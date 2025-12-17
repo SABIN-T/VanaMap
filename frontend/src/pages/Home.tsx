@@ -27,21 +27,11 @@ export const Home = () => {
 
     useEffect(() => {
         fetchPlants().then(async (data: Plant[]) => {
-            // Auto re-seed if we have new local mock data that isn't in DB yet
-            const { PLANTS } = await import('../data/mocks');
-            if (data.length < PLANTS.length) {
-                console.log("Database out of sync with mocks. Reseeding...");
+            // Only seed if database is COMPLETELY empty
+            if (data.length === 0) {
+                console.log("Database empty. Initializing with mocks...");
+                const { PLANTS } = await import('../data/mocks');
                 await import('../services/api').then(api => api.seedDatabase(PLANTS, []));
-                // Add a small delay for DB write
-                await new Promise(resolve => setTimeout(resolve, 500));
-                const newData = await fetchPlants();
-                setPlants(newData);
-                setPlants(newData);
-            } else if (data.some(p => !p.type)) {
-                // If plants exist but are missing the 'type' field due to old schema, force re-seed
-                console.log("Found plants with missing type. Forcing re-seed...");
-                await import('../services/api').then(api => api.seedDatabase(PLANTS, []));
-                await new Promise(resolve => setTimeout(resolve, 500));
                 const newData = await fetchPlants();
                 setPlants(newData);
             } else {

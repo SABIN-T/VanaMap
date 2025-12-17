@@ -35,6 +35,7 @@ export const Nearby = () => {
     const [position, setPosition] = useState<[number, number] | null>(null);
     const [nearbyVendors, setNearbyVendors] = useState<Vendor[]>([]);
     const [loading, setLoading] = useState(false);
+    const [activeTab, setActiveTab] = useState<'verified' | 'unverified'>('verified');
 
     const handleContact = async (vendor: Vendor, type: 'whatsapp' | 'call') => {
         if (!user) {
@@ -62,10 +63,12 @@ export const Nearby = () => {
         const verifiedVendors = allVendors.filter(v => v.verified === true);
 
         // Fetch 'Unverified' / Public listings via Overpass API (OSM)
+        // Targeted at: plant_nursery, florist, and garden_centre
         const overpassQuery = `
 [out:json];
 (
-    node["shop"~"florist|garden_centre"](around: 50000, ${lat}, ${lng});
+    node["shop"~"plant_nursery|florist|garden_centre"](around: 50000, ${lat}, ${lng});
+    node["landuse"~"plant_nursery"](around: 50000, ${lat}, ${lng});
 );
 out body;
 >;
@@ -79,18 +82,27 @@ out skel qt;
 
             if (osmData.elements) {
                 unverifiedVendors = osmData.elements
+                    .filter((el: any) => el.lat && el.lon)
                     .filter((el: any) => {
                         const name = (el.tags.name || "").toLowerCase();
-                        if (name.includes('pooja') || name.includes('temple') || name.includes('general store')) return false;
+                        // Block common irrelevant public listings
+                        const blacklist = ['temple', 'pooja', 'general store', 'bakery', 'medical', 'pharmacy', 'hospital', 'clinic', 'school', 'atm', 'bank', 'restaurant'];
+                        if (blacklist.some(word => name.includes(word))) return false;
+
+                        // MUST contain a plant-related word to be shown in "Unverified"
+                        const plantKeywords = ['plant', 'nursery', 'garden', 'green', 'flora', 'flower', 'farm', 'botanical', 'seed', 'landscape'];
+                        if (!plantKeywords.some(word => name.includes(word))) return false;
+
+                        if (!name || name === "local plant shop (public listing)") return false;
                         return true;
                     })
                     .map((el: any) => ({
                         id: `osm-${el.id}`,
-                        name: el.tags.name || "Local Plant Shop (Public Listing)",
+                        name: el.tags.name,
                         latitude: el.lat,
                         longitude: el.lon,
-                        address: "Google Maps / Public Listing",
-                        phone: el.tags.phone || "N/A",
+                        address: el.tags["addr:full"] || el.tags["addr:street"] || "Local Public Listing",
+                        phone: el.tags.phone || el.tags["contact:phone"] || "N/A",
                         whatsapp: "",
                         verified: false,
                         highlyRecommended: false,
@@ -119,8 +131,6 @@ out skel qt;
         setNearbyVendors(nearby);
     };
 
-    const [activeTab, setActiveTab] = useState<'verified' | 'unverified'>('verified');
-
     const handleGetLocation = useCallback(() => {
         setLoading(true);
         const toastId = toast.loading("Locating you...");
@@ -143,12 +153,13 @@ out skel qt;
             (err) => {
                 console.error(err);
                 toast.error("Location access denied", { id: toastId });
-                // Fallback to NY
-                setPosition([40.7128, -74.0060]);
+                // Fallback to NY or current?
+                if (!position) setPosition([40.7128, -74.0060]);
                 setLoading(false);
-            }
+            },
+            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
         );
-    }, []);
+    }, [position]);
 
     useEffect(() => {
         handleGetLocation();

@@ -13,7 +13,6 @@ export const Admin = () => {
     const [notifications, setNotifications] = useState<any[]>([]);
     const [activeTab, setActiveTab] = useState<'users' | 'plants' | 'activity'>('users');
     const [selectedVendor, setSelectedVendor] = useState<Vendor | null>(null);
-    const [resetHover, setResetHover] = useState(false);
 
     // Plant Form State
     const [isEditing, setIsEditing] = useState(false);
@@ -143,15 +142,6 @@ export const Admin = () => {
         }
     };
 
-    const handleResetDatabase = async () => {
-        if (confirm("WARNING: This will wipe data!")) {
-            try {
-                const { PLANTS, VENDORS, USERS } = await import('../data/mocks');
-                await import('../services/api').then(api => api.seedDatabase(PLANTS, VENDORS, USERS));
-                window.location.reload();
-            } catch (e) { alert("Failed."); }
-        }
-    };
 
     const handleDownloadVendors = () => {
         const headers = ["ID", "Name", "Address", "Phone", "WhatsApp", "Website", "Latitude", "Longitude", "Verified", "Recommended"];
@@ -197,22 +187,6 @@ export const Admin = () => {
                     </button>
                     <button onClick={() => setActiveTab('activity')} style={{ padding: '0.5rem 1rem', background: activeTab === 'activity' ? 'var(--color-primary)' : 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '0.5rem', color: activeTab === 'activity' ? 'black' : 'white', cursor: 'pointer' }}>
                         Activity Log
-                    </button>
-                    <button
-                        onClick={handleResetDatabase}
-                        onMouseEnter={() => setResetHover(true)}
-                        onMouseLeave={() => setResetHover(false)}
-                        style={{
-                            background: resetHover ? 'white' : '#ef4444',
-                            color: resetHover ? 'black' : 'white',
-                            border: 'none',
-                            padding: '0.5rem 1rem',
-                            borderRadius: '0.5rem',
-                            cursor: 'pointer',
-                            transition: 'all 0.2s'
-                        }}
-                    >
-                        ⚠ Reset Data
                     </button>
                     <button
                         onClick={() => {
@@ -418,9 +392,9 @@ export const Admin = () => {
                                     background: 'rgba(255,255,255,0.05)',
                                     borderRadius: '0.5rem',
                                     borderLeft: `4px solid ${n.type === 'vendor_contact' ? '#facc15' :
-                                            n.type === 'signup' ? '#10b981' :
-                                                n.type === 'login' ? '#3b82f6' :
-                                                    n.type === 'vendor_registration' ? '#a78bfa' : '#60a5fa'
+                                        n.type === 'signup' ? '#10b981' :
+                                            n.type === 'login' ? '#3b82f6' :
+                                                n.type === 'vendor_registration' ? '#a78bfa' : '#60a5fa'
                                         }`,
                                     display: 'flex',
                                     flexDirection: 'column',
