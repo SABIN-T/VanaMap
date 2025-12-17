@@ -36,7 +36,7 @@ export const analyzePlantSpecies = (scientificName: string): PlantData => {
     if (term.includes('sansevieria') || term.includes('trifasciata') || term.includes('cylindrica') || (term.includes('snake') && term.includes('plant'))) {
         return {
             name: "Snake Plant (Mother-in-Law's Tongue)",
-            description: "Native to West African tropical, arid climates. An architectural succulent famous for its ability to convert CO2 to Oxygen at night (CAM Process).",
+            description: "A resilient succulent native to West Africa. It is famous for its unique ability to perform CAM photosynthesis, absorbing CO2 and releasing Oxygen at night, making it ideal for bedrooms.",
             type: 'indoor',
             sunlight: 'medium', // Tolerates low
             oxygenLevel: 'very-high',
@@ -53,7 +53,7 @@ export const analyzePlantSpecies = (scientificName: string): PlantData => {
     if (term.includes('aloe') || term.includes('barbadensis')) {
         return {
             name: "Aloe Vera",
-            description: "A succulent plant species of the genus Aloe. Known for thick healing gel and CAM photosynthesis (Night O2). Thrives in arid, sunny conditions.",
+            description: "A succulent plant species renowned for its medicinal gel and nocturnal oxygen production. It thrives in sunny, arid conditions and requires minimal watering.",
             type: 'indoor', // Close to window
             sunlight: 'high',
             oxygenLevel: 'high',
@@ -70,7 +70,7 @@ export const analyzePlantSpecies = (scientificName: string): PlantData => {
     if (term.includes('spathiphyllum') || term.includes('peace') || term.includes('wallisii')) {
         return {
             name: "Peace Lily",
-            description: "A flowering rainforest plant known for its ability to break down toxic gases like carbon monoxide. Requires consistent moisture and hates direct sun.",
+            description: "A beautiful flowering plant that excels at breaking down toxic gases like carbon monoxide and formaldehyde. It prefers consistent moisture and shade.",
             type: 'indoor',
             sunlight: 'low',
             oxygenLevel: 'very-high',
@@ -87,7 +87,7 @@ export const analyzePlantSpecies = (scientificName: string): PlantData => {
     if (term.includes('epipremnum') || term.includes('aureum') || term.includes('pothos') || term.includes('money')) {
         return {
             name: "Golden Pothos (Money Plant)",
-            description: "The 'Devil's Ivy' - nearly indestructible climbing vine. Highly efficient at scrubbing indoor pollutants like xylene and toluene.",
+            description: "Known as 'Devil's Ivy', this hardy vine is a powerhouse for scrubbing indoor pollutants like formaldehyde, xylene, and toluene from the air.",
             type: 'indoor',
             sunlight: 'medium',
             oxygenLevel: 'moderate',
@@ -104,7 +104,7 @@ export const analyzePlantSpecies = (scientificName: string): PlantData => {
     if (term.includes('chlorophytum') || term.includes('comosum') || term.includes('spider')) {
         return {
             name: "Spider Plant",
-            description: "Fast-growing perennial producing 'spiderettes'. NASA study listed it as a top air purifier for removing formaldehyde from pressed wood furniture.",
+            description: "A fast-growing plant that produces 'spiderette' offshoots. NASA studies identify it as a top air purifier for removing formaldehyde and carbon monoxide.",
             type: 'indoor',
             sunlight: 'medium',
             oxygenLevel: 'high',
@@ -121,7 +121,7 @@ export const analyzePlantSpecies = (scientificName: string): PlantData => {
     if (term.includes('lyrata') || term.includes('fiddle')) {
         return {
             name: "Fiddle Leaf Fig",
-            description: "A stunning structural tree with large, violin-shaped leaves. Acts as a bio-statue in modern interiors but requires stable conditions.",
+            description: "A structural tree with large, violin-shaped leaves. It serves as a visual centerpiece and contributes to humidity regulation, though it can be temperamental.",
             type: 'indoor',
             sunlight: 'high',
             oxygenLevel: 'high', // Large surface area
@@ -138,7 +138,7 @@ export const analyzePlantSpecies = (scientificName: string): PlantData => {
     if (term.includes('elastica') || term.includes('rubber')) {
         return {
             name: "Rubber Plant",
-            description: "Glossy, dark leaves that are excellent at absorbing airborne chemicals and bacteria. A robust grower that adapts to standard room temps.",
+            description: "Characterized by glossy, dark leaves, this plant is excellent at absorbing airborne chemicals and bacteria. It adapts well to standard indoor temperatures.",
             type: 'indoor',
             sunlight: 'medium',
             oxygenLevel: 'high',
@@ -155,7 +155,7 @@ export const analyzePlantSpecies = (scientificName: string): PlantData => {
     if (term.includes('monstera') || term.includes('deliciosa')) {
         return {
             name: "Monstera Deliciosa (Swiss Cheese)",
-            description: "A tropical jungle giant famous for its fenestrated leaves. Adds significant biomass and humidity to indoor spaces.",
+            description: "A tropical jungle giant famous for its fenestrated (split) leaves. It adds significant biomass and moisture to indoor environments.",
             type: 'indoor',
             sunlight: 'medium',
             oxygenLevel: 'high',
@@ -172,7 +172,7 @@ export const analyzePlantSpecies = (scientificName: string): PlantData => {
     if (term.includes('dypsis') || term.includes('lutescens') || term.includes('areca') || term.includes('palm')) {
         return {
             name: "Areca Palm",
-            description: "One of the most efficient air humidifiers. Takes dry air and infuses it with moisture while scrubbing toxins. Perfect for offices.",
+            description: "One of the most efficient natural humidifiers. It breathes moisture into dry air while scrubbing toxins, making it excellent for offices and living rooms.",
             type: 'indoor',
             sunlight: 'high', // Bright indirect
             oxygenLevel: 'very-high',
@@ -189,7 +189,7 @@ export const analyzePlantSpecies = (scientificName: string): PlantData => {
     if (term.includes('ocimum') || term.includes('tenuiflorum') || term.includes('sanctum') || term.includes('tulsi')) {
         return {
             name: "Holy Basil (Tulsi)",
-            description: "Revered in Ayurveda as the 'Queen of Herbs'. Unlike most non-CAM plants, Tulsi is claimed to emit Oxygen for 20 hours a day and Ozone for 4.",
+            description: "Revered in Ayurveda as the 'Queen of Herbs'. Uniquely, it is believed to emit oxygen for up to 20 hours a day and possesses strong medicinal properties.",
             type: 'outdoor', // Often grown outdoor or bright balcony
             sunlight: 'direct',
             oxygenLevel: 'very-high',
@@ -206,7 +206,7 @@ export const analyzePlantSpecies = (scientificName: string): PlantData => {
     if (term.includes('crassula') || term.includes('ovata') || term.includes('jade')) {
         return {
             name: "Jade Plant",
-            description: "A symbol of good luck and prosperity. As a succulent, it follows CAM photosynthesis, making it suitable for bedroom placement.",
+            description: "A symbol of good luck and prosperity. As a succulent, it utilizes CAM photosynthesis to clean the air at night, suitable for bedrooms.",
             type: 'indoor',
             sunlight: 'medium',
             oxygenLevel: 'moderate',
