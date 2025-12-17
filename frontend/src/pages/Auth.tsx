@@ -33,7 +33,6 @@ export const Auth = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        let success = false;
 
         if (view === 'login') {
             const result = await login({ email, password });
