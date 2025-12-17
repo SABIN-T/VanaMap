@@ -147,71 +147,73 @@ out skel qt;
                 <p className={styles.subtitle}>Discover verified nurseries providing simulation-matched species near you.</p>
             </div>
 
-            <div className={styles.mapContainer}>
-                {position ? (
-                    <MapContainer center={position} zoom={11} style={{ height: '100%', width: '100%' }}>
-                        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                        <ChangeView center={position} />
-                        <Marker position={position} icon={L.divIcon({
-                            className: 'u-marker',
-                            html: `<div style="background:transparent;width:30px;height:30px;display:flex;align-items:center;justify-content:center;"><div style="background:var(--color-primary);width:14px;height:14px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 15px var(--color-primary)"></div></div>`
-                        })}><Popup>Origin point (You)</Popup></Marker>
-                        {displayVendors.map(v => (
-                            <Marker key={v.id} position={[v.latitude, v.longitude]}>
-                                <Popup><strong>{v.name}</strong><br />{formatDistance((v.distance || 0) * 1000)} away</Popup>
-                            </Marker>
-                        ))}
-                    </MapContainer>
-                ) : (
-                    <div style={{ background: 'var(--color-bg-card)', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-text-muted)' }}>
-                        Initializing precision tracking...
-                    </div>
-                )}
-            </div>
-
-            <div className={styles.resultsSection}>
-                <div className={styles.resultsHeader}>
-                    <h3 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 800 }}>Nearby Outlets ({displayVendors.length})</h3>
-                    <div className={styles.tabGroup}>
-                        <button className={`${styles.tabBtn} ${activeTab === 'verified' ? styles.active : ''}`} onClick={() => setActiveTab('verified')}>
-                            <Star size={16} fill={activeTab === 'verified' ? 'var(--color-text-main)' : 'none'} /> Verified
-                        </button>
-                        <button className={`${styles.tabBtn} ${activeTab === 'unverified' ? styles.active : ''}`} onClick={() => setActiveTab('unverified')}>
-                            <AlertCircle size={16} /> Public
-                        </button>
-                    </div>
+            <div className={styles.splitLayout}>
+                <div className={styles.mapContainer}>
+                    {position ? (
+                        <MapContainer center={position} zoom={11} style={{ height: '100%', width: '100%' }}>
+                            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                            <ChangeView center={position} />
+                            <Marker position={position} icon={L.divIcon({
+                                className: 'u-marker',
+                                html: `<div style="background:transparent;width:30px;height:30px;display:flex;align-items:center;justify-content:center;"><div style="background:var(--color-primary);width:14px;height:14px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 15px var(--color-primary)"></div></div>`
+                            })}><Popup>Origin point (You)</Popup></Marker>
+                            {displayVendors.map(v => (
+                                <Marker key={v.id} position={[v.latitude, v.longitude]}>
+                                    <Popup><strong>{v.name}</strong><br />{formatDistance((v.distance || 0) * 1000)} away</Popup>
+                                </Marker>
+                            ))}
+                        </MapContainer>
+                    ) : (
+                        <div style={{ background: 'var(--color-bg-card)', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-text-muted)' }}>
+                            Initializing precision tracking...
+                        </div>
+                    )}
                 </div>
 
-                {displayVendors.length === 0 ? (
-                    <div style={{ textAlign: 'center', padding: '4rem', background: 'var(--color-bg-card)', borderRadius: '2rem', border: '1px dashed var(--glass-border)' }}>
-                        <MapPin size={48} color="var(--color-text-muted)" style={{ marginBottom: '1rem' }} />
-                        <p style={{ color: 'var(--color-text-muted)' }}>No simulation partners detected. Try syncing your GPS metadata.</p>
+                <div className={styles.resultsSection}>
+                    <div className={styles.resultsHeader}>
+                        <h3 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 800 }}>Nearby Outlets ({displayVendors.length})</h3>
+                        <div className={styles.tabGroup}>
+                            <button className={`${styles.tabBtn} ${activeTab === 'verified' ? styles.active : ''}`} onClick={() => setActiveTab('verified')}>
+                                <Star size={16} fill={activeTab === 'verified' ? 'var(--color-text-main)' : 'none'} /> Verified
+                            </button>
+                            <button className={`${styles.tabBtn} ${activeTab === 'unverified' ? styles.active : ''}`} onClick={() => setActiveTab('unverified')}>
+                                <AlertCircle size={16} /> Public
+                            </button>
+                        </div>
                     </div>
-                ) : (
-                    <div className={styles.vendorGrid}>
-                        {displayVendors.map(vendor => (
-                            <div key={vendor.id} className={styles.vendorCard}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
-                                    <h4 className={styles.vendorName}>{vendor.name}</h4>
-                                    {vendor.verified && <Star size={18} fill="var(--color-primary)" color="var(--color-primary)" />}
-                                </div>
-                                <div className={styles.vendorDist}>{formatDistance((vendor.distance || 0) * 1000)} away</div>
-                                <p className={styles.vendorAddr}>{vendor.address}</p>
 
-                                <div className={styles.cardActions}>
-                                    <Button variant="outline" size="sm" className={styles.actionBtn} onClick={() => window.open(`https://www.google.com/maps/dir/?api=1&destination=${vendor.latitude},${vendor.longitude}`)}>
-                                        <ExternalLink size={14} /> Navigate
-                                    </Button>
-                                    {(vendor.whatsapp || vendor.phone !== 'N/A') && (
-                                        <Button size="sm" className={styles.actionBtn} onClick={() => { logVendorContact({ vendorId: vendor.id, vendorName: vendor.name, userEmail: user?.email || 'guest', contactType: 'whatsapp' }); window.open(`https://wa.me/${(vendor.whatsapp || vendor.phone).replace(/[^0-9]/g, '')}`, '_blank'); }}>
-                                            <MessageCircle size={14} /> Contact
+                    {displayVendors.length === 0 ? (
+                        <div style={{ textAlign: 'center', padding: '4rem', background: 'var(--color-bg-card)', borderRadius: '2rem', border: '1px dashed var(--glass-border)' }}>
+                            <MapPin size={48} color="var(--color-text-muted)" style={{ marginBottom: '1rem' }} />
+                            <p style={{ color: 'var(--color-text-muted)' }}>No simulation partners detected. Try syncing your GPS metadata.</p>
+                        </div>
+                    ) : (
+                        <div className={styles.vendorGrid}>
+                            {displayVendors.map(vendor => (
+                                <div key={vendor.id} className={styles.vendorCard}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
+                                        <h4 className={styles.vendorName}>{vendor.name}</h4>
+                                        {vendor.verified && <Star size={18} fill="var(--color-primary)" color="var(--color-primary)" />}
+                                    </div>
+                                    <div className={styles.vendorDist}>{formatDistance((vendor.distance || 0) * 1000)} away</div>
+                                    <p className={styles.vendorAddr}>{vendor.address}</p>
+
+                                    <div className={styles.cardActions}>
+                                        <Button variant="outline" size="sm" className={styles.actionBtn} onClick={() => window.open(`https://www.google.com/maps/dir/?api=1&destination=${vendor.latitude},${vendor.longitude}`)}>
+                                            <ExternalLink size={14} /> Navigate
                                         </Button>
-                                    )}
+                                        {(vendor.whatsapp || vendor.phone !== 'N/A') && (
+                                            <Button size="sm" className={styles.actionBtn} onClick={() => { logVendorContact({ vendorId: vendor.id, vendorName: vendor.name, userEmail: user?.email || 'guest', contactType: 'whatsapp' }); window.open(`https://wa.me/${(vendor.whatsapp || vendor.phone).replace(/[^0-9]/g, '')}`, '_blank'); }}>
+                                                <MessageCircle size={14} /> Contact
+                                            </Button>
+                                        )}
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
+                            ))}
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     );

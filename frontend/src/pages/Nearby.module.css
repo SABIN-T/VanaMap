@@ -310,3 +310,30 @@
         height: 350px;
     }
 }
+
+/* Desktop Optimizations */
+@media (min-width: 1024px) {
+    .nearbyContainer {
+        padding: 2rem 5rem;
+        max-width: 1600px;
+        margin: 0 auto;
+    }
+
+    .title {
+        font-size: 2.5rem;
+    }
+
+    .mapContainer {
+        height: 600px;
+        position: sticky;
+        top: 2rem;
+    }
+
+    /* Side-by-Side Layout Wrapper */
+    .splitLayout {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+        align-items: start;
+    }
+}
