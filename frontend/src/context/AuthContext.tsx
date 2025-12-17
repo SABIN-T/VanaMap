@@ -13,7 +13,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://plantoxy.onrender.com/api/auth';
+const API_URL = import.meta.env.VITE_API_URL || 'https://plantoxy.onrender.com/api';
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<User | null>(null);
@@ -28,17 +28,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const login = async (credentials: any) => {
         try {
-            const res = await fetch(`${API_URL}/login`, {
+            const res = await fetch(`${API_URL}/auth/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(credentials)
             });
-            const data = await res.json();
-            if (!res.ok) throw new Error(data.error || 'Login failed');
 
-            setUser(data);
-            localStorage.setItem('user', JSON.stringify(data));
-            return { success: true };
+            const contentType = res.headers.get("content-type");
+            if (contentType && contentType.indexOf("application/json") !== -1) {
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'Login failed');
+
+                setUser(data);
+                localStorage.setItem('user', JSON.stringify(data));
+                return { success: true };
+            } else {
+                const text = await res.text();
+                throw new Error(`Server Error (${res.status}): ${text.slice(0, 100)}`);
+            }
         } catch (err: any) {
             console.error(err);
             return { success: false, message: err.message };
@@ -47,17 +54,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const signup = async (userData: any) => {
         try {
-            const res = await fetch(`${API_URL}/signup`, {
+            const res = await fetch(`${API_URL}/auth/signup`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(userData)
             });
-            const data = await res.json();
-            if (!res.ok) throw new Error(data.error || 'Signup failed');
 
-            setUser(data);
-            localStorage.setItem('user', JSON.stringify(data));
-            return { success: true };
+            const contentType = res.headers.get("content-type");
+            if (contentType && contentType.indexOf("application/json") !== -1) {
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'Signup failed');
+
+                setUser(data);
+                localStorage.setItem('user', JSON.stringify(data));
+                return { success: true };
+            } else {
+                const text = await res.text();
+                throw new Error(`Server Error (${res.status}): ${text.slice(0, 100)}`);
+            }
         } catch (err: any) {
             console.error(err);
             return { success: false, message: err.message };
