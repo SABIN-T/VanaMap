@@ -4,8 +4,8 @@ import { jwtDecode } from "jwt-decode";
 
 interface AuthContextType {
     user: User | null;
-    signup: (data: any) => Promise<boolean>;
-    login: (credentials: any) => Promise<boolean>;
+    signup: (data: any) => Promise<{ success: boolean; message?: string }>;
+    login: (credentials: any) => Promise<{ success: boolean; message?: string }>;
     googleLogin: (credentialResponse: any) => Promise<boolean>;
     logout: () => void;
     toggleFavorite: (plantId: string) => void;
@@ -33,14 +33,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(credentials)
             });
-            if (!res.ok) throw new Error('Login failed');
             const data = await res.json();
+            if (!res.ok) throw new Error(data.error || 'Login failed');
+
             setUser(data);
             localStorage.setItem('user', JSON.stringify(data));
-            return true;
-        } catch (err) {
+            return { success: true };
+        } catch (err: any) {
             console.error(err);
-            return false;
+            return { success: false, message: err.message };
         }
     };
 
@@ -51,14 +52,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(userData)
             });
-            if (!res.ok) throw new Error('Signup failed');
             const data = await res.json();
+            if (!res.ok) throw new Error(data.error || 'Signup failed');
+
             setUser(data);
             localStorage.setItem('user', JSON.stringify(data));
-            return true;
-        } catch (err) {
+            return { success: true };
+        } catch (err: any) {
             console.error(err);
-            return false;
+            return { success: false, message: err.message };
         }
     };
 
