@@ -401,6 +401,7 @@ export const Admin = () => {
                         </div>
                     </div>
                 </div>
+            )}
             {/* ==================== ACTIVITY LOG TAB ==================== */}
             {activeTab === 'activity' && (
                 <div className="glass-panel" style={{ padding: '2rem' }}>
