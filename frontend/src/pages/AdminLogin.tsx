@@ -11,9 +11,9 @@ export const AdminLogin = () => {
     const handleLogin = (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Hardcoded for testing
-        const validEmail = 'admin@plantai.com';
-        const validPass = 'Defender123#@';
+        // Use environment variables
+        const validEmail = import.meta.env.VITE_ADMIN_USER;
+        const validPass = import.meta.env.VITE_ADMIN_PASS;
 
         if (email === validEmail && password === validPass) {
             localStorage.setItem('adminAuthenticated', 'true');
