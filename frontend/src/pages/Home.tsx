@@ -31,6 +31,19 @@ export const Home = () => {
     const { addToCart } = useCart();
     const navigate = useNavigate();
 
+    // Handle Android/Mobile Back Button for Modal
+    useEffect(() => {
+        const handlePopState = () => {
+            // Check if we are closing the modal (state is null or different)
+            setSelectedPlant(null);
+        };
+
+        window.addEventListener('popstate', handlePopState);
+        return () => {
+            window.removeEventListener('popstate', handlePopState);
+        };
+    }, []);
+
     useEffect(() => {
         setPlantsLoading(true);
         fetchPlants().then(async (data: Plant[]) => {
@@ -114,6 +127,8 @@ export const Home = () => {
     };
 
     const openDetails = (plant: Plant) => {
+        // Push state so back button closes modal instead of app
+        window.history.pushState({ modal: 'plantDetails' }, document.title);
         setSelectedPlant(plant);
     };
 
@@ -156,7 +171,7 @@ export const Home = () => {
                 <PlantDetailsModal
                     plant={selectedPlant}
                     weather={weather}
-                    onClose={() => setSelectedPlant(null)}
+                    onClose={() => window.history.back()}
                 />
             )}
 
