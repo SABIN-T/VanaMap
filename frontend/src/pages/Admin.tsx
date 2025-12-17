@@ -11,6 +11,8 @@ export const Admin = () => {
     const [requests, setRequests] = useState<any[]>([]);
     const [plants, setPlants] = useState<Plant[]>([]);
     const [activeTab, setActiveTab] = useState<'users' | 'plants'>('users');
+    const [selectedVendor, setSelectedVendor] = useState<Vendor | null>(null);
+    const [resetHover, setResetHover] = useState(false);
 
     // Plant Form State
     const [isEditing, setIsEditing] = useState(false);
@@ -153,6 +155,34 @@ export const Admin = () => {
         }
     };
 
+    const handleDownloadVendors = () => {
+        const headers = ["ID", "Name", "Address", "Phone", "WhatsApp", "Website", "Latitude", "Longitude", "Verified", "Recommended"];
+        const rows = vendors.map(v => [
+            v.id,
+            `"${v.name}"`, // Quote to handle commas
+            `"${v.address}"`,
+            v.phone,
+            v.whatsapp,
+            v.website,
+            v.latitude,
+            v.longitude,
+            v.verified,
+            v.highlyRecommended
+        ]);
+
+        const csvContent = "data:text/csv;charset=utf-8,"
+            + headers.join(",") + "\n"
+            + rows.map(e => e.join(",")).join("\n");
+
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "vendors_export.csv");
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    };
+
     return (
         <div className="container" style={{ padding: '4rem 1rem' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
@@ -164,7 +194,20 @@ export const Admin = () => {
                     <button onClick={() => setActiveTab('plants')} style={{ padding: '0.5rem 1rem', background: activeTab === 'plants' ? 'var(--color-primary)' : 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '0.5rem', color: activeTab === 'plants' ? 'black' : 'white', cursor: 'pointer' }}>
                         Plant Management
                     </button>
-                    <button onClick={handleResetDatabase} style={{ background: '#ef4444', color: 'white', border: 'none', padding: '0.5rem 1rem', borderRadius: '0.5rem', cursor: 'pointer' }}>
+                    <button
+                        onClick={handleResetDatabase}
+                        onMouseEnter={() => setResetHover(true)}
+                        onMouseLeave={() => setResetHover(false)}
+                        style={{
+                            background: resetHover ? 'white' : '#ef4444',
+                            color: resetHover ? 'black' : 'white',
+                            border: 'none',
+                            padding: '0.5rem 1rem',
+                            borderRadius: '0.5rem',
+                            cursor: 'pointer',
+                            transition: 'all 0.2s'
+                        }}
+                    >
                         ⚠ Reset Data
                     </button>
                 </div>
@@ -196,7 +239,12 @@ export const Admin = () => {
 
                     {/* VENDOR MANAGEMENT */}
                     <div className="glass-panel" style={{ padding: '2rem' }}>
-                        <h2>Vendor Management</h2>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <h2>Vendor Management</h2>
+                            <Button size="sm" onClick={handleDownloadVendors} variant="outline">
+                                Download Excel (CSV)
+                            </Button>
+                        </div>
                         {vendors.length === 0 ? <p>No vendors.</p> : (
                             <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                                 {vendors.map(v => (
@@ -206,6 +254,7 @@ export const Admin = () => {
                                             <p style={{ color: '#aaa', fontSize: '0.8rem' }}>{v.address}</p>
                                         </div>
                                         <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                            <Button size="sm" variant="outline" onClick={() => setSelectedVendor(v)}>Details</Button>
                                             {!v.verified ? <Button size="sm" onClick={() => handleVerify(v.id, true)}><Check size={14} /> Verify</Button> :
                                                 <Button size="sm" variant="outline" onClick={() => handleVerify(v.id, false)}><X size={14} /> Unverify</Button>}
                                             <Button size="sm" style={{ background: '#ef4444' }} onClick={() => handleDeleteVendor(v.id)}><Trash2 size={14} /></Button>
@@ -331,9 +380,33 @@ export const Admin = () => {
                     </div>
                 </div>
             )}
+
+            {/* Vendor Details Modal */}
+            {selectedVendor && (
+                <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, background: 'rgba(0,0,0,0.8)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000 }}>
+                    <div className="glass-panel" style={{ padding: '2rem', width: '500px', maxWidth: '90%' }}>
+                        <h2>Vendor Details: {selectedVendor.name}</h2>
+                        <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                            <p><strong>ID:</strong> {selectedVendor.id}</p>
+                            <p><strong>Address:</strong> {selectedVendor.address}</p>
+                            <p><strong>Phone:</strong> {selectedVendor.phone}</p>
+                            <p><strong>WhatsApp:</strong> {selectedVendor.whatsapp}</p>
+                            <p><strong>Website:</strong> {selectedVendor.website || 'N/A'}</p>
+                            <p><strong>Coordinates:</strong> {selectedVendor.latitude}, {selectedVendor.longitude}</p>
+                            <p><strong>Verified:</strong> {selectedVendor.verified ? 'Yes' : 'No'}</p>
+                            <p><strong>Recommended:</strong> {selectedVendor.highlyRecommended ? 'Yes' : 'No'}</p>
+                        </div>
+                        <div style={{ marginTop: '2rem', textAlign: 'right' }}>
+                            <Button onClick={() => setSelectedVendor(null)}>Close</Button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
+
+// ... inputStyle definition ...
 
 const inputStyle = {
     padding: '0.75rem',
