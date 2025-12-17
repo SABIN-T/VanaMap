@@ -417,7 +417,11 @@ export const Admin = () => {
                                     padding: '1.25rem',
                                     background: 'rgba(255,255,255,0.05)',
                                     borderRadius: '0.5rem',
-                                    borderLeft: `4px solid ${n.type === 'vendor_contact' ? '#facc15' : n.type === 'signup' ? '#10b981' : n.type === 'vendor_registration' ? '#a78bfa' : '#3b82f6'}`,
+                                    borderLeft: `4px solid ${n.type === 'vendor_contact' ? '#facc15' :
+                                            n.type === 'signup' ? '#10b981' :
+                                                n.type === 'login' ? '#3b82f6' :
+                                                    n.type === 'vendor_registration' ? '#a78bfa' : '#60a5fa'
+                                        }`,
                                     display: 'flex',
                                     flexDirection: 'column',
                                     gap: '0.5rem'
