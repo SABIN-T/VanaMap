@@ -1,6 +1,6 @@
 import type { Plant } from '../../../types';
 import { Button } from '../../common/Button';
-import { ShoppingCart, Heart } from 'lucide-react';
+import { ShoppingCart, Heart, Trophy, Sparkles } from 'lucide-react';
 import styles from './PlantCard.module.css';
 import { useAuth } from '../../../context/AuthContext';
 import toast from 'react-hot-toast';
@@ -27,16 +27,46 @@ export const PlantCard = ({ plant, onAdd, score, isTopMatch }: PlantCardProps) =
     };
 
     return (
-        <div className={styles.card} style={isTopMatch ? { border: '2px solid #fbbf24', boxShadow: '0 0 30px rgba(251, 191, 36, 0.2)' } : {}}>
+        <div className={styles.card} style={isTopMatch ? {
+            border: '2px solid rgba(251, 191, 36, 0.6)',
+            boxShadow: '0 0 50px rgba(251, 191, 36, 0.25)',
+            transform: 'scale(1.03)',
+            zIndex: 10
+        } : {}}>
             <div className={styles.imageContainer}>
                 {isTopMatch && (
-                    <div style={{
-                        position: 'absolute', top: 0, left: 0, width: '100%',
-                        padding: '0.5rem', background: '#fbbf24', color: 'black',
-                        fontWeight: 'bold', fontSize: '0.8rem', textAlign: 'center', zIndex: 20
-                    }}>
-                        🏆 Top Recommendation
-                    </div>
+                    <>
+                        <div style={{
+                            position: 'absolute',
+                            top: '12px',
+                            left: '50%',
+                            transform: 'translateX(-50%)',
+                            background: 'linear-gradient(135deg, #FFD700 0%, #FDB931 100%)',
+                            color: '#000',
+                            padding: '0.5rem 1.2rem',
+                            borderRadius: '99px',
+                            fontWeight: '800',
+                            fontSize: '0.75rem',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.5rem',
+                            boxShadow: '0 4px 20px rgba(251, 191, 36, 0.4)',
+                            zIndex: 20,
+                            whiteSpace: 'nowrap',
+                            letterSpacing: '1px',
+                            border: '1px solid rgba(255, 255, 255, 0.4)'
+                        }}>
+                            <Trophy size={14} fill="black" strokeWidth={2} />
+                            <span>BEST MATCH</span>
+                            <Sparkles size={12} fill="black" />
+                        </div>
+                        <div style={{
+                            position: 'absolute', inset: 0,
+                            pointerEvents: 'none',
+                            boxShadow: 'inset 0 0 30px rgba(251, 191, 36, 0.3)',
+                            zIndex: 15
+                        }} />
+                    </>
                 )}
                 {/* ... existing image ... */}
                 <img
