@@ -34,8 +34,8 @@ export const Navbar = () => {
                     <Leaf size={24} color="white" />
                 </div>
                 <div className={styles.logoText}>
-                    <span className={styles.brandName}>VanaMap</span>
-                    <span className={styles.tagline}>Caring goes smart</span>
+                    <span className={styles.brandName}>VanaSim</span>
+                    <span className={styles.tagline}>Smart Ecosystem Simulator</span>
                 </div>
             </Link>
 

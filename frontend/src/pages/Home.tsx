@@ -7,7 +7,7 @@ import { fetchPlants } from '../services/api';
 import { getWeather, geocodeCity } from '../services/weather';
 import { calculateAptness } from '../utils/logic';
 import type { Plant } from '../types';
-import { Sprout, CloudRain, Sun, MapPin, Thermometer, Wind, ArrowDown, Sparkles } from 'lucide-react';
+import { Sprout, MapPin, Thermometer, Wind, ArrowDown, Sparkles, Search } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
 import { PlantDetailsModal } from '../components/features/plants/PlantDetailsModal';
@@ -17,6 +17,8 @@ import styles from './Home.module.css';
 export const Home = () => {
     const [plants, setPlants] = useState<Plant[]>([]);
     const [filter, setFilter] = useState<'all' | 'indoor' | 'outdoor'>('all');
+    const [searchQuery, setSearchQuery] = useState('');
+    const [o2Filter, setO2Filter] = useState<'all' | 'high' | 'very-high'>('all');
     const [weather, setWeather] = useState<any>(null);
     const [locationLoading, setLocationLoading] = useState(false);
     const [plantsLoading, setPlantsLoading] = useState(true);
@@ -58,13 +60,13 @@ export const Home = () => {
             const weatherData = await getWeather(result.lat, result.lng);
             if (weatherData) {
                 setWeather(weatherData);
-                toast.success(`Weather found for ${citySearch}`);
+                toast.success(`Simulation synced for ${citySearch}`);
                 scrollToPlants();
             } else {
-                toast.error("Weather data unavailable for this city.");
+                toast.error("Environment data unavailable.");
             }
         } else {
-            toast.error("City not found.");
+            toast.error("Zone not found.");
         }
         setLocationLoading(false);
     };
@@ -72,31 +74,31 @@ export const Home = () => {
     const handleGetLocation = () => {
         setLocationLoading(true);
         if (navigator.geolocation) {
-            const toastId = toast.loading("Detecting location...");
+            const toastId = toast.loading("Syncing with satellite...");
             navigator.geolocation.getCurrentPosition(async (position) => {
                 const { latitude, longitude } = position.coords;
                 try {
                     const weatherData = await getWeather(latitude, longitude);
                     if (weatherData) {
                         setWeather(weatherData);
-                        toast.success("Location connected!", { id: toastId });
+                        toast.success("Ecosystem Locked!", { id: toastId });
                         scrollToPlants();
                     } else {
-                        toast.error("Weather data unavailable.", { id: toastId });
+                        toast.error("Syncing failed.", { id: toastId });
                     }
                 } catch (e) {
                     console.error(e);
-                    toast.error("Failed to fetch weather data.", { id: toastId });
+                    toast.error("Network error.", { id: toastId });
                 } finally {
                     setLocationLoading(false);
                 }
             }, (err) => {
                 console.error(err);
                 setLocationLoading(false);
-                toast.error("Location access denied.", { id: toastId });
+                toast.error("Satellite access denied.", { id: toastId });
             });
         } else {
-            toast.error("Geolocation not supported.");
+            toast.error("GPS not supported.");
             setLocationLoading(false);
         }
     };
@@ -108,7 +110,7 @@ export const Home = () => {
             return;
         }
         addToCart(plant);
-        toast.success(`Added ${plant.name} to cart!`);
+        toast.success(`Added ${plant.name} to simulation inventory!`);
     };
 
     const openDetails = (plant: Plant) => {
@@ -118,12 +120,18 @@ export const Home = () => {
     const getPollutionStatus = (aqi: number = 0) => {
         if (aqi <= 20) return { label: 'Excellent', color: '#00ff9d', desc: 'Fresh air detected (Live Data)' };
         if (aqi <= 50) return { label: 'Good', color: '#facc15', desc: 'Acceptable air quality' };
-        if (aqi <= 100) return { label: 'Moderate', color: '#fb923c', desc: 'Slight pollution according to live records' };
-        return { label: 'High Pollution', color: '#f87171', desc: 'High contamination! Oxygen-boosters simulated.' };
+        if (aqi <= 100) return { label: 'Moderate', color: '#fb923c', desc: 'Atmospheric stress detected' };
+        return { label: 'High Pollution', color: '#f87171', desc: 'Critical AQI: Oxygen-boosters simulated.' };
     };
 
     const displayedPlants = [...plants]
-        .filter(p => filter === 'all' ? true : p.type === filter)
+        .filter(p => {
+            const matchesType = filter === 'all' ? true : p.type === filter;
+            const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                p.scientificName.toLowerCase().includes(searchQuery.toLowerCase());
+            const matchesO2 = o2Filter === 'all' ? true : p.oxygenLevel === o2Filter;
+            return matchesType && matchesSearch && matchesO2;
+        })
         .map(p => {
             if (!weather) return { ...p, score: 0 };
             return { ...p, score: calculateAptness(p, weather.avgTemp30Days, weather.air_quality?.aqi, weather.avgHumidity30Days) };
@@ -131,7 +139,7 @@ export const Home = () => {
         .sort((a, b) => (weather ? b.score - a.score : 0));
 
     return (
-        <div>
+        <div className={styles.homeContainer}>
             {selectedPlant && (
                 <PlantDetailsModal
                     plant={selectedPlant}
@@ -143,13 +151,13 @@ export const Home = () => {
             <section className={styles.hero}>
                 <div className={styles.heroContent}>
                     <div className={styles.heroBadge}>
-                        <Sparkles size={16} /> AI-Powered Plant Finder
+                        <Sparkles size={16} /> Eco-Simulation Engine
                     </div>
 
-                    <h1 className={styles.heroTitle}>FIND THE PERFECT<br />PLANT FOR YOUR SPACE</h1>
+                    <h1 className={styles.heroTitle}>SMART ECOSYSTEM<br />SIMULATOR</h1>
                     <p className={styles.heroSubtitle}>
-                        Stop guessing. Our AI analyzes your local weather, pollution levels (AQI),
-                        and room oxygen needs to scientifically recommend plants that will actually thrive.
+                        Analyze your local atmosphere and simulate plant growth patterns.
+                        Our engine uses live environmental data to predict which species will perfectly balance your oxygen levels.
                     </p>
 
                     {!weather ? (
@@ -157,14 +165,14 @@ export const Home = () => {
                             <div className={styles.searchBox}>
                                 <input
                                     type="text"
-                                    placeholder="Enter City Name (e.g. London)"
+                                    placeholder="Enter Your City (e.g. New York)"
                                     value={citySearch}
                                     onChange={e => setCitySearch(e.target.value)}
                                     onKeyDown={e => e.key === 'Enter' && handleCitySearch()}
                                     className={styles.searchInput}
                                 />
                                 <Button onClick={handleCitySearch} disabled={locationLoading}>
-                                    {locationLoading ? 'Searching...' : 'Analyze My City'}
+                                    {locationLoading ? 'Syncing...' : 'Simulate Zone'}
                                 </Button>
                             </div>
 
@@ -172,10 +180,10 @@ export const Home = () => {
 
                             <div className={styles.buttonGroup}>
                                 <Button variant="outline" size="lg" onClick={handleGetLocation} className={styles.gpsBtn}>
-                                    <MapPin size={20} /> Detect My GPS Location
+                                    <MapPin size={20} /> Use Satellite GPS
                                 </Button>
                                 <Button variant="outline" size="lg" onClick={() => navigate('/nearby')}>
-                                    Find Nearby Shops
+                                    Find Nearby Nurseries
                                 </Button>
                             </div>
                         </div>
@@ -184,16 +192,16 @@ export const Home = () => {
                             <div className={styles.weatherCard}>
                                 <div className={styles.weatherMain}>
                                     <div className={styles.locationInfo}>
-                                        <span className={styles.label}>ANALYSIS ZONE</span>
-                                        <h3 className={styles.h3}>Detected Environment</h3>
-                                        <button onClick={() => setWeather(null)} className={styles.changeBtn}>Switch Location</button>
+                                        <span className={styles.label}>ATMOSPHERIC ZONE</span>
+                                        <h3 className={styles.h3}>Live Environment</h3>
+                                        <button onClick={() => setWeather(null)} className={styles.changeBtn}>Recalibrate Zone</button>
                                     </div>
                                     <div className={styles.vDivider}></div>
                                     <div className={styles.statGroup}>
                                         <div className={styles.iconCircle}><Thermometer size={20} color="#facc15" /></div>
                                         <div>
                                             <div className={styles.statVal}>{weather.avgTemp30Days.toFixed(1)}°C</div>
-                                            <div className={styles.statSub}>Avg Temperature</div>
+                                            <div className={styles.statSub}>Simulated Temp</div>
                                         </div>
                                     </div>
                                     <div className={styles.statGroup}>
@@ -208,11 +216,11 @@ export const Home = () => {
                                 </div>
                                 <div className={styles.weatherFooter}>
                                     <div className={styles.footerMsg}>
-                                        <span className={styles.liveTag}>LIVE ANALYSIS ACTIVE</span>
+                                        <span className={styles.liveTag}>CORE ANALYSIS ACTIVE</span>
                                         <p>{getPollutionStatus(weather.air_quality?.aqi).desc}</p>
                                     </div>
                                     <Button onClick={scrollToPlants} variant="primary" size="sm" className={styles.pulseBtn}>
-                                        View Recommendations <ArrowDown size={14} />
+                                        Analyze Recommendations <ArrowDown size={14} />
                                     </Button>
                                 </div>
                             </div>
@@ -221,19 +229,19 @@ export const Home = () => {
 
                     <div className={styles.featuresGrid}>
                         <div className={styles.featureCard}>
-                            <div className={styles.iconWrapper}><Sun size={24} /></div>
-                            <h3>Simulated Growth</h3>
-                            <p>We calculate average temperatures to predict plant happiness scores.</p>
+                            <div className={styles.iconWrapper}><Sparkles size={24} /></div>
+                            <h3>AI Vitality</h3>
+                            <p>Calculating species efficiency based on real-time atmospheric data.</p>
                         </div>
                         <div className={styles.featureCard}>
-                            <div className={styles.iconWrapper}><CloudRain size={24} /></div>
-                            <h3>Water Smart</h3>
-                            <p>Get specific hydration needs based on your local humidity levels.</p>
+                            <div className={styles.iconWrapper}><Wind size={24} /></div>
+                            <h3>O₂ Simulation</h3>
+                            <p>Predicting oxygen flux for your specific room dimensions.</p>
                         </div>
                         <div className={styles.featureCard}>
                             <div className={styles.iconWrapper}><Sprout size={24} /></div>
-                            <h3>O₂ Optimization</h3>
-                            <p>Maximize air quality with plants matched to your room size.</p>
+                            <h3>Growth Tracking</h3>
+                            <p>Adapting simulation parameters as local weather patterns shift.</p>
                         </div>
                     </div>
                 </div>
@@ -241,20 +249,50 @@ export const Home = () => {
 
             <div className="container" id="plants-grid" ref={plantsSectionRef} style={{ scrollMarginTop: '2rem' }}>
                 <div className={styles.sectionHeader}>
-                    <h2>{weather ? 'Top AI Recommendations' : 'Curated Plant Collection'}</h2>
-                    <p>{weather ? 'Scientifically ranked for your specific environmental data.' : 'Explore our high-oxygen species for a healthier living space.'}</p>
+                    <h2 style={{ fontSize: '2.5rem', fontWeight: 900 }}>{weather ? 'RANKED ECOSYSTEM MATCHES' : 'SIMULATION DATABASE'}</h2>
+                    <p style={{ color: 'var(--color-text-muted)' }}>{weather ? 'Scientifically ranked based on your atmosphere.' : 'Explore high-vitality species optimized for indoor simulation.'}</p>
                 </div>
 
-                <div className={styles.filters}>
-                    {['all', 'indoor', 'outdoor'].map((f) => (
-                        <button
-                            key={f}
-                            className={`${styles.filterBtn} ${filter === f ? styles.active : ''}`}
-                            onClick={() => setFilter(f as any)}
-                        >
-                            {f.charAt(0).toUpperCase() + f.slice(1)} {f === 'all' ? 'Species' : ''}
-                        </button>
-                    ))}
+                {/* Integrated Search and Filtering */}
+                <div className={styles.filterDiscoverySection}>
+                    <div className={styles.searchBarWrapper}>
+                        <Search size={20} className={styles.searchIcon} />
+                        <input
+                            type="text"
+                            placeholder="Find a species (e.g. Snake Plant)"
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className={styles.searchSpeciesInput}
+                        />
+                    </div>
+
+                    <div className={styles.filterWrapper}>
+                        <div className={styles.filterChipGroup}>
+                            <span className={styles.groupLabel}>TYPE</span>
+                            {['all', 'indoor', 'outdoor'].map((f) => (
+                                <button
+                                    key={f}
+                                    className={`${styles.filterBtn} ${filter === f ? styles.active : ''}`}
+                                    onClick={() => setFilter(f as any)}
+                                >
+                                    {f.toUpperCase()}
+                                </button>
+                            ))}
+                        </div>
+
+                        <div className={styles.filterChipGroup}>
+                            <span className={styles.groupLabel}>O₂ VITALITY</span>
+                            {['all', 'high', 'very-high'].map((v) => (
+                                <button
+                                    key={v}
+                                    className={`${styles.filterBtn} ${o2Filter === v ? styles.active : ''}`}
+                                    onClick={() => setO2Filter(v as any)}
+                                >
+                                    {v.toUpperCase().replace('-', ' ')}
+                                </button>
+                            ))}
+                        </div>
+                    </div>
                 </div>
 
                 <div className={styles.grid}>

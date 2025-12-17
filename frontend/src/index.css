@@ -3,26 +3,41 @@
   line-height: 1.5;
   font-weight: 400;
 
+  /* Global Tokens */
   --color-primary: #00ff9d;
   --color-secondary: #00cc7d;
-  --bg-dark: #0a0a0a;
-  --bg-card: rgba(25, 25, 25, 0.9);
-  --text-main: rgba(255, 255, 255, 0.9);
-
+  --color-accent: #00d2ff;
   --gradient-primary: linear-gradient(135deg, #00ff9d 0%, #00d2ff 100%);
+  --radius-full: 9999px;
+
+  /* Dark Theme (Default) */
+  --color-bg: #0a0a0a;
+  --color-bg-card: rgba(25, 25, 25, 0.9);
+  --color-text-main: rgba(255, 255, 255, 0.9);
+  --color-text-muted: rgba(255, 255, 255, 0.6);
   --glass-bg: rgba(255, 255, 255, 0.03);
   --glass-border: 1px solid rgba(255, 255, 255, 0.08);
   --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-  --radius-full: 9999px;
 
   color-scheme: dark;
-  color: var(--text-main);
-  background-color: var(--bg-dark);
+}
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+[data-theme='light'] {
+  --color-bg: #f8fafc;
+  --color-bg-card: #ffffff;
+  --color-text-main: #0f172a;
+  --color-text-muted: #64748b;
+  --glass-bg: rgba(255, 255, 255, 0.8);
+  --glass-border: 1px solid rgba(0, 0, 0, 0.05);
+  --glass-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+
+  color-scheme: light;
+}
+
+:root {
+  color: var(--color-text-main);
+  background-color: var(--color-bg);
+  transition: background-color 0.3s, color 0.3s;
 }
 
 * {
@@ -34,15 +49,15 @@ body {
   padding: 0;
   min-width: 320px;
   min-height: 100vh;
-  background-color: #000;
-  background-image:
-    radial-gradient(circle at 50% 0%, #1a1a1a 0%, #000 100%);
+  background-color: var(--color-bg);
+  color: var(--color-text-main);
   overflow-x: hidden;
 }
 
 .app-shell {
   width: 100%;
   min-height: 100vh;
+  background-color: var(--color-bg);
 }
 
 .container {
@@ -102,8 +117,8 @@ body {
 
 .btn-outline {
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #fff;
+  border: 1px solid var(--color-text-muted);
+  color: var(--color-text-main);
 }
 
 .btn-outline:hover {

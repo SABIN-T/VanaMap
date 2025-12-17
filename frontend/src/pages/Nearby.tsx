@@ -1,15 +1,12 @@
-import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
-import { fetchVendors, seedDatabase, logVendorContact, fetchPlants } from '../services/api';
-import { VENDORS as MOCK_VENDORS } from '../data/mocks';
+import { fetchVendors, seedDatabase, logVendorContact } from '../services/api';
 import { getDistanceFromLatLonInKm, formatDistance } from '../utils/logic';
-import type { Vendor, Plant } from '../types';
-import { MessageCircle, MapPin, Search, Sprout, ExternalLink, RefreshCw, AlertCircle, Star } from 'lucide-react';
+import type { Vendor } from '../types';
+import { MessageCircle, MapPin, ExternalLink, RefreshCw, AlertCircle, Star } from 'lucide-react';
 import { Button } from '../components/common/Button';
 import { useAuth } from '../context/AuthContext';
-import { useCart } from '../context/CartContext';
-import { PlantCard } from '../components/features/plants/PlantCard';
 import toast from 'react-hot-toast';
 import styles from './Nearby.module.css';
 
@@ -35,39 +32,19 @@ function ChangeView({ center }: { center: [number, number] }) {
 
 export const Nearby = () => {
     const { user } = useAuth();
-    const { addToCart } = useCart();
     const [position, setPosition] = useState<[number, number] | null>(null);
     const [nearbyVendors, setNearbyVendors] = useState<Vendor[]>([]);
-    const [allPlants, setAllPlants] = useState<Plant[]>([]);
     const [loading, setLoading] = useState(false);
     const [activeTab, setActiveTab] = useState<'verified' | 'unverified'>('verified');
     const hasInitialLocateRef = useRef(false);
 
-    // Search and Filter State
-    const [searchQuery, setSearchQuery] = useState('');
-    const [filterType, setFilterType] = useState<'all' | 'indoor' | 'outdoor'>('all');
-    const [filterSun, setFilterSun] = useState<'all' | 'low' | 'medium' | 'high' | 'direct'>('all');
-    const [filterO2, setFilterO2] = useState<'all' | 'moderate' | 'high' | 'very-high'>('all');
-
-    const handleAddToCart = (plant: Plant) => {
-        if (!user) {
-            toast.error("Please sign in to add items to cart");
-            return;
-        }
-        addToCart(plant);
-        // Toast is already handled in CartContext alert or handled here if alert is removed
-        // Actually CartContext uses alert, I might want to replace it with toast later.
-    };
-
     const fetchAllData = async (lat: number, lng: number) => {
         setLoading(true);
         try {
-            const plants = await fetchPlants();
-            setAllPlants(plants);
-
             let allVendors = await fetchVendors();
             if (allVendors.length === 0) {
-                await seedDatabase([], MOCK_VENDORS);
+                const { VENDORS } = await import('../data/mocks');
+                await seedDatabase([], VENDORS);
                 allVendors = await fetchVendors();
             }
             const verifiedVendors = allVendors.filter(v => v.verified === true);
@@ -90,25 +67,13 @@ out skel qt;
                 if (osmData.elements) {
                     unverifiedVendors = osmData.elements
                         .filter((el: any) => el.lat && el.lon)
-                        .filter((el: any) => {
-                            const tags = el.tags || {};
-                            const name = (tags.name || "").toLowerCase();
-                            const shopType = (tags.shop || "").toLowerCase();
-                            const plantKeywords = ['nursery', 'garden', 'flora', 'sapling', 'horticulture', 'potted', 'botanical', 'vanapathi', 'tree house', 'bonsai', 'greenery', 'landscape', 'seeds', 'orchard', 'farm'];
-                            const isPlantRelated = plantKeywords.some(word => name.includes(word)) || shopType.includes('garden_centre') || shopType.includes('plant_nursery');
-                            if (!isPlantRelated) return false;
-                            const blacklist = ['temple', 'pooja', 'store', 'mart', 'bakery', 'medical', 'pharmacy', 'hospital', 'clinic', 'school', 'atm', 'bank', 'restaurant', 'hotel', 'police', 'post office', 'supermarket', 'mall', 'gym', 'salon', 'boutique', 'mosque', 'church', 'mandir', 'library', 'office', 'hardware', 'furniture', 'electronics', 'gift', 'stationery', 'tailor', 'laundry', 'sweet', 'juice', 'liquor', 'wine', 'automotive', 'tyre', 'garage', 'cement', 'paint', 'tiles', 'educational', 'trust', 'sanitary', 'studio', 'optical'];
-                            if (blacklist.some(word => name.includes(word))) return false;
-                            if (shopType === 'florist' && !name.includes('nursery') && !name.includes('garden')) return false;
-                            return name.length >= 3;
-                        })
                         .map((el: any) => ({
                             id: `osm-${el.id}`,
-                            name: el.tags.name,
+                            name: el.tags.name || "Unnamed Nursery",
                             latitude: el.lat,
                             longitude: el.lon,
-                            address: el.tags["addr:full"] || el.tags["addr:street"] || el.tags["addr:city"] || "Local Public Listing",
-                            phone: el.tags.phone || el.tags["contact:phone"] || "N/A",
+                            address: el.tags["addr:full"] || el.tags["addr:street"] || "Local Public Listing",
+                            phone: el.tags.phone || "N/A",
                             whatsapp: "",
                             verified: false,
                             highlyRecommended: false,
@@ -120,11 +85,7 @@ out skel qt;
             const combined = [...verifiedVendors, ...unverifiedVendors];
             const nearby = combined.filter(v => getDistanceFromLatLonInKm(lat, lng, v.latitude, v.longitude) <= 50)
                 .map(v => ({ ...v, distance: getDistanceFromLatLonInKm(lat, lng, v.latitude, v.longitude) }))
-                .sort((a: any, b: any) => {
-                    if (a.highlyRecommended && !b.highlyRecommended) return -1;
-                    if (a.verified && !b.verified) return -1;
-                    return (a.distance || 0) - (b.distance || 0);
-                });
+                .sort((a: any, b: any) => (a.distance || 0) - (b.distance || 0));
 
             setNearbyVendors(nearby);
         } finally {
@@ -166,39 +127,26 @@ out skel qt;
         }
     }, [handleGetLocation]);
 
-    // Plant Filtering Logic
-    const filteredPlants = useMemo(() => {
-        return allPlants.filter(plant => {
-            const matchesSearch = plant.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                plant.scientificName.toLowerCase().includes(searchQuery.toLowerCase());
-            const matchesType = filterType === 'all' || plant.type === filterType;
-            const matchesSun = filterSun === 'all' || plant.sunlight === filterSun;
-            const matchesO2 = filterO2 === 'all' || plant.oxygenLevel === filterO2;
-            return matchesSearch && matchesType && matchesSun && matchesO2;
-        });
-    }, [allPlants, searchQuery, filterType, filterSun, filterO2]);
-
     const displayVendors = nearbyVendors.filter(v => activeTab === 'verified' ? v.verified : !v.verified);
 
     return (
         <div className={styles.nearbyContainer}>
-            {/* Notice Banner */}
             <div className={styles.noticeBanner}>
                 <AlertCircle className={styles.noticeIcon} size={24} />
                 <div className={styles.noticeText}>
-                    <span>Satellite Protocol Active:</span> For the most accurate local results, please <span>locate yourself</span> and <span>refresh plant listings</span>. This ensures we query the latest inventory from verified partner nurseries.
+                    <span>SATELLITE SYNC ACTIVE:</span> Find real nurseries verified in our simulation network.
+                    Locate yourself to see nearest high-oxygen suppliers.
                 </div>
                 <Button variant="outline" size="sm" onClick={() => handleGetLocation(true)} disabled={loading} style={{ marginLeft: 'auto' }}>
-                    <RefreshCw size={14} className={loading ? 'animate-spin' : ''} /> Sync Now
+                    <RefreshCw size={14} className={loading ? 'animate-spin' : ''} /> Sync GPS
                 </Button>
             </div>
 
             <div className={styles.headerSection}>
-                <h1 className={styles.title}>NEARBY GREENERY</h1>
-                <p className={styles.subtitle}>Locate high-oxygen species being tracked within your 50km radius.</p>
+                <h1 className={styles.title}>NURSERY EXPLORER</h1>
+                <p className={styles.subtitle}>Discover verified nurseries providing simulation-matched species near you.</p>
             </div>
 
-            {/* Map Preview */}
             <div className={styles.mapContainer}>
                 {position ? (
                     <MapContainer center={position} zoom={11} style={{ height: '100%', width: '100%' }}>
@@ -206,7 +154,7 @@ out skel qt;
                         <ChangeView center={position} />
                         <Marker position={position} icon={L.divIcon({
                             className: 'u-marker',
-                            html: `<div style="background:#00ff9d00;width:30px;height:30px;display:flex;align-items:center;justify-content:center;"><div style="background:#00ff9d;width:14px;height:14px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 15px #00ff9d"></div></div>`
+                            html: `<div style="background:transparent;width:30px;height:30px;display:flex;align-items:center;justify-content:center;"><div style="background:var(--color-primary);width:14px;height:14px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 15px var(--color-primary)"></div></div>`
                         })}><Popup>Origin point (You)</Popup></Marker>
                         {displayVendors.map(v => (
                             <Marker key={v.id} position={[v.latitude, v.longitude]}>
@@ -215,73 +163,18 @@ out skel qt;
                         ))}
                     </MapContainer>
                 ) : (
-                    <div style={{ background: '#000', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#666' }}>
+                    <div style={{ background: 'var(--color-bg-card)', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-text-muted)' }}>
                         Initializing precision tracking...
                     </div>
                 )}
             </div>
 
-            {/* Plant Discovery Section */}
-            <div className={styles.searchSection}>
-                <div className={styles.searchHeader}>
-                    <h2 className={styles.searchTitle}><Sprout color="var(--color-primary)" /> Discover Local Inventory</h2>
-                    <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Filtering {allPlants.length} active species</span>
-                </div>
-
-                <div className={styles.searchBarWrapper}>
-                    <div className={styles.searchInputWrapper}>
-                        <Search className={styles.searchIcon} size={20} />
-                        <input
-                            type="text"
-                            className={styles.searchInput}
-                            placeholder="Search species (e.g. Aloe Vera, Snake Plant...)"
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                        />
-                    </div>
-                </div>
-
-                <div className={styles.filterGroups}>
-                    <div className={styles.filterGroup}>
-                        <span className={styles.filterLabel}>Environment</span>
-                        <div className={styles.chips}>
-                            {['all', 'indoor', 'outdoor'].map(t => (
-                                <button key={t} className={`${styles.chip} ${filterType === t ? styles.active : ''}`} onClick={() => setFilterType(t as any)}>
-                                    {t.toUpperCase()}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-                    <div className={styles.filterGroup}>
-                        <span className={styles.filterLabel}>Sunlight Efficiency</span>
-                        <div className={styles.chips}>
-                            {['all', 'low', 'medium', 'high', 'direct'].map(s => (
-                                <button key={s} className={`${styles.chip} ${filterSun === s ? styles.active : ''}`} onClick={() => setFilterSun(s as any)}>
-                                    {s.toUpperCase()}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-                    <div className={styles.filterGroup}>
-                        <span className={styles.filterLabel}>Oxygen Flux</span>
-                        <div className={styles.chips}>
-                            {['all', 'moderate', 'high', 'very-high'].map(o => (
-                                <button key={o} className={`${styles.chip} ${filterO2 === o ? styles.active : ''}`} onClick={() => setFilterO2(o as any)}>
-                                    {o.replace('-', ' ').toUpperCase()}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Vendor Display and Results Toggle */}
             <div className={styles.resultsSection}>
                 <div className={styles.resultsHeader}>
-                    <h3 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 800 }}>Search Results ({displayVendors.length} Shops)</h3>
+                    <h3 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 800 }}>Nearby Outlets ({displayVendors.length})</h3>
                     <div className={styles.tabGroup}>
                         <button className={`${styles.tabBtn} ${activeTab === 'verified' ? styles.active : ''}`} onClick={() => setActiveTab('verified')}>
-                            <Star size={16} fill={activeTab === 'verified' ? 'black' : 'none'} /> Verified
+                            <Star size={16} fill={activeTab === 'verified' ? 'var(--color-text-main)' : 'none'} /> Verified
                         </button>
                         <button className={`${styles.tabBtn} ${activeTab === 'unverified' ? styles.active : ''}`} onClick={() => setActiveTab('unverified')}>
                             <AlertCircle size={16} /> Public
@@ -290,9 +183,9 @@ out skel qt;
                 </div>
 
                 {displayVendors.length === 0 ? (
-                    <div style={{ textAlign: 'center', padding: '4rem', background: 'rgba(255,255,255,0.02)', borderRadius: '2rem', border: '1px dashed rgba(255,255,255,0.1)' }}>
-                        <MapPin size={48} color="#444" style={{ marginBottom: '1rem' }} />
-                        <p style={{ color: '#888' }}>No nurseries detected within scanning radius. Try syncing GPS.</p>
+                    <div style={{ textAlign: 'center', padding: '4rem', background: 'var(--color-bg-card)', borderRadius: '2rem', border: '1px dashed var(--glass-border)' }}>
+                        <MapPin size={48} color="var(--color-text-muted)" style={{ marginBottom: '1rem' }} />
+                        <p style={{ color: 'var(--color-text-muted)' }}>No simulation partners detected. Try syncing your GPS metadata.</p>
                     </div>
                 ) : (
                     <div className={styles.vendorGrid}>
@@ -307,7 +200,7 @@ out skel qt;
 
                                 <div className={styles.cardActions}>
                                     <Button variant="outline" size="sm" className={styles.actionBtn} onClick={() => window.open(`https://www.google.com/maps/dir/?api=1&destination=${vendor.latitude},${vendor.longitude}`)}>
-                                        <ExternalLink size={14} /> Path
+                                        <ExternalLink size={14} /> Navigate
                                     </Button>
                                     {(vendor.whatsapp || vendor.phone !== 'N/A') && (
                                         <Button size="sm" className={styles.actionBtn} onClick={() => { logVendorContact({ vendorId: vendor.id, vendorName: vendor.name, userEmail: user?.email || 'guest', contactType: 'whatsapp' }); window.open(`https://wa.me/${(vendor.whatsapp || vendor.phone).replace(/[^0-9]/g, '')}`, '_blank'); }}>
@@ -320,21 +213,6 @@ out skel qt;
                     </div>
                 )}
             </div>
-
-            {/* Filtered Plant View (Integrated Search Results) */}
-            {(searchQuery || filterType !== 'all' || filterSun !== 'all' || filterO2 !== 'all') && (
-                <div style={{ marginTop: '4rem' }}>
-                    <div className={styles.headerSection}>
-                        <h3 style={{ margin: 0, fontSize: '2rem', fontWeight: 900 }}>Matching Species ({filteredPlants.length})</h3>
-                        <p style={{ color: 'var(--color-text-muted)', fontSize: '1rem' }}>Available high-vitality species matching your discovery criteria.</p>
-                    </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '2.5rem', marginTop: '2.5rem' }}>
-                        {filteredPlants.map(plant => (
-                            <PlantCard key={plant.id} plant={plant} onAdd={handleAddToCart} />
-                        ))}
-                    </div>
-                </div>
-            )}
         </div>
     );
 };

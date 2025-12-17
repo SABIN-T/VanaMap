@@ -35,10 +35,7 @@
     font-weight: 900;
     line-height: 1.1;
     margin-bottom: 1.5rem;
-    background: linear-gradient(to bottom, #fff 40%, #888);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: var(--color-text-main);
 }
 
 .heroSubtitle {
@@ -50,280 +47,162 @@
     margin-inline: auto;
 }
 
-.actionContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 1.5rem;
-}
-
 .searchBox {
     display: flex;
     gap: 0.5rem;
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--color-bg-card);
     padding: 0.5rem;
     border-radius: 1rem;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--glass-border);
     width: 100%;
     max-width: 450px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--glass-shadow);
     transition: 0.3s;
-}
-
-.searchBox:focus-within {
-    border-color: var(--color-primary);
-    background: rgba(255, 255, 255, 0.05);
 }
 
 .searchInput {
     background: transparent;
     border: none;
-    color: white;
+    color: var(--color-text-main);
     padding: 0 1rem;
     flex: 1;
     outline: none;
     font-size: 1rem;
 }
 
-.divider {
-    color: rgba(255, 255, 255, 0.2);
-    font-size: 0.8rem;
-    font-weight: 800;
-    letter-spacing: 2px;
-}
-
-.buttonGroup {
-    display: flex;
-    gap: 1.5rem;
-}
-
-/* Weather Display */
-.weatherDisplay {
-    margin-top: 2rem;
-    width: 100%;
-    max-width: 800px;
-    margin-inline: auto;
-    animation: slideUp 0.6s ease-out;
-}
-
 .weatherCard {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--color-bg-card);
+    border: var(--glass-border);
     border-radius: 2rem;
     overflow: hidden;
     backdrop-filter: blur(20px);
-}
-
-.weatherMain {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 2rem;
-    padding: 2rem;
-    align-items: center;
-    justify-content: center;
-}
-
-.locationInfo {
-    text-align: left;
-    min-width: 180px;
-}
-
-.label {
-    display: block;
-    font-size: 0.7rem;
-    font-weight: 800;
-    color: var(--color-primary);
-    letter-spacing: 2px;
-    margin-bottom: 0.25rem;
+    box-shadow: var(--glass-shadow);
 }
 
 .h3 {
     font-size: 1.5rem;
     font-weight: 800;
     margin: 0;
-    color: white;
-}
-
-.changeBtn {
-    background: none;
-    border: none;
-    color: var(--color-text-muted);
-    font-size: 0.8rem;
-    padding: 0;
-    cursor: pointer;
-    text-decoration: underline;
-    margin-top: 0.5rem;
-}
-
-.vDivider {
-    width: 1px;
-    height: 50px;
-    background: rgba(255, 255, 255, 0.1);
-}
-
-.statGroup {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
-.iconCircle {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.05);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--color-text-main);
 }
 
 .statVal {
     font-size: 1.5rem;
     font-weight: 900;
-    color: white;
+    color: var(--color-text-main);
     line-height: 1;
 }
 
-.statSub {
-    font-size: 0.75rem;
-    color: var(--color-text-muted);
-    font-weight: 600;
-    margin-top: 0.2rem;
-}
-
-.weatherFooter {
-    background: rgba(255, 255, 255, 0.02);
-    padding: 1.25rem 2rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-
-.footerMsg {
-    text-align: left;
-}
-
-.liveTag {
-    font-size: 0.6rem;
-    font-weight: 900;
-    color: var(--color-primary);
-    background: rgba(0, 255, 157, 0.1);
-    padding: 0.2rem 0.5rem;
-    border-radius: 4px;
-    display: inline-block;
-    margin-bottom: 0.25rem;
-}
-
-.footerMsg p {
-    font-size: 0.8rem;
-    color: var(--color-text-muted);
-    margin: 0;
-}
-
-.pulseBtn {
-    animation: pulse 2s infinite;
-}
-
-/* Features */
-.featuresGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 1.5rem;
-    margin-top: 5rem;
-}
-
 .featureCard {
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--color-bg-card);
+    border: var(--glass-border);
     border-radius: 1.5rem;
     padding: 2rem;
     text-align: left;
     transition: 0.3s;
-}
-
-.featureCard:hover {
-    background: rgba(255, 255, 255, 0.04);
-    transform: translateY(-5px);
-}
-
-.iconWrapper {
-    width: 50px;
-    height: 50px;
-    border-radius: 1rem;
-    background: rgba(0, 255, 157, 0.1);
-    color: var(--color-primary);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 1.5rem;
+    box-shadow: var(--glass-shadow);
 }
 
 .featureCard h3 {
     font-size: 1.25rem;
     font-weight: 700;
     margin-bottom: 0.75rem;
-    color: white;
-}
-
-.featureCard p {
-    font-size: 0.95rem;
-    color: var(--color-text-muted);
-    line-height: 1.5;
+    color: var(--color-text-main);
 }
 
 /* Section Header */
-.sectionHeader {
-    text-align: center;
-    margin-bottom: 3rem;
-    margin-top: 4rem;
-}
-
 .sectionHeader h2 {
     font-size: 2.5rem;
     font-weight: 900;
     margin-bottom: 0.5rem;
-    color: white;
+    color: var(--color-text-main);
 }
 
-.sectionHeader p {
-    color: var(--color-text-muted);
-    font-size: 1.1rem;
-}
-
-/* Grid & Filters */
-.filters {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
+/* Filter Discovery Section */
+.filterDiscoverySection {
+    background: var(--color-bg-card);
+    border: var(--glass-border);
+    border-radius: 2rem;
+    padding: 2rem;
     margin-bottom: 3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    box-shadow: var(--glass-shadow);
 }
 
-.filterBtn {
-    padding: 0.75rem 1.5rem;
-    border-radius: 99px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+.searchBarWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.searchIcon {
+    position: absolute;
+    left: 1.5rem;
     color: var(--color-text-muted);
-    font-size: 0.9rem;
-    font-weight: 600;
-    cursor: pointer;
+}
+
+.searchSpeciesInput {
+    width: 100%;
+    background: var(--color-bg);
+    border: 1px solid var(--glass-border);
+    padding: 1rem 1rem 1rem 3.5rem;
+    border-radius: 1rem;
+    color: var(--color-text-main);
+    font-size: 1.1rem;
+    outline: none;
     transition: 0.3s;
 }
 
+.searchSpeciesInput:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 4px rgba(0, 255, 157, 0.1);
+}
+
+.filterWrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2.5rem;
+}
+
+.filterChipGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.groupLabel {
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: var(--color-text-muted);
+    letter-spacing: 1.5px;
+    margin-left: 0.5rem;
+}
+
+.filterBtn {
+    padding: 0.6rem 1.25rem;
+    border-radius: 0.75rem;
+    background: var(--color-bg);
+    border: 1px solid var(--glass-border);
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s;
+    margin-right: 0.5rem;
+}
+
 .filterBtn:hover {
-    background: rgba(255, 255, 255, 0.05);
-    color: white;
+    border-color: var(--color-primary);
+    color: var(--color-text-main);
 }
 
 .filterBtn.active {
     background: var(--color-primary);
     color: #000;
     border-color: var(--color-primary);
-    box-shadow: 0 10px 20px rgba(0, 255, 157, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 255, 157, 0.2);
 }
 
 .grid {
@@ -402,5 +281,13 @@
     .buttonGroup {
         flex-direction: column;
         width: 100%;
+    }
+
+    .filterDiscoverySection {
+        padding: 1.25rem;
+    }
+
+    .filterWrapper {
+        gap: 1.5rem;
     }
 }
