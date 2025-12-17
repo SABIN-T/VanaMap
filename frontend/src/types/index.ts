@@ -27,6 +27,7 @@ export interface Vendor {
     inventoryIds: string[]; // List of plant IDs they sell
     verified?: boolean;
     highlyRecommended?: boolean;
+    distance?: number;
 }
 
 export interface WeatherData {
