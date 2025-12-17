@@ -4,6 +4,7 @@ import { Button } from '../components/common/Button';
 import { User, Store } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { countryCodes } from '../data/countryCodes';
+import { countryStates } from '../data/states';
 
 export const Auth = () => {
     const navigate = useNavigate();
@@ -19,7 +20,17 @@ export const Auth = () => {
     const [name, setName] = useState('');
 
     // Vendor Specific
-    const [phoneCode, setPhoneCode] = useState(countryCodes[0]?.code || '+91');
+    const [country, setCountry] = useState('India');
+    const [state, setState] = useState('');
+    const [phoneCode, setPhoneCode] = useState('+91');
+
+    // Sync phone code with country
+    useEffect(() => {
+        const found = countryCodes.find(c => c.name === country);
+        if (found) {
+            setPhoneCode(found.code);
+        }
+    }, [country]);
 
     useEffect(() => {
         if (user) {
@@ -132,15 +143,58 @@ export const Auth = () => {
                     {/* Vendor Fields (Signup + Vendor only) */}
                     {view === 'signup' && role === 'vendor' && (
                         <>
-                            {/* Simplified Vendor Fields for brevity since logic exists in original... */}
-                            {/* Re-implementing simplified location/phone logic */}
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                                <label style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>Phone</label>
-                                <div style={{ display: 'flex', gap: '0.5rem' }}>
-                                    <select value={phoneCode} onChange={(e) => setPhoneCode(e.target.value)} style={{ padding: '0.75rem', borderRadius: '0.5rem', border: 'var(--glass-border)', background: 'var(--glass-bg)', color: 'var(--color-text-main)' }}>
-                                        {countryCodes.map(c => <option key={c.name} value={c.code}>{c.code}</option>)}
+                            <div style={{ display: 'flex', gap: '1rem', width: '100%' }}>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', flex: 1 }}>
+                                    <label style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>Country</label>
+                                    <select
+                                        value={country}
+                                        onChange={(e) => setCountry(e.target.value)}
+                                        style={{ padding: '0.75rem', borderRadius: '0.5rem', border: 'var(--glass-border)', background: 'var(--glass-bg)', color: 'var(--color-text-main)', outline: 'none' }}
+                                    >
+                                        {countryCodes.map(c => <option key={c.name} value={c.name}>{c.name}</option>)}
                                     </select>
-                                    <input type="tel" placeholder="1234567890" style={{ flex: 1, padding: '0.75rem', borderRadius: '0.5rem', border: 'var(--glass-border)', background: 'var(--glass-bg)', color: 'var(--color-text-main)' }} />
+                                </div>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', flex: 1 }}>
+                                    <label style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>State / Province</label>
+                                    {countryStates[country] ? (
+                                        <select
+                                            value={state}
+                                            onChange={(e) => setState(e.target.value)}
+                                            required
+                                            style={{ padding: '0.75rem', borderRadius: '0.5rem', border: 'var(--glass-border)', background: 'var(--glass-bg)', color: 'var(--color-text-main)', outline: 'none' }}
+                                        >
+                                            <option value="">Select State</option>
+                                            {countryStates[country].map(s => <option key={s} value={s}>{s}</option>)}
+                                        </select>
+                                    ) : (
+                                        <input
+                                            type="text"
+                                            value={state}
+                                            onChange={(e) => setState(e.target.value)}
+                                            placeholder="Enter State"
+                                            required
+                                            style={{ padding: '0.75rem', borderRadius: '0.5rem', border: 'var(--glass-border)', background: 'var(--glass-bg)', color: 'var(--color-text-main)', outline: 'none' }}
+                                        />
+                                    )}
+                                </div>
+                            </div>
+
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                <label style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>Phone Number</label>
+                                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                    <div style={{
+                                        padding: '0.75rem',
+                                        borderRadius: '0.5rem',
+                                        border: 'var(--glass-border)',
+                                        background: 'rgba(255,255,255,0.05)',
+                                        color: 'var(--color-primary)',
+                                        fontWeight: 'bold',
+                                        minWidth: '60px',
+                                        textAlign: 'center'
+                                    }}>
+                                        {phoneCode}
+                                    </div>
+                                    <input type="tel" placeholder="1234567890" required style={{ flex: 1, padding: '0.75rem', borderRadius: '0.5rem', border: 'var(--glass-border)', background: 'var(--glass-bg)', color: 'var(--color-text-main)', outline: 'none' }} />
                                 </div>
                             </div>
                         </>
