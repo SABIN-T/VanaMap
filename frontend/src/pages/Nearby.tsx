@@ -33,6 +33,7 @@ function ChangeView({ center }: { center: [number, number] }) {
 export const Nearby = () => {
     const { user } = useAuth();
     const [position, setPosition] = useState<[number, number] | null>(null);
+    const [placeName, setPlaceName] = useState<string>("");
     const [nearbyVendors, setNearbyVendors] = useState<Vendor[]>([]);
     const [loading, setLoading] = useState(false);
     const [activeTab, setActiveTab] = useState<'verified' | 'unverified'>('verified');
@@ -41,6 +42,18 @@ export const Nearby = () => {
     const fetchAllData = async (lat: number, lng: number) => {
         setLoading(true);
         try {
+            // Reverse Geocoding
+            try {
+                const geoRes = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
+                const geoData = await geoRes.json();
+                if (geoData.address) {
+                    const city = geoData.address.city || geoData.address.town || geoData.address.village || geoData.address.suburb || "Unknown Area";
+                    setPlaceName(city);
+                }
+            } catch (e) {
+                console.warn("Geocoding failed", e);
+            }
+
             let allVendors = await fetchVendors();
             if (allVendors.length === 0) {
                 const { VENDORS } = await import('../data/mocks');
@@ -134,8 +147,16 @@ out skel qt;
             <div className={styles.noticeBanner}>
                 <AlertCircle className={styles.noticeIcon} size={24} />
                 <div className={styles.noticeText}>
-                    <span>SATELLITE SYNC ACTIVE:</span> Find real nurseries verified in our simulation network.
-                    Locate yourself to see nearest high-oxygen suppliers.
+                    {placeName ? (
+                        <>
+                            <span>LOCATION DETECTED: {placeName.toUpperCase()}</span> — Found verified simulation partners in your radius.
+                        </>
+                    ) : (
+                        <>
+                            <span>SATELLITE SYNC ACTIVE:</span> Find real nurseries verified in our simulation network.
+                            Locate yourself to see nearest high-oxygen suppliers.
+                        </>
+                    )}
                 </div>
                 <Button variant="outline" size="sm" onClick={() => handleGetLocation(true)} disabled={loading} style={{ marginLeft: 'auto' }}>
                     <RefreshCw size={14} className={loading ? 'animate-spin' : ''} /> Sync GPS

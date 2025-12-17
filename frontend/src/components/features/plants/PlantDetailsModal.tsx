@@ -124,24 +124,45 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
 
                     {/* Advanced Simulation Section */}
                     <div className={styles.simulationContainer}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                            <h3 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '1.1rem', fontWeight: 800 }}>
-                                <Activity size={20} color="var(--color-primary)" /> SMART ECO-SIMULATOR
-                            </h3>
-
-                            <div style={{
-                                padding: '0.25rem 0.75rem', borderRadius: '99px',
-                                background: isDay ? 'rgba(251, 191, 36, 0.1)' : 'rgba(96, 165, 250, 0.1)',
-                                color: isDay ? '#fbbf24' : '#60a5fa',
-                                fontWeight: 800, fontSize: '0.7rem', display: 'flex', alignItems: 'center', gap: '0.5rem'
-                            }}>
-                                {isDay ? <Sun size={14} /> : <span style={{ fontSize: '1.2em' }}>☾</span>}
-                                {isDay ? 'DAY CYCLE' : 'NIGHT CYCLE'}
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                {/* Square Photo in Top Left */}
+                                <img
+                                    src={plant.imageUrl}
+                                    className="sim-thumb"
+                                    alt="thumb"
+                                    style={{
+                                        width: '60px',
+                                        height: '60px',
+                                        objectFit: 'cover',
+                                        borderRadius: '12px',
+                                        border: '2px solid rgba(255,255,255,0.2)',
+                                        boxShadow: '0 4px 10px rgba(0,0,0,0.1)'
+                                    }}
+                                />
+                                <h3 style={{ margin: 0, display: 'flex', flexDirection: 'column', fontSize: '1.1rem', fontWeight: 800 }}>
+                                    <span style={{ fontSize: '0.7rem', color: 'var(--color-primary)', textTransform: 'uppercase', letterSpacing: '1px' }}>Live Data</span>
+                                    <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                                        <Activity size={18} color="var(--color-primary)" /> SMART SIMULATOR
+                                    </span>
+                                </h3>
                             </div>
 
-                            <div className={styles.acToggle}>
-                                <span style={{ fontSize: '0.7rem', fontWeight: 800, color: isACMode ? 'var(--color-primary)' : '#666' }}>AC MODE</span>
-                                <button className={`${styles.toggleSwitch} ${isACMode ? styles.active : ''}`} onClick={() => setIsACMode(!isACMode)}></button>
+                            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                                <div style={{
+                                    padding: '0.25rem 0.75rem', borderRadius: '99px',
+                                    background: isDay ? 'rgba(251, 191, 36, 0.1)' : 'rgba(96, 165, 250, 0.1)',
+                                    color: isDay ? '#fbbf24' : '#60a5fa',
+                                    fontWeight: 800, fontSize: '0.7rem', display: 'flex', alignItems: 'center', gap: '0.5rem'
+                                }}>
+                                    {isDay ? <Sun size={14} /> : <span style={{ fontSize: '1.2em' }}>☾</span>}
+                                    {isDay ? 'DAY CYCLE' : 'NIGHT CYCLE'}
+                                </div>
+
+                                <div className={styles.acToggle}>
+                                    <span style={{ fontSize: '0.7rem', fontWeight: 800, color: isACMode ? 'var(--color-primary)' : '#666' }}>AC MODE</span>
+                                    <button className={`${styles.toggleSwitch} ${isACMode ? styles.active : ''}`} onClick={() => setIsACMode(!isACMode)}></button>
+                                </div>
                             </div>
                         </div>
 

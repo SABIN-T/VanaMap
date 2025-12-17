@@ -22,9 +22,10 @@ function App() {
               position="top-center"
               toastOptions={{
                 style: {
-                  background: '#1f2937',
-                  color: '#fff',
-                  border: '1px solid #374151',
+                  background: '#ffffff',
+                  color: '#0f172a',
+                  border: '1px solid rgba(0,0,0,0.1)',
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
                 },
                 success: {
                   iconTheme: {
@@ -32,6 +33,12 @@ function App() {
                     secondary: '#fff',
                   },
                 },
+                error: {
+                  iconTheme: {
+                    primary: '#ef4444',
+                    secondary: '#fff',
+                  }
+                }
               }}
             />
             <Navbar />
