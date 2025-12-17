@@ -74,10 +74,12 @@
 .weatherCard {
     background: var(--color-bg-card);
     border: var(--glass-border);
-    border-radius: 2rem;
+    border-radius: 2.5rem;
     overflow: hidden;
     backdrop-filter: blur(20px);
     box-shadow: var(--glass-shadow);
+    max-width: 900px;
+    margin: 0 auto;
 }
 
 .h3 {
@@ -271,6 +273,23 @@
     }
 }
 
+.weatherMain {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 3rem;
+    padding: 3.5rem;
+}
+
+.weatherFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem 3.5rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
 @media (max-width: 768px) {
     .hero {
         padding: 4rem 1rem;
@@ -282,12 +301,14 @@
 
     .weatherMain {
         flex-direction: column;
-        gap: 1.5rem;
+        gap: 2.5rem;
+        padding: 2.5rem;
     }
 
     .weatherFooter {
         flex-direction: column;
         text-align: center;
+        padding: 2.5rem;
     }
 
     .footerMsg {

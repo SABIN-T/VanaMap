@@ -116,20 +116,20 @@
 }
 
 .content {
-    padding: 2rem;
+    padding: 3rem 2.5rem;
 }
 
 .descriptionSection {
-    margin-bottom: 2rem;
+    margin-bottom: 3.5rem;
 }
 
 /* Simulation Style Enhancements */
 .simulationContainer {
     background: rgba(255, 255, 255, 0.02);
     border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 1.5rem;
-    padding: 1.5rem;
-    margin-bottom: 2rem;
+    border-radius: 2rem;
+    padding: 2.5rem;
+    margin-bottom: 3.5rem;
     box-shadow: inset 0 0 40px rgba(0, 255, 157, 0.02);
 }
 
@@ -308,8 +308,8 @@
 .infoGrid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    margin-bottom: 2rem;
+    gap: 2rem;
+    margin-bottom: 3.5rem;
 }
 
 .infoTile {
@@ -339,8 +339,8 @@
 .listsGrid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-    margin-bottom: 2rem;
+    gap: 3rem;
+    margin-bottom: 3rem;
 }
 
 .listSection h4 {
