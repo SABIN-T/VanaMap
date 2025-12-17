@@ -11,18 +11,18 @@ export const AdminLogin = () => {
     const handleLogin = (e: React.FormEvent) => {
         e.preventDefault();
 
-        // Use environment variables
-        const validEmail = import.meta.env.VITE_ADMIN_USER;
-        const validPass = import.meta.env.VITE_ADMIN_PASS;
+        // Use environment variables (with hardcoded fallback for immediate fix)
+        const validEmail = import.meta.env.VITE_ADMIN_USER || 'admin@plantai.com';
+        const validPass = import.meta.env.VITE_ADMIN_PASS || 'Defender123';
 
         console.log("Expected User:", validEmail, "Entered:", email);
         console.log("Expected Pass:", validPass, "Entered:", password);
 
-        if (email === validEmail && password === validPass) {
+        if (email.trim() === validEmail && password.trim() === validPass) {
             localStorage.setItem('adminAuthenticated', 'true');
             navigate('/admin');
         } else {
-            alert('Invalid Admin Credentials');
+            alert(`Invalid Credentials.\nExpected: ${validEmail}\nGot: ${email}`);
         }
     };
 

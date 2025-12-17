@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { fetchVendors, updateVendor, deleteVendor, fetchPlants, addPlant, updatePlant, deletePlant } from '../services/api';
 import type { Vendor, Plant } from '../types';
-import { Check, X, Store, Trash2, Star, Edit, Image as ImageIcon } from 'lucide-react';
+import { Check, X, Trash2, Edit, Image as ImageIcon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/common/Button';
 
@@ -130,11 +130,6 @@ export const Admin = () => {
 
     const handleVerify = async (id: string, status: boolean) => {
         await updateVendor(id, { verified: status });
-        loadAll();
-    };
-
-    const handleRecommended = async (id: string, status: boolean) => {
-        await updateVendor(id, { highlyRecommended: status });
         loadAll();
     };
 

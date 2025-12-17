@@ -1,52 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { GoogleLogin } from '@react-oauth/google';
 import { Button } from '../components/common/Button';
-import { User, Store, MapPin } from 'lucide-react';
+import { User, Store } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { countryCodes } from '../data/countryCodes';
-import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
-import L from 'leaflet';
-
-// Fix Leaflet Default Icon
-import icon from 'leaflet/dist/images/marker-icon.png';
-import iconShadow from 'leaflet/dist/images/marker-shadow.png';
-
-let DefaultIcon = L.icon({
-    iconUrl: icon,
-    shadowUrl: iconShadow,
-    iconSize: [25, 41],
-    iconAnchor: [12, 41]
-});
-
-L.Marker.prototype.options.icon = DefaultIcon;
-
-const DraggableMarker = ({ location, setLocation }: { location: { lat: number, lng: number }, setLocation: (loc: { lat: number, lng: number }) => void }) => {
-    const map = useMapEvents({
-        click(e) {
-            setLocation(e.latlng);
-            map.flyTo(e.latlng, map.getZoom());
-        },
-    });
-
-    return (
-        <Marker
-            draggable={true}
-            eventHandlers={{
-                dragend: (e) => {
-                    const marker = e.target;
-                    const position = marker.getLatLng();
-                    setLocation(position);
-                },
-            }}
-            position={location}
-        />
-    )
-}
 
 export const Auth = () => {
     const navigate = useNavigate();
-    const { login, signup, googleLogin, user } = useAuth();
+    const { login, signup, user } = useAuth(); // Removed googleLogin
 
     type AuthView = 'login' | 'signup' | 'forgot' | 'reset';
     const [view, setView] = useState<AuthView>('login');
@@ -59,7 +20,6 @@ export const Auth = () => {
 
     // Vendor Specific
     const [phoneCode, setPhoneCode] = useState(countryCodes[0]?.code || '+91');
-    const [location, setLocation] = useState<{ lat: number, lng: number } | null>(null);
 
     useEffect(() => {
         if (user) {
@@ -112,20 +72,6 @@ export const Auth = () => {
         }
     };
 
-    /* GPS Location handler */
-    const handleGetLocation = () => {
-        if (!navigator.geolocation) {
-            alert("Geolocation is not supported by your browser");
-            return;
-        }
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const newLoc = { lat: position.coords.latitude, lng: position.coords.longitude };
-                setLocation(newLoc);
-            },
-            () => alert("Unable to retrieve location")
-        );
-    };
 
     return (
         <div className="container" style={{ padding: '4rem 1rem', display: 'flex', justifyContent: 'center' }}>
@@ -198,9 +144,6 @@ export const Auth = () => {
                                     <input type="tel" placeholder="1234567890" style={{ flex: 1, padding: '0.75rem', borderRadius: '0.5rem', border: 'var(--glass-border)', background: 'var(--glass-bg)', color: 'var(--color-text-main)' }} />
                                 </div>
                             </div>
-                            <button type="button" onClick={handleGetLocation} className="btn btn-outline" style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                                <MapPin size={16} /> Auto-Detect Shop GPS
-                            </button>
                         </>
                     )}
 

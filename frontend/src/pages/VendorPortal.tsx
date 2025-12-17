@@ -5,7 +5,6 @@ import { Button } from '../components/common/Button';
 import { MapPin } from 'lucide-react';
 import { registerVendor, fetchVendors, updateVendor } from '../services/api';
 import { useAuth } from '../context/AuthContext';
-import type { Vendor } from '../types';
 
 function DraggableMarker({ pos, setPos }: { pos: L.LatLng, setPos: (pos: L.LatLng) => void }) {
     useMapEvents({
