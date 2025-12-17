@@ -80,6 +80,19 @@ export const generateAndDownloadPDF = () => {
         addParagraph('Step 2: Get Verified - Upload inventory to get a Green Tick.');
         addParagraph('Step 3: Auto-Detect GPS - Pinpoint your shop location for buyers.');
 
+        // 4. Care Protocols
+        y += 5;
+        addSectionTitle('4. Advanced Care Protocols', 255, 100, 100); // Red/Orange
+        addParagraph('Watering: Always check soil moisture before watering. Overwatering is the #1 killer of indoor plants. Use the finger test: top inch should be dry.');
+        addParagraph('Light: "Bright Indirect Light" means the plant sees the sky but not the sun. South-facing windows are best for high-light plants; North for low-light.');
+
+        // 5. Troubleshooting
+        y += 5;
+        addSectionTitle('5. System Troubleshooting', 200, 200, 200); // White
+        addParagraph('Yellow Leaves: Usually a sign of overwatering or poor drainage.');
+        addParagraph('Drooping: Often means the plant is thirsty, but check the soil first.');
+        addParagraph('Brown Tips: Indicates low humidity. Use a humidifier or mist regularly.');
+
         // Footer
         checkPageBreak(20);
         doc.setFontSize(9);
