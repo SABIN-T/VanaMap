@@ -129,3 +129,21 @@ export const addPlant = async (plantData: Partial<Plant>) => {
     if (!res.ok) throw new Error("Failed to add plant");
     return res.json();
 };
+
+export const updatePlant = async (id: string, updates: Partial<Plant>) => {
+    const res = await fetch(`${API_URL}/plants/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updates)
+    });
+    if (!res.ok) throw new Error("Failed to update plant");
+    return res.json();
+};
+
+export const deletePlant = async (id: string) => {
+    const res = await fetch(`${API_URL}/plants/${id}`, {
+        method: 'DELETE'
+    });
+    if (!res.ok) throw new Error("Failed to delete plant");
+    return res.json();
+};

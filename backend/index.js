@@ -33,12 +33,37 @@ app.get('/api/plants', async (req, res) => {
 });
 
 // Admin add new plant (Requested feature: Notify Admin)
+// Admin add new plant (Requested feature: Notify Admin)
 app.post('/api/plants', async (req, res) => {
     try {
         const plant = new Plant(req.body);
         await plant.save();
         sendWhatsApp(`New Plant Added: ${plant.name} (${plant.scientificName})`);
         res.status(201).json(plant);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Admin Update Plant (New)
+app.patch('/api/plants/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const updates = req.body;
+        // Search by 'id' string field not _id
+        const plant = await Plant.findOneAndUpdate({ id: id }, updates, { new: true });
+        res.json(plant);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Admin Delete Plant (New)
+app.delete('/api/plants/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        await Plant.findOneAndDelete({ id: id });
+        res.json({ message: 'Plant deleted successfully' });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
