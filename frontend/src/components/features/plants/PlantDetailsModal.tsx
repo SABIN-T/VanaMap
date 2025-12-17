@@ -15,23 +15,30 @@ interface PlantDetailsModalProps {
 export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModalProps) => {
     const { user, toggleFavorite } = useAuth();
     const navigate = useNavigate();
-    const currentTemp = weather?.avgTemp30Days || 25;
+    const [numPeople, setNumPeople] = useState(1);
+    const [isACMode, setIsACMode] = useState(false);
+    const [manualTemp, setManualTemp] = useState(weather?.avgTemp30Days || 25);
+
+    const currentTemp = isACMode ? 22 : manualTemp;
     const currentHumidity = weather?.avgHumidity30Days || 50;
 
-    // Interactive Simulation State
-    const [numPeople, setNumPeople] = useState(1);
-
-    // Simulation Constants
-    const HUMAN_O2_NEED_LITERS = 550; // Daily requirement
+    // Simulation logic (Accurate Daily Oxygen)
+    const HUMAN_O2_NEED_LITERS = 550; // Daily requirement for 1 human
     const PLANT_O2_OUTPUT = useMemo(() => {
-        const base = plant.oxygenLevel === 'very-high' ? 120 : plant.oxygenLevel === 'high' ? 80 : 40;
-        // Apply slight weather boost/penalty
-        const tempMultiplier = currentTemp > 20 && currentTemp < 30 ? 1.1 : 0.9;
-        return Math.round(base * tempMultiplier);
+        // Base daily output per plant in Liters (simplified but grounded in botany)
+        const base = plant.oxygenLevel === 'very-high' ? 60 : plant.oxygenLevel === 'high' ? 40 : 20;
+
+        // Temperature efficiency curve (Plants breathe best between 18-28°C)
+        let efficiency = 1.0;
+        if (currentTemp >= 20 && currentTemp <= 26) efficiency = 1.25; // Peak efficiency (Like AC)
+        else if (currentTemp > 26 && currentTemp < 32) efficiency = 1.1;
+        else if (currentTemp >= 32 || currentTemp <= 15) efficiency = 0.7; // Stress zone
+
+        return Math.round(base * efficiency);
     }, [plant.oxygenLevel, currentTemp]);
 
     const plantsNeeded = Math.ceil((numPeople * HUMAN_O2_NEED_LITERS) / PLANT_O2_OUTPUT);
-    const fluxRate = Math.min(100, Math.round((PLANT_O2_OUTPUT / 550) * 100));
+    const fluxRate = Math.min(100, Math.round((PLANT_O2_OUTPUT / 60) * 100));
 
     const getWateringSchedule = () => {
         if (currentHumidity < 40 && currentTemp > 25) return "Intensive (Every 1-2 days)";
@@ -89,37 +96,66 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
 
                     {/* Advanced Simulation Section */}
                     <div className={styles.simulationContainer}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
                             <h3 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '1.1rem', fontWeight: 800 }}>
-                                <Activity size={20} color="var(--color-primary)" /> AI ECOSYSTEM ENGINE
+                                <Activity size={20} color="var(--color-primary)" /> SMART ECO-SIMULATOR
                             </h3>
-                            {weather && <span className={styles.liveIndicator}>Climate Synced</span>}
+                            <div className={styles.acToggle}>
+                                <span style={{ fontSize: '0.7rem', fontWeight: 800, color: isACMode ? 'var(--color-primary)' : '#666' }}>AC MODE</span>
+                                <button className={`${styles.toggleSwitch} ${isACMode ? styles.active : ''}`} onClick={() => setIsACMode(!isACMode)}></button>
+                            </div>
                         </div>
 
-                        {/* Interactive Slider */}
+                        {/* Instructional Notice */}
+                        <div className={styles.instructionNotice}>
+                            <Users size={14} />
+                            <span>Change the number of people below to see how many <strong>{plant.name}</strong> plants you need for fresh air in your room.</span>
+                        </div>
+
                         <div className={styles.sliderControl}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                    <Users size={16} color="var(--color-text-muted)" />
-                                    <span style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', fontWeight: 700 }}>OCCUPANCY LOAD</span>
-                                </div>
-                                <span style={{ color: 'var(--color-primary)', fontWeight: '900', fontSize: '1.1rem' }}>{numPeople} User{numPeople > 1 ? 's' : ''}</span>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                                <span className={styles.controlLabel}>PEOPLE IN ROOM</span>
+                                <span className={styles.controlVal}>{numPeople}</span>
                             </div>
                             <input
                                 type="range"
-                                min="1"
-                                max="10"
+                                min="1" max="12"
                                 value={numPeople}
                                 onChange={(e) => setNumPeople(Number(e.target.value))}
                                 className={styles.rangeInput}
                             />
                         </div>
 
+                        {/* Temperature Notice */}
+                        {!isACMode && (
+                            <div className={styles.instructionNotice} style={{ background: 'rgba(56, 189, 248, 0.1)', color: '#38bdf8' }}>
+                                <Sun size={14} />
+                                <span>Adjust temperature to match your office or home environment. Plants breathe best in cooler air!</span>
+                            </div>
+                        )}
+
+                        {!isACMode && (
+                            <div className={styles.sliderControl}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                                    <span className={styles.controlLabel}>ROOM TEMPERATURE</span>
+                                    <span className={styles.controlVal}>{manualTemp}°C</span>
+                                </div>
+                                <input
+                                    type="range"
+                                    min="15" max="40"
+                                    value={manualTemp}
+                                    onChange={(e) => setManualTemp(Number(e.target.value))}
+                                    className={styles.rangeInput}
+                                    style={{ '--accent': '#38bdf8' } as any}
+                                />
+                            </div>
+                        )}
+
                         <div className={styles.simVisual}>
                             <div className={styles.simCol}>
-                                <span style={{ color: '#ef4444', fontSize: '0.6rem', fontWeight: '900', letterSpacing: '1px' }}>↑ CO₂ FLUX</span>
+                                <span style={{ color: '#ef4444', fontSize: '0.6rem', fontWeight: '900', letterSpacing: '1px' }}>CO₂ REMOVAL</span>
                                 <div className={styles.particleContainer}>
-                                    {[...Array(Math.min(8, numPeople * 2))].map((_, i) => (
+                                    {[...Array(Math.min(10, numPeople * 2))].map((_, i) => (
                                         <div key={i} className="sim-particle co2" style={{ animationDelay: `${i * 0.4}s`, left: `${Math.random() * 80}%` }}>.</div>
                                     ))}
                                 </div>
@@ -129,10 +165,10 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                                 <div className={styles.fluxRing}>
                                     <Zap size={32} color="var(--color-primary)" />
                                 </div>
-                                <div style={{ position: 'absolute', bottom: '-20px', fontSize: '0.6rem', color: 'var(--color-primary)', fontWeight: 800 }}>{fluxRate}% EFFICIENCY</div>
+                                <div style={{ position: 'absolute', bottom: '-20px', fontSize: '0.6rem', color: 'var(--color-primary)', fontWeight: 800 }}>VITALITY: {fluxRate}%</div>
                             </div>
                             <div className={styles.simCol}>
-                                <span style={{ color: '#4ade80', fontSize: '0.6rem', fontWeight: '900', letterSpacing: '1px' }}>↓ O₂ OUTPUT</span>
+                                <span style={{ color: '#4ade80', fontSize: '0.6rem', fontWeight: '900', letterSpacing: '1px' }}>O₂ PRODUCTION</span>
                                 <div className={styles.particleContainer}>
                                     {[...Array(6)].map((_, i) => (
                                         <div key={i} className="sim-particle o2" style={{ animationDelay: `${i * 0.5}s`, right: `${Math.random() * 80}%` }}>.</div>
@@ -144,35 +180,35 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                         <div className={styles.simStats}>
                             <div className={styles.statBox}>
                                 <div className={styles.statVal} style={{ color: 'var(--color-primary)' }}>{plantsNeeded}</div>
-                                <div className={styles.statLabel}>Target Count</div>
+                                <div className={styles.statLabel}>Plants Needed</div>
                             </div>
                             <div className={styles.statBox}>
-                                <div className={styles.statVal}>{Math.round(currentTemp)}°C</div>
-                                <div className={styles.statLabel}>Ambient Temp</div>
+                                <div className={styles.statVal}>{currentTemp}°C</div>
+                                <div className={styles.statLabel}>Air Temp</div>
                             </div>
                             <div className={styles.statBox}>
-                                <div className={styles.statVal}>{Math.round(currentHumidity)}%</div>
-                                <div className={styles.statLabel}>Rel. Humidity</div>
+                                <div className={styles.statVal}>{PLANT_O2_OUTPUT}L</div>
+                                <div className={styles.statLabel}>O₂ Per Plant</div>
                             </div>
                         </div>
                     </div>
 
                     <div className={styles.infoGrid}>
                         <div className={styles.infoTile}>
-                            <div className={styles.tileHeader}><Droplets size={16} color="#38bdf8" /> HYDRATION PLAN</div>
+                            <div className={styles.tileHeader}><Droplets size={16} color="#38bdf8" /> WATERING GUIDE</div>
                             <div className={styles.tileBody}>{getWateringSchedule()}</div>
                         </div>
                         <div className={styles.infoTile}>
-                            <div className={styles.tileHeader}><Activity size={16} color="#ef4444" /> VITALITY CHECK</div>
+                            <div className={styles.tileHeader}><Heart size={16} color="#ef4444" /> HEALTH FACT</div>
                             <div className={styles.tileBody}>
-                                {plant.medicinalValues[0] || "Oxygen Focus"}
+                                {plant.medicinalValues[0] || "Boosts indoor air quality"}
                             </div>
                         </div>
                     </div>
 
                     <div className={styles.listsGrid}>
                         <div className={styles.listSection}>
-                            <h4>MEDICINAL PROFILE</h4>
+                            <h4>MEDICINAL USES</h4>
                             <div className={styles.listContainer}>
                                 {plant.medicinalValues.slice(0, 3).map((v, i) => (
                                     <div key={i} className={styles.listItem}>• {v}</div>
@@ -180,7 +216,7 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                             </div>
                         </div>
                         <div className={styles.listSection}>
-                            <h4>SYSTEM BENEFITS</h4>
+                            <h4>KEY ADVANTAGES</h4>
                             <div className={styles.listContainer}>
                                 {plant.advantages.slice(0, 3).map((v, i) => (
                                     <div key={i} className={styles.listItem}>• {v}</div>
@@ -190,7 +226,7 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                     </div>
 
                     <Button variant="primary" size="lg" style={{ width: '100%', marginTop: '1rem', fontWeight: 800 }} onClick={onClose}>
-                        DISMISS SIMULATION
+                        CLOSE EXPLORER
                     </Button>
                 </div>
             </div>

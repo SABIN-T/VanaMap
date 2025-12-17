@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingCart, User as UserIcon, LogOut, BookOpen, Leaf, Sun, Moon, Menu, X } from 'lucide-react';
+import { ShoppingCart, User as UserIcon, LogOut, BookOpen, Leaf, Sun, Moon, Menu, X, ChevronRight, Activity } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
 import { useTheme } from '../../context/ThemeContext';
@@ -83,26 +83,41 @@ export const Navbar = () => {
             {/* Mobile Menu Overlay */}
             <div className={`${styles.mobileMenu} ${isMenuOpen ? styles.open : ''}`}>
                 <div className={styles.mobileLinks}>
-                    <Link to="/" className={styles.mobileNavLink} onClick={() => setIsMenuOpen(false)}>Home</Link>
-                    <Link to="/nearby" className={styles.mobileNavLink} onClick={() => setIsMenuOpen(false)}>Nearby Shops</Link>
+                    <Link to="/" className={styles.mobileNavLink} onClick={() => setIsMenuOpen(false)}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><Leaf size={20} /> Home</div>
+                        <ChevronRight size={18} />
+                    </Link>
+                    <Link to="/nearby" className={styles.mobileNavLink} onClick={() => setIsMenuOpen(false)}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><Sun size={20} /> Nearby Shops</div>
+                        <ChevronRight size={18} />
+                    </Link>
                     <button onClick={handleDownloadGuide} className={styles.mobileNavLink}>
-                        <BookOpen size={20} /> Plant Care Guide
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><BookOpen size={20} /> Caring Guide</div>
+                        <ChevronRight size={18} />
                     </button>
-                    <Link to="/admin" className={styles.mobileNavLink} onClick={() => setIsMenuOpen(false)} style={{ color: '#facc15' }}>Admin Panel</Link>
-                    
-                    <hr className={styles.divider} />
-                    
+                    <Link to="/admin" className={styles.mobileNavLink} onClick={() => setIsMenuOpen(false)} style={{ color: '#facc15' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><Activity size={20} /> Admin Panel</div>
+                        <ChevronRight size={18} />
+                    </Link>
+
+                    <div className={styles.divider} />
+
                     {user ? (
                         <>
                             <Link to="/dashboard" className={styles.mobileNavLink} onClick={() => setIsMenuOpen(false)}>
-                                <UserIcon size={20} /> My Profile
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><UserIcon size={20} /> My Profile</div>
+                                <ChevronRight size={18} />
                             </Link>
                             <button onClick={handleLogout} className={styles.mobileNavLink} style={{ color: '#ef4444' }}>
-                                <LogOut size={20} /> Logout
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><LogOut size={20} /> Logout</div>
+                                <ChevronRight size={18} />
                             </button>
                         </>
                     ) : (
-                        <Link to="/auth" className={styles.mobileNavLink} onClick={() => setIsMenuOpen(false)}>Login / Register</Link>
+                        <Link to="/auth" className={styles.mobileNavLink} onClick={() => setIsMenuOpen(false)}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><UserIcon size={20} /> Login / Register</div>
+                            <ChevronRight size={18} />
+                        </Link>
                     )}
                 </div>
             </div>

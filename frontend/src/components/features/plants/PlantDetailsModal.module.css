@@ -144,8 +144,72 @@
     text-transform: uppercase;
 }
 
-.sliderControl {
-    margin-bottom: 2rem;
+.instructionNotice {
+    background: rgba(0, 255, 157, 0.05);
+    border: 1px solid rgba(0, 255, 157, 0.1);
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    font-size: 0.75rem;
+    color: var(--color-primary);
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+    line-height: 1.4;
+}
+
+.instructionNotice span {
+    flex: 1;
+}
+
+.acToggle {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.toggleSwitch {
+    width: 36px;
+    height: 18px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    position: relative;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.toggleSwitch::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 14px;
+    height: 14px;
+    background: white;
+    border-radius: 50%;
+    transition: 0.3s;
+}
+
+.toggleSwitch.active {
+    background: var(--color-primary);
+}
+
+.toggleSwitch.active::after {
+    left: 20px;
+}
+
+.controlLabel {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+    font-weight: 800;
+    letter-spacing: 0.5px;
+}
+
+.controlVal {
+    color: var(--color-primary);
+    font-weight: 900;
+    font-size: 1.1rem;
 }
 
 .rangeInput {
@@ -163,9 +227,9 @@
     width: 20px;
     height: 20px;
     border-radius: 50%;
-    background: var(--color-primary);
+    background: var(--accent, var(--color-primary));
     cursor: pointer;
-    box-shadow: 0 0 10px rgba(0, 255, 157, 0.5);
+    box-shadow: 0 0 10px rgba(0, 255, 157, 0.3);
     border: 3px solid #0f172a;
 }
 
