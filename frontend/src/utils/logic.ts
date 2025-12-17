@@ -1,26 +1,35 @@
 import type { Plant } from '../types';
 
-export const calculateAptness = (plant: Plant, currentTemp: number): number => {
-    // Simple algorithm:
-    // 1. If within ideal range -> 100%
-    // 2. If outside, subtract 5% for every degree off
-    // 3. Minimum 0%
-
-    // Note: ideally we'd use humidity too if available
-
-    if (currentTemp >= plant.idealTempMin && currentTemp <= plant.idealTempMax) {
-        return 100;
+export const calculateAptness = (plant: Plant, currentTemp: number, aqi: number = 20): number => {
+    // 1. Temperature Base Score (Max 70 points)
+    let tempScore = 70;
+    if (currentTemp < plant.idealTempMin || currentTemp > plant.idealTempMax) {
+        let diff = 0;
+        if (currentTemp < plant.idealTempMin) {
+            diff = plant.idealTempMin - currentTemp;
+        } else {
+            diff = currentTemp - plant.idealTempMax;
+        }
+        tempScore = Math.max(0, 70 - (diff * 5));
     }
 
-    let diff = 0;
-    if (currentTemp < plant.idealTempMin) {
-        diff = plant.idealTempMin - currentTemp;
-    } else {
-        diff = currentTemp - plant.idealTempMax;
+    // 2. Air Purification/Pollution Boost (Max 30 points)
+    // If AQI is high (>50), boost plants that are mentioned as air purifying
+    let pollutionBoost = 0;
+    const isAirPurifying =
+        plant.advantages?.some(adv => adv.toLowerCase().includes('purifying')) ||
+        plant.description?.toLowerCase().includes('air quality') ||
+        plant.description?.toLowerCase().includes('oxygen');
+
+    if (aqi > 50 && isAirPurifying) {
+        // High pollution area: increase priority for air cleaners
+        // Scale boost based on pollution severity
+        pollutionBoost = Math.min(30, (aqi - 30) * 0.5);
+    } else if (isAirPurifying) {
+        pollutionBoost = 10; // Base appreciation for air cleaners
     }
 
-    const score = 100 - (diff * 5);
-    return Math.max(0, score);
+    return Math.min(100, Math.round(tempScore + pollutionBoost));
 };
 
 export const formatDistance = (meters: number): string => {

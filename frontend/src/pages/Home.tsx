@@ -107,13 +107,21 @@ export const Home = () => {
         setSelectedPlant(plant);
     };
 
+    // Helper to interpret pollution data
+    const getPollutionStatus = (aqi: number = 0) => {
+        if (aqi <= 20) return { label: 'Excellent', color: '#00ff9d', desc: 'Fresh air detected (Live Data)' };
+        if (aqi <= 50) return { label: 'Good', color: '#facc15', desc: 'Acceptable air quality' };
+        if (aqi <= 100) return { label: 'Moderate', color: '#fb923c', desc: 'Slight pollution according to live records' };
+        return { label: 'High Pollution', color: '#f87171', desc: 'High contamination! Oxygen-boosters simulated.' };
+    };
+
     // Sort by aptness if weather exists
     const displayedPlants = [...plants]
         .filter(p => filter === 'all' ? true : p.type === filter)
         .map(p => {
             if (!weather) return { ...p, score: 0 };
-            // Use the simulated 30-day avg for aptness
-            return { ...p, score: calculateAptness(p, weather.avgTemp30Days) };
+            // Pass AQI to logic for pollution-based prioritization
+            return { ...p, score: calculateAptness(p, weather.avgTemp30Days, weather.air_quality?.aqi) };
         })
         .sort((a, b) => (weather ? b.score - a.score : 0));
 
@@ -137,8 +145,8 @@ export const Home = () => {
 
                     <h1 className={styles.heroTitle}>FIND THE PERFECT<br />PLANT FOR YOUR SPACE</h1>
                     <p className={styles.heroSubtitle} style={{ color: 'var(--color-text-muted)' }}>
-                        Stop guessing. Our AI analyzes your local weather humidity and oxygen needs
-                        to scientifically recommend plants that will actually thrive in your home.
+                        Stop guessing. Our AI analyzes your local weather, pollution levels (AQI),
+                        and room oxygen needs to scientifically recommend plants that will actually thrive.
                     </p>
 
                     {/* Weather Widget / Action Buttons */}
@@ -198,19 +206,29 @@ export const Home = () => {
                                 </div>
                             </div>
 
+                            {/* Pollution Info Block */}
                             <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                <div className={styles.weatherIconCircle} style={{ background: 'rgba(56, 189, 248, 0.1)' }}>
-                                    <Wind size={20} color="#38bdf8" />
+                                <div className={styles.weatherIconCircle} style={{
+                                    background: `${getPollutionStatus(weather.air_quality?.aqi).color}15`,
+                                    border: `1px solid ${getPollutionStatus(weather.air_quality?.aqi).color}30`
+                                }}>
+                                    <Wind size={20} color={getPollutionStatus(weather.air_quality?.aqi).color} />
                                 </div>
                                 <div>
-                                    <div style={{ fontSize: '1.25rem', fontWeight: '800', color: 'var(--color-text-main)' }}>{weather.current_weather.windspeed} km/h</div>
-                                    <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', fontWeight: '600' }}>Wind Speed</div>
+                                    <div style={{ fontSize: '1.25rem', fontWeight: '800', color: 'white' }}>
+                                        AQI {weather.air_quality?.aqi || 'N/A'}
+                                    </div>
+                                    <div style={{ fontSize: '0.65rem', color: getPollutionStatus(weather.air_quality?.aqi).color, fontWeight: '800', textTransform: 'uppercase' }}>
+                                        {getPollutionStatus(weather.air_quality?.aqi).label}
+                                    </div>
                                 </div>
                             </div>
 
                             <div style={{ paddingLeft: '1rem', borderLeft: '1px solid rgba(255,255,255,0.1)', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
                                 <div style={{ color: 'var(--color-primary)', fontSize: '0.85rem', fontWeight: '800' }}>✓ AI ANALYSIS LIVE</div>
-                                <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Tailored results below</div>
+                                <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', maxWidth: '200px' }}>
+                                    {getPollutionStatus(weather.air_quality?.aqi).desc}
+                                </div>
                             </div>
                         </div>
                     )}
