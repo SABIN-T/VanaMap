@@ -1,0 +1,45 @@
+:root {
+  /* Neon Nature / Dark Mode Palette */
+  --primary-h: 153;
+  --primary-s: 100%;
+  --primary-l: 50%;
+
+  --secondary-h: 180;
+  --secondary-s: 100%;
+  --secondary-l: 50%;
+
+  /* Core Colors */
+  --color-primary: hsl(var(--primary-h), var(--primary-s), var(--primary-l));
+  --color-secondary: hsl(var(--secondary-h), var(--secondary-s), var(--secondary-l));
+  --gradient-primary: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+
+  /* Backgrounds */
+  --color-bg-main: #020907;
+  /* Almost Black */
+  --color-bg-card: #0a1f18;
+  /* Dark Green Tint */
+  --color-text-main: #e0e0e0;
+  --color-text-muted: #94a3b8;
+
+  /* Glassmorphism */
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  /* Very subtle for dark mode */
+  --glass-border: 1px solid rgba(255, 255, 255, 0.08);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  --backdrop-blur: blur(12px);
+
+  /* Spacing & Utilities */
+  --radius-md: 0.75rem;
+  --radius-full: 9999px;
+
+  --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-heading: 'Outfit', sans-serif;
+}
+:root[data-theme='light'] {
+  --color-bg-main: #f0fdf4;
+  --color-bg-card: #ffffff;
+  --color-text-main: #1f2937;
+  --primary-l: 40%;
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: 1px solid rgba(0,0,0, 0.05);
+}

@@ -1,0 +1,192 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1rem;
+}
+
+.modal {
+    width: 100%;
+    max-width: 650px;
+    max-height: 85vh;
+    overflow-y: auto;
+    position: relative;
+    background: var(--color-bg-card);
+    color: var(--color-text-main);
+    border: 1px solid var(--color-primary);
+}
+
+.closeBtn {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    color: var(--color-text-main);
+    z-index: 2;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background: var(--glass-bg);
+}
+
+.image {
+    width: 120px;
+    height: 120px;
+    border-radius: 0.75rem;
+    object-fit: cover;
+    box-shadow: 0 0 20px rgba(0, 255, 157, 0.2);
+}
+
+.titleSection h2 {
+    font-size: 1.8rem;
+    line-height: 1.2;
+    color: var(--color-text-main);
+}
+
+.badges {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+}
+
+.badge {
+    background: rgba(0, 255, 157, 0.1);
+    color: var(--color-primary);
+    padding: 0.2rem 0.6rem;
+    border-radius: 1.5rem;
+    font-size: 0.8rem;
+    border: 1px solid rgba(0, 255, 157, 0.3);
+}
+
+.content {
+    padding: 2rem;
+    color: var(--color-text-main);
+}
+
+.simulationContainer {
+    background: var(--glass-bg);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    border: var(--glass-border);
+}
+
+.simulationContainer h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--color-text-main);
+}
+
+.simVisual {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding: 0 2rem;
+}
+
+.simCol {
+    text-align: center;
+    width: 100px;
+    font-weight: bold;
+    color: var(--color-text-main);
+}
+
+.particleContainer {
+    height: 100px;
+    position: relative;
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 0.8rem;
+}
+
+.plantIcon {
+    font-size: 5rem;
+}
+
+.simStats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.statBox {
+    background: var(--glass-bg);
+    padding: 1rem;
+    border-radius: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    border: var(--glass-border);
+}
+
+.statBox p {
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+}
+
+.section h4 {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+    color: var(--color-primary);
+}
+
+.section ul {
+    padding-left: 1.2rem;
+    color: var(--color-text-muted);
+}
+
+.section li {
+    margin-bottom: 0.3rem;
+}
+
+@media (max-width: 768px) {
+    .header {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 1rem;
+    }
+
+    .titleSection h2 {
+        font-size: 1.8rem;
+    }
+
+    .simVisual {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}
