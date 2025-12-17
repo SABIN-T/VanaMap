@@ -244,7 +244,7 @@ export const Auth = () => {
 
                 <div className={styles.footer}>
                     {view === 'login' && (
-                        <>New to VanaSim? <button onClick={() => setView('signup')}>Initialize Identity</button></>
+                        <>New to VanaMapp? <button onClick={() => setView('signup')}>Initialize Identity</button></>
                     )}
                     {view === 'signup' && (
                         <>Already registered? <button onClick={() => setView('login')}>Log In</button></>
