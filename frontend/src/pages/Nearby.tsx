@@ -81,25 +81,43 @@ out skel qt;
                 unverifiedVendors = osmData.elements
                     .filter((el: any) => el.lat && el.lon)
                     .filter((el: any) => {
-                        const name = (el.tags.name || "").toLowerCase();
-                        const plantKeywords = [
-                            'plant', 'nursery', 'garden', 'green', 'flora',
-                            'flower', 'farm', 'botanical', 'seed', 'landscape',
-                            'potted', 'horticulture', 'sapling', 'bonsai', 'nursary',
-                            'vanapathi', 'tree', 'organic'
-                        ];
-                        if (!plantKeywords.some(word => name.includes(word))) return false;
+                        const tags = el.tags || {};
+                        const name = (tags.name || "").toLowerCase();
+                        const shopType = (tags.shop || "").toLowerCase();
 
+                        // Strict keywords related to whole plants and nurseries
+                        const plantKeywords = [
+                            'nursery', 'garden', 'flora', 'sapling', 'horticulture',
+                            'potted', 'botanical', 'vanapathi', 'tree house', 'bonsai',
+                            'greenery', 'landscape', 'seeds', 'orchard', 'farm'
+                        ];
+
+                        // Check if name contains plant keywords OR it's specifically tagged as garden_centre/nursery
+                        const isPlantRelated = plantKeywords.some(word => name.includes(word)) ||
+                            shopType.includes('garden_centre') ||
+                            shopType.includes('plant_nursery');
+
+                        if (!isPlantRelated) return false;
+
+                        // Aggressive blacklist to exclude generic shops that might match keywords
                         const blacklist = [
-                            'temple', 'pooja', 'general store', 'bakery', 'medical',
+                            'temple', 'pooja', 'store', 'mart', 'bakery', 'medical',
                             'pharmacy', 'hospital', 'clinic', 'school', 'atm',
                             'bank', 'restaurant', 'hotel', 'police', 'post office',
                             'supermarket', 'mall', 'gym', 'salon', 'boutique',
-                            'mosque', 'church', 'mandir', 'library', 'office'
+                            'mosque', 'church', 'mandir', 'library', 'office',
+                            'hardware', 'furniture', 'electronics', 'gift', 'stationery',
+                            'tailor', 'laundry', 'sweet', 'juice', 'liquor', 'wine',
+                            'automotive', 'tyre', 'garage', 'cement', 'paint', 'tiles',
+                            'educational', 'trust', 'sanitary', 'studio', 'optical'
                         ];
+
                         if (blacklist.some(word => name.includes(word))) return false;
 
-                        if (!name || name === "local plant shop (public listing)") return false;
+                        // Special case: Florists are often just cut flowers, user specified plant shops/gardens
+                        if (shopType === 'florist' && !name.includes('nursery') && !name.includes('garden')) return false;
+
+                        if (!name || name.length < 3) return false;
                         return true;
                     })
                     .map((el: any) => ({
@@ -107,7 +125,7 @@ out skel qt;
                         name: el.tags.name,
                         latitude: el.lat,
                         longitude: el.lon,
-                        address: el.tags["addr:full"] || el.tags["addr:street"] || "Local Public Listing",
+                        address: el.tags["addr:full"] || el.tags["addr:street"] || el.tags["addr:city"] || "Local Public Listing",
                         phone: el.tags.phone || el.tags["contact:phone"] || "N/A",
                         whatsapp: "",
                         verified: false,
