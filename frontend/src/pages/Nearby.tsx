@@ -52,7 +52,7 @@ export const Nearby = () => {
             const overpassQuery = `
 [out:json];
 (
-    node["shop"~"plant_nursery|florist|garden_centre"](around: 50000, ${lat}, ${lng});
+    node["shop"~"plant_nursery|garden_centre"](around: 50000, ${lat}, ${lng});
     node["landuse"~"plant_nursery"](around: 50000, ${lat}, ${lng});
 );
 out body;

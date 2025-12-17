@@ -9,9 +9,10 @@ interface PlantCardProps {
     plant: Plant;
     onAdd: (plant: Plant) => void;
     score?: number; // Optional aptness score
+    isTopMatch?: boolean;
 }
 
-export const PlantCard = ({ plant, onAdd, score }: PlantCardProps) => {
+export const PlantCard = ({ plant, onAdd, score, isTopMatch }: PlantCardProps) => {
     const { user, toggleFavorite } = useAuth();
     const isFavorite = user?.favorites.includes(plant.id);
 
@@ -26,8 +27,17 @@ export const PlantCard = ({ plant, onAdd, score }: PlantCardProps) => {
     };
 
     return (
-        <div className={styles.card}>
+        <div className={styles.card} style={isTopMatch ? { border: '2px solid #fbbf24', boxShadow: '0 0 30px rgba(251, 191, 36, 0.2)' } : {}}>
             <div className={styles.imageContainer}>
+                {isTopMatch && (
+                    <div style={{
+                        position: 'absolute', top: 0, left: 0, width: '100%',
+                        padding: '0.5rem', background: '#fbbf24', color: 'black',
+                        fontWeight: 'bold', fontSize: '0.8rem', textAlign: 'center', zIndex: 20
+                    }}>
+                        🏆 Top Recommendation
+                    </div>
+                )}
                 {/* ... existing image ... */}
                 <img
                     src={plant.imageUrl}
