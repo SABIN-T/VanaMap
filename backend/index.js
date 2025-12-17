@@ -126,6 +126,7 @@ app.post('/api/vendors', async (req, res) => {
             inventoryIds: []
         });
         await newVendor.save();
+        await sendWhatsApp(`New Vendor Profile Created: ${name}`, 'vendor_registration', { vendorId: newVendor.id });
         res.status(201).json(newVendor);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -199,6 +200,9 @@ app.post('/api/auth/login', async (req, res) => {
         const { email, password } = req.body;
         const user = await User.findOne({ email, password });
         if (!user) return res.status(401).json({ error: "Invalid credentials" });
+
+        await sendWhatsApp(`User Logged In: ${user.name} (${email})`, 'login', { userId: user._id, email });
+
         res.json(user);
     } catch (err) {
         res.status(500).json({ error: err.message });
