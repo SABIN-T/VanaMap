@@ -5,19 +5,39 @@ import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
 import { useTheme } from '../../context/ThemeContext';
 import styles from './Navbar.module.css';
-import { HowItWorksModal } from '../features/guide/HowItWorksModal';
+import { generateAndDownloadPDF } from '../../utils/pdfGenerator';
 
 export const Navbar = () => {
     const { user, logout } = useAuth();
     const { items: cartItems } = useCart();
     const { theme, toggleTheme } = useTheme();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [showGuideModal, setShowGuideModal] = useState(false);
     const navigate = useNavigate();
 
-    const handleOpenGuide = () => {
-        setShowGuideModal(true);
+    const handleDownloadGuide = () => {
         setIsMenuOpen(false);
+        import('react-hot-toast').then(({ default: toast }) => {
+            // Mock async operation for the promise
+            const downloadPromise = new Promise((resolve) => {
+                generateAndDownloadPDF();
+                setTimeout(resolve, 2000); // Fake delay for UX
+            });
+
+            toast.promise(
+                downloadPromise,
+                {
+                    loading: 'Preparing Simulation Handbook...',
+                    success: 'Handbook downloaded successfully!',
+                    error: 'Could not generate PDF.'
+                },
+                {
+                    style: {
+                        background: '#333',
+                        color: '#fff',
+                    }
+                }
+            );
+        });
     };
 
     const handleLogout = () => {
@@ -30,8 +50,6 @@ export const Navbar = () => {
 
     return (
         <nav className={styles.navbar}>
-            {showGuideModal && <HowItWorksModal onClose={() => setShowGuideModal(false)} />}
-
             <Link to="/" className={styles.logo} onClick={() => setIsMenuOpen(false)}>
                 <div className={styles.logoIcon}>
                     <Leaf size={24} color="white" />
@@ -46,7 +64,7 @@ export const Navbar = () => {
             <div className={styles.desktopLinks}>
                 <Link to="/" className={styles.navLink}>Home</Link>
                 <Link to="/nearby" className={styles.navLink}>Nearby Shops</Link>
-                <button onClick={handleOpenGuide} className={styles.navLink}>
+                <button onClick={handleDownloadGuide} className={styles.navLink}>
                     <BookOpen size={16} /> Guide
                 </button>
                 <Link to="/admin" className={styles.navLink} style={{ color: '#facc15' }}>Admin</Link>
@@ -94,7 +112,7 @@ export const Navbar = () => {
                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><Sun size={20} /> Nearby Shops</div>
                         <ChevronRight size={18} />
                     </Link>
-                    <button onClick={handleOpenGuide} className={styles.mobileNavLink}>
+                    <button onClick={handleDownloadGuide} className={styles.mobileNavLink}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><BookOpen size={20} /> Caring Guide</div>
                         <ChevronRight size={18} />
                     </button>

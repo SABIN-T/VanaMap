@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/common/Button';
-import { User, Store } from 'lucide-react';
+import { User, Store, AlertTriangle, ArrowLeft } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { countryCodes } from '../data/countryCodes';
 import { countryStates } from '../data/states';
+import styles from './Auth.module.css';
 
 export const Auth = () => {
     const navigate = useNavigate();
-    const { login, signup, user } = useAuth(); // Removed googleLogin
+    const { login, signup, user } = useAuth();
 
     type AuthView = 'login' | 'signup' | 'forgot' | 'reset';
     const [view, setView] = useState<AuthView>('login');
@@ -48,208 +49,212 @@ export const Auth = () => {
         if (view === 'login') {
             const result = await login({ email, password });
             if (result.success) {
-                alert("Login Successful");
-                // Navigation handled by useEffect
+                // Toast logic handled in context or by effect
             } else {
                 alert(`Authentication failed: ${result.message}`);
             }
         } else if (view === 'signup') {
             const result = await signup({ email, password, name, role });
             if (result.success) {
-                alert("Signup Successful");
                 // Navigation handled by useEffect
             } else {
                 alert(`Signup failed: ${result.message}`);
             }
         } else if (view === 'forgot') {
-            // Request Reset
             try {
                 await import('../services/api').then(api => api.requestPasswordReset(email));
-                alert("Request sent to Admin. Notice: It will take 1 hour sometimes to change the new password space. Admin must approve.");
+                alert("Request sent. Pending Admin Approval.");
                 setView('login');
             } catch (err) {
-                alert("Failed to send request. User might not exist.");
+                alert("Failed to send request.");
             }
         } else if (view === 'reset') {
-            // Perform Reset
             try {
                 await import('../services/api').then(api => api.resetPassword(email, password));
-                alert("Password changed successfully! You can now login.");
+                alert("Password updated!");
                 setView('login');
             } catch (err) {
-                alert("Reset failed. Your request might not be approved yet.");
+                alert("Reset failed.");
             }
         }
     };
 
-
     return (
-        <div className="container" style={{ padding: '4rem 1rem', display: 'flex', justifyContent: 'center' }}>
-            <div className="glass-panel" style={{ padding: '3rem', width: '100%', maxWidth: '400px', background: 'var(--bg-card)' }}>
-                <h2 style={{ textAlign: 'center', marginBottom: '2rem' }}>
-                    {view === 'login' && 'Welcome Back'}
-                    {view === 'signup' && 'Join VanaMap'}
-                    {view === 'forgot' && 'Reset Password Request'}
-                    {view === 'reset' && 'Set New Password'}
-                </h2>
+        <div className={styles.authContainer}>
+            <div className={styles.authCard}>
+                <div className={styles.authHeader}>
+                    <h2 className={styles.authTitle}>
+                        {view === 'login' && 'Welcome Back'}
+                        {view === 'signup' && 'Create Identity'}
+                        {view === 'forgot' && 'Reset Access'}
+                        {view === 'reset' && 'New Credential'}
+                    </h2>
+                    <p className={styles.authSubtitle}>
+                        {view === 'login' && 'Access your simulation dashboard'}
+                        {view === 'signup' && 'Join the eco-simulation network'}
+                        {view === 'forgot' && 'Recover your account secure key'}
+                    </p>
+                </div>
 
-                {/* Role Toggle only for Signup */}
+                {view === 'forgot' && (
+                    <div className={styles.noticeBox}>
+                        <AlertTriangle size={20} style={{ minWidth: '20px' }} />
+                        <span>Security Notice: Reset requests are manually audited by Admin. This process may take up to 1 hour for valid verification.</span>
+                    </div>
+                )}
+
+                {/* Role Toggle */}
                 {view === 'signup' && (
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '2rem' }}>
+                    <div className={styles.roleToggle}>
                         <button
-                            onClick={() => setRole('user')}
                             type="button"
-                            style={{
-                                padding: '1rem',
-                                borderRadius: '0.5rem',
-                                border: `1px solid ${role === 'user' ? 'var(--color-primary)' : 'transparent'}`,
-                                background: role === 'user' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(0,0,0,0.05)',
-                                color: role === 'user' ? 'var(--color-primary)' : '#aaa',
-                                cursor: 'pointer',
-                                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem'
-                            }}
+                            className={`${styles.roleBtn} ${role === 'user' ? styles.active : ''}`}
+                            onClick={() => setRole('user')}
                         >
                             <User size={24} /> Plant Lover
                         </button>
                         <button
-                            onClick={() => setRole('vendor')}
                             type="button"
-                            style={{
-                                padding: '1rem',
-                                borderRadius: '0.5rem',
-                                border: `1px solid ${role === 'vendor' ? 'var(--color-primary)' : 'transparent'}`,
-                                background: role === 'vendor' ? 'rgba(16, 185, 129, 0.1)' : 'rgba(0,0,0,0.05)',
-                                color: role === 'vendor' ? 'var(--color-primary)' : '#aaa',
-                                cursor: 'pointer',
-                                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem'
-                            }}
+                            className={`${styles.roleBtn} ${role === 'vendor' ? styles.active : ''}`}
+                            onClick={() => setRole('vendor')}
                         >
                             <Store size={24} /> Shop Owner
                         </button>
                     </div>
                 )}
 
-                <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-
-                    {/* Name Field (Signup only) */}
+                <form onSubmit={handleSubmit}>
+                    {/* Signup Fields */}
                     {view === 'signup' && (
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                            <label style={{ fontSize: '0.9rem', color: '#666' }}>Full Name {role === 'vendor' && '/ Shop Name'}</label>
-                            <input type="text" value={name} onChange={(e) => setName(e.target.value)} required
-                                style={{ padding: '0.75rem', borderRadius: '0.5rem', border: 'var(--glass-border)', background: 'var(--glass-bg)', color: 'var(--color-text-main)', outline: 'none' }} />
+                        <div className={styles.formGroup}>
+                            <label className={styles.label}>
+                                {role === 'vendor' ? 'Business Name' : 'Full Name'}
+                            </label>
+                            <input
+                                className={styles.input}
+                                type="text"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                required
+                                placeholder={role === 'vendor' ? "e.g. Green Earth Nursery" : "e.g. John Doe"}
+                            />
                         </div>
                     )}
 
-                    {/* Vendor Fields (Signup + Vendor only) */}
+                    {/* Vendor Location */}
                     {view === 'signup' && role === 'vendor' && (
                         <>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                                <label style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>Country</label>
-                                <select
-                                    value={country}
-                                    onChange={(e) => setCountry(e.target.value)}
-                                    style={{ padding: '0.75rem', borderRadius: '0.5rem', border: 'var(--glass-border)', background: 'var(--glass-bg)', color: 'var(--color-text-main)', outline: 'none' }}
-                                >
-                                    {countryCodes.map(c => <option key={c.name} value={c.name}>{c.name}</option>)}
-                                </select>
-                            </div>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                                <label style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>State / Province</label>
-                                {countryStates[country] ? (
+                            <div className={styles.formGroup}>
+                                <label className={styles.label}>Business Location</label>
+                                <div style={{ display: 'grid', gap: '1rem' }}>
                                     <select
-                                        value={state}
-                                        onChange={(e) => setState(e.target.value)}
-                                        required
-                                        style={{ padding: '0.75rem', borderRadius: '0.5rem', border: 'var(--glass-border)', background: 'var(--glass-bg)', color: 'var(--color-text-main)', outline: 'none' }}
+                                        className={styles.select}
+                                        value={country}
+                                        onChange={(e) => setCountry(e.target.value)}
                                     >
-                                        <option value="">Select State</option>
-                                        {countryStates[country].map(s => <option key={s} value={s}>{s}</option>)}
+                                        {countryCodes.map(c => <option key={c.name} value={c.name}>{c.name}</option>)}
                                     </select>
-                                ) : (
-                                    <input
-                                        type="text"
-                                        value={state}
-                                        onChange={(e) => setState(e.target.value)}
-                                        placeholder="Enter State"
-                                        required
-                                        style={{ padding: '0.75rem', borderRadius: '0.5rem', border: 'var(--glass-border)', background: 'var(--glass-bg)', color: 'var(--color-text-main)', outline: 'none' }}
-                                    />
-                                )}
+
+                                    {countryStates[country] ? (
+                                        <select
+                                            className={styles.select}
+                                            value={state}
+                                            onChange={(e) => setState(e.target.value)}
+                                            required
+                                        >
+                                            <option value="">Select State</option>
+                                            {countryStates[country].map(s => <option key={s} value={s}>{s}</option>)}
+                                        </select>
+                                    ) : (
+                                        <input
+                                            className={styles.input}
+                                            type="text"
+                                            value={state}
+                                            onChange={(e) => setState(e.target.value)}
+                                            placeholder="State / Province"
+                                            required
+                                        />
+                                    )}
+                                </div>
                             </div>
 
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                                <label style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>Phone Number</label>
-                                <div style={{ display: 'flex', gap: '0.5rem' }}>
-                                    <div style={{
-                                        padding: '0.75rem',
-                                        borderRadius: '0.5rem',
-                                        border: 'var(--glass-border)',
-                                        background: 'rgba(255,255,255,0.05)',
-                                        color: 'var(--color-primary)',
-                                        fontWeight: 'bold',
-                                        minWidth: '60px',
-                                        textAlign: 'center'
-                                    }}>
-                                        {phoneCode}
-                                    </div>
-                                    <input type="tel" placeholder="1234567890" required style={{ flex: 1, padding: '0.75rem', borderRadius: '0.5rem', border: 'var(--glass-border)', background: 'var(--glass-bg)', color: 'var(--color-text-main)', outline: 'none' }} />
+                            <div className={styles.formGroup}>
+                                <label className={styles.label}>Contact Number</label>
+                                <div className={styles.inputWrapper}>
+                                    <div className={styles.phonePrefix}>{phoneCode}</div>
+                                    <input
+                                        type="tel"
+                                        className={styles.input}
+                                        placeholder="Mobile Number"
+                                        required
+                                    />
                                 </div>
                             </div>
                         </>
                     )}
 
-                    {/* Email Field (All Views) */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                        <label style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>Email Address</label>
-                        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required
-                            style={{ padding: '0.75rem', borderRadius: '0.5rem', border: 'var(--glass-border)', background: 'var(--glass-bg)', color: 'var(--color-text-main)', outline: 'none' }} />
+                    {/* Common Fields */}
+                    <div className={styles.formGroup}>
+                        <label className={styles.label}>Email Address</label>
+                        <input
+                            className={styles.input}
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                            placeholder="name@example.com"
+                        />
                     </div>
 
-                    {/* Password Field (Login, Signup, Reset) */}
                     {view !== 'forgot' && (
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                            <label style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>
-                                {view === 'reset' ? 'New Password' : 'Password'}
-                            </label>
-                            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required
-                                style={{ padding: '0.75rem', borderRadius: '0.5rem', border: 'var(--glass-border)', background: 'var(--glass-bg)', color: 'var(--color-text-main)', outline: 'none' }} />
+                        <div className={styles.formGroup}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                                <label className={styles.label} style={{ marginBottom: 0 }}>
+                                    {view === 'reset' ? 'New Password' : 'Password'}
+                                </label>
+                                {view === 'login' && (
+                                    <button
+                                        type="button"
+                                        onClick={() => setView('forgot')}
+                                        className={styles.linkBtn}
+                                        style={{ fontSize: '0.8rem' }}
+                                    >
+                                        Forgot?
+                                    </button>
+                                )}
+                            </div>
+                            <input
+                                className={styles.input}
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                                placeholder="••••••••"
+                            />
                         </div>
                     )}
 
-                    <Button type="submit" size="lg" style={{ marginTop: '1rem' }}>
-                        {view === 'login' && 'Log In'}
-                        {view === 'signup' && (role === 'vendor' ? 'Register Shop' : 'Create Account')}
-                        {view === 'forgot' && 'Send Request'}
-                        {view === 'reset' && 'Update Password'}
+                    <Button type="submit" variant="primary" className={styles.submitBtn}>
+                        {view === 'login' && 'Authenticate'}
+                        {view === 'signup' && 'Complete Registration'}
+                        {view === 'forgot' && 'Submit Request'}
+                        {view === 'reset' && 'Update Security Key'}
                     </Button>
-
-                    {/* Login Links */}
-                    {view === 'login' && (
-                        <div style={{ textAlign: 'center', marginTop: '1rem' }}>
-                            <button type="button" onClick={() => setView('forgot')} style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', textDecoration: 'underline' }}>
-                                Forgot Password?
-                            </button>
-                        </div>
-                    )}
                 </form>
 
-                <p style={{ textAlign: 'center', marginTop: '1.5rem', color: '#666', fontSize: '0.9rem' }}>
+                <div className={styles.footer}>
                     {view === 'login' && (
-                        <>Don't have an account? <button onClick={() => setView('signup')} style={{ color: 'var(--color-primary)', fontWeight: 'bold' }}>Sign Up</button></>
+                        <>New to VanaSim? <button onClick={() => setView('signup')}>Initialize Identity</button></>
                     )}
                     {view === 'signup' && (
-                        <>Already have an account? <button onClick={() => setView('login')} style={{ color: 'var(--color-primary)', fontWeight: 'bold' }}>Log In</button></>
+                        <>Already registered? <button onClick={() => setView('login')}>Log In</button></>
                     )}
                     {(view === 'forgot' || view === 'reset') && (
-                        <>Back to <button onClick={() => setView('login')} style={{ color: 'var(--color-primary)', fontWeight: 'bold' }}>Log In</button></>
+                        <><button onClick={() => setView('login')} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', margin: '0 auto' }}>
+                            <ArrowLeft size={16} /> Return to Login
+                        </button></>
                     )}
-                </p>
-
-                {view === 'forgot' && (
-                    <p style={{ textAlign: 'center', marginTop: '0.5rem', fontSize: '0.8rem', color: '#888' }}>
-                        Has your request been approved? <button onClick={() => setView('reset')} style={{ color: 'var(--color-primary)', textDecoration: 'underline' }}>Set New Password</button>
-                    </p>
-                )}
+                </div>
             </div>
         </div>
     );
