@@ -1,11 +1,20 @@
-import { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
+import { useState, useEffect, useCallback } from 'react';
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { Button } from '../components/common/Button';
-import { Store, Phone, MessageCircle, Navigation, Info } from 'lucide-react';
+import { Store, Phone, MessageCircle, Navigation, Info, Locate } from 'lucide-react';
 import { registerVendor, fetchVendors, updateVendor } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
+
+// Component to recenter map when marker moves
+function RecenterMap({ center }: { center: L.LatLng }) {
+    const map = useMap();
+    useEffect(() => {
+        map.flyTo(center, 15);
+    }, [center, map]);
+    return null;
+}
 
 function DraggableMarker({ pos, setPos }: { pos: L.LatLng, setPos: (pos: L.LatLng) => void }) {
     useMapEvents({
@@ -44,6 +53,7 @@ export const VendorPortal = () => {
     const [isEditing, setIsEditing] = useState(false);
     const [existingVendorId, setExistingVendorId] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
+    const [isLocating, setIsLocating] = useState(false);
 
     const [formData, setFormData] = useState({
         shopName: '',
@@ -78,6 +88,32 @@ export const VendorPortal = () => {
             }
         }
     };
+
+    const handleAutoLocate = useCallback(() => {
+        if (isLocating) return;
+        setIsLocating(true);
+        const tid = toast.loading("Accessing GPS...");
+
+        if (!navigator.geolocation) {
+            toast.error("Geolocation is not supported by your browser", { id: tid });
+            setIsLocating(false);
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+            (pos) => {
+                const newPos = new L.LatLng(pos.coords.latitude, pos.coords.longitude);
+                setMarkerPos(newPos);
+                toast.success("Current location captured!", { id: tid });
+                setIsLocating(false);
+            },
+            (err) => {
+                toast.error("Failed to get location. Please pin manually.", { id: tid });
+                setIsLocating(false);
+            },
+            { enableHighAccuracy: true, timeout: 10000 }
+        );
+    }, [isLocating]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -209,21 +245,44 @@ export const VendorPortal = () => {
                     </div>
 
                     <div style={{
-                        background: 'rgba(255,255,255,0.05)',
+                        background: 'rgba(255,165,0,0.05)',
                         padding: '1rem',
                         borderRadius: '1rem',
                         display: 'flex',
                         alignItems: 'center',
+                        justifyContent: 'space-between',
                         gap: '0.75rem',
                         marginBottom: '2rem',
                         fontSize: '0.85rem',
-                        color: 'var(--color-primary)'
+                        border: '1px solid rgba(255,165,0,0.1)'
                     }}>
-                        <Navigation size={18} />
-                        <div>
-                            <div style={{ fontWeight: 'bold' }}>Map Selected</div>
-                            <div style={{ fontSize: '0.75rem', opacity: 0.8 }}>{markerPos.lat.toFixed(5)}, {markerPos.lng.toFixed(5)}</div>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                            <Navigation size={18} color="var(--color-primary)" />
+                            <div>
+                                <div style={{ fontWeight: 'bold', color: 'white' }}>Coordinates</div>
+                                <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>{markerPos.lat.toFixed(5)}, {markerPos.lng.toFixed(5)}</div>
+                            </div>
                         </div>
+                        <button
+                            type="button"
+                            onClick={handleAutoLocate}
+                            disabled={isLocating}
+                            style={{
+                                background: 'var(--color-primary)',
+                                color: 'black',
+                                border: 'none',
+                                padding: '0.5rem 0.8rem',
+                                borderRadius: '0.5rem',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.4rem',
+                                fontWeight: '700',
+                                fontSize: '0.8rem'
+                            }}
+                        >
+                            <Locate size={14} /> {isLocating ? 'Locating...' : 'Use GPS'}
+                        </button>
                     </div>
 
                     <Button type="submit" disabled={loading} style={{ width: '100%', padding: '1rem' }}>
@@ -238,7 +297,7 @@ export const VendorPortal = () => {
                             <Info size={16} /> Pin Your Location
                         </h3>
                         <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', margin: '0.5rem 0 0' }}>
-                            Click on the map or drag the marker to your shop's exact location. This is how customers will find you.
+                            Click on the map or drag the marker to your shop's exact location. You can also use the **Use GPS** button for auto-detection.
                         </p>
                     </div>
 
@@ -256,6 +315,7 @@ export const VendorPortal = () => {
                                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                             />
                             <DraggableMarker pos={markerPos} setPos={setMarkerPos} />
+                            <RecenterMap center={markerPos} />
                         </MapContainer>
                     </div>
                 </div>
