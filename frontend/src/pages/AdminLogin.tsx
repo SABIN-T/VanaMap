@@ -15,6 +15,9 @@ export const AdminLogin = () => {
         const validEmail = import.meta.env.VITE_ADMIN_USER;
         const validPass = import.meta.env.VITE_ADMIN_PASS;
 
+        console.log("Expected User:", validEmail, "Entered:", email);
+        console.log("Expected Pass:", validPass, "Entered:", password);
+
         if (email === validEmail && password === validPass) {
             localStorage.setItem('adminAuthenticated', 'true');
             navigate('/admin');
