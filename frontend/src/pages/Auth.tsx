@@ -223,7 +223,7 @@ export const Auth = () => {
                     )}
 
                     <Button type="submit" size="lg" style={{ marginTop: '1rem' }}>
-                        {view === 'login' && 'Sign In'}
+                        {view === 'login' && 'Log In'}
                         {view === 'signup' && (role === 'vendor' ? 'Register Shop' : 'Create Account')}
                         {view === 'forgot' && 'Send Request'}
                         {view === 'reset' && 'Update Password'}
