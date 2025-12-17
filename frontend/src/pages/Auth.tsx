@@ -77,12 +77,20 @@ export const Auth = () => {
 
         if (view === 'login') {
             success = await login({ email, password });
-            if (success) alert(`Welcome back!`);
-            else alert('Authentication failed. Check credentials.');
+            if (success) {
+                alert("Login Successful");
+                // Navigation handled by useEffect
+            } else {
+                alert('Authentication failed. Check credentials.');
+            }
         } else if (view === 'signup') {
             success = await signup({ email, password, name, role });
-            if (success) alert(`Welcome ${name}!`);
-            else alert('Signup failed.');
+            if (success) {
+                alert("Signup Successful");
+                // Navigation handled by useEffect
+            } else {
+                alert('Signup failed.');
+            }
         } else if (view === 'forgot') {
             // Request Reset
             try {

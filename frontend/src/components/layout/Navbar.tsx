@@ -59,7 +59,7 @@ export const Navbar = () => {
                         <Link to="/dashboard" className="btn btn-primary" style={{ padding: '0.5rem 1rem', fontSize: '0.9rem' }}>
                             <UserIcon size={16} /> {user.name.split(' ')[0]}
                         </Link>
-                        <button onClick={logout} className="btn btn-outline" style={{ padding: '0.5rem' }} title="Logout">
+                        <button onClick={() => { alert('Logged out successfully'); logout(); }} className="btn btn-outline" style={{ padding: '0.5rem' }} title="Logout">
                             <LogOut size={16} />
                         </button>
                     </div>
