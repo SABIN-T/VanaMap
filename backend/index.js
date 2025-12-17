@@ -13,13 +13,32 @@ mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log('MongoDB Connected'))
     .catch(err => console.error('MongoDB Connection Error:', err));
 
-// Routes
+// --- HELPER: Mock WhatsApp Notification ---
+const sendWhatsApp = (msg) => {
+    // In a real app, integrate with Twilio/Meta API
+    // User requested phone: 9188773534
+    console.log(`[WHATSAPP MOCK] To 9188773534: ${msg}`);
+};
+
+// --- ROUTES ---
 
 // Get all plants
 app.get('/api/plants', async (req, res) => {
     try {
         const plants = await Plant.find();
         res.json(plants);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Admin add new plant (Requested feature: Notify Admin)
+app.post('/api/plants', async (req, res) => {
+    try {
+        const plant = new Plant(req.body);
+        await plant.save();
+        sendWhatsApp(`New Plant Added: ${plant.name} (${plant.scientificName})`);
+        res.status(201).json(plant);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -40,7 +59,7 @@ app.post('/api/vendors', async (req, res) => {
     try {
         const { name, latitude, longitude, address, phone, whatsapp, website } = req.body;
         const newVendor = new Vendor({
-            id: "v" + Date.now(), // Simple ID generation
+            id: "v" + Date.now(),
             name,
             latitude,
             longitude,
@@ -57,19 +76,25 @@ app.post('/api/vendors', async (req, res) => {
     }
 });
 
-// Update Vendor (Admin)
+// Update Vendor (Admin or Vendor Action)
 app.patch('/api/vendors/:id', async (req, res) => {
     try {
         const { id } = req.params;
         const updates = req.body;
         const vendor = await Vendor.findOneAndUpdate({ id: id }, updates, { new: true });
+
+        // Notify if inventory changed (New Plant Add context for vendors)
+        if (updates.inventoryIds) {
+            sendWhatsApp(`Vendor ${vendor ? vendor.name : id} updated their inventory.`);
+        }
+
         res.json(vendor);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 });
 
-// Delete Vendor (Admin)
+// Delete Vendor
 app.delete('/api/vendors/:id', async (req, res) => {
     try {
         const { id } = req.params;
@@ -80,7 +105,9 @@ app.delete('/api/vendors/:id', async (req, res) => {
     }
 });
 
-// Auth Endpoints
+// --- AUTH & USER ---
+
+// Signup
 app.post('/api/auth/signup', async (req, res) => {
     try {
         const { email, password, name, role } = req.body;
@@ -90,7 +117,6 @@ app.post('/api/auth/signup', async (req, res) => {
         const user = new User({ email, password, name, role });
         await user.save();
 
-        // If vendor, also create a vendor placeholder
         if (role === 'vendor') {
             const vendor = new Vendor({
                 id: user._id.toString(),
@@ -100,6 +126,9 @@ app.post('/api/auth/signup', async (req, res) => {
                 inventoryIds: []
             });
             await vendor.save();
+            sendWhatsApp(`New Vendor Registration: ${name} (${email})`);
+        } else {
+            sendWhatsApp(`New User Registration: ${name} (${email})`);
         }
 
         res.status(201).json(user);
@@ -108,19 +137,122 @@ app.post('/api/auth/signup', async (req, res) => {
     }
 });
 
+// Login
 app.post('/api/auth/login', async (req, res) => {
     try {
         const { email, password } = req.body;
         const user = await User.findOne({ email, password });
         if (!user) return res.status(401).json({ error: "Invalid credentials" });
-
         res.json(user);
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 });
 
-// Seed Endpoint (For dev only - to populate DB easily)
+// Forgot Password Request
+app.post('/api/auth/forgot-password', async (req, res) => {
+    try {
+        const { email } = req.body;
+        const user = await User.findOne({ email });
+        if (!user) return res.status(404).json({ error: "User not found" });
+
+        user.resetRequest = {
+            requested: true,
+            approved: false, // Must be approved by admin
+            requestDate: new Date()
+        };
+        await user.save();
+
+        sendWhatsApp(`Password Reset Request: ${user.name} (${email}). Please approve in Admin Dashboard.`);
+
+        res.json({ message: "Request sent to Admin. Please wait for approval." });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Reset Password (Perform actual change after approval)
+app.post('/api/auth/reset-password', async (req, res) => {
+    try {
+        const { email, newPassword } = req.body;
+        const user = await User.findOne({ email });
+        if (!user) return res.status(404).json({ error: "User not found" });
+
+        if (!user.resetRequest?.approved) {
+            return res.status(403).json({ error: "Reset request not approved by Admin yet." });
+        }
+
+        user.password = newPassword;
+        user.resetRequest = {
+            requested: false,
+            approved: false,
+            requestDate: null
+        };
+        await user.save();
+
+        sendWhatsApp(`Password Changed Successfully for: ${user.name}`);
+
+        res.json({ message: "Password updated successfully" });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Toggle Favorite
+app.post('/api/user/favorites', async (req, res) => {
+    try {
+        const { email, plantId } = req.body;
+        const user = await User.findOne({ email });
+        if (!user) return res.status(404).json({ error: "User not found" });
+
+        // Initialize if missing
+        if (!user.favorites) user.favorites = [];
+
+        const index = user.favorites.indexOf(plantId);
+        if (index === -1) {
+            user.favorites.push(plantId); // Add
+        } else {
+            user.favorites.splice(index, 1); // Remove
+        }
+        await user.save();
+        res.json({ favorites: user.favorites });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+
+// --- ADMIN ---
+
+// Get Reset Requests
+app.get('/api/admin/requests', async (req, res) => {
+    try {
+        // Find users with pending requests
+        const users = await User.find({ "resetRequest.requested": true });
+        res.json(users);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Approve Reset Request
+app.post('/api/admin/approve-reset', async (req, res) => {
+    try {
+        const { userId } = req.body;
+        const user = await User.findById(userId);
+        if (!user) return res.status(404).json({ error: "User not found" });
+
+        // Keep 'requested' true so it still shows up or handled in FE? 
+        // Better: Keep 'requested' true until password changed, but set 'approved' true.
+        user.resetRequest.approved = true;
+        await user.save();
+
+        res.json({ message: "Request approved. User can now reset password." });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // Seed Endpoint
 app.post('/api/seed', async (req, res) => {
     try {

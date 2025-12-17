@@ -66,11 +66,66 @@ export const deleteVendor = async (id: string): Promise<boolean> => {
     }
 };
 
-// Seed function to running from browser console if needed
 export const seedDatabase = async (plants: Plant[], vendors: Vendor[]) => {
     await fetch(`${API_URL}/seed`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ plants, vendors })
     });
+};
+
+export const toggleFavorite = async (email: string, plantId: string) => {
+    const res = await fetch(`${API_URL}/user/favorites`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, plantId })
+    });
+    if (!res.ok) throw new Error("Failed to toggle favorite");
+    return res.json();
+};
+
+export const requestPasswordReset = async (email: string) => {
+    const res = await fetch(`${API_URL}/auth/forgot-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+    });
+    if (!res.ok) throw new Error("Failed to request reset");
+    return res.json();
+};
+
+export const resetPassword = async (email: string, newPassword: string) => {
+    const res = await fetch(`${API_URL}/auth/reset-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, newPassword })
+    });
+    if (!res.ok) throw new Error("Reset failed. Check if approved.");
+    return res.json();
+};
+
+export const fetchResetRequests = async () => {
+    const res = await fetch(`${API_URL}/admin/requests`);
+    if (!res.ok) throw new Error("Failed to fetch requests");
+    return res.json();
+};
+
+export const approveResetRequest = async (userId: string) => {
+    const res = await fetch(`${API_URL}/admin/approve-reset`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId })
+    });
+    if (!res.ok) throw new Error("Failed to approve");
+    return res.json();
+};
+
+export const addPlant = async (plantData: Partial<Plant>) => {
+    const res = await fetch(`${API_URL}/plants`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(plantData)
+    });
+    if (!res.ok) throw new Error("Failed to add plant");
+    return res.json();
 };

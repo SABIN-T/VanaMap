@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 export const Admin = () => {
     const [vendors, setVendors] = useState<Vendor[]>([]);
+    const [requests, setRequests] = useState<any[]>([]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -15,11 +16,33 @@ export const Admin = () => {
             return;
         }
         loadVendors();
+        loadRequests();
     }, []);
 
     const loadVendors = async () => {
         const data = await fetchVendors();
         setVendors(data);
+    };
+
+    const loadRequests = async () => {
+        try {
+            const data = await import('../services/api').then(api => api.fetchResetRequests());
+            setRequests(data);
+        } catch (e) {
+            console.error("Failed to load requests", e);
+        }
+    };
+
+    const handleApproveReset = async (userId: string) => {
+        if (confirm("Approve password reset for this user?")) {
+            try {
+                await import('../services/api').then(api => api.approveResetRequest(userId));
+                alert("Request Approved.");
+                loadRequests();
+            } catch (e) {
+                alert("Failed to approve.");
+            }
+        }
     };
 
     const handleVerify = async (id: string, status: boolean) => {
@@ -55,12 +78,11 @@ export const Admin = () => {
     };
 
     const handleResetDatabase = async () => {
-        if (confirm("WARNING: This will wipe all plants/vendors and reload fresh data from code. Continue?")) {
+        if (confirm("WARNING: This will wipe all plants/vendors. Continue?")) {
             try {
                 const { PLANTS } = await import('../data/mocks');
-                // Pass empty array for vendors to ensure we NEVER wipe real vendors (User Safety Request)
                 await import('../services/api').then(api => api.seedDatabase(PLANTS, []));
-                alert("Database Reset Complete! Reloading...");
+                alert("Reset Complete! Reloading...");
                 window.location.reload();
             } catch (e) {
                 console.error(e);
@@ -79,6 +101,37 @@ export const Admin = () => {
                 >
                     ⚠ Reset System Data
                 </button>
+            </div>
+
+            {/* --- PASSWORD RESET REQUESTS --- */}
+            <div className="glass-panel" style={{ padding: '2rem', marginBottom: '2rem', border: '1px solid var(--color-primary)' }}>
+                <h2 style={{ marginBottom: '1.5rem', color: 'var(--color-primary)' }}>Password Reset Requests</h2>
+                {requests.length === 0 ? (
+                    <p style={{ color: '#aaa' }}>No pending requests.</p>
+                ) : (
+                    <div style={{ display: 'grid', gap: '1rem' }}>
+                        {requests.map(req => (
+                            <div key={req._id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', background: 'rgba(255,255,255,0.05)', padding: '1rem', borderRadius: '0.5rem' }}>
+                                <div>
+                                    <h3 style={{ fontSize: '1rem' }}>{req.name}</h3>
+                                    <p style={{ fontSize: '0.9rem', color: '#aaa' }}>{req.email}</p>
+                                    {req.resetRequest?.requestDate && (
+                                        <span style={{ fontSize: '0.8rem', color: '#facc15' }}>Requested: {new Date(req.resetRequest.requestDate).toLocaleDateString()}</span>
+                                    )}
+                                </div>
+                                <div>
+                                    {req.resetRequest.approved ? (
+                                        <span style={{ color: 'var(--color-primary)', fontWeight: 'bold' }}>Approved</span>
+                                    ) : (
+                                        <button onClick={() => handleApproveReset(req._id)} className="btn btn-primary" style={{ fontSize: '0.9rem' }}>
+                                            Approve Reset
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                )}
             </div>
 
             <div className="glass-panel" style={{ padding: '2rem' }}>
@@ -114,9 +167,7 @@ export const Admin = () => {
                                     </div>
                                 </div>
 
-                                {/* Action Buttons Row */}
                                 <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '1rem' }}>
-                                    {/* VERIFY TOGGLE */}
                                     {!vendor.verified ? (
                                         <button onClick={() => handleVerify(vendor.id, true)} className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.4rem 0.8rem', fontSize: '0.8rem' }}>
                                             <Check size={14} /> Verify
@@ -127,7 +178,6 @@ export const Admin = () => {
                                         </button>
                                     )}
 
-                                    {/* RECOMMEND TOGGLE */}
                                     {!vendor.highlyRecommended ? (
                                         <button onClick={() => handleRecommended(vendor.id, true)} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.4rem 0.8rem', fontSize: '0.8rem', background: 'transparent', border: '1px solid #facc15', color: '#facc15' }}>
                                             <Star size={14} /> Make Top Rated
@@ -138,7 +188,6 @@ export const Admin = () => {
                                         </button>
                                     )}
 
-                                    {/* DELETE BUTTON */}
                                     <button onClick={() => handleDelete(vendor.id)} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.4rem 0.8rem', fontSize: '0.8rem', background: 'rgba(239, 68, 68, 0.2)', color: '#ef4444', border: '1px solid rgba(239, 68, 68, 0.5)', marginLeft: 'auto' }}>
                                         <Trash2 size={14} /> Remove
                                     </button>

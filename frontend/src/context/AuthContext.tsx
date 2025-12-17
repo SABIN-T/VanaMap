@@ -93,9 +93,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         window.location.href = '/';
     };
 
-    const toggleFavorite = (plantId: string) => {
+    const toggleFavorite = async (plantId: string) => {
         if (!user) return;
 
+        // Optimistic UI update
         const isFav = user.favorites.includes(plantId);
         const newFavorites = isFav
             ? user.favorites.filter(id => id !== plantId)
@@ -105,7 +106,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUser(updatedUser);
         localStorage.setItem('user', JSON.stringify(updatedUser));
 
-        // TODO: Sync with backend
+        try {
+            await import('../services/api').then(api => api.toggleFavorite(user.email, plantId));
+        } catch (e) {
+            console.error("Failed to sync favorites", e);
+            // Revert on failure? (Optional, skipping for UX smoothness)
+        }
     };
 
     return (

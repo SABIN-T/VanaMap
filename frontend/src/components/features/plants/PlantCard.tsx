@@ -1,7 +1,9 @@
 import type { Plant } from '../../../types';
 import { Button } from '../../common/Button';
-import { ShoppingCart } from 'lucide-react';
+import { ShoppingCart, Heart } from 'lucide-react';
 import styles from './PlantCard.module.css';
+import { useAuth } from '../../../context/AuthContext';
+import toast from 'react-hot-toast';
 
 interface PlantCardProps {
     plant: Plant;
@@ -10,14 +12,54 @@ interface PlantCardProps {
 }
 
 export const PlantCard = ({ plant, onAdd, score }: PlantCardProps) => {
+    const { user, toggleFavorite } = useAuth();
+    const isFavorite = user?.favorites.includes(plant.id);
+
+    const handleHeartClick = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        if (!user) {
+            toast.error("Sign in to save favorites!");
+            return;
+        }
+        toggleFavorite(plant.id);
+        toast.success(isFavorite ? "Removed from favorites" : "Added to favorites");
+    };
+
     return (
         <div className={styles.card}>
             <div className={styles.imageContainer}>
+                {/* ... existing image ... */}
                 <img
                     src={plant.imageUrl}
                     alt={plant.name}
                     className={styles.image}
                 />
+
+                {/* Favorite Button */}
+                <button
+                    onClick={handleHeartClick}
+                    className={styles.favBtn}
+                    style={{
+                        position: 'absolute',
+                        top: '1rem',
+                        right: '1rem',
+                        background: 'rgba(0,0,0,0.4)',
+                        border: 'none',
+                        borderRadius: '50%',
+                        padding: '0.5rem',
+                        cursor: 'pointer',
+                        zIndex: 10,
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}
+                >
+                    <Heart
+                        size={20}
+                        color={isFavorite ? "#ef4444" : "#ffffff"}
+                        fill={isFavorite ? "#ef4444" : "none"}
+                    />
+                </button>
 
                 {/* Match Score Badge */}
                 {score !== undefined && score > 0 && (

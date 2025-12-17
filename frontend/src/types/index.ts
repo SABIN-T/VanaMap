@@ -35,7 +35,7 @@ export interface WeatherData {
     isDay: boolean;
 }
 
-export type UserRole = 'user' | 'vendor';
+export type UserRole = 'user' | 'vendor' | 'admin';
 
 export interface User {
     id: string;
@@ -44,4 +44,9 @@ export interface User {
     role: UserRole;
     favorites: string[]; // Plant IDs
     cart: { plantId: string; quantity: number }[];
+    resetRequest?: {
+        requested: boolean;
+        approved: boolean;
+        requestDate: string;
+    };
 }

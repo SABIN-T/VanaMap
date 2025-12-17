@@ -38,9 +38,14 @@ const UserSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true }, // In real app, hash this!
     name: { type: String, required: true },
-    role: { type: String, enum: ['user', 'vendor'], default: 'user' },
+    role: { type: String, enum: ['user', 'vendor', 'admin'], default: 'user' },
     favorites: [String],
-    cart: [{ plantId: String, quantity: Number }]
+    cart: [{ plantId: String, quantity: Number }],
+    resetRequest: {
+        requested: { type: Boolean, default: false },
+        approved: { type: Boolean, default: false },
+        requestDate: { type: Date }
+    }
 });
 
 module.exports = {
