@@ -170,30 +170,47 @@ export const Home = () => {
                             </div>
                         </div>
                     ) : (
-                        <div className="glass-panel" style={{ display: 'inline-flex', gap: '2rem', padding: '1.5rem', alignItems: 'center', marginTop: '1rem' }}>
-                            <div style={{ textAlign: 'left' }}>
-                                <div style={{ color: 'var(--color-text-muted)', fontSize: '0.8rem', marginBottom: '0.2rem' }}>LOCATION</div>
-                                <div style={{ fontSize: '1.2rem', fontWeight: 'bold', color: 'var(--color-text-main)' }}>Detected Area</div>
-                                <button onClick={() => setWeather(null)} style={{ fontSize: '0.8rem', color: 'var(--color-primary)', textDecoration: 'underline', background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}>Change</button>
+                        <div className="glass-panel" style={{
+                            display: 'flex',
+                            flexWrap: 'wrap',
+                            gap: '1.5rem',
+                            padding: '1.5rem',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            marginTop: '2rem',
+                            maxWidth: '100%'
+                        }}>
+                            <div style={{ textAlign: 'left', minWidth: '150px' }}>
+                                <div style={{ color: 'var(--color-text-muted)', fontSize: '0.75rem', fontWeight: '800', letterSpacing: '1px', marginBottom: '0.2rem' }}>LOCATION</div>
+                                <div style={{ fontSize: '1.25rem', fontWeight: 'bold', color: 'var(--color-text-main)' }}>Detected Area</div>
+                                <button onClick={() => setWeather(null)} style={{ fontSize: '0.8rem', color: 'var(--color-primary)', border: 'none', background: 'none', padding: 0, cursor: 'pointer', textDecoration: 'underline' }}>Change</button>
                             </div>
-                            <div style={{ width: '1px', height: '40px', background: 'var(--color-text-muted)', opacity: 0.2 }}></div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                <Thermometer size={24} color="#facc15" />
+
+                            <div className={styles.weatherDivider}></div>
+
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                <div className={styles.weatherIconCircle}>
+                                    <Thermometer size={20} color="#facc15" />
+                                </div>
                                 <div>
-                                    <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--color-text-main)' }}>{weather.avgTemp30Days.toFixed(1)}°C</div>
-                                    <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>30-Day Avg</div>
+                                    <div style={{ fontSize: '1.25rem', fontWeight: '800', color: 'var(--color-text-main)' }}>{weather.avgTemp30Days.toFixed(1)}°C</div>
+                                    <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', fontWeight: '600' }}>30-Day Avg</div>
                                 </div>
                             </div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                <Wind size={24} color="#38bdf8" />
+
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                <div className={styles.weatherIconCircle} style={{ background: 'rgba(56, 189, 248, 0.1)' }}>
+                                    <Wind size={20} color="#38bdf8" />
+                                </div>
                                 <div>
-                                    <div style={{ fontSize: '1.5rem', fontWeight: 'bold', color: 'var(--color-text-main)' }}>{weather.current_weather.windspeed} km/h</div>
-                                    <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Wind</div>
+                                    <div style={{ fontSize: '1.25rem', fontWeight: '800', color: 'var(--color-text-main)' }}>{weather.current_weather.windspeed} km/h</div>
+                                    <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', fontWeight: '600' }}>Wind Speed</div>
                                 </div>
                             </div>
-                            <div style={{ marginLeft: '1rem' }}>
-                                <div style={{ color: 'var(--color-primary)', fontSize: '0.9rem', fontWeight: 'bold' }}>✓ Analysis Complete</div>
-                                <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Recommendations Updated</div>
+
+                            <div style={{ paddingLeft: '1rem', borderLeft: '1px solid rgba(255,255,255,0.1)', display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
+                                <div style={{ color: 'var(--color-primary)', fontSize: '0.85rem', fontWeight: '800' }}>✓ AI ANALYSIS LIVE</div>
+                                <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Tailored results below</div>
                             </div>
                         </div>
                     )}

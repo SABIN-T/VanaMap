@@ -29,8 +29,10 @@
 
 @media (max-width: 768px) {
     .heroTitle {
-        font-size: 2.5rem; /* Slightly larger than before for better tablet impact */
+        font-size: 2.5rem;
+        /* Slightly larger than before for better tablet impact */
     }
+
     .hero {
         padding: 4rem 1rem 3rem;
     }
@@ -105,7 +107,8 @@
     margin-right: auto;
     border-radius: var(--radius-full);
     border: 1px solid rgba(255, 255, 255, 0.05);
-    flex-wrap: wrap; /* Added for mobile */
+    flex-wrap: wrap;
+    /* Added for mobile */
 }
 
 @media (max-width: 480px) {
@@ -113,6 +116,7 @@
         gap: 0.5rem;
         padding: 0.25rem;
     }
+
     .filterBtn {
         padding: 0.4rem 1rem !important;
         font-size: 0.9rem;
@@ -168,10 +172,40 @@
 
 /* Fade In Animation */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .fadeIn {
     animation: fadeIn 0.4s ease-out forwards;
+}
+
+/* Weather Widget Helpers */
+.weatherDivider {
+    width: 1px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.weatherIconCircle {
+    width: 2.5rem;
+    height: 2.5rem;
+    background: rgba(250, 204, 21, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+@media (max-width: 768px) {
+    .weatherDivider {
+        display: none;
+    }
 }

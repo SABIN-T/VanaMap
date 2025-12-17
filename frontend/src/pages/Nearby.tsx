@@ -1,11 +1,11 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { fetchVendors, seedDatabase, logVendorContact } from '../services/api';
 import { VENDORS as MOCK_VENDORS } from '../data/mocks';
 import { getDistanceFromLatLonInKm, formatDistance } from '../utils/logic';
 import type { Vendor } from '../types';
-import { Phone, MessageCircle, MapPin, Locate } from 'lucide-react';
+import { MessageCircle, MapPin, Locate, Star, ExternalLink, Info } from 'lucide-react';
 import { Button } from '../components/common/Button';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
@@ -26,7 +26,9 @@ L.Marker.prototype.options.icon = DefaultIcon;
 // Component to recenter map
 function ChangeView({ center }: { center: [number, number] }) {
     const map = useMap();
-    map.setView(center, map.getZoom());
+    useEffect(() => {
+        map.setView(center, map.getZoom());
+    }, [center, map]);
     return null;
 }
 
@@ -36,14 +38,13 @@ export const Nearby = () => {
     const [nearbyVendors, setNearbyVendors] = useState<Vendor[]>([]);
     const [loading, setLoading] = useState(false);
     const [activeTab, setActiveTab] = useState<'verified' | 'unverified'>('verified');
+    const hasInitialLocateRef = useRef(false);
 
     const handleContact = async (vendor: Vendor, type: 'whatsapp' | 'call') => {
         if (!user) {
             toast.error("Please sign in to contact vendors");
             return;
         }
-
-        // Log to backend (this triggers Admin notification and WhatsApp mock)
         await logVendorContact({
             vendorId: vendor.id,
             vendorName: vendor.name,
@@ -53,17 +54,13 @@ export const Nearby = () => {
     };
 
     const fetchNearbyShops = async (lat: number, lng: number) => {
-        // Fetch verified vendors from backend
         let allVendors = await fetchVendors();
         if (allVendors.length === 0) {
-            console.log("No vendors found, seeding...");
             await seedDatabase([], MOCK_VENDORS);
             allVendors = await fetchVendors();
         }
         const verifiedVendors = allVendors.filter(v => v.verified === true);
 
-        // Fetch 'Unverified' / Public listings via Overpass API (OSM)
-        // Targeted at: plant_nursery, florist, and garden_centre
         const overpassQuery = `
 [out:json];
 (
@@ -85,8 +82,6 @@ out skel qt;
                     .filter((el: any) => el.lat && el.lon)
                     .filter((el: any) => {
                         const name = (el.tags.name || "").toLowerCase();
-
-                        // MUST contain a plant-related word to be shown in "Unverified"
                         const plantKeywords = [
                             'plant', 'nursery', 'garden', 'green', 'flora',
                             'flower', 'farm', 'botanical', 'seed', 'landscape',
@@ -95,7 +90,6 @@ out skel qt;
                         ];
                         if (!plantKeywords.some(word => name.includes(word))) return false;
 
-                        // Blacklist irrelevant locations
                         const blacklist = [
                             'temple', 'pooja', 'general store', 'bakery', 'medical',
                             'pharmacy', 'hospital', 'clinic', 'school', 'atm',
@@ -143,9 +137,10 @@ out skel qt;
         setNearbyVendors(nearby);
     };
 
-    const handleGetLocation = useCallback(() => {
+    const handleGetLocation = useCallback((isManual = false) => {
+        if (loading) return;
         setLoading(true);
-        const toastId = toast.loading("Locating you...");
+        const toastId = toast.loading(isManual ? "Refreshing location..." : "Locating you...");
 
         if (!navigator.geolocation) {
             toast.error("Geolocation not supported", { id: toastId });
@@ -158,23 +153,29 @@ out skel qt;
                 const { latitude, longitude } = pos.coords;
                 setPosition([latitude, longitude]);
                 toast.success("Location found!", { id: toastId });
-
                 await fetchNearbyShops(latitude, longitude);
                 setLoading(false);
             },
             (err) => {
                 console.error(err);
-                toast.error("Location access denied", { id: toastId });
-                // Fallback to NY or current?
-                if (!position) setPosition([40.7128, -74.0060]);
+                if (isManual) {
+                    toast.error("Location access denied", { id: toastId });
+                } else {
+                    toast.dismiss(toastId);
+                }
+                // Fallback to NY only if we don't have a position yet
+                setPosition(prev => prev || [40.7128, -74.0060]);
                 setLoading(false);
             },
             { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
         );
-    }, [position]);
+    }, [loading]); // Fixed dependency array to avoid loop
 
     useEffect(() => {
-        handleGetLocation();
+        if (!hasInitialLocateRef.current) {
+            hasInitialLocateRef.current = true;
+            handleGetLocation(false);
+        }
     }, [handleGetLocation]);
 
     const filteredVendors = nearbyVendors.filter(v => {
@@ -182,163 +183,228 @@ out skel qt;
         return !v.verified;
     });
 
-    if (!position) return <div className="container" style={{ padding: '2rem' }}>Loading Location...</div>;
-
     return (
         <div className="container" style={{ padding: '2rem 1rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
-                <h2 style={{ fontSize: '2rem', margin: 0 }}>Nearby Plant Shops</h2>
-                <Button onClick={handleGetLocation} disabled={loading} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <Locate size={18} /> {loading ? 'Locating...' : 'Refresh GPS Location'}
-                </Button>
-            </div>
-
-            {/* Tabs */}
-            <div style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem' }}>
-                <button
-                    onClick={() => setActiveTab('verified')}
-                    style={{
-                        padding: '0.75rem 2rem',
-                        borderRadius: '0.5rem',
-                        border: 'none',
-                        background: activeTab === 'verified' ? 'var(--color-primary)' : 'var(--glass-bg)',
-                        color: activeTab === 'verified' ? 'black' : 'var(--color-text-main)',
-                        fontWeight: 'bold',
-                        cursor: 'pointer',
-                        transition: '0.3s'
-                    }}
-                >
-                    Verified Shops
-                </button>
-                <button
-                    onClick={() => setActiveTab('unverified')}
-                    style={{
-                        padding: '0.75rem 2rem',
-                        borderRadius: '0.5rem',
-                        border: 'none',
-                        background: activeTab === 'unverified' ? 'var(--color-primary)' : 'var(--glass-bg)',
-                        color: activeTab === 'unverified' ? 'black' : 'var(--color-text-main)',
-                        fontWeight: 'bold',
-                        cursor: 'pointer',
-                        transition: '0.3s'
-                    }}
-                >
-                    Unverified (Public)
-                </button>
-            </div>
-
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 350px', gap: '2rem', height: '600px', marginBottom: '4rem' }}>
-
-                {/* Map Section */}
-                <div className="glass-panel" style={{ borderRadius: '1rem', overflow: 'hidden' }}>
-                    <MapContainer center={position} zoom={13} style={{ height: '100%', width: '100%' }}>
-                        <TileLayer
-                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                        />
-                        <ChangeView center={position} />
-
-                        {/* User Location */}
-                        <Marker position={position}>
-                            <Popup>You are here</Popup>
-                        </Marker>
-
-                        {/* Vendors - Show ALL on map but maybe distinct icons? For now just show active filter or all? Let's show filtered for clarity */}
-                        {filteredVendors.map(vendor => (
-                            <Marker key={vendor.id} position={[vendor.latitude, vendor.longitude]}>
-                                <Popup>
-                                    <strong>{vendor.name}</strong><br />
-                                    {vendor.address}
-                                </Popup>
-                            </Marker>
-                        ))}
-                    </MapContainer>
-                </div>
-
-                {/* List Section */}
-                <div className="glass-panel" style={{ padding: '1.5rem', overflowY: 'auto' }}>
-                    <h3 style={{ marginBottom: '1rem', color: 'var(--color-text-main)' }}>
-                        {activeTab === 'verified' ? 'Verified Partners' : 'Public Listings'} (Within 50km)
-                    </h3>
-
-                    <div style={{
-                        fontSize: '0.75rem',
-                        color: 'var(--color-text-warning, #fbbf24)',
-                        background: 'rgba(251, 191, 36, 0.05)',
-                        padding: '0.75rem',
-                        borderRadius: '0.5rem',
-                        marginBottom: '1rem',
-                        border: '1px solid rgba(251, 191, 36, 0.15)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '0.5rem'
-                    }}>
-                        <span>⚠️</span>
-                        <span>If shops or plants are not visible, please click on <strong>Refresh GPS Location</strong> above.</span>
+            {/* Header Section */}
+            <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '1.5rem',
+                marginBottom: '2rem'
+            }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
+                    <div>
+                        <h2 style={{ fontSize: '2.5rem', fontWeight: '800', margin: 0, background: 'var(--gradient-primary)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                            Nearby Shops
+                        </h2>
+                        <p style={{ color: 'var(--color-text-muted)', marginTop: '0.5rem' }}>
+                            Discover verified nurseries and local plant listings in your area.
+                        </p>
                     </div>
-                    {filteredVendors.length === 0 ? (
-                        <p style={{ color: 'var(--color-text-muted)' }}>No {activeTab} vendors found nearby.</p>
-                    ) : (
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                            {filteredVendors.map((vendor: any) => (
-                                <div key={vendor.id} style={{
-                                    background: 'var(--glass-bg)',
-                                    padding: '1rem',
-                                    borderRadius: '0.5rem',
-                                    border: 'var(--glass-border)'
-                                }}>
-                                    <h4 style={{
-                                        color: vendor.verified ? 'var(--color-primary)' : 'var(--color-text-main)',
-                                        fontSize: '1.1rem',
-                                        marginBottom: '0.25rem',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '0.5rem'
-                                    }}>
-                                        {vendor.name}
-                                        {!vendor.verified && <span style={{ fontSize: '0.7rem', padding: '2px 6px', border: '1px solid #aaa', borderRadius: '4px', color: 'var(--color-text-muted)' }}>Unverified</span>}
-                                    </h4>
-                                    <p style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)', marginBottom: '0.5rem' }}>
-                                        {formatDistance(vendor.distance * 1000)} away
-                                    </p>
-                                    <p style={{ fontSize: '0.9rem', marginBottom: '1rem', color: 'var(--color-text-main)' }}>{vendor.address}</p>
+                </div>
 
-                                    <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-                                        <a
-                                            href={`tel:${vendor.phone}`}
-                                            className="btn btn-outline"
-                                            onClick={() => handleContact(vendor, 'call')}
-                                            style={{ padding: '0.5rem', fontSize: '0.8rem', color: 'var(--color-text-main)', borderColor: 'var(--color-text-muted)' }}
-                                        >
-                                            <Phone size={14} /> Call
-                                        </a>
-                                        {(vendor.whatsapp || (vendor.phone && vendor.phone !== 'N/A')) && (
-                                            <a
-                                                href={`https://wa.me/${(vendor.whatsapp || vendor.phone).replace(/[^0-9]/g, '')}`}
-                                                target="_blank"
-                                                className="btn btn-primary"
-                                                onClick={() => handleContact(vendor, 'whatsapp')}
-                                                style={{ padding: '0.5rem', fontSize: '0.8rem', flex: 1 }}
-                                            >
-                                                <MessageCircle size={14} /> WhatsApp
-                                            </a>
-                                        )}
-                                    </div>
-                                    <a
-                                        href={`https://www.google.com/maps/dir/?api=1&destination=${vendor.latitude},${vendor.longitude}`}
-                                        target="_blank"
-                                        rel="noreferrer"
-                                        className="btn btn-outline"
-                                        style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', fontSize: '0.9rem', textDecoration: 'none', marginTop: '0.5rem', width: '100%', borderColor: '#4285F4', color: '#4285F4' }}
-                                    >
-                                        <MapPin size={14} /> Navigate (Google Maps)
-                                    </a>
-                                </div>
-                            ))}
-                        </div>
-                    )}
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'center' }}>
+                    <div style={{ display: 'flex', gap: '0.5rem', background: 'var(--glass-bg)', padding: '0.4rem', borderRadius: '0.75rem', border: 'var(--glass-border)' }}>
+                        <button
+                            onClick={() => setActiveTab('verified')}
+                            style={{
+                                padding: '0.6rem 1.5rem',
+                                borderRadius: '0.5rem',
+                                border: 'none',
+                                background: activeTab === 'verified' ? 'var(--color-primary)' : 'transparent',
+                                color: activeTab === 'verified' ? 'black' : 'var(--color-text-muted)',
+                                fontWeight: '700',
+                                cursor: 'pointer',
+                                transition: 'all 0.3s ease'
+                            }}
+                        >
+                            <Star size={16} style={{ marginRight: '0.5rem', verticalAlign: 'text-bottom' }} /> Verified
+                        </button>
+                        <button
+                            onClick={() => setActiveTab('unverified')}
+                            style={{
+                                padding: '0.6rem 1.5rem',
+                                borderRadius: '0.5rem',
+                                border: 'none',
+                                background: activeTab === 'unverified' ? 'var(--color-primary)' : 'transparent',
+                                color: activeTab === 'unverified' ? 'black' : 'var(--color-text-muted)',
+                                fontWeight: '700',
+                                cursor: 'pointer',
+                                transition: 'all 0.3s ease'
+                            }}
+                        >
+                            <Info size={16} style={{ marginRight: '0.5rem', verticalAlign: 'text-bottom' }} /> Public Listings
+                        </button>
+                    </div>
+
+                    <Button
+                        variant="outline"
+                        onClick={() => handleGetLocation(true)}
+                        disabled={loading}
+                        style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', borderRadius: '0.75rem' }}
+                    >
+                        <Locate size={18} /> {loading ? 'Locating...' : 'Refresh GPS'}
+                    </Button>
                 </div>
             </div>
+
+            {/* Main Interactive Section */}
+            {!position ? (
+                <div className="glass-panel" style={{ padding: '4rem', textAlign: 'center', borderRadius: '1.5rem' }}>
+                    <div style={{ marginBottom: '1.5rem' }}>
+                        <Locate size={48} className="animate-pulse" color="var(--color-primary)" />
+                    </div>
+                    <h3 style={{ color: 'var(--color-text-main)' }}>Determining your coordinates...</h3>
+                    <p style={{ color: 'var(--color-text-muted)' }}>We need your location to find the closest plants for you.</p>
+                </div>
+            ) : (
+                <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: '1fr',
+                    gap: '2rem',
+                }}>
+                    {/* Map Section */}
+                    <div className="glass-panel" style={{
+                        borderRadius: '1.5rem',
+                        overflow: 'hidden',
+                        height: '400px',
+                        border: 'var(--glass-border)',
+                        boxShadow: 'var(--glass-shadow)'
+                    }}>
+                        <MapContainer center={position} zoom={13} style={{ height: '100%', width: '100%' }}>
+                            <TileLayer
+                                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                            />
+                            <ChangeView center={position} />
+                            <Marker position={position} icon={L.divIcon({
+                                className: 'user-location-marker',
+                                html: `<div style="background: #3b82f6; width: 12px; height: 12px; border-radius: 50%; border: 2px solid white; box-shadow: 0 0 10px rgba(59,130,246,0.5)"></div>`
+                            })}>
+                                <Popup>Your Location</Popup>
+                            </Marker>
+
+                            {filteredVendors.map(vendor => (
+                                <Marker key={vendor.id} position={[vendor.latitude, vendor.longitude]}>
+                                    <Popup>
+                                        <div style={{ padding: '0.5rem' }}>
+                                            <strong style={{ display: 'block', marginBottom: '0.25rem' }}>{vendor.name}</strong>
+                                            <p style={{ margin: 0, fontSize: '0.8rem', color: '#666' }}>{vendor.address}</p>
+                                        </div>
+                                    </Popup>
+                                </Marker>
+                            ))}
+                        </MapContainer>
+                    </div>
+
+                    {/* List Grid Section */}
+                    <div>
+                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1.5rem' }}>
+                            <h3 style={{ margin: 0, color: 'var(--color-text-main)', fontSize: '1.5rem' }}>
+                                Results ({filteredVendors.length})
+                            </h3>
+                            {activeTab === 'unverified' && (
+                                <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', background: 'rgba(255,255,255,0.05)', padding: '0.4rem 0.8rem', borderRadius: '99px' }}>
+                                    External Data (OSM)
+                                </span>
+                            )}
+                        </div>
+
+                        {filteredVendors.length === 0 ? (
+                            <div className="glass-panel" style={{ padding: '3rem', textAlign: 'center', borderRadius: '1.25rem' }}>
+                                <MapPin size={32} color="var(--color-text-muted)" style={{ marginBottom: '1rem' }} />
+                                <p style={{ color: 'var(--color-text-muted)' }}>No {activeTab} vendors found in this radius.</p>
+                                <Button variant="outline" onClick={() => handleGetLocation(true)} size="sm">Try Refreshing</Button>
+                            </div>
+                        ) : (
+                            <div style={{
+                                display: 'grid',
+                                gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
+                                gap: '1.25rem'
+                            }}>
+                                {filteredVendors.map((vendor: any) => (
+                                    <div key={vendor.id} style={{
+                                        background: 'var(--glass-bg)',
+                                        padding: '1.5rem',
+                                        borderRadius: '1.25rem',
+                                        border: 'var(--glass-border)',
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        transition: 'transform 0.3s ease',
+                                        cursor: 'default'
+                                    }} className="card-hover">
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.75rem' }}>
+                                            <h4 style={{
+                                                color: 'var(--color-text-main)',
+                                                fontSize: '1.2rem',
+                                                fontWeight: '700',
+                                                margin: 0
+                                            }}>
+                                                {vendor.name}
+                                            </h4>
+                                            {vendor.verified && <div title="Verified Partner" style={{ color: 'var(--color-primary)' }}><Star size={18} fill="currentColor" /></div>}
+                                        </div>
+
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
+                                            <span style={{
+                                                fontSize: '0.75rem',
+                                                fontWeight: '800',
+                                                background: 'rgba(0, 255, 157, 0.1)',
+                                                color: 'var(--color-primary)',
+                                                padding: '0.2rem 0.6rem',
+                                                borderRadius: '99px'
+                                            }}>
+                                                {formatDistance(vendor.distance * 1000)} away
+                                            </span>
+                                            <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
+                                                {vendor.address.length > 30 ? vendor.address.substring(0, 30) + '...' : vendor.address}
+                                            </span>
+                                        </div>
+
+                                        <div style={{ marginTop: 'auto', display: 'flex', gap: '0.75rem' }}>
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                onClick={() => window.open(`https://www.google.com/maps/dir/?api=1&destination=${vendor.latitude},${vendor.longitude}`)}
+                                                style={{ flex: 1, borderRadius: '0.75rem' }}
+                                            >
+                                                <ExternalLink size={14} /> Directions
+                                            </Button>
+
+                                            {(vendor.whatsapp || (vendor.phone && vendor.phone !== 'N/A')) && (
+                                                <Button
+                                                    size="sm"
+                                                    onClick={() => {
+                                                        handleContact(vendor, 'whatsapp');
+                                                        window.open(`https://wa.me/${(vendor.whatsapp || vendor.phone).replace(/[^0-9]/g, '')}`, '_blank');
+                                                    }}
+                                                    style={{ flex: 1, borderRadius: '0.75rem' }}
+                                                >
+                                                    <MessageCircle size={14} /> WhatsApp
+                                                </Button>
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
+
+            <style>{`
+                .animate-pulse {
+                    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+                }
+                @keyframes pulse {
+                    0%, 100% { opacity: 1; }
+                    50% { opacity: .5; }
+                }
+                .card-hover:hover {
+                    transform: translateY(-5px);
+                    border-color: var(--color-primary) !important;
+                }
+            `}</style>
         </div>
     );
 };
