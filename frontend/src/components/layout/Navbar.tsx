@@ -5,17 +5,18 @@ import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
 import { useTheme } from '../../context/ThemeContext';
 import styles from './Navbar.module.css';
-import { generateAndDownloadPDF } from '../../utils/pdfGenerator';
+import { HowItWorksModal } from '../features/guide/HowItWorksModal';
 
 export const Navbar = () => {
     const { user, logout } = useAuth();
     const { items: cartItems } = useCart();
     const { theme, toggleTheme } = useTheme();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [showGuideModal, setShowGuideModal] = useState(false);
     const navigate = useNavigate();
 
-    const handleDownloadGuide = () => {
-        generateAndDownloadPDF();
+    const handleOpenGuide = () => {
+        setShowGuideModal(true);
         setIsMenuOpen(false);
     };
 
@@ -29,6 +30,8 @@ export const Navbar = () => {
 
     return (
         <nav className={styles.navbar}>
+            {showGuideModal && <HowItWorksModal onClose={() => setShowGuideModal(false)} />}
+
             <Link to="/" className={styles.logo} onClick={() => setIsMenuOpen(false)}>
                 <div className={styles.logoIcon}>
                     <Leaf size={24} color="white" />
@@ -43,7 +46,7 @@ export const Navbar = () => {
             <div className={styles.desktopLinks}>
                 <Link to="/" className={styles.navLink}>Home</Link>
                 <Link to="/nearby" className={styles.navLink}>Nearby Shops</Link>
-                <button onClick={handleDownloadGuide} className={styles.navLink}>
+                <button onClick={handleOpenGuide} className={styles.navLink}>
                     <BookOpen size={16} /> Guide
                 </button>
                 <Link to="/admin" className={styles.navLink} style={{ color: '#facc15' }}>Admin</Link>
@@ -91,7 +94,7 @@ export const Navbar = () => {
                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><Sun size={20} /> Nearby Shops</div>
                         <ChevronRight size={18} />
                     </Link>
-                    <button onClick={handleDownloadGuide} className={styles.mobileNavLink}>
+                    <button onClick={handleOpenGuide} className={styles.mobileNavLink}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><BookOpen size={20} /> Caring Guide</div>
                         <ChevronRight size={18} />
                     </button>

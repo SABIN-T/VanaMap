@@ -1,94 +1,129 @@
-import { X, Download, Sun, Droplets, Wind } from 'lucide-react';
+import { useState } from 'react';
+import { X, Download, BookOpen, Activity, Users, ShieldCheck } from 'lucide-react';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { Button } from '../../common/Button';
-import styles from '../plants/PlantDetailsModal.module.css'; // Reusing modal styles
+import styles from './GuideModal.module.css';
 
 interface HowItWorksModalProps {
     onClose: () => void;
 }
 
 export const HowItWorksModal = ({ onClose }: HowItWorksModalProps) => {
+    const [activeSection, setActiveSection] = useState<'sim' | 'user' | 'vendor'>('sim');
 
     const handleDownloadPDF = async () => {
-        const element = document.getElementById('guide-content');
+        const element = document.getElementById('guide-pdf-content');
         if (!element) return;
 
         try {
-            const canvas = await html2canvas(element, { scale: 2 });
+            const canvas = await html2canvas(element, {
+                scale: 2,
+                useCORS: true,
+                backgroundColor: '#ffffff'
+            });
             const imgData = canvas.toDataURL('image/png');
             const pdf = new jsPDF('p', 'mm', 'a4');
             const pdfWidth = pdf.internal.pageSize.getWidth();
             const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
             pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-            pdf.save('PlantAI-Guide.pdf');
+            pdf.save('VanaSim_Official_Guide.pdf');
         } catch (err) {
             console.error("PDF generation failed", err);
-            alert("Could not generate PDF. Please try again.");
         }
     };
 
     return (
         <div className={styles.overlay}>
-            <div className={`${styles.modal} glass-panel`} style={{ maxWidth: '800px' }}>
-                <button className={styles.closeBtn} onClick={onClose}><X size={24} /></button>
+            <div className={styles.modal}>
+                <button className={styles.closeBtn} onClick={onClose}><X size={20} /></button>
 
-                <div id="guide-content" style={{ padding: '3rem', background: '#051810', color: '#e0e0e0', minHeight: '600px' }}>
-                    <div style={{ textAlign: 'center', marginBottom: '3rem', borderBottom: '1px solid #333', paddingBottom: '2rem' }}>
-                        <h1 style={{ color: '#00ff9d', fontSize: '2.5rem', marginBottom: '1rem' }}>How PlantAI Works</h1>
-                        <p style={{ fontSize: '1.2rem', color: '#aaa' }}>The Science Behind Your Plant Matches</p>
-                    </div>
+                <div className={styles.modalBody}>
+                    <aside className={styles.sidebar}>
+                        <div className={styles.sideTitle}>Handbook Contents</div>
+                        <nav className={styles.navItems}>
+                            <button
+                                className={`${styles.navItem} ${activeSection === 'sim' ? styles.active : ''}`}
+                                onClick={() => setActiveSection('sim')}
+                            >
+                                <Activity size={18} /> Engine Logic
+                            </button>
+                            <button
+                                className={`${styles.navItem} ${activeSection === 'user' ? styles.active : ''}`}
+                                onClick={() => setActiveSection('user')}
+                            >
+                                <Users size={18} /> User Guide
+                            </button>
+                            <button
+                                className={`${styles.navItem} ${activeSection === 'vendor' ? styles.active : ''}`}
+                                onClick={() => setActiveSection('vendor')}
+                            >
+                                <ShieldCheck size={18} /> Vendor Protocol
+                            </button>
+                        </nav>
+                    </aside>
 
-                    <div style={{ display: 'grid', gap: '3rem' }}>
-                        <section>
-                            <h3 style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: '#facc15', marginBottom: '1rem' }}>
-                                <Sun size={28} /> 1. Temperature Aptness
-                            </h3>
-                            <p style={{ lineHeight: '1.8' }}>
-                                Plants are living organisms with specific thermal comfort zones. We analyze the
-                                <strong> 7-Day Average Temperature</strong> of your location.
-                                If your local temperature falls within a plant's <code>Ideal Range</code> (e.g., 18°C - 25°C),
-                                it receives a high score. Deviations cause the "Stress Score" to rise, alerting you
-                                to potential dormancy or wilting.
-                            </p>
-                        </section>
+                    <main className={styles.contentArea}>
+                        <div id="guide-pdf-content" className={styles.previewContainer}>
+                            <header className={styles.docHeader}>
+                                <div style={{ fontSize: '0.7rem', fontWeight: 900, color: '#00ff9d', letterSpacing: '3px', marginBottom: '0.5rem' }}>OFFICIAL DOCUMENTATION</div>
+                                <h1 className={styles.docTitle}>VANASIM HANDBOOK</h1>
+                                <p style={{ color: '#666', fontSize: '1.1rem' }}>Smart Ecosystem Analysis & Simulation Engine</p>
+                            </header>
 
-                        <section>
-                            <h3 style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: '#60a5fa', marginBottom: '1rem' }}>
-                                <Droplets size={28} /> 2. Carbon & Oxygen Exchange
-                            </h3>
-                            <p style={{ lineHeight: '1.8' }}>
-                                Our simulation calculates the <strong>Photosynthetic Rate</strong> needed for human habitation.
-                                By comparing a plant's metabolic class (C3, C4, CAM) with
-                                standard human O₂ consumption (approx. 550 liters/day), we determine exactly
-                                <em>how many plants</em> are needed to offset one person's respiration in a closed loop.
-                            </p>
-                        </section>
+                            <section className={styles.section}>
+                                <div className={styles.sectionHeader}>
+                                    <Activity color="#00ff9d" /> 01. THE SIMULATION PIPELINE
+                                </div>
+                                <p className={styles.paragraph}>
+                                    VanaSim operates on a multi-vector simulation model. When you initialize a location scan, the engine aggregates 30-day meteorological data including atmospheric pressure, average humidity, and temperature oscillations.
+                                </p>
+                                <p className={styles.paragraph} style={{ marginTop: '1rem' }}>
+                                    <strong>Aptness Coefficient:</strong> Each species is assigned an aptness score based on its genetic thermal tolerance. A score of 100% indicates a perfect biological match for your current environment.
+                                </p>
+                            </section>
 
-                        <section>
-                            <h3 style={{ display: 'flex', alignItems: 'center', gap: '1rem', color: '#a78bfa', marginBottom: '1rem' }}>
-                                <Wind size={28} /> 3. Environmental Impact
-                            </h3>
-                            <p style={{ lineHeight: '1.8' }}>
-                                We also account for <strong>Transpiration Cooling</strong>. Plants release moisture which can
-                                lower ambient indoor temperature by 1-2°C. Our algorithm favors plants with high
-                                leaf surface area for hotter climates to maximize this natural cooling effect.
-                            </p>
-                        </section>
-                    </div>
+                            <section className={styles.section}>
+                                <div className={styles.sectionHeader}>
+                                    <Users color="#60a5fa" /> 02. INHABITANT PROTOCOLS
+                                </div>
+                                <p className={styles.paragraph}>
+                                    Our "Oxygen Flux" simulator calculates the O₂ output required to maintain peak cognitive performance for human inhabitants. By adjusting the inhabitant count, the engine predicts the exact quantity of high-vitality species needed to balance the room's respiratory load.
+                                </p>
+                            </section>
 
-                    <div style={{ marginTop: '4rem', textAlign: 'center', fontSize: '0.9rem', color: '#666' }}>
-                        Generated by PlantAI Algorithm • {new Date().getFullYear()}
-                    </div>
+                            <section className={styles.section}>
+                                <div className={styles.sectionHeader}>
+                                    <ShieldCheck color="#facc15" /> 03. VERIFIED NETWORK
+                                </div>
+                                <p className={styles.paragraph}>
+                                    VanaSim partners with premium nurseries within a 50km radius of your coordinates. Every vendor marked with a Green Tick has participated in our "Eco-Verification" inventory audit, ensuring the plants you buy match the simulation's quality standards.
+                                </p>
+                            </section>
+
+                            <footer style={{ marginTop: '5rem', borderTop: '1px solid #eee', paddingTop: '2rem', textAlign: 'center' }}>
+                                <div style={{ fontSize: '0.8rem', color: '#999' }}>
+                                    &copy; {new Date().getFullYear()} VanaSim Intelligence. All rights reserved.
+                                    <br />Generated on {new Date().toLocaleDateString()}
+                                </div>
+                            </footer>
+                        </div>
+                    </main>
                 </div>
 
-                <div style={{ padding: '2rem', borderTop: '1px solid rgba(255,255,255,0.1)', display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
-                    <Button variant="outline" onClick={onClose}>Close</Button>
-                    <Button onClick={handleDownloadPDF}>
-                        <Download size={18} /> Download Guide (PDF)
-                    </Button>
-                </div>
+                <footer className={styles.footer}>
+                    <div className={styles.downloadNotice}>
+                        <BookOpen size={20} color="var(--color-primary)" />
+                        <span>PREVIEW MODE: Review all documentation before final certification.</span>
+                    </div>
+                    <div style={{ display: 'flex', gap: '1rem' }}>
+                        <Button variant="outline" onClick={onClose}>Discard</Button>
+                        <Button onClick={handleDownloadPDF}>
+                            <Download size={18} /> Certify & Download PDF
+                        </Button>
+                    </div>
+                </footer>
             </div>
         </div>
     );

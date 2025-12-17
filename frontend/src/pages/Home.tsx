@@ -124,7 +124,7 @@ export const Home = () => {
         return { label: 'High Pollution', color: '#f87171', desc: 'Critical AQI: Oxygen-boosters simulated.' };
     };
 
-    const displayedPlants = [...plants]
+    const normalizedPlants = [...plants]
         .filter(p => {
             const matchesType = filter === 'all' ? true : p.type === filter;
             const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -137,6 +137,18 @@ export const Home = () => {
             return { ...p, score: calculateAptness(p, weather.avgTemp30Days, weather.air_quality?.aqi, weather.avgHumidity30Days) };
         })
         .sort((a, b) => (weather ? b.score - a.score : 0));
+
+    // Normalize so top is 100%
+    if (weather && normalizedPlants.length > 0) {
+        const topScore = normalizedPlants[0].score;
+        if (topScore > 0) {
+            normalizedPlants.forEach(p => {
+                p.score = Math.round((p.score / topScore) * 100);
+            });
+        }
+    }
+
+    const displayedPlants = normalizedPlants;
 
     return (
         <div className={styles.homeContainer}>
