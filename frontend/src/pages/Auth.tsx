@@ -63,8 +63,11 @@ export const Auth = () => {
 
     useEffect(() => {
         if (user) {
-            if (user.role === 'vendor') navigate('/vendor');
-            else navigate('/dashboard');
+            if (user.role === 'vendor') {
+                navigate('/vendor');
+            } else {
+                navigate('/dashboard');
+            }
         }
     }, [user, navigate]);
 
