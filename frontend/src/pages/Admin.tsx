@@ -264,22 +264,31 @@ export const Admin = () => {
                                             <input value={formData.scientificName} onChange={e => setFormData({ ...formData, scientificName: e.target.value })} placeholder="e.g. Aloe barbadensis" style={{ flex: 1 }} />
                                             <Button type="button" size="sm" variant="outline" onClick={() => {
                                                 const tid = toast.loading("Analyzing Biological Data...");
-                                                setTimeout(() => {
-                                                    const sName = (formData.scientificName || '').toLowerCase();
-                                                    const isCAM = sName.includes('aloe') || sName.includes('sansevieria') || sName.includes('cactus') || sName.includes('jade') || sName.includes('kalanchoe');
+                                                // Simulated delay to feel like "Processing"
+                                                setTimeout(async () => {
+                                                    try {
+                                                        const { analyzePlantSpecies } = await import('../utils/plantAiDatabase');
+                                                        const analysis = analyzePlantSpecies(formData.scientificName || '');
 
-                                                    setFormData({
-                                                        ...formData,
-                                                        description: `Biologically adapted for ${isCAM ? 'arid' : 'tropical'} climates. ${isCAM ? 'Features Crassulacean Acid Metabolism (CAM) for water efficiency.' : 'Standard C3 photosynthesis pathway.'}`,
-                                                        isNocturnal: isCAM,
-                                                        oxygenLevel: isCAM ? 'high' : 'moderate',
-                                                        minHumidity: isCAM ? 30 : 60,
-                                                        idealTempMax: isCAM ? 35 : 28,
-                                                        medicinalValues: isCAM ? ['Skin healing', 'Air purification'] : ['Stress reduction', 'Humidity regulation'],
-                                                        advantages: isCAM ? ['Drought resistant', 'Night O2 production'] : ['Fast growth', 'Visual appeal']
-                                                    });
-                                                    toast.success("AI Data Populated", { id: tid });
-                                                }, 1500);
+                                                        setFormData({
+                                                            ...formData,
+                                                            name: analysis.name !== "Unknown Species" ? analysis.name : formData.name, // Only overwrite if found
+                                                            description: analysis.description,
+                                                            type: analysis.type,
+                                                            sunlight: analysis.sunlight,
+                                                            oxygenLevel: analysis.oxygenLevel,
+                                                            idealTempMin: analysis.idealTempMin,
+                                                            idealTempMax: analysis.idealTempMax,
+                                                            minHumidity: analysis.minHumidity,
+                                                            isNocturnal: analysis.isNocturnal,
+                                                            medicinalValues: analysis.medicinalValues,
+                                                            advantages: analysis.advantages
+                                                        });
+                                                        toast.success("AI Data Auto-Filled", { id: tid });
+                                                    } catch (e) {
+                                                        toast.error("Analysis Failed", { id: tid });
+                                                    }
+                                                }, 1200);
                                             }}>
                                                 <Sparkles size={14} /> AI Fill
                                             </Button>
