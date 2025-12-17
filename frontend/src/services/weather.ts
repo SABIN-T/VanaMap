@@ -18,8 +18,10 @@ export interface WeatherResponse {
         time: string[];
         temperature_2m_max: number[];
         temperature_2m_min: number[];
+        relative_humidity_2m_mean?: number[];
     };
     avgTemp30Days?: number;
+    avgHumidity30Days?: number;
     air_quality?: AirQuality;
 }
 
@@ -47,7 +49,7 @@ export const getAirQuality = async (lat: number, lng: number): Promise<AirQualit
 export const getWeather = async (lat: number, lng: number): Promise<WeatherResponse | null> => {
     try {
         const response = await fetch(
-            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true&daily=temperature_2m_max,temperature_2m_min&past_days=30&timezone=auto`
+            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true&daily=temperature_2m_max,temperature_2m_min,relative_humidity_2m_mean&past_days=30&timezone=auto`
         );
         const data = await response.json();
 
@@ -55,22 +57,39 @@ export const getWeather = async (lat: number, lng: number): Promise<WeatherRespo
         const airQuality = await getAirQuality(lat, lng);
 
         let avgTemp = data.current_weather.temperature;
-        if (data.daily && data.daily.temperature_2m_max) {
-            const maxs = data.daily.temperature_2m_max;
-            const mins = data.daily.temperature_2m_min;
-            let sum = 0, count = 0;
-            for (let i = 0; i < maxs.length; i++) {
-                if (maxs[i] !== null && mins[i] !== null) {
-                    sum += (maxs[i] + mins[i]) / 2;
-                    count++;
+        let avgHumidity = 50;
+
+        if (data.daily) {
+            if (data.daily.temperature_2m_max) {
+                const maxs = data.daily.temperature_2m_max;
+                const mins = data.daily.temperature_2m_min;
+                let sum = 0, count = 0;
+                for (let i = 0; i < maxs.length; i++) {
+                    if (maxs[i] !== null && mins[i] !== null) {
+                        sum += (maxs[i] + mins[i]) / 2;
+                        count++;
+                    }
                 }
+                if (count > 0) avgTemp = sum / count;
             }
-            if (count > 0) avgTemp = sum / count;
+
+            if (data.daily.relative_humidity_2m_mean) {
+                const humidities = data.daily.relative_humidity_2m_mean;
+                let hSum = 0, hCount = 0;
+                for (let i = 0; i < humidities.length; i++) {
+                    if (humidities[i] !== null) {
+                        hSum += humidities[i];
+                        hCount++;
+                    }
+                }
+                if (hCount > 0) avgHumidity = hSum / hCount;
+            }
         }
 
         return {
             ...data,
             avgTemp30Days: avgTemp,
+            avgHumidity30Days: avgHumidity,
             air_quality: airQuality || undefined
         };
     } catch (error) {

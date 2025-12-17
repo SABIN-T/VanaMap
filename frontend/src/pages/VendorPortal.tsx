@@ -7,14 +7,16 @@ import { registerVendor, fetchVendors, updateVendor } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 
+import type { LatLng } from 'leaflet';
+
 // Component to recenter map when marker moves
-function RecenterMap({ center }: { center: L.LatLng }) {
+const RecenterMap = ({ center }: { center: LatLng }) => {
     const map = useMap();
     useEffect(() => {
         map.flyTo(center, 15);
     }, [center, map]);
     return null;
-}
+};
 
 function DraggableMarker({ pos, setPos }: { pos: L.LatLng, setPos: (pos: L.LatLng) => void }) {
     useMapEvents({
@@ -107,7 +109,7 @@ export const VendorPortal = () => {
                 toast.success("Current location captured!", { id: tid });
                 setIsLocating(false);
             },
-            (err) => {
+            () => {
                 toast.error("Failed to get location. Please pin manually.", { id: tid });
                 setIsLocating(false);
             },

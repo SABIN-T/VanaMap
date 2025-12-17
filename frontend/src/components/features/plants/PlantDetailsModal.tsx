@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { X, Droplets, Sun, Activity, Info, Heart } from 'lucide-react';
+import { X, Droplets, Sun, Activity, Heart, Wind, Shovel } from 'lucide-react';
 import { Button } from '../../common/Button';
 import type { Plant } from '../../../types';
 import styles from './PlantDetailsModal.module.css';
@@ -15,7 +15,8 @@ interface PlantDetailsModalProps {
 export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModalProps) => {
     const { user, toggleFavorite } = useAuth();
     const navigate = useNavigate();
-    const currentTemp = weather?.avgTemp30Days || 25; // Default to 25 if no sim
+    const currentTemp = weather?.avgTemp30Days || 25;
+    const currentHumidity = weather?.avgHumidity30Days || 50;
 
     // Interactive Simulation State
     const [numPeople, setNumPeople] = useState(1);
@@ -28,8 +29,10 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
     const plantsNeeded = Math.ceil((numPeople * HUMAN_O2_NEED_LITERS) / PLANT_O2_OUTPUT);
 
     const getWateringSchedule = () => {
+        if (currentHumidity < 40 && currentTemp > 25) return "Intensive (Every 1-2 days)";
         if (currentTemp > 25) return "Frequent (Every 2-3 days)";
         if (currentTemp < 15) return "Sparse (Every 10-14 days)";
+        if (currentHumidity > 70) return "Light (Every 7-9 days)";
         return "Moderate (Every 5-7 days)";
     };
 
@@ -49,63 +52,79 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                 <button className={styles.closeBtn} onClick={onClose}><X size={24} /></button>
 
                 <div className={styles.header}>
-                    <img src={plant.imageUrl} alt={plant.name} className={styles.image} />
+                    <div className={styles.imageContainer}>
+                        <img src={plant.imageUrl} alt={plant.name} className={styles.image} />
+                        <div className={styles.imageOverlay}></div>
+                    </div>
                     <div className={styles.titleSection}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
                             <div>
-                                <h2>{plant.name}</h2>
-                                <p className="text-gradient">{plant.scientificName}</p>
+                                <h2 style={{ fontSize: '2rem', marginBottom: '0.2rem' }}>{plant.name}</h2>
+                                <p style={{ color: 'var(--color-primary)', fontSize: '1rem', fontStyle: 'italic', opacity: 0.9 }}>{plant.scientificName}</p>
                             </div>
-                            <button onClick={handleFavorite} style={{ color: isFavorite ? '#ef4444' : '#666', transition: '0.2s' }}>
+                            <button onClick={handleFavorite} className={styles.favBtn} style={{ color: isFavorite ? '#ef4444' : 'rgba(255,255,255,0.4)' }}>
                                 <Heart fill={isFavorite ? '#ef4444' : 'none'} size={28} />
                             </button>
                         </div>
 
                         <div className={styles.badges}>
-                            <span className={styles.badge}>{plant.oxygenLevel} Oxygen</span>
-                            <span className={styles.badge}>{plant.sunlight} Light</span>
+                            <span className={styles.badge}><Wind size={14} /> {plant.oxygenLevel} O₂</span>
+                            <span className={styles.badge}><Sun size={14} /> {plant.sunlight} Light</span>
+                            <span className={styles.badge}><Droplets size={14} /> {plant.type}</span>
                         </div>
                     </div>
                 </div>
 
                 <div className={styles.content}>
+                    <div className={styles.descriptionSection}>
+                        <p style={{ color: 'var(--color-text-muted)', fontSize: '1.05rem', lineHeight: '1.6' }}>
+                            {plant.description}
+                        </p>
+                    </div>
+
                     {/* Advanced Simulation Section */}
                     <div className={styles.simulationContainer}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                            <h3><Activity size={20} /> Live Ecosystem Simulator</h3>
-                            {weather && <span style={{ fontSize: '0.8rem', color: '#00ff9d' }}>• Local Weather Active</span>}
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+                            <h3 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '1.2rem' }}>
+                                <Activity size={20} color="var(--color-primary)" /> AI Ecosystem Simulation
+                            </h3>
+                            {weather && <span className={styles.liveIndicator}>Live Climate Applied</span>}
                         </div>
 
                         {/* Interactive Slider */}
-                        <div style={{ marginBottom: '1.5rem', background: 'var(--glass-bg)', padding: '1rem', borderRadius: '0.5rem' }}>
-                            <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>
-                                Simulating for <strong>{numPeople} People</strong>
-                            </label>
+                        <div className={styles.sliderControl}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.8rem' }}>
+                                <label style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>Residents Being Simulated</label>
+                                <span style={{ color: 'var(--color-primary)', fontWeight: 'bold' }}>{numPeople} Person{numPeople > 1 ? 's' : ''}</span>
+                            </div>
                             <input
                                 type="range"
                                 min="1"
                                 max="10"
                                 value={numPeople}
                                 onChange={(e) => setNumPeople(Number(e.target.value))}
-                                style={{ width: '100%', accentColor: 'var(--color-primary)' }}
+                                className={styles.rangeInput}
                             />
                         </div>
 
                         <div className={styles.simVisual}>
                             <div className={styles.simCol}>
-                                <span style={{ color: '#ef4444', fontSize: '0.8rem' }}>CO2 Output</span>
+                                <span style={{ color: '#ef4444', fontSize: '0.75rem', fontWeight: '800', textTransform: 'uppercase' }}>CO₂ Build-up</span>
                                 <div className={styles.particleContainer}>
                                     {[...Array(numPeople > 3 ? 8 : 4)].map((_, i) => (
-                                        <div key={i} className="sim-particle-co2" style={{ animationDelay: `${i * 0.3}s` }}>↓ CO2</div>
+                                        <div key={i} className="sim-particle-co2" style={{ animationDelay: `${i * 0.3}s` }}>↓ CO₂</div>
                                     ))}
                                 </div>
                             </div>
-                            <div className={styles.plantIcon} style={{ fontSize: '3rem' }}>🌿</div>
+                            <div className={styles.plantIconWrapper}>
+                                <div className={styles.plantGlow}></div>
+                                <Shovel size={40} color="var(--color-primary)" />
+                            </div>
                             <div className={styles.simCol}>
-                                <span style={{ color: '#4ade80', fontSize: '0.8rem' }}>O2 Production</span>
+                                <span style={{ color: '#4ade80', fontSize: '0.75rem', fontWeight: '800', textTransform: 'uppercase' }}>O₂ Refresh</span>
                                 <div className={styles.particleContainer}>
                                     {[...Array(5)].map((_, i) => (
-                                        <div key={i} className="sim-particle-o2" style={{ animationDelay: `${i * 0.4}s` }}>↑ O2</div>
+                                        <div key={i} className="sim-particle-o2" style={{ animationDelay: `${i * 0.4}s` }}>↑ O₂</div>
                                     ))}
                                 </div>
                             </div>
@@ -113,88 +132,56 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
 
                         <div className={styles.simStats}>
                             <div className={styles.statBox}>
-                                <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--color-primary)' }}>{plantsNeeded}</div>
-                                <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Plants Required</div>
+                                <div className={styles.statVal}>{plantsNeeded}</div>
+                                <div className={styles.statLabel}>Plants Needed</div>
                             </div>
                             <div className={styles.statBox}>
-                                <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--color-text-main)' }}>{Math.round(currentTemp)}°C</div>
-                                <div style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Avg Environment</div>
+                                <div className={styles.statVal}>{Math.round(currentTemp)}°C</div>
+                                <div className={styles.statLabel}>Avg Temp</div>
                             </div>
-                        </div>
-                        <p style={{ marginTop: '1rem', fontSize: '0.85rem', color: 'var(--color-text-muted)', fontStyle: 'italic', textAlign: 'center' }}>
-                            *Based on {HUMAN_O2_NEED_LITERS}L O2/day human consumption vs plant efficiency.
-                        </p>
-                    </div>
-
-                    {/* Light Simulation */}
-                    <div style={{ marginTop: '2rem', padding: '1.5rem', background: 'var(--glass-bg)', borderRadius: '1rem', width: '100%' }}>
-                        <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem' }}>
-                            <Sun size={20} color="#facc15" /> Light Analysis
-                        </h3>
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
-                            <div>
-                                <div style={{ fontSize: '0.9rem', color: '#aaa', marginBottom: '0.5rem' }}>Required Sunlight</div>
-                                <div style={{ fontSize: '1.1rem', fontWeight: 'bold', textTransform: 'capitalize' }}>{plant.sunlight} Intensity</div>
-                                <div style={{
-                                    height: '8px',
-                                    background: 'rgba(255,255,255,0.1)',
-                                    borderRadius: '4px',
-                                    marginTop: '0.5rem',
-                                    overflow: 'hidden'
-                                }}>
-                                    <div style={{
-                                        width: plant.sunlight === 'low' ? '30%' : plant.sunlight === 'medium' ? '60%' : '100%',
-                                        height: '100%',
-                                        background: '#facc15',
-                                        borderRadius: '4px'
-                                    }}></div>
-                                </div>
-                            </div>
-                            <div>
-                                <div style={{ fontSize: '0.9rem', color: '#aaa', marginBottom: '0.5rem' }}>Your Room (Estimated)</div>
-                                <div style={{ fontSize: '1.1rem', fontWeight: 'bold' }}>Based on Normal Layout</div>
-                                <div style={{
-                                    height: '8px',
-                                    background: 'rgba(255,255,255,0.1)',
-                                    borderRadius: '4px',
-                                    marginTop: '0.5rem',
-                                    overflow: 'hidden'
-                                }}>
-                                    <div style={{
-                                        width: '50%',
-                                        height: '100%',
-                                        background: '#fff',
-                                        borderRadius: '4px',
-                                        opacity: 0.5
-                                    }}></div>
-                                </div>
+                            <div className={styles.statBox}>
+                                <div className={styles.statVal}>{Math.round(currentHumidity)}%</div>
+                                <div className={styles.statLabel}>Humidity</div>
                             </div>
                         </div>
                     </div>
 
-                    {/* Details Grid */}
-                    <div className={styles.grid}>
-                        <div className={styles.section}>
-                            <h4><Droplets size={18} /> Watering Schedule</h4>
-                            <p>{getWateringSchedule()}</p>
+                    {/* Fast info tiles */}
+                    <div className={styles.infoGrid}>
+                        <div className={styles.infoTile}>
+                            <div className={styles.tileHeader}><Droplets size={18} color="#38bdf8" /> Hydration</div>
+                            <div className={styles.tileBody}>{getWateringSchedule()}</div>
                         </div>
-
-                        <div className={styles.section}>
-                            <h4><Info size={18} /> Medicinal Values</h4>
-                            <ul>
-                                {plant.medicinalValues.map((v, i) => <li key={i}>{v}</li>)}
-                            </ul>
-                        </div>
-
-                        <div className={styles.section}>
-                            <h4><Sun size={18} /> Advantages</h4>
-                            <ul>
-                                {plant.advantages.map((v, i) => <li key={i}>{v}</li>)}
-                            </ul>
+                        <div className={styles.infoTile}>
+                            <div className={styles.tileHeader}><Activity size={18} color="#ef4444" /> Health Scan</div>
+                            <div className={styles.tileBody}>
+                                {plant.medicinalValues.slice(0, 2).join(", ") || "Beauty only"}
+                            </div>
                         </div>
                     </div>
 
-                    <Button style={{ width: '100%', marginTop: '1rem' }} onClick={onClose}>Close Simulation</Button>
+                    <div className={styles.listsGrid}>
+                        <div className={styles.listSection}>
+                            <h4>Medicinal Uses</h4>
+                            <div className={styles.listContainer}>
+                                {plant.medicinalValues.map((v, i) => (
+                                    <div key={i} className={styles.listItem}>• {v}</div>
+                                ))}
+                            </div>
+                        </div>
+                        <div className={styles.listSection}>
+                            <h4>Top Advantages</h4>
+                            <div className={styles.listContainer}>
+                                {plant.advantages.map((v, i) => (
+                                    <div key={i} className={styles.listItem}>• {v}</div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    <Button variant="primary" size="lg" style={{ width: '100%', marginTop: '1rem' }} onClick={onClose}>
+                        Exit Simulation
+                    </Button>
                 </div>
             </div>
         </div>
