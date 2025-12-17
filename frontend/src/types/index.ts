@@ -13,6 +13,7 @@ export interface Plant {
     advantages: string[];
     price?: number;
     type: 'indoor' | 'outdoor';
+    isNocturnal?: boolean; // For CAM plants (Snake Plant, Aloe) that produce O2 at night
 }
 
 export interface Vendor {

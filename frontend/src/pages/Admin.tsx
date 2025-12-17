@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { fetchVendors, updateVendor, deleteVendor, fetchPlants, addPlant, updatePlant, deletePlant } from '../services/api';
 import type { Vendor, Plant } from '../types';
-import { Check, Trash2, Edit, Image as ImageIcon, Users, Sprout, Activity, RefreshCw, LogOut, Download, AlertCircle, PlusCircle } from 'lucide-react';
+import { Check, Trash2, Edit, Image as ImageIcon, Users, Sprout, Activity, RefreshCw, LogOut, Download, AlertCircle, PlusCircle, Sparkles } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/common/Button';
 import styles from './Admin.module.css';
@@ -260,7 +260,30 @@ export const Admin = () => {
                                     </div>
                                     <div className={styles.inputGroup}>
                                         <label>Taxonomy Name</label>
-                                        <input value={formData.scientificName} onChange={e => setFormData({ ...formData, scientificName: e.target.value })} placeholder="e.g. Aloe barbadensis" />
+                                        <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                            <input value={formData.scientificName} onChange={e => setFormData({ ...formData, scientificName: e.target.value })} placeholder="e.g. Aloe barbadensis" style={{ flex: 1 }} />
+                                            <Button type="button" size="sm" variant="outline" onClick={() => {
+                                                const tid = toast.loading("Analyzing Biological Data...");
+                                                setTimeout(() => {
+                                                    const sName = (formData.scientificName || '').toLowerCase();
+                                                    const isCAM = sName.includes('aloe') || sName.includes('sansevieria') || sName.includes('cactus') || sName.includes('jade') || sName.includes('kalanchoe');
+
+                                                    setFormData({
+                                                        ...formData,
+                                                        description: `Biologically adapted for ${isCAM ? 'arid' : 'tropical'} climates. ${isCAM ? 'Features Crassulacean Acid Metabolism (CAM) for water efficiency.' : 'Standard C3 photosynthesis pathway.'}`,
+                                                        isNocturnal: isCAM,
+                                                        oxygenLevel: isCAM ? 'high' : 'moderate',
+                                                        minHumidity: isCAM ? 30 : 60,
+                                                        idealTempMax: isCAM ? 35 : 28,
+                                                        medicinalValues: isCAM ? ['Skin healing', 'Air purification'] : ['Stress reduction', 'Humidity regulation'],
+                                                        advantages: isCAM ? ['Drought resistant', 'Night O2 production'] : ['Fast growth', 'Visual appeal']
+                                                    });
+                                                    toast.success("AI Data Populated", { id: tid });
+                                                }, 1500);
+                                            }}>
+                                                <Sparkles size={14} /> AI Fill
+                                            </Button>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -300,6 +323,10 @@ export const Admin = () => {
                                             <option value="high">8/10 High</option>
                                             <option value="very-high">10/10 Peak</option>
                                         </select>
+                                    </div>
+                                    <div className={styles.inputGroup} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', paddingTop: '1.5rem' }}>
+                                        <input type="checkbox" checked={formData.isNocturnal || false} onChange={e => setFormData({ ...formData, isNocturnal: e.target.checked })} style={{ width: '20px', height: '20px' }} />
+                                        <label style={{ margin: 0 }}>Nocturnal O₂ (CAM)</label>
                                     </div>
                                 </div>
 
