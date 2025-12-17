@@ -139,11 +139,17 @@ out skel qt;
 
     const handleGetLocation = useCallback((isManual = false) => {
         if (loading) return;
+
+        let toastId: string | undefined;
+        // Only show loading toast for manual refresh
+        if (isManual) {
+            toastId = toast.loading("Refreshing location...");
+        }
+
         setLoading(true);
-        const toastId = toast.loading(isManual ? "Refreshing location..." : "Locating you...");
 
         if (!navigator.geolocation) {
-            toast.error("Geolocation not supported", { id: toastId });
+            if (isManual && toastId) toast.error("Geolocation not supported", { id: toastId });
             setLoading(false);
             return;
         }
@@ -151,25 +157,35 @@ out skel qt;
         navigator.geolocation.getCurrentPosition(
             async (pos) => {
                 const { latitude, longitude } = pos.coords;
+
+                // Only update if position actually changed significantly or first time
                 setPosition([latitude, longitude]);
-                toast.success("Location found!", { id: toastId });
+
+                // Only show success toast for manual refresh
+                if (isManual && toastId) {
+                    toast.success("Location found!", { id: toastId });
+                } else if (toastId) {
+                    toast.dismiss(toastId);
+                }
+
                 await fetchNearbyShops(latitude, longitude);
                 setLoading(false);
             },
             (err) => {
                 console.error(err);
-                if (isManual) {
+                if (isManual && toastId) {
                     toast.error("Location access denied", { id: toastId });
-                } else {
+                } else if (toastId) {
                     toast.dismiss(toastId);
                 }
-                // Fallback to NY only if we don't have a position yet
+
+                // Set default fallback if no position exists
                 setPosition(prev => prev || [40.7128, -74.0060]);
                 setLoading(false);
             },
-            { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+            { enableHighAccuracy: true, timeout: 10000, maximumAge: 5000 }
         );
-    }, [loading]); // Fixed dependency array to avoid loop
+    }, [loading]);
 
     useEffect(() => {
         if (!hasInitialLocateRef.current) {
