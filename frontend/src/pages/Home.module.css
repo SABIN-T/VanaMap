@@ -375,3 +375,51 @@
         gap: 1.5rem;
     }
 }
+
+/* Desktop Font Size Reductions */
+@media (min-width: 1024px) {
+    .heroTitle {
+        font-size: clamp(2rem, 4vw, 2.8rem) !important;
+    }
+
+    .heroSubtitle {
+        font-size: 0.95rem !important;
+    }
+
+    .heroBadge {
+        font-size: 0.65rem !important;
+        padding: 0.35rem 0.85rem !important;
+    }
+
+    .sectionTitle {
+        font-size: 1.6rem !important;
+    }
+
+    .sectionSubtitle {
+        font-size: 0.85rem !important;
+    }
+
+    .weatherTitle {
+        font-size: 1.3rem !important;
+    }
+
+    .weatherDesc {
+        font-size: 0.8rem !important;
+    }
+
+    .tempValue {
+        font-size: 2.2rem !important;
+    }
+
+    .statValue {
+        font-size: 1.4rem !important;
+    }
+
+    .statLabel {
+        font-size: 0.7rem !important;
+    }
+
+    .footerMsg {
+        font-size: 0.85rem !important;
+    }
+}
