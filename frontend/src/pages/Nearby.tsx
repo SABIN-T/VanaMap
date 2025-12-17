@@ -85,13 +85,25 @@ out skel qt;
                     .filter((el: any) => el.lat && el.lon)
                     .filter((el: any) => {
                         const name = (el.tags.name || "").toLowerCase();
-                        // Block common irrelevant public listings
-                        const blacklist = ['temple', 'pooja', 'general store', 'bakery', 'medical', 'pharmacy', 'hospital', 'clinic', 'school', 'atm', 'bank', 'restaurant'];
-                        if (blacklist.some(word => name.includes(word))) return false;
 
                         // MUST contain a plant-related word to be shown in "Unverified"
-                        const plantKeywords = ['plant', 'nursery', 'garden', 'green', 'flora', 'flower', 'farm', 'botanical', 'seed', 'landscape'];
+                        const plantKeywords = [
+                            'plant', 'nursery', 'garden', 'green', 'flora',
+                            'flower', 'farm', 'botanical', 'seed', 'landscape',
+                            'potted', 'horticulture', 'sapling', 'bonsai', 'nursary',
+                            'vanapathi', 'tree', 'organic'
+                        ];
                         if (!plantKeywords.some(word => name.includes(word))) return false;
+
+                        // Blacklist irrelevant locations
+                        const blacklist = [
+                            'temple', 'pooja', 'general store', 'bakery', 'medical',
+                            'pharmacy', 'hospital', 'clinic', 'school', 'atm',
+                            'bank', 'restaurant', 'hotel', 'police', 'post office',
+                            'supermarket', 'mall', 'gym', 'salon', 'boutique',
+                            'mosque', 'church', 'mandir', 'library', 'office'
+                        ];
+                        if (blacklist.some(word => name.includes(word))) return false;
 
                         if (!name || name === "local plant shop (public listing)") return false;
                         return true;

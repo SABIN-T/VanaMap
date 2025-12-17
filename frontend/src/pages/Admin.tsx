@@ -183,7 +183,7 @@ export const Admin = () => {
                         Users & Vendors
                     </button>
                     <button onClick={() => setActiveTab('plants')} style={{ padding: '0.5rem 1rem', background: activeTab === 'plants' ? 'var(--color-primary)' : 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '0.5rem', color: activeTab === 'plants' ? 'black' : 'white', cursor: 'pointer' }}>
-                        Plant Management
+                        Plant Management ({plants.length})
                     </button>
                     <button onClick={() => setActiveTab('activity')} style={{ padding: '0.5rem 1rem', background: activeTab === 'activity' ? 'var(--color-primary)' : 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '0.5rem', color: activeTab === 'activity' ? 'black' : 'white', cursor: 'pointer' }}>
                         Activity Log
