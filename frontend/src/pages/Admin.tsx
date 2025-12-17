@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { fetchVendors, updateVendor, deleteVendor, fetchPlants, addPlant, updatePlant, deletePlant } from '../services/api';
 import type { Vendor, Plant } from '../types';
-import { Check, X, Store, Trash2, Star, Edit, Plus, Image as ImageIcon } from 'lucide-react';
+import { Check, X, Store, Trash2, Star, Edit, Image as ImageIcon } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/common/Button';
 
@@ -15,12 +15,24 @@ export const Admin = () => {
     // Plant Form State
     const [isEditing, setIsEditing] = useState(false);
     const [currentPlantId, setCurrentPlantId] = useState<string | null>(null);
-    const [formData, setFormData] = useState<Partial<Plant>>({
-        name: '', scientificName: '', description: '', imageUrl: '',
-        price: '', minTemp: 0, maxTemp: 40, humidity: 50,
-        sunlight: 'Partial', water: 'Moderate', oxygen: 'Moderate',
-        type: 'Indoor', medicinalValues: [], advantages: []
-    });
+
+    // Default valid state strictly matching Plant interface
+    const initialFormState: Partial<Plant> = {
+        name: '',
+        scientificName: '',
+        description: '',
+        imageUrl: '',
+        price: 0,
+        idealTempMin: 18,
+        idealTempMax: 30,
+        minHumidity: 50,
+        sunlight: 'medium',
+        oxygenLevel: 'moderate',
+        type: 'indoor',
+        medicinalValues: [],
+        advantages: []
+    };
+    const [formData, setFormData] = useState<Partial<Plant>>(initialFormState);
 
     const navigate = useNavigate();
 
@@ -60,25 +72,25 @@ export const Admin = () => {
     const handlePlantSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
+            // Ensure numeric values are numbers
+            const payload = {
+                ...formData,
+                price: Number(formData.price),
+                idealTempMin: Number(formData.idealTempMin),
+                idealTempMax: Number(formData.idealTempMax),
+                minHumidity: Number(formData.minHumidity),
+            };
+
             if (isEditing && currentPlantId) {
-                // Update
-                await updatePlant(currentPlantId, formData);
+                await updatePlant(currentPlantId, payload);
                 alert("Plant Updated!");
             } else {
-                // Create
-                // Generate a simple ID if not present (Backend usually does _id but frontend uses string 'id')
-                // Ideally backend handles 'id' creation. Let's send it.
                 const newId = (formData.name?.toLowerCase().replace(/\s+/g, '-') || 'plant-' + Date.now());
-                await addPlant({ ...formData, id: newId });
+                await addPlant({ ...payload, id: newId });
                 alert("Plant Added!");
             }
-            // Reset Form
-            setFormData({
-                name: '', scientificName: '', description: '', imageUrl: '',
-                price: '', minTemp: 0, maxTemp: 40, humidity: 50,
-                sunlight: 'Partial', water: 'Moderate', oxygen: 'Moderate',
-                type: 'Indoor', medicinalValues: [], advantages: []
-            });
+
+            setFormData(initialFormState);
             setIsEditing(false);
             setCurrentPlantId(null);
             loadAll();
@@ -215,11 +227,11 @@ export const Admin = () => {
                         <h2>{isEditing ? 'Edit Plant' : 'Add New Plant'}</h2>
                         <form onSubmit={handlePlantSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem', marginTop: '1rem' }}>
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                                <input placeholder="Plant Name" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} required style={inputStyle} />
-                                <input placeholder="Scientific Name" value={formData.scientificName} onChange={e => setFormData({ ...formData, scientificName: e.target.value })} style={inputStyle} />
+                                <input placeholder="Plant Name" value={formData.name || ''} onChange={e => setFormData({ ...formData, name: e.target.value })} required style={inputStyle} />
+                                <input placeholder="Scientific Name" value={formData.scientificName || ''} onChange={e => setFormData({ ...formData, scientificName: e.target.value })} style={inputStyle} />
                             </div>
 
-                            <textarea placeholder="Description" value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} style={{ ...inputStyle, minHeight: '80px' }} />
+                            <textarea placeholder="Description" value={formData.description || ''} onChange={e => setFormData({ ...formData, description: e.target.value })} style={{ ...inputStyle, minHeight: '80px' }} />
 
                             {/* Image Upload */}
                             <div style={{ border: '1px dashed #666', padding: '1rem', borderRadius: '0.5rem', textAlign: 'center' }}>
@@ -236,28 +248,64 @@ export const Admin = () => {
                             </div>
 
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                                <select value={formData.sunlight} onChange={e => setFormData({ ...formData, sunlight: e.target.value })} style={inputStyle}>
-                                    <option>Full Sun</option><option>Partial</option><option>Shade</option>
-                                </select>
-                                <select value={formData.type} onChange={e => setFormData({ ...formData, type: e.target.value })} style={inputStyle}>
-                                    <option>Indoor</option><option>Outdoor</option>
-                                </select>
+                                {/* Sunlight Enum Mapping */}
+                                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                    <label style={{ fontSize: '0.8rem', color: '#aaa', marginBottom: '0.2rem' }}>Sunlight</label>
+                                    <select value={formData.sunlight || 'medium'} onChange={e => setFormData({ ...formData, sunlight: e.target.value as any })} style={inputStyle}>
+                                        <option value="low">Low / Indirect</option>
+                                        <option value="medium">Medium / Partial</option>
+                                        <option value="high">High / Bright</option>
+                                        <option value="direct">Direct Sunlight</option>
+                                    </select>
+                                </div>
+
+                                {/* Oxygen Enum Mapping */}
+                                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                    <label style={{ fontSize: '0.8rem', color: '#aaa', marginBottom: '0.2rem' }}>Oxygen Level</label>
+                                    <select value={formData.oxygenLevel || 'moderate'} onChange={e => setFormData({ ...formData, oxygenLevel: e.target.value as any })} style={inputStyle}>
+                                        <option value="moderate">Moderate</option>
+                                        <option value="high">High</option>
+                                        <option value="very-high">Very High</option>
+                                    </select>
+                                </div>
                             </div>
 
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                                <input type="number" placeholder="Min Temp" value={formData.minTemp} onChange={e => setFormData({ ...formData, minTemp: Number(e.target.value) })} style={inputStyle} />
-                                <input type="number" placeholder="Max Temp" value={formData.maxTemp} onChange={e => setFormData({ ...formData, maxTemp: Number(e.target.value) })} style={inputStyle} />
+                                {/* Type Enum Mapping */}
+                                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                    <label style={{ fontSize: '0.8rem', color: '#aaa', marginBottom: '0.2rem' }}>Type</label>
+                                    <select value={formData.type || 'indoor'} onChange={e => setFormData({ ...formData, type: e.target.value as any })} style={inputStyle}>
+                                        <option value="indoor">Indoor</option>
+                                        <option value="outdoor">Outdoor</option>
+                                    </select>
+                                </div>
+
+                                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                    <label style={{ fontSize: '0.8rem', color: '#aaa', marginBottom: '0.2rem' }}>Min Humidity (%)</label>
+                                    <input type="number" value={formData.minHumidity || 50} onChange={e => setFormData({ ...formData, minHumidity: Number(e.target.value) })} style={inputStyle} />
+                                </div>
                             </div>
 
-                            <input placeholder="Price (e.g. ₹500)" value={formData.price} onChange={e => setFormData({ ...formData, price: e.target.value })} style={inputStyle} />
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                    <label style={{ fontSize: '0.8rem', color: '#aaa', marginBottom: '0.2rem' }}>Min Temp (°C)</label>
+                                    <input type="number" value={formData.idealTempMin || 0} onChange={e => setFormData({ ...formData, idealTempMin: Number(e.target.value) })} style={inputStyle} />
+                                </div>
+                                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                    <label style={{ fontSize: '0.8rem', color: '#aaa', marginBottom: '0.2rem' }}>Max Temp (°C)</label>
+                                    <input type="number" value={formData.idealTempMax || 40} onChange={e => setFormData({ ...formData, idealTempMax: Number(e.target.value) })} style={inputStyle} />
+                                </div>
+                            </div>
+
+                            <input placeholder="Price (e.g. 500)" type="number" value={formData.price || 0} onChange={e => setFormData({ ...formData, price: Number(e.target.value) })} style={inputStyle} />
 
                             {/* Comma Separated Arrays */}
-                            <input placeholder="Medicinal Values (comma separated)" value={formData.medicinalValues?.join(', ')} onChange={e => setFormData({ ...formData, medicinalValues: e.target.value.split(',').map(s => s.trim()) })} style={inputStyle} />
-                            <input placeholder="Advantages (comma separated)" value={formData.advantages?.join(', ')} onChange={e => setFormData({ ...formData, advantages: e.target.value.split(',').map(s => s.trim()) })} style={inputStyle} />
+                            <input placeholder="Medicinal Values (comma separated)" value={formData.medicinalValues?.join(', ') || ''} onChange={e => setFormData({ ...formData, medicinalValues: e.target.value.split(',').map(s => s.trim()) })} style={inputStyle} />
+                            <input placeholder="Advantages (comma separated)" value={formData.advantages?.join(', ') || ''} onChange={e => setFormData({ ...formData, advantages: e.target.value.split(',').map(s => s.trim()) })} style={inputStyle} />
 
                             <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
                                 <Button type="submit" style={{ flex: 1 }}>{isEditing ? 'Update Plant' : 'Add Plant'}</Button>
-                                {isEditing && <Button type="button" variant="outline" onClick={() => { setIsEditing(false); setCurrentPlantId(null); setFormData({}); }}>Cancel</Button>}
+                                {isEditing && <Button type="button" variant="outline" onClick={() => { setIsEditing(false); setCurrentPlantId(null); setFormData(initialFormState); }}>Cancel</Button>}
                             </div>
                         </form>
                     </div>
