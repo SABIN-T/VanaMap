@@ -143,40 +143,38 @@ export const Auth = () => {
                     {/* Vendor Fields (Signup + Vendor only) */}
                     {view === 'signup' && role === 'vendor' && (
                         <>
-                            <div style={{ display: 'flex', gap: '1rem', width: '100%' }}>
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', flex: 1 }}>
-                                    <label style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>Country</label>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                <label style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>Country</label>
+                                <select
+                                    value={country}
+                                    onChange={(e) => setCountry(e.target.value)}
+                                    style={{ padding: '0.75rem', borderRadius: '0.5rem', border: 'var(--glass-border)', background: 'var(--glass-bg)', color: 'var(--color-text-main)', outline: 'none' }}
+                                >
+                                    {countryCodes.map(c => <option key={c.name} value={c.name}>{c.name}</option>)}
+                                </select>
+                            </div>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                                <label style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>State / Province</label>
+                                {countryStates[country] ? (
                                     <select
-                                        value={country}
-                                        onChange={(e) => setCountry(e.target.value)}
+                                        value={state}
+                                        onChange={(e) => setState(e.target.value)}
+                                        required
                                         style={{ padding: '0.75rem', borderRadius: '0.5rem', border: 'var(--glass-border)', background: 'var(--glass-bg)', color: 'var(--color-text-main)', outline: 'none' }}
                                     >
-                                        {countryCodes.map(c => <option key={c.name} value={c.name}>{c.name}</option>)}
+                                        <option value="">Select State</option>
+                                        {countryStates[country].map(s => <option key={s} value={s}>{s}</option>)}
                                     </select>
-                                </div>
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', flex: 1 }}>
-                                    <label style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>State / Province</label>
-                                    {countryStates[country] ? (
-                                        <select
-                                            value={state}
-                                            onChange={(e) => setState(e.target.value)}
-                                            required
-                                            style={{ padding: '0.75rem', borderRadius: '0.5rem', border: 'var(--glass-border)', background: 'var(--glass-bg)', color: 'var(--color-text-main)', outline: 'none' }}
-                                        >
-                                            <option value="">Select State</option>
-                                            {countryStates[country].map(s => <option key={s} value={s}>{s}</option>)}
-                                        </select>
-                                    ) : (
-                                        <input
-                                            type="text"
-                                            value={state}
-                                            onChange={(e) => setState(e.target.value)}
-                                            placeholder="Enter State"
-                                            required
-                                            style={{ padding: '0.75rem', borderRadius: '0.5rem', border: 'var(--glass-border)', background: 'var(--glass-bg)', color: 'var(--color-text-main)', outline: 'none' }}
-                                        />
-                                    )}
-                                </div>
+                                ) : (
+                                    <input
+                                        type="text"
+                                        value={state}
+                                        onChange={(e) => setState(e.target.value)}
+                                        placeholder="Enter State"
+                                        required
+                                        style={{ padding: '0.75rem', borderRadius: '0.5rem', border: 'var(--glass-border)', background: 'var(--glass-bg)', color: 'var(--color-text-main)', outline: 'none' }}
+                                    />
+                                )}
                             </div>
 
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
