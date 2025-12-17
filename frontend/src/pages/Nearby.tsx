@@ -62,11 +62,15 @@ export const Nearby = () => {
             }
             const verifiedVendors = allVendors.filter(v => v.verified === true);
 
+            // Improved Overpass Query - Only legitimate plant shops
             const overpassQuery = `
-[out:json];
+[out:json][timeout:25];
 (
-    node["shop"~"plant_nursery|garden_centre"](around: 50000, ${lat}, ${lng});
-    node["landuse"~"plant_nursery"](around: 50000, ${lat}, ${lng});
+    node["shop"="garden_centre"](around:25000,${lat},${lng});
+    node["shop"="florist"]["name"](around:25000,${lat},${lng});
+    node["shop"="garden"](around:25000,${lat},${lng});
+    node["landuse"="plant_nursery"]["name"](around:25000,${lat},${lng});
+    node["amenity"="greenhouse"]["name"](around:25000,${lat},${lng});
 );
 out body;
 >;
@@ -79,15 +83,25 @@ out skel qt;
                 const osmData = await osmRes.json();
                 if (osmData.elements) {
                     unverifiedVendors = osmData.elements
-                        .filter((el: any) => el.lat && el.lon)
+                        .filter((el: any) => {
+                            // Must have coordinates and a name
+                            if (!el.lat || !el.lon || !el.tags?.name) return false;
+
+                            // Filter out non-plant related shops
+                            const name = el.tags.name.toLowerCase();
+                            const excludeKeywords = ['hardware', 'supermarket', 'grocery', 'general store', 'convenience'];
+                            if (excludeKeywords.some(keyword => name.includes(keyword))) return false;
+
+                            return true;
+                        })
                         .map((el: any) => ({
                             id: `osm-${el.id}`,
-                            name: el.tags.name || "Unnamed Nursery",
+                            name: el.tags.name,
                             latitude: el.lat,
                             longitude: el.lon,
-                            address: el.tags["addr:full"] || el.tags["addr:street"] || "Local Public Listing",
-                            phone: el.tags.phone || "N/A",
-                            whatsapp: "",
+                            address: el.tags["addr:full"] || el.tags["addr:street"] || el.tags["addr:city"] || "Local Listing",
+                            phone: el.tags.phone || el.tags["contact:phone"] || "N/A",
+                            whatsapp: el.tags["contact:whatsapp"] || "",
                             verified: false,
                             highlyRecommended: false,
                             inventoryIds: []
@@ -96,7 +110,7 @@ out skel qt;
             } catch (err) { console.error("OSM Error", err); }
 
             const combined = [...verifiedVendors, ...unverifiedVendors];
-            const nearby = combined.filter(v => getDistanceFromLatLonInKm(lat, lng, v.latitude, v.longitude) <= 50)
+            const nearby = combined.filter(v => getDistanceFromLatLonInKm(lat, lng, v.latitude, v.longitude) <= 25)
                 .map(v => ({ ...v, distance: getDistanceFromLatLonInKm(lat, lng, v.latitude, v.longitude) }))
                 .sort((a: any, b: any) => (a.distance || 0) - (b.distance || 0));
 

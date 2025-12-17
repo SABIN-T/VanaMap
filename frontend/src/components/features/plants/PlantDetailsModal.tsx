@@ -124,135 +124,140 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
 
                     {/* Advanced Simulation Section */}
                     <div className={styles.simulationContainer}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem', flexWrap: 'wrap', gap: '1rem' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                {/* Square Photo in Top Left */}
-                                <img
-                                    src={plant.imageUrl}
-                                    className="sim-thumb"
-                                    alt="thumb"
-                                    style={{
-                                        width: '60px',
-                                        height: '60px',
-                                        objectFit: 'cover',
-                                        borderRadius: '12px',
-                                        border: '2px solid rgba(255,255,255,0.2)',
-                                        boxShadow: '0 4px 10px rgba(0,0,0,0.1)'
-                                    }}
-                                />
-                                <h3 style={{ margin: 0, display: 'flex', flexDirection: 'column', fontSize: '1.1rem', fontWeight: 800 }}>
-                                    <span style={{ fontSize: '0.7rem', color: 'var(--color-primary)', textTransform: 'uppercase', letterSpacing: '1px' }}>Live Data</span>
-                                    <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                                        <Activity size={18} color="var(--color-primary)" /> SMART SIMULATOR
-                                    </span>
-                                </h3>
-                            </div>
-
-                            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
-                                <div style={{
-                                    padding: '0.25rem 0.75rem', borderRadius: '99px',
-                                    background: isDay ? 'rgba(251, 191, 36, 0.1)' : 'rgba(96, 165, 250, 0.1)',
-                                    color: isDay ? '#fbbf24' : '#60a5fa',
-                                    fontWeight: 800, fontSize: '0.7rem', display: 'flex', alignItems: 'center', gap: '0.5rem'
-                                }}>
-                                    {isDay ? <Sun size={14} /> : <span style={{ fontSize: '1.2em' }}>☾</span>}
-                                    {isDay ? 'DAY CYCLE' : 'NIGHT CYCLE'}
-                                </div>
-
-                                <div className={styles.acToggle}>
-                                    <span style={{ fontSize: '0.7rem', fontWeight: 800, color: isACMode ? 'var(--color-primary)' : '#666' }}>AC MODE</span>
-                                    <button className={`${styles.toggleSwitch} ${isACMode ? styles.active : ''}`} onClick={() => setIsACMode(!isACMode)}></button>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* CO2 Warning */}
-                        {PLANT_O2_OUTPUT < 0 && (
-                            <div className={styles.instructionNotice} style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', borderColor: 'rgba(239, 68, 68, 0.2)' }}>
-                                <AlertTriangle size={14} />
-                                <span><strong>Night Respiration:</strong> This plant consumes O₂ at night. Ensure room ventilation or pair with snake plants!</span>
-                            </div>
-                        )}
-
-                        <div className={styles.sliderControl}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                                <span className={styles.controlLabel}>PEOPLE IN ROOM</span>
-                                <span className={styles.controlVal}>{numPeople}</span>
-                            </div>
-                            <input
-                                type="range"
-                                min="1" max="12"
-                                value={numPeople}
-                                onChange={(e) => setNumPeople(Number(e.target.value))}
-                                className={styles.rangeInput}
+                        <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'flex-start' }}>
+                            {/* Plant Image - Left Side */}
+                            <img
+                                src={plant.imageUrl}
+                                alt={plant.name}
+                                style={{
+                                    width: '80px',
+                                    height: '80px',
+                                    objectFit: 'cover',
+                                    borderRadius: '12px',
+                                    border: '2px solid var(--color-primary)',
+                                    boxShadow: '0 4px 12px rgba(16, 185, 129, 0.2)',
+                                    flexShrink: 0
+                                }}
                             />
-                        </div>
 
-                        {/* Temperature Notice */}
-                        {!isACMode && (
-                            <div className={styles.instructionNotice} style={{ background: 'rgba(56, 189, 248, 0.1)', color: '#38bdf8' }}>
-                                <Sun size={14} />
-                                <span>Adjust temperature to match your office or home environment. Plants breathe best in cooler air!</span>
-                            </div>
-                        )}
+                            {/* Controls & Data - Right Side */}
+                            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                {/* Header Row */}
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem' }}>
+                                    <h3 style={{ margin: 0, display: 'flex', flexDirection: 'column', fontSize: '1rem', fontWeight: 800 }}>
+                                        <span style={{ fontSize: '0.65rem', color: 'var(--color-primary)', textTransform: 'uppercase', letterSpacing: '1px' }}>Live Data</span>
+                                        <span style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                                            <Activity size={16} color="var(--color-primary)" /> SMART SIMULATOR
+                                        </span>
+                                    </h3>
 
-                        {!isACMode && (
-                            <div className={styles.sliderControl}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                                    <span className={styles.controlLabel}>ROOM TEMPERATURE</span>
-                                    <span className={styles.controlVal}>{manualTemp}°C</span>
-                                </div>
-                                <input
-                                    type="range"
-                                    min="15" max="40"
-                                    value={manualTemp}
-                                    onChange={(e) => setManualTemp(Number(e.target.value))}
-                                    className={styles.rangeInput}
-                                    style={{ '--accent': '#38bdf8' } as any}
-                                />
-                            </div>
-                        )}
+                                    <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexWrap: 'wrap' }}>
+                                        <div style={{
+                                            padding: '0.25rem 0.75rem', borderRadius: '99px',
+                                            background: isDay ? 'rgba(251, 191, 36, 0.1)' : 'rgba(96, 165, 250, 0.1)',
+                                            color: isDay ? '#fbbf24' : '#60a5fa',
+                                            fontWeight: 800, fontSize: '0.65rem', display: 'flex', alignItems: 'center', gap: '0.4rem'
+                                        }}>
+                                            {isDay ? <Sun size={12} /> : <span style={{ fontSize: '1.1em' }}>☾</span>}
+                                            {isDay ? 'DAY' : 'NIGHT'}
+                                        </div>
 
-                        <div className={styles.simVisual}>
-                            <div className={styles.simCol}>
-                                <span style={{ color: '#ef4444', fontSize: '0.6rem', fontWeight: '900', letterSpacing: '1px' }}>CO₂ REMOVAL</span>
-                                <div className={styles.particleContainer}>
-                                    {[...Array(Math.min(10, numPeople * 2))].map((_, i) => (
-                                        <div key={i} className="sim-particle co2" style={{ animationDelay: `${i * 0.4}s`, left: `${Math.random() * 80}%` }}>.</div>
-                                    ))}
+                                        <div className={styles.acToggle}>
+                                            <span style={{ fontSize: '0.65rem', fontWeight: 800, color: isACMode ? 'var(--color-primary)' : '#666' }}>AC</span>
+                                            <button className={`${styles.toggleSwitch} ${isACMode ? styles.active : ''}`} onClick={() => setIsACMode(!isACMode)}></button>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className={styles.plantIconWrapper}>
-                                <div className={styles.plantGlow} style={{ boxShadow: PLANT_O2_OUTPUT < 0 ? '0 0 30px rgba(239, 68, 68, 0.2)' : '' }}></div>
-                                <div className={styles.fluxRing} style={{ borderColor: PLANT_O2_OUTPUT < 0 ? '#ef4444' : 'var(--color-primary)' }}>
-                                    <Zap size={32} color={PLANT_O2_OUTPUT < 0 ? "#ef4444" : "var(--color-primary)"} />
-                                </div>
-                                <div style={{ position: 'absolute', bottom: '-20px', fontSize: '0.6rem', color: PLANT_O2_OUTPUT < 0 ? '#ef4444' : 'var(--color-primary)', fontWeight: 800 }}>VITALITY: {fluxRate}%</div>
-                            </div>
-                            <div className={styles.simCol}>
-                                <span style={{ color: PLANT_O2_OUTPUT < 0 ? '#ef4444' : '#4ade80', fontSize: '0.6rem', fontWeight: '900', letterSpacing: '1px' }}>
-                                    {PLANT_O2_OUTPUT < 0 ? 'O₂ CONSUMPTION' : 'O₂ PRODUCTION'}
-                                </span>
-                                <div className={styles.particleContainer}>
-                                    {[...Array(6)].map((_, i) => (
-                                        <div key={i} className={`sim-particle ${PLANT_O2_OUTPUT < 0 ? 'co2' : 'o2'}`} style={{ animationDelay: `${i * 0.5}s`, right: `${Math.random() * 80}%` }}>.</div>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
 
-                        <div className={styles.simStats}>
-                            <div className={styles.statBox}>
-                                <div className={styles.statVal} style={{ color: 'var(--color-primary)' }}>{plantsNeeded}</div>
-                                <div className={styles.statLabel}>Plants Needed</div>
-                            </div>
-                            <div className={styles.statBox}>
-                                <div className={styles.statVal}>{currentTemp}°C</div>
-                                <div className={styles.statLabel}>Air Temp</div>
-                            </div>
-                            <div className={styles.statBox}>
-                                <div className={styles.statVal}>{PLANT_O2_OUTPUT}L</div>
-                                <div className={styles.statLabel}>O₂ Per Plant</div>
+                                {/* CO2 Warning */}
+                                {PLANT_O2_OUTPUT < 0 && (
+                                    <div className={styles.instructionNotice} style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', borderColor: 'rgba(239, 68, 68, 0.2)' }}>
+                                        <AlertTriangle size={14} />
+                                        <span><strong>Night Respiration:</strong> This plant consumes O₂ at night. Ensure room ventilation or pair with snake plants!</span>
+                                    </div>
+                                )}
+
+                                <div className={styles.sliderControl}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                                        <span className={styles.controlLabel}>PEOPLE IN ROOM</span>
+                                        <span className={styles.controlVal}>{numPeople}</span>
+                                    </div>
+                                    <input
+                                        type="range"
+                                        min="1" max="12"
+                                        value={numPeople}
+                                        onChange={(e) => setNumPeople(Number(e.target.value))}
+                                        className={styles.rangeInput}
+                                    />
+                                </div>
+
+                                {/* Temperature Notice */}
+                                {!isACMode && (
+                                    <div className={styles.instructionNotice} style={{ background: 'rgba(56, 189, 248, 0.1)', color: '#38bdf8' }}>
+                                        <Sun size={14} />
+                                        <span>Adjust temperature to match your office or home environment. Plants breathe best in cooler air!</span>
+                                    </div>
+                                )}
+
+                                {!isACMode && (
+                                    <div className={styles.sliderControl}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                                            <span className={styles.controlLabel}>ROOM TEMPERATURE</span>
+                                            <span className={styles.controlVal}>{manualTemp}°C</span>
+                                        </div>
+                                        <input
+                                            type="range"
+                                            min="15" max="40"
+                                            value={manualTemp}
+                                            onChange={(e) => setManualTemp(Number(e.target.value))}
+                                            className={styles.rangeInput}
+                                            style={{ '--accent': '#38bdf8' } as any}
+                                        />
+                                    </div>
+                                )}
+
+                                <div className={styles.simVisual}>
+                                    <div className={styles.simCol}>
+                                        <span style={{ color: '#ef4444', fontSize: '0.6rem', fontWeight: '900', letterSpacing: '1px' }}>CO₂ REMOVAL</span>
+                                        <div className={styles.particleContainer}>
+                                            {[...Array(Math.min(10, numPeople * 2))].map((_, i) => (
+                                                <div key={i} className="sim-particle co2" style={{ animationDelay: `${i * 0.4}s`, left: `${Math.random() * 80}%` }}>.</div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                    <div className={styles.plantIconWrapper}>
+                                        <div className={styles.plantGlow} style={{ boxShadow: PLANT_O2_OUTPUT < 0 ? '0 0 30px rgba(239, 68, 68, 0.2)' : '' }}></div>
+                                        <div className={styles.fluxRing} style={{ borderColor: PLANT_O2_OUTPUT < 0 ? '#ef4444' : 'var(--color-primary)' }}>
+                                            <Zap size={32} color={PLANT_O2_OUTPUT < 0 ? "#ef4444" : "var(--color-primary)"} />
+                                        </div>
+                                        <div style={{ position: 'absolute', bottom: '-20px', fontSize: '0.6rem', color: PLANT_O2_OUTPUT < 0 ? '#ef4444' : 'var(--color-primary)', fontWeight: 800 }}>VITALITY: {fluxRate}%</div>
+                                    </div>
+                                    <div className={styles.simCol}>
+                                        <span style={{ color: PLANT_O2_OUTPUT < 0 ? '#ef4444' : '#4ade80', fontSize: '0.6rem', fontWeight: '900', letterSpacing: '1px' }}>
+                                            {PLANT_O2_OUTPUT < 0 ? 'O₂ CONSUMPTION' : 'O₂ PRODUCTION'}
+                                        </span>
+                                        <div className={styles.particleContainer}>
+                                            {[...Array(6)].map((_, i) => (
+                                                <div key={i} className={`sim-particle ${PLANT_O2_OUTPUT < 0 ? 'co2' : 'o2'}`} style={{ animationDelay: `${i * 0.5}s`, right: `${Math.random() * 80}%` }}>.</div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className={styles.simStats}>
+                                    <div className={styles.statBox}>
+                                        <div className={styles.statVal} style={{ color: 'var(--color-primary)' }}>{plantsNeeded}</div>
+                                        <div className={styles.statLabel}>Plants Needed</div>
+                                    </div>
+                                    <div className={styles.statBox}>
+                                        <div className={styles.statVal}>{currentTemp}°C</div>
+                                        <div className={styles.statLabel}>Air Temp</div>
+                                    </div>
+                                    <div className={styles.statBox}>
+                                        <div className={styles.statVal}>{PLANT_O2_OUTPUT}L</div>
+                                        <div className={styles.statLabel}>O₂ Per Plant</div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
