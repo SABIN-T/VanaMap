@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { X, Droplets, Sun, Activity, Heart, Wind, Shovel } from 'lucide-react';
+import { useState, useMemo } from 'react';
+import { X, Droplets, Sun, Activity, Heart, Wind, Users, Zap } from 'lucide-react';
 import { Button } from '../../common/Button';
 import type { Plant } from '../../../types';
 import styles from './PlantDetailsModal.module.css';
@@ -23,10 +23,15 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
 
     // Simulation Constants
     const HUMAN_O2_NEED_LITERS = 550; // Daily requirement
-    // Estimate Plant output based on level
-    const PLANT_O2_OUTPUT = plant.oxygenLevel === 'very-high' ? 100 : plant.oxygenLevel === 'high' ? 60 : 30;
+    const PLANT_O2_OUTPUT = useMemo(() => {
+        const base = plant.oxygenLevel === 'very-high' ? 120 : plant.oxygenLevel === 'high' ? 80 : 40;
+        // Apply slight weather boost/penalty
+        const tempMultiplier = currentTemp > 20 && currentTemp < 30 ? 1.1 : 0.9;
+        return Math.round(base * tempMultiplier);
+    }, [plant.oxygenLevel, currentTemp]);
 
     const plantsNeeded = Math.ceil((numPeople * HUMAN_O2_NEED_LITERS) / PLANT_O2_OUTPUT);
+    const fluxRate = Math.min(100, Math.round((PLANT_O2_OUTPUT / 550) * 100));
 
     const getWateringSchedule = () => {
         if (currentHumidity < 40 && currentTemp > 25) return "Intensive (Every 1-2 days)";
@@ -59,8 +64,8 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                     <div className={styles.titleSection}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start' }}>
                             <div>
-                                <h2 style={{ fontSize: '2rem', marginBottom: '0.2rem' }}>{plant.name}</h2>
-                                <p style={{ color: 'var(--color-primary)', fontSize: '1rem', fontStyle: 'italic', opacity: 0.9 }}>{plant.scientificName}</p>
+                                <h2 style={{ fontSize: 'clamp(1.5rem, 5vw, 2.2rem)', fontWeight: 900, marginBottom: '0.2rem' }}>{plant.name}</h2>
+                                <p style={{ color: 'var(--color-primary)', fontSize: '1rem', fontStyle: 'italic', fontWeight: 600 }}>{plant.scientificName}</p>
                             </div>
                             <button onClick={handleFavorite} className={styles.favBtn} style={{ color: isFavorite ? '#ef4444' : 'rgba(255,255,255,0.4)' }}>
                                 <Heart fill={isFavorite ? '#ef4444' : 'none'} size={28} />
@@ -69,7 +74,7 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
 
                         <div className={styles.badges}>
                             <span className={styles.badge}><Wind size={14} /> {plant.oxygenLevel} O₂</span>
-                            <span className={styles.badge}><Sun size={14} /> {plant.sunlight} Light</span>
+                            <span className={styles.badge}><Sun size={14} /> {plant.sunlight}</span>
                             <span className={styles.badge}><Droplets size={14} /> {plant.type}</span>
                         </div>
                     </div>
@@ -77,7 +82,7 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
 
                 <div className={styles.content}>
                     <div className={styles.descriptionSection}>
-                        <p style={{ color: 'var(--color-text-muted)', fontSize: '1.05rem', lineHeight: '1.6' }}>
+                        <p style={{ color: 'var(--color-text-muted)', fontSize: '1.05rem', lineHeight: '1.7' }}>
                             {plant.description}
                         </p>
                     </div>
@@ -85,17 +90,20 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                     {/* Advanced Simulation Section */}
                     <div className={styles.simulationContainer}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                            <h3 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '1.2rem' }}>
-                                <Activity size={20} color="var(--color-primary)" /> AI Ecosystem Simulation
+                            <h3 style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '0.6rem', fontSize: '1.1rem', fontWeight: 800 }}>
+                                <Activity size={20} color="var(--color-primary)" /> AI ECOSYSTEM ENGINE
                             </h3>
-                            {weather && <span className={styles.liveIndicator}>Live Climate Applied</span>}
+                            {weather && <span className={styles.liveIndicator}>Climate Synced</span>}
                         </div>
 
                         {/* Interactive Slider */}
                         <div className={styles.sliderControl}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.8rem' }}>
-                                <label style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>Residents Being Simulated</label>
-                                <span style={{ color: 'var(--color-primary)', fontWeight: 'bold' }}>{numPeople} Person{numPeople > 1 ? 's' : ''}</span>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                    <Users size={16} color="var(--color-text-muted)" />
+                                    <span style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', fontWeight: 700 }}>OCCUPANCY LOAD</span>
+                                </div>
+                                <span style={{ color: 'var(--color-primary)', fontWeight: '900', fontSize: '1.1rem' }}>{numPeople} User{numPeople > 1 ? 's' : ''}</span>
                             </div>
                             <input
                                 type="range"
@@ -109,22 +117,25 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
 
                         <div className={styles.simVisual}>
                             <div className={styles.simCol}>
-                                <span style={{ color: '#ef4444', fontSize: '0.75rem', fontWeight: '800', textTransform: 'uppercase' }}>CO₂ Build-up</span>
+                                <span style={{ color: '#ef4444', fontSize: '0.6rem', fontWeight: '900', letterSpacing: '1px' }}>↑ CO₂ FLUX</span>
                                 <div className={styles.particleContainer}>
-                                    {[...Array(numPeople > 3 ? 8 : 4)].map((_, i) => (
-                                        <div key={i} className="sim-particle-co2" style={{ animationDelay: `${i * 0.3}s` }}>↓ CO₂</div>
+                                    {[...Array(Math.min(8, numPeople * 2))].map((_, i) => (
+                                        <div key={i} className="sim-particle co2" style={{ animationDelay: `${i * 0.4}s`, left: `${Math.random() * 80}%` }}>.</div>
                                     ))}
                                 </div>
                             </div>
                             <div className={styles.plantIconWrapper}>
                                 <div className={styles.plantGlow}></div>
-                                <Shovel size={40} color="var(--color-primary)" />
+                                <div className={styles.fluxRing}>
+                                    <Zap size={32} color="var(--color-primary)" />
+                                </div>
+                                <div style={{ position: 'absolute', bottom: '-20px', fontSize: '0.6rem', color: 'var(--color-primary)', fontWeight: 800 }}>{fluxRate}% EFFICIENCY</div>
                             </div>
                             <div className={styles.simCol}>
-                                <span style={{ color: '#4ade80', fontSize: '0.75rem', fontWeight: '800', textTransform: 'uppercase' }}>O₂ Refresh</span>
+                                <span style={{ color: '#4ade80', fontSize: '0.6rem', fontWeight: '900', letterSpacing: '1px' }}>↓ O₂ OUTPUT</span>
                                 <div className={styles.particleContainer}>
-                                    {[...Array(5)].map((_, i) => (
-                                        <div key={i} className="sim-particle-o2" style={{ animationDelay: `${i * 0.4}s` }}>↑ O₂</div>
+                                    {[...Array(6)].map((_, i) => (
+                                        <div key={i} className="sim-particle o2" style={{ animationDelay: `${i * 0.5}s`, right: `${Math.random() * 80}%` }}>.</div>
                                     ))}
                                 </div>
                             </div>
@@ -132,58 +143,83 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
 
                         <div className={styles.simStats}>
                             <div className={styles.statBox}>
-                                <div className={styles.statVal}>{plantsNeeded}</div>
-                                <div className={styles.statLabel}>Plants Needed</div>
+                                <div className={styles.statVal} style={{ color: 'var(--color-primary)' }}>{plantsNeeded}</div>
+                                <div className={styles.statLabel}>Target Count</div>
                             </div>
                             <div className={styles.statBox}>
                                 <div className={styles.statVal}>{Math.round(currentTemp)}°C</div>
-                                <div className={styles.statLabel}>Avg Temp</div>
+                                <div className={styles.statLabel}>Ambient Temp</div>
                             </div>
                             <div className={styles.statBox}>
                                 <div className={styles.statVal}>{Math.round(currentHumidity)}%</div>
-                                <div className={styles.statLabel}>Humidity</div>
+                                <div className={styles.statLabel}>Rel. Humidity</div>
                             </div>
                         </div>
                     </div>
 
-                    {/* Fast info tiles */}
                     <div className={styles.infoGrid}>
                         <div className={styles.infoTile}>
-                            <div className={styles.tileHeader}><Droplets size={18} color="#38bdf8" /> Hydration</div>
+                            <div className={styles.tileHeader}><Droplets size={16} color="#38bdf8" /> HYDRATION PLAN</div>
                             <div className={styles.tileBody}>{getWateringSchedule()}</div>
                         </div>
                         <div className={styles.infoTile}>
-                            <div className={styles.tileHeader}><Activity size={18} color="#ef4444" /> Health Scan</div>
+                            <div className={styles.tileHeader}><Activity size={16} color="#ef4444" /> VITALITY CHECK</div>
                             <div className={styles.tileBody}>
-                                {plant.medicinalValues.slice(0, 2).join(", ") || "Beauty only"}
+                                {plant.medicinalValues[0] || "Oxygen Focus"}
                             </div>
                         </div>
                     </div>
 
                     <div className={styles.listsGrid}>
                         <div className={styles.listSection}>
-                            <h4>Medicinal Uses</h4>
+                            <h4>MEDICINAL PROFILE</h4>
                             <div className={styles.listContainer}>
-                                {plant.medicinalValues.map((v, i) => (
+                                {plant.medicinalValues.slice(0, 3).map((v, i) => (
                                     <div key={i} className={styles.listItem}>• {v}</div>
                                 ))}
                             </div>
                         </div>
                         <div className={styles.listSection}>
-                            <h4>Top Advantages</h4>
+                            <h4>SYSTEM BENEFITS</h4>
                             <div className={styles.listContainer}>
-                                {plant.advantages.map((v, i) => (
+                                {plant.advantages.slice(0, 3).map((v, i) => (
                                     <div key={i} className={styles.listItem}>• {v}</div>
                                 ))}
                             </div>
                         </div>
                     </div>
 
-                    <Button variant="primary" size="lg" style={{ width: '100%', marginTop: '1rem' }} onClick={onClose}>
-                        Exit Simulation
+                    <Button variant="primary" size="lg" style={{ width: '100%', marginTop: '1rem', fontWeight: 800 }} onClick={onClose}>
+                        DISMISS SIMULATION
                     </Button>
                 </div>
             </div>
+
+            <style>{`
+                .sim-particle {
+                    position: absolute;
+                    font-size: 20px;
+                    opacity: 0;
+                }
+                .co2 {
+                    color: #ef4444;
+                    animation: floatUp 2s infinite linear;
+                }
+                .o2 {
+                    color: #4ade80;
+                    animation: floatDown 2s infinite linear;
+                }
+                @keyframes floatUp {
+                    0% { transform: translateY(40px); opacity: 0; }
+                    50% { opacity: 0.8; }
+                    100% { transform: translateY(-20px); opacity: 0; }
+                }
+                @keyframes floatDown {
+                    0% { transform: translateY(-20px); opacity: 0; }
+                    50% { opacity: 0.8; }
+                    100% { transform: translateY(40px); opacity: 0; }
+                }
+            `}</style>
         </div>
     );
 };
