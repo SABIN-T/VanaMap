@@ -147,3 +147,21 @@ export const deletePlant = async (id: string) => {
     if (!res.ok) throw new Error("Failed to delete plant");
     return res.json();
 };
+
+export const fetchNotifications = async () => {
+    const res = await fetch(`${API_URL}/admin/notifications`);
+    if (!res.ok) throw new Error("Failed to fetch notifications");
+    return res.json();
+};
+
+export const logVendorContact = async (data: { vendorId: string, vendorName: string, userEmail: string, contactType: 'whatsapp' | 'call' }) => {
+    try {
+        await fetch(`${API_URL}/tracking/vendor-contact`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        });
+    } catch (err) {
+        console.error("Failed to log contact", err);
+    }
+};

@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const { Plant, Vendor, User } = require('./models');
+const { Plant, Vendor, User, Notification } = require('./models');
 
 const app = express();
 app.use(cors());
@@ -15,11 +15,42 @@ mongoose.connect(process.env.MONGO_URI)
     .catch(err => console.error('MongoDB Connection Error:', err));
 
 // --- HELPER: Mock WhatsApp Notification ---
-const sendWhatsApp = (msg) => {
-    // In a real app, integrate with Twilio/Meta API
+const sendWhatsApp = async (msg, type, details = {}) => {
     // User requested phone: 9188773534
-    console.log(`[WHATSAPP MOCK] To 9188773534: ${msg}`);
+    const adminPhone = "9188773534";
+    console.log(`[WHATSAPP MOCK] To ${adminPhone}: ${msg}`);
+
+    try {
+        const notification = new Notification({
+            type,
+            message: msg,
+            details
+        });
+        await notification.save();
+    } catch (err) {
+        console.error("Failed to save notification:", err);
+    }
 };
+
+app.get('/api/admin/notifications', async (req, res) => {
+    try {
+        const notifications = await Notification.find().sort({ date: -1 }).limit(50);
+        res.json(notifications);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.post('/api/tracking/vendor-contact', async (req, res) => {
+    try {
+        const { vendorId, vendorName, userEmail, contactType } = req.body;
+        const msg = `User ${userEmail} contacted Vendor ${vendorName} via ${contactType}`;
+        await sendWhatsApp(msg, 'vendor_contact', { vendorId, userEmail, contactType });
+        res.json({ success: true });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
 
 // --- ROUTES ---
 
@@ -34,12 +65,11 @@ app.get('/api/plants', async (req, res) => {
 });
 
 // Admin add new plant (Requested feature: Notify Admin)
-// Admin add new plant (Requested feature: Notify Admin)
 app.post('/api/plants', async (req, res) => {
     try {
         const plant = new Plant(req.body);
         await plant.save();
-        sendWhatsApp(`New Plant Added: ${plant.name} (${plant.scientificName})`);
+        await sendWhatsApp(`New Plant Added: ${plant.name} (${plant.scientificName})`, 'plant_add', { plantId: plant.id });
         res.status(201).json(plant);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -111,7 +141,7 @@ app.patch('/api/vendors/:id', async (req, res) => {
 
         // Notify if inventory changed (New Plant Add context for vendors)
         if (updates.inventoryIds) {
-            sendWhatsApp(`Vendor ${vendor ? vendor.name : id} updated their inventory.`);
+            await sendWhatsApp(`Vendor ${vendor ? vendor.name : id} updated their inventory.`, 'vendor_update', { vendorId: id });
         }
 
         res.json(vendor);
@@ -152,9 +182,9 @@ app.post('/api/auth/signup', async (req, res) => {
                 inventoryIds: []
             });
             await vendor.save();
-            sendWhatsApp(`New Vendor Registration: ${name} (${email})`);
+            await sendWhatsApp(`New Vendor Registration: ${name} (${email})`, 'vendor_registration', { userId: user._id, email });
         } else {
-            sendWhatsApp(`New User Registration: ${name} (${email})`);
+            await sendWhatsApp(`New User Registration: ${name} (${email})`, 'signup', { userId: user._id, email });
         }
 
         res.status(201).json(user);
@@ -189,7 +219,7 @@ app.post('/api/auth/forgot-password', async (req, res) => {
         };
         await user.save();
 
-        sendWhatsApp(`Password Reset Request: ${user.name} (${email}). Please approve in Admin Dashboard.`);
+        await sendWhatsApp(`Password Reset Request: ${user.name} (${email}). Please approve in Admin Dashboard.`, 'password_reset_request', { email });
 
         res.json({ message: "Request sent to Admin. Please wait for approval." });
     } catch (err) {
@@ -216,7 +246,7 @@ app.post('/api/auth/reset-password', async (req, res) => {
         };
         await user.save();
 
-        sendWhatsApp(`Password Changed Successfully for: ${user.name}`);
+        await sendWhatsApp(`Password Changed Successfully for: ${user.name}`, 'password_reset_complete', { email });
 
         res.json({ message: "Password updated successfully" });
     } catch (err) {

@@ -33,8 +33,6 @@ export const Cart = () => {
         );
     }
 
-    const total = items.reduce((sum, item) => sum + (item.plant.price || 0) * item.quantity, 0);
-
     return (
         <div className="container" style={{ padding: '2rem 1rem' }}>
             <div className="glass-panel" style={{ padding: '2rem', maxWidth: '800px', margin: '0 auto' }}>
@@ -72,12 +70,8 @@ export const Cart = () => {
                                     <div style={{ flex: 1 }}>
                                         <h3 style={{ color: 'var(--color-text-main)', marginBottom: '0.25rem' }}>{item.plant.name}</h3>
                                         <div style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>
-                                            ₹{item.plant.price || 'N/A'} x {item.quantity}
+                                            Quantity: {item.quantity}
                                         </div>
-                                    </div>
-
-                                    <div style={{ fontWeight: 'bold', color: 'var(--color-primary)', fontSize: '1.2rem' }}>
-                                        {item.plant.price ? `₹${item.plant.price * item.quantity}` : 'N/A'}
                                     </div>
 
                                     <button
@@ -97,13 +91,9 @@ export const Cart = () => {
                             ))}
                         </div>
 
-                        <div style={{ borderTop: '1px solid var(--glass-border)', paddingTop: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <div>
-                                <div style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>Total Amount</div>
-                                <div style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--color-primary)' }}>₹{total}</div>
-                            </div>
-                            <Button size="lg">
-                                Proceed to Checkout
+                        <div style={{ borderTop: '1px solid var(--glass-border)', paddingTop: '2rem', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                            <Button size="lg" onClick={() => navigate('/nearby')} style={{ width: '100%', maxWidth: '300px' }}>
+                                Find Nearby Shops & Contact
                             </Button>
                         </div>
                     </>

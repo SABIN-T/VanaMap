@@ -48,8 +48,17 @@ const UserSchema = new mongoose.Schema({
     }
 });
 
+const NotificationSchema = new mongoose.Schema({
+    type: { type: String, enum: ['signup', 'vendor_registration', 'vendor_contact', 'plant_add'], required: true },
+    message: { type: String, required: true },
+    details: mongoose.Schema.Types.Mixed,
+    date: { type: Date, default: Date.now },
+    read: { type: Boolean, default: false }
+});
+
 module.exports = {
     Plant: mongoose.model('Plant', PlantSchema),
     Vendor: mongoose.model('Vendor', VendorSchema),
-    User: mongoose.model('User', UserSchema)
+    User: mongoose.model('User', UserSchema),
+    Notification: mongoose.model('Notification', NotificationSchema)
 };

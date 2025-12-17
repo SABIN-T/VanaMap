@@ -1,12 +1,13 @@
 import { useState, useEffect, useCallback } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
-import { fetchVendors, seedDatabase } from '../services/api';
+import { fetchVendors, seedDatabase, logVendorContact } from '../services/api';
 import { VENDORS as MOCK_VENDORS } from '../data/mocks';
 import { getDistanceFromLatLonInKm, formatDistance } from '../utils/logic';
 import type { Vendor } from '../types';
 import { Phone, MessageCircle, MapPin, Locate } from 'lucide-react';
 import { Button } from '../components/common/Button';
+import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 
 // Fix Leaflet icon issue
@@ -30,9 +31,25 @@ function ChangeView({ center }: { center: [number, number] }) {
 }
 
 export const Nearby = () => {
+    const { user } = useAuth();
     const [position, setPosition] = useState<[number, number] | null>(null);
     const [nearbyVendors, setNearbyVendors] = useState<Vendor[]>([]);
     const [loading, setLoading] = useState(false);
+
+    const handleContact = async (vendor: Vendor, type: 'whatsapp' | 'call') => {
+        if (!user) {
+            toast.error("Please sign in to contact vendors");
+            return;
+        }
+
+        // Log to backend (this triggers Admin notification and WhatsApp mock)
+        await logVendorContact({
+            vendorId: vendor.id,
+            vendorName: vendor.name,
+            userEmail: user.email,
+            contactType: type
+        });
+    };
 
     const fetchNearbyShops = async (lat: number, lng: number) => {
         // Fetch verified vendors from backend
@@ -264,7 +281,12 @@ out skel qt;
                                     <p style={{ fontSize: '0.9rem', marginBottom: '1rem', color: 'var(--color-text-main)' }}>{vendor.address}</p>
 
                                     <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
-                                        <a href={`tel:${vendor.phone}`} className="btn btn-outline" style={{ padding: '0.5rem', fontSize: '0.8rem', color: 'var(--color-text-main)', borderColor: 'var(--color-text-muted)' }}>
+                                        <a
+                                            href={`tel:${vendor.phone}`}
+                                            className="btn btn-outline"
+                                            onClick={() => handleContact(vendor, 'call')}
+                                            style={{ padding: '0.5rem', fontSize: '0.8rem', color: 'var(--color-text-main)', borderColor: 'var(--color-text-muted)' }}
+                                        >
                                             <Phone size={14} /> Call
                                         </a>
                                         {(vendor.whatsapp || (vendor.phone && vendor.phone !== 'N/A')) && (
@@ -272,6 +294,7 @@ out skel qt;
                                                 href={`https://wa.me/${(vendor.whatsapp || vendor.phone).replace(/[^0-9]/g, '')}`}
                                                 target="_blank"
                                                 className="btn btn-primary"
+                                                onClick={() => handleContact(vendor, 'whatsapp')}
                                                 style={{ padding: '0.5rem', fontSize: '0.8rem', flex: 1 }}
                                             >
                                                 <MessageCircle size={14} /> WhatsApp

@@ -10,7 +10,8 @@ export const Admin = () => {
     const [vendors, setVendors] = useState<Vendor[]>([]);
     const [requests, setRequests] = useState<any[]>([]);
     const [plants, setPlants] = useState<Plant[]>([]);
-    const [activeTab, setActiveTab] = useState<'users' | 'plants'>('users');
+    const [notifications, setNotifications] = useState<any[]>([]);
+    const [activeTab, setActiveTab] = useState<'users' | 'plants' | 'activity'>('users');
     const [selectedVendor, setSelectedVendor] = useState<Vendor | null>(null);
     const [resetHover, setResetHover] = useState(false);
 
@@ -48,14 +49,16 @@ export const Admin = () => {
     }, []);
 
     const loadAll = async () => {
-        const [vData, pData, rData] = await Promise.all([
+        const [vData, pData, rData, nData] = await Promise.all([
             fetchVendors(),
             fetchPlants(),
-            import('../services/api').then(api => api.fetchResetRequests().catch(() => []))
+            import('../services/api').then(api => api.fetchResetRequests().catch(() => [])),
+            import('../services/api').then(api => api.fetchNotifications().catch(() => []))
         ]);
         setVendors(vData);
         setPlants(pData);
         setRequests(rData);
+        setNotifications(nData);
     };
 
     // --- PLANT HANDLERS ---
@@ -183,11 +186,17 @@ export const Admin = () => {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
                 <h1>Admin Dashboard</h1>
                 <div style={{ display: 'flex', gap: '1rem' }}>
+                    <button onClick={loadAll} style={{ padding: '0.5rem 1rem', background: 'rgba(255,255,255,0.05)', border: 'none', borderRadius: '0.5rem', color: 'white', cursor: 'pointer' }}>
+                        🔄 Refresh
+                    </button>
                     <button onClick={() => setActiveTab('users')} style={{ padding: '0.5rem 1rem', background: activeTab === 'users' ? 'var(--color-primary)' : 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '0.5rem', color: activeTab === 'users' ? 'black' : 'white', cursor: 'pointer' }}>
                         Users & Vendors
                     </button>
                     <button onClick={() => setActiveTab('plants')} style={{ padding: '0.5rem 1rem', background: activeTab === 'plants' ? 'var(--color-primary)' : 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '0.5rem', color: activeTab === 'plants' ? 'black' : 'white', cursor: 'pointer' }}>
                         Plant Management
+                    </button>
+                    <button onClick={() => setActiveTab('activity')} style={{ padding: '0.5rem 1rem', background: activeTab === 'activity' ? 'var(--color-primary)' : 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '0.5rem', color: activeTab === 'activity' ? 'black' : 'white', cursor: 'pointer' }}>
+                        Activity Log
                     </button>
                     <button
                         onClick={handleResetDatabase}
@@ -391,6 +400,53 @@ export const Admin = () => {
                             ))}
                         </div>
                     </div>
+                </div>
+            {/* ==================== ACTIVITY LOG TAB ==================== */}
+            {activeTab === 'activity' && (
+                <div className="glass-panel" style={{ padding: '2rem' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+                        <h2>Activity Log & Notifications</h2>
+                        <span style={{ fontSize: '0.9rem', color: '#aaa' }}>Live tracking enabled</span>
+                    </div>
+
+                    {notifications.length === 0 ? <p style={{ color: '#aaa' }}>No recent activity.</p> : (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                            {notifications.map(n => (
+                                <div key={n._id} style={{
+                                    padding: '1.25rem',
+                                    background: 'rgba(255,255,255,0.05)',
+                                    borderRadius: '0.5rem',
+                                    borderLeft: `4px solid ${n.type === 'vendor_contact' ? '#facc15' : n.type === 'signup' ? '#10b981' : n.type === 'vendor_registration' ? '#a78bfa' : '#3b82f6'}`,
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: '0.5rem'
+                                }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                        <span style={{
+                                            fontSize: '0.75rem',
+                                            padding: '2px 8px',
+                                            borderRadius: '10px',
+                                            background: 'rgba(255,255,255,0.1)',
+                                            color: '#ccc',
+                                            textTransform: 'uppercase',
+                                            fontWeight: 'bold'
+                                        }}>
+                                            {n.type.replace('_', ' ')}
+                                        </span>
+                                        <span style={{ fontSize: '0.8rem', color: '#888' }}>
+                                            {new Date(n.date).toLocaleString()}
+                                        </span>
+                                    </div>
+                                    <p style={{ fontSize: '1.1rem', margin: 0, color: '#fff' }}>{n.message}</p>
+                                    {n.details && Object.keys(n.details).length > 0 && (
+                                        <div style={{ fontSize: '0.85rem', color: '#aaa', fontStyle: 'italic' }}>
+                                            {Object.entries(n.details).map(([k, v]) => `${k}: ${v}`).join(' | ')}
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
             )}
 
