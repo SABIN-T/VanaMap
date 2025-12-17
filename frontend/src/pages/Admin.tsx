@@ -146,8 +146,8 @@ export const Admin = () => {
     const handleResetDatabase = async () => {
         if (confirm("WARNING: This will wipe data!")) {
             try {
-                const { PLANTS } = await import('../data/mocks');
-                await import('../services/api').then(api => api.seedDatabase(PLANTS, []));
+                const { PLANTS, VENDORS, USERS } = await import('../data/mocks');
+                await import('../services/api').then(api => api.seedDatabase(PLANTS, VENDORS, USERS));
                 window.location.reload();
             } catch (e) { alert("Failed."); }
         }

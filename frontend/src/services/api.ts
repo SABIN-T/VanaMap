@@ -66,11 +66,11 @@ export const deleteVendor = async (id: string): Promise<boolean> => {
     }
 };
 
-export const seedDatabase = async (plants: Plant[], vendors: Vendor[]) => {
+export const seedDatabase = async (plants: Plant[], vendors: Vendor[], users: any[] = []) => {
     await fetch(`${API_URL}/seed`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ plants, vendors })
+        body: JSON.stringify({ plants, vendors, users })
     });
 };
 

@@ -279,9 +279,10 @@ app.post('/api/admin/approve-reset', async (req, res) => {
 });
 
 // Seed Endpoint
+// Seed Endpoint
 app.post('/api/seed', async (req, res) => {
     try {
-        const { plants, vendors } = req.body;
+        const { plants, vendors, users } = req.body;
 
         // If plants provided, replace plants
         if (plants && plants.length > 0) {
@@ -289,14 +290,19 @@ app.post('/api/seed', async (req, res) => {
             await Plant.insertMany(plants);
         }
 
-        // If vendors provided (only if non-empty array), replace vendors
-        // This prevents accidental vendor wipe if we only want to update plants
+        // If vendors provided, replace vendors
         if (vendors && vendors.length > 0) {
             await Vendor.deleteMany({});
             await Vendor.insertMany(vendors);
         }
 
-        res.json({ message: 'Database updated successfully' });
+        // If users provided, replace users
+        if (users && users.length > 0) {
+            await User.deleteMany({});
+            await User.insertMany(users);
+        }
+
+        res.json({ message: 'Database updated successfully with Plants, Vendors, and Users.' });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }

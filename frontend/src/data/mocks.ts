@@ -616,4 +616,69 @@ export const PLANTS: Plant[] = [
     }
 ];
 
-export const VENDORS: Vendor[] = [];
+// --- MOCK VENDORS ---
+export const VENDORS: Vendor[] = [
+    {
+        id: 'v1',
+        name: 'Green Thumb Nursery',
+        latitude: 28.6139,
+        longitude: 77.2090, // Delhi
+        address: '123 Green Way, New Delhi',
+        phone: '9876543210',
+        whatsapp: '9876543210',
+        website: 'https://greenthumb.com',
+        inventoryIds: ['1', '2', '3', '6', '30'],
+        verified: true,
+        highlyRecommended: true
+    },
+    {
+        id: 'v2',
+        name: 'Urban Jungle Store',
+        latitude: 19.0760,
+        longitude: 72.8777, // Mumbai
+        address: '456 Urban St, Mumbai',
+        phone: '9123456780',
+        whatsapp: '9123456780',
+        inventoryIds: ['8', '9', '32', '15'],
+        verified: true
+    },
+    {
+        id: 'v3',
+        name: 'Bangalore Blooms',
+        latitude: 12.9716,
+        longitude: 77.5946, // Bangalore
+        address: '789 Garden Rd, Bangalore',
+        phone: '9988776655',
+        whatsapp: '9988776655',
+        inventoryIds: ['5', '12', '45', '41'],
+        verified: false
+    }
+];
+
+// --- MOCK USERS ---
+export const USERS = [
+    {
+        name: "Sabin Thapa",
+        email: "sabin@example.com",
+        password: "password123",
+        role: "admin",
+        favorites: ['1', '6'],
+        cart: []
+    },
+    {
+        name: "John Doe",
+        email: "john@example.com",
+        password: "password123",
+        role: "user",
+        favorites: ['2'],
+        cart: []
+    },
+    {
+        name: "Vendor User",
+        email: "vendor@example.com",
+        password: "password123",
+        role: "vendor",
+        favorites: [],
+        cart: []
+    }
+];
