@@ -210,6 +210,24 @@ export const Admin = () => {
                     >
                         ⚠ Reset Data
                     </button>
+                    <button
+                        onClick={() => {
+                            if (confirm("Logout from Admin Panel?")) {
+                                localStorage.removeItem('adminAuthenticated');
+                                navigate('/');
+                            }
+                        }}
+                        style={{
+                            background: 'rgba(255,255,255,0.1)',
+                            border: '1px solid rgba(255,255,255,0.2)',
+                            color: 'white',
+                            padding: '0.5rem 1rem',
+                            borderRadius: '0.5rem',
+                            cursor: 'pointer'
+                        }}
+                    >
+                        Log Out
+                    </button>
                 </div>
             </div>
 
