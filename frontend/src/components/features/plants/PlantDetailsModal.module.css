@@ -15,7 +15,7 @@
 
 .modal {
     width: 100%;
-    max-width: 650px;
+    max-width: 500px;
     max-height: 90vh;
     overflow-y: auto;
     position: relative;
@@ -26,12 +26,11 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-/* Desktop: Narrower, Taller Modal for Better Focus */
+/* Desktop: Narrower Modal for Better Focus */
 @media (min-width: 1024px) {
     .modal {
-        max-width: 900px !important;
-        /* Even wider to show all details */
-        max-height: 98vh !important;
+        max-width: 550px !important;
+        max-height: 95vh !important;
     }
 
     .overlay {
