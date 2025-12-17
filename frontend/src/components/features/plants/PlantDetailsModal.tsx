@@ -124,24 +124,16 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
 
                     {/* Advanced Simulation Section */}
                     <div className={styles.simulationContainer}>
-                        <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'flex-start' }}>
-                            {/* Plant Image - Left Side */}
+                        <div className={styles.simLayout}>
+                            {/* Plant Image - Left Side on Desktop, Top on Mobile */}
                             <img
                                 src={plant.imageUrl}
                                 alt={plant.name}
-                                style={{
-                                    width: '80px',
-                                    height: '80px',
-                                    objectFit: 'cover',
-                                    borderRadius: '12px',
-                                    border: '2px solid var(--color-primary)',
-                                    boxShadow: '0 4px 12px rgba(16, 185, 129, 0.2)',
-                                    flexShrink: 0
-                                }}
+                                className={styles.simImage}
                             />
 
-                            {/* Controls & Data - Right Side */}
-                            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                            {/* Controls & Data - Right Side on Desktop, Below on Mobile */}
+                            <div className={styles.simContent}>
                                 {/* Header Row */}
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.75rem' }}>
                                     <h3 style={{ margin: 0, display: 'flex', flexDirection: 'column', fontSize: '1rem', fontWeight: 800 }}>
