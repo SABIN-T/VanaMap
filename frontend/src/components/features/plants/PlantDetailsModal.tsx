@@ -356,6 +356,21 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                                     <span className={styles.controlVal} style={{ fontSize: '0.8rem' }}>{numPeople}</span>
                                 </div>
                                 <input type="range" min="1" max="12" value={numPeople} onChange={(e) => setNumPeople(Number(e.target.value))} className={styles.rangeInput} />
+                                <div style={{
+                                    marginTop: '0.5rem',
+                                    fontSize: '0.65rem',
+                                    fontWeight: 700,
+                                    color: 'var(--color-primary)',
+                                    textAlign: 'right',
+                                    display: 'flex',
+                                    justifyContent: 'flex-end',
+                                    alignItems: 'center',
+                                    gap: '0.3rem',
+                                    opacity: 0.9
+                                }}>
+                                    <Activity size={10} />
+                                    <span>NEEDS {plantsNeeded} {typeof plantsNeeded === 'number' && (plantsNeeded === 1 ? 'PLANT' : 'PLANTS')}</span>
+                                </div>
                             </div>
 
                             {!isACMode && (
