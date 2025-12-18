@@ -259,8 +259,8 @@ out skel qt;
                                 onKeyDown={(e) => e.key === 'Enter' && handleManualLocationSearch()}
                             />
                         </div>
-                        <Button onClick={handleManualLocationSearch} disabled={loading} size="sm">
-                            {loading ? '...' : 'Search Location'}
+                        <Button onClick={handleManualLocationSearch} disabled={loading} size="sm" style={{ minWidth: '100px', height: '48px' }}>
+                            {loading ? <RefreshCw className="animate-spin" size={20} /> : 'Search'}
                         </Button>
                     </div>
 
