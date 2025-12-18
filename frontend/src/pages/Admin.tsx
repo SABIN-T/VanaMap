@@ -64,8 +64,10 @@ export const Admin = () => {
             setRequests(rData);
             setNotifications(nData);
 
-            // Sync frontend cache when admin refreshes
-            localStorage.setItem('vanamap_plants_cache', JSON.stringify(pData));
+            setNotifications(nData);
+
+            // Removed localStorage cache due to QuotaExceededError (Images too large)
+            // localStorage.setItem('vanamap_plants_cache', JSON.stringify(pData));
 
             toast.success("Dashboard synced", { id: toastId });
         } catch (err: any) {
