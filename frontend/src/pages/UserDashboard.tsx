@@ -1,29 +1,60 @@
 import { useCart } from '../context/CartContext';
 import { Button } from '../components/common/Button';
-import { Trash2, ShoppingBag, MapPin, Heart, ArrowRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Trash2, ShoppingBag, MapPin, Heart, ArrowRight, Activity } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 export const UserDashboard = () => {
     const { items, removeFromCart } = useCart();
-    const { user } = useAuth();
+    const { user, loading } = useAuth();
+    const navigate = useNavigate();
+
+    if (loading) {
+        return (
+            <div style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                <div className="pre-loader-pulse"></div>
+            </div>
+        );
+    }
+
+    if (!user) {
+        navigate('/auth');
+        return null;
+    }
 
     return (
         <div className="container" style={{ padding: '3rem 1rem' }}>
-            <div style={{ marginBottom: '3rem' }}>
-                <h1 style={{
-                    fontSize: '2.5rem',
-                    fontWeight: '800',
-                    margin: 0,
-                    background: 'var(--gradient-primary)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent'
-                }}>
-                    User Dashboard
-                </h1>
-                <p style={{ color: 'var(--color-text-muted)', marginTop: '0.5rem', fontSize: '1.1rem' }}>
-                    Welcome back, {user?.name || 'Gardener'}! Manage your plant selection and wishlist.
-                </p>
+            <div style={{ marginBottom: '3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'end', flexWrap: 'wrap', gap: '1rem' }}>
+                <div>
+                    <h1 style={{
+                        fontSize: '2.5rem',
+                        fontWeight: '800',
+                        margin: 0,
+                        background: 'var(--gradient-primary)',
+                        WebkitBackgroundClip: 'text',
+                        WebkitTextFillColor: 'transparent'
+                    }}>
+                        User Dashboard
+                    </h1>
+                    <p style={{ color: 'var(--color-text-muted)', marginTop: '0.5rem', fontSize: '1.1rem' }}>
+                        Welcome back, {user.name}! Manage your plant selection and wishlist.
+                    </p>
+                </div>
+
+                {user.role === 'admin' && (
+                    <Link to="/admin">
+                        <Button style={{
+                            background: '#facc15',
+                            color: 'black',
+                            fontWeight: 800,
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.5rem'
+                        }}>
+                            <Activity size={18} /> ADMIN PANEL
+                        </Button>
+                    </Link>
+                )}
             </div>
 
             <div style={{
