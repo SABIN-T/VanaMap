@@ -14,7 +14,7 @@ const VendorPortal = lazy(() => import('./pages/VendorPortal').then(m => ({ defa
 const Auth = lazy(() => import('./pages/Auth').then(m => ({ default: m.Auth })));
 const Cart = lazy(() => import('./pages/Cart').then(m => ({ default: m.Cart })));
 const Admin = lazy(() => import('./pages/Admin').then(m => ({ default: m.Admin })));
-const Admin = lazy(() => import('./pages/Admin').then(m => ({ default: m.Admin })));
+
 // const AdminLogin = lazy(() => import('./pages/AdminLogin').then(m => ({ default: m.AdminLogin })));
 import { TourGuide } from './components/features/onboarding/TourGuide';
 
