@@ -235,7 +235,7 @@ out skel qt;
                             <Search size={18} className={styles.mapSearchIcon} />
                             <input
                                 type="text"
-                                placeholder="Search city or area..."
+                                placeholder="Search city, neighborhood, or zip..."
                                 value={manualSearchQuery}
                                 onChange={(e) => setManualSearchQuery(e.target.value)}
                                 onKeyDown={(e) => e.key === 'Enter' && handleManualLocationSearch()}
