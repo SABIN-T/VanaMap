@@ -3,7 +3,6 @@ import toast from 'react-hot-toast';
 import { QRCodeSVG } from 'qrcode.react';
 import { PlantCard } from '../components/features/plants/PlantCard';
 import { Button } from '../components/common/Button';
-import { useAuth } from '../context/AuthContext';
 import { fetchPlants } from '../services/api';
 import { getWeather, geocodeCity } from '../services/weather';
 import { calculateAptness } from '../utils/logic';
@@ -31,7 +30,7 @@ export const Home = () => {
 
     const plantsSectionRef = useRef<HTMLDivElement>(null);
 
-    const { user } = useAuth();
+
     const { addToCart } = useCart();
     const navigate = useNavigate();
 
@@ -159,13 +158,7 @@ export const Home = () => {
     };
 
     const handleAddToCart = (plant: Plant) => {
-        if (!user) {
-            toast.error("Please login to purchase items.");
-            navigate('/auth');
-            return;
-        }
         addToCart(plant);
-        toast.success(`Added ${plant.name} to simulation inventory!`);
     };
 
     const openDetails = (plant: Plant) => {

@@ -5,7 +5,6 @@ import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
 import { Toaster } from 'react-hot-toast';
 import { InstallPrompt } from './components/common/InstallPrompt';
-import { SpeedInsights } from '@vercel/speed-insights/react';
 
 // Lazy Load Pages
 const Home = lazy(() => import('./pages/Home').then(m => ({ default: m.Home })));
@@ -61,7 +60,7 @@ function App() {
             />
             <Navbar />
             <InstallPrompt />
-            <SpeedInsights />
+
             <Suspense fallback={<LoadingScreen />}>
               <Routes>
                 <Route path="/" element={<Home />} />

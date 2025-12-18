@@ -98,13 +98,11 @@ export const Nearby = () => {
             const overpassQuery = `
 [out:json][timeout:25];
 (
-    node["shop"="garden_centre"](around:25000,${lat},${lng});
-    node["shop"="garden"](around:25000,${lat},${lng});
-    node["leisure"="garden"](around:25000,${lat},${lng});
-    node["landuse"="flower_bed"](around:25000,${lat},${lng});
-    node["tourism"="botanical_garden"](around:25000,${lat},${lng});
-    node["landuse"="plant_nursery"]["name"](around:25000,${lat},${lng});
-    node["amenity"="greenhouse"]["name"](around:25000,${lat},${lng});
+    node["shop"="garden_centre"](around:50000,${lat},${lng});
+    node["shop"="garden"](around:50000,${lat},${lng});
+    node["leisure"="garden"](around:50000,${lat},${lng});
+    node["tourism"="botanical_garden"](around:50000,${lat},${lng});
+    node["landuse"="plant_nursery"]["name"](around:50000,${lat},${lng});
 );
 out body;
 >;
@@ -132,23 +130,32 @@ out skel qt;
 
                             return true;
                         })
-                        .map((el: any) => ({
-                            id: `osm-${el.id}`,
-                            name: el.tags?.name || (el.tags?.leisure === 'garden' ? "Public Garden" : "Local Nursery"),
-                            latitude: el.lat,
-                            longitude: el.lon,
-                            address: el.tags?.["addr:full"] || el.tags?.["addr:street"] || el.tags?.["addr:city"] || (el.tags?.leisure === 'garden' ? "Public Space" : "Local Listing"),
-                            phone: el.tags?.phone || el.tags?.["contact:phone"] || "N/A",
-                            whatsapp: el.tags?.["contact:whatsapp"] || "",
-                            verified: false,
-                            highlyRecommended: false,
-                            inventoryIds: []
-                        }));
+                        .map((el: any) => {
+                            const tags = el.tags || {};
+                            let category = "Garden";
+                            if (tags.shop === 'garden_centre' || tags.landuse === 'plant_nursery') {
+                                category = "Plant Shop";
+                            }
+
+                            return {
+                                id: `osm-${el.id}`,
+                                name: tags.name || (category === 'Garden' ? "Public Garden" : "Local Nursery"),
+                                latitude: el.lat,
+                                longitude: el.lon,
+                                address: tags["addr:full"] || tags["addr:street"] || tags["addr:city"] || (category === 'Garden' ? "Public Space" : "Local Listing"),
+                                phone: tags.phone || tags["contact:phone"] || "N/A",
+                                whatsapp: tags["contact:whatsapp"] || "",
+                                verified: false,
+                                highlyRecommended: false,
+                                category: category,
+                                inventoryIds: []
+                            };
+                        });
                 }
             } catch (err) { console.error("OSM Error", err); }
 
             const combined = [...verifiedVendors, ...unverifiedVendors];
-            const nearby = combined.filter(v => getDistanceFromLatLonInKm(lat, lng, v.latitude, v.longitude) <= 25)
+            const nearby = combined.filter(v => getDistanceFromLatLonInKm(lat, lng, v.latitude, v.longitude) <= 50)
                 .map(v => ({ ...v, distance: getDistanceFromLatLonInKm(lat, lng, v.latitude, v.longitude) }))
                 .sort((a: any, b: any) => (a.distance || 0) - (b.distance || 0));
 
@@ -217,62 +224,57 @@ out skel qt;
 
             <div className={styles.headerSection}>
                 <h1 className={styles.title}>NURSERY EXPLORER</h1>
-                <p className={styles.subtitle}>Discover verified nurseries providing simulation-matched species near you.</p>
-
-                {/* Search by Location Bar */}
-                <div style={{ marginTop: '2rem', maxWidth: '600px', position: 'relative', display: 'flex', gap: '0.5rem' }}>
-                    <div style={{ position: 'relative', flex: 1 }}>
-                        <Search style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--color-text-muted)' }} size={18} />
-                        <input
-                            type="text"
-                            placeholder="Search by city or area (e.g. Connaught Place)"
-                            value={manualSearchQuery}
-                            onChange={(e) => setManualSearchQuery(e.target.value)}
-                            onKeyDown={(e) => e.key === 'Enter' && handleManualLocationSearch()}
-                            style={{
-                                width: '100%',
-                                background: 'rgba(255,255,255,0.05)',
-                                border: '1px solid rgba(255,255,255,0.1)',
-                                padding: '1rem 1rem 1rem 3rem',
-                                borderRadius: '1rem',
-                                color: 'white',
-                                outline: 'none',
-                                fontSize: '1rem'
-                            }}
-                        />
-                    </div>
-                    <Button onClick={handleManualLocationSearch} disabled={loading} style={{ minWidth: '120px' }}>
-                        {loading ? 'Scanning...' : 'Locate'}
-                    </Button>
-                </div>
+                <p className={styles.subtitle}>Discover plant shops and gardens providing sustainable inventory near you.</p>
             </div>
 
             <div className={styles.splitLayout}>
-                <div className={styles.mapContainer}>
-                    {position ? (
-                        <MapContainer center={position} zoom={11} style={{ height: '100%', width: '100%' }}>
-                            <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                            <ChangeView center={position} />
-                            <Marker position={position} icon={L.divIcon({
-                                className: 'u-marker',
-                                html: `<div style="background:transparent;width:30px;height:30px;display:flex;align-items:center;justify-content:center;"><div style="background:var(--color-primary);width:14px;height:14px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 15px var(--color-primary)"></div></div>`
-                            })}><Popup>Origin point (You)</Popup></Marker>
-                            {displayVendors.map(v => (
-                                <Marker key={v.id} position={[v.latitude, v.longitude]}>
-                                    <Popup><strong>{v.name}</strong><br />{formatDistance((v.distance || 0) * 1000)} away</Popup>
-                                </Marker>
-                            ))}
-                        </MapContainer>
-                    ) : (
-                        <div style={{ background: 'var(--color-bg-card)', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-text-muted)' }}>
-                            Initializing precision tracking...
+                <div className={styles.mapWrapper}>
+                    {/* Search by Location Bar Moved Above Map */}
+                    <div className={styles.mapSearchBar}>
+                        <div className={styles.mapSearchInput}>
+                            <Search size={18} className={styles.mapSearchIcon} />
+                            <input
+                                type="text"
+                                placeholder="Search city or area..."
+                                value={manualSearchQuery}
+                                onChange={(e) => setManualSearchQuery(e.target.value)}
+                                onKeyDown={(e) => e.key === 'Enter' && handleManualLocationSearch()}
+                            />
                         </div>
-                    )}
+                        <Button onClick={handleManualLocationSearch} disabled={loading} size="sm">
+                            {loading ? '...' : 'Search Location'}
+                        </Button>
+                    </div>
+
+                    <div className={styles.mapContainer}>
+                        {position ? (
+                            <MapContainer center={position} zoom={11} style={{ height: '100%', width: '100%' }}>
+                                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                                <ChangeView center={position} />
+                                <Marker position={position} icon={L.divIcon({
+                                    className: 'u-marker',
+                                    html: `<div style="background:transparent;width:30px;height:30px;display:flex;align-items:center;justify-content:center;"><div style="background:var(--color-primary);width:14px;height:14px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 15px var(--color-primary)"></div></div>`
+                                })}><Popup>Origin point (You)</Popup></Marker>
+                                {displayVendors.map(v => (
+                                    <Marker key={v.id} position={[v.latitude, v.longitude]}>
+                                        <Popup><strong>{v.name}</strong><br />{formatDistance((v.distance || 0) * 1000)} away</Popup>
+                                    </Marker>
+                                ))}
+                            </MapContainer>
+                        ) : (
+                            <div style={{ background: 'var(--color-bg-card)', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-text-muted)' }}>
+                                Initializing precision tracking...
+                            </div>
+                        )}
+                    </div>
                 </div>
 
                 <div className={styles.resultsSection}>
                     <div className={styles.resultsHeader}>
-                        <h3 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 800 }}>Nearby Outlets ({displayVendors.length})</h3>
+                        <div>
+                            <h3 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 800 }}>Nearby Outlets ({displayVendors.length})</h3>
+                            <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Showing results within a 50km radius</p>
+                        </div>
                         <div className={styles.tabGroup}>
                             <button className={`${styles.tabBtn} ${activeTab === 'verified' ? styles.active : ''}`} onClick={() => setActiveTab('verified')}>
                                 <Star size={16} fill={activeTab === 'verified' ? 'var(--color-text-main)' : 'none'} /> Verified
@@ -298,16 +300,22 @@ out skel qt;
                                             <h4 className={styles.vendorName}>{vendor.name}</h4>
                                             {vendor.verified && <Star size={18} fill="var(--color-primary)" color="var(--color-primary)" />}
                                         </div>
-                                        <div className={styles.vendorDist}>{formatDistance((vendor.distance || 0) * 1000)} away</div>
+                                        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', marginBottom: '1rem' }}>
+                                            <div className={styles.vendorDist}>{formatDistance((vendor.distance || 0) * 1000)} away</div>
+                                            {(vendor as any).category && <div className={styles.categoryTag}>{(vendor as any).category}</div>}
+                                        </div>
                                         <p className={styles.vendorAddr}>{vendor.address}</p>
 
                                         <div className={styles.cardActions}>
                                             <Button variant="outline" size="sm" className={styles.actionBtn} onClick={() => window.open(`https://www.google.com/maps/dir/?api=1&destination=${vendor.latitude},${vendor.longitude}`)}>
                                                 <ExternalLink size={14} /> Navigate
                                             </Button>
+                                            <Button variant="outline" size="sm" className={styles.actionBtn} onClick={() => window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(vendor.name)}&query_place_id=${vendor.latitude},${vendor.longitude}`)}>
+                                                <MapPin size={14} /> Google Places
+                                            </Button>
                                             {(vendor.whatsapp || vendor.phone !== 'N/A') && (
-                                                <Button size="sm" className={styles.actionBtn} onClick={() => { logVendorContact({ vendorId: vendor.id, vendorName: vendor.name, userEmail: user?.email || 'guest', contactType: 'whatsapp' }); window.open(`https://wa.me/${(vendor.whatsapp || vendor.phone).replace(/[^0-9]/g, '')}`, '_blank'); }}>
-                                                    <MessageCircle size={14} /> Contact
+                                                <Button size="sm" className={styles.actionBtn} style={{ background: '#25D366', color: '#fff', border: 'none' }} onClick={() => { logVendorContact({ vendorId: vendor.id, vendorName: vendor.name, userEmail: user?.email || 'guest', contactType: 'whatsapp' }); window.open(`https://wa.me/${(vendor.whatsapp || vendor.phone).replace(/[^0-9]/g, '')}`, '_blank'); }}>
+                                                    <MessageCircle size={14} /> {(vendor.whatsapp || vendor.phone)}
                                                 </Button>
                                             )}
                                         </div>

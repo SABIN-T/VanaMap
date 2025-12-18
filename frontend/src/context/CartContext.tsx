@@ -17,9 +17,19 @@ interface CartContextType {
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
-    const [items, setItems] = useState<CartItem[]>([]);
+    const { user, updateUser } = useAuth();
 
-    const { user } = useAuth();
+    // Initial load from localStorage (either from user or guest_cart)
+    const [items, setItems] = useState<CartItem[]>(() => {
+        const savedUser = localStorage.getItem('user');
+        if (savedUser) {
+            const parsed = JSON.parse(savedUser);
+            if (parsed.cart) return parsed.cart;
+        }
+        const guestCart = localStorage.getItem('guest_cart');
+        if (guestCart) return JSON.parse(guestCart);
+        return [];
+    });
 
     // Sync local cart with user's DB cart on login
     useEffect(() => {
@@ -67,24 +77,22 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     const addToCart = (plant: Plant) => {
         setItems(prev => {
             const existing = prev.find(i => i.plant.id === plant.id);
-            let newItems;
+            let newItems: CartItem[];
             if (existing) {
                 newItems = prev.map(i => i.plant.id === plant.id ? { ...i, quantity: i.quantity + 1 } : i);
             } else {
                 newItems = [...prev, { plant, quantity: 1 }];
             }
 
-            // Sync with Cloud & Local Storage
+            // Persistence logic
+            const cartPayload = newItems.map(i => ({ plantId: i.plant.id, quantity: i.quantity }));
             if (user) {
-                import('../services/api').then(({ syncCart }) => syncCart(user.email, newItems));
-
-                // Update local storage user object immediately so refresh works
-                const savedUser = localStorage.getItem('user');
-                if (savedUser) {
-                    const parsed = JSON.parse(savedUser);
-                    parsed.cart = newItems;
-                    localStorage.setItem('user', JSON.stringify(parsed));
-                }
+                // Keep Auth state and global DB in sync
+                updateUser({ cart: cartPayload });
+                import('../services/api').then(({ syncCart }) => syncCart(user.email, cartPayload));
+            } else {
+                // Persistent guest cart
+                localStorage.setItem('guest_cart', JSON.stringify(newItems));
             }
             return newItems;
         });
@@ -94,16 +102,12 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     const removeFromCart = (plantId: string) => {
         setItems(prev => {
             const newItems = prev.filter(i => i.plant.id !== plantId);
+            const cartPayload = newItems.map(i => ({ plantId: i.plant.id, quantity: i.quantity }));
             if (user) {
-                import('../services/api').then(({ syncCart }) => syncCart(user.email, newItems));
-
-                // Update local storage user object immediately
-                const savedUser = localStorage.getItem('user');
-                if (savedUser) {
-                    const parsed = JSON.parse(savedUser);
-                    parsed.cart = newItems;
-                    localStorage.setItem('user', JSON.stringify(parsed));
-                }
+                updateUser({ cart: cartPayload });
+                import('../services/api').then(({ syncCart }) => syncCart(user.email, cartPayload));
+            } else {
+                localStorage.setItem('guest_cart', JSON.stringify(newItems));
             }
             return newItems;
         });

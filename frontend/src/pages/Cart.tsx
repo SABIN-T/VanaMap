@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
-import { Trash2, ArrowLeft, LogIn } from 'lucide-react';
+import { Trash2, ArrowLeft } from 'lucide-react';
 import { Button } from '../components/common/Button';
 
 export const Cart = () => {
@@ -9,29 +9,7 @@ export const Cart = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
 
-    if (!user) {
-        return (
-            <div className="container" style={{ padding: '2rem 1rem' }}>
-                <div className="glass-panel" style={{ padding: '4rem 2rem', maxWidth: '600px', margin: '2rem auto', textAlign: 'center' }}>
-                    <div style={{ background: 'rgba(255,255,255,0.05)', width: '80px', height: '80px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem' }}>
-                        <LogIn size={40} color="var(--color-primary)" />
-                    </div>
-                    <h2 style={{ fontSize: '2rem', marginBottom: '1rem', color: 'var(--color-text-main)' }}>Sign In Required</h2>
-                    <p style={{ color: 'var(--color-text-muted)', marginBottom: '2rem', fontSize: '1.1rem' }}>
-                        Please sign in to view your cart and add items.
-                    </p>
-                    <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-                        <Button onClick={() => navigate('/auth')} size="lg">
-                            Sign In / Join
-                        </Button>
-                        <Button variant="outline" onClick={() => navigate('/')}>
-                            Continue Browsing
-                        </Button>
-                    </div>
-                </div>
-            </div>
-        );
-    }
+
 
     return (
         <div className="container" style={{ padding: '2rem 1rem' }}>
@@ -91,7 +69,24 @@ export const Cart = () => {
                             ))}
                         </div>
 
-                        <div style={{ borderTop: '1px solid var(--glass-border)', paddingTop: '2rem', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <div style={{ borderTop: '1px solid var(--glass-border)', paddingTop: '2rem', display: 'flex', flexDirection: 'column', gap: '1.5rem', alignItems: 'center' }}>
+                            {!user && (
+                                <div style={{
+                                    background: 'rgba(56, 189, 248, 0.05)',
+                                    border: '1px solid rgba(56, 189, 248, 0.2)',
+                                    padding: '1.5rem',
+                                    borderRadius: '1rem',
+                                    width: '100%',
+                                    textAlign: 'center'
+                                }}>
+                                    <p style={{ margin: '0 0 1rem 0', color: '#38bdf8', fontSize: '0.9rem', fontWeight: 600 }}>
+                                        💡 Tip: Sign in to sync your selections across devices and access verified botanical guidance.
+                                    </p>
+                                    <Button variant="outline" size="sm" onClick={() => navigate('/auth')}>
+                                        Sign In / Create Account
+                                    </Button>
+                                </div>
+                            )}
                             <Button size="lg" onClick={() => navigate('/nearby')} style={{ width: '100%', maxWidth: '300px' }}>
                                 Find Nearby Shops & Contact
                             </Button>
