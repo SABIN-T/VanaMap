@@ -195,19 +195,23 @@ app.post('/api/auth/signup', async (req, res) => {
 });
 
 // Login
+// Health Check
+app.get('/', (req, res) => res.send('VanaMap API Active'));
+
 app.post('/api/auth/login', async (req, res) => {
     try {
         const { email, password } = req.body;
 
         // --- LEGACY ADMIN MIGRATION ---
-        const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@plantai.com';
+        const ADMIN_EMAIL = (process.env.ADMIN_EMAIL || 'admin@plantai.com').toLowerCase();
         const ADMIN_PASS = process.env.ADMIN_PASS || 'Defender123';
 
-        if (email === ADMIN_EMAIL && password === ADMIN_PASS) {
-            let admin = await User.findOne({ email });
+        if (email.toLowerCase() === ADMIN_EMAIL && password === ADMIN_PASS) {
+            // Find admin case-insensitively
+            let admin = await User.findOne({ email: { $regex: new RegExp(`^${ADMIN_EMAIL}$`, 'i') } });
             if (!admin) {
                 admin = new User({
-                    email: email,
+                    email: ADMIN_EMAIL,
                     password: password,
                     name: 'System Admin',
                     role: 'admin'
