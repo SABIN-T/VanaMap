@@ -1086,9 +1086,12 @@
         gap: 3rem;
         padding: 3rem 4rem !important;
         /* Wider padding */
-        max-width: 1300px !important;
-        /* Wider container */
+        max-width: 100% !important;
+        width: 100% !important;
+        /* Maximize Width */
         align-items: center;
+        overflow: hidden !important;
+        /* Remove scrolling */
     }
 
     .desktopLayout .simControlsGroup {
