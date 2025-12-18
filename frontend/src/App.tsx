@@ -83,4 +83,4 @@ function App() {
   );
 }
 
-export default App; // v2.3 Rebuild Triggered
+export default App; // v2.5 UI Overhaul Triggered
