@@ -282,7 +282,8 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                             <div className={styles.badges}>
                                 <span className={styles.badge}><Wind size={14} /> {plant.oxygenLevel} O₂</span>
                                 <span className={styles.badge}><Sun size={14} /> {plant.sunlight}</span>
-                                <span className={styles.badge}><Droplets size={14} /> {plant.type}</span>
+                                <span className={styles.badge}><Droplet size={14} /> {plant.type}</span>
+                                {plant.petFriendly && <span className={styles.badge}><Cat size={14} /> Pet Friendly</span>}
                             </div>
                         </div>
                     </div>
@@ -305,7 +306,12 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
 
                     <div className={styles.content}>
                         <div className={styles.detailsColumn} style={{ display: (window.innerWidth < 1024 && activeTab === 'sim') ? 'none' : 'block' }}>
+
                             <div className={styles.descriptionSection}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', color: '#38bdf8' }}>
+                                    <Info size={18} />
+                                    <span style={{ fontSize: '0.8rem', fontWeight: 700, letterSpacing: '1px' }}>BOTANICAL PROFILE</span>
+                                </div>
                                 <p style={{ color: 'var(--color-text-muted)', fontSize: '1.05rem', lineHeight: '1.7' }}>
                                     {plant.description}
                                 </p>
@@ -313,8 +319,16 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
 
                             <div className={styles.infoGrid}>
                                 <div className={styles.infoTile}>
-                                    <div className={styles.tileHeader}><Droplets size={16} color="#38bdf8" /> WATERING GUIDE</div>
-                                    <div className={styles.tileBody}>{getWateringSchedule()}</div>
+                                    <div className={styles.tileHeader}><Sun size={16} color="#facc15" /> LIGHT</div>
+                                    <div className={styles.tileBody}>{plant.sunlight || "Bright Indirect"}</div>
+                                </div>
+                                <div className={styles.infoTile}>
+                                    <div className={styles.tileHeader}><Thermometer size={16} color="#fb923c" /> TEMP</div>
+                                    <div className={styles.tileBody}>18° - 24°C</div>
+                                </div>
+                                <div className={styles.infoTile}>
+                                    <div className={styles.tileHeader}><Maximize size={16} color="#a78bfa" /> SIZE</div>
+                                    <div className={styles.tileBody}>{plant.size || "Medium"}</div>
                                 </div>
                                 <div className={styles.infoTile}>
                                     <div className={styles.tileHeader}><Heart size={16} color="#ef4444" /> HEALTH FACT</div>
