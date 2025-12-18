@@ -6,7 +6,8 @@ import { useNavigate } from 'react-router-dom';
 
 // Mock API call
 const sendChat = async (userId: string, message: string) => {
-    const API_URL = import.meta.env.VITE_API_URL || 'https://plantoxy.onrender.com/api';
+    const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+    const API_URL = import.meta.env.VITE_API_URL || (isLocal ? 'http://localhost:5000/api' : 'https://plantoxy.onrender.com/api');
     const res = await fetch(`${API_URL}/ai/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

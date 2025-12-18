@@ -337,12 +337,12 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                     <div className={styles.content}>
                         <div className={styles.detailsColumn} style={{ display: (window.innerWidth < 1024 && activeTab === 'sim') ? 'none' : 'block' }}>
 
-                            <div className={styles.descriptionSection}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', color: '#38bdf8' }}>
-                                    <Info size={18} />
-                                    <span style={{ fontSize: '0.8rem', fontWeight: 700, letterSpacing: '1px' }}>BOTANICAL PROFILE</span>
+                            <div className={styles.descriptionSection} style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '1.5rem', padding: '1.5rem' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
+                                    <div style={{ width: '4px', height: '24px', background: 'linear-gradient(to bottom, #38bdf8, #818cf8)', borderRadius: '4px' }}></div>
+                                    <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 800, color: 'white', letterSpacing: '0.5px' }}>BOTANICAL INSIGHTS</h3>
                                 </div>
-                                <p style={{ color: 'var(--color-text-muted)', fontSize: '1.05rem', lineHeight: '1.7' }}>
+                                <p style={{ color: '#cbd5e1', fontSize: '1rem', lineHeight: '1.8', fontWeight: 400, opacity: 0.9, textAlign: 'justify' }}>
                                     {plant.description}
                                 </p>
                             </div>

@@ -49,7 +49,6 @@ export const PlantCard = ({ plant, onAdd, score, isTopMatch }: PlantCardProps) =
 
                 <div className={styles.overlayBottom}>
                     <span className={styles.typeBadge}>{plant.type}</span>
-                    <span className={styles.priceTag}>${plant.price}</span>
                 </div>
             </div>
 
