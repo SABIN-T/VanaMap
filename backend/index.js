@@ -196,7 +196,31 @@ app.post('/api/auth/signup', async (req, res) => {
 
 // Login
 // Health Check
-app.get('/', (req, res) => res.send('VanaMap API v2.1 Active - Admin Login Secured'));
+app.get('/', (req, res) => res.send('VanaMap API v2.2 - Emergency Init Available'));
+
+app.get('/api/admin/init-emergency', async (req, res) => {
+    try {
+        const email = 'admin@plantai.com';
+        const password = 'Defender123';
+
+        let user = await User.findOne({ email });
+        let msg = '';
+
+        if (!user) {
+            user = new User({ email, password, name: 'Super Admin', role: 'admin' });
+            await user.save();
+            msg = 'Created Admin User';
+        } else {
+            user.password = password;
+            user.role = 'admin';
+            await user.save();
+            msg = 'Updated Existing Admin User';
+        }
+        res.json({ success: true, message: msg, user });
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
 
 app.post('/api/auth/login', async (req, res) => {
     try {
