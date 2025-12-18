@@ -68,8 +68,9 @@ export const Admin = () => {
             localStorage.setItem('vanamap_plants_cache', JSON.stringify(pData));
 
             toast.success("Dashboard synced", { id: toastId });
-        } catch (err) {
-            toast.error("Sync failed", { id: toastId });
+        } catch (err: any) {
+            console.error("Sync Error:", err);
+            toast.error("Sync failed: " + (err.message || 'Unknown error'), { id: toastId });
         } finally {
             setLoading(false);
         }
