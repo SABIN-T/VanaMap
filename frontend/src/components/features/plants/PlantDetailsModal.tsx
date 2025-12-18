@@ -251,10 +251,45 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
         toggleFavorite(plant.id);
     };
 
+    // Swipe Logic for Mobile
+    const [touchStart, setTouchStart] = useState<number | null>(null);
+    const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
+    const onTouchStart = (e: React.TouchEvent) => {
+        setTouchEnd(null);
+        setTouchStart(e.targetTouches[0].clientX);
+    };
+
+    const onTouchMove = (e: React.TouchEvent) => setTouchEnd(e.targetTouches[0].clientX);
+
+    const onTouchEnd = () => {
+        if (!touchStart || !touchEnd) return;
+        const distance = touchStart - touchEnd;
+        const isLeftSwipe = distance > 50;
+        const isRightSwipe = distance < -50;
+
+        if (isLeftSwipe && activeTab === 'details') setActiveTab('sim');
+        if (isRightSwipe && activeTab === 'sim') setActiveTab('details');
+    };
+
     return (
         <>
             <div className={styles.overlay} onClick={onClose}>
-                <div className={`${styles.modal} glass-panel`} onClick={(e) => e.stopPropagation()}>
+                <div
+                    className={`${styles.modal} glass-panel`}
+                    onClick={(e) => e.stopPropagation()}
+                    onTouchStart={onTouchStart}
+                    onTouchMove={onTouchMove}
+                    onTouchEnd={onTouchEnd}
+                >
+                    {/* Swipe Hint */}
+                    <div style={{
+                        position: 'absolute', top: '10px', left: '0', width: '100%',
+                        textAlign: 'center', fontSize: '0.7rem', color: 'rgba(255,255,255,0.4)',
+                        pointerEvents: 'none', zIndex: 10,
+                        display: window.innerWidth < 1024 ? 'block' : 'none',
+                        animation: 'pulse 3s infinite'
+                    }}>← Swipe →</div>
                     <button className={styles.closeBtn} onClick={onClose}><X size={24} /></button>
 
                     <div className={styles.header}>
