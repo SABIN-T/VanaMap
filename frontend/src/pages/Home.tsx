@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import toast from 'react-hot-toast';
+import { QRCodeSVG } from 'qrcode.react';
 import { PlantCard } from '../components/features/plants/PlantCard';
 import { Button } from '../components/common/Button';
 import { useAuth } from '../context/AuthContext';
@@ -354,6 +355,37 @@ export const Home = () => {
                     )}
                 </div>
             </div>
+
+            {/* --- FOOTER SECTION --- */}
+            <footer style={{
+                marginTop: '6rem',
+                padding: '4rem 2rem 2rem',
+                borderTop: '1px solid rgba(255,255,255,0.05)',
+                background: 'linear-gradient(to bottom, transparent, rgba(0,0,0,0.4))',
+                textAlign: 'center'
+            }}>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.5rem', marginBottom: '2rem' }}>
+                    <div style={{
+                        padding: '1rem',
+                        background: 'white',
+                        borderRadius: '1rem',
+                        boxShadow: '0 0 20px rgba(16, 185, 129, 0.2)'
+                    }}>
+                        <QRCodeSVG
+                            value="https://www.vanamap.online"
+                            size={120}
+                            bgColor={"#ffffff"}
+                            fgColor={"#000000"}
+                            level={"L"}
+                            includeMargin={false}
+                        />
+                    </div>
+                    <div>
+                        <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '0.5rem' }}>Scan to Experience VanaMap on Mobile</p>
+                        <p style={{ color: '#64748b', fontSize: '0.8rem' }}>© 2025 VanaMap Intelligence Systems</p>
+                    </div>
+                </div>
+            </footer>
         </div>
     );
 };
