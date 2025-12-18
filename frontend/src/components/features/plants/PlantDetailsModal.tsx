@@ -1,5 +1,5 @@
-import { useState, useMemo } from 'react';
-import { X, Droplets, Sun, Heart, Wind, Users, ShoppingBag } from 'lucide-react';
+import { useState, useMemo, useEffect } from 'react';
+import { X, Droplets, Sun, Heart, Wind, Users, ShoppingBag, Info, Thermometer, Maximize, Cat, Droplet } from 'lucide-react';
 import { Button } from '../../common/Button';
 import type { Plant } from '../../../types';
 import styles from './PlantDetailsModal.module.css';
@@ -23,6 +23,9 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
 
     const [numPeople, setNumPeople] = useState(1);
     const [isACMode, setIsACMode] = useState(false);
+    const [activeTab, setActiveTab] = useState<'details' | 'sim'>('details');
+
+    useEffect(() => { setActiveTab('details'); }, [plant]);
 
     // Day/Night Logic
     const hour = new Date().getHours();
