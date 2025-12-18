@@ -39,6 +39,8 @@ export const PlantCard = ({ plant, onAdd, score, isTopMatch }: PlantCardProps) =
                     src={plant.imageUrl}
                     alt={plant.name}
                     className={styles.image}
+                    loading="lazy"
+                    decoding="async"
                 />
 
                 {/* Favorite Button */}

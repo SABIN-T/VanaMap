@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, lazy, Suspense } from 'react';
 import toast from 'react-hot-toast';
 import { PlantCard } from '../components/features/plants/PlantCard';
 import { Button } from '../components/common/Button';
@@ -10,7 +10,8 @@ import type { Plant } from '../types';
 import { Sprout, MapPin, Thermometer, Wind, ArrowDown, Sparkles, Search } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
-import { PlantDetailsModal } from '../components/features/plants/PlantDetailsModal';
+// Lazy load modal for performance
+const PlantDetailsModal = lazy(() => import('../components/features/plants/PlantDetailsModal').then(module => ({ default: module.PlantDetailsModal })));
 import { PlantSkeleton } from '../components/features/plants/PlantSkeleton';
 import styles from './Home.module.css';
 
@@ -175,11 +176,13 @@ export const Home = () => {
     return (
         <div className={styles.homeContainer}>
             {selectedPlant && (
-                <PlantDetailsModal
-                    plant={selectedPlant}
-                    weather={weather}
-                    onClose={() => window.history.back()}
-                />
+                <Suspense fallback={<div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2000, backdropFilter: 'blur(10px)' }}>Initializing Simulation Engine...</div>}>
+                    <PlantDetailsModal
+                        plant={selectedPlant}
+                        weather={weather}
+                        onClose={() => window.history.back()}
+                    />
+                </Suspense>
             )}
 
             <section className={styles.hero}>

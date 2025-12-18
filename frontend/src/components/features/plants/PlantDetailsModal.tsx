@@ -397,9 +397,45 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                                         </div>
                                     </div>
 
-                                    <div className={styles.plantIconWrapper}>
-                                        <div className={styles.plantGlow} style={{ opacity: fluxRate / 100, width: '100px', height: '100px' }}></div>
-                                        <img src={plant.imageUrl} className={styles.simImage} alt="" style={{ width: '90px', height: '90px', objectFit: 'cover', borderRadius: '1rem', border: '2px solid rgba(255,255,255,0.1)' }} />
+                                    <div className={styles.plantIconWrapper} style={{ width: '100%', display: 'flex', justifyContent: 'center', gap: '3rem', margin: '1rem 0' }}>
+                                        {/* CO2 INTAKE */}
+                                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
+                                            <span style={{ fontSize: '0.6rem', fontWeight: 800, color: '#ef4444', letterSpacing: '1px' }}>CO₂ INTAKE</span>
+                                            <div style={{ position: 'relative', width: '60px', height: '100px', background: 'rgba(239, 68, 68, 0.1)', borderRadius: '1rem', overflow: 'hidden' }}>
+                                                {[...Array(5)].map((_, i) => (
+                                                    <div key={`co2-${i}`} className="sim-particle co2" style={{
+                                                        left: '50%',
+                                                        animationDelay: `${i * 0.5}s`,
+                                                        animationDuration: '3s'
+                                                    }}>●</div>
+                                                ))}
+                                            </div>
+                                            <span style={{ fontSize: '0.9rem', fontWeight: 900, color: '#ef4444' }}>
+                                                {isDay ? (PLANT_O2_OUTPUT * 1.1).toFixed(1) : '0.0'} L
+                                            </span>
+                                        </div>
+
+                                        {/* CENTER FLUX */}
+                                        <div className={styles.plantGlow} style={{ position: 'relative', width: '80px', height: '80px', borderRadius: '50%', border: '2px dashed rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                            <div style={{ fontSize: '1.2rem', fontWeight: 900, color: 'white' }}>{fluxRate}%</div>
+                                        </div>
+
+                                        {/* O2 OUTPUT */}
+                                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
+                                            <span style={{ fontSize: '0.6rem', fontWeight: 800, color: '#10b981', letterSpacing: '1px' }}>O₂ PRODUCTION</span>
+                                            <div style={{ position: 'relative', width: '60px', height: '100px', background: 'rgba(16, 185, 129, 0.1)', borderRadius: '1rem', overflow: 'hidden' }}>
+                                                {[...Array(5)].map((_, i) => (
+                                                    <div key={`o2-${i}`} className="sim-particle o2" style={{
+                                                        left: '50%',
+                                                        animationDelay: `${i * 0.5}s`,
+                                                        animationDuration: '3s'
+                                                    }}>●</div>
+                                                ))}
+                                            </div>
+                                            <span style={{ fontSize: '0.9rem', fontWeight: 900, color: '#10b981' }}>
+                                                {isDay ? PLANT_O2_OUTPUT : '0.0'} L
+                                            </span>
+                                        </div>
                                     </div>
 
                                     {/* Key Insight Highlight */}
@@ -442,6 +478,7 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
             position: absolute;
             font-size: 20px;
             opacity: 0;
+            will-change: transform, opacity;
         }
         .co2 {
             color: #ef4444;
