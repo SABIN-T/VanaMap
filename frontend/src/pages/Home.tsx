@@ -8,7 +8,7 @@ import { fetchPlants } from '../services/api';
 import { getWeather, geocodeCity } from '../services/weather';
 import { calculateAptness } from '../utils/logic';
 import type { Plant } from '../types';
-import { Sprout, MapPin, Thermometer, Wind, ArrowDown, Sparkles, Search } from 'lucide-react';
+import { Sprout, MapPin, Thermometer, Wind, ArrowDown, Sparkles, Search, AlertCircle } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
 // Lazy load modal for performance
@@ -25,6 +25,7 @@ export const Home = () => {
     const [locationLoading, setLocationLoading] = useState(false);
     const [plantsLoading, setPlantsLoading] = useState(true);
     const [isFromCache, setIsFromCache] = useState(false);
+    const [isSlowLoading, setIsSlowLoading] = useState(false);
     const [selectedPlant, setSelectedPlant] = useState<Plant | null>(null);
     const [citySearch, setCitySearch] = useState('');
 
@@ -64,6 +65,10 @@ export const Home = () => {
         }
 
         const loadFreshData = async () => {
+            const timer = setTimeout(() => {
+                if (plantsLoading) setIsSlowLoading(true);
+            }, 3500);
+
             try {
                 const data = await fetchPlants();
                 if (data.length === 0) {
@@ -76,11 +81,13 @@ export const Home = () => {
                     setPlants(data);
                     localStorage.setItem('vanamap_plants_cache', JSON.stringify(data));
                 }
-                setIsFromCache(false); // New data should animate once
+                setIsFromCache(false);
             } catch (err) {
                 console.error("Fetch failed", err);
             } finally {
                 setPlantsLoading(false);
+                setIsSlowLoading(false);
+                clearTimeout(timer);
             }
         };
 
@@ -362,7 +369,29 @@ export const Home = () => {
 
                 <div className={styles.grid}>
                     {plantsLoading ? (
-                        [...Array(6)].map((_, i) => <PlantSkeleton key={i} />)
+                        <div style={{ gridColumn: '1 / -1', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+                            {isSlowLoading && (
+                                <div style={{
+                                    background: 'rgba(251, 191, 36, 0.1)',
+                                    border: '1px solid rgba(251, 191, 36, 0.2)',
+                                    padding: '1.5rem',
+                                    borderRadius: '1rem',
+                                    textAlign: 'center',
+                                    animation: 'fadeIn 0.5s ease-out'
+                                }}>
+                                    <h3 style={{ color: '#facc15', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                                        <AlertCircle size={20} /> Awakening Cloud Engines
+                                    </h3>
+                                    <p style={{ color: '#94a3b8', fontSize: '0.9rem' }}>
+                                        Our intelligence systems are spinning up. This may take up to 45 seconds on your first entry.
+                                        Thank you for your patience while we synchronize the ecosystem.
+                                    </p>
+                                </div>
+                            )}
+                            <div style={{ display: 'grid', gridTemplateColumns: 'inherit', gap: 'inherit', width: '100%' }}>
+                                {[...Array(10)].map((_, i) => <PlantSkeleton key={i} />)}
+                            </div>
+                        </div>
                     ) : (
                         displayedPlants.map((plant: Plant, index: number) => (
                             <div

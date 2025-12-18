@@ -27,4 +27,11 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       </GoogleOAuthProvider>
     </ThemeProvider>
   </React.StrictMode>,
-)
+);
+
+// Remove pre-loader after first render
+const loader = document.getElementById('pre-loader');
+if (loader) {
+  loader.style.opacity = '0';
+  setTimeout(() => loader.remove(), 500);
+}

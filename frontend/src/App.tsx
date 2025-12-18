@@ -1,17 +1,33 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { lazy, Suspense } from 'react';
 import { Navbar } from './components/layout/Navbar';
-import { Home } from './pages/Home';
-import { Nearby } from './pages/Nearby';
-import { UserDashboard } from './pages/UserDashboard';
-import { VendorPortal } from './pages/VendorPortal';
-import { Auth } from './pages/Auth';
-import { Cart } from './pages/Cart';
-import { Admin } from './pages/Admin';
-import { AdminLogin } from './pages/AdminLogin';
 import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
 import { Toaster } from 'react-hot-toast';
 import { InstallPrompt } from './components/common/InstallPrompt';
+
+// Lazy Load Pages
+const Home = lazy(() => import('./pages/Home').then(m => ({ default: m.Home })));
+const Nearby = lazy(() => import('./pages/Nearby').then(m => ({ default: m.Nearby })));
+const UserDashboard = lazy(() => import('./pages/UserDashboard').then(m => ({ default: m.UserDashboard })));
+const VendorPortal = lazy(() => import('./pages/VendorPortal').then(m => ({ default: m.VendorPortal })));
+const Auth = lazy(() => import('./pages/Auth').then(m => ({ default: m.Auth })));
+const Cart = lazy(() => import('./pages/Cart').then(m => ({ default: m.Cart })));
+const Admin = lazy(() => import('./pages/Admin').then(m => ({ default: m.Admin })));
+const AdminLogin = lazy(() => import('./pages/AdminLogin').then(m => ({ default: m.AdminLogin })));
+
+const LoadingScreen = () => (
+  <div style={{
+    height: '100vh',
+    width: '100vw',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    background: '#0f172a'
+  }}>
+    <div className="pre-loader-pulse"></div>
+  </div>
+);
 
 function App() {
   return (
@@ -44,16 +60,18 @@ function App() {
             />
             <Navbar />
             <InstallPrompt />
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/dashboard" element={<UserDashboard />} />
-              <Route path="/nearby" element={<Nearby />} />
-              <Route path="/vendor" element={<VendorPortal />} />
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/cart" element={<Cart />} />
-              <Route path="/admin" element={<Admin />} />
-              <Route path="/admin-login" element={<AdminLogin />} />
-            </Routes>
+            <Suspense fallback={<LoadingScreen />}>
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/dashboard" element={<UserDashboard />} />
+                <Route path="/nearby" element={<Nearby />} />
+                <Route path="/vendor" element={<VendorPortal />} />
+                <Route path="/auth" element={<Auth />} />
+                <Route path="/cart" element={<Cart />} />
+                <Route path="/admin" element={<Admin />} />
+                <Route path="/admin-login" element={<AdminLogin />} />
+              </Routes>
+            </Suspense>
           </Router>
         </CartProvider>
       </AuthProvider>
