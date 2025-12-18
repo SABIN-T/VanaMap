@@ -53,58 +53,60 @@
     }
 }
 
-/* Desktop: Wide, No-Scroll Two-Column View */
+/* Desktop: Full Screen Immersive Page View */
 @media (min-width: 1024px) {
-    .modal {
-        max-width: 1300px !important;
-        height: 88vh !important;
-        max-height: 88vh !important;
-        overflow: hidden !important;
-        /* Remove internal scrolling if content fits */
-        display: flex;
-        flex-direction: column;
-        border: 1px solid rgba(16, 185, 129, 0.15);
-        background: linear-gradient(180deg, rgba(15, 23, 42, 0.98) 0%, rgba(10, 15, 28, 0.99) 100%);
+    .overlay {
+        padding: 0 !important;
+        background: rgba(15, 23, 42, 1) !important;
+        backdrop-filter: none !important;
     }
 
-    .overlay {
-        padding: 2.5rem;
-        background: rgba(0, 0, 0, 0.9);
+    .modal {
+        max-width: 100vw !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        max-height: 100vh !important;
+        border-radius: 0 !important;
+        border: none !important;
+        background: linear-gradient(180deg, #0f172a 0%, #020617 100%);
+        display: flex;
+        flex-direction: column;
     }
 
     .content {
         flex: 1;
         display: grid !important;
-        grid-template-columns: 1fr 450px;
-        gap: 5rem;
-        padding: 0 5rem 4rem !important;
+        grid-template-columns: 1fr 480px;
+        gap: 6rem;
+        padding: 2rem 6rem 4rem !important;
+        max-width: 1600px;
+        width: 100%;
+        margin: 0 auto;
         overflow-y: auto;
-        scrollbar-width: thin;
-        scrollbar-color: rgba(16, 185, 129, 0.3) transparent;
-        /* Allow scrolling ONLY in the content area if still too long */
-        /* max-height: calc(95vh - 200px); */
-        /* Adjust based on image height */
         scrollbar-gutter: stable;
+        align-content: start;
     }
 
     .simulationContainer {
         position: sticky;
-        top: 0;
+        top: 2rem;
         background: rgba(255, 255, 255, 0.02) !important;
-        backdrop-filter: blur(10px);
+        backdrop-filter: blur(20px);
         border: 1px solid rgba(16, 185, 129, 0.2) !important;
-        border-radius: 2.5rem !important;
+        border-radius: 2rem !important;
         padding: 3rem !important;
         box-shadow:
-            20px 20px 60px rgba(0, 0, 0, 0.3),
-            inset 0 0 30px rgba(16, 185, 129, 0.05) !important;
+            0 25px 50px -12px rgba(0, 0, 0, 0.5),
+            inset 0 0 40px rgba(16, 185, 129, 0.05) !important;
         height: min-content;
-        animation: slideInRight 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s backwards;
+        max-height: calc(100vh - 4rem);
+        overflow-y: auto;
+        animation: slideInRight 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.3s backwards;
     }
 
     @keyframes slideInRight {
         from {
-            transform: translateX(30px);
+            transform: translateX(50px);
             opacity: 0;
         }
 
@@ -117,42 +119,47 @@
     .detailsColumn {
         display: flex;
         flex-direction: column;
-        gap: 2.5rem !important;
-        animation: slideInLeft 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s backwards;
+        gap: 3rem !important;
+        padding-top: 1rem;
+        animation: slideInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s backwards;
     }
 
-    @keyframes slideInLeft {
+    @keyframes slideInUp {
         from {
-            transform: translateX(-30px);
+            transform: translateY(50px);
             opacity: 0;
         }
 
         to {
-            transform: translateX(0);
+            transform: translateY(0);
             opacity: 1;
         }
     }
 
     .imageContainer {
-        height: 320px !important;
-        border-bottom: 2px solid rgba(16, 185, 129, 0.1);
-    }
-
-    .imageOverlay {
-        background: linear-gradient(to top, rgba(15, 23, 42, 1), transparent 70%);
+        height: 400px !important;
+        width: 100%;
+        mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+        -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+        border: none !important;
     }
 
     .image {
-        transition: transform 12s linear;
+        transition: transform 20s ease-out;
     }
 
     .modal:hover .image {
-        transform: scale(1.1);
+        transform: scale(1.05);
+        /* Subtle zoom for premium feel */
     }
 
     .titleSection {
-        padding: 0 5rem !important;
-        margin-top: -6rem !important;
+        max-width: 1600px;
+        width: 100%;
+        margin: -8rem auto 3rem !important;
+        padding: 0 6rem !important;
+        position: relative;
+        z-index: 10;
     }
 
     .descriptionSection {
@@ -160,11 +167,12 @@
     }
 
     .descriptionSection p {
-        font-size: 1.2rem !important;
+        font-size: 1.35rem !important;
         line-height: 1.8 !important;
         color: #e2e8f0 !important;
-        font-weight: 500;
-        letter-spacing: -0.01em;
+        font-weight: 400;
+        letter-spacing: 0.01em;
+        max-width: 900px;
     }
 
     .infoGrid {
@@ -175,12 +183,6 @@
     .listsGrid {
         grid-template-columns: 1fr !important;
         margin-bottom: 0 !important;
-    }
-
-    .detailsColumn {
-        display: flex;
-        flex-direction: column;
-        gap: 2.5rem !important;
     }
 }
 
