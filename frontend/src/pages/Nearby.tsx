@@ -4,7 +4,7 @@ import L from 'leaflet';
 import { fetchVendors, seedDatabase, logVendorContact } from '../services/api';
 import { getDistanceFromLatLonInKm, formatDistance } from '../utils/logic';
 import type { Vendor } from '../types';
-import { MessageCircle, MapPin, ExternalLink, RefreshCw, AlertCircle, Star, Sparkles } from 'lucide-react';
+import { MessageCircle, MapPin, ExternalLink, RefreshCw, AlertCircle, Star, Sparkles, Search } from 'lucide-react';
 import { Button } from '../components/common/Button';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
@@ -37,7 +37,39 @@ export const Nearby = () => {
     const [nearbyVendors, setNearbyVendors] = useState<Vendor[]>([]);
     const [loading, setLoading] = useState(false);
     const [activeTab, setActiveTab] = useState<'verified' | 'unverified'>('verified');
+    const [manualSearchQuery, setManualSearchQuery] = useState('');
     const hasInitialLocateRef = useRef(false);
+
+    const handleManualLocationSearch = async () => {
+        if (!manualSearchQuery.trim()) return;
+        setLoading(true);
+        const tid = toast.loading(`Scanning satellite data for "${manualSearchQuery}"...`);
+
+        try {
+            // Forward Geocoding
+            const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(manualSearchQuery)}`);
+            const data = await res.json();
+
+            if (data && data.length > 0) {
+                const { lat, lon, display_name } = data[0];
+                const latitude = parseFloat(lat);
+                const longitude = parseFloat(lon);
+
+                setPosition([latitude, longitude]);
+                setPlaceName(display_name.split(',')[0]); // Take safe first part
+                toast.success("Target area locked!", { id: tid });
+
+                await fetchAllData(latitude, longitude);
+            } else {
+                toast.error("Location signature not found.", { id: tid });
+            }
+        } catch (e) {
+            console.error(e);
+            toast.error("Network triangulation failed.", { id: tid });
+        } finally {
+            setLoading(false);
+        }
+    };
 
     const fetchAllData = async (lat: number, lng: number) => {
         setLoading(true);
@@ -180,6 +212,33 @@ out skel qt;
             <div className={styles.headerSection}>
                 <h1 className={styles.title}>NURSERY EXPLORER</h1>
                 <p className={styles.subtitle}>Discover verified nurseries providing simulation-matched species near you.</p>
+
+                {/* Search by Location Bar */}
+                <div style={{ marginTop: '2rem', maxWidth: '600px', position: 'relative', display: 'flex', gap: '0.5rem' }}>
+                    <div style={{ position: 'relative', flex: 1 }}>
+                        <Search style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: 'var(--color-text-muted)' }} size={18} />
+                        <input
+                            type="text"
+                            placeholder="Search by city or area (e.g. Connaught Place)"
+                            value={manualSearchQuery}
+                            onChange={(e) => setManualSearchQuery(e.target.value)}
+                            onKeyDown={(e) => e.key === 'Enter' && handleManualLocationSearch()}
+                            style={{
+                                width: '100%',
+                                background: 'rgba(255,255,255,0.05)',
+                                border: '1px solid rgba(255,255,255,0.1)',
+                                padding: '1rem 1rem 1rem 3rem',
+                                borderRadius: '1rem',
+                                color: 'white',
+                                outline: 'none',
+                                fontSize: '1rem'
+                            }}
+                        />
+                    </div>
+                    <Button onClick={handleManualLocationSearch} disabled={loading} style={{ minWidth: '120px' }}>
+                        {loading ? 'Scanning...' : 'Locate'}
+                    </Button>
+                </div>
             </div>
 
             <div className={styles.splitLayout}>
