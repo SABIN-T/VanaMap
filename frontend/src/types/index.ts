@@ -14,6 +14,7 @@ export interface Plant {
     price?: number;
     type: 'indoor' | 'outdoor';
     isNocturnal?: boolean; // For CAM plants (Snake Plant, Aloe) that produce O2 at night
+    score?: number; // Calculated aptness based on local environment
 }
 
 export interface Vendor {

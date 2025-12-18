@@ -5,7 +5,6 @@ import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
 import { useTheme } from '../../context/ThemeContext';
 import styles from './Navbar.module.css';
-import { generateAndDownloadPDF } from '../../utils/pdfGenerator';
 
 export const Navbar = () => {
     const { user, logout } = useAuth();
@@ -17,11 +16,12 @@ export const Navbar = () => {
     const handleDownloadGuide = () => {
         setIsMenuOpen(false);
         import('react-hot-toast').then(({ default: toast }) => {
-            // Mock async operation for the promise
-            const downloadPromise = new Promise((resolve) => {
+            const downloadPromise = (async () => {
+                const { generateAndDownloadPDF } = await import('../../utils/pdfGenerator');
                 generateAndDownloadPDF();
-                setTimeout(resolve, 2000); // Fake delay for UX
-            });
+                // We keep a small artificial delay so the toast doesn't flicker too fast
+                await new Promise(resolve => setTimeout(resolve, 1500));
+            })();
 
             toast.promise(
                 downloadPromise,

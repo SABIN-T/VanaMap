@@ -63,6 +63,10 @@ export const Admin = () => {
             setPlants(pData);
             setRequests(rData);
             setNotifications(nData);
+
+            // Sync frontend cache when admin refreshes
+            localStorage.setItem('vanamap_plants_cache', JSON.stringify(pData));
+
             toast.success("Dashboard synced", { id: toastId });
         } catch (err) {
             toast.error("Sync failed", { id: toastId });

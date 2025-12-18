@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, lazy, Suspense } from 'react';
+import { useState, useEffect, useRef, lazy, Suspense, useMemo } from 'react';
 import toast from 'react-hot-toast';
 import { QRCodeSVG } from 'qrcode.react';
 import { PlantCard } from '../components/features/plants/PlantCard';
@@ -24,6 +24,7 @@ export const Home = () => {
     const [weather, setWeather] = useState<any>(null);
     const [locationLoading, setLocationLoading] = useState(false);
     const [plantsLoading, setPlantsLoading] = useState(true);
+    const [isFromCache, setIsFromCache] = useState(false);
     const [selectedPlant, setSelectedPlant] = useState<Plant | null>(null);
     const [citySearch, setCitySearch] = useState('');
 
@@ -47,18 +48,43 @@ export const Home = () => {
     }, []);
 
     useEffect(() => {
-        setPlantsLoading(true);
-        fetchPlants().then(async (data: Plant[]) => {
-            if (data.length === 0) {
-                const { PLANTS } = await import('../data/mocks');
-                await import('../services/api').then(api => api.seedDatabase(PLANTS, []));
-                const newData = await fetchPlants();
-                setPlants(newData);
-            } else {
-                setPlants(data);
+        // Attempt to load from cache first for instant UX
+        const cachedPlants = localStorage.getItem('vanamap_plants_cache');
+        if (cachedPlants) {
+            try {
+                const parsed = JSON.parse(cachedPlants);
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                    setPlants(parsed);
+                    setPlantsLoading(false);
+                    setIsFromCache(true); // Don't animate staggered if from cache
+                }
+            } catch (e) {
+                console.error("Cache corrupted");
             }
-            setPlantsLoading(false);
-        }).catch(() => setPlantsLoading(false));
+        }
+
+        const loadFreshData = async () => {
+            try {
+                const data = await fetchPlants();
+                if (data.length === 0) {
+                    const { PLANTS } = await import('../data/mocks');
+                    await import('../services/api').then(api => api.seedDatabase(PLANTS, []));
+                    const newData = await fetchPlants();
+                    setPlants(newData);
+                    localStorage.setItem('vanamap_plants_cache', JSON.stringify(newData));
+                } else {
+                    setPlants(data);
+                    localStorage.setItem('vanamap_plants_cache', JSON.stringify(data));
+                }
+                setIsFromCache(false); // New data should animate once
+            } catch (err) {
+                console.error("Fetch failed", err);
+            } finally {
+                setPlantsLoading(false);
+            }
+        };
+
+        loadFreshData();
     }, []);
 
     const scrollToPlants = () => {
@@ -148,31 +174,32 @@ export const Home = () => {
         return { label: 'High Pollution', color: '#f87171', desc: 'Critical AQI: Oxygen-boosters simulated.' };
     };
 
-    const normalizedPlants = [...plants]
-        .filter(p => {
-            const matchesType = filter === 'all' ? true : p.type === filter;
-            const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                p.scientificName.toLowerCase().includes(searchQuery.toLowerCase());
-            const matchesO2 = o2Filter === 'all' ? true : p.oxygenLevel === o2Filter;
-            return matchesType && matchesSearch && matchesO2;
-        })
-        .map(p => {
-            if (!weather) return { ...p, score: 0 };
-            return { ...p, score: calculateAptness(p, weather.avgTemp30Days, weather.air_quality?.aqi, weather.avgHumidity30Days) };
-        })
-        .sort((a, b) => (weather ? b.score - a.score : 0));
+    const displayedPlants = useMemo(() => {
+        const processed = [...plants]
+            .filter(p => {
+                const matchesType = filter === 'all' ? true : p.type === filter;
+                const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    p.scientificName.toLowerCase().includes(searchQuery.toLowerCase());
+                const matchesO2 = o2Filter === 'all' ? true : p.oxygenLevel === o2Filter;
+                return matchesType && matchesSearch && matchesO2;
+            })
+            .map(p => {
+                if (!weather) return { ...p, score: 0 };
+                return { ...p, score: calculateAptness(p, weather.avgTemp30Days, weather.air_quality?.aqi, weather.avgHumidity30Days) };
+            })
+            .sort((a, b) => (weather ? b.score - a.score : 0));
 
-    // Normalize so top is 100%
-    if (weather && normalizedPlants.length > 0) {
-        const topScore = normalizedPlants[0].score;
-        if (topScore > 0) {
-            normalizedPlants.forEach(p => {
-                p.score = Math.round((p.score / topScore) * 100);
-            });
+        // Normalize so top is 100%
+        if (weather && processed.length > 0) {
+            const topScore = processed[0].score;
+            if (topScore > 0) {
+                processed.forEach(p => {
+                    p.score = Math.round((p.score / topScore) * 100);
+                });
+            }
         }
-    }
-
-    const displayedPlants = normalizedPlants;
+        return processed;
+    }, [plants, filter, searchQuery, o2Filter, weather]);
 
     return (
         <div className={styles.homeContainer}>
@@ -337,18 +364,21 @@ export const Home = () => {
                     {plantsLoading ? (
                         [...Array(6)].map((_, i) => <PlantSkeleton key={i} />)
                     ) : (
-                        displayedPlants.map((plant, index) => (
+                        displayedPlants.map((plant: Plant, index: number) => (
                             <div
                                 key={plant.id}
                                 onClick={() => openDetails(plant)}
                                 className={styles.fadeIn}
-                                style={{ animationDelay: `${index * 0.05}s`, cursor: 'pointer' }}
+                                style={{
+                                    animationDelay: isFromCache ? '0s' : `${Math.min(index * 0.05, 1)}s`,
+                                    cursor: 'pointer'
+                                }}
                             >
                                 <PlantCard
                                     plant={plant}
                                     onAdd={handleAddToCart}
                                     score={weather ? plant.score : undefined}
-                                    isTopMatch={weather ? index === 0 && plant.score > 0 : false}
+                                    isTopMatch={weather ? index === 0 && (plant.score || 0) > 0 : false}
                                 />
                             </div>
                         ))
