@@ -196,7 +196,7 @@ app.post('/api/auth/signup', async (req, res) => {
 
 // Login
 // Health Check
-app.get('/', (req, res) => res.send('VanaMap API Active'));
+app.get('/', (req, res) => res.send('VanaMap API v2.1 Active - Admin Login Secured'));
 
 app.post('/api/auth/login', async (req, res) => {
     try {
