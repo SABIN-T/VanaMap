@@ -140,7 +140,10 @@ export const Navbar = () => {
                         </Link>
                     )}
                 </div>
+                </div>
             </div>
-        </nav>
+
+            <DoctorAIModal isOpen={isAIModalOpen} onClose={() => setIsAIModalOpen(false)} />
+        </nav >
     );
 };
