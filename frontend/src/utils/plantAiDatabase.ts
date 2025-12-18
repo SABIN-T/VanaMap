@@ -87,10 +87,10 @@ export const analyzePlantSpecies = (scientificName: string): PlantData => {
     if (term.includes('epipremnum') || term.includes('aureum') || term.includes('pothos') || term.includes('money')) {
         return {
             name: "Golden Pothos (Money Plant)",
-            description: "Known as 'Devil's Ivy', this hardy vine is a powerhouse for scrubbing indoor pollutants like formaldehyde, xylene, and toluene from the air.",
+            description: "Known as 'Devil's Ivy', this hardy vine is a powerhouse for scrubbing indoor pollutants like formaldehyde. High transpiration rate adds beneficial humidity.",
             type: 'indoor',
             sunlight: 'medium',
-            oxygenLevel: 'moderate',
+            oxygenLevel: 'high', // Upgraded from moderate
             idealTempMin: 15,
             idealTempMax: 30,
             minHumidity: 40,
@@ -107,7 +107,7 @@ export const analyzePlantSpecies = (scientificName: string): PlantData => {
             description: "A fast-growing plant that produces 'spiderette' offshoots. NASA studies identify it as a top air purifier for removing formaldehyde and carbon monoxide.",
             type: 'indoor',
             sunlight: 'medium',
-            oxygenLevel: 'high',
+            oxygenLevel: 'very-high', // Upgraded to NASA Top Tier
             idealTempMin: 13,
             idealTempMax: 27,
             minHumidity: 45,
@@ -141,7 +141,7 @@ export const analyzePlantSpecies = (scientificName: string): PlantData => {
             description: "Characterized by glossy, dark leaves, this plant is excellent at absorbing airborne chemicals and bacteria. It adapts well to standard indoor temperatures.",
             type: 'indoor',
             sunlight: 'medium',
-            oxygenLevel: 'high',
+            oxygenLevel: 'very-high', // Upgraded: Huge biomass/surface area
             idealTempMin: 16,
             idealTempMax: 29,
             minHumidity: 40,
@@ -165,6 +165,23 @@ export const analyzePlantSpecies = (scientificName: string): PlantData => {
             isNocturnal: false,
             medicinalValues: ["Mood enhancement", "Sound dampening"],
             advantages: ["Iconic aesthetic", "Climbing growth", "Pest resistant"]
+        };
+    }
+
+    // 8.5 Nephrolepis (Boston Fern) - NEW ENTRY
+    if (term.includes('nephrolepis') || term.includes('exaltata') || term.includes('boston') || (term.includes('fern') && term.includes('sword'))) {
+        return {
+            name: "Boston Fern",
+            description: "Ranked by NASA as one of the most efficient plants for removing formaldehyde. It adds lush greenery and high humidity to any room.",
+            type: 'indoor',
+            sunlight: 'medium',
+            oxygenLevel: 'very-high', // NASA Top Tier
+            idealTempMin: 16,
+            idealTempMax: 26,
+            minHumidity: 70, // Loves moisture
+            isNocturnal: false,
+            medicinalValues: ["Natural humidifier", "Skin hydration", "Soothes dry nose"],
+            advantages: ["Lush volume", "Pet safe", "Air scrubbing"]
         };
     }
 

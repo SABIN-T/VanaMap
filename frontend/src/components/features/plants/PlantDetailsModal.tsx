@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { X, Droplets, Sun, Activity, Heart, Wind, Zap, AlertTriangle } from 'lucide-react';
+import { X, Droplets, Sun, Heart, Wind, Zap } from 'lucide-react';
 import { Button } from '../../common/Button';
 import type { Plant } from '../../../types';
 import styles from './PlantDetailsModal.module.css';
@@ -386,7 +386,7 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
 
                                     <div className={styles.plantIconWrapper}>
                                         <div className={styles.plantGlow} style={{ opacity: fluxRate / 100, width: '100px', height: '100px' }}></div>
-                                        <img src={plant.default_image?.original_url || plant.default_image?.thumbnail} className={styles.simImage} alt="" style={{ width: '90px', height: '90px', objectFit: 'cover', borderRadius: '1rem', border: '2px solid rgba(255,255,255,0.1)' }} />
+                                        <img src={plant.imageUrl} className={styles.simImage} alt="" style={{ width: '90px', height: '90px', objectFit: 'cover', borderRadius: '1rem', border: '2px solid rgba(255,255,255,0.1)' }} />
                                     </div>
 
                                     {/* Key Insight Highlight */}
