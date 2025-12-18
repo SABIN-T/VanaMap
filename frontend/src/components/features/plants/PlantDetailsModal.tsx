@@ -9,7 +9,11 @@ import toast from 'react-hot-toast';
 
 interface PlantDetailsModalProps {
     plant: Plant;
-    weather: any;
+    weather: {
+        avgTemp30Days?: number;
+        avgHumidity30Days?: number;
+        [key: string]: any;
+    } | null;
     onClose: () => void;
 }
 

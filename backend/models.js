@@ -31,7 +31,8 @@ const VendorSchema = new mongoose.Schema({
     district: String,
     inventoryIds: [String],
     verified: { type: Boolean, default: false },
-    highlyRecommended: { type: Boolean, default: false }
+    highlyRecommended: { type: Boolean, default: false },
+    category: { type: String, default: 'Plant Shop' }
 });
 
 const UserSchema = new mongoose.Schema({

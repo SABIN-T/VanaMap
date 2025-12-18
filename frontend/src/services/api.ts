@@ -84,7 +84,7 @@ export const toggleFavorite = async (email: string, plantId: string) => {
     return res.json();
 };
 
-export const syncCart = async (email: string, cart: any[]) => {
+export const syncCart = async (email: string, cart: { plantId: string; quantity: number }[]) => {
     const res = await fetch(`${API_URL}/user/cart`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

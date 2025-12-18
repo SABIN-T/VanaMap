@@ -8,6 +8,13 @@ interface CartItem {
     quantity: number;
 }
 
+interface RawCartItem {
+    plantId?: string;
+    _id?: string;
+    quantity: number;
+    plant?: Plant;
+}
+
 interface CartContextType {
     items: CartItem[];
     addToCart: (plant: Plant) => void;
@@ -36,7 +43,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         const hydrateCart = async () => {
             if (user && user.cart && user.cart.length > 0) {
                 // Check if the first item needs hydration (has plantId but no plant object)
-                const firstItem = user.cart[0] as any;
+                const firstItem = user.cart[0] as unknown as RawCartItem;
                 const needsHydration = !firstItem.plant && (firstItem.plantId || firstItem._id);
 
                 if (needsHydration) {
@@ -44,9 +51,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
                         const { fetchPlants } = await import('../services/api');
                         const allPlants = await fetchPlants();
 
-                        const hydratedItems: CartItem[] = user.cart.map((item: any) => {
+                        const hydratedItems: CartItem[] = (user.cart as any[]).map((item: any) => {
+                            const raw = item as RawCartItem;
                             // Handle both plantId and _id formats from different DB schemas
-                            const targetId = item.plantId || item._id;
+                            const targetId = raw.plantId || raw._id;
                             const fullPlant = allPlants.find(p => p.id === targetId);
                             if (fullPlant) {
                                 return {

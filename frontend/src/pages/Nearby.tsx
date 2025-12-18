@@ -10,6 +10,24 @@ import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 import styles from './Nearby.module.css';
 
+interface OSMElement {
+    id: number;
+    lat: number;
+    lon: number;
+    tags?: {
+        name?: string;
+        shop?: string;
+        landuse?: string;
+        "addr:full"?: string;
+        "addr:street"?: string;
+        "addr:city"?: string;
+        phone?: string;
+        "contact:phone"?: string;
+        "contact:whatsapp"?: string;
+        [key: string]: string | undefined;
+    };
+}
+
 // Leaflet icon setup
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
@@ -115,7 +133,7 @@ out skel qt;
                 const osmData = await osmRes.json();
                 if (osmData.elements) {
                     unverifiedVendors = osmData.elements
-                        .filter((el: any) => {
+                        .filter((el: OSMElement) => {
                             // Must have coordinates
                             if (!el.lat || !el.lon) return false;
 
@@ -130,7 +148,7 @@ out skel qt;
 
                             return true;
                         })
-                        .map((el: any) => {
+                        .map((el: OSMElement) => {
                             const tags = el.tags || {};
                             let category = "Garden";
                             if (tags.shop === 'garden_centre' || tags.landuse === 'plant_nursery') {
@@ -157,7 +175,7 @@ out skel qt;
             const combined = [...verifiedVendors, ...unverifiedVendors];
             const nearby = combined.filter(v => getDistanceFromLatLonInKm(lat, lng, v.latitude, v.longitude) <= 50)
                 .map(v => ({ ...v, distance: getDistanceFromLatLonInKm(lat, lng, v.latitude, v.longitude) }))
-                .sort((a: any, b: any) => (a.distance || 0) - (b.distance || 0));
+                .sort((a, b) => (a.distance || 0) - (b.distance || 0));
 
             setNearbyVendors(nearby);
         } finally {
@@ -302,7 +320,7 @@ out skel qt;
                                         </div>
                                         <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', marginBottom: '1rem' }}>
                                             <div className={styles.vendorDist}>{formatDistance((vendor.distance || 0) * 1000)} away</div>
-                                            {(vendor as any).category && <div className={styles.categoryTag}>{(vendor as any).category}</div>}
+                                            {vendor.category && <div className={styles.categoryTag}>{vendor.category}</div>}
                                         </div>
                                         <p className={styles.vendorAddr}>{vendor.address}</p>
 

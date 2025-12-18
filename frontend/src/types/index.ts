@@ -30,6 +30,7 @@ export interface Vendor {
     verified?: boolean;
     highlyRecommended?: boolean;
     distance?: number;
+    category?: string;
 }
 
 export interface WeatherData {

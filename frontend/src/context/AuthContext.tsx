@@ -2,10 +2,22 @@ import { createContext, useContext, useState, type ReactNode, useEffect } from '
 import type { User } from '../types';
 import { jwtDecode } from "jwt-decode";
 
+interface LoginCredentials {
+    email: string;
+    password: string;
+}
+
+interface SignupData {
+    email: string;
+    password: string;
+    name: string;
+    role?: string;
+}
+
 interface AuthContextType {
     user: User | null;
-    signup: (data: any) => Promise<{ success: boolean; message?: string }>;
-    login: (credentials: any) => Promise<{ success: boolean; message?: string }>;
+    signup: (data: SignupData) => Promise<{ success: boolean; message?: string }>;
+    login: (credentials: LoginCredentials) => Promise<{ success: boolean; message?: string }>;
     googleLogin: (credentialResponse: any) => Promise<boolean>;
     logout: () => void;
     toggleFavorite: (plantId: string) => void;
@@ -27,7 +39,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
     }, []);
 
-    const login = async (credentials: any) => {
+    const login = async (credentials: LoginCredentials) => {
         try {
             const res = await fetch(`${API_URL}/auth/login`, {
                 method: 'POST',
@@ -62,7 +74,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
-    const signup = async (userData: any) => {
+    const signup = async (userData: SignupData) => {
         try {
             const res = await fetch(`${API_URL}/auth/signup`, {
                 method: 'POST',
@@ -92,7 +104,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         try {
             if (!credentialResponse.credential) return false;
 
-            const decoded: any = jwtDecode(credentialResponse.credential);
+            const decoded = jwtDecode(credentialResponse.credential) as { sub: string; name: string; email: string };
 
             // Check if user exists in DB, otherwise create
             let googleUser: User = {

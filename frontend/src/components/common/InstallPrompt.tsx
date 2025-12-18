@@ -1,8 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Smartphone, X, Download } from 'lucide-react';
 
+interface BeforeInstallPromptEvent extends Event {
+    prompt: () => Promise<void>;
+    userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
+}
+
 export const InstallPrompt = () => {
-    const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+    const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
     const [isVisible, setIsVisible] = useState(false);
     const [isIOS, setIsIOS] = useState(false);
 
@@ -19,9 +24,9 @@ export const InstallPrompt = () => {
         }
 
         // Check for standard PWA install support (Android/Desktop)
-        const handler = (e: any) => {
+        const handler = (e: Event) => {
             e.preventDefault();
-            setDeferredPrompt(e);
+            setDeferredPrompt(e as BeforeInstallPromptEvent);
             setIsVisible(true);
         };
 
