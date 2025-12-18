@@ -1104,12 +1104,69 @@
         /* Move icon to left in horizontal layout if desired, or keep centered */
     }
 
-    /* Adjust simStats for horizontal layout */
-    .desktopLayout .simStats {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 2rem;
-        margin-top: 2rem;
+    /* Beautiful Slider Controls for Desktop */
+    .desktopLayout .sliderControl {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        /* Subtle border */
+        border-radius: 1.25rem;
+        padding: 1.75rem;
+        margin-bottom: 1.5rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .desktopLayout .sliderControl:hover {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(255, 255, 255, 0.15);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Dynamic background highlight on hover/active could go here */
+
+    .desktopLayout .controlLabel {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: #94a3b8;
+        font-weight: 700;
+        margin-bottom: 0.75rem;
+        display: block;
+    }
+
+    .desktopLayout .controlVal {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: #f1f5f9;
+        font-family: 'Inter', sans-serif;
+        /* Ensure clean font */
+    }
+
+    /* Custom Range Input for Desktop */
+    .desktopLayout .rangeInput {
+        height: 6px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 3px;
+        margin-top: 0.5rem;
+    }
+
+    .desktopLayout .rangeInput::-webkit-slider-thumb {
+        width: 24px;
+        height: 24px;
+        background: #10b981;
+        border: 4px solid #0f172a;
+        /* Dark border to separate from track */
+        box-shadow: 0 0 0 1px #10b981;
+        /* Outline effect */
+        cursor: grab;
+        transition: transform 0.1s;
+    }
+
+    .desktopLayout .rangeInput::-webkit-slider-thumb:active {
+        transform: scale(1.1);
+        cursor: grabbing;
     }
 }
 

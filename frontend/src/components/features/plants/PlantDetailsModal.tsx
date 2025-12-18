@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { X, Droplets, Sun, Heart, Wind, Zap, Monitor, Smartphone } from 'lucide-react';
+import { X, Droplets, Sun, Heart, Wind, Zap, Monitor, Smartphone, Users, Thermometer } from 'lucide-react';
 import { Button } from '../../common/Button';
 import type { Plant } from '../../../types';
 import styles from './PlantDetailsModal.module.css';
@@ -368,17 +368,22 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                                 </div>
 
                                 {/* Inputs */}
+                                {/* Inputs */}
                                 <div className={styles.sliderControl}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                                        <span className={styles.controlLabel}>OCCUPANCY</span>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.8rem', alignItems: 'flex-end' }}>
+                                        <span className={styles.controlLabel} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                            <Users size={14} color="#94a3b8" /> OCCUPANCY
+                                        </span>
                                         <span className={styles.controlVal}>{numPeople} <span style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 600 }}>person</span></span>
                                     </div>
                                     <input type="range" min="1" max="12" value={numPeople} onChange={(e) => setNumPeople(Number(e.target.value))} className={styles.rangeInput} />
                                 </div>
 
                                 <div className={styles.sliderControl}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                                        <span className={styles.controlLabel}>TEMPERATURE</span>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.8rem', alignItems: 'flex-end' }}>
+                                        <span className={styles.controlLabel} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                            <Thermometer size={14} color="#94a3b8" /> TEMPERATURE
+                                        </span>
                                         <span className={styles.controlVal} style={{ color: isACMode ? '#64748b' : 'var(--color-primary)' }}>{currentTemp}°C</span>
                                     </div>
                                     <input disabled={isACMode} type="range" min="15" max="40" value={manualTemp} onChange={(e) => setManualTemp(Number(e.target.value))} className={styles.rangeInput} style={{ opacity: isACMode ? 0.5 : 1 }} />
