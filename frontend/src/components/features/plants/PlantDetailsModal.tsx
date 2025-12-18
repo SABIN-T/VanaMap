@@ -33,101 +33,109 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
     // Using Monte Carlo methods for realistic variability
     // ==========================================
 
-    // 1. BASE PHOTOSYNTHESIS RATE (μmol CO2/m²/s)
-    // Based on research: typical houseplant leaf area = 0.1-0.5 m²
+    // 1. BASE PHOTOSYNTHESIS RATE (μmol CO2/s per plant)
     const getBasePhotosynthesisRate = useMemo(() => {
-        const leafArea = 0.3; // m² (average houseplant)
+        // Leaf Area (m²) - Based on 'Deep Research' for fully-grown houseplants
+        // Areca Palm/Snake Plant (shoulder-high) typically has 1.2 - 1.8 m² leaf area
+        let leafArea = 0.3;
+        if (plant.oxygenLevel === 'very-high') leafArea = 1.6;
+        else if (plant.oxygenLevel === 'high') leafArea = 1.0;
+        else if (plant.oxygenLevel === 'moderate' || plant.oxygenLevel === 'medium') leafArea = 0.6;
+        else leafArea = 0.3;
+
         let baseRate = 0;
+        // Photosynthesis rate (μmol CO2/m²/s)
+        // C3/CAM plants in optimal lighting
+        if (plant.oxygenLevel === 'very-high') baseRate = 25;
+        else if (plant.oxygenLevel === 'high') baseRate = 20;
+        else if (plant.oxygenLevel === 'moderate' || plant.oxygenLevel === 'medium') baseRate = 18;
+        else baseRate = 12;
 
-        // Photosynthesis rate varies by plant oxygen level
-        // Research: C3 plants = 10-30 μmol CO2/m²/s
-        if (plant.oxygenLevel === 'very-high') baseRate = 25; // Snake plant, Areca palm
-        else if (plant.oxygenLevel === 'high') baseRate = 20; // Peace lily, Spider plant
-        else if (plant.oxygenLevel === 'moderate' || plant.oxygenLevel === 'medium') baseRate = 15;
-        else baseRate = 10; // Low light plants
-
-        return baseRate * leafArea; // μmol CO2/s per plant
+        return baseRate * leafArea;
     }, [plant.oxygenLevel]);
 
     // 2. TEMPERATURE RESPONSE FUNCTION (Arrhenius-based)
-    // Optimal photosynthesis: 20-30°C
     const temperatureEffect = useMemo(() => {
         const T = currentTemp + 273.15; // Kelvin
         const T_opt = 25 + 273.15; // Optimal temp in K
-
-        if (currentTemp < 10 || currentTemp > 40) return 0.1; // Extreme stress
-
-        // Gaussian-like response curve
-        const sigma = 10; // Temperature tolerance
+        if (currentTemp < 10 || currentTemp > 42) return 0.1;
+        const sigma = 12; // Wider tolerance
         const effect = Math.exp(-Math.pow(T - T_opt, 2) / (2 * sigma * sigma));
-
-        return Math.max(0.1, effect);
+        return Math.max(0.15, effect);
     }, [currentTemp]);
 
     // 3. HUMIDITY EFFECT
-    // Stomatal conductance increases with humidity (up to ~70%)
     const humidityEffect = useMemo(() => {
-        if (currentHumidity < 30) return 0.7; // Stomata partially close
-        if (currentHumidity > 80) return 0.85; // Risk of disease, slight reduction
-        return 1.0; // Optimal range 30-80%
+        if (currentHumidity < 25) return 0.65;
+        if (currentHumidity > 85) return 0.8;
+        return 1.0;
     }, [currentHumidity]);
 
     // 4. MONTE CARLO SIMULATION (1000 iterations)
-    // Accounts for natural variability in photosynthesis
     const PLANT_O2_OUTPUT = useMemo(() => {
-        if (!isDay) {
-            // Night respiration: plants consume O2
-            // Research: ~10% of daytime photosynthesis rate
-            const respirationRate = getBasePhotosynthesisRate * 0.1;
-            const respirationO2 = (respirationRate * 3600 * 12) / 1000; // 12 hours night, convert to L
-            return -Math.round(respirationO2 * 10) / 10;
-        }
-
         const numSimulations = 1000;
-        let totalO2 = 0;
+        let totalO2PerDay = 0;
 
+        // Simulate 24-hour cycle logic within the calc
         for (let i = 0; i < numSimulations; i++) {
-            // Stochastic variations (±15% random variation)
-            const randomVariation = 0.85 + Math.random() * 0.3; // 0.85 to 1.15
+            let dayYield = 0;
+            let nightYield = 0;
 
-            // Light variation throughout the day (sine wave)
-            const hourAngle = ((hour - 6) / 12) * Math.PI; // 0 to π during day
-            const lightIntensity = Math.sin(hourAngle); // 0 to 1 to 0
+            // Stochastic variations (±15%)
+            const randomVariation = 0.85 + Math.random() * 0.3;
 
-            // Cloud cover simulation (random)
-            const cloudFactor = 0.7 + Math.random() * 0.3; // 0.7 to 1.0
-
-            // Combined photosynthesis rate
-            let netRate = getBasePhotosynthesisRate
+            // Daytime (12 hours)
+            const lightFactor = 0.8; // Average light intensity over 12h
+            dayYield = getBasePhotosynthesisRate
                 * temperatureEffect
                 * humidityEffect
-                * lightIntensity
-                * cloudFactor
-                * randomVariation;
+                * lightFactor
+                * randomVariation
+                * 3600 * 12 * 22.4 / 1000000;
 
-            // Convert μmol CO2/s to L O2/day
-            // 1 mol CO2 → 1 mol O2 (photosynthesis)
-            // 1 mol gas at STP = 22.4 L
-            // Daytime = 12 hours
-            const o2Liters = (netRate * 3600 * 12 * 22.4) / 1000000; // Convert to L/day
+            // Nighttime (12 hours)
+            if (plant.oxygenLevel === 'very-high') {
+                // CAM Plants (Snake Plant) - Convert CO2 at night
+                // Typically 30-40% efficiency of daytime photosynthesis
+                nightYield = (dayYield * 0.4);
+            } else {
+                // Respiration - Consume O2 (~5% of peak day rate)
+                nightYield = -(dayYield * 0.05);
+            }
 
-            totalO2 += o2Liters;
+            totalO2PerDay += (dayYield + nightYield);
         }
 
-        const avgO2 = totalO2 / numSimulations;
+        const avgO2 = totalO2PerDay / numSimulations;
+        // If it's currently night, show the live rate (consumption or CAM)
+        if (!isDay) {
+            const currentNightRate = plant.oxygenLevel === 'very-high' ? 0.4 : -0.05;
+            const singlePlantRate = (avgO2 / 24) * currentNightRate * 2.5; // Scaled for live view
+            return Math.round(singlePlantRate * 10) / 10;
+        }
+
         return Math.round(avgO2 * 10) / 10;
-    }, [getBasePhotosynthesisRate, temperatureEffect, humidityEffect, isDay, hour]);
+    }, [getBasePhotosynthesisRate, temperatureEffect, humidityEffect, isDay, plant.oxygenLevel]);
 
     // 5. HUMAN OXYGEN CONSUMPTION
-    // Research: Adult at rest = 250 mL O2/min = 360 L/day
-    // Active/office work = 400-500 mL/min = 550-720 L/day
-    const O2_PER_PERSON_PER_DAY = 550; // Conservative estimate for office/home
+    // Deep Research: Average adult consumes ~450L - 550L O2/day
+    const O2_PER_PERSON_PER_DAY = 450;
     const totalO2Needed = numPeople * O2_PER_PERSON_PER_DAY;
 
     // 6. CALCULATE PLANTS NEEDED
-    const plantsNeeded = PLANT_O2_OUTPUT > 0
-        ? Math.ceil(totalO2Needed / PLANT_O2_OUTPUT)
-        : 'N/A';
+    // We use the full 24h average yield for the plant count requirement
+    const plantsNeeded = useMemo(() => {
+        const numSimulations = 100;
+        let totalDailyYield = 0;
+        for (let i = 0; i < numSimulations; i++) {
+            const randomVariation = 0.9 + Math.random() * 0.2;
+            const dayYield = getBasePhotosynthesisRate * temperatureEffect * humidityEffect * 0.8 * randomVariation * 3600 * 12 * 22.4 / 1000000;
+            const nightYield = plant.oxygenLevel === 'very-high' ? (dayYield * 0.4) : -(dayYield * 0.05);
+            totalDailyYield += (dayYield + nightYield);
+        }
+        const avgDailyYield = totalDailyYield / numSimulations;
+        return Math.ceil(totalO2Needed / avgDailyYield);
+    }, [getBasePhotosynthesisRate, temperatureEffect, humidityEffect, totalO2Needed, plant.oxygenLevel]);
 
     // 7. VITALITY/FLUX RATE (0-100%)
     // Based on deviation from optimal conditions
@@ -445,15 +453,20 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                                     <span>SMART INSIGHT</span>
                                 </div>
                                 <div className={styles.insightBody}>
-                                    {PLANT_O2_OUTPUT > 0 ? (
+                                    {isDay ? (
                                         <>
                                             For <strong>{numPeople} {numPeople === 1 ? 'person' : 'people'}</strong> at <strong>{currentTemp}°C</strong>,
-                                            you need approximately <strong>{plantsNeeded}</strong> {plant.name} plants to maintain
-                                            optimum O₂ equilibrium.
+                                            you need <strong>{plantsNeeded}</strong> {plant.name} plants to maintain
+                                            optimum O₂ equilibrium through photosynthesis.
+                                        </>
+                                    ) : plant.oxygenLevel === 'very-high' ? (
+                                        <>
+                                            It's <strong>Night</strong>, but your {plant.name} is a <strong>CAM plant</strong>!
+                                            It continues to produce oxygen even in the dark, making it perfect for bedrooms.
                                         </>
                                     ) : (
                                         <>
-                                            It's currently <strong>Night Cycle</strong>. Plants are in <strong>Respiration Phase</strong>.
+                                            It's <strong>Night Cycle</strong>. Most plants are in <strong>Respiration Phase</strong>.
                                             We recommend keeping the room ventilated until the Solar Cycle resumes.
                                         </>
                                     )}
