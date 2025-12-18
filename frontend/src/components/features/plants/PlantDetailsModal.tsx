@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { X, Droplets, Sun, Heart, Wind, Zap, Monitor, Smartphone, Users, Thermometer, Sprout } from 'lucide-react';
+import { X, Droplets, Sun, Heart, Wind, Monitor, Smartphone, Users, Thermometer, Sprout, AlertCircle, Info, Lightbulb, ShieldCheck } from 'lucide-react';
 import { Button } from '../../common/Button';
 import type { Plant } from '../../../types';
 import styles from './PlantDetailsModal.module.css';
@@ -149,6 +149,19 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
         const avgScore = (tempScore + humidityScore + dayScore) / 3;
         return Math.round(Math.min(100, Math.max(0, avgScore)));
     }, [temperatureEffect, humidityEffect, isDay]);
+
+    const statusMessages = useMemo(() => {
+        const msgs = [];
+        if (numPeople > 5) msgs.push({ type: 'warning', icon: <AlertCircle size={20} />, text: `High Occupancy: ${numPeople} people require significant oxygen.` });
+        if (isACMode) msgs.push({ type: 'good', icon: <ShieldCheck size={20} />, text: 'Controlled Environment: AC stabilizes photosynthesis at 22°C.' });
+        if (!isDay) msgs.push({
+            type: 'warning',
+            icon: <Info size={20} />,
+            text: plant.oxygenLevel === 'very-high' ? "Night Cycle: This plant produces oxygen even at night!" : "Night Cycle: Respiration active. Output resumes at sunrise."
+        });
+        if (fluxRate < 40) msgs.push({ type: 'critical', icon: <AlertCircle size={20} />, text: 'Low Efficiency: Conditions are not optimal for this plant.' });
+        return msgs;
+    }, [numPeople, isACMode, isDay, plant.oxygenLevel, fluxRate]);
 
     const getWateringSchedule = () => {
         if (currentHumidity < 40 && currentTemp > 25) return "Intensive (Every 1-2 days)";
@@ -328,7 +341,7 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                             </Button>
                         </div>
 
-                        {/* Simulation Section - Support for both layouts (toggled via button) */}
+                        {/* Simulation Section */}
                         <div className={`${styles.simulationContainer} ${viewMode === 'desktop' ? styles.desktopLayout : ''}`}>
 
                             {/* View Toggle */}
@@ -359,121 +372,95 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                                         </div>
                                     </div>
 
-                                    {/* High level status that was previously header */}
                                     <div className={styles.scoreCircle}>
                                         <div className={styles.scoreValue}>{fluxRate}</div>
-                                        <div className={styles.scoreLabel}>SCORE</div>
                                         <div className={styles.scoreRing} style={{ borderTopColor: fluxRate > 70 ? '#10b981' : fluxRate > 40 ? '#f59e0b' : '#ef4444' }}></div>
                                     </div>
                                 </div>
 
-                                {/* Inputs */}
-                                {/* Inputs */}
                                 <div className={styles.sliderControl}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.8rem', alignItems: 'flex-end' }}>
-                                        <span className={styles.controlLabel} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                            <Users size={14} color="#94a3b8" /> OCCUPANCY
-                                        </span>
-                                        <span className={styles.controlVal}>{numPeople} <span style={{ fontSize: '0.8rem', color: '#64748b', fontWeight: 600 }}>person</span></span>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.8rem' }}>
+                                        <span className={styles.controlLabel}><Users size={14} /> OCCUPANCY</span>
+                                        <span className={styles.controlVal}>{numPeople} people</span>
                                     </div>
-                                    <input type="range" min="1" max="12" value={numPeople} onChange={(e) => setNumPeople(Number(e.target.value))} className={styles.rangeInput} />
+                                    <input type="range" min="1" max="15" value={numPeople} onChange={(e) => setNumPeople(Number(e.target.value))} className={styles.rangeInput} />
                                 </div>
 
                                 <div className={styles.sliderControl}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.8rem', alignItems: 'flex-end' }}>
-                                        <span className={styles.controlLabel} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                            <Thermometer size={14} color="#94a3b8" /> TEMPERATURE
-                                        </span>
-                                        <span className={styles.controlVal} style={{ color: isACMode ? '#64748b' : 'var(--color-primary)' }}>{currentTemp}°C</span>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.8rem' }}>
+                                        <span className={styles.controlLabel}><Thermometer size={14} /> TEMP</span>
+                                        <span className={styles.controlVal}>{currentTemp}°C</span>
                                     </div>
-                                    <input disabled={isACMode} type="range" min="15" max="40" value={manualTemp} onChange={(e) => setManualTemp(Number(e.target.value))} className={styles.rangeInput} style={{ opacity: isACMode ? 0.5 : 1 }} />
+                                    <input disabled={isACMode} type="range" min="10" max="45" value={manualTemp} onChange={(e) => setManualTemp(Number(e.target.value))} className={styles.rangeInput} style={{ opacity: isACMode ? 0.5 : 1 }} />
+                                </div>
+
+                                <div className={styles.guideBox}>
+                                    <h5><Lightbulb size={14} /> Simulator Guide</h5>
+                                    <p>Adjust <strong>Occupancy</strong> to match people in your room. See how many plants are needed to keep the air fresh!</p>
+                                    <div className={styles.actionTip}><Info size={12} /> Target a Score &gt; 80% for ideal health.</div>
                                 </div>
                             </div>
 
-                            {/* RIGHT COLUMN: Results & Visualization */}
+                            {/* RIGHT COLUMN: Visualization & Analysis */}
                             <div className={styles.simResultsGroup}>
                                 <div className={styles.simVisual}>
-                                    <div className={styles.simCol}>
-                                        <span style={{ color: '#fff', fontSize: '0.7rem', fontWeight: '800', marginBottom: '0.5rem' }}>OUTPUT</span>
-                                        <div className={styles.particleContainer}>
-                                            {[...Array(6)].map((_, i) => (
-                                                <div key={i} className={`sim-particle ${PLANT_O2_OUTPUT < 0 ? 'co2' : 'o2'}`} style={{ animationDelay: `${i * 0.4}s`, right: `${Math.random() * 60}%` }}>.</div>
-                                            ))}
+                                    <div className={styles.plantIconWrapper} style={{ width: '100%', display: 'flex', justifyContent: 'center', gap: '2rem', marginBottom: '1.5rem' }}>
+                                        <div style={{ textAlign: 'center' }}>
+                                            <span style={{ fontSize: '0.6rem', color: '#ef4444', fontWeight: 800 }}>CO₂ IN</span>
+                                            <div style={{ height: '60px', width: '40px', background: 'rgba(239, 68, 68, 0.1)', borderRadius: '0.5rem', margin: '0.5rem 0' }}></div>
+                                            <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#ef4444' }}>{isDay ? (PLANT_O2_OUTPUT * 1.1).toFixed(1) : '0.0'}L</span>
                                         </div>
-                                    </div>
-
-                                    <div className={styles.plantIconWrapper} style={{ width: '100%', display: 'flex', justifyContent: 'center', gap: '3rem', margin: '1rem 0' }}>
-                                        {/* CO2 INTAKE */}
-                                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
-                                            <span style={{ fontSize: '0.6rem', fontWeight: 800, color: '#ef4444', letterSpacing: '1px' }}>CO₂ INTAKE</span>
-                                            <div style={{ position: 'relative', width: '60px', height: '100px', background: 'rgba(239, 68, 68, 0.1)', borderRadius: '1rem', overflow: 'hidden' }}>
-                                                {[...Array(5)].map((_, i) => (
-                                                    <div key={`co2-${i}`} className="sim-particle co2" style={{
-                                                        left: '50%',
-                                                        animationDelay: `${i * 0.5}s`,
-                                                        animationDuration: '3s'
-                                                    }}>●</div>
-                                                ))}
-                                            </div>
-                                            <span style={{ fontSize: '0.9rem', fontWeight: 900, color: '#ef4444' }}>
-                                                {isDay ? (PLANT_O2_OUTPUT * 1.1).toFixed(1) : '0.0'} L
-                                            </span>
-                                        </div>
-
-                                        {/* CENTER FLUX */}
                                         <div className={styles.reactorCore}>
-                                            <div className={styles.plantGlow} style={{ position: 'relative', width: '80px', height: '80px', borderRadius: '50%', border: '2px dashed rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                                <div style={{ fontSize: '1.2rem', fontWeight: 900, color: 'white' }}>{fluxRate}%</div>
+                                            <div className={styles.plantGlow} style={{ width: '70px', height: '70px', borderRadius: '50%', background: 'rgba(16, 185, 129, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid' + (fluxRate > 70 ? '#10b981' : '#f59e0b') }}>
+                                                <div style={{ color: 'white', fontWeight: 900 }}>{fluxRate}%</div>
                                             </div>
                                         </div>
-
-                                        {/* O2 OUTPUT */}
-                                        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
-                                            <span style={{ fontSize: '0.6rem', fontWeight: 800, color: '#10b981', letterSpacing: '1px' }}>O₂ PRODUCTION</span>
-                                            <div style={{ position: 'relative', width: '60px', height: '100px', background: 'rgba(16, 185, 129, 0.1)', borderRadius: '1rem', overflow: 'hidden' }}>
-                                                {[...Array(5)].map((_, i) => (
-                                                    <div key={`o2-${i}`} className="sim-particle o2" style={{
-                                                        left: '50%',
-                                                        animationDelay: `${i * 0.5}s`,
-                                                        animationDuration: '3s'
-                                                    }}>●</div>
-                                                ))}
-                                            </div>
-                                            <span style={{ fontSize: '0.9rem', fontWeight: 900, color: '#10b981' }}>
-                                                {isDay ? PLANT_O2_OUTPUT : '0.0'} L
-                                            </span>
+                                        <div style={{ textAlign: 'center' }}>
+                                            <span style={{ fontSize: '0.6rem', color: '#10b981', fontWeight: 800 }}>O₂ OUT</span>
+                                            <div style={{ height: '60px', width: '40px', background: 'rgba(16, 185, 129, 0.1)', borderRadius: '0.5rem', margin: '0.5rem 0' }}></div>
+                                            <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#10b981' }}>{isDay ? PLANT_O2_OUTPUT : '0.0'}L</span>
                                         </div>
                                     </div>
 
-                                    {/* Key Insight Highlight */}
-                                    <div style={{ flex: 1, marginLeft: '2rem', background: 'rgba(0,0,0,0.2)', padding: '1.5rem', borderRadius: '1rem', border: '1px solid rgba(255,255,255,0.05)' }}>
-                                        <div style={{ fontSize: '0.65rem', fontWeight: 800, color: '#94a3b8', marginBottom: '0.5rem', letterSpacing: '1px', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                            <Zap size={12} color="var(--color-primary)" /> Efficiency Analysis
-                                        </div>
-                                        <div style={{ fontSize: '1.05rem', lineHeight: '1.5', color: '#e2e8f0', fontWeight: 500 }}>
-                                            {isDay ? (
-                                                <>You need <strong>{plantsNeeded} plants</strong> to maintain optimal O₂ levels for {numPeople} people.</>
-                                            ) : (
-                                                <>Night Cycle active. Ventilation recommended unless using CAM plants.</>
-                                            )}
-                                        </div>
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', width: '100%' }}>
+                                        {statusMessages.map((msg, idx) => (
+                                            <div key={idx} className={`${styles.statusMessage} ${styles[msg.type]}`}>
+                                                {msg.icon}
+                                                <div style={{ fontSize: '0.8rem' }}>{msg.text}</div>
+                                            </div>
+                                        ))}
                                     </div>
                                 </div>
 
-                                <div className={styles.simStats}>
-                                    <div className={styles.statBox}>
-                                        <div className={styles.statVal} style={{ color: 'var(--color-primary)' }}>{plantsNeeded}</div>
-                                        <div className={styles.statLabel}><Sprout size={12} /> REQUIRED UNITS</div>
+                                <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1.5rem', borderRadius: '1rem', border: '1px solid rgba(255,255,255,0.05)' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', marginBottom: '1rem' }}>
+                                        <div style={{ background: 'rgba(16, 185, 129, 0.1)', padding: '0.5rem', borderRadius: '0.5rem' }}>
+                                            <Sprout size={20} color="#10b981" />
+                                        </div>
+                                        <h4 style={{ margin: 0, fontSize: '1rem', color: 'white' }}>Conclusion</h4>
                                     </div>
-                                    <div className={styles.statBox}>
-                                        <div className={styles.statVal}>{currentTemp}°C</div>
-                                        <div className={styles.statLabel}><Thermometer size={12} /> AMBIENT TEMP</div>
-                                    </div>
-                                    <div className={styles.statBox}>
-                                        <div className={styles.statVal}>{Math.abs(PLANT_O2_OUTPUT)}L</div>
-                                        <div className={styles.statLabel}><Wind size={12} /> {PLANT_O2_OUTPUT > 0 ? 'YIELD / DAY' : 'UPTAKE'}</div>
+                                    <p style={{ margin: '0 0 1rem 0', fontSize: '1.2rem', color: '#f1f5f9', lineHeight: 1.4 }}>
+                                        For <strong>{numPeople} people</strong>, you need <strong>{plantsNeeded} units</strong> of this plant to stay fresh.
+                                    </p>
+                                    <div style={{ background: 'rgba(56, 189, 248, 0.1)', padding: '0.8rem', borderRadius: '0.5rem', fontSize: '0.75rem', color: '#94a3b8', borderLeft: '3px solid #38bdf8' }}>
+                                        <strong>Fact:</strong> Adults need ~500L oxygen daily. One {plant.name} produces {Math.abs(PLANT_O2_OUTPUT)}L under these conditions.
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+
+                        <div className={styles.simStats}>
+                            <div className={styles.statBox}>
+                                <div className={styles.statVal} style={{ color: 'var(--color-primary)' }}>{plantsNeeded}</div>
+                                <div className={styles.statLabel}>REQUIRED</div>
+                            </div>
+                            <div className={styles.statBox}>
+                                <div className={styles.statVal}>{currentTemp}°C</div>
+                                <div className={styles.statLabel}>TEMP</div>
+                            </div>
+                            <div className={styles.statBox}>
+                                <div className={styles.statVal}>{Math.abs(PLANT_O2_OUTPUT)}L</div>
+                                <div className={styles.statLabel}>YIELD</div>
                             </div>
                         </div>
                     </div>
@@ -481,31 +468,12 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
             </div>
 
             <style>{`
-        .sim-particle {
-            position: absolute;
-            font-size: 20px;
-            opacity: 0;
-            will-change: transform, opacity;
-        }
-        .co2 {
-            color: #ef4444;
-            animation: floatUp 2s infinite linear;
-        }
-        .o2 {
-            color: #4ade80;
-            animation: floatDown 2s infinite linear;
-        }
-        @keyframes floatUp {
-            0% { transform: translateY(40px); opacity: 0; }
-            50% { opacity: 0.8; }
-            100% { transform: translateY(-20px); opacity: 0; }
-        }
-        @keyframes floatDown {
-            0% { transform: translateY(-20px); opacity: 0; }
-            50% { opacity: 0.8; }
-            100% { transform: translateY(40px); opacity: 0; }
-        }
-    `}</style>
+                .sim-particle { position: absolute; font-size: 20px; opacity: 0; }
+                .co2 { color: #ef4444; animation: floatUp 2s infinite linear; }
+                .o2 { color: #4ade80; animation: floatDown 2s infinite linear; }
+                @keyframes floatUp { 0% { transform: translateY(40px); opacity: 0; } 50% { opacity: 0.8; } 100% { transform: translateY(-20px); opacity: 0; } }
+                @keyframes floatDown { 0% { transform: translateY(-20px); opacity: 0; } 50% { opacity: 0.8; } 100% { transform: translateY(40px); opacity: 0; } }
+            `}</style>
         </>
     );
 };

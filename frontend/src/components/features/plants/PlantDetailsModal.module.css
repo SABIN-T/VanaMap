@@ -1253,3 +1253,74 @@
         opacity: 1;
     }
 }
+
+/* Status & Guide Styles */
+.statusMessage {
+    display: flex;
+    gap: 0.8rem;
+    padding: 1.2rem;
+    border-radius: 1rem;
+    margin-top: 1.5rem;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    animation: slideUp 0.4s ease-out;
+}
+
+.statusMessage.good {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    color: #34d399;
+}
+
+.statusMessage.warning {
+    background: rgba(245, 158, 11, 0.15);
+    border: 1px solid rgba(245, 158, 11, 0.3);
+    color: #fbbf24;
+}
+
+.statusMessage.critical {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    color: #f87171;
+}
+
+.guideBox {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px dashed rgba(255, 255, 255, 0.1);
+    padding: 1.2rem;
+    border-radius: 1rem;
+    margin-top: 1rem;
+}
+
+.guideBox h5 {
+    margin: 0 0 0.5rem;
+    color: #38bdf8;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.guideBox p {
+    margin: 0;
+    font-size: 0.8rem;
+    color: #94a3b8;
+    line-height: 1.4;
+}
+
+.actionTip {
+    font-size: 0.7rem;
+    color: #64748b;
+    font-style: italic;
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.conclusionCard {
+    background: rgba(255, 255, 100, 0.1);
+    padding: 1rem;
+    border-radius: 0.75rem;
+    border: 1px solid rgba(250, 204, 21, 0.2);
+    margin: 1.5rem 0;
+}
