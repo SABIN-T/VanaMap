@@ -425,17 +425,44 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
 
                             <div className={styles.simStats}>
                                 <div className={styles.statBox}>
-                                    <div className={styles.statVal} style={{ color: 'var(--color-primary)', fontSize: '1.1rem' }}>{plantsNeeded}</div>
-                                    <div className={styles.statLabel} style={{ fontSize: '0.65rem' }}>Plants</div>
+                                    <div className={styles.statVal} style={{ color: 'var(--color-primary)' }}>{plantsNeeded}</div>
+                                    <div className={styles.statLabel}>Target Count</div>
                                 </div>
                                 <div className={styles.statBox}>
-                                    <div className={styles.statVal} style={{ fontSize: '1.1rem' }}>{currentTemp}°C</div>
-                                    <div className={styles.statLabel} style={{ fontSize: '0.65rem' }}>Temp</div>
+                                    <div className={styles.statVal}>{currentTemp}°C</div>
+                                    <div className={styles.statLabel}>Env. Temp</div>
                                 </div>
                                 <div className={styles.statBox}>
-                                    <div className={styles.statVal} style={{ fontSize: '1.1rem' }}>{PLANT_O2_OUTPUT}L</div>
-                                    <div className={styles.statLabel} style={{ fontSize: '0.65rem' }}>O₂/Plant</div>
+                                    <div className={styles.statVal}>{PLANT_O2_OUTPUT}L</div>
+                                    <div className={styles.statLabel}>Yield / Unit</div>
                                 </div>
+                            </div>
+
+                            {/* AI Room Analysis - Best UX */}
+                            <div className={styles.insightCard}>
+                                <div className={styles.insightHeader}>
+                                    <Zap size={14} color="var(--color-primary)" />
+                                    <span>SMART INSIGHT</span>
+                                </div>
+                                <div className={styles.insightBody}>
+                                    {PLANT_O2_OUTPUT > 0 ? (
+                                        <>
+                                            For <strong>{numPeople} {numPeople === 1 ? 'person' : 'people'}</strong> at <strong>{currentTemp}°C</strong>,
+                                            you need approximately <strong>{plantsNeeded}</strong> {plant.name} plants to maintain
+                                            optimum O₂ equilibrium.
+                                        </>
+                                    ) : (
+                                        <>
+                                            It's currently <strong>Night Cycle</strong>. Plants are in <strong>Respiration Phase</strong>.
+                                            We recommend keeping the room ventilated until the Solar Cycle resumes.
+                                        </>
+                                    )}
+                                </div>
+                                {fluxRate < 60 && (
+                                    <div className={styles.uxTip}>
+                                        💡 Tip: Increase humidity or adjust to 22°C to boost O₂ yield by up to 40%.
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>

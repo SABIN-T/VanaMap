@@ -502,15 +502,47 @@
     }
 }
 
-.liveIndicator {
+/* Smart Insight UX Card */
+.insightCard {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: rgba(16, 185, 129, 0.05);
+    border: 1px dashed rgba(16, 185, 129, 0.3);
+    border-radius: 1.25rem;
+}
+
+.insightHeader {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
     font-size: 0.65rem;
-    font-weight: 800;
+    font-weight: 900;
     color: var(--color-primary);
-    background: rgba(0, 255, 157, 0.1);
-    padding: 0.25rem 0.6rem;
-    border-radius: 99px;
-    letter-spacing: 1px;
     text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.insightBody {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #cbd5e1;
+}
+
+.insightBody strong {
+    color: white;
+    font-weight: 700;
+}
+
+.uxTip {
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 0.75rem;
+    font-size: 0.8rem;
+    color: #94a3b8;
+    font-style: italic;
+    border-left: 3px solid var(--color-primary);
 }
 
 .instructionNotice {
