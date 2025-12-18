@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { X, Droplets, Sun, Heart, Wind, Monitor, Smartphone, Users, Thermometer, Sprout, AlertCircle, Info, Lightbulb, ShieldCheck, ShoppingBag } from 'lucide-react';
+import { X, Droplets, Sun, Heart, Wind, Users, ShoppingBag } from 'lucide-react';
 import { Button } from '../../common/Button';
 import type { Plant } from '../../../types';
 import styles from './PlantDetailsModal.module.css';
@@ -23,15 +23,12 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
 
     const [numPeople, setNumPeople] = useState(1);
     const [isACMode, setIsACMode] = useState(false);
-    const [manualTemp, setManualTemp] = useState(weather?.avgTemp30Days || 25);
-
-    const [viewMode, setViewMode] = useState<'mobile' | 'desktop'>('mobile');
 
     // Day/Night Logic
     const hour = new Date().getHours();
     const isDay = hour >= 6 && hour < 18;
 
-    const currentTemp = isACMode ? 22 : manualTemp;
+    const currentTemp = isACMode ? 22 : (weather?.avgTemp30Days || 25);
     const currentHumidity = weather?.avgHumidity30Days || 50;
 
     // ==========================================
@@ -153,19 +150,6 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
         const avgScore = (tempScore + humidityScore + dayScore) / 3;
         return Math.round(Math.min(100, Math.max(0, avgScore)));
     }, [temperatureEffect, humidityEffect, isDay]);
-
-    const statusMessages = useMemo(() => {
-        const msgs = [];
-        if (numPeople > 5) msgs.push({ type: 'warning', icon: <AlertCircle size={20} />, text: `High Occupancy: ${numPeople} people require significant oxygen.` });
-        if (isACMode) msgs.push({ type: 'good', icon: <ShieldCheck size={20} />, text: 'Controlled Environment: AC stabilizes photosynthesis at 22°C.' });
-        if (!isDay) msgs.push({
-            type: 'warning',
-            icon: <Info size={20} />,
-            text: plant.oxygenLevel === 'very-high' ? "Night Cycle: This plant produces oxygen even at night!" : "Night Cycle: Respiration active. Output resumes at sunrise."
-        });
-        if (fluxRate < 40) msgs.push({ type: 'critical', icon: <AlertCircle size={20} />, text: 'Low Efficiency: Conditions are not optimal for this plant.' });
-        return msgs;
-    }, [numPeople, isACMode, isDay, plant.oxygenLevel, fluxRate]);
 
     const getWateringSchedule = () => {
         if (currentHumidity < 40 && currentTemp > 25) return "Intensive (Every 1-2 days)";
@@ -360,7 +344,7 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                         </div>
 
                         {/* Simulation Section - User Friendly Version */}
-                        <div className={`${styles.simulationContainer} ${viewMode === 'desktop' ? styles.desktopLayout : ''}`}>
+                        <div className={styles.simulationContainer}>
 
                             <div className={styles.dashboardHeader} style={{ border: 'none', marginBottom: '1rem' }}>
                                 <div>
@@ -378,7 +362,7 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                                 </div>
                             </div>
 
-                            <div style={{ display: 'grid', gridTemplateColumns: viewMode === 'desktop' ? '1fr 1fr' : '1fr', gap: '2rem' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
                                 {/* Controls */}
                                 <div>
                                     <div className={styles.sliderControl} style={{ background: 'rgba(255,255,255,0.05)', padding: '1.2rem', borderRadius: '1rem' }}>
