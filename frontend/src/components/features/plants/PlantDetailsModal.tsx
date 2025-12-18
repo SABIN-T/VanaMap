@@ -258,6 +258,10 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                     <button className={styles.closeBtn} onClick={onClose}><X size={24} /></button>
 
                     <div className={styles.header}>
+                        <div className={styles.imageContainer}>
+                            <img src={plant.imageUrl} alt={plant.name} className={styles.image} />
+                            <div className={styles.imageOverlay}></div>
+                        </div>
 
                         <div className={styles.titleSection}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'start', width: '100%' }}>

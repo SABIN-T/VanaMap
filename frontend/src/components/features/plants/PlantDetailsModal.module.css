@@ -181,6 +181,19 @@
         margin-bottom: 0 !important;
         gap: 2rem !important;
     }
+
+    /* Desktop: Hide Header Image */
+    .imageContainer {
+        display: none !important;
+    }
+
+    /* Desktop: Adjust Title spacing (since image is gone) */
+    .titleSection {
+        margin-top: 4rem !important;
+        padding: 0 3rem !important;
+        text-align: left;
+        align-items: flex-start;
+    }
 }
 
 .closeBtn {
