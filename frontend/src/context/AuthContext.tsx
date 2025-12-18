@@ -22,6 +22,7 @@ interface AuthContextType {
     logout: () => void;
     toggleFavorite: (plantId: string) => void;
     updateUser: (updates: Partial<User>) => void;
+    loading: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -30,6 +31,7 @@ const API_URL = import.meta.env.VITE_API_URL || 'https://plantoxy.onrender.com/a
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<User | null>(null);
+    const [loading, setLoading] = useState(true);
 
     // Load from local storage on mount
     useEffect(() => {
@@ -37,6 +39,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         if (saved) {
             setUser(JSON.parse(saved));
         }
+        setLoading(false);
     }, []);
 
     const login = async (credentials: LoginCredentials) => {
