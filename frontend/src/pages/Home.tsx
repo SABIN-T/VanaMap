@@ -75,10 +75,10 @@ export const Home = () => {
                     await import('../services/api').then(api => api.seedDatabase(PLANTS, []));
                     const newData = await fetchPlants();
                     setPlants(newData);
-                    localStorage.setItem('vanamap_plants_cache', JSON.stringify(newData));
+                    // localStorage.setItem('vanamap_plants_cache', JSON.stringify(newData));
                 } else {
                     setPlants(data);
-                    localStorage.setItem('vanamap_plants_cache', JSON.stringify(data));
+                    // localStorage.setItem('vanamap_plants_cache', JSON.stringify(data));
                 }
                 setIsFromCache(false);
             } catch (err) {
