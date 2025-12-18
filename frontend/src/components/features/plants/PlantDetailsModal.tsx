@@ -276,10 +276,48 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                     </div>
 
                     <div className={styles.content}>
-                        <div className={styles.descriptionSection}>
-                            <p style={{ color: 'var(--color-text-muted)', fontSize: '1.05rem', lineHeight: '1.7' }}>
-                                {plant.description}
-                            </p>
+                        <div className={styles.detailsColumn}>
+                            <div className={styles.descriptionSection}>
+                                <p style={{ color: 'var(--color-text-muted)', fontSize: '1.05rem', lineHeight: '1.7' }}>
+                                    {plant.description}
+                                </p>
+                            </div>
+
+                            <div className={styles.infoGrid}>
+                                <div className={styles.infoTile}>
+                                    <div className={styles.tileHeader}><Droplets size={16} color="#38bdf8" /> WATERING GUIDE</div>
+                                    <div className={styles.tileBody}>{getWateringSchedule()}</div>
+                                </div>
+                                <div className={styles.infoTile}>
+                                    <div className={styles.tileHeader}><Heart size={16} color="#ef4444" /> HEALTH FACT</div>
+                                    <div className={styles.tileBody}>
+                                        {plant.medicinalValues[0] || "Boosts indoor air quality"}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className={styles.listsGrid}>
+                                <div className={styles.listSection}>
+                                    <h4>MEDICINAL USES</h4>
+                                    <div className={styles.listContainer}>
+                                        {plant.medicinalValues.slice(0, 3).map((v, i) => (
+                                            <div key={i} className={styles.listItem}>• {v}</div>
+                                        ))}
+                                    </div>
+                                </div>
+                                <div className={styles.listSection}>
+                                    <h4>KEY ADVANTAGES</h4>
+                                    <div className={styles.listContainer}>
+                                        {plant.advantages.slice(0, 3).map((v, i) => (
+                                            <div key={i} className={styles.listItem}>• {v}</div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <Button variant="primary" size="lg" style={{ width: '100%', marginTop: '1rem', fontWeight: 800 }} onClick={onClose}>
+                                CLOSE EXPLORER
+                            </Button>
                         </div>
 
                         {/* Simulation Section - Compact & Scrollable */}
@@ -381,42 +419,6 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                                 </div>
                             </div>
                         </div>
-
-                        <div className={styles.infoGrid}>
-                            <div className={styles.infoTile}>
-                                <div className={styles.tileHeader}><Droplets size={16} color="#38bdf8" /> WATERING GUIDE</div>
-                                <div className={styles.tileBody}>{getWateringSchedule()}</div>
-                            </div>
-                            <div className={styles.infoTile}>
-                                <div className={styles.tileHeader}><Heart size={16} color="#ef4444" /> HEALTH FACT</div>
-                                <div className={styles.tileBody}>
-                                    {plant.medicinalValues[0] || "Boosts indoor air quality"}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className={styles.listsGrid}>
-                            <div className={styles.listSection}>
-                                <h4>MEDICINAL USES</h4>
-                                <div className={styles.listContainer}>
-                                    {plant.medicinalValues.slice(0, 3).map((v, i) => (
-                                        <div key={i} className={styles.listItem}>• {v}</div>
-                                    ))}
-                                </div>
-                            </div>
-                            <div className={styles.listSection}>
-                                <h4>KEY ADVANTAGES</h4>
-                                <div className={styles.listContainer}>
-                                    {plant.advantages.slice(0, 3).map((v, i) => (
-                                        <div key={i} className={styles.listItem}>• {v}</div>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-
-                        <Button variant="primary" size="lg" style={{ width: '100%', marginTop: '1rem', fontWeight: 800 }} onClick={onClose}>
-                            CLOSE EXPLORER
-                        </Button>
                     </div>
                 </div>
             </div>
