@@ -56,32 +56,39 @@ app.post('/api/tracking/vendor-contact', async (req, res) => {
 
 const { Chat } = require('./models');
 
-// Mock AI Logic (Heuristic)
-// Mock AI Logic (Heuristic + DB Augmented)
+// Mock AI Logic (Conversational + Sales + DB)
 const getAIResponse = async (query) => {
     const q = query.toLowerCase();
 
-    // 1. DB Search (Train on Website Data)
+    // 0. Conversational Greeting
+    if (q.match(/^(hi|hello|hey|greetings|start)/)) {
+        return "Connection Established. Greetings. I am the VanaMap Intelligence. My protocols are set to assist you with Ecosystem Management and Species Acquisition. Query me about any plant to check availability and care data.";
+    }
+
+    // 1. DB Search (Sales Integration)
     try {
-        // Simple linear search for keyword matching in Plant Names
-        const plants = await Plant.find({}, 'name description medicinalValues idealTempMin idealTempMax');
+        const plants = await Plant.find({}, 'name description type medicinalValues idealTempMin idealTempMax');
         const matchedPlant = plants.find(p => q.includes(p.name.toLowerCase()) || (p.scientificName && q.includes(p.scientificName.toLowerCase())));
 
         if (matchedPlant) {
-            return `Based on my analysis of ${matchedPlant.name}: It thrives between ${matchedPlant.idealTempMin}-${matchedPlant.idealTempMax}°C. ${matchedPlant.description}. Key benefits: ${matchedPlant.medicinalValues.slice(0, 3).join(', ')}.`;
+            return `System Match Found: ${matchedPlant.name} [${matchedPlant.type}].\n\nBio-Data: ${matchedPlant.description.substring(0, 120)}...\n\nStatus: IN STOCK. This species is available across our network. I strongly recommend acquiring it from the 'Nearby Vendors' section to boost your local oxygen index. Check the Vendor Portal for immediate delivery options.`;
         }
     } catch (e) {
         console.error("AI DB Lookup Error:", e);
     }
 
-    // 2. Expert Heuristics
+    // 2. Deep Search Simulation
+    if (q.includes('search') || q.includes('online') || q.includes('deep')) {
+        return `Initiating Deep Web Botanical Scrape... [||||||||||] 100% Complete.\nAnalyzing Global Archives for "${query}"...\n\nResult: This subject requires advanced taxonomic classification. My internal database suggests checking local variations. Please specify a plant name for detailed local availability checks.`;
+    }
+
+    // 3. Expert Heuristics
     if (q.includes('water')) return "Hydration Logic: Most indoor flora requires water when the substrate's top inch desiccates. Succulents require total aridity between cycles.";
     if (q.includes('light') || q.includes('sun')) return "Photosynthesis Optimization: South-facing apertures provide high lux (direct). North-facing provides ambient (low) light. Match your plant's heliophilic rating.";
     if (q.includes('yellow')) return "Chlorosis Detected: Yellowing often signals hydric saturation (overwatering). Alternates: Nitrogen deficiency or pest vectors. Audit soil moisture immediately.";
     if (q.includes('bug') || q.includes('pest')) return "Pest Protocol: Isolate the specimen. Apply Neem Oil solution or insecticidal soap. Increase humidity if Spider Mites are suspected.";
-    if (q.includes('hello') || q.includes('hi')) return "System Online. I am Doctor AI, initialized with VanaMap's complete botanical registry. Query me about specific species or general horticulture.";
 
-    return "Query Analysis: My local neural pathways didn't match a specific species in our database. ensure standard homeostasis: 50% Humidity, Indirect Light, and Weekly Watering cycles.";
+    return "Input received. My neural net is processing... To check if a plant is available for purchase, simply type its name. For care instructions, specify 'Water' or 'Light' parameters.";
 };
 
 app.post('/api/ai/chat', async (req, res) => {
