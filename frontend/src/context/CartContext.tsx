@@ -40,9 +40,17 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
                 newItems = [...prev, { plant, quantity: 1 }];
             }
 
-            // Sync with Cloud
+            // Sync with Cloud & Local Storage
             if (user) {
                 import('../services/api').then(({ syncCart }) => syncCart(user.email, newItems));
+
+                // Update local storage user object immediately so refresh works
+                const savedUser = localStorage.getItem('user');
+                if (savedUser) {
+                    const parsed = JSON.parse(savedUser);
+                    parsed.cart = newItems;
+                    localStorage.setItem('user', JSON.stringify(parsed));
+                }
             }
             return newItems;
         });
@@ -54,6 +62,14 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
             const newItems = prev.filter(i => i.plant.id !== plantId);
             if (user) {
                 import('../services/api').then(({ syncCart }) => syncCart(user.email, newItems));
+
+                // Update local storage user object immediately
+                const savedUser = localStorage.getItem('user');
+                if (savedUser) {
+                    const parsed = JSON.parse(savedUser);
+                    parsed.cart = newItems;
+                    localStorage.setItem('user', JSON.stringify(parsed));
+                }
             }
             return newItems;
         });
