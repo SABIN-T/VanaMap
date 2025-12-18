@@ -353,8 +353,8 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                                 <Button variant="primary" size="lg" style={{ flex: 2, fontWeight: 800 }} onClick={onClose}>
                                     CLOSE EXPLORER
                                 </Button>
-                                <Button variant="outline" size="lg" style={{ flex: 1, fontSize: '0.8rem', opacity: 0.6 }} onClick={() => toast.success("Partner inquiries: contact@vanamap.online")}>
-                                    SPONSOR
+                                <Button variant="outline" size="lg" style={{ flex: 1, fontSize: '0.8rem', opacity: 0.8 }} onClick={() => window.open('https://wa.me/9188773534', '_blank')}>
+                                    SPONSOR (WhatsApp)
                                 </Button>
                             </div>
                         </div>

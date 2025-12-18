@@ -363,8 +363,11 @@ out skel qt;
                                 <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '1.5rem', maxWidth: '600px', marginInline: 'auto' }}>
                                     Own a nursery or garden center? Join our verified network to showcase your sustainable inventory to thousands of local eco-enthusiasts.
                                 </p>
-                                <Button variant="primary" size="sm" onClick={() => toast.success("Join queue opened! Email us at partners@vanamap.online")}>
-                                    Apply for Verified Status
+                                <Button variant="primary" size="sm" onClick={() => {
+                                    import('react-hot-toast').then(({ default: toast }) => toast.success("Opening WhatsApp contact..."));
+                                    window.open('https://wa.me/9188773534', '_blank');
+                                }}>
+                                    Apply via WhatsApp (+91 88773534)
                                 </Button>
                             </div>
                         </>
