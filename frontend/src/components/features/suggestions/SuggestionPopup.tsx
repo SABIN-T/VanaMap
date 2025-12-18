@@ -87,7 +87,6 @@ export const SuggestionPopup = () => {
         }}>
             <div className="glass-panel" style={{
                 width: '90%', maxWidth: '400px',
-                background: 'white',
                 background: '#1e293b',
                 border: '1px solid rgba(255,255,255,0.1)',
                 borderRadius: '1.5rem',

@@ -1,16 +1,19 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingCart, User as UserIcon, LogOut, BookOpen, Leaf, Sun, Moon, Menu, X, ChevronRight } from 'lucide-react';
+import { ShoppingCart, User as UserIcon, LogOut, BookOpen, Leaf, Sun, Moon, Menu, X, ChevronRight, Bot } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
 import { useTheme } from '../../context/ThemeContext';
 import styles from './Navbar.module.css';
+import { DoctorAIModal } from '../features/ai/DoctorAI';
+import { SuggestionPopup } from '../features/suggestions/SuggestionPopup';
 
 export const Navbar = () => {
     const { user, logout } = useAuth();
     const { items: cartItems } = useCart();
     const { theme, toggleTheme } = useTheme();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isAIModalOpen, setIsAIModalOpen] = useState(false);
     const navigate = useNavigate();
 
     const handleDownloadGuide = () => {
@@ -19,7 +22,6 @@ export const Navbar = () => {
             const downloadPromise = (async () => {
                 const { generateAndDownloadPDF } = await import('../../utils/pdfGenerator');
                 generateAndDownloadPDF();
-                // We keep a small artificial delay so the toast doesn't flicker too fast
                 await new Promise(resolve => setTimeout(resolve, 1500));
             })();
 
@@ -31,10 +33,7 @@ export const Navbar = () => {
                     error: 'Could not generate PDF.'
                 },
                 {
-                    style: {
-                        background: '#333',
-                        color: '#fff',
-                    }
+                    style: { background: '#333', color: '#fff' }
                 }
             );
         });
@@ -64,6 +63,12 @@ export const Navbar = () => {
             <div className={styles.desktopLinks}>
                 <Link id="nav-home" to="/" className={styles.navLink}>Home</Link>
                 <Link id="nav-nearby" to="/nearby" className={styles.navLink}>Nearby Shops</Link>
+
+                {/* Doctor AI Button */}
+                <button onClick={() => setIsAIModalOpen(true)} className={styles.navLink} style={{ color: '#38bdf8', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                    <Bot size={18} /> Doctor AI
+                </button>
+
                 <button id="nav-guide" onClick={handleDownloadGuide} className={styles.navLink}>
                     <BookOpen size={16} /> Guide
                 </button>
@@ -107,6 +112,12 @@ export const Navbar = () => {
                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><Leaf size={20} /> Home</div>
                         <ChevronRight size={18} />
                     </Link>
+
+                    <button onClick={() => { setIsAIModalOpen(true); setIsMenuOpen(false); }} className={styles.mobileNavLink} style={{ color: '#38bdf8' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><Bot size={20} /> Doctor AI</div>
+                        <ChevronRight size={18} />
+                    </button>
+
                     <Link to="/cart" className={styles.mobileNavLink} onClick={() => setIsMenuOpen(false)}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><ShoppingCart size={20} /> My Cart {cartItems.length > 0 && `(${cartItems.length})`}</div>
                         <ChevronRight size={18} />
@@ -140,10 +151,10 @@ export const Navbar = () => {
                         </Link>
                     )}
                 </div>
-                </div>
             </div>
 
             <DoctorAIModal isOpen={isAIModalOpen} onClose={() => setIsAIModalOpen(false)} />
-        </nav >
+            <SuggestionPopup />
+        </nav>
     );
 };
