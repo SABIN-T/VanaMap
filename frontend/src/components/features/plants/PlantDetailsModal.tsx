@@ -287,8 +287,24 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                         </div>
                     </div>
 
+                    {/* Mobile Tab Bar */}
+                    <div className={styles.tabBar}>
+                        <button
+                            className={`${styles.tabBtn} ${activeTab === 'details' ? styles.active : ''}`}
+                            onClick={() => setActiveTab('details')}
+                        >
+                            Overview
+                        </button>
+                        <button
+                            className={`${styles.tabBtn} ${activeTab === 'sim' ? styles.active : ''}`}
+                            onClick={() => setActiveTab('sim')}
+                        >
+                            Simulation
+                        </button>
+                    </div>
+
                     <div className={styles.content}>
-                        <div className={styles.detailsColumn}>
+                        <div className={styles.detailsColumn} style={{ display: (window.innerWidth < 1024 && activeTab === 'sim') ? 'none' : 'block' }}>
                             <div className={styles.descriptionSection}>
                                 <p style={{ color: 'var(--color-text-muted)', fontSize: '1.05rem', lineHeight: '1.7' }}>
                                     {plant.description}
