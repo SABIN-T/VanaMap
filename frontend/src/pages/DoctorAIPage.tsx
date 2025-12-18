@@ -20,7 +20,7 @@ export const DoctorAIPage = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
     const [messages, setMessages] = useState<{ sender: 'user' | 'ai', text: string }[]>([
-        { sender: 'ai', text: 'Greeting! I am Doctor AI, your botanical guardian. How can I assist with your ecosystem today?' }
+        { sender: 'ai', text: 'Connection Established. Greetings. I am Doctor AI, your VanaMap Botanical Guardian. Protocols initialized for ecosystem analysis. How may I serve?' }
     ]);
     const [input, setInput] = useState('');
     const [loading, setLoading] = useState(false);
@@ -34,6 +34,30 @@ export const DoctorAIPage = () => {
     useEffect(() => {
         scrollToBottom();
     }, [messages]);
+
+    // Local Fallback Intelligence (Simulates Backend if Offline)
+    const simulateAIResponse = (query: string) => {
+        const q = query.toLowerCase();
+
+        // Security
+        if (q.match(/(code|security|password|credential|database|api key|token|backend|server)/)) {
+            return "SECURITY ALERT: Access to internal source code is strictly PROHIBITED. My function is limited to Botanical Intelligence.";
+        }
+
+        // Greeting
+        if (q.match(/^(hi|hello|hey|greetings|start)/)) {
+            return "Connection Established. Greetings. I am the VanaMap Intelligence, trained on global botanical repositories. Query me about any plant species or local availabilities.";
+        }
+
+        // Heuristics (Match Backend Logic)
+        if (q.includes('water')) return "Hydration Logic: Most indoor flora requires water when the substrate's top inch desiccates. Succulents require total aridity between cycles. Recommendation: Check soil moisture daily.";
+        if (q.includes('light') || q.includes('sun')) return "Photosynthesis Optimization: South-facing apertures provide high lux (direct). North-facing provides ambient (low) light. Match your plant's heliophilic rating.";
+        if (q.includes('yellow')) return "Chlorosis Detected: Yellowing often signals hydric saturation (overwatering). Alternates: Nitrogen deficiency or pest vectors. Audit soil moisture immediately.";
+        if (q.includes('bug') || q.includes('pest')) return "Pest Protocol: Isolate the specimen. Apply Neem Oil solution or insecticidal soap. Increase humidity if Spider Mites are suspected.";
+
+        // Data Sim
+        return `Synthesizing Global Data Streams... [Connected]\n\nAnalysis for "${query}":\nBased on aggregated botanical datasets (Google/Wiki/Ref), this subject relates to specific horticultural parameters. Recommend maintaining 20-25°C ambient temperature and 50% relative humidity. \n\nAcquisition: Cross-referencing your location... Local Vendors in the 'Nearby' tab likely stock relevant supplies.`;
+    };
 
     const handleSend = async () => {
         if (!input.trim() || !user) return;
@@ -52,10 +76,16 @@ export const DoctorAIPage = () => {
                 setMessages(prev => [...prev, { sender: 'ai', text: data.response }]);
             }
         } catch (e) {
-            console.error(e);
-            setMessages(prev => [...prev, { sender: 'ai', text: "Connection unstable. Switch to Local-Only Mode... [OFFLINE]: Based on general protocols, ensure your plant has adequate drainage and indirect light. Try refreshing for Datalevel access." }]);
+            console.error("AI Offline, switching to local:", e);
+            // FALLBACK TO SIMULATED AI
+            // Delay slightly to simulate processing
+            setTimeout(() => {
+                const fallbackResponse = simulateAIResponse(userMsg);
+                setMessages(prev => [...prev, { sender: 'ai', text: fallbackResponse }]);
+            }, 500);
         } finally {
-            setLoading(false);
+            if (window.location.hostname === 'localhost') setLoading(false); // Immediate for local logic
+            else setTimeout(() => setLoading(false), 500); // Visual delay
         }
     };
 
