@@ -1,0 +1,16 @@
+{
+  "name": "VanaMap",
+  "short_name": "VanaMap",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#10b981",
+  "description": "Smart Ecosystem Simulator & Plant Finder",
+  "icons": [
+    {
+      "src": "/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

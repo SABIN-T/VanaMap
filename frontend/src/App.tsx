@@ -11,6 +11,7 @@ import { AdminLogin } from './pages/AdminLogin';
 import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
 import { Toaster } from 'react-hot-toast';
+import { InstallPrompt } from './components/common/InstallPrompt';
 
 function App() {
   return (
@@ -42,6 +43,7 @@ function App() {
               }}
             />
             <Navbar />
+            <InstallPrompt />
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/dashboard" element={<UserDashboard />} />
