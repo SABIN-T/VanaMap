@@ -281,6 +281,73 @@ app.post('/api/user/favorites', async (req, res) => {
     }
 });
 
+// Sync Cart
+app.post('/api/user/cart', async (req, res) => {
+    try {
+        const { email, cart } = req.body;
+        const user = await User.findOne({ email });
+        if (!user) return res.status(404).json({ error: "User not found" });
+
+        // Map frontend cart items (full plant objects) to schema format (plantId)
+        // Or if frontend sends pre-formatted items, use them.
+        // Based on frontend logic, we sync whatever matches the Schema: { plantId: String, quantity: Number }
+
+        const schemaCart = cart.map(item => ({
+            plantId: item.plantId || item.plant?.id || item.plant?._id,
+            quantity: item.quantity
+        })).filter(item => item.plantId); // Remove invalid items
+
+        user.cart = schemaCart;
+        await user.save();
+        res.json({ success: true, cart: user.cart });
+    } catch (err) {
+        console.error("Cart Sync Error:", err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Get User Profile (Full Sync)
+app.get('/api/user/profile', async (req, res) => {
+    try {
+        const { email } = req.query;
+        if (!email) return res.status(400).json({ error: "Email required" });
+
+        const user = await User.findOne({ email });
+        if (!user) return res.status(404).json({ error: "User not found" });
+
+        res.json(user);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Google Auth Sync
+app.post('/api/auth/google-sync', async (req, res) => {
+    try {
+        const { email, name, favorites, cart } = req.body;
+        let user = await User.findOne({ email });
+
+        if (!user) {
+            // Create new Google user
+            user = new User({
+                email,
+                name,
+                password: "GOOGLE_AUTH_" + Date.now(), // Dummy password
+                role: 'user',
+                favorites: favorites || [],
+                cart: cart || []
+            });
+            await user.save();
+            await sendWhatsApp(`New Google User: ${name}`, 'signup', { userId: user._id, email });
+        } else {
+            // Check if we need to merge logic? For now, just return existing user.
+        }
+        res.json(user);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 
 // --- ADMIN ---
 
