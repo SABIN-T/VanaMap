@@ -14,7 +14,7 @@ const VendorPortal = lazy(() => import('./pages/VendorPortal').then(m => ({ defa
 const Auth = lazy(() => import('./pages/Auth').then(m => ({ default: m.Auth })));
 const Cart = lazy(() => import('./pages/Cart').then(m => ({ default: m.Cart })));
 const Admin = lazy(() => import('./pages/Admin').then(m => ({ default: m.Admin })));
-const AdminLogin = lazy(() => import('./pages/AdminLogin').then(m => ({ default: m.AdminLogin })));
+// const AdminLogin = lazy(() => import('./pages/AdminLogin').then(m => ({ default: m.AdminLogin })));
 
 const LoadingScreen = () => (
   <div style={{
@@ -70,7 +70,7 @@ function App() {
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/admin" element={<Admin />} />
-                <Route path="/admin-login" element={<AdminLogin />} />
+                {/* <Route path="/admin-login" element={<AdminLogin />} /> */}
               </Routes>
             </Suspense>
           </Router>

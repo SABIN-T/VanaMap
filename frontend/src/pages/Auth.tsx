@@ -35,7 +35,10 @@ export const Auth = () => {
 
     useEffect(() => {
         if (user) {
-            if (user.role === 'vendor') {
+            if (user.role === 'admin') {
+                localStorage.setItem('adminAuthenticated', 'true');
+                navigate('/admin');
+            } else if (user.role === 'vendor') {
                 navigate('/vendor');
             } else {
                 navigate('/dashboard');

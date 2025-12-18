@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingCart, User as UserIcon, LogOut, BookOpen, Leaf, Sun, Moon, Menu, X, ChevronRight, Activity } from 'lucide-react';
+import { ShoppingCart, User as UserIcon, LogOut, BookOpen, Leaf, Sun, Moon, Menu, X, ChevronRight } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
 import { useTheme } from '../../context/ThemeContext';
@@ -67,7 +67,6 @@ export const Navbar = () => {
                 <button onClick={handleDownloadGuide} className={styles.navLink}>
                     <BookOpen size={16} /> Guide
                 </button>
-                <Link to="/admin" className={styles.navLink} style={{ color: '#facc15' }}>Admin</Link>
             </div>
 
             <div className={styles.actions}>
@@ -120,10 +119,6 @@ export const Navbar = () => {
                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><BookOpen size={20} /> Caring Guide</div>
                         <ChevronRight size={18} />
                     </button>
-                    <Link to="/admin" className={styles.mobileNavLink} onClick={() => setIsMenuOpen(false)} style={{ color: '#facc15' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><Activity size={20} /> Admin Panel</div>
-                        <ChevronRight size={18} />
-                    </Link>
 
                     <div className={styles.divider} />
 
