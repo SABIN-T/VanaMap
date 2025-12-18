@@ -88,6 +88,13 @@ export const Home = () => {
         setLocationLoading(true);
         if (navigator.geolocation) {
             const toastId = toast.loading("Syncing with satellite...");
+
+            const options = {
+                enableHighAccuracy: false,
+                timeout: 8000,
+                maximumAge: 60000
+            };
+
             navigator.geolocation.getCurrentPosition(async (position) => {
                 const { latitude, longitude } = position.coords;
                 try {
@@ -109,7 +116,7 @@ export const Home = () => {
                 console.error(err);
                 setLocationLoading(false);
                 toast.error("Satellite access denied.", { id: toastId });
-            });
+            }, options);
         } else {
             toast.error("GPS not supported.");
             setLocationLoading(false);

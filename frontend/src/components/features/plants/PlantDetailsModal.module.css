@@ -1017,7 +1017,101 @@
     }
 }
 
-/* Desktop Optimized UI */
+/* View Toggle Styles */
+.viewToggle {
+    display: none;
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 2rem;
+    padding: 0.25rem;
+    z-index: 10;
+}
+
+@media (min-width: 1024px) {
+    .viewToggle {
+        display: flex;
+        gap: 0.25rem;
+    }
+}
+
+.viewToggle button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 1.5rem;
+    border: none;
+    background: transparent;
+    color: #94a3b8;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.viewToggle button:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.viewToggle button.activeView {
+    background: var(--color-primary);
+    color: #0f172a;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+/* Desktop Layout Overrides (Command Deck Mode) */
+@media (min-width: 1024px) {
+    .desktopLayout {
+        display: grid !important;
+        grid-template-columns: 280px 1fr;
+        gap: 3rem;
+        padding: 3rem 4rem !important;
+        /* Wider padding */
+        max-width: 1300px !important;
+        /* Wider container */
+        align-items: center;
+    }
+
+    .desktopLayout .simControlsGroup {
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
+        padding-right: 3rem;
+    }
+
+    .desktopLayout .simResultsGroup {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    /* Restore Horizontal Visuals for Desktop Layout */
+    .desktopLayout .simVisual {
+        flex-direction: row !important;
+        justify-content: space-between;
+        padding: 2.5rem;
+        background: rgba(255, 255, 255, 0.03);
+    }
+
+    .desktopLayout .particleContainer {
+        width: 120px;
+    }
+
+    .desktopLayout .plantIconWrapper {
+        order: -1;
+        /* Move icon to left in horizontal layout if desired, or keep centered */
+    }
+
+    /* Adjust simStats for horizontal layout */
+    .desktopLayout .simStats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+}
 
 @keyframes fadeIn {
     from {

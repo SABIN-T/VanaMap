@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { X, Droplets, Sun, Heart, Wind, Zap } from 'lucide-react';
+import { X, Droplets, Sun, Heart, Wind, Zap, Monitor, Smartphone } from 'lucide-react';
 import { Button } from '../../common/Button';
 import type { Plant } from '../../../types';
 import styles from './PlantDetailsModal.module.css';
@@ -20,6 +20,8 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
     const [numPeople, setNumPeople] = useState(1);
     const [isACMode, setIsACMode] = useState(false);
     const [manualTemp, setManualTemp] = useState(weather?.avgTemp30Days || 25);
+
+    const [viewMode, setViewMode] = useState<'mobile' | 'desktop'>('mobile');
 
     // Day/Night Logic
     const hour = new Date().getHours();
@@ -326,8 +328,19 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                             </Button>
                         </div>
 
-                        {/* Simulation Section - Next UI Dashboard (Horizontal) */}
-                        <div className={styles.simulationContainer}>
+                        {/* Simulation Section - Support for both layouts (toggled via button) */}
+                        <div className={`${styles.simulationContainer} ${viewMode === 'desktop' ? styles.desktopLayout : ''}`}>
+
+                            {/* View Toggle */}
+                            <div className={styles.viewToggle}>
+                                <button className={viewMode === 'mobile' ? styles.activeView : ''} onClick={() => setViewMode('mobile')}>
+                                    <Smartphone size={16} /> <span className={styles.toggleLabel}>Mobile</span>
+                                </button>
+                                <button className={viewMode === 'desktop' ? styles.activeView : ''} onClick={() => setViewMode('desktop')}>
+                                    <Monitor size={16} /> <span className={styles.toggleLabel}>Desk</span>
+                                </button>
+                            </div>
+
                             {/* LEFT COLUMN: Controls & Input */}
                             <div className={styles.simControlsGroup}>
                                 <div className={styles.dashboardHeader}>
