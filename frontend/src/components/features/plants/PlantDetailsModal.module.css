@@ -927,27 +927,70 @@
     gap: 0.5rem;
 }
 
+/* Desktop: Premium stat cards */
+@media (min-width: 1024px) {
+    .statBox {
+        padding: 1.5rem;
+        background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
+        border-radius: 1.25rem;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .statBox:hover {
+        border-color: rgba(16, 185, 129, 0.3);
+        transform: translateY(-4px);
+        box-shadow: 0 12px 40px -10px rgba(0, 0, 0, 0.3);
+    }
+}
+
 .statVal {
     font-size: 1.8rem;
     font-weight: 900;
     color: white;
+    font-variant-numeric: tabular-nums;
 }
 
 @media (min-width: 1024px) {
     .statVal {
-        font-size: 2.2rem;
-        color: white;
-        text-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+        font-size: 2.5rem;
+        background: linear-gradient(180deg, #fff 0%, #cbd5e1 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        filter: drop-shadow(0 0 15px rgba(16, 185, 129, 0.2));
     }
 }
 
 .statLabel {
     font-size: 0.65rem;
     color: #64748b;
-    font-weight: 700;
+    font-weight: 800;
     text-transform: uppercase;
-    margin-top: 0.4rem;
-    letter-spacing: 1px;
+    margin-top: 0.5rem;
+    letter-spacing: 1.2px;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+/* Reactor Core Background for Visualizer */
+.reactorCore {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    box-shadow: 0 0 30px rgba(16, 185, 129, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .fluxRing {

@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { X, Droplets, Sun, Heart, Wind, Zap, Monitor, Smartphone, Users, Thermometer } from 'lucide-react';
+import { X, Droplets, Sun, Heart, Wind, Zap, Monitor, Smartphone, Users, Thermometer, Sprout } from 'lucide-react';
 import { Button } from '../../common/Button';
 import type { Plant } from '../../../types';
 import styles from './PlantDetailsModal.module.css';
@@ -421,8 +421,10 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                                         </div>
 
                                         {/* CENTER FLUX */}
-                                        <div className={styles.plantGlow} style={{ position: 'relative', width: '80px', height: '80px', borderRadius: '50%', border: '2px dashed rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                                            <div style={{ fontSize: '1.2rem', fontWeight: 900, color: 'white' }}>{fluxRate}%</div>
+                                        <div className={styles.reactorCore}>
+                                            <div className={styles.plantGlow} style={{ position: 'relative', width: '80px', height: '80px', borderRadius: '50%', border: '2px dashed rgba(255,255,255,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                <div style={{ fontSize: '1.2rem', fontWeight: 900, color: 'white' }}>{fluxRate}%</div>
+                                            </div>
                                         </div>
 
                                         {/* O2 OUTPUT */}
@@ -461,15 +463,15 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                                 <div className={styles.simStats}>
                                     <div className={styles.statBox}>
                                         <div className={styles.statVal} style={{ color: 'var(--color-primary)' }}>{plantsNeeded}</div>
-                                        <div className={styles.statLabel}>REQUIRED UNITS</div>
+                                        <div className={styles.statLabel}><Sprout size={12} /> REQUIRED UNITS</div>
                                     </div>
                                     <div className={styles.statBox}>
                                         <div className={styles.statVal}>{currentTemp}°C</div>
-                                        <div className={styles.statLabel}>AMBIENT TEMP</div>
+                                        <div className={styles.statLabel}><Thermometer size={12} /> AMBIENT TEMP</div>
                                     </div>
                                     <div className={styles.statBox}>
                                         <div className={styles.statVal}>{Math.abs(PLANT_O2_OUTPUT)}L</div>
-                                        <div className={styles.statLabel}>{PLANT_O2_OUTPUT > 0 ? 'YIELD / DAY' : 'UPTAKE'}</div>
+                                        <div className={styles.statLabel}><Wind size={12} /> {PLANT_O2_OUTPUT > 0 ? 'YIELD / DAY' : 'UPTAKE'}</div>
                                     </div>
                                 </div>
                             </div>
