@@ -68,40 +68,52 @@
         max-height: 100vh !important;
         border-radius: 0 !important;
         border: none !important;
-        background: linear-gradient(180deg, #0f172a 0%, #020617 100%);
+        background: linear-gradient(180deg, #020617 0%, #0f172a 100%);
         display: flex;
         flex-direction: column;
+        overflow-y: auto !important;
+        /* Unified Window Scroll */
     }
 
     .content {
         flex: 1;
-        display: grid !important;
-        grid-template-columns: 1fr 480px;
-        gap: 6rem;
-        padding: 2rem 6rem 4rem !important;
-        max-width: 1600px;
+        display: flex;
+        /* Flex column for vertical stacking */
+        flex-direction: column;
+        gap: 4rem;
+        padding: 2rem 15% 6rem !important;
+        /* Centered narrow column */
+        max-width: 1400px;
         width: 100%;
         margin: 0 auto;
-        overflow-y: auto;
-        scrollbar-gutter: stable;
-        align-content: start;
+        overflow: visible !important;
+        /* Let body scroll */
     }
 
+    /* Simulation Container - Bottom "Next UI" Dashboard */
     .simulationContainer {
-        position: sticky;
-        top: 2rem;
-        background: rgba(255, 255, 255, 0.02) !important;
+        position: relative;
+        /* Not sticky anymore */
+        top: auto;
+        width: 100%;
+        background: linear-gradient(135deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%) !important;
         backdrop-filter: blur(20px);
         border: 1px solid rgba(16, 185, 129, 0.2) !important;
-        border-radius: 2rem !important;
+        border-radius: 1.5rem !important;
         padding: 3rem !important;
         box-shadow:
-            0 25px 50px -12px rgba(0, 0, 0, 0.5),
-            inset 0 0 40px rgba(16, 185, 129, 0.05) !important;
-        height: min-content;
-        max-height: calc(100vh - 4rem);
-        overflow-y: auto;
-        animation: slideInRight 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.3s backwards;
+            0 20px 60px -10px rgba(0, 0, 0, 0.4),
+            inset 0 0 50px rgba(16, 185, 129, 0.03) !important;
+        height: auto;
+        max-height: none;
+        overflow: visible;
+        margin-top: 2rem;
+        display: grid;
+        grid-template-columns: 350px 1fr;
+        /* Controls | Results */
+        gap: 3rem;
+        align-items: start;
+        animation: slideInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.3s backwards;
     }
 
     @keyframes slideInRight {
@@ -117,16 +129,13 @@
     }
 
     .detailsColumn {
-        display: flex;
-        flex-direction: column;
-        gap: 3rem !important;
-        padding-top: 1rem;
+        width: 100%;
         animation: slideInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s backwards;
     }
 
     @keyframes slideInUp {
         from {
-            transform: translateY(50px);
+            transform: translateY(30px);
             opacity: 0;
         }
 
@@ -137,10 +146,11 @@
     }
 
     .imageContainer {
-        height: 400px !important;
+        height: 280px !important;
+        /* Decreased size */
         width: 100%;
-        mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
-        -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
+        mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+        -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
         border: none !important;
     }
 
@@ -149,40 +159,49 @@
     }
 
     .modal:hover .image {
-        transform: scale(1.05);
-        /* Subtle zoom for premium feel */
+        transform: scale(1.03);
     }
 
     .titleSection {
-        max-width: 1600px;
+        max-width: 1400px;
         width: 100%;
-        margin: -8rem auto 3rem !important;
-        padding: 0 6rem !important;
+        margin: -6rem auto 2rem !important;
+        padding: 0 15% !important;
         position: relative;
         z-index: 10;
+        text-align: center;
+        /* Center align title for vertical flow */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 
-    .descriptionSection {
-        margin-bottom: 2rem !important;
+    .badges {
+        justify-content: center;
+        /* Center badges */
     }
 
     .descriptionSection p {
-        font-size: 1.35rem !important;
+        font-size: 1.25rem !important;
         line-height: 1.8 !important;
-        color: #e2e8f0 !important;
-        font-weight: 400;
-        letter-spacing: 0.01em;
-        max-width: 900px;
+        color: #cbd5e1 !important;
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto;
     }
 
     .infoGrid {
-        grid-template-columns: repeat(2, 1fr) !important;
+        grid-template-columns: repeat(4, 1fr) !important;
+        /* 4 columns wide */
         margin-bottom: 0 !important;
+        gap: 1.5rem !important;
     }
 
     .listsGrid {
-        grid-template-columns: 1fr !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        /* Side by side lists */
         margin-bottom: 0 !important;
+        gap: 2rem !important;
     }
 }
 
