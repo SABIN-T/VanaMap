@@ -4,12 +4,12 @@ import { Button } from '../components/common/Button';
 import { Trash2, ShoppingBag, MapPin, Heart, ArrowRight, Activity, Loader2 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { fetchPlants, toggleFavorite } from '../services/api';
+import { fetchPlants } from '../services/api';
 import type { Plant } from '../types';
 
 export const UserDashboard = () => {
     const { items, removeFromCart } = useCart();
-    const { user, loading, refreshUser } = useAuth();
+    const { user, loading, toggleFavorite } = useAuth();
     const navigate = useNavigate();
 
     // Favorites State
@@ -31,19 +31,14 @@ export const UserDashboard = () => {
             }
         };
         loadData();
-    }, [user]);
+    }, [user?.email]); // Only reload if user email changes, simplified dependency
 
     // Compute favorites from allPlants based on user.favorites IDs
     const favoritePlants = allPlants.filter(p => user?.favorites?.includes(p.id));
 
-    const handleRemoveFavorite = async (plantId: string) => {
+    const handleRemoveFavorite = (plantId: string) => {
         if (!user) return;
-        try {
-            await toggleFavorite(user.email, plantId);
-            await refreshUser(); // Refresh user context to update favorites list
-        } catch (error) {
-            console.error(error);
-        }
+        toggleFavorite(plantId); // Context handles optimistic update & API
     };
 
     if (loading) {
@@ -166,7 +161,7 @@ export const UserDashboard = () => {
                                         <p style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)', margin: 0, fontStyle: 'italic' }}>{plant.scientificName}</p>
                                         <div style={{ marginTop: '1rem', display: 'flex', gap: '0.5rem' }}>
                                             <span style={{ fontSize: '0.75rem', padding: '0.2rem 0.6rem', borderRadius: '4px', background: 'rgba(56, 189, 248, 0.1)', color: '#38bdf8' }}>
-                                                {plant.waterNeeds || "Moderate"} Water
+                                                {(plant as any).waterNeeds || "Moderate"} Water
                                             </span>
                                         </div>
                                     </div>
@@ -214,7 +209,7 @@ export const UserDashboard = () => {
                                                 <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>Qty: {quantity}</p>
                                             </div>
                                         </div>
-                                        <Button size="sm" variant="danger" onClick={() => removeFromCart(plant.id)}>
+                                        <Button size="sm" style={{ background: '#ef4444', border: 'none', color: 'white' }} onClick={() => removeFromCart(plant.id)}>
                                             <Trash2 size={16} />
                                         </Button>
                                     </div>

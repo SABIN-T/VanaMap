@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { X, ChevronRight, ChevronLeft, MapPin, ShoppingBag, BookOpen, Leaf } from 'lucide-react';
+import { ChevronRight, ChevronLeft, MapPin, ShoppingBag, BookOpen, Leaf } from 'lucide-react';
 
 interface Step {
     targetId: string;
