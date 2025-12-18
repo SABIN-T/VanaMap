@@ -13,6 +13,7 @@ export const SuggestionPopup = () => {
         // For testing, user might want to see it sooner, but request said 5 min.
         const timer = setTimeout(() => {
             setIsVisible(true);
+            setIsOpen(true);
         }, 300000);
 
         return () => clearTimeout(timer);

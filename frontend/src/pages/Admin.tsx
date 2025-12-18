@@ -145,6 +145,7 @@ export const Admin = () => {
             case 'signup': return '#10b981';
             case 'login': return '#3b82f6';
             case 'vendor_contact': return '#facc15';
+            case 'suggestion': return '#22c55e';
             default: return '#60a5fa';
         }
     };
