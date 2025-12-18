@@ -63,23 +63,51 @@
     }
 
     .modal {
-        max-width: 1100px !important;
-        width: 100% !important;
+        /* Enable Resizing */
+        resize: both !important;
+        overflow: hidden !important;
+        /* Required for resize handle */
+
+        /* Initial & Constraints */
+        width: 80% !important;
         height: 85vh !important;
-        max-height: 900px !important;
-        border-radius: 2rem !important;
+        min-width: 900px !important;
+        min-height: 600px !important;
+        max-width: 98vw !important;
+        max-height: 98vh !important;
+
+        border-radius: 1.5rem !important;
         border: 1px solid rgba(255, 255, 255, 0.1) !important;
         background: rgba(15, 23, 42, 0.95) !important;
         box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.9) !important;
+
         display: flex;
         flex-direction: column;
-        overflow: hidden !important;
-        /* Prevent double scrollbars */
+
+        /* Smooth transitions for non-resize properties */
+        transition: box-shadow 0.3s ease;
+    }
+
+    /* Resize Handle Styling Prompt */
+    .modal::after {
+        content: '';
+        position: absolute;
+        bottom: 0px;
+        right: 0px;
+        width: 25px;
+        height: 25px;
+        background: linear-gradient(135deg, transparent 50%, rgba(255, 255, 255, 0.4) 50%);
+        cursor: nwse-resize;
+        pointer-events: none;
+        /* Let clicks pass through to native handle */
+        border-bottom-right-radius: 1.5rem;
     }
 
     .content {
         flex: 1;
+        /* Grow to fill remaining height */
         overflow-y: auto;
+        /* Scroll internally */
         padding: 2rem 3rem !important;
         width: 100%;
         max-width: none;
@@ -88,85 +116,24 @@
         /* Grid Layout for Content */
         display: grid;
         grid-template-columns: 1fr 1.2fr;
-        /* Info left, Sim right */
         gap: 3rem;
         align-items: start;
     }
 
-    /* Scrollbar styling for content */
-    .content::-webkit-scrollbar {
-        width: 6px;
-    }
-
-    .content::-webkit-scrollbar-thumb {
-        background: rgba(255, 255, 255, 0.3);
-        border-radius: 10px;
-    }
-
-    /* Simulation Container - Centered Vertical Stack (Same as Mobile) */
-    .simulationContainer {
-        position: relative;
-        top: auto;
-        width: 100%;
-        max-width: 600px;
-        /* Constrain width for readability */
-        margin: 2rem auto 0;
-        /* Center it */
-        background: rgba(30, 41, 59, 0.6) !important;
-        /* Fallback */
-        background: linear-gradient(135deg, rgba(30, 41, 59, 0.6) 0%, rgba(15, 23, 42, 0.8) 100%) !important;
-        backdrop-filter: blur(20px);
-        border: 1px solid rgba(16, 185, 129, 0.2) !important;
-        border-radius: 1.5rem !important;
-        padding: 2rem !important;
-        box-shadow: 0 20px 60px -10px rgba(0, 0, 0, 0.4) !important;
-        height: auto;
-        max-height: none;
-        overflow: visible;
-        display: flex;
-        /* Flex, not grid */
-        flex-direction: column;
-        /* Vertical stack */
-        gap: 1.5rem;
-        animation: slideInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.3s backwards;
-    }
-
-    @keyframes slideInRight {
-        from {
-            transform: translateX(50px);
-            opacity: 0;
-        }
-
-        to {
-            transform: translateX(0);
-            opacity: 1;
-        }
-    }
-
-    .detailsColumn {
-        width: 100%;
-        animation: slideInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s backwards;
-    }
-
-    @keyframes slideInUp {
-        from {
-            transform: translateY(30px);
-            opacity: 0;
-        }
-
-        to {
-            transform: translateY(0);
-            opacity: 1;
-        }
-    }
-
+    /* Image scales with Modal Height (e.g. 35% of total height) */
     .imageContainer {
-        height: 280px !important;
-        /* Decreased size */
+        flex: 0 0 35% !important;
+        /* Fixed percentage of flex parent */
+        min-height: 250px;
+        max-height: 50vh;
         width: 100%;
-        mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
-        -webkit-mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+        position: relative;
+        overflow: hidden;
+        mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
+        -webkit-mask-image: linear-gradient(to bottom, black 60%, transparent 100%);
         border: none !important;
+        transition: flex-basis 0.1s;
+        /* Smooth resize */
     }
 
     .image {
