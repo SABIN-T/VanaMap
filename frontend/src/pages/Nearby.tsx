@@ -4,7 +4,7 @@ import L from 'leaflet';
 import { fetchVendors, seedDatabase, logVendorContact } from '../services/api';
 import { getDistanceFromLatLonInKm, formatDistance } from '../utils/logic';
 import type { Vendor } from '../types';
-import { MessageCircle, MapPin, ExternalLink, RefreshCw, AlertCircle, Star } from 'lucide-react';
+import { MessageCircle, MapPin, ExternalLink, RefreshCw, AlertCircle, Star, Sparkles } from 'lucide-react';
 import { Button } from '../components/common/Button';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
@@ -224,29 +224,52 @@ out skel qt;
                             <p style={{ color: 'var(--color-text-muted)' }}>No simulation partners detected. Try syncing your GPS metadata.</p>
                         </div>
                     ) : (
-                        <div className={styles.vendorGrid}>
-                            {displayVendors.map(vendor => (
-                                <div key={vendor.id} className={styles.vendorCard}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
-                                        <h4 className={styles.vendorName}>{vendor.name}</h4>
-                                        {vendor.verified && <Star size={18} fill="var(--color-primary)" color="var(--color-primary)" />}
-                                    </div>
-                                    <div className={styles.vendorDist}>{formatDistance((vendor.distance || 0) * 1000)} away</div>
-                                    <p className={styles.vendorAddr}>{vendor.address}</p>
+                        <>
+                            <div className={styles.vendorGrid}>
+                                {displayVendors.map(vendor => (
+                                    <div key={vendor.id} className={`${styles.vendorCard} ${vendor.highlyRecommended ? styles.premiumCard : ''}`}>
+                                        {vendor.highlyRecommended && <div className={styles.premiumBadge}>Partner</div>}
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
+                                            <h4 className={styles.vendorName}>{vendor.name}</h4>
+                                            {vendor.verified && <Star size={18} fill="var(--color-primary)" color="var(--color-primary)" />}
+                                        </div>
+                                        <div className={styles.vendorDist}>{formatDistance((vendor.distance || 0) * 1000)} away</div>
+                                        <p className={styles.vendorAddr}>{vendor.address}</p>
 
-                                    <div className={styles.cardActions}>
-                                        <Button variant="outline" size="sm" className={styles.actionBtn} onClick={() => window.open(`https://www.google.com/maps/dir/?api=1&destination=${vendor.latitude},${vendor.longitude}`)}>
-                                            <ExternalLink size={14} /> Navigate
-                                        </Button>
-                                        {(vendor.whatsapp || vendor.phone !== 'N/A') && (
-                                            <Button size="sm" className={styles.actionBtn} onClick={() => { logVendorContact({ vendorId: vendor.id, vendorName: vendor.name, userEmail: user?.email || 'guest', contactType: 'whatsapp' }); window.open(`https://wa.me/${(vendor.whatsapp || vendor.phone).replace(/[^0-9]/g, '')}`, '_blank'); }}>
-                                                <MessageCircle size={14} /> Contact
+                                        <div className={styles.cardActions}>
+                                            <Button variant="outline" size="sm" className={styles.actionBtn} onClick={() => window.open(`https://www.google.com/maps/dir/?api=1&destination=${vendor.latitude},${vendor.longitude}`)}>
+                                                <ExternalLink size={14} /> Navigate
                                             </Button>
-                                        )}
+                                            {(vendor.whatsapp || vendor.phone !== 'N/A') && (
+                                                <Button size="sm" className={styles.actionBtn} onClick={() => { logVendorContact({ vendorId: vendor.id, vendorName: vendor.name, userEmail: user?.email || 'guest', contactType: 'whatsapp' }); window.open(`https://wa.me/${(vendor.whatsapp || vendor.phone).replace(/[^0-9]/g, '')}`, '_blank'); }}>
+                                                    <MessageCircle size={14} /> Contact
+                                                </Button>
+                                            )}
+                                        </div>
                                     </div>
-                                </div>
-                            ))}
-                        </div>
+                                ))}
+                            </div>
+
+                            {/* Partnership CTA */}
+                            <div style={{
+                                marginTop: '3rem',
+                                background: 'linear-gradient(45deg, rgba(25,25,25,0.8), rgba(16,185,129,0.1))',
+                                border: '1px solid rgba(16,185,129,0.2)',
+                                borderRadius: '1.5rem',
+                                padding: '2rem',
+                                textAlign: 'center'
+                            }}>
+                                <h4 style={{ margin: '0 0 0.5rem 0', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
+                                    <Sparkles size={18} color="#facc15" /> Nursery Partnership Program
+                                </h4>
+                                <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '1.5rem', maxWidth: '600px', marginInline: 'auto' }}>
+                                    Own a nursery or garden center? Join our verified network to showcase your sustainable inventory to thousands of local eco-enthusiasts.
+                                </p>
+                                <Button variant="primary" size="sm" onClick={() => toast.success("Join queue opened! Email us at partners@vanamap.online")}>
+                                    Apply for Verified Status
+                                </Button>
+                            </div>
+                        </>
                     )}
                 </div>
             </div>

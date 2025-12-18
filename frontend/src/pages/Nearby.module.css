@@ -235,6 +235,30 @@
     background: rgba(255, 255, 255, 0.05);
 }
 
+.premiumCard {
+    background: rgba(251, 191, 36, 0.05) !important;
+    border: 1px solid rgba(251, 191, 36, 0.3) !important;
+    box-shadow: 0 0 30px rgba(251, 191, 36, 0.15) !important;
+    position: relative;
+    overflow: hidden;
+}
+
+.premiumBadge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: #facc15;
+    color: #000;
+    padding: 0.2rem 1rem;
+    font-size: 0.6rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    transform: rotate(45deg) translate(25%, -50%);
+    width: 100px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
 .vendorName {
     font-size: 1.25rem;
     font-weight: 800;

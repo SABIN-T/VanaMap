@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { X, Droplets, Sun, Heart, Wind, Monitor, Smartphone, Users, Thermometer, Sprout, AlertCircle, Info, Lightbulb, ShieldCheck } from 'lucide-react';
+import { X, Droplets, Sun, Heart, Wind, Monitor, Smartphone, Users, Thermometer, Sprout, AlertCircle, Info, Lightbulb, ShieldCheck, ShoppingBag } from 'lucide-react';
 import { Button } from '../../common/Button';
 import type { Plant } from '../../../types';
 import styles from './PlantDetailsModal.module.css';
@@ -327,18 +327,32 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                                     </div>
                                 </div>
                                 <div className={styles.listSection}>
-                                    <h4>KEY ADVANTAGES</h4>
-                                    <div className={styles.listContainer}>
-                                        {plant.advantages.slice(0, 3).map((v, i) => (
-                                            <div key={i} className={styles.listItem}>• {v}</div>
-                                        ))}
+                                    <h4>MARKET INTELLIGENCE</h4>
+                                    <div className={styles.monetizationBox}>
+                                        <p style={{ fontSize: '0.75rem', color: '#94a3b8', margin: '0 0 0.5rem 0' }}>Est. Market Value: ₹{plant.price || '499 - 1499'}</p>
+                                        <Button
+                                            size="sm"
+                                            variant="outline"
+                                            style={{ width: '100%', fontSize: '0.7rem', display: 'flex', alignItems: 'center', gap: '0.4rem', borderColor: '#facc15', color: '#facc15' }}
+                                            onClick={() => window.open(`https://www.google.com/search?q=buy+${plant.name}+online`, '_blank')}
+                                        >
+                                            <ShoppingBag size={12} /> Check Availability & Price
+                                        </Button>
+                                        <div style={{ marginTop: '0.5rem', fontSize: '0.65rem', color: '#64748b', fontStyle: 'italic' }}>
+                                            * Affiliate links contribute to ecosystem maintenance.
+                                        </div>
                                     </div>
                                 </div>
                             </div>
 
-                            <Button variant="primary" size="lg" style={{ width: '100%', marginTop: '1rem', fontWeight: 800 }} onClick={onClose}>
-                                CLOSE EXPLORER
-                            </Button>
+                            <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem' }}>
+                                <Button variant="primary" size="lg" style={{ flex: 2, fontWeight: 800 }} onClick={onClose}>
+                                    CLOSE EXPLORER
+                                </Button>
+                                <Button variant="outline" size="lg" style={{ flex: 1, fontSize: '0.8rem', opacity: 0.6 }} onClick={() => toast.success("Partner inquiries: contact@vanamap.online")}>
+                                    SPONSOR
+                                </Button>
+                            </div>
                         </div>
 
                         {/* Simulation Section */}

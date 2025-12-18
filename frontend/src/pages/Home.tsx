@@ -8,7 +8,7 @@ import { fetchPlants } from '../services/api';
 import { getWeather, geocodeCity } from '../services/weather';
 import { calculateAptness } from '../utils/logic';
 import type { Plant } from '../types';
-import { Sprout, MapPin, Thermometer, Wind, ArrowDown, Sparkles, Search, AlertCircle } from 'lucide-react';
+import { Sprout, MapPin, Thermometer, Wind, ArrowDown, Sparkles, Search, AlertCircle, Heart } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
 // Lazy load modal for performance
@@ -423,26 +423,48 @@ export const Home = () => {
                 background: 'linear-gradient(to bottom, transparent, rgba(0,0,0,0.4))',
                 textAlign: 'center'
             }}>
-                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.5rem', marginBottom: '2rem' }}>
-                    <div style={{
-                        padding: '1rem',
-                        background: 'white',
-                        borderRadius: '1rem',
-                        boxShadow: '0 0 20px rgba(16, 185, 129, 0.2)'
-                    }}>
-                        <QRCodeSVG
-                            value="https://www.vanamap.online"
-                            size={120}
-                            bgColor={"#ffffff"}
-                            fgColor={"#000000"}
-                            level={"L"}
-                            includeMargin={false}
-                        />
+                <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+                    <div style={{ textAlign: 'center' }}>
+                        <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '0.5rem' }}>Experience VanaMap Mobile</p>
+                        <div style={{
+                            padding: '0.75rem',
+                            background: 'white',
+                            borderRadius: '1rem',
+                            boxShadow: '0 0 20px rgba(16, 185, 129, 0.2)',
+                            display: 'inline-block'
+                        }}>
+                            <QRCodeSVG
+                                value="https://www.vanamap.online"
+                                size={100}
+                                bgColor={"#ffffff"}
+                                fgColor={"#000000"}
+                                level={"L"}
+                                includeMargin={false}
+                            />
+                        </div>
                     </div>
-                    <div>
-                        <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '0.5rem' }}>Scan to Experience VanaMap on Mobile</p>
-                        <p style={{ color: '#64748b', fontSize: '0.8rem' }}>© 2025 VanaMap Intelligence Systems</p>
+
+                    <div style={{ textAlign: 'left', minWidth: '200px' }}>
+                        <h4 style={{ color: 'white', marginBottom: '1rem', fontSize: '1rem' }}>Monetization & Growth</h4>
+                        <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                            <li>
+                                <a href="#" style={{ color: '#10b981', textDecoration: 'none', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                    <Heart size={14} fill="#10b981" /> Support the Project
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" style={{ color: '#facc15', textDecoration: 'none', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                    <Sparkles size={14} /> Become a Partner
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/nearby" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '0.9rem' }}>Vendor Advertising</a>
+                            </li>
+                        </ul>
                     </div>
+                </div>
+                <div style={{ marginTop: '3rem', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '1.5rem', width: '100%' }}>
+                    <p style={{ color: '#64748b', fontSize: '0.8rem' }}>© 2025 VanaMap Intelligence Systems • Sustainability Research Lab</p>
                 </div>
             </footer>
         </div>
