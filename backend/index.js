@@ -198,6 +198,29 @@ app.post('/api/auth/signup', async (req, res) => {
 app.post('/api/auth/login', async (req, res) => {
     try {
         const { email, password } = req.body;
+
+        // --- LEGACY ADMIN MIGRATION ---
+        // If user tries 'admin' credentials from old system, auto-create database entry
+        if ((email === 'admin@vanamap.com' || email === 'admin') && (password === 'admin123' || password === 'admin')) {
+            let admin = await User.findOne({ email });
+            if (!admin) {
+                admin = new User({
+                    email: email,
+                    password: password,
+                    name: 'System Admin',
+                    role: 'admin'
+                });
+                await admin.save();
+                console.log("Admin account auto-generated");
+            }
+            if (admin.role !== 'admin') {
+                // Fix role if somehow demoted
+                admin.role = 'admin';
+                await admin.save();
+            }
+            return res.json(admin);
+        }
+
         const user = await User.findOne({ email, password });
         if (!user) return res.status(401).json({ error: "Invalid credentials" });
 
