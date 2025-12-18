@@ -28,22 +28,46 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
     const currentTemp = isACMode ? 22 : manualTemp;
     const currentHumidity = weather?.avgHumidity30Days || 50;
 
-    // Oxygen calculation
-    const BASE_O2_OUTPUT = 5;
+    // Realistic Oxygen calculation
+    // Average plant produces 5-10L O2 per day depending on size and conditions
+    const BASE_O2_OUTPUT = useMemo(() => {
+        // Base output varies by plant oxygen level
+        if (plant.oxygenLevel === 'very-high') return 10;
+        if (plant.oxygenLevel === 'high') return 7;
+        if (plant.oxygenLevel === 'moderate' || plant.oxygenLevel === 'medium') return 5;
+        return 3; // low
+    }, [plant.oxygenLevel]);
+
     const PLANT_O2_OUTPUT = useMemo(() => {
         let output = BASE_O2_OUTPUT;
-        if (currentTemp < 15 || currentTemp > 30) output *= 0.5;
-        else if (currentTemp >= 20 && currentTemp <= 25) output *= 1.2;
-        if (!isDay) output = -2;
-        return Math.round(output * 10) / 10;
-    }, [currentTemp, isDay]);
 
-    const CO2_PER_PERSON = 500;
-    const totalCO2 = numPeople * CO2_PER_PERSON;
-    const plantsNeeded = Math.ceil(totalCO2 / (PLANT_O2_OUTPUT > 0 ? PLANT_O2_OUTPUT * 100 : 1));
+        // Temperature efficiency (optimal 20-25°C)
+        if (currentTemp < 15 || currentTemp > 30) {
+            output *= 0.5; // 50% reduction in extreme temps
+        } else if (currentTemp >= 20 && currentTemp <= 25) {
+            output *= 1.2; // 20% boost in optimal range
+        }
+
+        // Night mode: plants consume oxygen during respiration
+        if (!isDay) {
+            output = -2; // Plants consume ~2L O2 at night
+        }
+
+        return Math.round(output * 10) / 10;
+    }, [BASE_O2_OUTPUT, currentTemp, isDay]);
+
+    // Human oxygen consumption: ~550L per day per person
+    const O2_PER_PERSON_PER_DAY = 550;
+    const totalO2Needed = numPeople * O2_PER_PERSON_PER_DAY;
+
+    // Calculate plants needed
+    const plantsNeeded = PLANT_O2_OUTPUT > 0
+        ? Math.ceil(totalO2Needed / PLANT_O2_OUTPUT)
+        : 'N/A';
+
     const fluxRate = useMemo(() => {
         return Math.min(100, Math.max(0, Math.round((PLANT_O2_OUTPUT / BASE_O2_OUTPUT) * 100)));
-    }, [PLANT_O2_OUTPUT]);
+    }, [PLANT_O2_OUTPUT, BASE_O2_OUTPUT]);
 
     const getWateringSchedule = () => {
         if (currentHumidity < 40 && currentTemp > 25) return "Intensive (Every 1-2 days)";
