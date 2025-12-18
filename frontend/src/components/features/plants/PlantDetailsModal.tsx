@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import { X, Sun, Heart, Wind, Users, ShoppingBag, Info, Thermometer, Maximize, Cat, Droplet } from 'lucide-react';
+import { X, Sun, Heart, Wind, Users, ShoppingBag, Thermometer, Maximize, Cat, Droplet } from 'lucide-react';
 import { Button } from '../../common/Button';
 import type { Plant } from '../../../types';
 import styles from './PlantDetailsModal.module.css';
