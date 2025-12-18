@@ -39,8 +39,17 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error || 'Login failed');
 
-                setUser(data);
-                localStorage.setItem('user', JSON.stringify(data));
+                // Fetch latest profile to ensure favorites are synced
+                let fullProfile = data;
+                try {
+                    const profileRes = await fetch(`${API_URL}/user/profile?email=${data.email}`);
+                    if (profileRes.ok) {
+                        fullProfile = await profileRes.json();
+                    }
+                } catch (e) { console.warn("Could not fetch full profile", e); }
+
+                setUser(fullProfile);
+                localStorage.setItem('user', JSON.stringify(fullProfile));
                 return { success: true };
             } else {
                 const text = await res.text();
@@ -84,15 +93,27 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
             const decoded: any = jwtDecode(credentialResponse.credential);
 
-            // Map Google user to our User type
-            const googleUser: User = {
+            // Check if user exists in DB, otherwise create
+            let googleUser: User = {
                 id: decoded.sub || 'google-user',
                 name: decoded.name || 'Google User',
                 email: decoded.email,
-                role: 'user', // Default to user
+                role: 'user',
                 favorites: [],
                 cart: []
             };
+
+            // Attempt backend sync
+            try {
+                const res = await fetch(`${API_URL}/auth/google-sync`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(googleUser)
+                });
+                if (res.ok) {
+                    googleUser = await res.json();
+                }
+            } catch (e) { console.warn("Google sync failed", e); }
 
             setUser(googleUser);
             localStorage.setItem('user', JSON.stringify(googleUser));
@@ -120,13 +141,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
         const updatedUser = { ...user, favorites: newFavorites };
         setUser(updatedUser);
-        localStorage.setItem('user', JSON.stringify(updatedUser));
+        localStorage.setItem('user', JSON.stringify(updatedUser)); // Keep local sync
 
         try {
-            await import('../services/api').then(api => api.toggleFavorite(user.email, plantId));
+            // Push to MongoDB
+            const { toggleFavorite } = await import('../services/api');
+            await toggleFavorite(user.email, plantId);
         } catch (e) {
-            console.error("Failed to sync favorites", e);
-            // Revert on failure? (Optional, skipping for UX smoothness)
+            console.error("Failed to sync favorites to Cloud", e);
+            // Verify state on next reload
         }
     };
 
