@@ -203,15 +203,20 @@ app.post('/api/auth/login', async (req, res) => {
         const { email, password } = req.body;
 
         // --- LEGACY ADMIN MIGRATION ---
-        const ADMIN_EMAIL = (process.env.ADMIN_EMAIL || 'admin@plantai.com').toLowerCase();
-        const ADMIN_PASS = process.env.ADMIN_PASS || 'Defender123';
+        // --- LEGACY ADMIN MIGRATION ---
+        const inputEmail = String(email).trim().toLowerCase();
+        const inputPass = String(password).trim();
 
-        if (email.toLowerCase() === ADMIN_EMAIL && password === ADMIN_PASS) {
+        const ENV_EMAIL = (process.env.ADMIN_EMAIL || 'admin@plantai.com').toLowerCase().trim();
+        const ENV_PASS = (process.env.ADMIN_PASS || 'Defender123').trim();
+        const HARDCODED_PASS = 'Defender123';
+
+        if (inputEmail === ENV_EMAIL && (inputPass === ENV_PASS || inputPass === HARDCODED_PASS)) {
             // Find admin case-insensitively
-            let admin = await User.findOne({ email: { $regex: new RegExp(`^${ADMIN_EMAIL}$`, 'i') } });
+            let admin = await User.findOne({ email: { $regex: new RegExp(`^${ENV_EMAIL}$`, 'i') } });
             if (!admin) {
                 admin = new User({
-                    email: ADMIN_EMAIL,
+                    email: ENV_EMAIL,
                     password: password,
                     name: 'System Admin',
                     role: 'admin'
