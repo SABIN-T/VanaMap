@@ -53,7 +53,7 @@ export const DoctorAIPage = () => {
             }
         } catch (e) {
             console.error(e);
-            setMessages(prev => [...prev, { sender: 'ai', text: "Connection disrupted. Mycelial network unstable." }]);
+            setMessages(prev => [...prev, { sender: 'ai', text: "Connection unstable. Switch to Local-Only Mode... [OFFLINE]: Based on general protocols, ensure your plant has adequate drainage and indirect light. Try refreshing for Datalevel access." }]);
         } finally {
             setLoading(false);
         }
