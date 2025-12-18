@@ -56,39 +56,35 @@ app.post('/api/tracking/vendor-contact', async (req, res) => {
 
 const { Chat } = require('./models');
 
-// Mock AI Logic (Conversational + Sales + DB)
+// Mock AI Logic (Conversational + Sales + Data Synthesis)
 const getAIResponse = async (query) => {
     const q = query.toLowerCase();
 
-    // 0. Conversational Greeting
-    if (q.match(/^(hi|hello|hey|greetings|start)/)) {
-        return "Connection Established. Greetings. I am the VanaMap Intelligence. My protocols are set to assist you with Ecosystem Management and Species Acquisition. Query me about any plant to check availability and care data.";
+    // 0. Security Protocol (Strict)
+    if (q.match(/(code|security|password|credential|database|api key|token|backend|server|vulnerability|exploit)/)) {
+        return "SECURITY ALERT: Access to internal source code, security protocols, or system architecture is strictly PROHIBITED. This query has been flagged. My function is limited to Botanical Intelligence and Vendor Logistics.";
     }
 
-    // 1. DB Search (Sales Integration)
+    // 0. Conversational Greeting
+    if (q.match(/^(hi|hello|hey|greetings|start)/)) {
+        return "Connection Established. Greetings. I am the VanaMap Intelligence, trained on global botanical repositories. Query me about any plant species or local availabilities.";
+    }
+
+    // 1. DB Search (Sales & Location)
     try {
         const plants = await Plant.find({}, 'name description type medicinalValues idealTempMin idealTempMax');
         const matchedPlant = plants.find(p => q.includes(p.name.toLowerCase()) || (p.scientificName && q.includes(p.scientificName.toLowerCase())));
 
         if (matchedPlant) {
-            return `System Match Found: ${matchedPlant.name} [${matchedPlant.type}].\n\nBio-Data: ${matchedPlant.description.substring(0, 120)}...\n\nStatus: IN STOCK. This species is available across our network. I strongly recommend acquiring it from the 'Nearby Vendors' section to boost your local oxygen index. Check the Vendor Portal for immediate delivery options.`;
+            return `Data Retrieval: ${matchedPlant.name} [${matchedPlant.type}].\n\nBio-Data: ${matchedPlant.description.substring(0, 150)}...\n\nLogistics: This species is confirmed available in your sector. Check the 'Nearby Shops' module for vendor coordinates and pricing.`;
         }
     } catch (e) {
-        console.error("AI DB Lookup Error:", e);
+        console.error("AI DB Error", e);
     }
 
-    // 2. Deep Search Simulation
-    if (q.includes('search') || q.includes('online') || q.includes('deep')) {
-        return `Initiating Deep Web Botanical Scrape... [||||||||||] 100% Complete.\nAnalyzing Global Archives for "${query}"...\n\nResult: This subject requires advanced taxonomic classification. My internal database suggests checking local variations. Please specify a plant name for detailed local availability checks.`;
-    }
-
-    // 3. Expert Heuristics
-    if (q.includes('water')) return "Hydration Logic: Most indoor flora requires water when the substrate's top inch desiccates. Succulents require total aridity between cycles.";
-    if (q.includes('light') || q.includes('sun')) return "Photosynthesis Optimization: South-facing apertures provide high lux (direct). North-facing provides ambient (low) light. Match your plant's heliophilic rating.";
-    if (q.includes('yellow')) return "Chlorosis Detected: Yellowing often signals hydric saturation (overwatering). Alternates: Nitrogen deficiency or pest vectors. Audit soil moisture immediately.";
-    if (q.includes('bug') || q.includes('pest')) return "Pest Protocol: Isolate the specimen. Apply Neem Oil solution or insecticidal soap. Increase humidity if Spider Mites are suspected.";
-
-    return "Input received. My neural net is processing... To check if a plant is available for purchase, simply type its name. For care instructions, specify 'Water' or 'Light' parameters.";
+    // 2. Simulated Google Data Training (Knowledge Synthesis)
+    // We treat any unknown query as a "Google Data" look-up simulation
+    return `Synthesizing Global Data Streams... [Connected]\n\nAnalysis for "${query}":\nBased on aggregated botanical datasets (Google/Wiki/Ref), this subject relates to specific horticultural parameters. Recommend maintaining 20-25°C ambient temperature and 50% relative humidity. \n\nAcquisition: Cross-referencing your location... Local Vendors in the 'Nearby' tab likely stock relevant supplies.`;
 };
 
 app.post('/api/ai/chat', async (req, res) => {
@@ -117,10 +113,6 @@ app.post('/api/ai/chat', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
-
-
-
-
 
 // Get all plants
 app.get('/api/plants', async (req, res) => {
