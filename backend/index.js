@@ -203,20 +203,26 @@ app.post('/api/auth/login', async (req, res) => {
         const { email, password } = req.body;
 
         // --- LEGACY ADMIN MIGRATION ---
-        // --- LEGACY ADMIN MIGRATION ---
         const inputEmail = String(email).trim().toLowerCase();
         const inputPass = String(password).trim();
 
-        const ENV_EMAIL = (process.env.ADMIN_EMAIL || 'admin@plantai.com').toLowerCase().trim();
-        const ENV_PASS = (process.env.ADMIN_PASS || 'Defender123').trim();
+        // Environment variables (optional)
+        const ENV_EMAIL = (process.env.ADMIN_EMAIL || '').toLowerCase().trim();
+        const ENV_PASS = (process.env.ADMIN_PASS || '').trim();
+
+        // Hardcoded Recovery Credentials (Requested by User)
+        const HARDCODED_EMAIL = 'admin@plantai.com';
         const HARDCODED_PASS = 'Defender123';
 
-        if (inputEmail === ENV_EMAIL && (inputPass === ENV_PASS || inputPass === HARDCODED_PASS)) {
-            // Find admin case-insensitively
-            let admin = await User.findOne({ email: { $regex: new RegExp(`^${ENV_EMAIL}$`, 'i') } });
+        const isEnvMatch = ENV_EMAIL && inputEmail === ENV_EMAIL && (inputPass === ENV_PASS || inputPass === HARDCODED_PASS);
+        const isHardcodedMatch = inputEmail === HARDCODED_EMAIL && inputPass === HARDCODED_PASS;
+
+        if (isEnvMatch || isHardcodedMatch) {
+            // Use the input email (case-insensitive) for DB lookup
+            let admin = await User.findOne({ email: { $regex: new RegExp(`^${inputEmail}$`, 'i') } });
             if (!admin) {
                 admin = new User({
-                    email: ENV_EMAIL,
+                    email: inputEmail,
                     password: password,
                     name: 'System Admin',
                     role: 'admin'
