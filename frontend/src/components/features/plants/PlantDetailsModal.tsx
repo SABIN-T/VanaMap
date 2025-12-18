@@ -334,11 +334,8 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                             </div>
 
                             <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem' }}>
-                                <Button variant="primary" size="lg" style={{ flex: 2, fontWeight: 800 }} onClick={onClose}>
+                                <Button variant="primary" size="lg" style={{ flex: 1, fontWeight: 800 }} onClick={onClose}>
                                     CLOSE EXPLORER
-                                </Button>
-                                <Button variant="outline" size="lg" style={{ flex: 1, fontSize: '0.8rem', opacity: 0.8 }} onClick={() => window.open('https://wa.me/9188773534', '_blank')}>
-                                    SPONSOR (WhatsApp)
                                 </Button>
                             </div>
                         </div>
@@ -362,7 +359,7 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                                 </div>
                             </div>
 
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem' }}>
+                            <div className={styles.simulationGrid}>
                                 {/* Controls */}
                                 <div>
                                     <div className={styles.sliderControl} style={{ background: 'rgba(255,255,255,0.05)', padding: '1.2rem', borderRadius: '1rem' }}>
