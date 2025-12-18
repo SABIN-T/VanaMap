@@ -23,11 +23,45 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
     // Sync local cart with user's DB cart on login
     useEffect(() => {
-        if (user && user.cart) {
-            // Assuming the backend populates the cart items with full Plant objects
-            // If strictly IDs, we would need to hydrate this data here
-            setItems(user.cart as unknown as CartItem[]);
-        }
+        const hydrateCart = async () => {
+            if (user && user.cart && user.cart.length > 0) {
+                // Check if the first item needs hydration (has plantId but no plant object)
+                const firstItem = user.cart[0] as any;
+                const needsHydration = !firstItem.plant && (firstItem.plantId || firstItem._id);
+
+                if (needsHydration) {
+                    try {
+                        const { fetchPlants } = await import('../services/api');
+                        const allPlants = await fetchPlants();
+
+                        const hydratedItems: CartItem[] = user.cart.map((item: any) => {
+                            // Handle both plantId and _id formats from different DB schemas
+                            const targetId = item.plantId || item._id;
+                            const fullPlant = allPlants.find(p => p.id === targetId);
+                            if (fullPlant) {
+                                return {
+                                    plant: fullPlant,
+                                    quantity: item.quantity || 1
+                                };
+                            }
+                            return null;
+                        }).filter((i): i is CartItem => i !== null); // Remove nulls if plant not found
+
+                        setItems(hydratedItems);
+                    } catch (err) {
+                        console.error("Failed to hydrate cart", err);
+                    }
+                } else {
+                    // Already hydrated or empty
+                    setItems(user.cart as unknown as CartItem[]);
+                }
+            } else if (user && (!user.cart || user.cart.length === 0)) {
+                // User has empty cart in DB (or cleared it)
+                setItems([]);
+            }
+        };
+
+        hydrateCart();
     }, [user]);
 
     const addToCart = (plant: Plant) => {
