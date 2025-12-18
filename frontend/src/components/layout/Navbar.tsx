@@ -108,6 +108,10 @@ export const Navbar = () => {
                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><Leaf size={20} /> Home</div>
                         <ChevronRight size={18} />
                     </Link>
+                    <Link to="/cart" className={styles.mobileNavLink} onClick={() => setIsMenuOpen(false)}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><ShoppingCart size={20} /> My Cart {cartItems.length > 0 && `(${cartItems.length})`}</div>
+                        <ChevronRight size={18} />
+                    </Link>
                     <Link to="/nearby" className={styles.mobileNavLink} onClick={() => setIsMenuOpen(false)}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><Sun size={20} /> Nearby Shops</div>
                         <ChevronRight size={18} />

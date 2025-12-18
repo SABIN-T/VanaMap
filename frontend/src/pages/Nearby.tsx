@@ -303,7 +303,14 @@ out skel qt;
                         </div>
                     </div>
 
-                    {displayVendors.length === 0 ? (
+                    {loading ? (
+                        <div style={{ padding: '2rem', textAlign: 'center' }}>
+                            <div className="animate-spin" style={{ display: 'inline-block', marginBottom: '1rem' }}>
+                                <RefreshCw size={32} color="var(--color-primary)" />
+                            </div>
+                            <p style={{ color: 'var(--color-text-muted)' }}>Scanning satellite data for nurseries...</p>
+                        </div>
+                    ) : displayVendors.length === 0 ? (
                         <div style={{ textAlign: 'center', padding: '4rem', background: 'var(--color-bg-card)', borderRadius: '2rem', border: '1px dashed var(--glass-border)' }}>
                             <MapPin size={48} color="var(--color-text-muted)" style={{ marginBottom: '1rem' }} />
                             <p style={{ color: 'var(--color-text-muted)' }}>No simulation partners detected. Try syncing your GPS metadata.</p>
