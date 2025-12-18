@@ -359,109 +359,77 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                             </div>
                         </div>
 
-                        {/* Simulation Section */}
+                        {/* Simulation Section - User Friendly Version */}
                         <div className={`${styles.simulationContainer} ${viewMode === 'desktop' ? styles.desktopLayout : ''}`}>
 
-                            {/* View Toggle */}
-                            <div className={styles.viewToggle}>
-                                <button className={viewMode === 'mobile' ? styles.activeView : ''} onClick={() => setViewMode('mobile')}>
-                                    <Smartphone size={16} /> <span className={styles.toggleLabel}>Mobile</span>
-                                </button>
-                                <button className={viewMode === 'desktop' ? styles.activeView : ''} onClick={() => setViewMode('desktop')}>
-                                    <Monitor size={16} /> <span className={styles.toggleLabel}>Desk</span>
-                                </button>
-                            </div>
-
-                            {/* LEFT COLUMN: Controls & Input */}
-                            <div className={styles.simControlsGroup}>
-                                <div className={styles.dashboardHeader}>
-                                    <div>
-                                        <h3 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 900, color: 'white', letterSpacing: '-0.5px' }}>
-                                            Air Quality <br />
-                                            <span style={{ color: 'var(--color-primary)' }}>Simulator</span>
-                                        </h3>
-                                        <div style={{ display: 'flex', gap: '0.8rem', marginTop: '0.8rem', alignItems: 'center' }}>
-                                            <div className={styles.liveBadge} style={{ fontSize: '0.7rem' }}>LIVE FEED</div>
-                                            <div className={styles.timeBadge} style={{ fontSize: '0.7rem' }}>{isDay ? 'ACTIVE CYCLE' : 'REST CYCLE'}</div>
-                                            <div className={styles.acToggle}>
-                                                <span style={{ fontSize: '0.7rem', fontWeight: 800, color: '#64748b' }}>AC MODE</span>
-                                                <button className={`${styles.toggleSwitch} ${isACMode ? styles.active : ''}`} onClick={() => setIsACMode(!isACMode)}></button>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div className={styles.scoreCircle}>
-                                        <div className={styles.scoreValue}>{fluxRate}</div>
-                                        <div className={styles.scoreRing} style={{ borderTopColor: fluxRate > 70 ? '#10b981' : fluxRate > 40 ? '#f59e0b' : '#ef4444' }}></div>
-                                    </div>
-                                </div>
-
-                                <div className={styles.sliderControl}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.8rem' }}>
-                                        <span className={styles.controlLabel}><Users size={14} /> OCCUPANCY</span>
-                                        <span className={styles.controlVal}>{numPeople} people</span>
-                                    </div>
-                                    <input type="range" min="1" max="15" value={numPeople} onChange={(e) => setNumPeople(Number(e.target.value))} className={styles.rangeInput} />
-                                </div>
-
-                                <div className={styles.sliderControl}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.8rem' }}>
-                                        <span className={styles.controlLabel}><Thermometer size={14} /> TEMP</span>
-                                        <span className={styles.controlVal}>{currentTemp}°C</span>
-                                    </div>
-                                    <input disabled={isACMode} type="range" min="10" max="45" value={manualTemp} onChange={(e) => setManualTemp(Number(e.target.value))} className={styles.rangeInput} style={{ opacity: isACMode ? 0.5 : 1 }} />
-                                </div>
-
-                                <div className={styles.guideBox}>
-                                    <h5><Lightbulb size={14} /> Simulator Guide</h5>
-                                    <p>Adjust <strong>Occupancy</strong> to match people in your room. See how many plants are needed to keep the air fresh!</p>
-                                    <div className={styles.actionTip}><Info size={12} /> Target a Score &gt; 80% for ideal health.</div>
-                                </div>
-                            </div>
-
-                            {/* RIGHT COLUMN: Visualization & Analysis */}
-                            <div className={styles.simResultsGroup}>
-                                <div className={styles.simVisual}>
-                                    <div className={styles.plantIconWrapper} style={{ width: '100%', display: 'flex', justifyContent: 'center', gap: '2rem', marginBottom: '1.5rem' }}>
-                                        <div style={{ textAlign: 'center' }}>
-                                            <span style={{ fontSize: '0.6rem', color: '#ef4444', fontWeight: 800 }}>CO₂ IN</span>
-                                            <div style={{ height: '60px', width: '40px', background: 'rgba(239, 68, 68, 0.1)', borderRadius: '0.5rem', margin: '0.5rem 0' }}></div>
-                                            <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#ef4444' }}>{isDay ? (PLANT_O2_OUTPUT * 1.1).toFixed(1) : '0.0'}L</span>
-                                        </div>
-                                        <div className={styles.reactorCore}>
-                                            <div className={styles.plantGlow} style={{ width: '70px', height: '70px', borderRadius: '50%', background: 'rgba(16, 185, 129, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', border: '2px solid' + (fluxRate > 70 ? '#10b981' : '#f59e0b') }}>
-                                                <div style={{ color: 'white', fontWeight: 900 }}>{fluxRate}%</div>
-                                            </div>
-                                        </div>
-                                        <div style={{ textAlign: 'center' }}>
-                                            <span style={{ fontSize: '0.6rem', color: '#10b981', fontWeight: 800 }}>O₂ OUT</span>
-                                            <div style={{ height: '60px', width: '40px', background: 'rgba(16, 185, 129, 0.1)', borderRadius: '0.5rem', margin: '0.5rem 0' }}></div>
-                                            <span style={{ fontSize: '0.8rem', fontWeight: 700, color: '#10b981' }}>{isDay ? PLANT_O2_OUTPUT : '0.0'}L</span>
-                                        </div>
-                                    </div>
-
-                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', width: '100%' }}>
-                                        {statusMessages.map((msg, idx) => (
-                                            <div key={idx} className={`${styles.statusMessage} ${styles[msg.type]}`}>
-                                                {msg.icon}
-                                                <div style={{ fontSize: '0.8rem' }}>{msg.text}</div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1.5rem', borderRadius: '1rem', border: '1px solid rgba(255,255,255,0.05)' }}>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem', marginBottom: '1rem' }}>
-                                        <div style={{ background: 'rgba(16, 185, 129, 0.1)', padding: '0.5rem', borderRadius: '0.5rem' }}>
-                                            <Sprout size={20} color="#10b981" />
-                                        </div>
-                                        <h4 style={{ margin: 0, fontSize: '1rem', color: 'white' }}>Conclusion</h4>
-                                    </div>
-                                    <p style={{ margin: '0 0 1rem 0', fontSize: '1.2rem', color: '#f1f5f9', lineHeight: 1.4 }}>
-                                        For <strong>{numPeople} people</strong>, you need <strong>{plantsNeeded} units</strong> of this plant to stay fresh.
+                            <div className={styles.dashboardHeader} style={{ border: 'none', marginBottom: '1rem' }}>
+                                <div>
+                                    <h3 style={{ margin: 0, fontSize: '1.4rem', fontWeight: 800, color: 'white' }}>
+                                        Will it purify my room?
+                                    </h3>
+                                    <p style={{ margin: '0.5rem 0 0', color: '#94a3b8', fontSize: '0.9rem' }}>
+                                        Calculate how many plants you need for fresh air.
                                     </p>
-                                    <div style={{ background: 'rgba(56, 189, 248, 0.1)', padding: '0.8rem', borderRadius: '0.5rem', fontSize: '0.75rem', color: '#94a3b8', borderLeft: '3px solid #38bdf8' }}>
-                                        <strong>Fact:</strong> Adults need ~500L oxygen daily. One {plant.name} produces {Math.abs(PLANT_O2_OUTPUT)}L under these conditions.
+                                </div>
+                                <div className={styles.scoreCircle} style={{ width: '60px', height: '60px' }}>
+                                    <div className={styles.scoreValue} style={{ fontSize: '1rem' }}>{fluxRate}%</div>
+                                    <div className={styles.scoreLabel}>EFFICIENT</div>
+                                    <div className={styles.scoreRing} style={{ borderTopColor: fluxRate > 70 ? '#10b981' : '#f59e0b' }}></div>
+                                </div>
+                            </div>
+
+                            <div style={{ display: 'grid', gridTemplateColumns: viewMode === 'desktop' ? '1fr 1fr' : '1fr', gap: '2rem' }}>
+                                {/* Controls */}
+                                <div>
+                                    <div className={styles.sliderControl} style={{ background: 'rgba(255,255,255,0.05)', padding: '1.2rem', borderRadius: '1rem' }}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem', alignItems: 'center' }}>
+                                            <span style={{ fontSize: '0.9rem', fontWeight: 700, color: 'white', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                                <Users size={16} color="var(--color-primary)" /> Who is in the room?
+                                            </span>
+                                            <span className={styles.controlVal} style={{ fontSize: '1.2rem' }}>{numPeople}</span>
+                                        </div>
+                                        <input type="range" min="1" max="10" value={numPeople} onChange={(e) => setNumPeople(Number(e.target.value))} className={styles.rangeInput} />
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.5rem', fontSize: '0.7rem', color: '#64748b' }}>
+                                            <span>Just me</span>
+                                            <span>Full Family</span>
+                                        </div>
+                                    </div>
+
+                                    <div className={styles.acToggle} style={{ marginTop: '1.5rem', background: 'rgba(255,255,255,0.02)', padding: '1rem', borderRadius: '0.8rem', justifyContent: 'space-between' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
+                                            <div style={{ background: 'rgba(56, 189, 248, 0.1)', padding: '0.4rem', borderRadius: '0.4rem' }}>
+                                                <Wind size={16} color="#38bdf8" />
+                                            </div>
+                                            <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                                <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#e2e8f0' }}>Climate Control</span>
+                                                <span style={{ fontSize: '0.7rem', color: '#94a3b8' }}>{isACMode ? 'AC is keeping temp ideal' : 'Natural room temperature'}</span>
+                                            </div>
+                                        </div>
+                                        <button className={`${styles.toggleSwitch} ${isACMode ? styles.active : ''}`} onClick={() => setIsACMode(!isACMode)}></button>
+                                    </div>
+                                </div>
+
+                                {/* Results */}
+                                <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+                                    <div style={{
+                                        flex: 1,
+                                        background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(6, 78, 59, 0.2) 100%)',
+                                        borderRadius: '1.5rem',
+                                        padding: '1.5rem',
+                                        border: '1px solid rgba(16, 185, 129, 0.2)',
+                                        display: 'flex',
+                                        flexDirection: 'column',
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        textAlign: 'center'
+                                    }}>
+                                        <div style={{ fontSize: '0.8rem', color: '#86efac', fontWeight: 700, letterSpacing: '1px', marginBottom: '0.5rem' }}>RECOMMENDATION</div>
+                                        <div style={{ fontSize: '3.5rem', fontWeight: 900, color: 'white', lineHeight: 1 }}>{plantsNeeded}</div>
+                                        <div style={{ fontSize: '1.1rem', fontWeight: 600, color: 'white', marginBottom: '1rem' }}>Plants Needed</div>
+
+                                        <p style={{ fontSize: '0.85rem', color: '#cbd5e1', lineHeight: 1.5, margin: 0, maxWidth: '200px' }}>
+                                            To provide fresh {plant.oxygenLevel} oxygen for {numPeople} people.
+                                        </p>
                                     </div>
                                 </div>
                             </div>
