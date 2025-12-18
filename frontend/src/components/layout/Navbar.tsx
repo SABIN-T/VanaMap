@@ -5,7 +5,6 @@ import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
 import { useTheme } from '../../context/ThemeContext';
 import styles from './Navbar.module.css';
-import { SuggestionPopup } from '../features/suggestions/SuggestionPopup';
 
 export const Navbar = () => {
     const { user, logout } = useAuth();
@@ -151,7 +150,6 @@ export const Navbar = () => {
                 </div>
             </div>
 
-            <SuggestionPopup />
         </nav>
     );
 };

@@ -118,27 +118,7 @@ app.post('/api/ai/chat', async (req, res) => {
     }
 });
 
-app.post('/api/suggestions', async (req, res) => {
-    try {
-        const { message, contact } = req.body; // user/vendor contact info
-        const msg = `SUGGESTION from ${contact || 'Anonymous'}: ${message}`;
 
-        // Send to Admin WhatsApp (Mock)
-        await sendWhatsApp(msg, 'suggestion', { contact });
-
-        // Also save to Notifications for dashboard capability
-        const notif = new Notification({
-            type: 'suggestion',
-            message: msg,
-            details: { contact, fullText: message }
-        });
-        await notif.save();
-
-        res.json({ success: true });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});
 
 
 
