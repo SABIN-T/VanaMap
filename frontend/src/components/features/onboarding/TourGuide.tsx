@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ChevronRight, ChevronLeft, MapPin, ShoppingBag, BookOpen, Leaf, X } from 'lucide-react';
+import { ChevronRight, MapPin, ShoppingBag, BookOpen, Leaf } from 'lucide-react';
 
 interface Step {
     targetId: string;
@@ -184,8 +184,7 @@ export const TourGuide = () => {
                 <div className="glass-panel" style={{
                     flex: 1,
                     position: 'relative',
-                    background: 'rgba(255, 255, 255, 0.95)', // Cleaner light theme for speech bubble look? Or dark. User said "Best UI". Dark glass is usually premium.
-                    background: 'rgba(30, 41, 59, 0.95)',
+                    background: 'rgba(30, 41, 59, 0.95)', // Cleaner light theme for speech bubble look? Or dark. User said "Best UI". Dark glass is usually premium.
                     backdropFilter: 'blur(20px)',
                     border: '1px solid rgba(255, 255, 255, 0.1)',
                     borderRadius: '1.5rem',
