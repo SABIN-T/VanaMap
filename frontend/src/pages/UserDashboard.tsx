@@ -1,13 +1,50 @@
+import { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import { Button } from '../components/common/Button';
-import { Trash2, ShoppingBag, MapPin, Heart, ArrowRight, Activity } from 'lucide-react';
+import { Trash2, ShoppingBag, MapPin, Heart, ArrowRight, Activity, Loader2 } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { fetchPlants, toggleFavorite } from '../services/api';
+import type { Plant } from '../types';
 
 export const UserDashboard = () => {
     const { items, removeFromCart } = useCart();
-    const { user, loading } = useAuth();
+    const { user, loading, refreshUser } = useAuth();
     const navigate = useNavigate();
+
+    // Favorites State
+    const [allPlants, setAllPlants] = useState<Plant[]>([]);
+    const [loadingFavs, setLoadingFavs] = useState(true);
+
+    useEffect(() => {
+        const loadData = async () => {
+            if (user) {
+                setLoadingFavs(true);
+                try {
+                    const plants = await fetchPlants();
+                    setAllPlants(plants);
+                } catch (e) {
+                    console.error("Failed to load plants", e);
+                } finally {
+                    setLoadingFavs(false);
+                }
+            }
+        };
+        loadData();
+    }, [user]);
+
+    // Compute favorites from allPlants based on user.favorites IDs
+    const favoritePlants = allPlants.filter(p => user?.favorites?.includes(p.id));
+
+    const handleRemoveFavorite = async (plantId: string) => {
+        if (!user) return;
+        try {
+            await toggleFavorite(user.email, plantId);
+            await refreshUser(); // Refresh user context to update favorites list
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     if (loading) {
         return (
@@ -37,7 +74,7 @@ export const UserDashboard = () => {
                         User Dashboard
                     </h1>
                     <p style={{ color: 'var(--color-text-muted)', marginTop: '0.5rem', fontSize: '1.1rem' }}>
-                        Welcome back, {user.name}! Manage your plant selection and wishlist.
+                        Welcome back, {user.name}!
                     </p>
                 </div>
 
@@ -57,137 +94,161 @@ export const UserDashboard = () => {
                 )}
             </div>
 
-            <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-                gap: '2rem',
-                alignItems: 'start'
-            }}>
-                {/* Wishlist Section */}
-                <div className="glass-panel" style={{ padding: '2rem', borderRadius: '1.5rem', border: 'var(--glass-border)' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
-                        <h2 style={{ fontSize: '1.5rem', margin: 0, display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                            <ShoppingBag color="var(--color-primary)" /> Your Wishlist
-                        </h2>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '4rem' }}>
+
+                {/* FAVORITES SECTION */}
+                <section>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
+                        <div style={{ padding: '0.75rem', background: 'rgba(239, 68, 68, 0.1)', borderRadius: '1rem', color: '#ef4444' }}>
+                            <Heart size={24} fill="#ef4444" />
+                        </div>
+                        <h2 style={{ fontSize: '1.8rem', fontWeight: 700, margin: 0 }}>My Favorites</h2>
                         <span style={{
                             background: 'rgba(255,255,255,0.05)',
-                            padding: '0.25rem 0.75rem',
+                            padding: '0.25rem 0.8rem',
                             borderRadius: '99px',
-                            fontSize: '0.8rem',
-                            fontWeight: '600'
+                            color: '#ef4444',
+                            fontWeight: 600
                         }}>
-                            {items.length} Items
+                            {user.favorites?.length || 0}
                         </span>
                     </div>
 
-                    {items.length === 0 ? (
-                        <div style={{ textAlign: 'center', padding: '3rem 1rem', color: 'var(--color-text-muted)' }}>
-                            <div style={{ marginBottom: '1.5rem' }}>
-                                <ShoppingBag size={48} opacity={0.2} />
-                            </div>
-                            <p style={{ marginBottom: '1.5rem' }}>Your wishlist is currently empty.</p>
-                            <Link to="/">
-                                <Button variant="outline">Browse Plants</Button>
-                            </Link>
+                    {loadingFavs ? (
+                        <div style={{ display: 'flex', gap: '1rem', color: 'var(--color-text-muted)', background: 'rgba(255,255,255,0.02)', padding: '2rem', borderRadius: '1rem' }}>
+                            <Loader2 className="animate-spin" /> Loading favorites...
+                        </div>
+                    ) : favoritePlants.length === 0 ? (
+                        <div className="glass-panel" style={{ padding: '3rem', textAlign: 'center', borderRadius: '1.5rem', borderStyle: 'dashed', borderColor: 'rgba(255,255,255,0.1)' }}>
+                            <Heart size={48} color="#cbd5e1" style={{ marginBottom: '1rem', opacity: 0.5 }} />
+                            <h3 style={{ marginBottom: '0.5rem', color: 'var(--color-text-muted)' }}>No favorites yet</h3>
+                            <p style={{ marginBottom: '1.5rem', color: '#64748b' }}>Heart plants as you browse to save them here.</p>
+                            <Link to="/"><Button variant="outline">Browse Plants</Button></Link>
                         </div>
                     ) : (
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-                            {items.map(({ plant, quantity }) => (
-                                <div key={plant.id} style={{
-                                    display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                                    background: 'rgba(255,255,255,0.03)', padding: '1rem', borderRadius: '1rem',
-                                    border: '1px solid rgba(255,255,255,0.05)',
-                                    transition: 'transform 0.2s ease'
-                                }} className="item-card">
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                        <div style={{ position: 'relative' }}>
-                                            <img src={plant.imageUrl} alt={plant.name} style={{ width: '70px', height: '70px', borderRadius: '0.75rem', objectFit: 'cover' }} />
-                                            <div style={{
-                                                position: 'absolute', top: -5, right: -5,
-                                                background: 'var(--color-primary)', color: 'black',
-                                                width: '20px', height: '20px', borderRadius: '50%',
+                        <div style={{
+                            display: 'grid',
+                            gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
+                            gap: '1.5rem'
+                        }}>
+                            {favoritePlants.map(plant => (
+                                <div key={plant.id} className="glass-panel" style={{
+                                    padding: '0',
+                                    borderRadius: '1.5rem',
+                                    overflow: 'hidden',
+                                    transition: 'transform 0.2s',
+                                    position: 'relative'
+                                }}>
+                                    <div style={{ height: '180px', position: 'relative' }}>
+                                        <img src={plant.imageUrl} alt={plant.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                        <button
+                                            onClick={() => handleRemoveFavorite(plant.id)}
+                                            title="Remove from favorites"
+                                            style={{
+                                                position: 'absolute',
+                                                top: '10px',
+                                                right: '10px',
+                                                background: 'white',
+                                                borderRadius: '50%',
+                                                width: '32px',
+                                                height: '32px',
                                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                                fontSize: '0.7rem', fontWeight: '800'
-                                            }}>
-                                                {quantity}
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <h3 style={{ fontSize: '1.1rem', margin: 0 }}>{plant.name}</h3>
-                                            <p style={{ color: 'var(--color-text-muted)', fontSize: '0.8rem', fontStyle: 'italic' }}>{plant.scientificName}</p>
+                                                border: 'none',
+                                                cursor: 'pointer',
+                                                boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
+                                            }}
+                                        >
+                                            <Heart size={16} fill="#ef4444" color="#ef4444" />
+                                        </button>
+                                    </div>
+                                    <div style={{ padding: '1.25rem' }}>
+                                        <h3 style={{ fontSize: '1.1rem', fontWeight: 700, margin: '0 0 0.25rem 0' }}>{plant.name}</h3>
+                                        <p style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)', margin: 0, fontStyle: 'italic' }}>{plant.scientificName}</p>
+                                        <div style={{ marginTop: '1rem', display: 'flex', gap: '0.5rem' }}>
+                                            <span style={{ fontSize: '0.75rem', padding: '0.2rem 0.6rem', borderRadius: '4px', background: 'rgba(56, 189, 248, 0.1)', color: '#38bdf8' }}>
+                                                {plant.waterNeeds || "Moderate"} Water
+                                            </span>
                                         </div>
                                     </div>
-
-                                    <button
-                                        onClick={() => removeFromCart(plant.id)}
-                                        style={{
-                                            background: 'rgba(239, 68, 68, 0.1)',
-                                            color: '#ef4444',
-                                            border: 'none',
-                                            padding: '0.6rem',
-                                            borderRadius: '0.5rem',
-                                            cursor: 'pointer'
-                                        }}
-                                        title="Remove"
-                                    >
-                                        <Trash2 size={18} />
-                                    </button>
                                 </div>
                             ))}
-
-                            <div style={{
-                                marginTop: '1.5rem',
-                                padding: '1.5rem',
-                                background: 'rgba(0, 255, 157, 0.05)',
-                                borderRadius: '1rem',
-                                border: '1px dashed var(--color-primary)',
-                                textAlign: 'center'
-                            }}>
-                                <p style={{ color: 'var(--color-primary)', fontSize: '0.9rem', fontWeight: '600', margin: 0 }}>
-                                    💡 Tip: Contact vendors via the "Nearby" map for current pricing.
-                                </p>
-                            </div>
-
-                            <Link to="/nearby" style={{ textDecoration: 'none' }}>
-                                <Button style={{ width: '100%', borderRadius: '1rem', padding: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
-                                    <MapPin size={20} /> Find Vendors Near Me <ArrowRight size={18} />
-                                </Button>
-                            </Link>
                         </div>
                     )}
-                </div>
+                </section>
 
-                {/* Account & Favorites Summary */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-                    <div className="glass-panel" style={{ padding: '2rem', borderRadius: '1.5rem' }}>
-                        <h3 style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem' }}>
-                            <Heart color="#ef4444" fill="#ef4444" size={20} /> Saved Favorites
-                        </h3>
-                        <p style={{ color: 'var(--color-text-muted)', fontSize: '0.95rem' }}>
-                            You have {user?.favorites?.length || 0} plants saved as favorites.
-                            These will be prioritized in your recommendations.
-                        </p>
-                    </div>
-
-                    <div className="glass-panel" style={{ padding: '2rem', borderRadius: '1.5rem', background: 'var(--gradient-primary)', color: 'black' }}>
-                        <h3 style={{ margin: 0 }}>Oxygen Goal</h3>
-                        <p style={{ fontSize: '0.9rem', opacity: 0.8, margin: '0.5rem 0 1.5rem' }}>
-                            Based on your selection, you are improving air quality in your space.
-                        </p>
-                        <div style={{ background: 'rgba(0,0,0,0.1)', height: '8px', borderRadius: '4px', overflow: 'hidden' }}>
-                            <div style={{ background: 'black', width: '65%', height: '100%' }}></div>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '4rem' }}>
+                    {/* WISHLIST / CART SECTION */}
+                    <section>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
+                            <div style={{ padding: '0.75rem', background: 'rgba(56, 189, 248, 0.1)', borderRadius: '1rem', color: '#38bdf8' }}>
+                                <ShoppingBag size={24} />
+                            </div>
+                            <h2 style={{ fontSize: '1.8rem', fontWeight: 700, margin: 0 }}>Shopping List</h2>
+                            <span style={{
+                                background: 'rgba(255,255,255,0.05)',
+                                padding: '0.25rem 0.8rem',
+                                borderRadius: '99px',
+                                color: '#38bdf8',
+                                fontWeight: 600
+                            }}>
+                                {items.length}
+                            </span>
                         </div>
-                        <p style={{ fontSize: '0.8rem', fontWeight: '800', marginTop: '0.5rem', textAlign: 'right' }}>65% Towards Fresh Air Goal</p>
-                    </div>
+
+                        {items.length === 0 ? (
+                            <div className="glass-panel" style={{ padding: '2rem', textAlign: 'center', borderRadius: '1.5rem' }}>
+                                <p style={{ color: 'var(--color-text-muted)' }}>Your cart is empty.</p>
+                                <Link to="/" style={{ display: 'inline-block', marginTop: '1rem' }}><Button variant="outline" size="sm">Add Items</Button></Link>
+                            </div>
+                        ) : (
+                            <div style={{ display: 'grid', gap: '1rem' }}>
+                                {items.map(({ plant, quantity }) => (
+                                    <div key={plant.id} className="glass-panel" style={{
+                                        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                                        padding: '1rem', borderRadius: '1rem'
+                                    }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                            <img src={plant.imageUrl} alt={plant.name} style={{ width: '60px', height: '60px', borderRadius: '0.75rem', objectFit: 'cover' }} />
+                                            <div>
+                                                <h4 style={{ margin: 0, fontSize: '1rem' }}>{plant.name}</h4>
+                                                <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>Qty: {quantity}</p>
+                                            </div>
+                                        </div>
+                                        <Button size="sm" variant="danger" onClick={() => removeFromCart(plant.id)}>
+                                            <Trash2 size={16} />
+                                        </Button>
+                                    </div>
+                                ))}
+                                <div style={{ marginTop: '1rem', textAlign: 'right' }}>
+                                    <Link to="/cart"><Button variant="primary">Go to Cart <ArrowRight size={16} /></Button></Link>
+                                </div>
+                            </div>
+                        )}
+                    </section>
+
+                    {/* Nearby Shops Section */}
+                    <section>
+                        <div style={{ marginBottom: '2rem' }}>
+                            <h2 style={{ fontSize: '1.5rem', margin: 0, display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                <MapPin color="#facc15" /> Nearby Shops
+                            </h2>
+                        </div>
+                        <div className="glass-panel" style={{ padding: '2rem', borderRadius: '1.5rem' }}>
+                            <div style={{ background: 'url(https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?auto=format&fit=crop&q=80)', height: '150px', borderRadius: '1rem', backgroundSize: 'cover', backgroundPosition: 'center', marginBottom: '1.5rem', position: 'relative' }}>
+                                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.8), transparent)', borderRadius: '1rem', display: 'flex', alignItems: 'end', padding: '1rem' }}>
+                                    <p style={{ margin: 0, fontWeight: 700 }}>Find Verified Nurseries</p>
+                                </div>
+                            </div>
+                            <p style={{ color: 'var(--color-text-muted)', marginBottom: '1.5rem' }}>
+                                Locate the best plant shops in your area with our interactive map integration.
+                            </p>
+                            <Link to="/nearby">
+                                <Button variant="outline" style={{ width: '100%' }}>Open Map</Button>
+                            </Link>
+                        </div>
+                    </section>
                 </div>
             </div>
-
-            <style>{`
-                .item-card:hover {
-                    transform: translateX(5px);
-                    background: rgba(255,255,255,0.05) !important;
-                }
-            `}</style>
         </div>
     );
 };
