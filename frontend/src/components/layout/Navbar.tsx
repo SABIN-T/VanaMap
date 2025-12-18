@@ -62,15 +62,15 @@ export const Navbar = () => {
 
             {/* Desktop Links */}
             <div className={styles.desktopLinks}>
-                <Link to="/" className={styles.navLink}>Home</Link>
-                <Link to="/nearby" className={styles.navLink}>Nearby Shops</Link>
-                <button onClick={handleDownloadGuide} className={styles.navLink}>
+                <Link id="nav-home" to="/" className={styles.navLink}>Home</Link>
+                <Link id="nav-nearby" to="/nearby" className={styles.navLink}>Nearby Shops</Link>
+                <button id="nav-guide" onClick={handleDownloadGuide} className={styles.navLink}>
                     <BookOpen size={16} /> Guide
                 </button>
             </div>
 
             <div className={styles.actions}>
-                <Link to="/cart" className={styles.cartBtn}>
+                <Link id="nav-cart" to="/cart" className={styles.cartBtn}>
                     <ShoppingCart size={24} />
                     {cartItems.length > 0 && <span className={styles.badge}>{cartItems.length}</span>}
                 </Link>

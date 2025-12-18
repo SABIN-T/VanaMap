@@ -312,7 +312,7 @@ export const Home = () => {
                 </div>
             </section>
 
-            <div className="container" id="plants-grid" ref={plantsSectionRef} style={{ scrollMarginTop: '2rem' }}>
+            <div className="container" id="plant-grid" ref={plantsSectionRef} style={{ scrollMarginTop: '2rem' }}>
                 <div className={styles.sectionHeader}>
                     <h2 style={{ fontSize: '2.5rem', fontWeight: 900 }}>{weather ? 'RANKED ECOSYSTEM MATCHES' : 'SIMULATION DATABASE'}</h2>
                     <p style={{ color: 'var(--color-text-muted)' }}>{weather ? 'Scientifically ranked based on your atmosphere.' : 'Explore high-vitality species optimized for indoor simulation.'}</p>
