@@ -78,18 +78,23 @@ export const TourGuide = () => {
     const [isVisible, setIsVisible] = useState(false);
     const [currentStep, setCurrentStep] = useState(0);
     const [targetRect, setTargetRect] = useState<DOMRect | null>(null);
+    const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
     // Initial check
     useEffect(() => {
-        const hasSeenTour = localStorage.getItem('vanamap_tour_v3_complete');
+        const hasSeenTour = localStorage.getItem('vanamap_tour_v4_complete');
         if (!hasSeenTour) {
             setTimeout(() => setIsVisible(true), 1500);
         }
+
+        const handleResize = () => setIsMobile(window.innerWidth < 768);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
     }, []);
 
     // Update rect
     useEffect(() => {
-        if (!isVisible) return;
+        if (!isVisible || isMobile) return; // Skip targeting on mobile
 
         const updatePosition = () => {
             const step = TOUR_STEPS[currentStep];
@@ -108,7 +113,7 @@ export const TourGuide = () => {
         updatePosition();
         window.addEventListener('resize', updatePosition);
         return () => window.removeEventListener('resize', updatePosition);
-    }, [currentStep, isVisible]);
+    }, [currentStep, isVisible, isMobile]);
 
     const handleNext = () => {
         if (currentStep < TOUR_STEPS.length - 1) {
@@ -120,7 +125,7 @@ export const TourGuide = () => {
 
     const finishTour = () => {
         setIsVisible(false);
-        localStorage.setItem('vanamap_tour_v3_complete', 'true');
+        localStorage.setItem('vanamap_tour_v4_complete', 'true');
     };
 
     if (!isVisible) return null;
@@ -131,8 +136,8 @@ export const TourGuide = () => {
         <div style={{
             position: 'fixed', inset: 0, zIndex: 9999, pointerEvents: 'none', overflow: 'hidden'
         }}>
-            {/* Spotlight Overlay */}
-            {targetRect && (
+            {/* Spotlight Overlay - DESKTOP ONLY */}
+            {!isMobile && targetRect && (
                 <div style={{
                     position: 'absolute',
                     top: targetRect.top - 10,
@@ -151,24 +156,20 @@ export const TourGuide = () => {
                 </div>
             )}
 
-            {!targetRect && <div style={{ position: 'absolute', inset: 0, background: 'rgba(15, 23, 42, 0.9)' }}></div>}
+            {(!isMobile && !targetRect) && <div style={{ position: 'absolute', inset: 0, background: 'rgba(15, 23, 42, 0.9)' }}></div>}
+
+            {/* Mobile simplified overlay */}
+            {isMobile && <div style={{ position: 'absolute', bottom: 0, left: 0, width: '100%', height: '100%', background: 'none' }}></div>}
 
             {/* Speech Bubble / Dialog Box */}
             <div style={{
-                position: 'absolute',
-                top: targetRect
-                    ? (window.innerWidth < 768
-                        ? 'auto' // Mobile: let bottom dictate
-                        : Math.min(window.innerHeight - 250, Math.max(100, targetRect.bottom + 40)))
-                    : '50%',
-                bottom: (window.innerWidth < 768 && targetRect) ? '40px' : 'auto', // Mobile: Stick to bottom
-                left: targetRect
-                    ? (window.innerWidth < 768
-                        ? '50%'
-                        : Math.min(window.innerWidth - 350, Math.max(50, targetRect.left)))
-                    : '50%',
-                transform: 'translateX(-50%)',
-                width: window.innerWidth < 768 ? '90vw' : '340px',
+                position: isMobile ? 'fixed' : 'absolute',
+                // Mobile: Stick to bottom, Desktop: Follow target
+                bottom: isMobile ? '20px' : (targetRect ? 'auto' : '50%'),
+                top: isMobile ? 'auto' : (targetRect ? Math.min(window.innerHeight - 250, Math.max(100, targetRect.bottom + 40)) : '50%'),
+                left: isMobile ? '50%' : (targetRect ? Math.min(window.innerWidth - 350, Math.max(50, targetRect.left)) : '50%'),
+                transform: isMobile ? 'translateX(-50%)' : 'translateX(-50%)',
+                width: isMobile ? '90vw' : '340px',
                 pointerEvents: 'auto',
                 transition: 'all 0.5s cubic-bezier(0.25, 1, 0.5, 1)',
                 display: 'flex',
@@ -184,18 +185,18 @@ export const TourGuide = () => {
                 <div className="glass-panel" style={{
                     flex: 1,
                     position: 'relative',
-                    background: 'rgba(30, 41, 59, 0.95)', // Cleaner light theme for speech bubble look? Or dark. User said "Best UI". Dark glass is usually premium.
+                    background: 'rgba(30, 41, 59, 0.95)',
                     backdropFilter: 'blur(20px)',
                     border: '1px solid rgba(255, 255, 255, 0.1)',
                     borderRadius: '1.5rem',
-                    borderBottomLeftRadius: '0.2rem', // Speech bubble tail effect
+                    borderBottomLeftRadius: '0.2rem',
                     boxShadow: '0 20px 50px -10px rgba(0,0,0,0.5)',
                     padding: '0',
                     color: 'white'
                 }}>
-                    {/* Top Controls (Requested) */}
+                    {/* Top Controls */}
                     <div style={{
-                        padding: '1rem 1.25rem 0.5rem',
+                        padding: '0.75rem 1.25rem',
                         display: 'flex',
                         justifyContent: 'space-between',
                         alignItems: 'center',
