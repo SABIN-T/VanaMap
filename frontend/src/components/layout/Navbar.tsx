@@ -63,9 +63,9 @@ export const Navbar = () => {
                 <Link id="nav-nearby" to="/nearby" className={styles.navLink}>Nearby Shops</Link>
 
                 {/* Doctor AI Button */}
-                <button onClick={() => setIsAIModalOpen(true)} className={styles.navLink} style={{ color: '#38bdf8', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <Link to="/doctor-ai" target="_blank" className={styles.navLink} style={{ color: '#38bdf8', display: 'flex', alignItems: 'center', gap: '5px' }}>
                     <Bot size={18} /> Doctor AI
-                </button>
+                </Link>
 
                 <button id="nav-guide" onClick={handleDownloadGuide} className={styles.navLink}>
                     <BookOpen size={16} /> Guide
@@ -111,10 +111,10 @@ export const Navbar = () => {
                         <ChevronRight size={18} />
                     </Link>
 
-                    <button onClick={() => { setIsAIModalOpen(true); setIsMenuOpen(false); }} className={styles.mobileNavLink} style={{ color: '#38bdf8' }}>
+                    <Link to="/doctor-ai" target="_blank" className={styles.mobileNavLink} onClick={() => setIsMenuOpen(false)} style={{ color: '#38bdf8' }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><Bot size={20} /> Doctor AI</div>
                         <ChevronRight size={18} />
-                    </button>
+                    </Link>
 
                     <Link to="/cart" className={styles.mobileNavLink} onClick={() => setIsMenuOpen(false)}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><ShoppingCart size={20} /> My Cart {cartItems.length > 0 && `(${cartItems.length})`}</div>
