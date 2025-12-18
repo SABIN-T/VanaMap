@@ -19,59 +19,81 @@
     max-height: 90vh;
     overflow-y: auto;
     position: relative;
-    border-radius: 2rem;
-    background: rgba(15, 23, 42, 0.95);
+    border-radius: 2.5rem;
+    background: rgba(15, 23, 42, 0.98);
     color: white;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Desktop: Wide, No-Scroll Two-Column View */
 @media (min-width: 1024px) {
     .modal {
-        max-width: 1100px !important;
-        max-height: 95vh !important;
-        overflow-y: hidden;
+        max-width: 1200px !important;
+        height: 85vh !important;
+        max-height: 85vh !important;
+        overflow: hidden !important;
         /* Remove internal scrolling if content fits */
         display: flex;
         flex-direction: column;
+        border: 1px solid rgba(16, 185, 129, 0.2);
     }
 
     .overlay {
-        padding: 2rem;
+        padding: 3rem;
+        background: rgba(0, 0, 0, 0.9);
     }
 
     .content {
+        flex: 1;
         display: grid !important;
-        grid-template-columns: 1fr 1fr;
-        gap: 2.5rem;
-        padding: 2rem 3rem !important;
+        grid-template-columns: 1fr 1.1fr;
+        gap: 4rem;
+        padding: 0 4rem 3rem !important;
         overflow-y: auto;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(16, 185, 129, 0.3) transparent;
         /* Allow scrolling ONLY in the content area if still too long */
-        max-height: calc(95vh - 200px);
+        /* max-height: calc(95vh - 200px); */
         /* Adjust based on image height */
     }
 
     .simulationContainer {
-        padding: 2rem !important;
-        margin-bottom: 0 !important;
-        background: rgba(255, 255, 255, 0.03);
-        border-radius: 1.5rem;
-        border: 1px solid rgba(255, 255, 255, 0.05);
+        position: sticky;
+        top: 0;
+        background: linear-gradient(165deg, rgba(16, 185, 129, 0.08) 0%, rgba(14, 165, 233, 0.05) 100%) !important;
+        border: 1px solid rgba(16, 185, 129, 0.2) !important;
+        border-radius: 2rem !important;
+        padding: 3rem !important;
+        box-shadow:
+            0 20px 50px rgba(0, 0, 0, 0.2),
+            inset 0 0 20px rgba(16, 185, 129, 0.05) !important;
         height: min-content;
     }
 
     .imageContainer {
-        height: 220px !important;
+        height: 280px !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .imageOverlay {
+        background: linear-gradient(to top, rgba(15, 23, 42, 1), transparent 70%);
     }
 
     .titleSection {
-        padding: 0 3rem !important;
-        margin-top: -4rem !important;
+        padding: 0 4rem !important;
+        margin-top: -5rem !important;
     }
 
     .descriptionSection {
         margin-bottom: 2rem !important;
+    }
+
+    .descriptionSection p {
+        font-size: 1.15rem !important;
+        line-height: 1.8 !important;
+        color: #94a3b8 !important;
     }
 
     .infoGrid {
@@ -87,31 +109,33 @@
     .detailsColumn {
         display: flex;
         flex-direction: column;
-        gap: 1.5rem;
+        gap: 2.5rem !important;
     }
 }
 
 .closeBtn {
     position: absolute;
-    top: 1.5rem;
-    right: 1.5rem;
-    background: rgba(255, 255, 255, 0.05);
+    top: 2rem;
+    right: 2rem;
+    background: rgba(15, 23, 42, 0.8);
     border: 1px solid rgba(255, 255, 255, 0.1);
     color: white;
     border-radius: 50%;
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    z-index: 10;
-    transition: 0.3s;
+    z-index: 100;
+    transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(10px);
 }
 
 .closeBtn:hover {
     background: #ef4444;
     border-color: #ef4444;
+    transform: rotate(90deg) scale(1.1);
 }
 
 .header {
@@ -570,94 +594,58 @@
     }
 }
 
-.statVal {
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: white;
-}
-
-/* Desktop: Smaller, refined stat values */
-@media (min-width: 1024px) {
-    .statVal {
-        font-size: 1.5rem;
-        font-weight: 800;
-        color: #0f172a;
-        margin-bottom: 0.4rem;
-    }
-}
-
-.statLabel {
-    font-size: 0.7rem;
-    color: var(--color-text-muted);
-    font-weight: 700;
-    text-transform: uppercase;
-    margin-top: 0.25rem;
-}
-
-/* Desktop: Cleaner stat labels */
-@media (min-width: 1024px) {
-    .statLabel {
-        font-size: 0.65rem;
-        font-weight: 600;
-        color: #64748b;
-        letter-spacing: 1.2px;
-    }
-}
-
-.fluxRing {
-    position: relative;
-    width: 60px;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(0, 255, 157, 0.05);
-    border-radius: 50%;
-    border: 2px solid rgba(0, 255, 157, 0.2);
-    animation: rotate 10s linear infinite;
-}
-
-/* Desktop: Cleaner ring */
-@media (min-width: 1024px) {
-    .fluxRing {
-        width: 75px;
-        height: 75px;
-        border: 2.5px solid #10b981;
-        background: rgba(255, 255, 255, 0.8);
-        box-shadow: 0 4px 16px rgba(16, 185, 129, 0.2);
-    }
-}
-
-/* Info Grid */
 .infoGrid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-    margin-bottom: 3.5rem;
+    gap: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+    .infoGrid {
+        gap: 2rem;
+    }
 }
 
 .infoTile {
     background: rgba(255, 255, 255, 0.03);
-    padding: 1rem;
-    border-radius: 1rem;
+    padding: 1.25rem;
+    border-radius: 1.25rem;
     border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.3s ease;
+}
+
+@media (min-width: 1024px) {
+    .infoTile {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        padding: 1.75rem;
+    }
+
+    .infoTile:hover {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(16, 185, 129, 0.3);
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
 }
 
 .tileHeader {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 800;
-    color: var(--color-text-muted);
+    color: #94a3b8;
     text-transform: uppercase;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 0.5rem;
+    gap: 0.6rem;
+    margin-bottom: 0.75rem;
+    letter-spacing: 1.5px;
 }
 
 .tileBody {
-    font-size: 0.95rem;
+    font-size: 1rem;
     font-weight: 600;
     color: white;
+    line-height: 1.5;
 }
 
 .listsGrid {
@@ -668,22 +656,50 @@
 }
 
 .listSection h4 {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     text-transform: uppercase;
     color: var(--color-primary);
-    margin-bottom: 1rem;
-    letter-spacing: 1px;
+    margin-bottom: 1.25rem;
+    letter-spacing: 2px;
+    font-weight: 800;
 }
 
 .listContainer {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.75rem;
 }
 
 .listItem {
-    font-size: 0.9rem;
-    color: var(--color-text-muted);
+    font-size: 0.95rem;
+    color: #94a3b8;
+    line-height: 1.6;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+
+.statVal {
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: white;
+}
+
+@media (min-width: 1024px) {
+    .statVal {
+        font-size: 2.2rem;
+        color: white;
+        text-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+    }
+}
+
+.statLabel {
+    font-size: 0.65rem;
+    color: #64748b;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-top: 0.4rem;
+    letter-spacing: 1px;
 }
 
 .fluxRing {
