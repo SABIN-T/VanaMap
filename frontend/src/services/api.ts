@@ -84,6 +84,16 @@ export const toggleFavorite = async (email: string, plantId: string) => {
     return res.json();
 };
 
+export const syncCart = async (email: string, cart: any[]) => {
+    const res = await fetch(`${API_URL}/user/cart`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, cart })
+    });
+    if (!res.ok) throw new Error("Failed to sync cart");
+    return res.json();
+};
+
 export const requestPasswordReset = async (email: string) => {
     const res = await fetch(`${API_URL}/auth/forgot-password`, {
         method: 'POST',
