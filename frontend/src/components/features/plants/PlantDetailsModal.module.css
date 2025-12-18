@@ -645,11 +645,14 @@
     }
 }
 
+/* Mobile Control Styles */
 .controlLabel {
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     color: var(--color-text-muted);
     font-weight: 800;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    opacity: 0.9;
 }
 
 /* Desktop: Smaller, cleaner labels */
@@ -665,7 +668,11 @@
 .controlVal {
     color: var(--color-primary);
     font-weight: 900;
-    font-size: 1.1rem;
+    font-size: 1.4rem;
+    /* Larger for Mobile Readability */
+    font-family: 'Inter', sans-serif;
+    text-shadow: 0 2px 10px rgba(16, 185, 129, 0.2);
+    /* Subtle glow */
 }
 
 /* Desktop: Refined value display */
@@ -1021,19 +1028,27 @@
 .viewToggle {
     display: none;
     position: absolute;
-    top: 1.5rem;
-    right: 1.5rem;
-    background: rgba(0, 0, 0, 0.3);
+    top: 1rem;
+    /* Tighter alignment */
+    right: 1rem;
+    /* Tighter alignment */
+    background: rgba(15, 23, 42, 0.6);
+    /* Darker, more integrated background */
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 2rem;
     padding: 0.25rem;
     z-index: 10;
+    backdrop-filter: blur(8px);
+    /* Frost effect */
 }
 
 @media (min-width: 1024px) {
     .viewToggle {
         display: flex;
         gap: 0.25rem;
+        /* Align relative to the padding of the desktop container */
+        top: 2rem;
+        right: 3rem;
     }
 }
 
