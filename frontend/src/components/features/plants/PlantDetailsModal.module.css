@@ -249,8 +249,7 @@
 
 .titleSection {
     padding: 0 2rem;
-    margin-top: 4rem;
-    /* Adjusted for no image */
+    margin-top: -3rem;
     position: relative;
     z-index: 2;
 }
