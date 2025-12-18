@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { Send, Bot, User as UserIcon, X, ShieldAlert, CreditCard } from 'lucide-react';
+import { Send, Bot, X, ShieldAlert, CreditCard } from 'lucide-react';
 import { useAuth } from '../../../context/AuthContext';
 import { Button } from '../../common/Button';
 
@@ -121,7 +121,7 @@ export const DoctorAIModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
                             borderBottomRightRadius: m.sender === 'user' ? '0' : '1rem',
                             background: m.sender === 'user' ? '#38bdf8' : 'rgba(255,255,255,0.05)',
                             color: m.sender === 'user' ? '#0f172a' : '#e2e8f0',
-                            boxingShadow: '0 2px 5px rgba(0,0,0,0.1)',
+                            boxShadow: '0 2px 5px rgba(0,0,0,0.1)',
                             fontSize: '0.95rem',
                             lineHeight: '1.5'
                         }}>

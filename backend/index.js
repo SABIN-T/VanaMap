@@ -116,44 +116,7 @@ app.post('/api/suggestions', async (req, res) => {
     }
 });
 
-// --- DOCTOR AI & SUGGESTION ROUTES ---
 
-const { Chat } = require('./models');
-
-// Mock AI Logic (Heuristic)
-const getAIResponse = (query) => {
-    const q = query.toLowerCase();
-    if (q.includes('water')) return "Most indoor plants need watering when the top inch of soil is dry. For succulents, wait until completely dry.";
-    if (q.includes('light') || q.includes('sun')) return "Assess your window direction. South-facing windows offer bright direct light, while North-facing are low light.";
-    if (q.includes('yellow')) return "Yellow leaves often indicate overwatering, but can also mean nutrient deficiency or pests. Check your soil moisture first.";
-    if (q.includes('dying')) return "Don't panic! Check the roots for rot (mushy brown). If healthy, repot with fresh soil and ensure drainage.";
-    if (q.includes('hello') || q.includes('hi')) return "Hello! I am Doctor AI. Ask me anything about your plants or ecosystem!";
-    return "That's an interesting botanical question. Generally, ensuring stable humidity (40-60%) and consistent watering solves 80% of plant issues.";
-};
-
-app.post('/api/ai/chat', async (req, res) => {
-    try {
-        const { userId, message } = req.body;
-        const count = await Chat.countDocuments({ userId });
-        const response = getAIResponse(message);
-        const chat = new Chat({ userId, message, response });
-        await chat.save();
-        res.json({ response, count: count + 1, limitReached: (count + 1) > 5 });
-    } catch (err) { res.status(500).json({ error: err.message }); }
-});
-
-app.post('/api/suggestions', async (req, res) => {
-    try {
-        const { message, contact } = req.body;
-        const msg = `SUGGESTION from ${contact}: ${message}`;
-        await sendWhatsApp(msg, 'suggestion', { contact });
-        const notif = new Notification({ type: 'suggestion', message: msg, details: { contact } });
-        await notif.save();
-        res.json({ success: true });
-    } catch (err) { res.status(500).json({ error: err.message }); }
-});
-
-// --- ROUTES ---
 
 // Get all plants
 app.get('/api/plants', async (req, res) => {
