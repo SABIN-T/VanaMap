@@ -154,13 +154,7 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
         return Math.round(Math.min(100, Math.max(0, avgScore)));
     }, [temperatureEffect, humidityEffect, isDay]);
 
-    const getWateringSchedule = () => {
-        if (currentHumidity < 40 && currentTemp > 25) return "Intensive (Every 1-2 days)";
-        if (currentTemp > 25) return "Frequent (Every 2-3 days)";
-        if (currentTemp < 15) return "Sparse (Every 10-14 days)";
-        if (currentHumidity > 70) return "Light (Every 7-9 days)";
-        return "Moderate (Every 5-7 days)";
-    };
+
 
     const isFavorite = user?.favorites?.includes(plant.id);
 
@@ -283,7 +277,7 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                                 <span className={styles.badge}><Wind size={14} /> {plant.oxygenLevel} O₂</span>
                                 <span className={styles.badge}><Sun size={14} /> {plant.sunlight}</span>
                                 <span className={styles.badge}><Droplet size={14} /> {plant.type}</span>
-                                {plant.petFriendly && <span className={styles.badge}><Cat size={14} /> Pet Friendly</span>}
+                                {(plant as any).petFriendly && <span className={styles.badge}><Cat size={14} /> Pet Friendly</span>}
                             </div>
                         </div>
                     </div>
@@ -328,7 +322,7 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                                 </div>
                                 <div className={styles.infoTile}>
                                     <div className={styles.tileHeader}><Maximize size={16} color="#a78bfa" /> SIZE</div>
-                                    <div className={styles.tileBody}>{plant.size || "Medium"}</div>
+                                    <div className={styles.tileBody}>{(plant as any).size || "Medium"}</div>
                                 </div>
                                 <div className={styles.infoTile}>
                                     <div className={styles.tileHeader}><Heart size={16} color="#ef4444" /> HEALTH FACT</div>
