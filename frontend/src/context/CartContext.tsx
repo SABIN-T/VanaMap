@@ -31,7 +31,14 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         const savedUser = localStorage.getItem('user');
         if (savedUser) {
             const parsed = JSON.parse(savedUser);
-            if (parsed.cart) return parsed.cart;
+            if (parsed.cart) {
+                // Prevent crash: Only use cached cart if it contains full plant objects.
+                // If it contains raw IDs (unhydrated), return empty and let useEffect hydrate it.
+                if (parsed.cart.length > 0 && !parsed.cart[0].plant) {
+                    return [];
+                }
+                return parsed.cart;
+            }
         }
         const guestCart = localStorage.getItem('guest_cart');
         if (guestCart) return JSON.parse(guestCart);
