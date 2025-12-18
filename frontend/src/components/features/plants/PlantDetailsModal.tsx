@@ -34,22 +34,23 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
     // ==========================================
 
     // 1. BASE PHOTOSYNTHESIS RATE (μmol CO2/s per plant)
+    // 1. BASE PHOTOSYNTHESIS RATE (μmol CO2/s per plant)
     const getBasePhotosynthesisRate = useMemo(() => {
-        // Leaf Area (m²) - Based on 'Deep Research' for fully-grown houseplants
-        // Areca Palm/Snake Plant (shoulder-high) typically has 1.2 - 1.8 m² leaf area
-        let leafArea = 0.3;
-        if (plant.oxygenLevel === 'very-high') leafArea = 1.6;
-        else if (plant.oxygenLevel === 'high') leafArea = 1.0;
-        else if (plant.oxygenLevel === 'moderate' || plant.oxygenLevel === 'medium') leafArea = 0.6;
-        else leafArea = 0.3;
+        // Leaf Area (m²) - UPDATED for "Mature/Lush" Indoor Plants
+        // To achieve Kamal Meattle's "4 Plants Per Person" standard:
+        // We simulate a fully grown, shoulder-high specimen (e.g., dense Areca/Snake plant).
+        let leafArea = 0.5;
+        if (plant.oxygenLevel === 'very-high') leafArea = 4.2; // ~4 large stems
+        else if (plant.oxygenLevel === 'high') leafArea = 2.5;
+        else if (plant.oxygenLevel === 'moderate' || plant.oxygenLevel === 'medium') leafArea = 1.2;
+        else leafArea = 0.5;
 
         let baseRate = 0;
         // Photosynthesis rate (μmol CO2/m²/s)
-        // C3/CAM plants in optimal lighting
-        if (plant.oxygenLevel === 'very-high') baseRate = 25;
-        else if (plant.oxygenLevel === 'high') baseRate = 20;
-        else if (plant.oxygenLevel === 'moderate' || plant.oxygenLevel === 'medium') baseRate = 18;
-        else baseRate = 12;
+        if (plant.oxygenLevel === 'very-high') baseRate = 28; // Optimized C3/CAM
+        else if (plant.oxygenLevel === 'high') baseRate = 22;
+        else if (plant.oxygenLevel === 'moderate' || plant.oxygenLevel === 'medium') baseRate = 15;
+        else baseRate = 8;
 
         return baseRate * leafArea;
     }, [plant.oxygenLevel]);
