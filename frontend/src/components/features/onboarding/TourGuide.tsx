@@ -1,37 +1,43 @@
 import { useState, useEffect } from 'react';
-import { X, ChevronRight, ChevronLeft } from 'lucide-react';
+import { X, ChevronRight, ChevronLeft, MapPin, ShoppingBag, BookOpen, Leaf } from 'lucide-react';
 
 interface Step {
     targetId: string;
     title: string;
     content: string;
+    icon?: React.ReactNode;
 }
 
 const TOUR_STEPS: Step[] = [
     {
         targetId: 'nav-home',
-        title: 'Welcome to VanaMap!',
-        content: 'Your journey starts here. Browse our curated collection of plants customized for your environment.'
+        title: 'Welcome to VanaMap',
+        content: 'Your smart botanist assistant. Let us guide you to the perfect plant for your space.',
+        icon: <Leaf className="text-emerald-400" size={32} />
     },
     {
         targetId: 'plant-grid',
-        title: 'Smart Plant Grid',
-        content: 'Check out our scientifically accurate plant recommendations. Click any card to see its Oxygen Simulation!'
+        title: 'Scientific Recommendations',
+        content: 'Explore our AI-ranked species database. Click any plant to simulate its oxygen output in your room.',
+        icon: <div className="text-blue-400">🧬</div>
     },
     {
         targetId: 'nav-nearby',
-        title: 'Find Local Shops',
-        content: 'Need to buy? Locate the nearest verified plant shops and nurseries on our interactive map.'
+        title: 'Locate Nurseries',
+        content: 'Find verified local shops and garden centers near you with our interactive map.',
+        icon: <MapPin className="text-orange-400" size={32} />
     },
     {
         targetId: 'nav-guide',
-        title: 'Plant Care Guide',
-        content: 'Beginner? No worries. Access our comprehensive care guides to keep your plants thriving.'
+        title: 'Expert Care Guides',
+        content: 'Access detailed care instructions and maintenance tips to keep your green friends thriving.',
+        icon: <BookOpen className="text-purple-400" size={32} />
     },
     {
         targetId: 'nav-cart',
-        title: 'Wishlist & Cart',
-        content: 'Save your favorites and prepare for your green transformation here.'
+        title: 'Your Green Wishlist',
+        content: 'Save plants you love and manage your collection here.',
+        icon: <ShoppingBag className="text-pink-400" size={32} />
     }
 ];
 
@@ -42,9 +48,8 @@ export const TourGuide = () => {
 
     // Initial check
     useEffect(() => {
-        const hasSeenTour = localStorage.getItem('vanamap_tour_complete');
+        const hasSeenTour = localStorage.getItem('vanamap_tour_v2_complete');
         if (!hasSeenTour) {
-            // Delay slightly to allow UI to load
             setTimeout(() => setIsVisible(true), 1500);
         }
     }, []);
@@ -60,11 +65,9 @@ export const TourGuide = () => {
             const element = document.getElementById(step.targetId);
             if (element) {
                 const rect = element.getBoundingClientRect();
-                // Ensure visible
                 element.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 setTargetRect(rect);
             } else {
-                // If element not found (e.g. mobile nav hidden), skip or use center fallback
                 setTargetRect(null);
             }
         };
@@ -88,7 +91,7 @@ export const TourGuide = () => {
 
     const finishTour = () => {
         setIsVisible(false);
-        localStorage.setItem('vanamap_tour_complete', 'true');
+        localStorage.setItem('vanamap_tour_v2_complete', 'true');
     };
 
     if (!isVisible) return null;
@@ -100,126 +103,175 @@ export const TourGuide = () => {
             position: 'fixed',
             top: 0,
             left: 0,
-            width: '100%',
-            height: '100%',
+            width: '100vw',
+            height: '100vh',
             zIndex: 9999,
-            pointerEvents: 'none' // Allow clicks to pass through overlay generally, but block on tooltip
+            pointerEvents: 'none',
+            overflow: 'hidden'
         }}>
-            {/* Dark Overlay with cutout */}
-            <div style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                height: '100%',
-                background: 'rgba(0,0,0,0.7)',
-                // Clip path to create a "hole" (spotlight) if target exists
-                clipPath: targetRect
-                    ? `polygon(
-                        0% 0%, 
-                        0% 100%, 
-                        100% 100%, 
-                        100% 0%, 
-                        ${targetRect.left}px 0%, 
-                        ${targetRect.left}px ${targetRect.top}px, 
-                        ${targetRect.right}px ${targetRect.top}px, 
-                        ${targetRect.right}px ${targetRect.bottom}px, 
-                        ${targetRect.left}px ${targetRect.bottom}px, 
-                        ${targetRect.left}px 0%
-                      )`
-                    : undefined,
-                transition: 'all 0.4s ease'
-            }}></div>
-
-            {/* Highlight Box Border (Visual Only) */}
+            {/* Spotlight Effect using Box Shadow */}
             {targetRect && (
                 <div style={{
                     position: 'absolute',
-                    top: targetRect.top - 4,
-                    left: targetRect.left - 4,
-                    width: targetRect.width + 8,
-                    height: targetRect.height + 8,
-                    border: '2px solid #38bdf8',
-                    borderRadius: '8px',
-                    boxShadow: '0 0 20px rgba(56, 189, 248, 0.5)',
-                    transition: 'all 0.4s ease',
-                    pointerEvents: 'none'
-                }}></div>
+                    top: targetRect.top - 10,
+                    left: targetRect.left - 10,
+                    width: targetRect.width + 20,
+                    height: targetRect.height + 20,
+                    borderRadius: '12px',
+                    boxShadow: '0 0 0 9999px rgba(15, 23, 42, 0.85)', // The dark overlay
+                    transition: 'all 0.5s cubic-bezier(0.25, 1, 0.5, 1)',
+                }}>
+                    {/* Pulsing Border */}
+                    <div className="tour-pulse" style={{
+                        position: 'absolute',
+                        inset: 0,
+                        border: '2px solid #38bdf8',
+                        borderRadius: '12px',
+                        boxShadow: '0 0 30px rgba(56, 189, 248, 0.4)',
+                    }}></div>
+                </div>
+            )}
+
+            {/* If no target (e.g. valid mobile mismatch), show full overlay */}
+            {!targetRect && (
+                <div style={{ position: 'absolute', inset: 0, background: 'rgba(15, 23, 42, 0.9)' }}></div>
             )}
 
             {/* Tooltip Card */}
             <div style={{
                 position: 'absolute',
-                top: targetRect ? Math.min(window.innerHeight - 200, Math.max(20, targetRect.bottom + 20)) : '50%',
-                left: targetRect ? Math.min(window.innerWidth - 320, Math.max(20, targetRect.left)) : '50%',
+                top: targetRect ? Math.min(window.innerHeight - 250, Math.max(20, targetRect.bottom + 30)) : '50%',
+                left: targetRect ? Math.min(window.innerWidth - 350, Math.max(20, targetRect.left - 20)) : '50%',
                 transform: targetRect ? 'none' : 'translate(-50%, -50%)',
-                background: 'rgba(15, 23, 42, 0.95)',
-                backdropFilter: 'blur(10px)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                padding: '1.5rem',
-                borderRadius: '1rem',
-                width: '300px',
+                width: '320px',
                 maxWidth: '90vw',
-                color: 'white',
-                pointerEvents: 'auto', // Re-enable clicks
-                transition: 'all 0.4s ease',
-                boxShadow: '0 20px 50px rgba(0,0,0,0.5)'
+                pointerEvents: 'auto',
+                transition: 'all 0.5s cubic-bezier(0.25, 1, 0.5, 1)',
             }}>
-                <button
-                    onClick={finishTour}
-                    style={{ position: 'absolute', top: '10px', right: '10px', background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer' }}
-                >
-                    <X size={16} />
-                </button>
+                <div className="glass-panel" style={{
+                    padding: '0',
+                    borderRadius: '1.5rem',
+                    background: 'rgba(30, 41, 59, 0.8)',
+                    backdropFilter: 'blur(20px)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5)',
+                    overflow: 'hidden'
+                }}>
+                    {/* Header Image/Icon */}
+                    <div style={{
+                        background: 'linear-gradient(135deg, rgba(56, 189, 248, 0.1) 0%, rgba(56, 189, 248, 0.0) 100%)',
+                        padding: '1.5rem',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '1rem',
+                        borderBottom: '1px solid rgba(255, 255, 255, 0.05)'
+                    }}>
+                        <div style={{
+                            background: 'rgba(255,255,255,0.1)',
+                            borderRadius: '50%',
+                            width: '48px',
+                            height: '48px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            color: '#38bdf8'
+                        }}>
+                            {step?.icon || <Leaf size={24} />}
+                        </div>
+                        <div>
+                            <h3 style={{ fontSize: '1.1rem', fontWeight: 700, margin: 0, color: 'white' }}>
+                                {step?.title}
+                            </h3>
+                            <div style={{ fontSize: '0.75rem', color: '#94a3b8', marginTop: '0.2rem' }}>
+                                Step {currentStep + 1} of {TOUR_STEPS.length}
+                            </div>
+                        </div>
+                    </div>
 
-                <div style={{ marginBottom: '1rem' }}>
-                    <h3 style={{ fontSize: '1.2rem', fontWeight: 700, margin: '0 0 0.5rem 0', color: '#38bdf8' }}>
-                        {step?.title || "Welcome"}
-                    </h3>
-                    <p style={{ margin: 0, fontSize: '0.95rem', lineHeight: 1.5, color: '#e2e8f0' }}>
-                        {step?.content || "Let's show you around."}
-                    </p>
-                </div>
+                    {/* Content */}
+                    <div style={{ padding: '1.5rem' }}>
+                        <p style={{ margin: 0, fontSize: '0.95rem', lineHeight: 1.6, color: '#cbd5e1' }}>
+                            {step?.content}
+                        </p>
+                    </div>
 
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <span style={{ fontSize: '0.8rem', color: '#64748b' }}>
-                        {currentStep + 1} of {TOUR_STEPS.length}
-                    </span>
-                    <div style={{ display: 'flex', gap: '0.5rem' }}>
+                    {/* Footer */}
+                    <div style={{
+                        padding: '1rem 1.5rem',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        background: 'rgba(0,0,0,0.2)'
+                    }}>
                         <button
-                            onClick={handlePrev}
-                            disabled={currentStep === 0}
+                            onClick={finishTour}
                             style={{
-                                padding: '0.5rem',
-                                borderRadius: '0.5rem',
-                                background: 'rgba(255,255,255,0.1)',
+                                background: 'none',
                                 border: 'none',
-                                color: currentStep === 0 ? '#475569' : 'white',
-                                cursor: currentStep === 0 ? 'not-allowed' : 'pointer'
-                            }}
-                        >
-                            <ChevronLeft size={18} />
-                        </button>
-                        <button
-                            onClick={handleNext}
-                            style={{
-                                padding: '0.5rem 1rem',
-                                borderRadius: '0.5rem',
-                                background: 'var(--color-primary)',
-                                border: 'none',
-                                color: 'white',
-                                fontWeight: 600,
+                                color: '#64748b',
+                                fontSize: '0.85rem',
                                 cursor: 'pointer',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '0.25rem'
+                                fontWeight: 500
                             }}
                         >
-                            {currentStep === TOUR_STEPS.length - 1 ? 'Finish' : 'Next'} <ChevronRight size={16} />
+                            Skip Tour
                         </button>
+
+                        <div style={{ display: 'flex', gap: '0.75rem' }}>
+                            <button
+                                onClick={handlePrev}
+                                disabled={currentStep === 0}
+                                style={{
+                                    width: '36px',
+                                    height: '36px',
+                                    borderRadius: '50%',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    background: 'rgba(255,255,255,0.05)',
+                                    border: '1px solid rgba(255,255,255,0.1)',
+                                    color: currentStep === 0 ? '#475569' : 'white',
+                                    cursor: currentStep === 0 ? 'default' : 'pointer',
+                                    transition: 'all 0.2s'
+                                }}
+                            >
+                                <ChevronLeft size={18} />
+                            </button>
+                            <button
+                                onClick={handleNext}
+                                style={{
+                                    padding: '0.6rem 1.25rem',
+                                    borderRadius: '99px',
+                                    background: 'var(--color-primary)',
+                                    border: 'none',
+                                    color: 'white',
+                                    fontWeight: 600,
+                                    fontSize: '0.9rem',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '0.5rem',
+                                    boxShadow: '0 4px 12px rgba(16, 185, 129, 0.3)'
+                                }}
+                            >
+                                {currentStep === TOUR_STEPS.length - 1 ? 'Start Exploring' : 'Next'}
+                                {currentStep !== TOUR_STEPS.length - 1 && <ChevronRight size={16} />}
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
+
+            <style>{`
+                @keyframes pulse-ring {
+                    0% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.4); }
+                    70% { box-shadow: 0 0 0 15px rgba(56, 189, 248, 0); }
+                    100% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0); }
+                }
+                .tour-pulse {
+                    animation: pulse-ring 2s infinite;
+                }
+            `}</style>
         </div>
     );
 };
