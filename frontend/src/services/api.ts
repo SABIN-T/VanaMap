@@ -115,9 +115,14 @@ export const resetPassword = async (email: string, newPassword: string) => {
 };
 
 export const fetchResetRequests = async () => {
-    const res = await fetch(`${API_URL}/admin/requests`);
-    if (!res.ok) throw new Error("Failed to fetch requests");
-    return res.json();
+    try {
+        const res = await fetch(`${API_URL}/admin/requests`);
+        if (!res.ok) throw new Error("Failed to fetch requests");
+        return await res.json();
+    } catch (error) {
+        console.error("Error fetching reset requests:", error);
+        return [];
+    }
 };
 
 export const approveResetRequest = async (userId: string) => {
@@ -159,9 +164,14 @@ export const deletePlant = async (id: string) => {
 };
 
 export const fetchNotifications = async () => {
-    const res = await fetch(`${API_URL}/admin/notifications`);
-    if (!res.ok) throw new Error("Failed to fetch notifications");
-    return res.json();
+    try {
+        const res = await fetch(`${API_URL}/admin/notifications`);
+        if (!res.ok) throw new Error("Failed to fetch notifications");
+        return await res.json();
+    } catch (error) {
+        console.error("Error fetching notifications:", error);
+        return [];
+    }
 };
 
 export const logVendorContact = async (data: { vendorId: string, vendorName: string, userEmail: string, contactType: 'whatsapp' | 'call' }) => {

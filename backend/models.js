@@ -50,7 +50,7 @@ const UserSchema = new mongoose.Schema({
 });
 
 const NotificationSchema = new mongoose.Schema({
-    type: { type: String, enum: ['signup', 'vendor_registration', 'vendor_contact', 'plant_add'], required: true },
+    type: { type: String, required: true },
     message: { type: String, required: true },
     details: mongoose.Schema.Types.Mixed,
     date: { type: Date, default: Date.now },

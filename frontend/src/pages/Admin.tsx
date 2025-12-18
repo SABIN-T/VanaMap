@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { fetchVendors, updateVendor, deleteVendor, fetchPlants, addPlant, updatePlant, deletePlant } from '../services/api';
+import { fetchVendors, updateVendor, deleteVendor, fetchPlants, addPlant, updatePlant, deletePlant, fetchResetRequests, fetchNotifications, approveResetRequest } from '../services/api';
 import type { Vendor, Plant } from '../types';
 import { Check, Trash2, Edit, Image as ImageIcon, Users, Sprout, Activity, RefreshCw, LogOut, Download, AlertCircle, PlusCircle, Sparkles } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -56,8 +56,8 @@ export const Admin = () => {
             const [vData, pData, rData, nData] = await Promise.all([
                 fetchVendors(),
                 fetchPlants(),
-                import('../services/api').then(api => api.fetchResetRequests().catch(() => [])),
-                import('../services/api').then(api => api.fetchNotifications().catch(() => []))
+                fetchResetRequests(),
+                fetchNotifications()
             ]);
             setVendors(vData);
             setPlants(pData);
@@ -209,7 +209,7 @@ export const Admin = () => {
                                                 <p>{req.email} • Requested {new Date(req.resetRequest.requestDate).toLocaleDateString()}</p>
                                             </div>
                                             <div className={styles.actions}>
-                                                <Button size="sm" variant="primary" onClick={() => import('../services/api').then(api => api.approveResetRequest(req._id).then(loadAll))}>
+                                                <Button size="sm" variant="primary" onClick={() => approveResetRequest(req._id).then(loadAll)}>
                                                     Confirm Identity & Reset
                                                 </Button>
                                             </div>
