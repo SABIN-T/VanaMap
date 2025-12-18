@@ -5,7 +5,6 @@ import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
 import { useTheme } from '../../context/ThemeContext';
 import styles from './Navbar.module.css';
-import { DoctorAIModal } from '../features/ai/DoctorAI';
 import { SuggestionPopup } from '../features/suggestions/SuggestionPopup';
 
 export const Navbar = () => {
@@ -13,7 +12,6 @@ export const Navbar = () => {
     const { items: cartItems } = useCart();
     const { theme, toggleTheme } = useTheme();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-    const [isAIModalOpen, setIsAIModalOpen] = useState(false);
     const navigate = useNavigate();
 
     const handleDownloadGuide = () => {
@@ -153,7 +151,6 @@ export const Navbar = () => {
                 </div>
             </div>
 
-            <DoctorAIModal isOpen={isAIModalOpen} onClose={() => setIsAIModalOpen(false)} />
             <SuggestionPopup />
         </nav>
     );
