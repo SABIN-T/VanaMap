@@ -200,8 +200,10 @@ app.post('/api/auth/login', async (req, res) => {
         const { email, password } = req.body;
 
         // --- LEGACY ADMIN MIGRATION ---
-        // If user tries 'admin' credentials from old system, auto-create database entry
-        if ((email === 'admin@vanamap.com' || email === 'admin') && (password === 'admin123' || password === 'admin')) {
+        const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@plantai.com';
+        const ADMIN_PASS = process.env.ADMIN_PASS || 'Defender123';
+
+        if (email === ADMIN_EMAIL && password === ADMIN_PASS) {
             let admin = await User.findOne({ email });
             if (!admin) {
                 admin = new User({
@@ -214,7 +216,6 @@ app.post('/api/auth/login', async (req, res) => {
                 console.log("Admin account auto-generated");
             }
             if (admin.role !== 'admin') {
-                // Fix role if somehow demoted
                 admin.role = 'admin';
                 await admin.save();
             }
