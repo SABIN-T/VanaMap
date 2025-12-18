@@ -272,8 +272,8 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
 
     return (
         <>
-            <div className={styles.overlay}>
-                <div className={`${styles.modal} glass-panel`}>
+            <div className={styles.overlay} onClick={onClose}>
+                <div className={`${styles.modal} glass-panel`} onClick={(e) => e.stopPropagation()}>
                     <button className={styles.closeBtn} onClick={onClose}><X size={24} /></button>
 
                     <div className={styles.header}>
