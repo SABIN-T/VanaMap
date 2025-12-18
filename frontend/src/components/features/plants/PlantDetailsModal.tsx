@@ -341,7 +341,7 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                         </div>
 
                         {/* Simulation Section - User Friendly Version */}
-                        <div className={styles.simulationContainer}>
+                        <div className={styles.simulationContainer} style={{ display: (window.innerWidth < 1024 && activeTab === 'details') ? 'none' : 'flex' }}>
 
                             <div className={styles.dashboardHeader} style={{ border: 'none', marginBottom: '1rem' }}>
                                 <div>

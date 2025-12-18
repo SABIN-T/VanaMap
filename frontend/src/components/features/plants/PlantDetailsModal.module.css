@@ -1384,7 +1384,42 @@
         font-size: 1rem !important;
     }
 
+
     .statLabel {
         font-size: 0.6rem !important;
+    }
+}
+
+/* Mobile Tabs */
+.tabBar {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 0;
+    padding: 0 1rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.tabBtn {
+    padding: 1rem 1.5rem;
+    background: transparent;
+    color: #94a3b8;
+    border: none;
+    border-bottom: 2px solid transparent;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.tabBtn.active {
+    color: #fff;
+    border-bottom-color: var(--color-primary);
+}
+
+@media (min-width: 1024px) {
+    .tabBar {
+        display: none !important;
     }
 }
