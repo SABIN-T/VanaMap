@@ -94,13 +94,15 @@ export const Nearby = () => {
             }
             const verifiedVendors = allVendors.filter(v => v.verified === true);
 
-            // Improved Overpass Query - Only legitimate plant shops
+            // Improved Overpass Query - Strictly Gardens and Nurseries
             const overpassQuery = `
 [out:json][timeout:25];
 (
     node["shop"="garden_centre"](around:25000,${lat},${lng});
-    node["shop"="florist"]["name"](around:25000,${lat},${lng});
     node["shop"="garden"](around:25000,${lat},${lng});
+    node["leisure"="garden"](around:25000,${lat},${lng});
+    node["landuse"="flower_bed"](around:25000,${lat},${lng});
+    node["tourism"="botanical_garden"](around:25000,${lat},${lng});
     node["landuse"="plant_nursery"]["name"](around:25000,${lat},${lng});
     node["amenity"="greenhouse"]["name"](around:25000,${lat},${lng});
 );
@@ -116,24 +118,28 @@ out skel qt;
                 if (osmData.elements) {
                     unverifiedVendors = osmData.elements
                         .filter((el: any) => {
-                            // Must have coordinates and a name
-                            if (!el.lat || !el.lon || !el.tags?.name) return false;
+                            // Must have coordinates
+                            if (!el.lat || !el.lon) return false;
 
-                            // Filter out non-plant related shops
-                            const name = el.tags.name.toLowerCase();
-                            const excludeKeywords = ['hardware', 'supermarket', 'grocery', 'general store', 'convenience'];
-                            if (excludeKeywords.some(keyword => name.includes(keyword))) return false;
+                            // If it's a shop, it must have a name. If it's a public garden, name is optional but good.
+                            const tags = el.tags || {};
+                            const name = tags.name || "Unknown Garden";
+
+                            // Filter out non-garden related shops
+                            const nameLower = name.toLowerCase();
+                            const excludeKeywords = ['hardware', 'supermarket', 'grocery', 'general store', 'convenience', 'department store'];
+                            if (excludeKeywords.some(keyword => nameLower.includes(keyword))) return false;
 
                             return true;
                         })
                         .map((el: any) => ({
                             id: `osm-${el.id}`,
-                            name: el.tags.name,
+                            name: el.tags?.name || (el.tags?.leisure === 'garden' ? "Public Garden" : "Local Nursery"),
                             latitude: el.lat,
                             longitude: el.lon,
-                            address: el.tags["addr:full"] || el.tags["addr:street"] || el.tags["addr:city"] || "Local Listing",
-                            phone: el.tags.phone || el.tags["contact:phone"] || "N/A",
-                            whatsapp: el.tags["contact:whatsapp"] || "",
+                            address: el.tags?.["addr:full"] || el.tags?.["addr:street"] || el.tags?.["addr:city"] || (el.tags?.leisure === 'garden' ? "Public Space" : "Local Listing"),
+                            phone: el.tags?.phone || el.tags?.["contact:phone"] || "N/A",
+                            whatsapp: el.tags?.["contact:whatsapp"] || "",
                             verified: false,
                             highlyRecommended: false,
                             inventoryIds: []
