@@ -127,7 +127,7 @@ export const Admin = () => {
         const csvContent = "data:text/csv;charset=utf-8," + headers.join(",") + "\n" + rows.map(e => e.join(",")).join("\n");
         const link = document.createElement("a");
         link.href = encodeURI(csvContent);
-        link.download = `vanamapp_vendors_${new Date().toLocaleDateString()}.csv`;
+        link.download = `vanamap_vendors_${new Date().toLocaleDateString()}.csv`;
         link.click();
     };
 
@@ -146,7 +146,7 @@ export const Admin = () => {
         <div className={styles.adminContainer}>
             <header className={styles.adminHeader}>
                 <div className={styles.titleGroup}>
-                    <h1>VAИAMAPP Control</h1>
+                    <h1>VanaMap Control</h1>
                     <p>Global Ecosystem & Vendor Management System</p>
                 </div>
                 <div className={styles.tabBar}>
