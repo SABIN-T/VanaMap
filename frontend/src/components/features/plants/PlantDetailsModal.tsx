@@ -322,24 +322,28 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
 
                         {/* Simulation Section - Compact & Scrollable */}
                         <div className={styles.simulationContainer}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                                <h3 style={{ margin: 0, fontSize: '0.9rem', fontWeight: 800, color: 'var(--color-primary)' }}>
-                                    <Activity size={14} style={{ display: 'inline', marginRight: '0.3rem' }} />
-                                    SMART SIMULATOR
-                                </h3>
-                                <div style={{ display: 'flex', gap: '0.4rem', alignItems: 'center' }}>
-                                    <div style={{
-                                        padding: '0.2rem 0.6rem', borderRadius: '99px',
-                                        background: isDay ? 'rgba(251, 191, 36, 0.1)' : 'rgba(96, 165, 250, 0.1)',
-                                        color: isDay ? '#fbbf24' : '#60a5fa',
-                                        fontWeight: 800, fontSize: '0.6rem'
-                                    }}>
-                                        {isDay ? <Sun size={10} style={{ display: 'inline', marginRight: '0.2rem' }} /> : '☾'} {isDay ? 'DAY' : 'NIGHT'}
+                            {/* Air Quality Dashboard Header */}
+                            <div className={styles.dashboardHeader}>
+                                <div className={styles.scoreCircle}>
+                                    <div className={styles.scoreValue}>{fluxRate}%</div>
+                                    <div className={styles.scoreLabel}>AQ SCORE</div>
+                                    <div className={styles.scoreRing} style={{
+                                        borderTopColor: fluxRate > 70 ? '#10b981' : fluxRate > 40 ? '#f59e0b' : '#ef4444'
+                                    }}></div>
+                                </div>
+                                <div className={styles.statusInfo}>
+                                    <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 800, color: 'white', letterSpacing: '1px' }}>
+                                        <Activity size={16} className={styles.pulseIcon} />
+                                        LIVE VITALITY
+                                    </h3>
+                                    <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.5rem' }}>
+                                        <div className={styles.liveBadge}>LIVE FEED</div>
+                                        <div className={styles.timeBadge}>{isDay ? 'SOLAR ACTIVE' : 'NOCTURNAL CYCLE'}</div>
                                     </div>
-                                    <div className={styles.acToggle}>
-                                        <span style={{ fontSize: '0.6rem', fontWeight: 800 }}>AC</span>
-                                        <button className={`${styles.toggleSwitch} ${isACMode ? styles.active : ''}`} onClick={() => setIsACMode(!isACMode)}></button>
-                                    </div>
+                                </div>
+                                <div className={styles.acControl}>
+                                    <span style={{ fontSize: '0.7rem', fontWeight: 800, color: '#64748b' }}>SYSTEM AC</span>
+                                    <button className={`${styles.toggleSwitch} ${isACMode ? styles.active : ''}`} onClick={() => setIsACMode(!isACMode)}></button>
                                 </div>
                             </div>
 

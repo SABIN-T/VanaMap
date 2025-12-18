@@ -397,6 +397,111 @@
     }
 }
 
+/* Dashboard Header Styling */
+.dashboardHeader {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.scoreCircle {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.scoreRing {
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    border-top-color: #10b981;
+    animation: rotate 2s linear infinite;
+}
+
+.scoreValue {
+    font-size: 1.2rem;
+    font-weight: 900;
+    color: white;
+    line-height: 1;
+}
+
+.scoreLabel {
+    font-size: 0.5rem;
+    font-weight: 800;
+    color: #64748b;
+    margin-top: 2px;
+    letter-spacing: 0.5px;
+}
+
+.statusInfo {
+    flex: 1;
+}
+
+.pulseIcon {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 0.5rem;
+    color: #10b981;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.liveBadge {
+    font-size: 0.6rem;
+    font-weight: 900;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+    letter-spacing: 1px;
+}
+
+.timeBadge {
+    font-size: 0.6rem;
+    font-weight: 800;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #94a3b8;
+}
+
+.acControl {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.4rem;
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.5;
+        transform: scale(0.9);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
 .liveIndicator {
     font-size: 0.65rem;
     font-weight: 800;
