@@ -214,7 +214,7 @@ const BOTANICAL_DB = { ...BASE_BOTANICAL_DB, ...INDIAN_PLANT_DB };
 export const Admin = () => {
     // --- STATE ---
     const [vendors, setVendors] = useState<Vendor[]>([]);
-    const [requests, setRequests] = useState<any[]>([]);
+    // const [requests, setRequests] = useState<any[]>([]); // Future implementation
     // const [notifications, setNotifications] = useState<any[]>([]); // To be implemented
     const [plants, setPlants] = useState<Plant[]>([]);
     const [activeTab, setActiveTab] = useState<'dashboard' | 'plants' | 'reports' | 'users'>('dashboard');
@@ -265,7 +265,7 @@ export const Admin = () => {
         // setLoading(true);
         const toastId = toast.loading("Fetching latest dashboard data...");
         try {
-            const [vData, pData, rData, uData] = await Promise.all([
+            const [vData, pData, , uData] = await Promise.all([
                 fetchVendors(),
                 fetchPlants(),
                 fetchResetRequests(),
@@ -274,7 +274,7 @@ export const Admin = () => {
             ]);
             setVendors(vData);
             setPlants(pData);
-            setRequests(rData);
+            // setRequests(rData);
             setUsers(uData);
             // setNotifications(nData);
 
@@ -480,16 +480,6 @@ export const Admin = () => {
             toast.error("Import failed", { id: tid });
         }
     };
-
-    // --- UX HELPERS ---
-    const InfoTip = ({ text }: { text: string }) => (
-        <span className="group relative inline-flex items-center ml-2 cursor-help text-slate-500 hover:text-emerald-400 align-middle">
-            <HelpCircle size={14} />
-            <span className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 rounded bg-slate-900 p-2 text-xs text-slate-200 opacity-0 shadow-xl transition-opacity group-hover:opacity-100 z-50 border border-slate-700">
-                {text}
-            </span>
-        </span>
-    );
 
     // --- RENDER HELPERS ---
     const isFieldAutoFilled = (fieldName: string) => lastAutoFilled.includes(fieldName);
