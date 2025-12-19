@@ -20,7 +20,7 @@ export const DoctorAIPage = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
     const [messages, setMessages] = useState<{ sender: 'user' | 'ai', text: string }[]>([
-        { sender: 'ai', text: 'Connection Established. Greetings. I am Doctor AI, your VanaMap Botanical Guardian. Protocols initialized for ecosystem analysis. How may I serve?' }
+        { sender: 'ai', text: 'Hello! I am Doctor AI. I can search web sources, identify plant issues, and find verified vendors for you. What are you looking for today?' }
     ]);
     const [input, setInput] = useState('');
     const [loading, setLoading] = useState(false);
@@ -255,6 +255,26 @@ export const DoctorAIPage = () => {
                         borderTop: '1px solid rgba(255,255,255,0.05)',
                         backdropFilter: 'blur(10px)'
                     }}>
+                        {/* Suggestions */}
+                        <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '1rem' }}>
+                            {suggestions.map((s, i) => (
+                                <button key={i} onClick={() => handleSend(s)} style={{
+                                    background: 'rgba(56, 189, 248, 0.1)',
+                                    border: '1px solid rgba(56, 189, 248, 0.2)',
+                                    borderRadius: '20px',
+                                    padding: '6px 12px',
+                                    color: '#94a3b8',
+                                    fontSize: '0.8rem',
+                                    cursor: 'pointer',
+                                    transition: 'all 0.2s'
+                                }}
+                                    onMouseEnter={(e) => e.currentTarget.style.borderColor = '#38bdf8'}
+                                    onMouseLeave={(e) => e.currentTarget.style.borderColor = 'rgba(56, 189, 248, 0.2)'}
+                                >
+                                    {s}
+                                </button>
+                            ))}
+                        </div>
                         <div style={{
                             display: 'flex', gap: '1rem',
                             background: 'rgba(255,255,255,0.05)',
@@ -281,7 +301,7 @@ export const DoctorAIPage = () => {
                                 }}
                             />
                             <button
-                                onClick={handleSend}
+                                onClick={() => handleSend()}
                                 disabled={limitReached || loading}
                                 style={{
                                     width: '45px',
