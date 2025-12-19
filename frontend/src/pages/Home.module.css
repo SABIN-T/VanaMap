@@ -277,7 +277,7 @@
 
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     gap: 2rem;
     margin-bottom: 6rem;
 }
@@ -285,7 +285,7 @@
 /* Desktop: Force 5 columns for detailed view on wide screens */
 @media (min-width: 1440px) {
     .grid {
-        grid-template-columns: repeat(5, 1fr);
+        grid-template-columns: repeat(4, 1fr);
         gap: 1.5rem;
     }
 }
