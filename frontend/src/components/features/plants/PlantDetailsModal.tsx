@@ -76,7 +76,7 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
         const lightFactor = Math.max(0.1, lightLevel / 100);
 
         const dayYield = getBasePhotosynthesisRate * temperatureEffect * humidityEffect * lightFactor * 3600 * 12 * 22.4 / 1000000;
-        return (dayYield * 1000).toFixed(1);
+        return dayYield.toFixed(1);
     }, [getBasePhotosynthesisRate, temperatureEffect, humidityEffect, lightLevel]);
 
     const plantsNeeded = Math.max(1, Math.ceil((550 * numPeople) / (parseFloat(PLANT_O2_OUTPUT) || 50)));
