@@ -18,8 +18,8 @@ export const InstallPrompt = () => {
 
         if (isIosDevice && !isInStandaloneMode) {
             setIsIOS(true);
-            // Show iOS prompt after a delay for effect
-            const timer = setTimeout(() => setIsVisible(true), 3000);
+            // Show iOS prompt after a delay to respect Onboarding flow
+            const timer = setTimeout(() => setIsVisible(true), 8000);
             return () => clearTimeout(timer);
         }
 
@@ -27,7 +27,8 @@ export const InstallPrompt = () => {
         const handler = (e: Event) => {
             e.preventDefault();
             setDeferredPrompt(e as BeforeInstallPromptEvent);
-            setIsVisible(true);
+            // Delay showing the prompt so it feels like a 'smart suggestion' after partial usage
+            setTimeout(() => setIsVisible(true), 8000);
         };
 
         window.addEventListener('beforeinstallprompt', handler);
@@ -91,9 +92,9 @@ export const InstallPrompt = () => {
             </div>
 
             <div style={{ flex: 1 }}>
-                <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 600 }}>Install VanaMap App</h4>
+                <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 600 }}>Get the VanaMap App</h4>
                 <p style={{ margin: '4px 0 0', fontSize: '0.8rem', color: '#94a3b8' }}>
-                    {isIOS ? 'Tap "Share" → "Add to Home Screen"' : 'Add to Home Screen for the best experience'}
+                    {isIOS ? 'Tap "Share" → "Add to Home Screen"' : 'Browse 2x Faster with the native app!'}
                 </p>
             </div>
 
