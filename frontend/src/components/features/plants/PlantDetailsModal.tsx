@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import { X, Sun, Heart, Wind, Users, ShoppingBag, Thermometer, Maximize, Cat, Droplet } from 'lucide-react';
+import { X, Sun, Heart, Wind, ShoppingBag, Thermometer, Maximize, Cat, Droplet } from 'lucide-react';
 import { Button } from '../../common/Button';
 import type { Plant } from '../../../types';
 import styles from './PlantDetailsModal.module.css';
@@ -142,17 +142,6 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
         const avgDailyYield = totalDailyYield / numSimulations;
         return Math.ceil(totalO2Needed / avgDailyYield);
     }, [getBasePhotosynthesisRate, temperatureEffect, humidityEffect, totalO2Needed, plant.oxygenLevel]);
-
-    // 7. VITALITY/FLUX RATE (0-100%)
-    // Based on deviation from optimal conditions
-    const fluxRate = useMemo(() => {
-        const tempScore = temperatureEffect * 100;
-        const humidityScore = humidityEffect * 100;
-        const dayScore = isDay ? 100 : 20; // Night penalty
-
-        const avgScore = (tempScore + humidityScore + dayScore) / 3;
-        return Math.round(Math.min(100, Math.max(0, avgScore)));
-    }, [temperatureEffect, humidityEffect, isDay]);
 
 
 
