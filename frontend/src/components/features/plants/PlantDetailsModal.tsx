@@ -404,8 +404,9 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                         </div>
 
                         {/* Simulation Section - Premium Version */}
-                        <div className={styles.simulationContainer} style={{
+                        <div className={`simulationContainer ${styles.simulationContainer}`} style={{
                             display: (window.innerWidth < 1024 && activeTab === 'details') ? 'none' : 'flex',
+                            flexDirection: 'column',
                             background: 'linear-gradient(135deg, rgba(8, 51, 68, 0.4) 0%, rgba(2, 6, 23, 0.6) 100%)',
                             border: '1px solid rgba(56, 189, 248, 0.15)',
                             borderRadius: '1.5rem',
@@ -417,7 +418,7 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                             {/* Decorative Background Elements */}
                             <div style={{ position: 'absolute', top: '-10%', right: '-10%', width: '200px', height: '200px', background: 'radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%)', borderRadius: '50%', filter: 'blur(40px)' }}></div>
 
-                            <div className={styles.dashboardHeader} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '1.5rem', marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', width: '100%' }}>
+                            <div className="dashboardHeader" style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '1.5rem', marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', width: '100%', flexShrink: 0 }}>
                                 <div>
                                     <h3 style={{ margin: 0, fontSize: '1.4rem', fontWeight: 900, color: 'white', letterSpacing: '-0.5px' }}>
                                         <Wind size={20} color="#38bdf8" style={{ marginRight: '8px', verticalAlign: 'text-bottom' }} />
@@ -433,7 +434,7 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                                 </div>
                             </div>
 
-                            <div className={styles.simulationGrid} style={{ display: 'grid', gridTemplateColumns: window.innerWidth > 768 ? '1fr 1.2fr' : '1fr', gap: '2rem' }}>
+                            <div className="simulationGrid" style={{ display: 'grid', gridTemplateColumns: window.innerWidth > 768 ? '1fr 1.2fr' : '1fr', gap: '2rem', flex: 1, minHeight: 0 }}>
                                 {/* Controls */}
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                                     <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1.25rem', borderRadius: '1.25rem', border: '1px solid rgba(255,255,255,0.05)' }}>
@@ -518,22 +519,47 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
 
                             <style>{`
                                 @keyframes scaleIn { from { transform: scale(0); } to { transform: scale(1); } }
+                                
+                                /* Responsive Adjustments */
+                                @media (max-width: 768px) {
+                                    .glass-panel {
+                                        width: 100% !important;
+                                        height: 100dvh !important;
+                                        border-radius: 0 !important;
+                                    }
+                                    .simulationContainer {
+                                        padding: 1rem !important;
+                                        overflow-y: auto;
+                                    }
+                                    .dashboardHeader { 
+                                        margin-bottom: 1rem !important;
+                                        padding-bottom: 1rem !important;
+                                    }
+                                    .simulationGrid {
+                                        display: flex !important;
+                                        flex-direction: column-reverse; /* Controls below visual on mobile for reachability */
+                                        gap: 1rem !important;
+                                    }
+                                    .sliderControl {
+                                        padding: 1rem !important;
+                                    }
+                                }
                             `}</style>
                         </div>
 
                         {/* Quick Stats Row */}
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem', marginTop: '1rem' }}>
-                            <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: '1rem', padding: '1rem', textAlign: 'center' }}>
-                                <div style={{ fontSize: '0.7rem', color: '#94a3b8', fontWeight: 700, marginBottom: '0.2rem' }}>O₂ YIELD</div>
-                                <div style={{ fontSize: '1.1rem', color: '#white', fontWeight: 700 }}>{Math.abs(PLANT_O2_OUTPUT)}L</div>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.8rem', marginTop: 'auto', paddingTop: '1rem' }}>
+                            <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: '1rem', padding: '0.8rem', textAlign: 'center' }}>
+                                <div style={{ fontSize: '0.65rem', color: '#94a3b8', fontWeight: 700, marginBottom: '0.2rem' }}>O₂ YIELD</div>
+                                <div style={{ fontSize: 'clamp(0.9rem, 4vw, 1.1rem)', color: '#white', fontWeight: 700 }}>{Math.abs(PLANT_O2_OUTPUT)}L</div>
                             </div>
-                            <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: '1rem', padding: '1rem', textAlign: 'center' }}>
-                                <div style={{ fontSize: '0.7rem', color: '#94a3b8', fontWeight: 700, marginBottom: '0.2rem' }}>TEMP</div>
-                                <div style={{ fontSize: '1.1rem', color: '#white', fontWeight: 700 }}>{currentTemp}°C</div>
+                            <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: '1rem', padding: '0.8rem', textAlign: 'center' }}>
+                                <div style={{ fontSize: '0.65rem', color: '#94a3b8', fontWeight: 700, marginBottom: '0.2rem' }}>TEMP</div>
+                                <div style={{ fontSize: 'clamp(0.9rem, 4vw, 1.1rem)', color: '#white', fontWeight: 700 }}>{currentTemp}°C</div>
                             </div>
-                            <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: '1rem', padding: '1rem', textAlign: 'center' }}>
-                                <div style={{ fontSize: '0.7rem', color: '#94a3b8', fontWeight: 700, marginBottom: '0.2rem' }}>TOXIN REMOVAL</div>
-                                <div style={{ fontSize: '1.1rem', color: '#white', fontWeight: 700 }}>High</div>
+                            <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: '1rem', padding: '0.8rem', textAlign: 'center' }}>
+                                <div style={{ fontSize: '0.65rem', color: '#94a3b8', fontWeight: 700, marginBottom: '0.2rem' }}>PURITY</div>
+                                <div style={{ fontSize: 'clamp(0.9rem, 4vw, 1.1rem)', color: '#white', fontWeight: 700 }}>High</div>
                             </div>
                         </div>
                     </div>
