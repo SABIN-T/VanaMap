@@ -164,7 +164,7 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
     // ==========================================
     if (isMobile) {
         return (
-            <div className={styles.overlay} onClick={onClose} style={{ zIndex: 9999, padding: '10px' }}>
+            <div className={`${styles.overlay} no-swipe`} onClick={onClose} style={{ zIndex: 9999, padding: '10px' }}>
                 <div className={styles.modal} onClick={(e) => e.stopPropagation()} style={{
                     maxHeight: '90vh', overflowY: 'auto', borderRadius: '24px',
                     background: '#0f172a', border: '1px solid rgba(255,255,255,0.1)'
@@ -229,7 +229,7 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
     // DESKTOP VIEW (Split Layout)
     // ==========================================
     return (
-        <div className={styles.overlay} onClick={onClose} style={{ zIndex: 9999 }}>
+        <div className={`${styles.overlay} no-swipe`} onClick={onClose} style={{ zIndex: 9999 }}>
             <div className={styles.modal} onClick={(e) => e.stopPropagation()} style={{ overflow: 'hidden', padding: 0 }}>
                 <div style={{ display: 'flex', height: '100%', flexDirection: 'row' }}>
 
