@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { fetchVendors, fetchPlants, addPlant, updatePlant, deletePlant, fetchResetRequests } from '../services/api';
 import type { Vendor, Plant } from '../types';
-import { Check, Trash2, Edit, Image as ImageIcon, Users, Sprout, Activity, LogOut, Sparkles, Search, Database } from 'lucide-react';
+import { Check, Trash2, Edit, Image as ImageIcon, Users, Sprout, Activity, LogOut, Sparkles, Search, Database, Leaf } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/common/Button';
 import styles from './Admin.module.css';
@@ -222,6 +222,7 @@ export const Admin = () => {
 
     // Filter State
     const [plantFilter, setPlantFilter] = useState<'all' | 'indoor' | 'outdoor'>('all');
+    const [searchQuery, setSearchQuery] = useState('');
 
     // Plant Form State
     const [isEditing, setIsEditing] = useState(false);
@@ -434,6 +435,8 @@ export const Admin = () => {
         const tid = toast.loading("Seeding Database...");
         let added = 0;
         try {
+            const formatSciName = (key: string) => key.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+
             for (const [key, data] of Object.entries(INDIAN_PLANT_DB)) {
                 if (plants.some(p => p.name === data.name)) continue;
 
@@ -446,6 +449,7 @@ export const Admin = () => {
 
                 await addPlant({
                     ...data,
+                    scientificName: formatSciName(key), // Explicitly set Scientific Name from Key
                     id: key.replace(/\s+/g, '-'),
                     price: Math.floor(Math.random() * 800) + 150,
                     imageUrl: img,
@@ -468,24 +472,20 @@ export const Admin = () => {
         { border: '1px solid #10b981', boxShadow: '0 0 10px rgba(16, 185, 129, 0.1)' } : {};
 
     return (
-        <div className={styles.adminContainer}>
+        <div className={styles.container}>
             <div className={styles.sidebar}>
-                <div className={styles.sidebarBrand}>
+                <div className={styles.logoArea}>
                     <Sprout size={28} className="text-emerald-400" />
-                    <span>AdminPanel</span>
+                    <h1>VanaMap Admin</h1>
                 </div>
-                <div className={styles.navMenu}>
-                    <button className={activeTab === 'users' ? styles.active : ''} onClick={() => setActiveTab('users')}>
-                        <Users size={18} /> Users & Vendors
-                    </button>
-                    <button className={activeTab === 'plants' ? styles.active : ''} onClick={() => setActiveTab('plants')}>
-                        <Database size={18} /> Plant Registry
-                    </button>
-                    <button className={activeTab === 'activity' ? styles.active : ''} onClick={() => setActiveTab('activity')}>
-                        <Activity size={18} /> Activity Log
-                    </button>
-                    <button onClick={() => navigate('/')} style={{ marginTop: 'auto', color: '#ef4444' }}>
-                        <LogOut size={18} /> Return to Home
+                <nav className={styles.nav}>
+                    <button onClick={() => setActiveTab('users')} className={activeTab === 'users' ? styles.navItemActive : styles.navItem}><Users size={20} /> Users</button>
+                    <button onClick={() => setActiveTab('plants')} className={activeTab === 'plants' ? styles.navItemActive : styles.navItem}><Database size={20} /> Plant Directory</button>
+                    <button onClick={() => setActiveTab('activity')} className={activeTab === 'activity' ? styles.navItemActive : styles.navItem}><Activity size={20} /> System Activity</button>
+                </nav>
+                <div className="mt-auto pt-6 border-t border-slate-700">
+                    <button className={styles.navItem} onClick={() => { localStorage.removeItem('adminAuthenticated'); navigate('/admin-login'); }}>
+                        <LogOut size={20} /> Logout
                     </button>
                 </div>
             </div>
@@ -550,8 +550,15 @@ export const Admin = () => {
                                     </div>
 
                                     <div>
-                                        <label className="block text-sm text-slate-400 mb-1">Common Name</label>
-                                        <input className={styles.input} required value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} style={getFieldStyle('name')} />
+                                        <label className={styles.label}>Common Name * <span style={getFieldStyle('name')}>{isFieldAutoFilled('name') ? '✓' : ''}</span></label>
+                                        <input className={styles.input} value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} required />
+                                    </div>
+                                    <div>
+                                        <label className={styles.label}>Type</label>
+                                        <select className={styles.select} value={formData.type} onChange={e => setFormData({ ...formData, type: e.target.value as any })}>
+                                            <option value="indoor">Indoor</option>
+                                            <option value="outdoor">Outdoor</option>
+                                        </select>
                                     </div>
 
                                     <div>
@@ -624,42 +631,64 @@ export const Admin = () => {
                                         </label>
                                     </div>
 
-                                    <div className="flex items-end">
-                                        <Button type="submit" size="lg" style={{ width: '100%' }}>
-                                            {isEditing ? 'Update Entry' : 'Add to Registry'}
-                                        </Button>
+                                    <div className="md:col-span-2 flex justify-end gap-4 mt-4">
+                                        {isEditing && <Button type="button" variant="outline" onClick={() => { setIsEditing(false); setFormData(initialFormState); }}>Cancel</Button>}
+                                        <Button type="submit">{isEditing ? 'Update Registry' : 'AddTo Database'}</Button>
                                     </div>
                                 </form>
                             </div>
 
-                            {/* PLANTS LIST */}
-                            <div className="flex gap-2 mb-4">
-                                <button onClick={() => setPlantFilter('all')} className={`px - 3 py - 1.5 rounded - lg text - xs font - medium transition - colors ${plantFilter === 'all' ? 'bg-emerald-500 text-white' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'} `}>All Varieties</button>
-                                <button onClick={() => setPlantFilter('indoor')} className={`px - 3 py - 1.5 rounded - lg text - xs font - medium transition - colors ${plantFilter === 'indoor' ? 'bg-emerald-500 text-white' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'} `}>Indoor</button>
-                                <button onClick={() => setPlantFilter('outdoor')} className={`px - 3 py - 1.5 rounded - lg text - xs font - medium transition - colors ${plantFilter === 'outdoor' ? 'bg-emerald-500 text-white' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'} `}>Outdoor</button>
+                            {/* PLANTS LIST HEADER & SEARCH */}
+                            <div className="flex flex-col md:flex-row justify-between items-end md:items-center mb-6 gap-4">
+                                <div className="flex gap-2">
+                                    <button onClick={() => setPlantFilter('all')} className={`px-4 py-2 rounded-full text-xs font-bold transition-all ${plantFilter === 'all' ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}`}>All Varieties</button>
+                                    <button onClick={() => setPlantFilter('indoor')} className={`px-4 py-2 rounded-full text-xs font-bold transition-all ${plantFilter === 'indoor' ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}`}>Indoor</button>
+                                    <button onClick={() => setPlantFilter('outdoor')} className={`px-4 py-2 rounded-full text-xs font-bold transition-all ${plantFilter === 'outdoor' ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/20' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}`}>Outdoor</button>
+                                </div>
+                                <div className="relative w-full md:w-64">
+                                    <Search className="absolute left-3 top-2.5 text-slate-500" size={16} />
+                                    <input
+                                        type="text"
+                                        placeholder="Search taxonomy or local name..."
+                                        className="w-full bg-slate-800 border-none rounded-full py-2 pl-10 pr-4 text-sm text-slate-200 focus:ring-2 focus:ring-emerald-500/50"
+                                        value={searchQuery}
+                                        onChange={(e) => setSearchQuery(e.target.value)}
+                                    />
+                                </div>
                             </div>
-                            <div className="space-y-4">
-                                {plants.filter(p => plantFilter === 'all' || p.type === plantFilter).map(p => (
-                                    <div key={p.id} className={styles.listItem}>
-                                        <img src={p.imageUrl} alt={p.name} className="w-12 h-12 rounded-lg object-cover bg-slate-800" />
-                                        <div className="flex-1">
-                                            <div className="font-bold text-slate-200">{p.name}</div>
-                                            <div className="text-xs text-slate-500 italic">{p.scientificName || 'Unknown Taxon'}</div>
-                                            <div className="flex gap-2 mt-1">
-                                                <span className="text-[10px] bg-slate-700 px-1 rounded text-slate-300">{p.ecosystem || 'General'}</span>
-                                                {p.isNocturnal && <span className="text-[10px] bg-indigo-900/50 text-indigo-300 px-1 rounded">CAM System</span>}
+
+                            {/* PLANTS LIST CARDS */}
+                            <div className="grid grid-cols-1 gap-4">
+                                {plants.filter(p => (plantFilter === 'all' || p.type === plantFilter) && (p.name.toLowerCase().includes(searchQuery.toLowerCase()) || p.scientificName?.toLowerCase().includes(searchQuery.toLowerCase()))).map(p => (
+                                    <div key={p.id} className="group relative bg-slate-800/40 hover:bg-slate-800/80 border border-slate-700/50 hover:border-emerald-500/30 rounded-xl p-4 transition-all duration-300 flex items-center gap-4">
+                                        <img src={p.imageUrl} alt={p.name} className="w-16 h-16 rounded-lg object-cover bg-slate-900 shadow-md group-hover:scale-105 transition-transform" />
+
+                                        <div className="flex-1 min-w-0">
+                                            <div className="flex items-center gap-2 mb-1">
+                                                <h4 className="font-bold text-slate-200 truncate text-lg">{p.name}</h4>
+                                                {p.type === 'indoor' ? <span className="px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 text-[10px] font-medium border border-indigo-500/30">Indoor</span> : <span className="px-2 py-0.5 rounded-full bg-orange-500/20 text-orange-300 text-[10px] font-medium border border-orange-500/30">Outdoor</span>}
+                                            </div>
+                                            <div className="flex items-center gap-2 text-sm text-slate-400">
+                                                <Leaf size={12} className="text-emerald-500" />
+                                                <span className="italic font-serif text-emerald-100/70">{p.scientificName || 'Unknown Taxonomy'}</span>
+                                            </div>
+                                            <div className="flex gap-3 mt-2 text-xs text-slate-500">
+                                                <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-blue-400/50"></span> {p.ecosystem || 'General Class'}</span>
+                                                {p.isNocturnal && <span className="flex items-center gap-1 text-purple-400"><Sparkles size={10} /> CAM Invariant</span>}
                                             </div>
                                         </div>
-                                        <div className="flex gap-2">
-                                            <button onClick={() => startEdit(p)} className={styles.actionBtn} title="Edit">
-                                                <Edit size={16} />
+
+                                        <div className="flex gap-2 opacity-60 group-hover:opacity-100 transition-opacity">
+                                            <button onClick={() => startEdit(p)} className="p-2 hover:bg-slate-700 rounded-lg text-slate-400 hover:text-white transition-colors" title="Edit Species">
+                                                <Edit size={18} />
                                             </button>
-                                            <button onClick={() => deletePlantHandler(p.id, p.name)} className={`${styles.actionBtn} text-red-400 hover:bg-red-400/10`} title="Delete">
-                                                <Trash2 size={16} />
+                                            <button onClick={() => deletePlantHandler(p.id, p.name)} className="p-2 hover:bg-red-500/20 rounded-lg text-slate-400 hover:text-red-400 transition-colors" title="Remove Species">
+                                                <Trash2 size={18} />
                                             </button>
                                         </div>
                                     </div>
                                 ))}
+                                {plants.length === 0 && <div className="text-center py-10 text-slate-500">No plants in database. Use seed button above.</div>}
                             </div>
                         </div>
                     )}
