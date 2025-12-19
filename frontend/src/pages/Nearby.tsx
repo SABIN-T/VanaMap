@@ -314,23 +314,53 @@ out skel qt;
                         </div>
 
                         {/* Public/All Tab Warning Hint */}
+                        {/* Public/All Tab Warning Hint Actions */}
                         {(activeTab === 'unverified' || activeTab === 'all') && (
                             <div style={{
                                 marginTop: '1rem',
-                                padding: '0.75rem',
-                                background: 'rgba(234, 179, 8, 0.1)',
-                                border: '1px solid rgba(234, 179, 8, 0.3)',
-                                borderRadius: '0.5rem',
-                                fontSize: '0.85rem',
-                                color: '#eab308',
+                                padding: '1rem',
+                                background: 'var(--color-bg-card)', // Adaptive theme background
+                                border: '1px solid var(--glass-border)',
+                                borderRadius: '16px', // Mobile friendly rounded corners
+                                boxShadow: '0 4px 15px rgba(0,0,0,0.05)',
                                 display: 'flex',
-                                alignItems: 'start',
-                                gap: '0.5rem'
+                                flexDirection: 'column',
+                                gap: '1rem',
+                                animation: 'fadeIn 0.5s ease-out'
                             }}>
-                                <AlertCircle size={16} style={{ flexShrink: 0, marginTop: '2px' }} />
-                                <span>
-                                    <strong>Tip:</strong> If public shops aren't visible, try <b>Syncing GPS</b> or <b>Searching your area manually</b>. Our satellite data covers 98% of locations!
-                                </span>
+                                <div style={{ display: 'flex', gap: '0.8rem', alignItems: 'flex-start' }}>
+                                    <div style={{
+                                        padding: '10px',
+                                        background: 'rgba(234, 179, 8, 0.1)',
+                                        borderRadius: '12px',
+                                        flexShrink: 0
+                                    }}>
+                                        <AlertCircle size={20} color="#fbbf24" />
+                                    </div>
+                                    <div>
+                                        <h4 style={{ margin: '0 0 4px 0', fontSize: '0.95rem', fontWeight: 700 }}>Don't see any shops?</h4>
+                                        <p style={{ margin: 0, fontSize: '0.85rem', lineHeight: '1.4', color: 'var(--color-text-muted)' }}>
+                                            The map might be looking in the wrong spot. Sync your GPS to find public nurseries near you.
+                                        </p>
+                                    </div>
+                                </div>
+                                <Button
+                                    size="md"
+                                    onClick={() => handleGetLocation(false)}
+                                    style={{
+                                        width: '100%',
+                                        background: 'var(--color-text-main)',
+                                        color: 'var(--color-bg-main)',
+                                        borderRadius: '10px',
+                                        fontWeight: 600,
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        gap: '8px'
+                                    }}
+                                >
+                                    <MapPin size={16} /> Sync My Location
+                                </Button>
                             </div>
                         )}
                     </div>
