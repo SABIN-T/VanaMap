@@ -810,17 +810,7 @@ export const Admin = () => {
                         </div>
                     )}
 
-                    {activeTab === 'users' && (
-                        <div className="animate-fade-in text-center text-slate-400 py-10">
-                            User Management Section
-                        </div>
-                    )}
 
-                    {activeTab === 'activity' && (
-                        <div className="animate-fade-in text-center text-slate-400 py-10">
-                            Activity Log Section
-                        </div>
-                    )}
                 </div>
             </main>
         </div>
