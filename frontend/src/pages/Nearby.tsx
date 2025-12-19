@@ -314,8 +314,8 @@ out skel qt;
                         </div>
 
                         {/* Public/All Tab Warning Hint */}
-                        {/* Public/All Tab Warning Hint Actions */}
-                        {(activeTab === 'unverified' || activeTab === 'all') && (
+                        {/* Public/All Tab Warning Hint Actions - Shown only when no results found */}
+                        {!loading && (activeTab === 'unverified' || activeTab === 'all') && displayVendors.length === 0 && (
                             <div style={{
                                 marginTop: '1rem',
                                 padding: '1rem',
@@ -382,10 +382,13 @@ out skel qt;
                             `}</style>
                         </div>
                     ) : displayVendors.length === 0 ? (
-                        <div style={{ textAlign: 'center', padding: '4rem', background: 'var(--color-bg-card)', borderRadius: '2rem', border: '1px dashed var(--glass-border)' }}>
-                            <MapPin size={48} color="var(--color-text-muted)" style={{ marginBottom: '1rem' }} />
-                            <p style={{ color: 'var(--color-text-muted)' }}>No simulation partners detected. Try syncing your GPS metadata.</p>
-                        </div>
+                        /* Only show generic empty state for Verified tab, others use the Action Card above */
+                        activeTab === 'verified' ? (
+                            <div style={{ textAlign: 'center', padding: '4rem', background: 'var(--color-bg-card)', borderRadius: '2rem', border: '1px dashed var(--glass-border)' }}>
+                                <MapPin size={48} color="var(--color-text-muted)" style={{ marginBottom: '1rem' }} />
+                                <p style={{ color: 'var(--color-text-muted)' }}>No confirmed partners found. Try the 'Public' tab.</p>
+                            </div>
+                        ) : null
                     ) : (
                         <>
                             <div className={styles.vendorGrid}>
