@@ -87,7 +87,7 @@ export const Cart = () => {
                                     </Button>
                                 </div>
                             )}
-                            <Button size="lg" onClick={() => navigate('/nearby', { state: { tab: 'unverified' } })} style={{ width: '100%', maxWidth: '300px' }}>
+                            <Button size="lg" onClick={() => navigate('/nearby', { state: { tab: 'all' } })} style={{ width: '100%', maxWidth: '300px' }}>
                                 Find Nearby Shops & Contact
                             </Button>
                         </div>

@@ -58,7 +58,7 @@ export const Nearby = () => {
     const [loading, setLoading] = useState(false);
 
     // Initialize tab from navigation state or default to verified
-    const [activeTab, setActiveTab] = useState<'verified' | 'unverified'>((location.state as any)?.tab || 'verified');
+    const [activeTab, setActiveTab] = useState<'verified' | 'unverified' | 'all'>((location.state as any)?.tab || 'verified');
 
     const [manualSearchQuery, setManualSearchQuery] = useState('');
     const hasInitialLocateRef = useRef(false);
@@ -222,7 +222,10 @@ out skel qt;
         }
     }, [handleGetLocation]);
 
-    const displayVendors = nearbyVendors.filter(v => activeTab === 'verified' ? v.verified : !v.verified);
+    const displayVendors = nearbyVendors.filter(v => {
+        if (activeTab === 'all') return true;
+        return activeTab === 'verified' ? v.verified : !v.verified;
+    });
 
     return (
         <div className={styles.nearbyContainer}>
@@ -299,6 +302,9 @@ out skel qt;
                             <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Showing results within a 50km radius</p>
                         </div>
                         <div className={styles.tabGroup}>
+                            <button className={`${styles.tabBtn} ${activeTab === 'all' ? styles.active : ''}`} onClick={() => setActiveTab('all')}>
+                                <Sparkles size={16} fill={activeTab === 'all' ? 'var(--color-primary)' : 'none'} /> All
+                            </button>
                             <button className={`${styles.tabBtn} ${activeTab === 'verified' ? styles.active : ''}`} onClick={() => setActiveTab('verified')}>
                                 <Star size={16} fill={activeTab === 'verified' ? 'var(--color-text-main)' : 'none'} /> Verified
                             </button>
