@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
-import { Trash2, ArrowLeft, Minus, Plus, Download, FileText, Leaf, Sun } from 'lucide-react';
+import { Trash2, ArrowLeft, Minus, Plus, Download, Leaf, Sun } from 'lucide-react';
 import { Button } from '../components/common/Button';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
