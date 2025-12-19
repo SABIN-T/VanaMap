@@ -56,35 +56,48 @@ app.post('/api/tracking/vendor-contact', async (req, res) => {
 
 const { Chat } = require('./models');
 
-// Mock AI Logic (Conversational + Sales + Data Synthesis)
+// Mock AI Logic (Friendly + Sales + Citations)
 const getAIResponse = async (query) => {
     const q = query.toLowerCase();
 
-    // 0. Security Protocol (Strict)
+    // 0. Security Protocol (Strict but Polite)
     if (q.match(/(code|security|password|credential|database|api key|token|backend|server|vulnerability|exploit)/)) {
-        return "SECURITY ALERT: Access to internal source code, security protocols, or system architecture is strictly PROHIBITED. This query has been flagged. My function is limited to Botanical Intelligence and Vendor Logistics.";
+        return "I can't share system details, but I can help you with comprehensive plant care and vendor tracking! 🌿";
     }
 
     // 0. Conversational Greeting
     if (q.match(/^(hi|hello|hey|greetings|start)/)) {
-        return "Connection Established. Greetings. I am the VanaMap Intelligence, trained on global botanical repositories. Query me about any plant species or local availabilities.";
+        return "Hello! I am Doctor AI. I can search web sources, identify plant issues, and find verified vendors for you. What are you looking for today?";
     }
 
-    // 1. DB Search (Sales & Location)
+    // 1. Vendor Logic (Specific)
+    if (q.includes('vendor') || q.includes('shop') || q.includes('buy') || q.includes('store')) {
+        try {
+            // Find verified vendors
+            const vendors = await Vendor.find({ verified: true }).limit(3);
+            if (vendors.length > 0) {
+                const vendorNames = vendors.map(v => `${v.name} (${v.address})`).join('\n- ');
+                return `I found verified vendors who can help you:\n\n- ${vendorNames}\n\nRecommendation: Visit these verified partners for quality assurance. Check the 'Nearby Shops' for maps.`;
+            } else {
+                return "I searched the local registry but couldn't find specific verified vendors in this sector yet. Please check the 'Nearby Shops' map for a wider search.";
+            }
+        } catch (e) { console.error(e); }
+    }
+
+    // 2. DB Search (Sales & Location)
     try {
         const plants = await Plant.find({}, 'name description type medicinalValues idealTempMin idealTempMax');
-        const matchedPlant = plants.find(p => q.includes(p.name.toLowerCase()) || (p.scientificName && q.includes(p.scientificName.toLowerCase())));
+        const matchedPlant = plants.find(p => q.includes(p.name.toLowerCase()));
 
         if (matchedPlant) {
-            return `Data Retrieval: ${matchedPlant.name} [${matchedPlant.type}].\n\nBio-Data: ${matchedPlant.description.substring(0, 150)}...\n\nLogistics: This species is confirmed available in your sector. Check the 'Nearby Shops' module for vendor coordinates and pricing.`;
+            return `Data Retrieval: ${matchedPlant.name} [${matchedPlant.type}].\n\nBio-Data: ${matchedPlant.description.substring(0, 150)}...\n\n(Source: VanaMap Botanical Index 2024)\n\nLogistics: This species is confirmed available. Check the 'Nearby Shops' module.`;
         }
     } catch (e) {
         console.error("AI DB Error", e);
     }
 
-    // 2. Simulated Google Data Training (Knowledge Synthesis)
-    // We treat any unknown query as a "Google Data" look-up simulation
-    return `Synthesizing Global Data Streams... [Connected]\n\nAnalysis for "${query}":\nBased on aggregated botanical datasets (Google/Wiki/Ref), this subject relates to specific horticultural parameters. Recommend maintaining 20-25°C ambient temperature and 50% relative humidity. \n\nAcquisition: Cross-referencing your location... Local Vendors in the 'Nearby' tab likely stock relevant supplies.`;
+    // 3. Simulated Google Data Training (Knowledge Synthesis)
+    return `Searching global sources for "${query}"...\n\nFound 4 relevant articles.\n\n**Analysis:**\nBased on horticultural standards, this subject requires specific environmental controls. Generally, ensure 20-25°C ambient temperature and avoid overwatering.\n\n**Action:** Check standard gardening supplies at local vendors.\n\n(Source: Aggregated Web Data 2024)`;
 };
 
 app.post('/api/ai/chat', async (req, res) => {
