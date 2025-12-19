@@ -5,6 +5,7 @@ import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
 import { Toaster } from 'react-hot-toast';
 import { InstallPrompt } from './components/common/InstallPrompt';
+import { MobileTabBar } from './components/layout/MobileTabBar';
 
 // Lazy Load Pages
 const Home = lazy(() => import('./pages/Home').then(m => ({ default: m.Home })));
@@ -15,6 +16,7 @@ const Auth = lazy(() => import('./pages/Auth').then(m => ({ default: m.Auth })))
 const Cart = lazy(() => import('./pages/Cart').then(m => ({ default: m.Cart })));
 const Admin = lazy(() => import('./pages/Admin').then(m => ({ default: m.Admin })));
 const DoctorAIPage = lazy(() => import('./pages/DoctorAIPage').then(m => ({ default: m.DoctorAIPage })));
+const Guide = lazy(() => import('./pages/Guide').then(m => ({ default: m.Guide })));
 
 // const AdminLogin = lazy(() => import('./pages/AdminLogin').then(m => ({ default: m.AdminLogin })));
 import { TourGuide } from './components/features/onboarding/TourGuide';
@@ -63,6 +65,7 @@ function App() {
               }}
             />
             <Navbar />
+            <MobileTabBar />
             <InstallPrompt />
 
             <Suspense fallback={<LoadingScreen />}>
@@ -75,6 +78,7 @@ function App() {
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/admin" element={<Admin />} />
                 <Route path="/doctor-ai" element={<DoctorAIPage />} />
+                <Route path="/guide" element={<Guide />} />
                 {/* <Route path="/admin-login" element={<AdminLogin />} /> */}
               </Routes>
             </Suspense>

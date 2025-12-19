@@ -61,8 +61,13 @@ export const Navbar = () => {
                 <Link id="nav-home" to="/" className={styles.navLink}>Home</Link>
                 <Link id="nav-nearby" to="/nearby" className={styles.navLink}>Nearby Shops</Link>
 
-                {/* Doctor AI Button */}
-                <Link to="/doctor-ai" target="_blank" className={styles.navLink} style={{ color: '#38bdf8', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                {/* Doctor AI Button - Desktop Only */}
+                <Link
+                    to="/doctor-ai"
+                    target="_blank"
+                    className={`${styles.navLink} desktop-only`}
+                    style={{ color: '#38bdf8', display: 'flex', alignItems: 'center', gap: '5px' }}
+                >
                     <Bot size={18} /> Doctor AI
                 </Link>
 
@@ -150,6 +155,28 @@ export const Navbar = () => {
                 </div>
             </div>
 
+            {/* Mobile Styles Override */}
+            <style>{`
+                @media (max-width: 768px) {
+                    .${styles.desktopLinks}, 
+                    .${styles.menuBtn},
+                    #nav-cart {
+                        display: none !important;
+                    }
+                    /* Ensure Logo and Auth are visible */
+                    .${styles.navbar} {
+                         padding: 0.8rem 1rem;
+                         justify-content: space-between;
+                    }
+                    .${styles.actions} {
+                        display: flex;
+                        gap: 10px;
+                    }
+                    .${styles.authDesktop} {
+                        display: flex !important;
+                    }
+                }
+            `}</style>
         </nav>
     );
 };
