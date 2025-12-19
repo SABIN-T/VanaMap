@@ -768,7 +768,7 @@ export const Admin = () => {
                         <div className="animate-fade-in">
                             {/* PLANT FORM PRO */}
                             <div className={`${styles['premium-card']} p-8 mb-12 relative overflow-hidden group`}>
-                                <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 group-hover:bg-emerald-500/20 transition-all duration-1000" />
+                                <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2" />
 
                                 <h3 className={`text-2xl font-black mb-8 flex items-center justify-between relative z-10 ${styles['glow-text']}`}>
                                     <span className="flex items-center gap-3">
@@ -792,17 +792,17 @@ export const Admin = () => {
                                             <div className="space-y-4">
                                                 <h4 className="text-[10px] font-black text-emerald-500/50 uppercase tracking-[0.2em] mb-4">I. Botanical Identity</h4>
                                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                    <div className={`${styles['premium-box']} focus-within:border-emerald-500/50 transition-all`}>
-                                                        <label className="text-[10px] uppercase tracking-widest text-slate-500 mb-2 block">Common Nomenclature</label>
-                                                        <input className={`${styles.input} bg-transparent border-none p-0 focus:ring-0 text-lg font-bold`} value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} placeholder="e.g. Fiddle Leaf Fig" required />
+                                                    <div className={`${styles['premium-box']} focus-within:ring-2 ring-emerald-500/10`}>
+                                                        <label className="text-[11px] font-bold text-slate-400 mb-1.5 block uppercase tracking-wider">Common Nomenclature</label>
+                                                        <input className={`${styles.input} text-xl`} value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} placeholder="e.g. Fiddle Leaf Fig" required />
                                                     </div>
-                                                    <div className={`${styles['premium-box']} focus-within:border-emerald-500/50 transition-all flex items-center gap-4`}>
+                                                    <div className={`${styles['premium-box']} flex items-center gap-4`}>
                                                         <div className="flex-1">
-                                                            <label className="text-[10px] uppercase tracking-widest text-slate-500 mb-2 block">Scientific Taxonomy</label>
-                                                            <input className={`${styles.input} bg-transparent border-none p-0 focus:ring-0 text-sm italic font-serif`} value={formData.scientificName} onChange={e => setFormData({ ...formData, scientificName: e.target.value })} placeholder="e.g. Ficus lyrata" required />
+                                                            <label className="text-[11px] font-bold text-slate-400 mb-1.5 block uppercase tracking-wider">Scientific Taxonomy</label>
+                                                            <input className={`${styles.input} text-sm font-medium italic`} value={formData.scientificName} onChange={e => setFormData({ ...formData, scientificName: e.target.value })} placeholder="e.g. Ficus lyrata" required />
                                                         </div>
-                                                        <Button type="button" onClick={handleSmartFetch} size="sm" className="bg-emerald-500/10 hover:bg-emerald-500 text-emerald-400 hover:text-white border border-emerald-500/20 p-2">
-                                                            <Search size={14} />
+                                                        <Button type="button" onClick={handleSmartFetch} size="sm" className="bg-emerald-50 text-emerald-600 hover:bg-emerald-500 hover:text-white border border-emerald-100 p-2.5 rounded-xl transition-all shadow-sm">
+                                                            <Search size={16} strokeWidth={2.5} />
                                                         </Button>
                                                     </div>
                                                 </div>
@@ -810,22 +810,22 @@ export const Admin = () => {
 
                                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                                 <div className={styles['premium-box']}>
-                                                    <label className="text-[10px] uppercase tracking-widest text-slate-500 mb-2 block">classification</label>
-                                                    <select className={`${styles.select} bg-transparent border-none p-0 focus:ring-0 font-bold`} value={formData.type} onChange={e => setFormData({ ...formData, type: e.target.value as any })}>
+                                                    <label className="text-[11px] font-bold text-slate-400 mb-1.5 block uppercase tracking-wider">Classification</label>
+                                                    <select className={`${styles.select}`} value={formData.type} onChange={e => setFormData({ ...formData, type: e.target.value as any })}>
                                                         <option value="indoor">Indoor (Houseplant)</option>
                                                         <option value="outdoor">Outdoor (Wild)</option>
                                                     </select>
                                                 </div>
                                                 <div className={styles['premium-box']}>
-                                                    <label className="text-[10px] uppercase tracking-widest text-slate-500 mb-2 block">Market Price (INR)</label>
+                                                    <label className="text-[11px] font-bold text-slate-400 mb-1.5 block uppercase tracking-wider">Market Price</label>
                                                     <div className="flex items-center gap-1">
-                                                        <span className="text-slate-500 font-bold">₹</span>
-                                                        <input type="number" className="bg-transparent border-none p-0 focus:ring-0 font-bold w-full" value={formData.price} onChange={e => setFormData({ ...formData, price: Number(e.target.value) })} required />
+                                                        <span className="text-slate-800 font-bold text-lg">₹</span>
+                                                        <input type="number" className={`${styles.input} text-lg`} value={formData.price} onChange={e => setFormData({ ...formData, price: Number(e.target.value) })} required />
                                                     </div>
                                                 </div>
                                                 <div className={styles['premium-box']}>
-                                                    <label className="text-[10px] uppercase tracking-widest text-slate-500 mb-2 block">Origin Ecosystem</label>
-                                                    <input className="bg-transparent border-none p-0 focus:ring-0 font-bold w-full" value={formData.ecosystem || ''} onChange={e => setFormData({ ...formData, ecosystem: e.target.value })} placeholder="e.g. Mediterranean" />
+                                                    <label className="text-[11px] font-bold text-slate-400 mb-1.5 block uppercase tracking-wider">Origin Ecosystem</label>
+                                                    <input className={`${styles.input} text-base`} value={formData.ecosystem || ''} onChange={e => setFormData({ ...formData, ecosystem: e.target.value })} placeholder="e.g. Mediterranean" />
                                                 </div>
                                             </div>
 
@@ -833,22 +833,22 @@ export const Admin = () => {
                                                 <h4 className="text-[10px] font-black text-blue-500/50 uppercase tracking-[0.2em] mb-4">II. Environmental Parameters</h4>
                                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                                     <div className={styles['premium-box']}>
-                                                        <div className="flex justify-between items-center mb-4 text-[10px] uppercase tracking-widest text-slate-400">
-                                                            <span>Vital Temperature Range</span>
-                                                            <span className="text-blue-400 font-bold">{formData.idealTempMin}-{formData.idealTempMax}°C</span>
+                                                        <div className="flex justify-between items-center mb-4 text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                                                            <span>Vital Temp</span>
+                                                            <span className="text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full">{formData.idealTempMin}-{formData.idealTempMax}°C</span>
                                                         </div>
-                                                        <div className="space-y-2">
-                                                            <input type="range" min="0" max="40" value={formData.idealTempMin} onChange={e => setFormData({ ...formData, idealTempMin: Number(e.target.value) })} className="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-500" />
-                                                            <input type="range" min="10" max="50" value={formData.idealTempMax} onChange={e => setFormData({ ...formData, idealTempMax: Number(e.target.value) })} className="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-400" />
+                                                        <div className="space-y-4 px-1">
+                                                            <input type="range" min="0" max="40" value={formData.idealTempMin} onChange={e => setFormData({ ...formData, idealTempMin: Number(e.target.value) })} className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-blue-500 hover:accent-blue-400 transition-all" />
+                                                            <input type="range" min="10" max="50" value={formData.idealTempMax} onChange={e => setFormData({ ...formData, idealTempMax: Number(e.target.value) })} className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-rose-500 hover:accent-rose-400 transition-all" />
                                                         </div>
                                                     </div>
                                                     <div className={styles['premium-box']}>
-                                                        <div className="flex justify-between items-center mb-4 text-[10px] uppercase tracking-widest text-slate-400">
-                                                            <span>Moisture Matrix</span>
-                                                            <span className="text-teal-400 font-bold">{formData.minHumidity}%+</span>
+                                                        <div className="flex justify-between items-center mb-4 text-[11px] font-bold uppercase tracking-wider text-slate-500">
+                                                            <span>Moisure</span>
+                                                            <span className="text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">{formData.minHumidity}%+</span>
                                                         </div>
-                                                        <input type="range" min="10" max="100" value={formData.minHumidity} onChange={e => setFormData({ ...formData, minHumidity: Number(e.target.value) })} className="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-teal-500" />
-                                                        <div className="mt-2 text-[8px] uppercase tracking-widest text-slate-500 flex justify-between">
+                                                        <input type="range" min="10" max="100" value={formData.minHumidity} onChange={e => setFormData({ ...formData, minHumidity: Number(e.target.value) })} className="w-full h-1.5 bg-slate-200 rounded-lg appearance-none cursor-pointer accent-emerald-500 hover:accent-emerald-400 transition-all" />
+                                                        <div className="mt-4 text-[10px] font-bold uppercase tracking-wider text-slate-400 flex justify-between px-1">
                                                             <span>Arid</span>
                                                             <span>Tropical</span>
                                                         </div>
@@ -863,11 +863,11 @@ export const Admin = () => {
                                                 <h4 className="text-[10px] font-black text-purple-500/50 uppercase tracking-[0.2em] mb-4">III. Visual Asset</h4>
                                                 <div className="relative group/img overflow-hidden rounded-2xl border border-slate-700/50 aspect-square bg-slate-900/40">
                                                     {formData.imageUrl ? (
-                                                        <img src={formData.imageUrl} alt="Ref" className="w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-110" />
+                                                        <img src={formData.imageUrl} alt="Ref" className="w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-105" />
                                                     ) : (
-                                                        <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-600">
-                                                            <ImageIcon size={48} className="mb-4 opacity-20" />
-                                                            <span className="text-[10px] uppercase tracking-widest font-bold">No Render Loaded</span>
+                                                        <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-400 bg-slate-50">
+                                                            <ImageIcon size={48} className="mb-4 opacity-30" />
+                                                            <span className="text-[10px] uppercase tracking-widest font-bold">No Image</span>
                                                         </div>
                                                     )}
                                                     <label className="absolute inset-0 bg-black/60 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center cursor-pointer backdrop-blur-sm">
@@ -880,7 +880,7 @@ export const Admin = () => {
                                             <div className="space-y-4">
                                                 <h4 className="text-[10px] font-black text-amber-500/50 uppercase tracking-[0.2em] mb-4">IV. Metadata</h4>
                                                 <textarea
-                                                    className={`${styles.input} h-32 bg-slate-900/40 border-slate-700/50 text-xs`}
+                                                    className={`${styles.input} h-32 bg-slate-50 border border-slate-200 rounded-xl p-4 text-sm resize-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all`}
                                                     value={formData.description}
                                                     onChange={e => setFormData({ ...formData, description: e.target.value })}
                                                     placeholder="Synthesize species characteristics and lore..."
@@ -899,34 +899,34 @@ export const Admin = () => {
 
                             {/* PLANTS CATALOGUE FEED */}
                             <div className="flex flex-col md:flex-row justify-between items-center mb-10 gap-6">
-                                <div className="flex items-center gap-1 p-1.5 bg-slate-800/40 backdrop-blur rounded-2xl border border-slate-700/50">
+                                <div className="flex items-center gap-1 p-2 bg-white rounded-2xl border border-slate-200 shadow-sm">
                                     {['all', 'indoor', 'outdoor'].map(f => (
                                         <button
                                             key={f}
                                             onClick={() => setPlantFilter(f as any)}
-                                            className={`px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${plantFilter === f
-                                                ? 'bg-emerald-500 text-white shadow-xl shadow-emerald-500/20'
-                                                : 'text-slate-500 hover:text-white hover:bg-slate-700/50'}`}
+                                            className={`px-6 py-2.5 rounded-xl text-[11px] font-bold uppercase tracking-wider transition-all ${plantFilter === f
+                                                ? 'bg-slate-900 text-white shadow-lg shadow-slate-900/20'
+                                                : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50'}`}
                                         >
                                             {f}
                                         </button>
                                     ))}
                                 </div>
                                 <div className="relative w-full md:w-96 group">
-                                    <div className="absolute inset-y-0 left-5 flex items-center pointer-events-none text-slate-500 group-focus-within:text-emerald-400 transition-colors">
-                                        <Search size={18} />
+                                    <div className="absolute inset-y-0 left-5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-emerald-500 transition-colors">
+                                        <Search size={20} />
                                     </div>
                                     <input
                                         type="text"
-                                        placeholder="FILTER BY TAXONOMY..."
-                                        className="w-full bg-slate-800/30 border border-slate-700/50 rounded-2xl py-4 pl-14 pr-6 text-[10px] font-bold tracking-[0.2em] text-slate-200 outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500/50 transition-all placeholder:text-slate-600"
+                                        placeholder="SEARCH SPECIES..."
+                                        className="w-full bg-white border border-slate-200 rounded-2xl py-4 pl-14 pr-6 text-sm font-bold text-slate-800 outline-none focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all placeholder:text-slate-400 shadow-sm"
                                         value={searchQuery}
                                         onChange={(e) => setSearchQuery(e.target.value)}
                                     />
                                 </div>
                             </div>
 
-                            <div className={`${styles['animate-staggered']} grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 pb-32`}>
+                            <div className={`${styles['animate-staggered']} pb-32`}>
                                 {plants.filter(p => (plantFilter === 'all' || p.type === plantFilter) && (p.name.toLowerCase().includes(searchQuery.toLowerCase()) || p.scientificName?.toLowerCase().includes(searchQuery.toLowerCase()))).map((p, index) => (
                                     <div
                                         key={p.id}
@@ -935,77 +935,76 @@ export const Admin = () => {
                                     >
                                         <div className={styles['image-container']}>
                                             <img src={p.imageUrl} alt="" className={styles['plant-image']} />
-                                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent opacity-80" />
-
                                             {/* Top Badges */}
-                                            <div className="absolute top-4 left-4 flex gap-2">
-                                                <span className={`px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-widest backdrop-blur-xl border border-white/10 ${p.type === 'indoor' ? 'bg-indigo-500/30 text-indigo-200' : 'bg-orange-500/30 text-orange-200'}`}>
+                                            <div className="absolute top-4 left-4 flex gap-2 z-10">
+                                                <span className={`px-3 py-1.5 rounded-3xl text-[10px] font-bold uppercase tracking-wide backdrop-blur-md shadow-sm border border-white/40 ${p.type === 'indoor' ? 'bg-white/90 text-indigo-600' : 'bg-white/90 text-orange-600'}`}>
                                                     {p.type}
                                                 </span>
-                                                {(p.price || 0) > 800 && <span className="bg-purple-500/30 text-purple-200 px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-widest backdrop-blur-xl border border-white/10">Premium</span>}
+                                                {(p.price || 0) > 800 && <span className="bg-white/90 text-purple-600 px-3 py-1.5 rounded-3xl text-[10px] font-bold uppercase tracking-wide backdrop-blur-md shadow-sm border border-white/40">Premium</span>}
                                             </div>
 
                                             {/* Edit Overlay */}
                                             <div className={styles['edit-overlay']}>
-                                                <button onClick={() => startEdit(p)} className="w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-xl text-white flex items-center justify-center hover:bg-emerald-500 transition-all border border-white/20 active:scale-95 shadow-2xl">
-                                                    <Edit size={20} />
+                                                <button onClick={() => startEdit(p)} className="w-12 h-12 rounded-2xl bg-white text-emerald-600 flex items-center justify-center hover:bg-emerald-500 hover:text-white transition-all shadow-xl hover:scale-110">
+                                                    <Edit size={22} />
                                                 </button>
-                                                <button onClick={() => deletePlantHandler(p.id, p.name)} className="w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-xl text-white flex items-center justify-center hover:bg-red-500 transition-all border border-white/20 active:scale-95 shadow-2xl">
-                                                    <Trash2 size={20} />
+                                                <button onClick={() => deletePlantHandler(p.id, p.name)} className="w-12 h-12 rounded-2xl bg-white text-rose-500 flex items-center justify-center hover:bg-rose-500 hover:text-white transition-all shadow-xl hover:scale-110">
+                                                    <Trash2 size={22} />
                                                 </button>
                                             </div>
                                         </div>
 
-                                        <div className="p-6">
+                                        <div className="p-5 flex flex-col flex-1">
                                             <div className="flex justify-between items-start mb-4">
                                                 <div>
-                                                    <h3 className="font-black text-white text-lg leading-tight mb-1 group-hover:text-emerald-400 transition-colors uppercase tracking-tight">{p.name}</h3>
-                                                    <p className="text-[10px] text-emerald-500 font-serif italic flex items-center gap-1.5 opacity-70">
-                                                        <Leaf size={10} /> {p.scientificName || 'Unclassified'}
+                                                    <h3 className="font-bold text-slate-800 text-lg leading-tight mb-1 group-hover:text-emerald-600 transition-colors tracking-tight">{p.name}</h3>
+                                                    <p className="text-xs text-slate-500 font-serif italic flex items-center gap-1.5">
+                                                        <Leaf size={12} className="text-emerald-500" /> {p.scientificName || 'Unclassified'}
                                                     </p>
                                                 </div>
                                                 <div className="text-right">
-                                                    <div className="text-sm font-black text-white">₹{p.price}</div>
-                                                    <div className="text-[8px] text-slate-500 uppercase font-bold">Standard</div>
+                                                    <div className="text-base font-black text-slate-800">₹{p.price}</div>
                                                 </div>
                                             </div>
 
-                                            <div className="grid grid-cols-3 gap-2 mt-6">
-                                                <div className="flex flex-col items-center justify-center py-2.5 rounded-xl bg-slate-900/50 border border-slate-800 group-hover:border-slate-700 transition-colors">
-                                                    <Sun size={14} className="text-amber-400 mb-1.5" />
-                                                    <span className="text-[8px] text-slate-400 font-black uppercase tracking-tighter">{p.sunlight}</span>
+                                            <div className="grid grid-cols-3 gap-2 mt-auto">
+                                                <div className="flex flex-col items-center justify-center py-3 rounded-xl bg-slate-50 border border-slate-100 group-hover:border-slate-200 transition-colors">
+                                                    <Sun size={16} className="text-amber-500 mb-1" />
+                                                    <span className="text-[10px] text-slate-500 font-bold uppercase tracking-tight">{p.sunlight}</span>
                                                 </div>
-                                                <div className="flex flex-col items-center justify-center py-2.5 rounded-xl bg-slate-900/50 border border-slate-800 group-hover:border-slate-700 transition-colors">
-                                                    <Droplets size={14} className="text-blue-400 mb-1.5" />
-                                                    <span className="text-[8px] text-slate-400 font-black uppercase tracking-tighter">{p.minHumidity}%</span>
+                                                <div className="flex flex-col items-center justify-center py-3 rounded-xl bg-slate-50 border border-slate-100 group-hover:border-slate-200 transition-colors">
+                                                    <Droplets size={16} className="text-blue-500 mb-1" />
+                                                    <span className="text-[10px] text-slate-500 font-bold uppercase tracking-tight">{p.minHumidity}%</span>
                                                 </div>
-                                                <div className="flex flex-col items-center justify-center py-2.5 rounded-xl bg-slate-900/50 border border-slate-800 group-hover:border-slate-700 transition-colors">
-                                                    <Thermometer size={14} className="text-rose-400 mb-1.5" />
-                                                    <span className="text-[8px] text-slate-400 font-black uppercase tracking-tighter">{p.idealTempMin}°C</span>
+                                                <div className="flex flex-col items-center justify-center py-3 rounded-xl bg-slate-50 border border-slate-100 group-hover:border-slate-200 transition-colors">
+                                                    <Thermometer size={16} className="text-rose-500 mb-1" />
+                                                    <span className="text-[10px] text-slate-500 font-bold uppercase tracking-tight">{p.idealTempMin}°C</span>
                                                 </div>
                                             </div>
 
                                             {p.isNocturnal && (
-                                                <div className="mt-4 flex items-center gap-2 justify-center text-[8px] font-black uppercase tracking-[0.2em] text-purple-400 bg-purple-500/5 py-2.5 rounded-xl border border-purple-500/10">
-                                                    <Sparkles size={10} /> Night Purifier
+                                                <div className="mt-4 flex items-center gap-2 justify-center text-[9px] font-bold uppercase tracking-wide text-purple-600 bg-purple-50 py-2.5 rounded-xl border border-purple-100">
+                                                    <Sparkles size={12} /> Night Purifier
                                                 </div>
                                             )}
                                         </div>
                                     </div>
                                 ))}
-                                {plants.length === 0 && (
-                                    <div className="col-span-full py-32 text-center border border-dashed border-slate-700 rounded-[2.5rem] bg-slate-950/20 backdrop-blur">
-                                        <div className="flex justify-center mb-6"><Sprout size={64} className="text-slate-800" /></div>
-                                        <h3 className="text-2xl font-black text-slate-700 uppercase tracking-widest mb-2">Registry Offline</h3>
-                                        <p className="text-slate-700 mb-8 text-sm">No botanical data discovered in local clusters.</p>
-                                        <Button onClick={handleBulkImport} variant="outline" className="border-slate-800 text-slate-600 hover:text-emerald-500 hover:border-emerald-500 px-12 h-14">Initialize Seed Protocol</Button>
-                                    </div>
-                                )}
                             </div>
+
+                            {plants.length === 0 && (
+                                <div className="col-span-full py-32 text-center border border-dashed border-slate-200 rounded-[2.5rem] bg-slate-50/50 backdrop-blur">
+                                    <div className="flex justify-center mb-6"><Sprout size={64} className="text-slate-300" /></div>
+                                    <h3 className="text-xl font-bold text-slate-700 uppercase tracking-wide mb-2">Registry Empty</h3>
+                                    <p className="text-slate-500 mb-8 text-sm font-medium">No botanical data found matching these parameters.</p>
+                                    <Button onClick={handleBulkImport} variant="outline" className="border-slate-200 text-slate-600 hover:text-emerald-500 hover:border-emerald-500 hover:bg-white px-8 h-12 rounded-xl transition-all shadow-sm">Initialize Default Data</Button>
+                                </div>
+                            )}
                         </div>
                     )}
                 </div>
             </main>
         </div>
+
     );
 };
