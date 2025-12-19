@@ -1,5 +1,6 @@
+
 import { useState, useEffect } from 'react';
-import { fetchVendors, fetchPlants, addPlant, updatePlant, deletePlant, fetchResetRequests, fetchNotifications } from '../services/api';
+import { fetchVendors, fetchPlants, addPlant, updatePlant, deletePlant, fetchResetRequests } from '../services/api';
 import type { Vendor, Plant } from '../types';
 import { Check, Trash2, Edit, Image as ImageIcon, Users, Sprout, Activity, LogOut, Sparkles, Search, Database } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -214,10 +215,10 @@ export const Admin = () => {
     // --- STATE ---
     const [vendors, setVendors] = useState<Vendor[]>([]);
     const [requests, setRequests] = useState<any[]>([]);
+    // const [notifications, setNotifications] = useState<any[]>([]); // To be implemented
     const [plants, setPlants] = useState<Plant[]>([]);
-    const [notifications, setNotifications] = useState<any[]>([]);
     const [activeTab, setActiveTab] = useState<'users' | 'plants' | 'activity'>('users');
-    const [loading, setLoading] = useState(true);
+    // const [loading, setLoading] = useState(true);
 
     // Filter State
     const [plantFilter, setPlantFilter] = useState<'all' | 'indoor' | 'outdoor'>('all');
@@ -259,26 +260,26 @@ export const Admin = () => {
     }, []);
 
     const loadAll = async () => {
-        setLoading(true);
+        // setLoading(true);
         const toastId = toast.loading("Fetching latest dashboard data...");
         try {
-            const [vData, pData, rData, nData] = await Promise.all([
+            const [vData, pData, rData] = await Promise.all([
                 fetchVendors(),
                 fetchPlants(),
                 fetchResetRequests(),
-                fetchNotifications()
+                // fetchNotifications()
             ]);
             setVendors(vData);
             setPlants(pData);
             setRequests(rData);
-            setNotifications(nData);
+            // setNotifications(nData);
 
             toast.success("Dashboard synced", { id: toastId });
         } catch (err: any) {
             console.error("Sync Error:", err);
             toast.error("Sync failed: " + (err.message || 'Unknown error'), { id: toastId });
         } finally {
-            setLoading(false);
+            // setLoading(false);
         }
     };
 
@@ -323,7 +324,7 @@ export const Admin = () => {
                 toast.success(`Verified: ${match.name} found!`, { id: toastId });
 
                 if (updatedFields.length > 0) {
-                    toast((t) => (
+                    toast(() => (
                         <div className="text-sm">
                             <div className="font-bold text-green-400 mb-1">✅ Auto-Updated {updatedFields.length} Fields:</div>
                             <div className="opacity-80">{updatedFields.slice(0, 5).join(', ')}{updatedFields.length > 5 && '...'}</div>
@@ -332,7 +333,7 @@ export const Admin = () => {
                 }
 
                 if (missingFields.length > 0) {
-                    toast((t) => (
+                    toast(() => (
                         <div className="text-sm">
                             <div className="font-bold text-yellow-400 mb-1">⚠️ Manual Input Required:</div>
                             <div>{missingFields.join(', ')}</div>
@@ -481,7 +482,7 @@ export const Admin = () => {
                             {/* PLANT FORM */}
                             <div className={styles.card} style={{ marginBottom: '2rem' }}>
                                 <h3 className={styles.cardTitle}>
-                                    {isEditing ? `Editing: ${formData.name}` : 'Catalog New Species'}
+                                    {isEditing ? `Editing: ${formData.name} ` : 'Catalog New Species'}
                                     {isEditing && <button onClick={() => { setIsEditing(false); setFormData(initialFormState); setLastAutoFilled([]); }} className="text-xs ml-4 text-red-400 border border-red-500/30 px-2 py-1 rounded">Cancel Edit</button>}
                                 </h3>
                                 <form onSubmit={handlePlantSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
@@ -593,9 +594,9 @@ export const Admin = () => {
 
                             {/* PLANTS LIST */}
                             <div className="flex gap-2 mb-4">
-                                <button onClick={() => setPlantFilter('all')} className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${plantFilter === 'all' ? 'bg-emerald-500 text-white' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}`}>All Varieties</button>
-                                <button onClick={() => setPlantFilter('indoor')} className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${plantFilter === 'indoor' ? 'bg-emerald-500 text-white' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}`}>Indoor</button>
-                                <button onClick={() => setPlantFilter('outdoor')} className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${plantFilter === 'outdoor' ? 'bg-emerald-500 text-white' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}`}>Outdoor</button>
+                                <button onClick={() => setPlantFilter('all')} className={`px - 3 py - 1.5 rounded - lg text - xs font - medium transition - colors ${plantFilter === 'all' ? 'bg-emerald-500 text-white' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'} `}>All Varieties</button>
+                                <button onClick={() => setPlantFilter('indoor')} className={`px - 3 py - 1.5 rounded - lg text - xs font - medium transition - colors ${plantFilter === 'indoor' ? 'bg-emerald-500 text-white' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'} `}>Indoor</button>
+                                <button onClick={() => setPlantFilter('outdoor')} className={`px - 3 py - 1.5 rounded - lg text - xs font - medium transition - colors ${plantFilter === 'outdoor' ? 'bg-emerald-500 text-white' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'} `}>Outdoor</button>
                             </div>
                             <div className="space-y-4">
                                 {plants.filter(p => plantFilter === 'all' || p.type === plantFilter).map(p => (
