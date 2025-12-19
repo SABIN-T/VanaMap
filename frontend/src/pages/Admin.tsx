@@ -429,6 +429,39 @@ export const Admin = () => {
         }
     };
 
+    const handleBulkImport = async () => {
+        if (!confirm("Populate store with Indian Plant Database (~40-50 varieties)?")) return;
+        const tid = toast.loading("Seeding Database...");
+        let added = 0;
+        try {
+            for (const [key, data] of Object.entries(INDIAN_PLANT_DB)) {
+                if (plants.some(p => p.name === data.name)) continue;
+
+                let img = 'https://images.unsplash.com/photo-1520412099551-62b6bafeb5bb?auto=format&fit=crop&q=80&w=400';
+                const k = data.name?.toLowerCase() || '';
+                if (k.includes('neem') || k.includes('tree')) img = 'https://images.unsplash.com/photo-1542372070-07ffee20e649?auto=format&fit=crop&q=80&w=400';
+                else if (k.includes('tulsi') || k.includes('basil')) img = 'https://images.unsplash.com/photo-1629198688000-71f23e745b6e?auto=format&fit=crop&q=80&w=400';
+                else if (k.includes('palm')) img = 'https://images.unsplash.com/photo-1614539971887-2cd9393309a6?auto=format&fit=crop&q=80&w=400';
+                else if (k.includes('flower') || k.includes('rose') || k.includes('hibiscus')) img = 'https://images.unsplash.com/photo-1580227974351-460d53c301cb?auto=format&fit=crop&q=80&w=400';
+
+                await addPlant({
+                    ...data,
+                    id: key.replace(/\s+/g, '-'),
+                    price: Math.floor(Math.random() * 800) + 150,
+                    imageUrl: img,
+                    idealTempMin: data.idealTempMin || 20,
+                    idealTempMax: data.idealTempMax || 30,
+                    minHumidity: data.minHumidity || 50
+                } as Plant);
+                added++;
+            }
+            toast.success(`Imported ${added} plants!`, { id: tid });
+            loadAll();
+        } catch (err) {
+            toast.error("Import failed", { id: tid });
+        }
+    };
+
     // --- RENDER HELPERS ---
     const isFieldAutoFilled = (fieldName: string) => lastAutoFilled.includes(fieldName);
     const getFieldStyle = (fieldName: string) => isFieldAutoFilled(fieldName) ?
@@ -459,7 +492,14 @@ export const Admin = () => {
 
             <main className={styles.mainContent}>
                 <header className={styles.header}>
-                    <h2>{activeTab === 'users' ? 'User Management' : activeTab === 'plants' ? 'Plant Directory' : 'System Activity'}</h2>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                        <h2>{activeTab === 'users' ? 'User Management' : activeTab === 'plants' ? 'Plant Directory' : 'System Activity'}</h2>
+                        {activeTab === 'plants' && (
+                            <Button onClick={handleBulkImport} variant="outline" size="sm" style={{ borderColor: '#10b981', color: '#10b981' }}>
+                                <Sparkles size={16} className="mr-2" /> Simulate 500+ Inventory
+                            </Button>
+                        )}
+                    </div>
                     <div className={styles.statsRow}>
                         <div className={styles.statCard}>
                             <div className={styles.statLabel}>Total Vendors</div>
