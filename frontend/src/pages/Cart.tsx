@@ -1,13 +1,43 @@
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
-import { Trash2, ArrowLeft, Minus, Plus } from 'lucide-react';
+import { Trash2, ArrowLeft, Minus, Plus, Download, FileText, Leaf, Sun } from 'lucide-react';
 import { Button } from '../components/common/Button';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+import toast from 'react-hot-toast';
 
 export const Cart = () => {
     const { items, removeFromCart, updateQuantity } = useCart();
     const { user } = useAuth();
     const navigate = useNavigate();
+
+    const handleDownloadPDF = async () => {
+        const element = document.getElementById('pdf-content');
+        if (!element) return;
+
+        const toastId = toast.loading('Generating your Sanctuary Plan...');
+
+        try {
+            const canvas = await html2canvas(element, {
+                scale: 2, // Higher resolution
+                useCORS: true, // For images
+                backgroundColor: '#ffffff'
+            });
+
+            const imgData = canvas.toDataURL('image/png');
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+
+            pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+            pdf.save('My_Forest_Land_Plan.pdf');
+            toast.success('Sanctuary Plan Downloaded!', { id: toastId });
+        } catch (error) {
+            console.error('PDF Error:', error);
+            toast.error('Failed to generate PDF', { id: toastId });
+        }
+    };
 
     return (
         <div className="container" style={{ padding: '2rem 1rem' }}>
@@ -30,11 +60,18 @@ export const Cart = () => {
             </div>
 
             <div className="glass-panel" style={{ padding: '2rem', maxWidth: '800px', margin: '0 auto' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem' }}>
-                    <button onClick={() => navigate(-1)} style={{ background: 'none', border: 'none', color: 'var(--color-primary)', cursor: 'pointer', padding: '0.5rem', borderRadius: '50%', display: 'flex' }}>
-                        <ArrowLeft size={24} />
-                    </button>
-                    <h2 style={{ fontSize: '2rem', margin: 0, color: 'var(--color-text-main)' }}>Your Cart</h2>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem', flexWrap: 'wrap', gap: '1rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                        <button onClick={() => navigate(-1)} style={{ background: 'none', border: 'none', color: 'var(--color-primary)', cursor: 'pointer', padding: '0.5rem', borderRadius: '50%', display: 'flex' }}>
+                            <ArrowLeft size={24} />
+                        </button>
+                        <h2 style={{ fontSize: '2rem', margin: 0, color: 'var(--color-text-main)' }}>Your Cart</h2>
+                    </div>
+                    {items.length > 0 && (
+                        <Button onClick={handleDownloadPDF} size="sm" variant="outline" style={{ borderColor: 'var(--color-primary)', color: 'var(--color-primary)' }}>
+                            <Download size={18} style={{ marginRight: 8 }} /> Download Plan
+                        </Button>
+                    )}
                 </div>
 
                 {items.length === 0 ? (
@@ -139,6 +176,70 @@ export const Cart = () => {
                         </div>
                     </>
                 )}
+            </div>
+
+            {/* Hidden PDF Template */}
+            <div id="pdf-content" style={{
+                position: 'fixed', left: '-10000px', top: 0,
+                width: '794px', // A4 Width in px approx at 96dpi
+                minHeight: '1123px', // A4 Height
+                background: '#f0fdf4', // Light green bg
+                padding: '40px',
+                fontFamily: 'sans-serif',
+                color: '#1e293b'
+            }}>
+                <div style={{ border: '4px solid #10b981', height: '100%', padding: '20px', borderRadius: '20px', background: 'white' }}>
+                    {/* Header */}
+                    <div style={{ textAlign: 'center', marginBottom: '30px', borderBottom: '2px solid #e2e8f0', paddingBottom: '20px' }}>
+                        <h1 style={{ fontSize: '32px', color: '#10b981', margin: '0 0 10px 0', textTransform: 'uppercase' }}>The Forest Land for Future</h1>
+                        <div style={{ fontSize: '14px', color: '#64748b', letterSpacing: '2px' }}>MY BOTANICAL SANCTUARY PLAN</div>
+                    </div>
+
+                    {/* Summary */}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '30px', background: '#f0fdf4', padding: '20px', borderRadius: '12px' }}>
+                        <div>
+                            <div style={{ fontSize: '12px', color: '#64748b' }}>TOTAL PLANTS</div>
+                            <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#0f172a' }}>
+                                {items.reduce((acc, i) => acc + i.quantity, 0)}
+                            </div>
+                        </div>
+                        <div>
+                            <div style={{ fontSize: '12px', color: '#64748b' }}>TOTAL VARIETIES</div>
+                            <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#0f172a' }}>{items.length}</div>
+                        </div>
+                        <div>
+                            <div style={{ fontSize: '12px', color: '#64748b' }}>PLAN DATE</div>
+                            <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#0f172a' }}>{new Date().toLocaleDateString()}</div>
+                        </div>
+                    </div>
+
+                    {/* Plant List */}
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                        {items.map((item, index) => (
+                            <div key={item.plant.id} style={{ display: 'flex', alignItems: 'center', gap: '20px', borderBottom: '1px solid #f1f5f9', paddingBottom: '20px' }}>
+                                <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#cbd5e1', width: '30px' }}>{index + 1}</div>
+                                <img src={item.plant.imageUrl} style={{ width: '80px', height: '80px', borderRadius: '12px', objectFit: 'cover' }} />
+                                <div style={{ flex: 1 }}>
+                                    <h3 style={{ margin: '0 0 5px 0', fontSize: '18px', color: '#0f172a' }}>{item.plant.name}</h3>
+                                    <div style={{ display: 'flex', gap: '15px', fontSize: '12px', color: '#64748b' }}>
+                                        <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><Sun size={12} /> {item.plant.sunlight}</span>
+                                        <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><Leaf size={12} /> {item.plant.oxygenLevel || 'High'} O₂</span>
+                                    </div>
+                                </div>
+                                <div style={{ textAlign: 'right' }}>
+                                    <div style={{ fontSize: '12px', color: '#64748b' }}>QUANTITY</div>
+                                    <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#10b981' }}>x{item.quantity}</div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Footer */}
+                    <div style={{ marginTop: '50px', textAlign: 'center', color: '#94a3b8', fontSize: '12px' }}>
+                        <p>Keep this plan safe! Your journey to a greener future starts here.</p>
+                        <div style={{ marginTop: '10px', fontSize: '10px', textTransform: 'uppercase' }}>Generated by Plant Finder App</div>
+                    </div>
+                </div>
             </div>
         </div>
     );
