@@ -1,10 +1,11 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { fetchVendors, seedDatabase, logVendorContact } from '../services/api';
 import { getDistanceFromLatLonInKm, formatDistance } from '../utils/logic';
 import type { Vendor } from '../types';
-import { MessageCircle, MapPin, ExternalLink, RefreshCw, AlertCircle, Star, Sparkles, Search } from 'lucide-react';
+import { MessageCircle, MapPin, ExternalLink, RefreshCw, AlertCircle, Star, Sparkles, Search, Zap } from 'lucide-react';
 import { Button } from '../components/common/Button';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
@@ -50,11 +51,15 @@ function ChangeView({ center }: { center: [number, number] }) {
 
 export const Nearby = () => {
     const { user } = useAuth();
+    const location = useLocation(); // Hook usage
     const [position, setPosition] = useState<[number, number] | null>(null);
     const [placeName, setPlaceName] = useState<string>("");
     const [nearbyVendors, setNearbyVendors] = useState<Vendor[]>([]);
     const [loading, setLoading] = useState(false);
-    const [activeTab, setActiveTab] = useState<'verified' | 'unverified'>('verified');
+
+    // Initialize tab from navigation state or default to verified
+    const [activeTab, setActiveTab] = useState<'verified' | 'unverified'>((location.state as any)?.tab || 'verified');
+
     const [manualSearchQuery, setManualSearchQuery] = useState('');
     const hasInitialLocateRef = useRef(false);
 
@@ -304,11 +309,20 @@ out skel qt;
                     </div>
 
                     {loading ? (
-                        <div style={{ padding: '2rem', textAlign: 'center' }}>
-                            <div className="animate-spin" style={{ display: 'inline-block', marginBottom: '1rem' }}>
-                                <RefreshCw size={32} color="var(--color-primary)" />
+                        <div style={{ padding: '2rem', textAlign: 'center', animation: 'fadeIn 0.3s' }}>
+                            <div className="pulse-fast" style={{ display: 'inline-block', marginBottom: '1rem' }}>
+                                <Zap size={56} color="#facc15" fill="#facc15" style={{ filter: 'drop-shadow(0 0 10px #facc15)' }} />
                             </div>
-                            <p style={{ color: 'var(--color-text-muted)' }}>Scanning satellite data for nurseries...</p>
+                            <h3 style={{ color: '#facc15', margin: '0 0 0.5rem', fontWeight: 800 }}>Searching for Vendors...</h3>
+                            <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>Scanning nearby network at lightning speed</p>
+                            <style>{`
+                                @keyframes pulseFast {
+                                    0% { transform: scale(1); opacity: 1; }
+                                    50% { transform: scale(1.15); opacity: 0.8; }
+                                    100% { transform: scale(1); opacity: 1; }
+                                }
+                                .pulse-fast { animation: pulseFast 0.6s infinite ease-in-out; }
+                            `}</style>
                         </div>
                     ) : displayVendors.length === 0 ? (
                         <div style={{ textAlign: 'center', padding: '4rem', background: 'var(--color-bg-card)', borderRadius: '2rem', border: '1px dashed var(--glass-border)' }}>
