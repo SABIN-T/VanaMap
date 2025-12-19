@@ -441,14 +441,14 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                                     <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1.25rem', borderRadius: '1.25rem', border: '1px solid rgba(255,255,255,0.05)' }}>
                                         <label style={{ display: 'flex', justifyContent: 'space-between', color: '#e2e8f0', fontSize: '0.9rem', fontWeight: 600, marginBottom: '1rem' }}>
                                             <span>People in Room</span>
-                                            <span style={{ color: '#38bdf8' }}>{occupants}</span>
+                                            <span style={{ color: '#38bdf8' }}>{numPeople}</span>
                                         </label>
                                         <input
                                             type="range"
                                             min="1"
                                             max="10"
-                                            value={occupants}
-                                            onChange={(e) => setOccupants(parseInt(e.target.value))}
+                                            value={numPeople}
+                                            onChange={(e) => setNumPeople(parseInt(e.target.value))}
                                             style={{ width: '100%', accentColor: '#38bdf8', cursor: 'pointer' }}
                                         />
                                     </div>
@@ -459,16 +459,16 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                                             <div style={{ color: '#64748b', fontSize: '0.75rem' }}>Adjusts temperature</div>
                                         </div>
                                         <button
-                                            onClick={() => setAcOn(!acOn)}
+                                            onClick={() => setIsACMode(!isACMode)}
                                             style={{
                                                 width: '48px', height: '28px', borderRadius: '20px',
-                                                background: acOn ? '#38bdf8' : 'rgba(255,255,255,0.1)',
+                                                background: isACMode ? '#38bdf8' : 'rgba(255,255,255,0.1)',
                                                 position: 'relative', transition: 'all 0.3s ease'
                                             }}
                                         >
                                             <div style={{
                                                 width: '20px', height: '20px', background: 'white', borderRadius: '50%',
-                                                position: 'absolute', top: '4px', left: acOn ? '24px' : '4px',
+                                                position: 'absolute', top: '4px', left: isACMode ? '24px' : '4px',
                                                 transition: 'all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1)',
                                                 boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
                                             }}></div>
@@ -478,7 +478,7 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                                     <div style={{ background: 'rgba(56, 189, 248, 0.1)', border: '1px solid rgba(56, 189, 248, 0.2)', padding: '1rem', borderRadius: '1rem' }}>
                                         <div style={{ fontSize: '0.75rem', color: '#7dd3fc', marginBottom: '0.25rem', fontWeight: 700, textTransform: 'uppercase' }}>Did you know?</div>
                                         <p style={{ fontSize: '0.85rem', color: '#bae6fd', lineHeight: '1.4', margin: 0 }}>
-                                            {plant.name} gives enough oxygen for <b>{(occupants / (PLANTS_NEEDED || 1)).toFixed(1)} people</b> naturally.
+                                            {plant.name} gives enough oxygen for <b>{(numPeople / (plantsNeeded || 1)).toFixed(1)} people</b> naturally.
                                         </p>
                                     </div>
                                 </div>
@@ -488,7 +488,7 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                                     <div style={{ position: 'absolute', top: '1rem', left: '1rem', fontSize: '0.75rem', color: '#94a3b8', fontWeight: 600 }}>PLANTS NEEDED</div>
 
                                     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap', gap: '10px', maxWidth: '80%', margin: '1rem 0' }}>
-                                        {[...Array(Math.min(PLANTS_NEEDED, 12))].map((_, i) => (
+                                        {[...Array(Math.min(plantsNeeded, 12))].map((_, i) => (
                                             <div key={i} style={{
                                                 width: '32px', height: '32px', background: '#10b981', borderRadius: '50%',
                                                 display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -498,15 +498,15 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                                                 <div style={{ fontSize: '14px' }}>🌱</div>
                                             </div>
                                         ))}
-                                        {PLANTS_NEEDED > 12 && <div style={{ color: '#10b981', fontWeight: 700, fontSize: '1.2rem' }}>+{PLANTS_NEEDED - 12}</div>}
+                                        {plantsNeeded > 12 && <div style={{ color: '#10b981', fontWeight: 700, fontSize: '1.2rem' }}>+{plantsNeeded - 12}</div>}
                                     </div>
 
                                     <div style={{ textAlign: 'center', marginTop: 'auto', marginBottom: '1.5rem' }}>
                                         <div style={{ fontSize: '3rem', fontWeight: 900, color: 'white', lineHeight: 1, textShadow: '0 0 30px rgba(16, 185, 129, 0.3)' }}>
-                                            {PLANTS_NEEDED}
+                                            {plantsNeeded}
                                         </div>
                                         <div style={{ fontSize: '0.9rem', color: '#10b981', fontWeight: 600 }}>Plants Recommended</div>
-                                        <div style={{ fontSize: '0.8rem', color: '#64748b', marginTop: '0.25rem' }}>For {occupants} People</div>
+                                        <div style={{ fontSize: '0.8rem', color: '#64748b', marginTop: '0.25rem' }}>For {numPeople} People</div>
                                     </div>
 
                                     <style>{`
