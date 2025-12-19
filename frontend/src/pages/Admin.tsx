@@ -418,7 +418,7 @@ export const Admin = () => {
         setCurrentPlantId(plant.id);
         setFormData({ ...plant });
         setLastAutoFilled([]);
-        window.scrollTo({ top: 300, behavior: 'smooth' });
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     const deletePlantHandler = async (id: string, name: string) => {
@@ -526,28 +526,46 @@ export const Admin = () => {
 
             <main className={styles.mainContent}>
                 <header className={styles.header}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
-                        <h2>{activeTab === 'users' ? 'User Management' : activeTab === 'plants' ? 'Plant Directory' : 'System Activity'}</h2>
+                    <div className="flex justify-between items-center w-full mb-8">
+                        <div>
+                            <h2 className="text-3xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+                                {activeTab === 'users' ? 'User Access Control' :
+                                    activeTab === 'plants' ? 'Botanical Matrix' :
+                                        activeTab === 'reports' ? 'System Health' : 'Mission Control'}
+                            </h2>
+                            <p className="text-slate-400 text-sm mt-1">
+                                {activeTab === 'users' ? 'Manage vendor permissions and user sessions' : 'Real-time database operations and analytics'}
+                            </p>
+                        </div>
                         {activeTab === 'plants' && (
-                            <Button onClick={handleBulkImport} variant="outline" size="sm" style={{ borderColor: '#10b981', color: '#10b981' }}>
-                                <Sparkles size={16} className="mr-2" /> Simulate 500+ Inventory
+                            <Button onClick={handleBulkImport} variant="outline" size="sm" className="border-emerald-500/50 text-emerald-400 hover:bg-emerald-500/10 gap-2">
+                                <Database size={16} /> Run Diagnostics
                             </Button>
                         )}
                     </div>
-                    <div className={styles.statsRow}>
-                        <div className={styles.statCard}>
-                            <div className={styles.statLabel}>Total Vendors</div>
-                            <div className={styles.statValue}>{vendors.length}</div>
+
+                    {activeTab === 'dashboard' && (
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-fade-in">
+                            <div className="bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700/50 p-6 rounded-2xl relative overflow-hidden group hover:border-emerald-500/30 transition-all">
+                                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"><Users size={64} /></div>
+                                <div className="text-slate-400 text-sm font-medium tracking-wider uppercase mb-1">Total Vendors</div>
+                                <div className="text-4xl font-black text-white">{vendors.length}</div>
+                                <div className="text-xs text-emerald-400 mt-2 flex items-center gap-1"><Activity size={10} /> Active Partner Network</div>
+                            </div>
+                            <div className="bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700/50 p-6 rounded-2xl relative overflow-hidden group hover:border-emerald-500/30 transition-all">
+                                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"><Database size={64} /></div>
+                                <div className="text-slate-400 text-sm font-medium tracking-wider uppercase mb-1">Plants Cataloged</div>
+                                <div className="text-4xl font-black text-white">{plants.length}</div>
+                                <div className="text-xs text-emerald-400 mt-2 flex items-center gap-1"><Sprout size={10} /> Verified Species</div>
+                            </div>
+                            <div className="bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700/50 p-6 rounded-2xl relative overflow-hidden group hover:border-emerald-500/30 transition-all">
+                                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"><Sparkles size={64} /></div>
+                                <div className="text-slate-400 text-sm font-medium tracking-wider uppercase mb-1">System Status</div>
+                                <div className="text-4xl font-black text-emerald-400">98%</div>
+                                <div className="text-xs text-slate-400 mt-2 flex items-center gap-1">Operational</div>
+                            </div>
                         </div>
-                        <div className={styles.statCard}>
-                            <div className={styles.statLabel}>Plants Listed</div>
-                            <div className={styles.statValue}>{plants.length}</div>
-                        </div>
-                        <div className={styles.statCard}>
-                            <div className={styles.statLabel}>Pending Requests</div>
-                            <div className={styles.statValue}>{requests.length}</div>
-                        </div>
-                    </div>
+                    )}
                 </header>
 
                 <div className={styles.contentArea}>
@@ -627,130 +645,157 @@ export const Admin = () => {
                     {activeTab === 'plants' && (
                         <div className="animate-fade-in">
                             {/* PLANT FORM */}
-                            <div className={styles.card} style={{ marginBottom: '2rem' }}>
-                                <h3 className={styles.cardTitle}>
-                                    {isEditing ? `Editing: ${formData.name} ` : 'Catalog New Species'}
-                                    {isEditing && <button onClick={() => { setIsEditing(false); setFormData(initialFormState); setLastAutoFilled([]); }} className="text-xs ml-4 text-red-400 border border-red-500/30 px-2 py-1 rounded">Cancel Edit</button>}
-                                </h3>
-                                <form onSubmit={handlePlantSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                            {/* PLANT FORM PRO */}
+                            <div className="bg-slate-800/20 backdrop-blur-xl border border-slate-700/50 rounded-2xl p-6 mb-10 shadow-2xl relative overflow-hidden">
+                                <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
 
-                                    {/* Taxonomy & Fetch */}
-                                    <div className="md:col-span-2 p-4 bg-slate-800/50 rounded-xl border border-slate-700/50">
-                                        <div className="flex justify-between items-center mb-1">
-                                            <label className="block text-sm text-slate-400">Taxonomy Name (Scientific) *</label>
-                                            {lastAutoFilled.length > 0 && <span className="text-xs text-emerald-400 flex items-center gap-1"><Sparkles size={12} /> {lastAutoFilled.length} Fields Auto-Verified</span>}
-                                        </div>
-                                        <div className="flex gap-2">
-                                            <input
-                                                className={styles.input}
-                                                placeholder="e.g. Monstera deliciosa"
-                                                value={formData.scientificName}
-                                                onChange={e => setFormData({ ...formData, scientificName: e.target.value })}
-                                                required
-                                                style={getFieldStyle('scientificName')}
-                                            />
-                                            <Button type="button" onClick={handleSmartFetch} style={{ whiteSpace: 'nowrap' }}>
+                                <h3 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400 mb-6 flex items-center justify-between relative z-10">
+                                    <span>{isEditing ? `Editing: ${formData.name} ` : 'Catalog New Species'}</span>
+                                    {isEditing && (
+                                        <button
+                                            onClick={() => { setIsEditing(false); setFormData(initialFormState); setLastAutoFilled([]); }}
+                                            className="text-xs flex items-center gap-1 text-red-400 bg-red-500/10 hover:bg-red-500/20 px-3 py-1.5 rounded-full transition-colors border border-red-500/20"
+                                        >
+                                            <LogOut size={12} className="rotate-180" /> Cancel Edit
+                                        </button>
+                                    )}
+                                </h3>
+
+                                <form onSubmit={handlePlantSubmit} className="space-y-8 relative z-10">
+
+                                    {/* SECTION 1: IDENTITY */}
+                                    <div className="space-y-4">
+                                        <h4 className="text-sm font-bold text-emerald-400 uppercase tracking-widest border-b border-emerald-500/20 pb-2 mb-4">Core Identity</h4>
+
+                                        {/* Smart Fetch Bar */}
+                                        <div className="bg-slate-900/50 p-4 rounded-xl border border-slate-700/50 flex flex-col md:flex-row gap-4 items-end md:items-center transition-all focus-within:border-emerald-500/50 focus-within:ring-1 focus-within:ring-emerald-500/20">
+                                            <div className="flex-1 w-full">
+                                                <div className="flex justify-between items-center mb-1.5">
+                                                    <label className="text-xs font-semibold text-slate-400 flex items-center gap-2"> Scientific Taxonomy <HelpCircle size={10} /></label>
+                                                    {lastAutoFilled.length > 0 && <span className="text-[10px] text-emerald-400 flex items-center gap-1 bg-emerald-500/10 px-2 py-0.5 rounded-full"><Sparkles size={8} /> Auto-Verified</span>}
+                                                </div>
+                                                <input
+                                                    className="w-full bg-slate-800 border-none rounded-lg p-3 text-slate-200 placeholder:text-slate-600 focus:ring-2 focus:ring-emerald-500/50"
+                                                    placeholder="e.g. Monstera deliciosa"
+                                                    value={formData.scientificName}
+                                                    onChange={e => setFormData({ ...formData, scientificName: e.target.value })}
+                                                    required
+                                                    style={getFieldStyle('scientificName')}
+                                                />
+                                            </div>
+                                            <Button type="button" onClick={handleSmartFetch} className="w-full md:w-auto md:mb-0.5 bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-900/20">
                                                 <Search size={16} className="mr-2" /> Verify & Fetch
                                             </Button>
                                         </div>
-                                        <p className="text-xs text-slate-500 mt-2">✨ Enter taxonomy to fetch verified botanical ecosystem & efficiency data.</p>
-                                    </div>
 
-                                    <div>
-                                        <label className={styles.label}>Common Name * <span style={getFieldStyle('name')}>{isFieldAutoFilled('name') ? '✓' : ''}</span></label>
-                                        <input className={styles.input} value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} required />
-                                    </div>
-                                    <div>
-                                        <label className={styles.label}>Type</label>
-                                        <select className={styles.select} value={formData.type} onChange={e => setFormData({ ...formData, type: e.target.value as any })}>
-                                            <option value="indoor">Indoor</option>
-                                            <option value="outdoor">Outdoor</option>
-                                        </select>
-                                    </div>
-                                    <div>
-                                        <label className={styles.label}>Price (₹) <InfoTip text="Market price in INR." /></label>
-                                        <input type="number" className={styles.input} value={formData.price} onChange={e => setFormData({ ...formData, price: Number(e.target.value) })} required />
-                                        <div className="text-[10px] text-slate-500 mt-1 flex items-center gap-2">
-                                            {(formData.price || 0) > 0 && ((formData.price || 0) < 150 ? <span className="text-emerald-400">Budget Friendly</span> : (formData.price || 0) > 800 ? <span className="text-purple-400">Premium Species</span> : 'Standard Market Range')}
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <label className="block text-sm text-slate-400 mb-1">Ecosystem Type</label>
-                                        <input className={styles.input} placeholder="e.g. Tropical Rainforest" value={formData.ecosystem || ''} onChange={e => setFormData({ ...formData, ecosystem: e.target.value })} style={getFieldStyle('ecosystem')} />
-                                    </div>
-
-                                    <div className="md:col-span-2">
-                                        <label className="block text-sm text-slate-400 mb-1">Ecosystem Description</label>
-                                        <textarea className={styles.input} style={{ height: '80px', ...getFieldStyle('ecosystemDescription') }} placeholder="Describe the natural habitat..." value={formData.ecosystemDescription || ''} onChange={e => setFormData({ ...formData, ecosystemDescription: e.target.value })} />
-                                    </div>
-
-                                    {/* Scientific Specs */}
-                                    <div className="p-4 bg-slate-800/30 rounded-lg border border-slate-700/30 md:col-span-2 grid grid-cols-2 lg:grid-cols-4 gap-4">
-                                        <div>
-                                            <label className="block text-xs text-slate-400 mb-1 flex items-center gap-1">O₂ Efficiency <InfoTip text="Breaks down CO2/VOCs" /> {isFieldAutoFilled('oxygenLevel') && <Check size={10} color="#10b981" />}</label>
-                                            <select className={styles.input} value={formData.oxygenLevel} onChange={e => setFormData({ ...formData, oxygenLevel: e.target.value as any })} style={getFieldStyle('oxygenLevel')}>
-                                                <option value="low">Standard</option>
-                                                <option value="moderate">Moderate</option>
-                                                <option value="high">High</option>
-                                                <option value="very-high">Super Oxygenator</option>
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <label className="block text-xs text-slate-400 mb-1 flex items-center gap-1">Sunlight Req <InfoTip text="Light intensity needed" /> {isFieldAutoFilled('sunlight') && <Check size={10} color="#10b981" />}</label>
-                                            <select className={styles.input} value={formData.sunlight} onChange={e => setFormData({ ...formData, sunlight: e.target.value as any })} style={getFieldStyle('sunlight')}>
-                                                <option value="low">Low (Indirect)</option>
-                                                <option value="medium">Medium (Bright Indirect)</option>
-                                                <option value="high">High (Direct)</option>
-                                                <option value="direct">Full Direct</option>
-                                            </select>
-                                        </div>
-                                        <div className="flex items-center gap-2 pt-6">
-                                            <input type="checkbox" checked={formData.isNocturnal || false} onChange={e => setFormData({ ...formData, isNocturnal: e.target.checked })} className="w-5 h-5 accent-emerald-500" />
-                                            <div className="flex flex-col">
-                                                <label className="text-sm text-slate-300 flex items-center">Nocturnal O₂ <InfoTip text="CAM Photosynthesis" /></label>
-                                                {isFieldAutoFilled('isNocturnal') && <span className="text-[10px] text-emerald-400">Verified Trait</span>}
+                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                            <div>
+                                                <label className="text-xs font-semibold text-slate-400 mb-1.5 block">Common Name</label>
+                                                <input className={styles.input} value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} required />
+                                            </div>
+                                            <div>
+                                                <label className="text-xs font-semibold text-slate-400 mb-1.5 block">Classification</label>
+                                                <select className={styles.select} value={formData.type} onChange={e => setFormData({ ...formData, type: e.target.value as any })}>
+                                                    <option value="indoor">Indoor (Houseplant)</option>
+                                                    <option value="outdoor">Outdoor (Garden/Wild)</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label className="text-xs font-semibold text-slate-400 mb-1.5 block">Market Price (₹)</label>
+                                                <div className="relative">
+                                                    <span className="absolute left-3 top-2.5 text-slate-500">₹</span>
+                                                    <input type="number" className={`${styles.input} pl-8`} value={formData.price} onChange={e => setFormData({ ...formData, price: Number(e.target.value) })} required />
+                                                </div>
+                                                <div className="text-[10px] text-slate-500 mt-1 h-4">
+                                                    {(formData.price || 0) > 0 && ((formData.price || 0) < 150 ? <span className="text-emerald-400">Budget Friendly</span> : (formData.price || 0) > 800 ? <span className="text-purple-400">Premium Species</span> : 'Standard Market Range')}
+                                                </div>
                                             </div>
                                         </div>
-                                        <div className="flex flex-col gap-2">
-                                            <div className="flex justify-between"><span className="text-xs text-slate-400">Min Temp</span> <span className="text-xs font-bold text-slate-200">{formData.idealTempMin}°C</span></div>
-                                            <input type="range" min="0" max="40" value={formData.idealTempMin} onChange={e => setFormData({ ...formData, idealTempMin: Number(e.target.value) })} className="w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer" />
-                                            <span className="text-[9px] text-slate-500 text-right">{(formData.idealTempMin || 0) < 10 ? 'Frost Hardy' : 'Tropical'}</span>
+                                    </div>
+
+                                    {/* SECTION 2: ENVIRONMENTAL & BIOLOGY */}
+                                    <div className="space-y-4">
+                                        <h4 className="text-sm font-bold text-blue-400 uppercase tracking-widest border-b border-blue-500/20 pb-2 mb-4">Environmental Profile</h4>
+
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                                            <div>
+                                                <label className="text-xs font-semibold text-slate-400 mb-1.5 block">Ecosystem Origin</label>
+                                                <input className={styles.input} placeholder="e.g. Tropical Rainforest" value={formData.ecosystem || ''} onChange={e => setFormData({ ...formData, ecosystem: e.target.value })} style={getFieldStyle('ecosystem')} />
+                                                <textarea className={`${styles.input} mt-2 text-xs`} rows={2} placeholder="Describe the natural habitat..." value={formData.ecosystemDescription || ''} onChange={e => setFormData({ ...formData, ecosystemDescription: e.target.value })} style={getFieldStyle('ecosystemDescription')} />
+                                            </div>
+
+                                            <div className="bg-slate-900/30 rounded-xl p-4 border border-slate-700/30">
+                                                <div className="flex justify-between items-start mb-4">
+                                                    <label className="text-xs font-semibold text-slate-400 flex items-center gap-1"><Sparkles size={12} /> Bio-Efficiency</label>
+                                                    {isFieldAutoFilled('oxygenLevel') && <Check size={12} className="text-emerald-500" />}
+                                                </div>
+                                                <select className={`${styles.select} mb-4`} value={formData.oxygenLevel} onChange={e => setFormData({ ...formData, oxygenLevel: e.target.value as any })} style={getFieldStyle('oxygenLevel')}>
+                                                    <option value="low">Standard O₂ Production</option>
+                                                    <option value="moderate">Moderate Air Purifier</option>
+                                                    <option value="high">High Efficiency Purifier</option>
+                                                    <option value="very-high">Super Oxygenator (NASA List)</option>
+                                                </select>
+                                                <div className="flex items-center gap-2">
+                                                    <input type="checkbox" checked={formData.isNocturnal || false} onChange={e => setFormData({ ...formData, isNocturnal: e.target.checked })} className="w-4 h-4 rounded border-slate-600 bg-slate-700 accent-purple-500" />
+                                                    <span className="text-xs text-slate-300">Nocturnal O₂ (CAM)</span>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div className="flex flex-col gap-2">
-                                            <div className="flex justify-between"><span className="text-xs text-slate-400">Max Temp</span> <span className="text-xs font-bold text-slate-200">{formData.idealTempMax}°C</span></div>
-                                            <input type="range" min="10" max="50" value={formData.idealTempMax} onChange={e => setFormData({ ...formData, idealTempMax: Number(e.target.value) })} className="w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer" />
-                                        </div>
-                                        <div className="flex flex-col gap-2">
-                                            <div className="flex justify-between"><span className="text-xs text-slate-400">Min Humidity</span> <span className="text-xs font-bold text-slate-200">{formData.minHumidity}%</span></div>
-                                            <input type="range" min="10" max="100" value={formData.minHumidity} onChange={e => setFormData({ ...formData, minHumidity: Number(e.target.value) })} className="w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer" />
-                                            <span className="text-[9px] text-slate-500 text-right">{(formData.minHumidity || 0) > 60 ? 'Humid (Mist often)' : 'Dry Air Tolerant'}</span>
+
+                                        {/* RANGE SLIDERS GRID */}
+                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-slate-900/30 p-4 rounded-xl border border-slate-700/30">
+                                            {/* TEMP */}
+                                            <div>
+                                                <div className="flex justify-between mb-2"><span className="text-xs text-slate-400">Temperature</span> <span className="text-xs font-bold text-slate-200">{formData.idealTempMin}-{formData.idealTempMax}°C</span></div>
+                                                <input type="range" min="0" max="40" value={formData.idealTempMin} onChange={e => setFormData({ ...formData, idealTempMin: Number(e.target.value) })} className="w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer mb-2" />
+                                                <input type="range" min="10" max="50" value={formData.idealTempMax} onChange={e => setFormData({ ...formData, idealTempMax: Number(e.target.value) })} className="w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer" />
+                                            </div>
+                                            {/* HUMIDITY */}
+                                            <div>
+                                                <div className="flex justify-between mb-2"><span className="text-xs text-slate-400">Humidity</span> <span className="text-xs font-bold text-slate-200">{formData.minHumidity}%+</span></div>
+                                                <input type="range" min="10" max="100" value={formData.minHumidity} onChange={e => setFormData({ ...formData, minHumidity: Number(e.target.value) })} className="w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer" />
+                                                <div className="text-[10px] text-right text-slate-500 mt-1">{(formData.minHumidity || 0) > 60 ? 'Misting Required' : 'Drought Tolerant'}</div>
+                                            </div>
+                                            {/* LIGHT */}
+                                            <div>
+                                                <div className="flex justify-between mb-2"><span className="text-xs text-slate-400">Sunlight</span> <span className="text-xs font-bold text-slate-200 capitalize">{formData.sunlight}</span></div>
+                                                <select className={styles.select} value={formData.sunlight} onChange={e => setFormData({ ...formData, sunlight: e.target.value as any })} style={getFieldStyle('sunlight')}>
+                                                    <option value="low">Low (Indirect)</option>
+                                                    <option value="medium">Medium (Bright Indirect)</option>
+                                                    <option value="high">High (Direct)</option>
+                                                    <option value="direct">Full Direct Sun</option>
+                                                </select>
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div className="md:col-span-2">
-                                        <label className="block text-sm text-slate-400 mb-1">Description</label>
-                                        <textarea className={styles.input} rows={3} value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} style={getFieldStyle('description')} />
+                                    {/* SECTION 3: MEDIA & DETAILS */}
+                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                        <div className="md:col-span-2">
+                                            <label className="text-xs font-semibold text-slate-400 mb-1.5 block">Description</label>
+                                            <textarea className={styles.input} rows={4} value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} style={getFieldStyle('description')} placeholder="Detailed description of the species..." />
+                                        </div>
+                                        <div>
+                                            <label className="text-xs font-semibold text-slate-400 mb-1.5 block">Reference Image</label>
+                                            <label className="cursor-pointer border-2 border-dashed border-slate-700 hover:border-emerald-500/50 rounded-xl h-32 flex flex-col items-center justify-center transition-colors bg-slate-900/20 group">
+                                                {formData.imageUrl ? (
+                                                    <img src={formData.imageUrl} alt="Preview" className="h-full w-full object-cover rounded-xl opacity-80 group-hover:opacity-100 transition-opacity" />
+                                                ) : (
+                                                    <>
+                                                        <ImageIcon size={24} className="text-slate-500 group-hover:text-emerald-400 mb-2 transition-colors" />
+                                                        <span className="text-[10px] text-slate-500">Upload / Drag & Drop</span>
+                                                    </>
+                                                )}
+                                                <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
+                                            </label>
+                                        </div>
                                     </div>
 
-                                    <div>
-                                        <label className="block text-sm text-slate-400 mb-1">Plant Image</label>
-                                        <label className="cursor-pointer border-2 border-dashed border-slate-600 rounded-lg p-4 flex flex-col items-center hover:border-emerald-500 transition-colors">
-                                            {formData.imageUrl ? (
-                                                <img src={formData.imageUrl} alt="Preview" className="h-32 object-contain" />
-                                            ) : (
-                                                <>
-                                                    <ImageIcon size={24} className="text-slate-400 mb-2" />
-                                                    <span className="text-xs text-slate-500">Upload Image</span>
-                                                </>
-                                            )}
-                                            <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
-                                        </label>
-                                    </div>
-
-                                    <div className="md:col-span-2 flex justify-end gap-4 mt-4">
-                                        {isEditing && <Button type="button" variant="outline" onClick={() => { setIsEditing(false); setFormData(initialFormState); }}>Cancel</Button>}
-                                        <Button type="submit">{isEditing ? 'Update Registry' : 'AddTo Database'}</Button>
+                                    <div className="flex justify-end gap-4 pt-4 border-t border-emerald-500/10">
+                                        <Button type="button" variant="outline" onClick={() => { setFormData(initialFormState); setIsEditing(false); }} className="border-slate-600 text-slate-400 hover:text-white">Clear Form</Button>
+                                        <Button type="submit" className="bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-500/20 px-8">
+                                            {isEditing ? 'Update Botanical Record' : 'AddTo Global Database'}
+                                        </Button>
                                     </div>
                                 </form>
                             </div>
