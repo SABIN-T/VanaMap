@@ -296,74 +296,78 @@ out skel qt;
                 </div>
 
                 <div className={styles.resultsSection}>
-                    <div className={styles.resultsHeader}>
-                        <div>
-                            <h3 style={{ margin: 0, fontSize: '1.5rem', fontWeight: 800 }}>Nearby Outlets ({displayVendors.length})</h3>
-                            <p style={{ margin: '0.25rem 0 0 0', fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>Showing results within a 50km radius</p>
+                    <div className={styles.resultsHeader} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
+                            <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 800 }}>Nearby Outlets ({displayVendors.length})</h3>
                         </div>
-                        <div className={styles.tabGroup}>
-                            <button className={`${styles.tabBtn} ${activeTab === 'all' ? styles.active : ''}`} onClick={() => setActiveTab('all')}>
+                        {/* Subtitle - hidden on very small screens via CSS/Inline if needed, but simpler text helps */}
+                        <p style={{ margin: '-0.25rem 0 0 0', fontSize: '0.75rem', color: 'var(--color-text-muted)', maxWidth: '100%', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
+                            Showing results within a 50km radius
+                        </p>
+
+                        <div className={styles.tabGroup} style={{ width: '100%', display: 'flex', gap: '0.5rem', overflowX: 'auto', paddingBottom: '4px' }}>
+                            <button className={`${styles.tabBtn} ${activeTab === 'all' ? styles.active : ''}`} onClick={() => setActiveTab('all')} style={{ flex: 1, justifyContent: 'center', whiteSpace: 'nowrap' }}>
                                 <Sparkles size={16} fill={activeTab === 'all' ? 'var(--color-primary)' : 'none'} /> All
                             </button>
-                            <button className={`${styles.tabBtn} ${activeTab === 'verified' ? styles.active : ''}`} onClick={() => setActiveTab('verified')}>
+                            <button className={`${styles.tabBtn} ${activeTab === 'verified' ? styles.active : ''}`} onClick={() => setActiveTab('verified')} style={{ flex: 1, justifyContent: 'center', whiteSpace: 'nowrap' }}>
                                 <Star size={16} fill={activeTab === 'verified' ? 'var(--color-text-main)' : 'none'} /> Verified
                             </button>
-                            <button className={`${styles.tabBtn} ${activeTab === 'unverified' ? styles.active : ''}`} onClick={() => setActiveTab('unverified')}>
+                            <button className={`${styles.tabBtn} ${activeTab === 'unverified' ? styles.active : ''}`} onClick={() => setActiveTab('unverified')} style={{ flex: 1, justifyContent: 'center', whiteSpace: 'nowrap' }}>
                                 <AlertCircle size={16} /> Public
                             </button>
                         </div>
-
-                        {/* Public/All Tab Warning Hint */}
-                        {/* Public/All Tab Warning Hint Actions - Shown only when no results found */}
-                        {!loading && (activeTab === 'unverified' || activeTab === 'all') && displayVendors.length === 0 && (
-                            <div style={{
-                                marginTop: '1rem',
-                                padding: '1rem',
-                                background: 'var(--color-bg-card)', // Adaptive theme background
-                                border: '1px solid var(--glass-border)',
-                                borderRadius: '16px', // Mobile friendly rounded corners
-                                boxShadow: '0 4px 15px rgba(0,0,0,0.05)',
-                                display: 'flex',
-                                flexDirection: 'column',
-                                gap: '1rem',
-                                animation: 'fadeIn 0.5s ease-out'
-                            }}>
-                                <div style={{ display: 'flex', gap: '0.8rem', alignItems: 'flex-start' }}>
-                                    <div style={{
-                                        padding: '10px',
-                                        background: 'rgba(234, 179, 8, 0.1)',
-                                        borderRadius: '12px',
-                                        flexShrink: 0
-                                    }}>
-                                        <AlertCircle size={20} color="#fbbf24" />
-                                    </div>
-                                    <div>
-                                        <h4 style={{ margin: '0 0 4px 0', fontSize: '0.95rem', fontWeight: 700 }}>Don't see any shops?</h4>
-                                        <p style={{ margin: 0, fontSize: '0.85rem', lineHeight: '1.4', color: 'var(--color-text-muted)' }}>
-                                            The map might be looking in the wrong spot. Sync your GPS to find public nurseries near you.
-                                        </p>
-                                    </div>
-                                </div>
-                                <Button
-                                    size="md"
-                                    onClick={() => handleGetLocation(false)}
-                                    style={{
-                                        width: '100%',
-                                        background: 'var(--color-text-main)',
-                                        color: 'var(--color-bg-main)',
-                                        borderRadius: '10px',
-                                        fontWeight: 600,
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        gap: '8px'
-                                    }}
-                                >
-                                    <MapPin size={16} /> Sync My Location
-                                </Button>
-                            </div>
-                        )}
                     </div>
+
+                    {/* Public/All Tab Warning Hint Actions - Output moved OUT of header but inside Section */}
+                    {/* Public/All Tab Warning Hint Actions - Shown only when no results found */}
+                    {!loading && (activeTab === 'unverified' || activeTab === 'all') && displayVendors.length === 0 && (
+                        <div style={{
+                            marginBottom: '1rem',
+                            padding: '1rem',
+                            background: 'var(--color-bg-card)',
+                            border: '1px solid var(--glass-border)',
+                            borderRadius: '16px',
+                            boxShadow: '0 4px 15px rgba(0,0,0,0.05)',
+                            display: 'flex',
+                            flexDirection: 'column', // Ensures vertical layout
+                            gap: '1rem',
+                            animation: 'fadeIn 0.5s ease-out'
+                        }}>
+                            <div style={{ display: 'flex', gap: '0.8rem', alignItems: 'flex-start' }}>
+                                <div style={{
+                                    padding: '10px',
+                                    background: 'rgba(234, 179, 8, 0.1)',
+                                    borderRadius: '12px',
+                                    flexShrink: 0
+                                }}>
+                                    <AlertCircle size={20} color="#fbbf24" />
+                                </div>
+                                <div>
+                                    <h4 style={{ margin: '0 0 4px 0', fontSize: '0.95rem', fontWeight: 700 }}>Don't see any shops?</h4>
+                                    <p style={{ margin: 0, fontSize: '0.85rem', lineHeight: '1.4', color: 'var(--color-text-muted)' }}>
+                                        The map might be looking in the wrong spot. Sync your GPS to find public nurseries near you.
+                                    </p>
+                                </div>
+                            </div>
+                            <Button
+                                size="md"
+                                onClick={() => handleGetLocation(false)}
+                                style={{
+                                    width: '100%',
+                                    background: 'var(--color-text-main)',
+                                    color: 'var(--color-bg-main)',
+                                    borderRadius: '10px',
+                                    fontWeight: 600,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    gap: '8px'
+                                }}
+                            >
+                                <MapPin size={16} /> Sync My Location
+                            </Button>
+                        </div>
+                    )}
 
                     {loading ? (
                         <div style={{ padding: '2rem', textAlign: 'center', animation: 'fadeIn 0.3s' }}>
