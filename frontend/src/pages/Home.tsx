@@ -19,7 +19,6 @@ export const Home = () => {
     const [plants, setPlants] = useState<Plant[]>([]);
     const [filter, setFilter] = useState<'all' | 'indoor' | 'outdoor'>('all');
     const [searchQuery, setSearchQuery] = useState('');
-    const [o2Filter, setO2Filter] = useState<'all' | 'high' | 'very-high'>('all');
     const [lightFilter, setLightFilter] = useState<'all' | 'low' | 'medium' | 'high'>('all'); // New Light Filter
     const [weather, setWeather] = useState<any>(null);
     const [locationLoading, setLocationLoading] = useState(false);
@@ -181,7 +180,6 @@ export const Home = () => {
                 const matchesType = filter === 'all' ? true : p.type === filter;
                 const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                     p.scientificName.toLowerCase().includes(searchQuery.toLowerCase());
-                const matchesO2 = o2Filter === 'all' ? true : p.oxygenLevel === o2Filter;
 
                 // Light Filter Logic
                 const matchesLight = lightFilter === 'all' ? true : (() => {
@@ -192,7 +190,7 @@ export const Home = () => {
                     return false;
                 })();
 
-                return matchesType && matchesSearch && matchesO2 && matchesLight;
+                return matchesType && matchesSearch && matchesLight;
             })
             .map(p => {
                 if (!weather) return { ...p, score: 0 };
@@ -210,7 +208,7 @@ export const Home = () => {
             }
         }
         return processed;
-    }, [plants, filter, searchQuery, o2Filter, lightFilter, weather]);
+    }, [plants, filter, searchQuery, lightFilter, weather]);
 
     return (
         <div className={styles.homeContainer}>
