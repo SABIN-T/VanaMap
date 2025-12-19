@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { fetchVendors, fetchPlants, addPlant, updatePlant, deletePlant, fetchResetRequests } from '../services/api';
 import type { Vendor, Plant } from '../types';
-import { Check, Trash2, Edit, Image as ImageIcon, Users, Sprout, Activity, LogOut, Sparkles, Search, Database, Leaf } from 'lucide-react';
+import { Check, Trash2, Edit, Image as ImageIcon, Users, Sprout, Activity, LogOut, Sparkles, Search, Database, Leaf, HelpCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/common/Button';
 import styles from './Admin.module.css';
@@ -431,14 +431,25 @@ export const Admin = () => {
     };
 
     const handleBulkImport = async () => {
-        if (!confirm("Populate store with Indian Plant Database (~40-50 varieties)?")) return;
-        const tid = toast.loading("Seeding Database...");
+        if (!confirm("Run Smart Diagnostics & Import? This will fix missing scientific names and add missing plants.")) return;
+        const tid = toast.loading("Analyzing Database...");
         let added = 0;
+        let updated = 0;
         try {
             const formatSciName = (key: string) => key.split(' ').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
 
             for (const [key, data] of Object.entries(INDIAN_PLANT_DB)) {
-                if (plants.some(p => p.name === data.name)) continue;
+                // Case insensitive check
+                const match = plants.find(p => p.name.toLowerCase() === data.name?.toLowerCase());
+
+                if (match) {
+                    // Smart Repair: Fix missing Scientific Names
+                    if (!match.scientificName || match.scientificName === 'Unknown' || match.scientificName === 'Unknown Taxon') {
+                        await updatePlant(match.id, { scientificName: formatSciName(key) });
+                        updated++;
+                    }
+                    continue;
+                }
 
                 let img = 'https://images.unsplash.com/photo-1520412099551-62b6bafeb5bb?auto=format&fit=crop&q=80&w=400';
                 const k = data.name?.toLowerCase() || '';
@@ -449,7 +460,7 @@ export const Admin = () => {
 
                 await addPlant({
                     ...data,
-                    scientificName: formatSciName(key), // Explicitly set Scientific Name from Key
+                    scientificName: formatSciName(key),
                     id: key.replace(/\s+/g, '-'),
                     price: Math.floor(Math.random() * 800) + 150,
                     imageUrl: img,
@@ -459,12 +470,24 @@ export const Admin = () => {
                 } as Plant);
                 added++;
             }
-            toast.success(`Imported ${added} plants!`, { id: tid });
+            toast.success(`Sync Complete: Added ${added}, Repaired ${updated} entries!`, { id: tid });
             loadAll();
         } catch (err) {
+            console.error(err);
             toast.error("Import failed", { id: tid });
         }
     };
+
+    // --- UX HELPERS ---
+    const InfoTip = ({ text }: { text: string }) => (
+        <span className="group relative inline-flex items-center ml-2 cursor-help text-slate-500 hover:text-emerald-400 align-middle">
+            <HelpCircle size={14} />
+            <span className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 rounded bg-slate-900 p-2 text-xs text-slate-200 opacity-0 shadow-xl transition-opacity group-hover:opacity-100 z-50 border border-slate-700">
+                {text}
+                <svg className="absolute text-slate-900 h-2 w-full left-0 top-full" x="0px" y="0px" viewBox="0 0 255 255"><polygon className="fill-current" points="0,0 127.5,127.5 255,0" /></svg>
+            </span>
+        </span>
+    );
 
     // --- RENDER HELPERS ---
     const isFieldAutoFilled = (fieldName: string) => lastAutoFilled.includes(fieldName);
@@ -560,6 +583,13 @@ export const Admin = () => {
                                             <option value="outdoor">Outdoor</option>
                                         </select>
                                     </div>
+                                    <div>
+                                        <label className={styles.label}>Price (₹) <InfoTip text="Market price in INR." /></label>
+                                        <input type="number" className={styles.input} value={formData.price} onChange={e => setFormData({ ...formData, price: Number(e.target.value) })} required />
+                                        <div className="text-[10px] text-slate-500 mt-1 flex items-center gap-2">
+                                            {(formData.price || 0) > 0 && ((formData.price || 0) < 150 ? <span className="text-emerald-400">Budget Friendly</span> : (formData.price || 0) > 800 ? <span className="text-purple-400">Premium Species</span> : 'Standard Market Range')}
+                                        </div>
+                                    </div>
 
                                     <div>
                                         <label className="block text-sm text-slate-400 mb-1">Ecosystem Type</label>
@@ -574,15 +604,16 @@ export const Admin = () => {
                                     {/* Scientific Specs */}
                                     <div className="p-4 bg-slate-800/30 rounded-lg border border-slate-700/30 md:col-span-2 grid grid-cols-2 lg:grid-cols-4 gap-4">
                                         <div>
-                                            <label className="block text-xs text-slate-400 mb-1 flex items-center gap-1">O₂ Efficiency {isFieldAutoFilled('oxygenLevel') && <Check size={10} color="#10b981" />}</label>
+                                            <label className="block text-xs text-slate-400 mb-1 flex items-center gap-1">O₂ Efficiency <InfoTip text="Breaks down CO2/VOCs" /> {isFieldAutoFilled('oxygenLevel') && <Check size={10} color="#10b981" />}</label>
                                             <select className={styles.input} value={formData.oxygenLevel} onChange={e => setFormData({ ...formData, oxygenLevel: e.target.value as any })} style={getFieldStyle('oxygenLevel')}>
+                                                <option value="low">Standard</option>
                                                 <option value="moderate">Moderate</option>
                                                 <option value="high">High</option>
-                                                <option value="very-high">Very High</option>
+                                                <option value="very-high">Super Oxygenator</option>
                                             </select>
                                         </div>
                                         <div>
-                                            <label className="block text-xs text-slate-400 mb-1 flex items-center gap-1">Sunlight Req {isFieldAutoFilled('sunlight') && <Check size={10} color="#10b981" />}</label>
+                                            <label className="block text-xs text-slate-400 mb-1 flex items-center gap-1">Sunlight Req <InfoTip text="Light intensity needed" /> {isFieldAutoFilled('sunlight') && <Check size={10} color="#10b981" />}</label>
                                             <select className={styles.input} value={formData.sunlight} onChange={e => setFormData({ ...formData, sunlight: e.target.value as any })} style={getFieldStyle('sunlight')}>
                                                 <option value="low">Low (Indirect)</option>
                                                 <option value="medium">Medium (Bright Indirect)</option>
@@ -593,13 +624,14 @@ export const Admin = () => {
                                         <div className="flex items-center gap-2 pt-6">
                                             <input type="checkbox" checked={formData.isNocturnal || false} onChange={e => setFormData({ ...formData, isNocturnal: e.target.checked })} className="w-5 h-5 accent-emerald-500" />
                                             <div className="flex flex-col">
-                                                <label className="text-sm text-slate-300">Nocturnal O₂ (CAM)</label>
+                                                <label className="text-sm text-slate-300 flex items-center">Nocturnal O₂ <InfoTip text="CAM Photosynthesis" /></label>
                                                 {isFieldAutoFilled('isNocturnal') && <span className="text-[10px] text-emerald-400">Verified Trait</span>}
                                             </div>
                                         </div>
                                         <div className="flex flex-col gap-2">
                                             <div className="flex justify-between"><span className="text-xs text-slate-400">Min Temp</span> <span className="text-xs font-bold text-slate-200">{formData.idealTempMin}°C</span></div>
                                             <input type="range" min="0" max="40" value={formData.idealTempMin} onChange={e => setFormData({ ...formData, idealTempMin: Number(e.target.value) })} className="w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer" />
+                                            <span className="text-[9px] text-slate-500 text-right">{(formData.idealTempMin || 0) < 10 ? 'Frost Hardy' : 'Tropical'}</span>
                                         </div>
                                         <div className="flex flex-col gap-2">
                                             <div className="flex justify-between"><span className="text-xs text-slate-400">Max Temp</span> <span className="text-xs font-bold text-slate-200">{formData.idealTempMax}°C</span></div>
@@ -608,6 +640,7 @@ export const Admin = () => {
                                         <div className="flex flex-col gap-2">
                                             <div className="flex justify-between"><span className="text-xs text-slate-400">Min Humidity</span> <span className="text-xs font-bold text-slate-200">{formData.minHumidity}%</span></div>
                                             <input type="range" min="10" max="100" value={formData.minHumidity} onChange={e => setFormData({ ...formData, minHumidity: Number(e.target.value) })} className="w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer" />
+                                            <span className="text-[9px] text-slate-500 text-right">{(formData.minHumidity || 0) > 60 ? 'Humid (Mist often)' : 'Dry Air Tolerant'}</span>
                                         </div>
                                     </div>
 
