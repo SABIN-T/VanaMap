@@ -403,94 +403,137 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                             </div>
                         </div>
 
-                        {/* Simulation Section - User Friendly Version */}
-                        <div className={styles.simulationContainer} style={{ display: (window.innerWidth < 1024 && activeTab === 'details') ? 'none' : 'flex' }}>
+                        {/* Simulation Section - Premium Version */}
+                        <div className={styles.simulationContainer} style={{
+                            display: (window.innerWidth < 1024 && activeTab === 'details') ? 'none' : 'flex',
+                            background: 'linear-gradient(135deg, rgba(8, 51, 68, 0.4) 0%, rgba(2, 6, 23, 0.6) 100%)',
+                            border: '1px solid rgba(56, 189, 248, 0.15)',
+                            borderRadius: '1.5rem',
+                            padding: '2rem',
+                            boxShadow: 'inset 0 0 40px rgba(56, 189, 248, 0.05)',
+                            position: 'relative',
+                            overflow: 'hidden'
+                        }}>
+                            {/* Decorative Background Elements */}
+                            <div style={{ position: 'absolute', top: '-10%', right: '-10%', width: '200px', height: '200px', background: 'radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%)', borderRadius: '50%', filter: 'blur(40px)' }}></div>
 
-                            <div className={styles.dashboardHeader} style={{ border: 'none', marginBottom: '1rem' }}>
+                            <div className={styles.dashboardHeader} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '1.5rem', marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', width: '100%' }}>
                                 <div>
-                                    <h3 style={{ margin: 0, fontSize: '1.4rem', fontWeight: 800, color: 'white' }}>
-                                        Will it purify my room?
+                                    <h3 style={{ margin: 0, fontSize: '1.4rem', fontWeight: 900, color: 'white', letterSpacing: '-0.5px' }}>
+                                        <Wind size={20} color="#38bdf8" style={{ marginRight: '8px', verticalAlign: 'text-bottom' }} />
+                                        Bio-Purification Lab
                                     </h3>
-                                    <p style={{ margin: '0.5rem 0 0', color: '#94a3b8', fontSize: '0.9rem' }}>
-                                        Calculate how many plants you need for fresh air.
+                                    <p style={{ margin: '0.4rem 0 0', color: '#94a3b8', fontSize: '0.9rem', maxWidth: '300px' }}>
+                                        Simulate required biomass for optimal oxygen saturation based on occupancy.
                                     </p>
                                 </div>
-                                <div className={styles.scoreCircle} style={{ width: '60px', height: '60px' }}>
-                                    <div className={styles.scoreValue} style={{ fontSize: '1rem' }}>{fluxRate}%</div>
-                                    <div className={styles.scoreLabel}>EFFICIENT</div>
-                                    <div className={styles.scoreRing} style={{ borderTopColor: fluxRate > 70 ? '#10b981' : '#f59e0b' }}></div>
+                                <div style={{ textAlign: 'right' }}>
+                                    <div style={{ fontSize: '2rem', fontWeight: 800, color: fluxRate > 80 ? '#4ade80' : '#facc15', lineHeight: 1 }}>{fluxRate}%</div>
+                                    <div style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '1px', color: '#64748b' }}>EFFICIENCY</div>
                                 </div>
                             </div>
 
-                            <div className={styles.simulationGrid}>
+                            <div className={styles.simulationGrid} style={{ display: 'grid', gridTemplateColumns: window.innerWidth > 768 ? '1fr 1.2fr' : '1fr', gap: '2rem' }}>
                                 {/* Controls */}
-                                <div>
-                                    <div className={styles.sliderControl} style={{ background: 'rgba(255,255,255,0.05)', padding: '1.2rem', borderRadius: '1rem' }}>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem', alignItems: 'center' }}>
-                                            <span style={{ fontSize: '0.9rem', fontWeight: 700, color: 'white', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                                <Users size={16} color="var(--color-primary)" /> Who is in the room?
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                                    <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1.25rem', borderRadius: '1.25rem', border: '1px solid rgba(255,255,255,0.05)' }}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.2rem', alignItems: 'center' }}>
+                                            <span style={{ fontSize: '0.9rem', fontWeight: 700, color: '#e2e8f0', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
+                                                <Users size={16} color="#38bdf8" /> Occupants
                                             </span>
-                                            <span className={styles.controlVal} style={{ fontSize: '1.2rem' }}>{numPeople}</span>
+                                            <span style={{ fontSize: '1.1rem', fontWeight: 800, color: 'white', background: 'rgba(56, 189, 248, 0.2)', padding: '2px 10px', borderRadius: '8px' }}>{numPeople}</span>
                                         </div>
-                                        <input type="range" min="1" max="10" value={numPeople} onChange={(e) => setNumPeople(Number(e.target.value))} className={styles.rangeInput} />
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.5rem', fontSize: '0.7rem', color: '#64748b' }}>
-                                            <span>Just me</span>
-                                            <span>Full Family</span>
+                                        <input
+                                            type="range" min="1" max="10" value={numPeople}
+                                            onChange={(e) => setNumPeople(Number(e.target.value))}
+                                            style={{ width: '100%', accentColor: '#38bdf8', height: '6px', cursor: 'grab' }}
+                                        />
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.8rem', fontSize: '0.75rem', color: '#64748b', fontWeight: 500 }}>
+                                            <span>Solo</span>
+                                            <span>Full House</span>
                                         </div>
                                     </div>
 
-                                    <div className={styles.acToggle} style={{ marginTop: '1.5rem', background: 'rgba(255,255,255,0.02)', padding: '1rem', borderRadius: '0.8rem', justifyContent: 'space-between' }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.8rem' }}>
-                                            <div style={{ background: 'rgba(56, 189, 248, 0.1)', padding: '0.4rem', borderRadius: '0.4rem' }}>
-                                                <Wind size={16} color="#38bdf8" />
+                                    <div
+                                        onClick={() => setIsACMode(!isACMode)}
+                                        style={{
+                                            background: isACMode ? 'linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(30, 58, 138, 0.2))' : 'rgba(255,255,255,0.03)',
+                                            padding: '1rem 1.25rem', borderRadius: '1.25rem',
+                                            border: `1px solid ${isACMode ? 'rgba(56, 189, 248, 0.3)' : 'rgba(255,255,255,0.05)'}`,
+                                            cursor: 'pointer', transition: 'all 0.3s',
+                                            display: 'flex', alignItems: 'center', justifyContent: 'space-between'
+                                        }}
+                                    >
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                            <div style={{ background: isACMode ? '#38bdf8' : 'rgba(255,255,255,0.1)', padding: '0.5rem', borderRadius: '50%', color: isACMode ? 'black' : '#94a3b8', transition: 'all 0.3s' }}>
+                                                <Wind size={18} />
                                             </div>
                                             <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                                <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#e2e8f0' }}>Climate Control</span>
-                                                <span style={{ fontSize: '0.7rem', color: '#94a3b8' }}>{isACMode ? 'AC is keeping temp ideal' : 'Natural room temperature'}</span>
+                                                <span style={{ fontSize: '0.9rem', fontWeight: 700, color: isACMode ? 'white' : '#cbd5e1' }}>Climate Control</span>
+                                                <span style={{ fontSize: '0.75rem', color: isACMode ? '#7dd3fc' : '#64748b' }}>{isACMode ? 'Active (22°C)' : 'Natural (Ambient)'}</span>
                                             </div>
                                         </div>
-                                        <button className={`${styles.toggleSwitch} ${isACMode ? styles.active : ''}`} onClick={() => setIsACMode(!isACMode)}></button>
+                                        <div style={{
+                                            width: '40px', height: '22px', background: isACMode ? '#38bdf8' : '#334155', borderRadius: '20px',
+                                            position: 'relative', transition: 'all 0.3s'
+                                        }}>
+                                            <div style={{
+                                                width: '18px', height: '18px', background: 'white', borderRadius: '50%',
+                                                position: 'absolute', top: '2px', left: isACMode ? '20px' : '2px', transition: 'all 0.3s', boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+                                            }} />
+                                        </div>
                                     </div>
                                 </div>
 
-                                {/* Results */}
-                                <div style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
-                                    <div style={{
-                                        flex: 1,
-                                        background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(6, 78, 59, 0.2) 100%)',
-                                        borderRadius: '1.5rem',
-                                        padding: '1.5rem',
-                                        border: '1px solid rgba(16, 185, 129, 0.2)',
-                                        display: 'flex',
-                                        flexDirection: 'column',
-                                        justifyContent: 'center',
-                                        alignItems: 'center',
-                                        textAlign: 'center'
-                                    }}>
-                                        <div style={{ fontSize: '0.8rem', color: '#86efac', fontWeight: 700, letterSpacing: '1px', marginBottom: '0.5rem' }}>RECOMMENDATION</div>
-                                        <div style={{ fontSize: '3.5rem', fontWeight: 900, color: 'white', lineHeight: 1 }}>{plantsNeeded}</div>
-                                        <div style={{ fontSize: '1.1rem', fontWeight: 600, color: 'white', marginBottom: '1rem' }}>Plants Needed</div>
+                                {/* Results Visualization */}
+                                <div style={{
+                                    background: 'rgba(2, 6, 23, 0.4)', borderRadius: '1.5rem', padding: '1.5rem', border: '1px solid rgba(255,255,255,0.05)',
+                                    display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative'
+                                }}>
+                                    <div style={{ position: 'absolute', top: '10px', left: '15px', fontSize: '0.75rem', fontWeight: 700, color: '#64748b', letterSpacing: '1px' }}>SYSTEM OUTPUT</div>
 
-                                        <p style={{ fontSize: '0.85rem', color: '#cbd5e1', lineHeight: 1.5, margin: 0, maxWidth: '200px' }}>
-                                            To provide fresh {plant.oxygenLevel} oxygen for {numPeople} people.
-                                        </p>
+                                    {/* Visual Representation */}
+                                    <div style={{ display: 'flex', justifyContent: 'center', gap: '4px', flexWrap: 'wrap', maxWidth: '180px', marginBottom: '1.5rem', minHeight: '40px' }}>
+                                        {Array.from({ length: Math.min(plantsNeeded, 12) }).map((_, i) => (
+                                            <span key={i} style={{ animation: `scaleIn 0.3s ease-out ${i * 0.05}s forwards`, transform: 'scale(0)' }}>
+                                                <iframe
+                                                    src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%234ade80' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'/></svg>"
+                                                    style={{ width: '24px', height: '24px', border: 'none' }}
+                                                    title="icon"
+                                                />
+                                                {/* Fallback to Lucide Icon directly */}
+                                                <Heart size={20} color="#4ade80" fill="#4ade80" style={{ opacity: 0.8 }} />
+                                            </span>
+                                        ))}
+                                        {plantsNeeded > 12 && <span style={{ color: '#4ade80', fontSize: '1rem', alignSelf: 'center' }}>+</span>}
                                     </div>
+
+                                    <div style={{ fontSize: '4rem', fontWeight: 900, color: 'white', lineHeight: 0.8, textShadow: '0 0 30px rgba(74, 222, 128, 0.2)' }}>{plantsNeeded}</div>
+                                    <div style={{ fontSize: '1.1rem', fontWeight: 700, color: '#4ade80', marginBottom: '0.5rem' }}>Specimens</div>
+                                    <p style={{ fontSize: '0.8rem', color: '#94a3b8', textAlign: 'center', margin: 0 }}>
+                                        Required to purify {Math.round(numPeople * 450)}L of O₂ daily.
+                                    </p>
                                 </div>
                             </div>
+
+                            <style>{`
+                                @keyframes scaleIn { from { transform: scale(0); } to { transform: scale(1); } }
+                            `}</style>
                         </div>
 
-                        <div className={styles.simStats}>
-                            <div className={styles.statBox}>
-                                <div className={styles.statVal} style={{ color: 'var(--color-primary)' }}>{plantsNeeded}</div>
-                                <div className={styles.statLabel}>REQUIRED</div>
+                        {/* Quick Stats Row */}
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem', marginTop: '1rem' }}>
+                            <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: '1rem', padding: '1rem', textAlign: 'center' }}>
+                                <div style={{ fontSize: '0.7rem', color: '#94a3b8', fontWeight: 700, marginBottom: '0.2rem' }}>O₂ YIELD</div>
+                                <div style={{ fontSize: '1.1rem', color: '#white', fontWeight: 700 }}>{Math.abs(PLANT_O2_OUTPUT)}L</div>
                             </div>
-                            <div className={styles.statBox}>
-                                <div className={styles.statVal}>{currentTemp}°C</div>
-                                <div className={styles.statLabel}>TEMP</div>
+                            <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: '1rem', padding: '1rem', textAlign: 'center' }}>
+                                <div style={{ fontSize: '0.7rem', color: '#94a3b8', fontWeight: 700, marginBottom: '0.2rem' }}>TEMP</div>
+                                <div style={{ fontSize: '1.1rem', color: '#white', fontWeight: 700 }}>{currentTemp}°C</div>
                             </div>
-                            <div className={styles.statBox}>
-                                <div className={styles.statVal}>{Math.abs(PLANT_O2_OUTPUT)}L</div>
-                                <div className={styles.statLabel}>YIELD</div>
+                            <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: '1rem', padding: '1rem', textAlign: 'center' }}>
+                                <div style={{ fontSize: '0.7rem', color: '#94a3b8', fontWeight: 700, marginBottom: '0.2rem' }}>TOXIN REMOVAL</div>
+                                <div style={{ fontSize: '1.1rem', color: '#white', fontWeight: 700 }}>High</div>
                             </div>
                         </div>
                     </div>
