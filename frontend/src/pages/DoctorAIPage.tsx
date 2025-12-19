@@ -59,10 +59,18 @@ export const DoctorAIPage = () => {
         return `Synthesizing Global Data Streams... [Connected]\n\nAnalysis for "${query}":\nBased on aggregated botanical datasets (Google/Wiki/Ref), this subject relates to specific horticultural parameters. Recommend maintaining 20-25°C ambient temperature and 50% relative humidity. \n\nAcquisition: Cross-referencing your location... Local Vendors in the 'Nearby' tab likely stock relevant supplies.`;
     };
 
-    const handleSend = async () => {
-        if (!input.trim() || !user) return;
+    const suggestions: string[] = [
+        "Best indoor plants?",
+        "Why is my plant yellow?",
+        "Find verified vendors",
+        "Watering tips",
+        "Search online for succulents"
+    ];
 
-        const userMsg = input;
+    const handleSend = async (textOverride?: string) => {
+        const userMsg = textOverride || input;
+        if (!userMsg.trim() || !user) return;
+
         setMessages(prev => [...prev, { sender: 'user', text: userMsg }]);
         setInput('');
         setLoading(true);
