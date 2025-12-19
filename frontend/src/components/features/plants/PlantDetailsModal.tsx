@@ -422,15 +422,16 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                                 <div>
                                     <h3 style={{ margin: 0, fontSize: '1.4rem', fontWeight: 900, color: 'white', letterSpacing: '-0.5px' }}>
                                         <Wind size={20} color="#38bdf8" style={{ marginRight: '8px', verticalAlign: 'text-bottom' }} />
-                                        Bio-Purification Lab
+                                        Room Air Checker
                                     </h3>
-                                    <p style={{ margin: '0.4rem 0 0', color: '#94a3b8', fontSize: '0.9rem', maxWidth: '300px' }}>
-                                        Simulate required biomass for optimal oxygen saturation based on occupancy.
-                                    </p>
+                                    <p style={{ margin: '0.2rem 0 0', color: '#94a3b8', fontSize: '0.85rem' }}>See how this plant cleans your room.</p>
                                 </div>
                                 <div style={{ textAlign: 'right' }}>
-                                    <div style={{ fontSize: '2rem', fontWeight: 800, color: fluxRate > 80 ? '#4ade80' : '#facc15', lineHeight: 1 }}>{fluxRate}%</div>
-                                    <div style={{ fontSize: '0.7rem', fontWeight: 700, letterSpacing: '1px', color: '#64748b' }}>EFFICIENCY</div>
+                                    <div style={{ fontSize: '0.7rem', color: '#64748b', fontWeight: 700, letterSpacing: '1px' }}>STATUS</div>
+                                    <div style={{ color: '#10b981', fontWeight: 700, fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                        <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10b981', boxShadow: '0 0 10px #10b981' }}></div>
+                                        ACTIVE
+                                    </div>
                                 </div>
                             </div>
 
@@ -438,82 +439,87 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                                 {/* Controls */}
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                                     <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1.25rem', borderRadius: '1.25rem', border: '1px solid rgba(255,255,255,0.05)' }}>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1.2rem', alignItems: 'center' }}>
-                                            <span style={{ fontSize: '0.9rem', fontWeight: 700, color: '#e2e8f0', display: 'flex', alignItems: 'center', gap: '0.6rem' }}>
-                                                <Users size={16} color="#38bdf8" /> Occupants
-                                            </span>
-                                            <span style={{ fontSize: '1.1rem', fontWeight: 800, color: 'white', background: 'rgba(56, 189, 248, 0.2)', padding: '2px 10px', borderRadius: '8px' }}>{numPeople}</span>
-                                        </div>
+                                        <label style={{ display: 'flex', justifyContent: 'space-between', color: '#e2e8f0', fontSize: '0.9rem', fontWeight: 600, marginBottom: '1rem' }}>
+                                            <span>People in Room</span>
+                                            <span style={{ color: '#38bdf8' }}>{occupants}</span>
+                                        </label>
                                         <input
-                                            type="range" min="1" max="10" value={numPeople}
-                                            onChange={(e) => setNumPeople(Number(e.target.value))}
-                                            style={{ width: '100%', accentColor: '#38bdf8', height: '6px', cursor: 'grab' }}
+                                            type="range"
+                                            min="1"
+                                            max="10"
+                                            value={occupants}
+                                            onChange={(e) => setOccupants(parseInt(e.target.value))}
+                                            style={{ width: '100%', accentColor: '#38bdf8', cursor: 'pointer' }}
                                         />
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '0.8rem', fontSize: '0.75rem', color: '#64748b', fontWeight: 500 }}>
-                                            <span>Solo</span>
-                                            <span>Full House</span>
-                                        </div>
                                     </div>
 
-                                    <div
-                                        onClick={() => setIsACMode(!isACMode)}
-                                        style={{
-                                            background: isACMode ? 'linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(30, 58, 138, 0.2))' : 'rgba(255,255,255,0.03)',
-                                            padding: '1rem 1.25rem', borderRadius: '1.25rem',
-                                            border: `1px solid ${isACMode ? 'rgba(56, 189, 248, 0.3)' : 'rgba(255,255,255,0.05)'}`,
-                                            cursor: 'pointer', transition: 'all 0.3s',
-                                            display: 'flex', alignItems: 'center', justifyContent: 'space-between'
-                                        }}
-                                    >
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                            <div style={{ background: isACMode ? '#38bdf8' : 'rgba(255,255,255,0.1)', padding: '0.5rem', borderRadius: '50%', color: isACMode ? 'black' : '#94a3b8', transition: 'all 0.3s' }}>
-                                                <Wind size={18} />
-                                            </div>
-                                            <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                                <span style={{ fontSize: '0.9rem', fontWeight: 700, color: isACMode ? 'white' : '#cbd5e1' }}>Climate Control</span>
-                                                <span style={{ fontSize: '0.75rem', color: isACMode ? '#7dd3fc' : '#64748b' }}>{isACMode ? 'Active (22°C)' : 'Natural (Ambient)'}</span>
-                                            </div>
+                                    <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1.25rem', borderRadius: '1.25rem', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                                        <div>
+                                            <div style={{ color: '#e2e8f0', fontSize: '0.9rem', fontWeight: 600 }}>Room AC</div>
+                                            <div style={{ color: '#64748b', fontSize: '0.75rem' }}>Adjusts temperature</div>
                                         </div>
-                                        <div style={{
-                                            width: '40px', height: '22px', background: isACMode ? '#38bdf8' : '#334155', borderRadius: '20px',
-                                            position: 'relative', transition: 'all 0.3s'
-                                        }}>
+                                        <button
+                                            onClick={() => setAcOn(!acOn)}
+                                            style={{
+                                                width: '48px', height: '28px', borderRadius: '20px',
+                                                background: acOn ? '#38bdf8' : 'rgba(255,255,255,0.1)',
+                                                position: 'relative', transition: 'all 0.3s ease'
+                                            }}
+                                        >
                                             <div style={{
-                                                width: '18px', height: '18px', background: 'white', borderRadius: '50%',
-                                                position: 'absolute', top: '2px', left: isACMode ? '20px' : '2px', transition: 'all 0.3s', boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
-                                            }} />
-                                        </div>
+                                                width: '20px', height: '20px', background: 'white', borderRadius: '50%',
+                                                position: 'absolute', top: '4px', left: acOn ? '24px' : '4px',
+                                                transition: 'all 0.3s cubic-bezier(0.4, 0.0, 0.2, 1)',
+                                                boxShadow: '0 2px 4px rgba(0,0,0,0.2)'
+                                            }}></div>
+                                        </button>
+                                    </div>
+
+                                    <div style={{ background: 'rgba(56, 189, 248, 0.1)', border: '1px solid rgba(56, 189, 248, 0.2)', padding: '1rem', borderRadius: '1rem' }}>
+                                        <div style={{ fontSize: '0.75rem', color: '#7dd3fc', marginBottom: '0.25rem', fontWeight: 700, textTransform: 'uppercase' }}>Did you know?</div>
+                                        <p style={{ fontSize: '0.85rem', color: '#bae6fd', lineHeight: '1.4', margin: 0 }}>
+                                            {plant.name} gives enough oxygen for <b>{(occupants / (PLANTS_NEEDED || 1)).toFixed(1)} people</b> naturally.
+                                        </p>
                                     </div>
                                 </div>
 
-                                {/* Results Visualization */}
-                                <div style={{
-                                    background: 'rgba(2, 6, 23, 0.4)', borderRadius: '1.5rem', padding: '1.5rem', border: '1px solid rgba(255,255,255,0.05)',
-                                    display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', position: 'relative'
-                                }}>
-                                    <div style={{ position: 'absolute', top: '10px', left: '15px', fontSize: '0.75rem', fontWeight: 700, color: '#64748b', letterSpacing: '1px' }}>SYSTEM OUTPUT</div>
+                                {/* Visualizer */}
+                                <div style={{ position: 'relative', background: 'rgba(0,0,0,0.2)', borderRadius: '1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '200px', border: '1px dashed rgba(255,255,255,0.1)' }}>
+                                    <div style={{ position: 'absolute', top: '1rem', left: '1rem', fontSize: '0.75rem', color: '#94a3b8', fontWeight: 600 }}>PLANTS NEEDED</div>
 
-                                    {/* Visual Representation */}
-                                    <div style={{ display: 'flex', justifyContent: 'center', gap: '4px', flexWrap: 'wrap', maxWidth: '180px', marginBottom: '1.5rem', minHeight: '40px' }}>
-                                        {Array.from({ length: Math.min(plantsNeeded, 12) }).map((_, i) => (
-                                            <span key={i} style={{ animation: `scaleIn 0.3s ease-out ${i * 0.05}s forwards`, transform: 'scale(0)' }}>
-                                                <iframe
-                                                    src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%234ade80' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'/></svg>"
-                                                    style={{ width: '24px', height: '24px', border: 'none' }}
-                                                    title="icon"
-                                                />
-                                                {/* Fallback to Lucide Icon directly */}
-                                                <Heart size={20} color="#4ade80" fill="#4ade80" style={{ opacity: 0.8 }} />
-                                            </span>
+                                    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap', gap: '10px', maxWidth: '80%', margin: '1rem 0' }}>
+                                        {[...Array(Math.min(PLANTS_NEEDED, 12))].map((_, i) => (
+                                            <div key={i} style={{
+                                                width: '32px', height: '32px', background: '#10b981', borderRadius: '50%',
+                                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                                boxShadow: '0 0 15px rgba(16, 185, 129, 0.4)',
+                                                animation: `scaleIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) ${i * 0.05}s backwards`
+                                            }}>
+                                                <div style={{ fontSize: '14px' }}>🌱</div>
+                                            </div>
                                         ))}
-                                        {plantsNeeded > 12 && <span style={{ color: '#4ade80', fontSize: '1rem', alignSelf: 'center' }}>+</span>}
+                                        {PLANTS_NEEDED > 12 && <div style={{ color: '#10b981', fontWeight: 700, fontSize: '1.2rem' }}>+{PLANTS_NEEDED - 12}</div>}
                                     </div>
 
-                                    <div style={{ fontSize: '4rem', fontWeight: 900, color: 'white', lineHeight: 0.8, textShadow: '0 0 30px rgba(74, 222, 128, 0.2)' }}>{plantsNeeded}</div>
-                                    <div style={{ fontSize: '1.1rem', fontWeight: 700, color: '#4ade80', marginBottom: '0.5rem' }}>Specimens</div>
-                                    <p style={{ fontSize: '0.8rem', color: '#94a3b8', textAlign: 'center', margin: 0 }}>
-                                        Required to purify {Math.round(numPeople * 450)}L of O₂ daily.
-                                    </p>
+                                    <div style={{ textAlign: 'center', marginTop: 'auto', marginBottom: '1.5rem' }}>
+                                        <div style={{ fontSize: '3rem', fontWeight: 900, color: 'white', lineHeight: 1, textShadow: '0 0 30px rgba(16, 185, 129, 0.3)' }}>
+                                            {PLANTS_NEEDED}
+                                        </div>
+                                        <div style={{ fontSize: '0.9rem', color: '#10b981', fontWeight: 600 }}>Plants Recommended</div>
+                                        <div style={{ fontSize: '0.8rem', color: '#64748b', marginTop: '0.25rem' }}>For {occupants} People</div>
+                                    </div>
+
+                                    <style>{`
+                                        @keyframes scaleIn { from { transform: scale(0); } to { transform: scale(1); } }
+                                        
+                                        /* Responsive Adjustments */
+                                        @media (max-width: 768px) {
+                                            .glass-panel { width: 100% !important; height: 100dvh !important; border-radius: 0 !important; }
+                                            .simulationContainer { padding: 1rem !important; overflow-y: auto; }
+                                            .dashboardHeader { margin-bottom: 1rem !important; padding-bottom: 1rem !important; }
+                                            .simulationGrid { display: flex !important; flex-direction: column-reverse; gap: 1rem !important; }
+                                        }
+                                    `}</style>
                                 </div>
                             </div>
 
@@ -550,7 +556,7 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                         {/* Quick Stats Row */}
                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.8rem', marginTop: 'auto', paddingTop: '1rem' }}>
                             <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: '1rem', padding: '0.8rem', textAlign: 'center' }}>
-                                <div style={{ fontSize: '0.65rem', color: '#94a3b8', fontWeight: 700, marginBottom: '0.2rem' }}>O₂ YIELD</div>
+                                <div style={{ fontSize: '0.65rem', color: '#94a3b8', fontWeight: 700, marginBottom: '0.2rem' }}>OXYGEN</div>
                                 <div style={{ fontSize: 'clamp(0.9rem, 4vw, 1.1rem)', color: '#white', fontWeight: 700 }}>{Math.abs(PLANT_O2_OUTPUT)}L</div>
                             </div>
                             <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: '1rem', padding: '0.8rem', textAlign: 'center' }}>
@@ -558,7 +564,7 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                                 <div style={{ fontSize: 'clamp(0.9rem, 4vw, 1.1rem)', color: '#white', fontWeight: 700 }}>{currentTemp}°C</div>
                             </div>
                             <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: '1rem', padding: '0.8rem', textAlign: 'center' }}>
-                                <div style={{ fontSize: '0.65rem', color: '#94a3b8', fontWeight: 700, marginBottom: '0.2rem' }}>PURITY</div>
+                                <div style={{ fontSize: '0.65rem', color: '#94a3b8', fontWeight: 700, marginBottom: '0.2rem' }}>CLEAN AIR</div>
                                 <div style={{ fontSize: 'clamp(0.9rem, 4vw, 1.1rem)', color: '#white', fontWeight: 700 }}>High</div>
                             </div>
                         </div>
