@@ -1,8 +1,10 @@
 import { useState, useMemo, useEffect } from 'react';
-import { X, Sun, Wind, Thermometer, Droplet, ShoppingBag, Leaf } from 'lucide-react';
+import { X, Sun, Wind, Thermometer, Droplet, ShoppingBag, Leaf, Lightbulb, Fan } from 'lucide-react';
 import { Button } from '../../common/Button';
 import type { Plant } from '../../../types';
 import styles from './PlantDetailsModal.module.css';
+import { useCart } from '../../../context/CartContext';
+import toast from 'react-hot-toast';
 
 interface PlantDetailsModalProps {
     plant: Plant;
@@ -15,6 +17,7 @@ interface PlantDetailsModalProps {
 }
 
 export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModalProps) => {
+    const { addToCart } = useCart();
     const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
 
     useEffect(() => {
@@ -29,9 +32,11 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
     // Simulation States
     const [numPeople, setNumPeople] = useState(1);
     const [isACMode, setIsACMode] = useState(false);
+    const [targetTemp, setTargetTemp] = useState(22);
+    const [lightLevel, setLightLevel] = useState(70); // %
 
     // Environment
-    const currentTemp = isACMode ? 22 : (weather?.avgTemp30Days || 25);
+    const currentTemp = isACMode ? targetTemp : (weather?.avgTemp30Days || 25);
     const currentHumidity = weather?.avgHumidity30Days || 50;
 
     // ==========================================
@@ -46,7 +51,7 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
         else if (ox === 'high') leafArea = 2.5;
         else leafArea = 1.2;
 
-        // C3 vs CAM Plant rates approx
+        // C3 vs CAM Plant rates
         let baseRate = ox === 'very-high' ? 28 : (ox === 'high' ? 22 : 15);
 
         return baseRate * leafArea;
@@ -67,21 +72,69 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
     }, [currentHumidity]);
 
     const PLANT_O2_OUTPUT = useMemo(() => {
-        const dayYield = getBasePhotosynthesisRate * temperatureEffect * humidityEffect * 0.8 * 3600 * 12 * 22.4 / 1000000;
+        // Light Factor affects photosynthesis linearly to saturation
+        const lightFactor = Math.max(0.1, lightLevel / 100);
+
+        const dayYield = getBasePhotosynthesisRate * temperatureEffect * humidityEffect * lightFactor * 3600 * 12 * 22.4 / 1000000;
         return (dayYield * 1000).toFixed(1);
-    }, [getBasePhotosynthesisRate, temperatureEffect, humidityEffect]);
+    }, [getBasePhotosynthesisRate, temperatureEffect, humidityEffect, lightLevel]);
 
     const plantsNeeded = Math.max(1, Math.ceil((550 * numPeople) / (parseFloat(PLANT_O2_OUTPUT) || 50)));
 
+    const handleAddToCart = () => {
+        addToCart(plant);
+        toast.success(`Added ${plant.name} to Sanctuary`);
+    };
+
     // ==========================================
-    // COMPONENTS
+    // SHARED COMPONENTS
     // ==========================================
+
+    const renderControls = () => (
+        <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1.25rem', borderRadius: '1rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+            {/* People */}
+            <div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.9rem' }}>
+                    <span style={{ color: '#cbd5e1' }}>Occupants</span>
+                    <span style={{ color: '#38bdf8', fontWeight: 700 }}>{numPeople}</span>
+                </div>
+                <input type="range" min="1" max="10" value={numPeople} onChange={(e) => setNumPeople(Number(e.target.value))} style={{ width: '100%', accentColor: '#38bdf8' }} />
+            </div>
+
+            {/* Light */}
+            <div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.9rem' }}>
+                    <span style={{ color: '#cbd5e1', display: 'flex', alignItems: 'center', gap: 6 }}><Lightbulb size={14} /> Light Level</span>
+                    <span style={{ color: '#facc15', fontWeight: 700 }}>{lightLevel}%</span>
+                </div>
+                <input type="range" min="10" max="100" value={lightLevel} onChange={(e) => setLightLevel(Number(e.target.value))} style={{ width: '100%', accentColor: '#facc15' }} />
+            </div>
+
+            {/* AC/Temp */}
+            <div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                    <div style={{ fontSize: '0.9rem', color: '#cbd5e1', display: 'flex', alignItems: 'center', gap: 6 }}><Fan size={14} /> AC Control</div>
+                    <div onClick={() => setIsACMode(!isACMode)} style={{ cursor: 'pointer', width: 36, height: 20, background: isACMode ? '#38bdf8' : '#334155', borderRadius: 20, position: 'relative' }}>
+                        <div style={{ width: 16, height: 16, background: 'white', borderRadius: '50%', position: 'absolute', top: 2, left: isACMode ? 18 : 2, transition: 'all 0.2s' }} />
+                    </div>
+                </div>
+                {isACMode && (
+                    <div className="animate-fade-in">
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.8rem' }}>
+                            <span style={{ color: '#64748b' }}>Target Temp</span>
+                            <span style={{ color: '#38bdf8', fontWeight: 700 }}>{targetTemp}°C</span>
+                        </div>
+                        <input type="range" min="16" max="30" value={targetTemp} onChange={(e) => setTargetTemp(Number(e.target.value))} style={{ width: '100%', accentColor: '#38bdf8' }} />
+                    </div>
+                )}
+                {!isACMode && <div style={{ fontSize: '0.8rem', color: '#64748b' }}>Using local weather: {weather?.avgTemp30Days || 25}°C</div>}
+            </div>
+        </div>
+    );
 
     const renderVisualizer = () => (
         <div style={{ position: 'relative', background: 'rgba(0,0,0,0.3)', borderRadius: '1.5rem', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '220px', border: '1px dashed rgba(255,255,255,0.1)', overflow: 'hidden' }}>
-            <div style={{ position: 'absolute', top: '1rem', left: '1rem', fontSize: '0.75rem', color: '#94a3b8', fontWeight: 600, zIndex: 2 }}>RECOMMENDATION</div>
-
-            {/* Dynamic Circles */}
+            <div style={{ position: 'absolute', top: '1rem', left: '1rem', fontSize: '0.75rem', color: '#94a3b8', fontWeight: 600, zIndex: 2 }}>RESULTS</div>
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap', gap: '8px', maxWidth: '80%', margin: '1rem 0', zIndex: 2 }}>
                 {[...Array(Math.min(plantsNeeded, 12))].map((_, i) => (
                     <div key={i} className="pop-in" style={{
@@ -95,22 +148,19 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                 ))}
                 {plantsNeeded > 12 && <div style={{ color: '#10b981', fontWeight: 700, fontSize: '1.2rem' }}>+{plantsNeeded - 12}</div>}
             </div>
-
             <div style={{ textAlign: 'center', marginTop: 'auto', marginBottom: '1.5rem', zIndex: 2 }}>
                 <div style={{ fontSize: '3rem', fontWeight: 900, color: 'white', lineHeight: 1, textShadow: '0 0 30px rgba(16, 185, 129, 0.3)' }}>
                     {plantsNeeded}
                 </div>
                 <div style={{ fontSize: '0.9rem', color: '#10b981', fontWeight: 600 }}>Plants Needed</div>
-                <div style={{ fontSize: '0.8rem', color: '#64748b' }}>For {numPeople} People</div>
+                <div style={{ fontSize: '0.8rem', color: '#64748b' }}>For {numPeople} People ({Math.abs(parseFloat(PLANT_O2_OUTPUT))}L/day)</div>
             </div>
-
-            {/* Background Effect */}
             <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at center, rgba(16, 185, 129, 0.1), transparent 70%)' }}></div>
         </div>
     );
 
     // ==========================================
-    // MOBILE VIEW (Restored "Old" Style)
+    // MOBILE VIEW (Scrollable Stack)
     // ==========================================
     if (isMobile) {
         return (
@@ -128,67 +178,38 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                         </button>
                         <div style={{ position: 'absolute', bottom: 10, left: 20 }}>
                             <h2 style={{ fontSize: '2rem', fontWeight: 800, color: 'white', margin: 0 }}>{plant.name}</h2>
+                            <div style={{ display: 'flex', gap: 10, marginTop: 5 }}>
+                                <span style={{ fontSize: '0.75rem', background: '#334155', padding: '2px 8px', borderRadius: 4 }}>{plant.oxygenLevel} O2</span>
+                                <span style={{ fontSize: '0.75rem', background: '#334155', padding: '2px 8px', borderRadius: 4 }}>{plant.sunlight}</span>
+                            </div>
                         </div>
                     </div>
 
-                    <div style={{ padding: '20px' }}>
-                        {/* Dashboard Header */}
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px', borderBottom: '1px solid rgba(255,255,255,0.1)', paddingBottom: '10px' }}>
-                            <div>
-                                <h3 style={{ margin: 0, color: '#38bdf8', display: 'flex', alignItems: 'center', gap: 6, fontSize: '1.2rem' }}>
-                                    <Wind size={20} /> Room Air Checker
+                    <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+                        {/* OVERVIEW SECTION */}
+                        <div>
+                            <h3 style={{ fontSize: '1.2rem', color: 'white', marginBottom: '0.5rem' }}>Overview</h3>
+                            <p style={{ color: '#94a3b8', lineHeight: 1.6, fontSize: '0.95rem' }}>{plant.description}</p>
+                        </div>
+
+                        {/* SIMULATION SECTION */}
+                        <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '2rem' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                                <h3 style={{ margin: 0, color: '#38bdf8', display: 'flex', alignItems: 'center', gap: 6 }}>
+                                    <Wind size={20} /> Room Lab
                                 </h3>
-                            </div>
-                            <div style={{ fontSize: '0.7rem', color: '#10b981', fontWeight: 700, border: '1px solid #10b981', padding: '2px 8px', borderRadius: '12px' }}>ACTIVE</div>
-                        </div>
-
-                        {/* Controls */}
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '15px', marginBottom: '20px' }}>
-                            <div style={{ background: 'rgba(255,255,255,0.03)', padding: '15px', borderRadius: '16px' }}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}>
-                                    <span style={{ color: '#cbd5e1', fontWeight: 600 }}>Occupants</span>
-                                    <span style={{ color: '#38bdf8' }}>{numPeople}</span>
-                                </div>
-                                <input
-                                    type="range" min="1" max="10" value={numPeople}
-                                    onChange={(e) => setNumPeople(Number(e.target.value))}
-                                    style={{ width: '100%', accentColor: '#38bdf8' }}
-                                />
+                                <div className="text-xs text-emerald-400 font-bold border border-emerald-500 rounded px-2">ACTIVE</div>
                             </div>
 
-                            {/* AC Toggle */}
-                            <div onClick={() => setIsACMode(!isACMode)} style={{ background: 'rgba(255,255,255,0.03)', padding: '15px', borderRadius: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                                    <Thermometer size={18} color={isACMode ? '#38bdf8' : '#94a3b8'} />
-                                    <span style={{ color: '#cbd5e1' }}>AC Mode (22°C)</span>
-                                </div>
-                                <div style={{ width: 40, height: 20, background: isACMode ? '#38bdf8' : '#334155', borderRadius: 20, position: 'relative' }}>
-                                    <div style={{ width: 16, height: 16, background: 'white', borderRadius: '50%', position: 'absolute', top: 2, left: isACMode ? 22 : 2, transition: 'all 0.2s' }} />
-                                </div>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                                {renderControls()}
+                                {renderVisualizer()}
                             </div>
                         </div>
 
-                        {/* Visualizer */}
-                        {renderVisualizer()}
-
-                        {/* Stats Row */}
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10, marginTop: 20 }}>
-                            <div style={{ background: 'rgba(255,255,255,0.03)', padding: 10, borderRadius: 12, textAlign: 'center' }}>
-                                <div style={{ fontSize: '0.7rem', color: '#64748b' }}>OXYGEN</div>
-                                <div style={{ fontSize: '1rem', color: 'white', fontWeight: 700 }}>{PLANT_O2_OUTPUT}L</div>
-                            </div>
-                            <div style={{ background: 'rgba(255,255,255,0.03)', padding: 10, borderRadius: 12, textAlign: 'center' }}>
-                                <div style={{ fontSize: '0.7rem', color: '#64748b' }}>TEMP</div>
-                                <div style={{ fontSize: '1rem', color: 'white', fontWeight: 700 }}>{currentTemp}°C</div>
-                            </div>
-                            <div style={{ background: 'rgba(255,255,255,0.03)', padding: 10, borderRadius: 12, textAlign: 'center' }}>
-                                <div style={{ fontSize: '0.7rem', color: '#64748b' }}>RATING</div>
-                                <div style={{ fontSize: '1rem', color: '#10b981', fontWeight: 700 }}>A+</div>
-                            </div>
-                        </div>
-
-                        <div style={{ marginTop: 30 }}>
-                            <Button onClick={() => { }} size="lg" style={{ width: '100%', borderRadius: '16px' }}>
+                        {/* Footer */}
+                        <div style={{ marginTop: 'auto' }}>
+                            <Button onClick={handleAddToCart} size="lg" style={{ width: '100%', borderRadius: '16px' }}>
                                 <ShoppingBag size={20} style={{ marginRight: 8 }} /> Add to Cart
                             </Button>
                         </div>
@@ -196,14 +217,16 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                 </div>
                 <style>{`
                     .pop-in { animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) backwards; }
+                    .animate-fade-in { animation: fadeIn 0.3s ease-out; }
                     @keyframes popIn { from { transform: scale(0); } to { transform: scale(1); } }
+                    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
                 `}</style>
             </div>
         );
     }
 
     // ==========================================
-    // DESKTOP VIEW (New Split Layout)
+    // DESKTOP VIEW (Split Layout)
     // ==========================================
     return (
         <div className={styles.overlay} onClick={onClose} style={{ zIndex: 9999 }}>
@@ -243,19 +266,16 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                                     </div>
                                 </div>
                             ) : (
-                                <div className="animate-fade-in" style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+                                <div className="animate-fade-in" style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '2rem' }}>
                                     {renderVisualizer()}
-                                    <div style={{ background: 'rgba(255,255,255,0.03)', borderRadius: '16px', padding: '1.5rem' }}>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}><label>Occupants</label><span>{numPeople}</span></div>
-                                        <input type="range" min="1" max="10" value={numPeople} onChange={(e) => setNumPeople(Number(e.target.value))} style={{ width: '100%', accentColor: '#38bdf8' }} />
-                                    </div>
+                                    {renderControls()}
                                 </div>
                             )}
                         </div>
 
                         {/* Footer */}
                         <div style={{ padding: '2rem 3rem', borderTop: '1px solid rgba(255,255,255,0.05)', background: 'rgba(15,23,42,0.5)' }}>
-                            <Button size="lg" style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
+                            <Button onClick={handleAddToCart} size="lg" style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
                                 <ShoppingBag size={20} /> Add to Sanctuary
                             </Button>
                         </div>
