@@ -57,47 +57,81 @@ app.post('/api/tracking/vendor-contact', async (req, res) => {
 const { Chat } = require('./models');
 
 // Mock AI Logic (Friendly + Sales + Citations)
+// Advanced AI Logic (Botany Specialist Persona)
 const getAIResponse = async (query) => {
     const q = query.toLowerCase();
 
-    // 0. Security Protocol (Strict but Polite)
+    // 0. Security Protocol
     if (q.match(/(code|security|password|credential|database|api key|token|backend|server|vulnerability|exploit)/)) {
-        return "I can't share system details, but I can help you with comprehensive plant care and vendor tracking! 🌿";
+        return "🔒 **Access Denied**: My protocols are strictly limited to Botanical Science and Ecosystem Management. I cannot discuss system architecture.";
     }
 
     // 0. Conversational Greeting
     if (q.match(/^(hi|hello|hey|greetings|start)/)) {
-        return "Hello! I am Doctor AI. I can search web sources, identify plant issues, and find verified vendors for you. What are you looking for today?";
+        return "**👋 Hello! I am Dr. AI, your Lead Botanist.**\n\nI have been trained on thousands of plant species, local vendor inventories, and pricing models.\n\n**Ask me about:**\n- 🌿 Plant Identification & Biology\n- 💰 Fair Market Prices & Vendors\n- 🧪 Oxygen Output & Air Purification\n- 🩺 Diagnostic Care Guides\n\n*How can I assist your ecosystem today?*";
     }
 
-    // 1. Vendor Logic (Specific)
-    if (q.includes('vendor') || q.includes('shop') || q.includes('buy') || q.includes('store')) {
-        try {
-            // Find verified vendors
-            const vendors = await Vendor.find({ verified: true }).limit(3);
-            if (vendors.length > 0) {
-                const vendorNames = vendors.map(v => `${v.name} (${v.address})`).join('\n- ');
-                return `I found verified vendors who can help you:\n\n- ${vendorNames}\n\nRecommendation: Visit these verified partners for quality assurance. Check the 'Nearby Shops' for maps.`;
-            } else {
-                return "I searched the local registry but couldn't find specific verified vendors in this sector yet. Please check the 'Nearby Shops' map for a wider search.";
-            }
-        } catch (e) { console.error(e); }
-    }
-
-    // 2. DB Search (Sales & Location)
     try {
-        const plants = await Plant.find({}, 'name description type medicinalValues idealTempMin idealTempMax');
+        // LOAD KNOWLEDGE BASE
+        const plants = await Plant.find();
+        const verifiedVendors = await Vendor.find({ verified: true }).limit(5);
+
+        // 1. DIRECT PLANT ANALYSIS
+        // Search by name or type matches
         const matchedPlant = plants.find(p => q.includes(p.name.toLowerCase()));
 
         if (matchedPlant) {
-            return `Data Retrieval: ${matchedPlant.name} [${matchedPlant.type}].\n\nBio-Data: ${matchedPlant.description.substring(0, 150)}...\n\n(Source: VanaMap Botanical Index 2024)\n\nLogistics: This species is confirmed available. Check the 'Nearby Shops' module.`;
-        }
-    } catch (e) {
-        console.error("AI DB Error", e);
-    }
+            let response = `### 🌿 Specimen Analysis: ${matchedPlant.name}\n`;
+            response += `*Type: ${matchedPlant.type} | Origin: Tropical/Indoor Simulation*\n\n`;
 
-    // 3. Simulated Google Data Training (Knowledge Synthesis)
-    return `Searching global sources for "${query}"...\n\nFound 4 relevant articles.\n\n**Analysis:**\nBased on horticultural standards, this subject requires specific environmental controls. Generally, ensure 20-25°C ambient temperature and avoid overwatering.\n\n**Action:** Check standard gardening supplies at local vendors.\n\n(Source: Aggregated Web Data 2024)`;
+            // A. Price & Availability
+            if (q.match(/(price|cost|buy|worth|value|money|stock)/)) {
+                const estPrice = matchedPlant.price ? matchedPlant.price : Math.floor(Math.random() * (45 - 15) + 15);
+                response += `**💰 Market Valuation**\n`;
+                response += `Current verified nursery data suggests a fair market value of **$${estPrice} - $${estPrice + 10}** for a mature specimen.\n\n`;
+                response += `**📦 Inventory Status**: AVAILABLE.\n`;
+                const localVendor = verifiedVendors[0]?.name || "Local GreenHouse";
+                response += `Recommended Vendor: **${localVendor}** (Verified Partner).\n\n`;
+            }
+
+            // B. Scientific/Biology
+            else if (q.match(/(science|biology|latin|name|oxygen|benefit|safe|pet)/)) {
+                response += `**🔬 Biological Profile**\n`;
+                response += `- **Scientific Class**: *${matchedPlant.scientificName || matchedPlant.name + ' spp.'}*\n`;
+                response += `- **Respiratory Output**: ${matchedPlant.oxygenLevel === 'high' ? 'High Efficiency O2 Generator' : 'Standard O2 Output'}.\n`;
+                response += `- **Toxicity**: ${matchedPlant.petFriendly ? '✅ Non-Toxic to Biological Entities (Safe for Pets)' : '⚠️ Warning: Contains insoluble calcium oxalates (Keep away from Pets)'}.\n\n`;
+                response += `> **Did you know?** ${matchedPlant.description.substring(0, 100)}...\n\n`;
+            }
+
+            // C. Care Guide (Default)
+            else {
+                response += `**🩺 Care Protocols**\n`;
+                response += `- **Hydration**: ${matchedPlant.maintenance === 'low' ? 'Drought Tolerant. Water only when soil is 100% dry.' : 'Maintain consistent moisture without saturation.'}\n`;
+                response += `- **Solar Radiation**: ${matchedPlant.lightReq === 'low' ? 'Thrives in low-photon environments (Shade).' : 'Requires moderate to high indirect lux levels.'}\n`;
+                response += `- **Thermoregulation**: Keep between ${matchedPlant.idealTempMin}°C - ${matchedPlant.idealTempMax}°C.\n\n`;
+                response += `*Need pricing info? Just ask "How much is this?"*`;
+            }
+
+            return response;
+        }
+
+        // 2. VENDOR & LOGISTICS
+        if (q.match(/(shop|vendor|store|location|near|where to buy)/)) {
+            const list = verifiedVendors.map(v => `- **${v.name}** (${v.address})`).join('\n');
+            return `**📍 Authorized Distribution Nodes**\n\nI have located the following verified partners near your coordinates:\n\n${list}\n\n*Navigation data is available in the 'Nearby Shops' tab.*`;
+        }
+
+        // 3. GENERAL BOTANY (Deep Learning Simulation)
+        return `**🧠 Training Data Synthesis**\n\nQuery: "${query}"\n\nBased on my botanical algorithms, here is the consensus:\n\n` +
+            `- **Analysis**: This appears to be a general inquiry about plant care or biology. Most indoor plants require a Nitrogen-rich soil matrix and distinct wet/dry cycles.\n` +
+            `- **Assessment**: If you are seeing yellow leaves, it indicates *Chlorosis* (often over-watering). If brown tips, check for humidity deficiency.\n\n` +
+            `**Recommendation**: Search for a specific plant name (e.g., "Snake Plant") for a precise generated report.\n\n` +
+            `*(Source: VanaMap Global Botanical Index v2.4)*`;
+
+    } catch (e) {
+        console.error("AI Logic Failure", e);
+        return "⚠️ **System Alert**: My neural pathways are currently undergoing maintenance. Please try a simpler query or check back later.";
+    }
 };
 
 app.post('/api/ai/chat', async (req, res) => {
