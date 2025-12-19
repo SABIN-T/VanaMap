@@ -7,7 +7,7 @@ import { fetchPlants } from '../services/api';
 import { getWeather, geocodeCity } from '../services/weather';
 import { calculateAptness } from '../utils/logic';
 import type { Plant } from '../types';
-import { Sprout, MapPin, Thermometer, Wind, ArrowDown, Sparkles, Search, AlertCircle, Heart } from 'lucide-react';
+import { Sprout, MapPin, Thermometer, Wind, ArrowDown, Sparkles, Search, AlertCircle, Heart, Sun } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
 // Lazy load modal for performance
@@ -20,6 +20,7 @@ export const Home = () => {
     const [filter, setFilter] = useState<'all' | 'indoor' | 'outdoor'>('all');
     const [searchQuery, setSearchQuery] = useState('');
     const [o2Filter, setO2Filter] = useState<'all' | 'high' | 'very-high'>('all');
+    const [lightFilter, setLightFilter] = useState<'all' | 'low' | 'medium' | 'high'>('all'); // New Light Filter
     const [weather, setWeather] = useState<any>(null);
     const [locationLoading, setLocationLoading] = useState(false);
     const [plantsLoading, setPlantsLoading] = useState(true);
@@ -107,13 +108,13 @@ export const Home = () => {
             const weatherData = await getWeather(result.lat, result.lng);
             if (weatherData) {
                 setWeather(weatherData);
-                toast.success(`Simulation synced for ${citySearch}`);
+                toast.success(`Synced location: ${citySearch}`);
                 scrollToPlants();
             } else {
-                toast.error("Environment data unavailable.");
+                toast.error("Data unavailable.");
             }
         } else {
-            toast.error("Zone not found.");
+            toast.error("City not found.");
         }
         setLocationLoading(false);
     };
@@ -121,7 +122,7 @@ export const Home = () => {
     const handleGetLocation = () => {
         setLocationLoading(true);
         if (navigator.geolocation) {
-            const toastId = toast.loading("Syncing with satellite...");
+            const toastId = toast.loading("Finding your location...");
 
             const options = {
                 enableHighAccuracy: false,
@@ -135,10 +136,10 @@ export const Home = () => {
                     const weatherData = await getWeather(latitude, longitude);
                     if (weatherData) {
                         setWeather(weatherData);
-                        toast.success("Ecosystem Locked!", { id: toastId });
+                        toast.success("Location set!", { id: toastId });
                         scrollToPlants();
                     } else {
-                        toast.error("Syncing failed.", { id: toastId });
+                        toast.error("Sync failed.", { id: toastId });
                     }
                 } catch (e) {
                     console.error(e);
@@ -149,7 +150,7 @@ export const Home = () => {
             }, (err) => {
                 console.error(err);
                 setLocationLoading(false);
-                toast.error("Satellite access denied.", { id: toastId });
+                toast.error("GPS access denied.", { id: toastId });
             }, options);
         } else {
             toast.error("GPS not supported.");
@@ -168,10 +169,10 @@ export const Home = () => {
     };
 
     const getPollutionStatus = (aqi: number = 0) => {
-        if (aqi <= 20) return { label: 'Excellent', color: '#00ff9d', desc: 'Fresh air detected (Live Data)' };
-        if (aqi <= 50) return { label: 'Good', color: '#facc15', desc: 'Acceptable air quality' };
-        if (aqi <= 100) return { label: 'Moderate', color: '#fb923c', desc: 'Atmospheric stress detected' };
-        return { label: 'High Pollution', color: '#f87171', desc: 'Critical AQI: Oxygen-boosters simulated.' };
+        if (aqi <= 20) return { label: 'Excellent', color: '#00ff9d', desc: 'Fresh Air' };
+        if (aqi <= 50) return { label: 'Good', color: '#facc15', desc: 'Air is Okay' };
+        if (aqi <= 100) return { label: 'Moderate', color: '#fb923c', desc: 'Not very Clean' };
+        return { label: 'High Pollution', color: '#f87171', desc: 'You need plants!' };
     };
 
     const displayedPlants = useMemo(() => {
@@ -181,7 +182,17 @@ export const Home = () => {
                 const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                     p.scientificName.toLowerCase().includes(searchQuery.toLowerCase());
                 const matchesO2 = o2Filter === 'all' ? true : p.oxygenLevel === o2Filter;
-                return matchesType && matchesSearch && matchesO2;
+
+                // Light Filter Logic
+                const matchesLight = lightFilter === 'all' ? true : (() => {
+                    const s = p.sunlight.toLowerCase();
+                    if (lightFilter === 'low') return s.includes('low') || s.includes('shade') || s.includes('shadow');
+                    if (lightFilter === 'medium') return s.includes('indirect') || s.includes('partial') || s.includes('medium');
+                    if (lightFilter === 'high') return s.includes('full') || s.includes('high') || s.includes('direct') || s.includes('bright');
+                    return false;
+                })();
+
+                return matchesType && matchesSearch && matchesO2 && matchesLight;
             })
             .map(p => {
                 if (!weather) return { ...p, score: 0 };
@@ -199,12 +210,12 @@ export const Home = () => {
             }
         }
         return processed;
-    }, [plants, filter, searchQuery, o2Filter, weather]);
+    }, [plants, filter, searchQuery, o2Filter, lightFilter, weather]);
 
     return (
         <div className={styles.homeContainer}>
             {selectedPlant && (
-                <Suspense fallback={<div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2000, backdropFilter: 'blur(10px)' }}>Initializing Simulation Engine...</div>}>
+                <Suspense fallback={<div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2000, backdropFilter: 'blur(10px)' }}>Starting Simulation...</div>}>
                     <PlantDetailsModal
                         plant={selectedPlant}
                         weather={weather}
@@ -216,13 +227,13 @@ export const Home = () => {
             <section className={styles.hero}>
                 <div className={styles.heroContent}>
                     <div className={styles.heroBadge}>
-                        <Sparkles size={16} /> Eco-Simulation Engine
+                        <Sparkles size={16} /> Home Ecosystem App
                     </div>
 
-                    <h1 className={styles.heroTitle}>SMART ECOSYSTEM<br />SIMULATOR</h1>
+                    <h1 className={styles.heroTitle}>FIND THE PERFECT<br />PLANT FOR YOU</h1>
                     <p className={styles.heroSubtitle}>
-                        Analyze your local atmosphere and simulate plant growth patterns.
-                        Our engine uses live environmental data to predict which species will perfectly balance your oxygen levels.
+                        Discover plants that clean your air and fit your life.
+                        See what grows best in your city.
                     </p>
 
                     {!weather ? (
@@ -230,14 +241,14 @@ export const Home = () => {
                             <div className={styles.searchBox}>
                                 <input
                                     type="text"
-                                    placeholder="Enter Your City (e.g. New York)"
+                                    placeholder="Enter your City (e.g. Kathmandu)"
                                     value={citySearch}
                                     onChange={e => setCitySearch(e.target.value)}
                                     onKeyDown={e => e.key === 'Enter' && handleCitySearch()}
                                     className={styles.searchInput}
                                 />
                                 <Button onClick={handleCitySearch} disabled={locationLoading}>
-                                    {locationLoading ? 'Syncing...' : 'Simulate Zone'}
+                                    {locationLoading ? 'Checking...' : 'Check My Location'}
                                 </Button>
                             </div>
 
@@ -245,10 +256,10 @@ export const Home = () => {
 
                             <div className={styles.buttonGroup}>
                                 <Button variant="outline" size="lg" onClick={handleGetLocation} className={styles.gpsBtn}>
-                                    <MapPin size={20} /> Use Satellite GPS
+                                    <MapPin size={20} /> Use GPS
                                 </Button>
                                 <Button variant="outline" size="lg" onClick={() => navigate('/nearby')}>
-                                    Find Nearby Nurseries
+                                    Find Nearby Shop
                                 </Button>
                             </div>
                         </div>
@@ -257,16 +268,16 @@ export const Home = () => {
                             <div className={styles.weatherCard}>
                                 <div className={styles.weatherMain}>
                                     <div className={styles.locationInfo}>
-                                        <span className={styles.label}>ATMOSPHERIC ZONE</span>
+                                        <span className={styles.label}>YOUR ZONE</span>
                                         <h3 className={styles.h3}>Live Environment</h3>
-                                        <button onClick={() => setWeather(null)} className={styles.changeBtn}>Recalibrate Zone</button>
+                                        <button onClick={() => setWeather(null)} className={styles.changeBtn}>Change Location</button>
                                     </div>
                                     <div className={styles.vDivider}></div>
                                     <div className={styles.statGroup}>
                                         <div className={styles.iconCircle}><Thermometer size={20} color="#facc15" /></div>
                                         <div>
                                             <div className={styles.statVal}>{weather.avgTemp30Days.toFixed(1)}°C</div>
-                                            <div className={styles.statSub}>Simulated Temp</div>
+                                            <div className={styles.statSub}>Avg Temp</div>
                                         </div>
                                     </div>
                                     <div className={styles.statGroup}>
@@ -281,11 +292,11 @@ export const Home = () => {
                                 </div>
                                 <div className={styles.weatherFooter}>
                                     <div className={styles.footerMsg}>
-                                        <span className={styles.liveTag}>CORE ANALYSIS ACTIVE</span>
+                                        <span className={styles.liveTag}>LIVE UPDATE</span>
                                         <p>{getPollutionStatus(weather.air_quality?.aqi).desc}</p>
                                     </div>
                                     <Button onClick={scrollToPlants} variant="primary" size="sm" className={styles.pulseBtn}>
-                                        Analyze Recommendations <ArrowDown size={14} />
+                                        See Recommendations <ArrowDown size={14} />
                                     </Button>
                                 </div>
                             </div>
@@ -295,18 +306,18 @@ export const Home = () => {
                     <div className={styles.featuresGrid}>
                         <div className={styles.featureCard}>
                             <div className={styles.iconWrapper}><Sparkles size={24} /></div>
-                            <h3>AI Vitality</h3>
-                            <p>Calculating species efficiency based on real-time atmospheric data.</p>
+                            <h3>Smart Match</h3>
+                            <p>We rate plants based on your local weather.</p>
                         </div>
                         <div className={styles.featureCard}>
                             <div className={styles.iconWrapper}><Wind size={24} /></div>
-                            <h3>O₂ Simulation</h3>
-                            <p>Predicting oxygen flux for your specific room dimensions.</p>
+                            <h3>Fresh Air</h3>
+                            <p>See how much oxygen a plant gives your room.</p>
                         </div>
                         <div className={styles.featureCard}>
                             <div className={styles.iconWrapper}><Sprout size={24} /></div>
-                            <h3>Growth Tracking</h3>
-                            <p>Adapting simulation parameters as local weather patterns shift.</p>
+                            <h3>Easy Care</h3>
+                            <p>Find plants that are easy to keep alive.</p>
                         </div>
                     </div>
                 </div>
@@ -314,8 +325,8 @@ export const Home = () => {
 
             <div className="container" id="plant-grid" ref={plantsSectionRef} style={{ scrollMarginTop: '2rem' }}>
                 <div className={styles.sectionHeader}>
-                    <h2 style={{ fontSize: '2.5rem', fontWeight: 900 }}>{weather ? 'RANKED ECOSYSTEM MATCHES' : 'SIMULATION DATABASE'}</h2>
-                    <p style={{ color: 'var(--color-text-muted)' }}>{weather ? 'Scientifically ranked based on your atmosphere.' : 'Explore high-vitality species optimized for indoor simulation.'}</p>
+                    <h2 style={{ fontSize: '2.5rem', fontWeight: 900 }}>{weather ? 'BEST MATCHES FOR YOU' : 'EXPLORE PLANTS'}</h2>
+                    <p style={{ color: 'var(--color-text-muted)' }}>{weather ? 'These plants grow best in your area.' : 'Browse our collection of air-purifying plants.'}</p>
                 </div>
 
                 {/* Integrated Search and Filtering */}
@@ -324,7 +335,7 @@ export const Home = () => {
                         <Search size={20} className={styles.searchIcon} />
                         <input
                             type="text"
-                            placeholder="Find a species (e.g. Snake Plant)"
+                            placeholder="Search (e.g. Aloe Vera)"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             className={styles.searchSpeciesInput}
@@ -333,7 +344,7 @@ export const Home = () => {
 
                     <div className={styles.filterWrapper}>
                         <div className={styles.filterChipGroup}>
-                            <span className={styles.groupLabel}>TYPE</span>
+                            <span className={styles.groupLabel}>LOCATION</span>
                             {['all', 'indoor', 'outdoor'].map((f) => (
                                 <button
                                     key={f}
@@ -346,14 +357,15 @@ export const Home = () => {
                         </div>
 
                         <div className={styles.filterChipGroup}>
-                            <span className={styles.groupLabel}>O₂ VITALITY</span>
-                            {['all', 'high', 'very-high'].map((v) => (
+                            <span className={styles.groupLabel}>SUNLIGHT</span>
+                            {['all', 'low', 'medium', 'high'].map((l) => (
                                 <button
-                                    key={v}
-                                    className={`${styles.filterBtn} ${o2Filter === v ? styles.active : ''}`}
-                                    onClick={() => setO2Filter(v as any)}
+                                    key={l}
+                                    className={`${styles.filterBtn} ${lightFilter === l ? styles.active : ''}`}
+                                    onClick={() => setLightFilter(l as any)}
                                 >
-                                    {v.toUpperCase().replace('-', ' ')}
+                                    <Sun size={12} style={{ marginRight: '4px', display: 'inline-block' }} />
+                                    {l.toUpperCase()}
                                 </button>
                             ))}
                         </div>
@@ -373,11 +385,10 @@ export const Home = () => {
                                     animation: 'fadeIn 0.5s ease-out'
                                 }}>
                                     <h3 style={{ color: '#facc15', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
-                                        <AlertCircle size={20} /> Awakening Cloud Engines
+                                        <AlertCircle size={20} /> Loading Plants...
                                     </h3>
                                     <p style={{ color: '#94a3b8', fontSize: '0.9rem' }}>
-                                        Our intelligence systems are spinning up. This may take up to 45 seconds on your first entry.
-                                        Thank you for your patience while we synchronize the ecosystem.
+                                        Getting fresh data from the server. Please wait...
                                     </p>
                                 </div>
                             )}
@@ -418,7 +429,7 @@ export const Home = () => {
             }}>
                 <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', justifyContent: 'center' }}>
                     <div style={{ textAlign: 'center' }}>
-                        <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '0.5rem' }}>Experience VanaMap Mobile</p>
+                        <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '0.5rem' }}>For Mobile Users</p>
                         <div style={{
                             padding: '0.75rem',
                             background: 'white',
@@ -438,11 +449,11 @@ export const Home = () => {
                     </div>
 
                     <div style={{ textAlign: 'left', minWidth: '200px' }}>
-                        <h4 style={{ color: 'white', marginBottom: '1rem', fontSize: '1rem' }}>Monetization & Growth</h4>
+                        <h4 style={{ color: 'white', marginBottom: '1rem', fontSize: '1rem' }}>Links</h4>
                         <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                             <li>
                                 <a href="#" style={{ color: '#10b981', textDecoration: 'none', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                    <Heart size={14} fill="#10b981" /> Support the Project
+                                    <Heart size={14} fill="#10b981" /> Support Us
                                 </a>
                             </li>
                             <li>
@@ -451,13 +462,13 @@ export const Home = () => {
                                 </a>
                             </li>
                             <li>
-                                <a href="/nearby" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '0.9rem' }}>Vendor Advertising</a>
+                                <a href="/nearby" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '0.9rem' }}>Vendor Login</a>
                             </li>
                         </ul>
                     </div>
                 </div>
                 <div style={{ marginTop: '3rem', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '1.5rem', width: '100%' }}>
-                    <p style={{ color: '#64748b', fontSize: '0.8rem' }}>© 2025 VanaMap Intelligence Systems • Sustainability Research Lab</p>
+                    <p style={{ color: '#64748b', fontSize: '0.8rem' }}>© 2025 VanaMap - Green Earth Project</p>
                 </div>
             </footer>
         </div>
