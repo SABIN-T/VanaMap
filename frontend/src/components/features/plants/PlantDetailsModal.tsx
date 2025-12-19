@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, MouseEvent, TouchEvent } from 'react';
 import { X, Sun, Wind, Droplet, ShoppingBag, Leaf, Lightbulb, Fan } from 'lucide-react';
 import { Button } from '../../common/Button';
 import type { Plant } from '../../../types';
@@ -33,7 +33,7 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
     const [numPeople, setNumPeople] = useState(1);
     const [isACMode, setIsACMode] = useState(false);
     const [targetTemp, setTargetTemp] = useState(22);
-    const [lightLevel, setLightLevel] = useState(70); // %
+    const [lightLevel, setLightLevel] = useState(70);
 
     // Environment
     const currentTemp = isACMode ? targetTemp : (weather?.avgTemp30Days || 25);
@@ -44,7 +44,6 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
     // ==========================================
     const getBasePhotosynthesisRate = useMemo(() => {
         let leafArea = 0.5;
-        // Map types safely
         const ox = plant.oxygenLevel || 'moderate';
 
         if (ox === 'very-high') leafArea = 4.2;
@@ -72,9 +71,7 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
     }, [currentHumidity]);
 
     const PLANT_O2_OUTPUT = useMemo(() => {
-        // Light Factor affects photosynthesis linearly to saturation
         const lightFactor = Math.max(0.1, lightLevel / 100);
-
         const dayYield = getBasePhotosynthesisRate * temperatureEffect * humidityEffect * lightFactor * 3600 * 12 * 22.4 / 1000000;
         return dayYield.toFixed(1);
     }, [getBasePhotosynthesisRate, temperatureEffect, humidityEffect, lightLevel]);
@@ -85,6 +82,9 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
         addToCart(plant);
         toast.success(`Added ${plant.name} to Sanctuary`);
     };
+
+    // Stop Propagation Helper to kill global swipe
+    const stopProp = (e: TouchEvent | MouseEvent) => e.stopPropagation();
 
     // ==========================================
     // SHARED COMPONENTS
@@ -98,7 +98,12 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                     <span style={{ color: '#cbd5e1' }}>Occupants</span>
                     <span style={{ color: '#38bdf8', fontWeight: 700 }}>{numPeople}</span>
                 </div>
-                <input type="range" min="1" max="10" value={numPeople} onChange={(e) => setNumPeople(Number(e.target.value))} style={{ width: '100%', accentColor: '#38bdf8' }} />
+                <input
+                    type="range" min="1" max="10" value={numPeople}
+                    onChange={(e) => setNumPeople(Number(e.target.value))}
+                    className="no-swipe"
+                    style={{ width: '100%', accentColor: '#38bdf8' }}
+                />
             </div>
 
             {/* Light */}
@@ -107,7 +112,12 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                     <span style={{ color: '#cbd5e1', display: 'flex', alignItems: 'center', gap: 6 }}><Lightbulb size={14} /> Light Level</span>
                     <span style={{ color: '#facc15', fontWeight: 700 }}>{lightLevel}%</span>
                 </div>
-                <input type="range" min="10" max="100" value={lightLevel} onChange={(e) => setLightLevel(Number(e.target.value))} style={{ width: '100%', accentColor: '#facc15' }} />
+                <input
+                    type="range" min="10" max="100" value={lightLevel}
+                    onChange={(e) => setLightLevel(Number(e.target.value))}
+                    className="no-swipe"
+                    style={{ width: '100%', accentColor: '#facc15' }}
+                />
             </div>
 
             {/* AC/Temp */}
@@ -124,7 +134,12 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                             <span style={{ color: '#64748b' }}>Target Temp</span>
                             <span style={{ color: '#38bdf8', fontWeight: 700 }}>{targetTemp}°C</span>
                         </div>
-                        <input type="range" min="16" max="30" value={targetTemp} onChange={(e) => setTargetTemp(Number(e.target.value))} style={{ width: '100%', accentColor: '#38bdf8' }} />
+                        <input
+                            type="range" min="16" max="30" value={targetTemp}
+                            onChange={(e) => setTargetTemp(Number(e.target.value))}
+                            className="no-swipe"
+                            style={{ width: '100%', accentColor: '#38bdf8' }}
+                        />
                     </div>
                 )}
                 {!isACMode && <div style={{ fontSize: '0.8rem', color: '#64748b' }}>Using local weather: {weather?.avgTemp30Days || 25}°C</div>}
@@ -164,7 +179,14 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
     // ==========================================
     if (isMobile) {
         return (
-            <div className={`${styles.overlay} no-swipe`} onClick={onClose} style={{ zIndex: 9999, padding: '10px' }}>
+            <div
+                className={`${styles.overlay} no-swipe`}
+                onClick={onClose}
+                onTouchStart={stopProp}
+                onTouchMove={stopProp}
+                onTouchEnd={stopProp}
+                style={{ zIndex: 9999, padding: '10px' }}
+            >
                 <div className={styles.modal} onClick={(e) => e.stopPropagation()} style={{
                     maxHeight: '90vh', overflowY: 'auto', borderRadius: '24px',
                     background: '#0f172a', border: '1px solid rgba(255,255,255,0.1)'
@@ -229,7 +251,14 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
     // DESKTOP VIEW (Split Layout)
     // ==========================================
     return (
-        <div className={`${styles.overlay} no-swipe`} onClick={onClose} style={{ zIndex: 9999 }}>
+        <div
+            className={`${styles.overlay} no-swipe`}
+            onClick={onClose}
+            onTouchStart={stopProp}
+            onTouchMove={stopProp}
+            onTouchEnd={stopProp}
+            style={{ zIndex: 9999 }}
+        >
             <div className={styles.modal} onClick={(e) => e.stopPropagation()} style={{ overflow: 'hidden', padding: 0 }}>
                 <div style={{ display: 'flex', height: '100%', flexDirection: 'row' }}>
 
