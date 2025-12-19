@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import { X, Sun, Wind, Thermometer, Droplet, ShoppingBag, Leaf, Lightbulb, Fan } from 'lucide-react';
+import { X, Sun, Wind, Droplet, ShoppingBag, Leaf, Lightbulb, Fan } from 'lucide-react';
 import { Button } from '../../common/Button';
 import type { Plant } from '../../../types';
 import styles from './PlantDetailsModal.module.css';
