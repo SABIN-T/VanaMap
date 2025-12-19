@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from 'react';
 import type { MouseEvent, TouchEvent } from 'react';
-import { X, Sun, Wind, Droplet, ShoppingBag, Leaf, Lightbulb, Fan } from 'lucide-react';
+import { X, Sun, Wind, Droplet, ShoppingBag, Leaf, Lightbulb, Fan, AlertTriangle, CheckCircle2 } from 'lucide-react';
 import { Button } from '../../common/Button';
 import type { Plant } from '../../../types';
 import styles from './PlantDetailsModal.module.css';
@@ -18,7 +18,7 @@ interface PlantDetailsModalProps {
 }
 
 export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModalProps) => {
-    const { addToCart } = useCart();
+    const { addToCart, items } = useCart();
     const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
 
     useEffect(() => {
@@ -40,6 +40,9 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
     const currentTemp = isACMode ? targetTemp : (weather?.avgTemp30Days || 25);
     const currentHumidity = weather?.avgHumidity30Days || 50;
 
+    // Cart State
+    const cartQty = items.find(item => item.plant.id === plant.id)?.quantity || 0;
+
     // ==========================================
     // SCIENTIFIC LOGIC
     // ==========================================
@@ -51,15 +54,13 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
         else if (ox === 'high') leafArea = 2.5;
         else leafArea = 1.2;
 
-        // C3 vs CAM Plant rates
         let baseRate = ox === 'very-high' ? 28 : (ox === 'high' ? 22 : 15);
-
         return baseRate * leafArea;
     }, [plant.oxygenLevel]);
 
     const temperatureEffect = useMemo(() => {
         const T = currentTemp + 273.15;
-        const T_opt = 298.15; // 25C
+        const T_opt = 298.15;
         if (currentTemp < 10 || currentTemp > 42) return 0.1;
         const sigma = 12;
         return Math.max(0.15, Math.exp(-Math.pow(T - T_opt, 2) / (2 * sigma * sigma)));
@@ -84,7 +85,7 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
         toast.success(`Added ${plant.name} to Sanctuary`);
     };
 
-    // Stop Propagation Helper to kill global swipe
+    // Stop Propagation Helper
     const stopProp = (e: TouchEvent | MouseEvent) => e.stopPropagation();
 
     // ==========================================
@@ -93,6 +94,15 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
 
     const renderControls = () => (
         <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1.25rem', borderRadius: '1rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+
+            {/* GPS Warning */}
+            <div style={{ background: 'rgba(234, 179, 8, 0.1)', border: '1px solid rgba(234, 179, 8, 0.2)', padding: '0.75rem', borderRadius: '0.5rem', display: 'flex', alignItems: 'start', gap: '0.75rem' }}>
+                <AlertTriangle size={16} className="text-yellow-500" style={{ marginTop: 2, flexShrink: 0 }} />
+                <div style={{ fontSize: '0.75rem', color: '#fde047', lineHeight: 1.4 }}>
+                    <strong>Pro Tip:</strong> Enable GPS for accurate local climate simulation results.
+                </div>
+            </div>
+
             {/* People */}
             <div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.9rem' }}>
@@ -176,7 +186,7 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
     );
 
     // ==========================================
-    // MOBILE VIEW (Scrollable Stack)
+    // MOBILE VIEW
     // ==========================================
     if (isMobile) {
         return (
@@ -192,7 +202,6 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                     maxHeight: '90vh', overflowY: 'auto', borderRadius: '24px',
                     background: '#0f172a', border: '1px solid rgba(255,255,255,0.1)'
                 }}>
-                    {/* Header Image */}
                     <div style={{ height: '200px', position: 'relative' }}>
                         <img src={plant.imageUrl} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                         <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, #0f172a 0%, transparent 100%)' }}></div>
@@ -209,13 +218,11 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                     </div>
 
                     <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-                        {/* OVERVIEW SECTION */}
                         <div>
                             <h3 style={{ fontSize: '1.2rem', color: 'white', marginBottom: '0.5rem' }}>Overview</h3>
                             <p style={{ color: '#94a3b8', lineHeight: 1.6, fontSize: '0.95rem' }}>{plant.description}</p>
                         </div>
 
-                        {/* SIMULATION SECTION */}
                         <div style={{ borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '2rem' }}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
                                 <h3 style={{ margin: 0, color: '#38bdf8', display: 'flex', alignItems: 'center', gap: 6 }}>
@@ -223,15 +230,19 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                                 </h3>
                                 <div className="text-xs text-emerald-400 font-bold border border-emerald-500 rounded px-2">ACTIVE</div>
                             </div>
-
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                                 {renderControls()}
                                 {renderVisualizer()}
                             </div>
                         </div>
 
-                        {/* Footer */}
-                        <div style={{ marginTop: 'auto' }}>
+                        <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                            {cartQty > 0 && (
+                                <div style={{ fontSize: '0.8rem', color: '#10b981', display: 'flex', alignItems: 'center', gap: 4, whiteSpace: 'nowrap' }}>
+                                    <CheckCircle2 size={16} />
+                                    <strong>{cartQty}</strong> in Cart
+                                </div>
+                            )}
                             <Button onClick={handleAddToCart} size="lg" style={{ width: '100%', borderRadius: '16px' }}>
                                 <ShoppingBag size={20} style={{ marginRight: 8 }} /> Add to Cart
                             </Button>
@@ -249,7 +260,7 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
     }
 
     // ==========================================
-    // DESKTOP VIEW (Split Layout)
+    // DESKTOP VIEW
     // ==========================================
     return (
         <div
@@ -263,7 +274,6 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
             <div className={styles.modal} onClick={(e) => e.stopPropagation()} style={{ overflow: 'hidden', padding: 0 }}>
                 <div style={{ display: 'flex', height: '100%', flexDirection: 'row' }}>
 
-                    {/* LEFT: Image */}
                     <div style={{ flex: '0 0 45%', position: 'relative', background: '#0f172a' }}>
                         <img src={plant.imageUrl} alt={plant.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                         <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', background: 'linear-gradient(to bottom, rgba(0,0,0,0.2), transparent 50%, rgba(0,0,0,0.8))' }}></div>
@@ -275,9 +285,7 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                         </div>
                     </div>
 
-                    {/* RIGHT: Content */}
                     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', background: '#1e293b', borderLeft: '1px solid rgba(255,255,255,0.05)' }}>
-                        {/* Header Tabs */}
                         <div style={{ padding: '2rem 3rem', borderBottom: '1px solid rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                             <div style={{ display: 'flex', background: 'rgba(0,0,0,0.2)', padding: '4px', borderRadius: '12px' }}>
                                 <button onClick={() => setActiveTab('overview')} style={{ padding: '10px 24px', borderRadius: '8px', border: 'none', cursor: 'pointer', fontWeight: 600, background: activeTab === 'overview' ? '#334155' : 'transparent', color: activeTab === 'overview' ? 'white' : '#64748b', transition: 'all 0.2s' }}>Overview</button>
@@ -285,7 +293,6 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                             </div>
                         </div>
 
-                        {/* Scrollable Body */}
                         <div style={{ flex: 1, overflowY: 'auto', padding: '3rem' }}>
                             {activeTab === 'overview' ? (
                                 <div className="animate-fade-in">
@@ -303,8 +310,13 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                             )}
                         </div>
 
-                        {/* Footer */}
-                        <div style={{ padding: '2rem 3rem', borderTop: '1px solid rgba(255,255,255,0.05)', background: 'rgba(15,23,42,0.5)' }}>
+                        <div style={{ padding: '2rem 3rem', borderTop: '1px solid rgba(255,255,255,0.05)', background: 'rgba(15,23,42,0.5)', display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                            {cartQty > 0 && (
+                                <div style={{ fontSize: '0.9rem', color: '#10b981', display: 'flex', alignItems: 'center', gap: 6 }}>
+                                    <CheckCircle2 size={18} />
+                                    <strong>{cartQty}</strong> in Sanctuary
+                                </div>
+                            )}
                             <Button onClick={handleAddToCart} size="lg" style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
                                 <ShoppingBag size={20} /> Add to Sanctuary
                             </Button>
