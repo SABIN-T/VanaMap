@@ -153,7 +153,7 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                     {plantsNeeded}
                 </div>
                 <div style={{ fontSize: '0.9rem', color: '#10b981', fontWeight: 600 }}>Plants Needed</div>
-                <div style={{ fontSize: '0.8rem', color: '#64748b' }}>For {numPeople} People ({Math.abs(parseFloat(PLANT_O2_OUTPUT))}L/day)</div>
+                <div style={{ fontSize: '0.8rem', color: '#64748b' }}>For {numPeople} People (Needs {numPeople * 550}L O₂)</div>
             </div>
             <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at center, rgba(16, 185, 129, 0.1), transparent 70%)' }}></div>
         </div>
