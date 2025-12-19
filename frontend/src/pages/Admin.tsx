@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { fetchVendors, fetchPlants, addPlant, updatePlant, deletePlant, fetchUsers } from '../services/api';
 import type { Vendor, Plant } from '../types';
 import { Trash2, Edit, Image as ImageIcon, Users, Sprout, Activity, LogOut, Sparkles, Search, Database, Leaf, Droplets, Thermometer, Sun } from 'lucide-react';
@@ -252,16 +252,10 @@ export const Admin = () => {
 
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const isAdmin = localStorage.getItem('adminAuthenticated');
-        if (!isAdmin) {
-            navigate('/admin-login');
-            return;
-        }
-        loadAll();
-    }, []);
 
-    const loadAll = async () => {
+
+
+    const loadAll = useCallback(async () => {
         // setLoading(true);
         const toastId = toast.loading("Fetching latest dashboard data...");
         try {
@@ -269,22 +263,26 @@ export const Admin = () => {
                 fetchVendors(),
                 fetchPlants(),
                 fetchUsers()
-                // fetchNotifications()
             ]);
             setVendors(vData);
             setPlants(pData);
-            // setRequests(rData);
             setUsers(uData);
-            // setNotifications(nData);
 
             toast.success("Dashboard synced", { id: toastId });
         } catch (err: any) {
             console.error("Sync Error:", err);
             toast.error("Sync failed: " + (err.message || 'Unknown error'), { id: toastId });
-        } finally {
-            // setLoading(false);
         }
-    };
+    }, []);
+
+    useEffect(() => {
+        const isAdmin = localStorage.getItem('adminAuthenticated');
+        if (!isAdmin) {
+            navigate('/admin-login');
+            return;
+        }
+        loadAll();
+    }, [navigate, loadAll]);
 
     // --- SMART FETCH ---
     const handleSmartFetch = () => {
@@ -526,44 +524,46 @@ export const Admin = () => {
                     </div>
 
                     {activeTab === 'dashboard' && (
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-fade-in">
-                            <div className={`${styles['premium-card']} p-6 flex flex-col justify-between group`}>
-                                <div className="flex justify-between items-start mb-4">
-                                    <div className="p-3 rounded-lg bg-blue-50 text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-colors duration-300">
-                                        <Users size={24} />
+                        <div className={`${styles['stats-grid']} animate-fade-in`}>
+                            <div className={`${styles['premium-card']} p-6 group`}>
+                                <div className="flex justify-between items-start mb-6">
+                                    <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-500 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-sm">
+                                        <Users size={24} strokeWidth={2.5} />
                                     </div>
-                                    <div className="text-xs font-bold text-slate-400 bg-slate-50 px-2 py-1 rounded-full border border-slate-100">+12% this week</div>
+                                    <div className="text-[11px] font-bold text-slate-500 bg-slate-50 px-2.5 py-1 rounded-full border border-slate-100 uppercase tracking-wide">+12% vs week</div>
                                 </div>
-                                <div>
-                                    <div className="text-3xl font-black text-slate-800 mb-1">{vendors.length}</div>
-                                    <div className="text-sm font-medium text-slate-500">Active Partners</div>
+                                <div className="mt-auto">
+                                    <div className="text-4xl font-black text-slate-800 tracking-tight leading-none mb-2">{vendors.length}</div>
+                                    <div className="text-sm font-bold text-slate-400 uppercase tracking-wider">Active Partners</div>
                                 </div>
                             </div>
-                            <div className={`${styles['premium-card']} p-6 flex flex-col justify-between group`}>
-                                <div className="flex justify-between items-start mb-4">
-                                    <div className="p-3 rounded-lg bg-emerald-50 text-emerald-500 group-hover:bg-emerald-500 group-hover:text-white transition-colors duration-300">
-                                        <Database size={24} />
+
+                            <div className={`${styles['premium-card']} p-6 group`}>
+                                <div className="flex justify-between items-start mb-6">
+                                    <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-500 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-sm">
+                                        <Database size={24} strokeWidth={2.5} />
                                     </div>
-                                    <span className="flex h-2 w-2 relative">
+                                    <span className="flex h-3 w-3 relative">
                                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                        <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                                        <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500 border-2 border-white"></span>
                                     </span>
                                 </div>
-                                <div>
-                                    <div className="text-3xl font-black text-slate-800 mb-1">{plants.length}</div>
-                                    <div className="text-sm font-medium text-slate-500">Botanical Records</div>
+                                <div className="mt-auto">
+                                    <div className="text-4xl font-black text-slate-800 tracking-tight leading-none mb-2">{plants.length}</div>
+                                    <div className="text-sm font-bold text-slate-400 uppercase tracking-wider">Botanical Records</div>
                                 </div>
                             </div>
-                            <div className={`${styles['premium-card']} p-6 flex flex-col justify-between group`}>
-                                <div className="flex justify-between items-start mb-4">
-                                    <div className="p-3 rounded-lg bg-orange-50 text-orange-500 group-hover:bg-orange-500 group-hover:text-white transition-colors duration-300">
-                                        <Activity size={24} />
+
+                            <div className={`${styles['premium-card']} p-6 group`}>
+                                <div className="flex justify-between items-start mb-6">
+                                    <div className="w-12 h-12 rounded-2xl bg-orange-50 text-orange-500 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-sm">
+                                        <Activity size={24} strokeWidth={2.5} />
                                     </div>
-                                    <div className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full border border-emerald-100">Optimal</div>
+                                    <div className="text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100 uppercase tracking-wide">Optimal</div>
                                 </div>
-                                <div>
-                                    <div className="text-3xl font-black text-slate-800 mb-1">99.8%</div>
-                                    <div className="text-sm font-medium text-slate-500">System Uptime</div>
+                                <div className="mt-auto">
+                                    <div className="text-4xl font-black text-slate-800 tracking-tight leading-none mb-2">99.8%</div>
+                                    <div className="text-sm font-bold text-slate-400 uppercase tracking-wider">System Uptime</div>
                                 </div>
                             </div>
                         </div>
