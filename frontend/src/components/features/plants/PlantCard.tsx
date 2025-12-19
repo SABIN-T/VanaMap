@@ -83,7 +83,7 @@ export const PlantCard = ({ plant, onAdd, score, isTopMatch }: PlantCardProps) =
                         <h3 className={styles.title} style={{ fontSize: '1.1rem', fontWeight: 700 }}>{plant.name}</h3>
                         {/* Type Icon */}
                         <div style={{ opacity: 0.5 }}>
-                            {plant.type === 'Indoor' ? <ShieldCheck size={14} /> : <Sun size={14} />}
+                            {plant.type.toLowerCase() === 'indoor' ? <ShieldCheck size={14} /> : <Sun size={14} />}
                         </div>
                     </div>
                     <p className={styles.scientific} style={{ fontSize: '0.8rem', fontStyle: 'italic', color: '#94a3b8' }}>{plant.scientificName}</p>
