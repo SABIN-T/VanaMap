@@ -1,15 +1,16 @@
 import { useState, useEffect } from 'react';
-import { fetchVendors, updateVendor, deleteVendor, fetchPlants, addPlant, updatePlant, deletePlant, fetchResetRequests, fetchNotifications, approveResetRequest } from '../services/api';
+import { fetchVendors, fetchPlants, addPlant, updatePlant, deletePlant, fetchResetRequests, fetchNotifications } from '../services/api';
 import type { Vendor, Plant } from '../types';
-import { Check, Trash2, Edit, Image as ImageIcon, Users, Sprout, Activity, RefreshCw, LogOut, Download, AlertCircle, PlusCircle, Sparkles, Search, Database, Info } from 'lucide-react';
+import { Check, Trash2, Edit, Image as ImageIcon, Users, Sprout, Activity, LogOut, Sparkles, Search, Database } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/common/Button';
 import styles from './Admin.module.css';
 import toast from 'react-hot-toast';
+import { INDIAN_PLANT_DB } from '../data/indianPlants';
 
-// --- MOCK BOTANICAL DATABASE (Expanded with 20+ Entries) ---
+// --- MOCK BOTANICAL DATABASE (Expanded with 20+ Entries + Indian DB) ---
 // Simulating data from open access botanical repositories (e.g. Figshare, OpenFarm)
-const BOTANICAL_DB: Record<string, Partial<Plant>> = {
+const BASE_BOTANICAL_DB: Record<string, Partial<Plant>> = {
     'monstera deliciosa': {
         name: 'Swiss Cheese Plant',
         ecosystem: 'Tropical Rainforest',
@@ -207,6 +208,8 @@ const BOTANICAL_DB: Record<string, Partial<Plant>> = {
     }
 };
 
+const BOTANICAL_DB = { ...BASE_BOTANICAL_DB, ...INDIAN_PLANT_DB };
+
 export const Admin = () => {
     // --- STATE ---
     const [vendors, setVendors] = useState<Vendor[]>([]);
@@ -215,6 +218,9 @@ export const Admin = () => {
     const [notifications, setNotifications] = useState<any[]>([]);
     const [activeTab, setActiveTab] = useState<'users' | 'plants' | 'activity'>('users');
     const [loading, setLoading] = useState(true);
+
+    // Filter State
+    const [plantFilter, setPlantFilter] = useState<'all' | 'indoor' | 'outdoor'>('all');
 
     // Plant Form State
     const [isEditing, setIsEditing] = useState(false);
@@ -288,7 +294,8 @@ export const Admin = () => {
 
         setTimeout(() => {
             const preFetchFormData = { ...formData };
-            const match = BOTANICAL_DB[query] || Object.values(BOTANICAL_DB).find(p => p.name?.toLowerCase() === query); // Try fuzzy match on common name too
+            // Enhanced Lookup: Checks Merged DB
+            const match = BOTANICAL_DB[query] || Object.values(BOTANICAL_DB).find(p => p.name?.toLowerCase().includes(query));
 
             if (match) {
                 const newFormData = { ...preFetchFormData, ...match, scientificName: formData.scientificName };
@@ -585,8 +592,13 @@ export const Admin = () => {
                             </div>
 
                             {/* PLANTS LIST */}
+                            <div className="flex gap-2 mb-4">
+                                <button onClick={() => setPlantFilter('all')} className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${plantFilter === 'all' ? 'bg-emerald-500 text-white' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}`}>All Varieties</button>
+                                <button onClick={() => setPlantFilter('indoor')} className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${plantFilter === 'indoor' ? 'bg-emerald-500 text-white' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}`}>Indoor</button>
+                                <button onClick={() => setPlantFilter('outdoor')} className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${plantFilter === 'outdoor' ? 'bg-emerald-500 text-white' : 'bg-slate-800 text-slate-400 hover:bg-slate-700'}`}>Outdoor</button>
+                            </div>
                             <div className="space-y-4">
-                                {plants.map(p => (
+                                {plants.filter(p => plantFilter === 'all' || p.type === plantFilter).map(p => (
                                     <div key={p.id} className={styles.listItem}>
                                         <img src={p.imageUrl} alt={p.name} className="w-12 h-12 rounded-lg object-cover bg-slate-800" />
                                         <div className="flex-1">
