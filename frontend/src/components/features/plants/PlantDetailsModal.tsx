@@ -1,4 +1,5 @@
-import { useState, useMemo, useEffect, MouseEvent, TouchEvent } from 'react';
+import { useState, useMemo, useEffect } from 'react';
+import type { MouseEvent, TouchEvent } from 'react';
 import { X, Sun, Wind, Droplet, ShoppingBag, Leaf, Lightbulb, Fan } from 'lucide-react';
 import { Button } from '../../common/Button';
 import type { Plant } from '../../../types';
