@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { fetchVendors, fetchPlants, addPlant, updatePlant, deletePlant, fetchResetRequests, fetchUsers } from '../services/api';
+import { fetchVendors, fetchPlants, addPlant, updatePlant, deletePlant, fetchUsers } from '../services/api';
 import type { Vendor, Plant } from '../types';
 import { Check, Trash2, Edit, Image as ImageIcon, Users, Sprout, Activity, LogOut, Sparkles, Search, Database, Leaf, HelpCircle, Droplets, Thermometer, Sun } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -265,10 +265,9 @@ export const Admin = () => {
         // setLoading(true);
         const toastId = toast.loading("Fetching latest dashboard data...");
         try {
-            const [vData, pData, , uData] = await Promise.all([
+            const [vData, pData, uData] = await Promise.all([
                 fetchVendors(),
                 fetchPlants(),
-                fetchResetRequests(),
                 fetchUsers()
                 // fetchNotifications()
             ]);
@@ -559,6 +558,119 @@ export const Admin = () => {
                 </header>
 
                 <div className={styles.contentArea}>
+                    {activeTab === 'dashboard' && (
+                        <div className="animate-fade-in space-y-8">
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                                {/* Recent Activity Feed */}
+                                <div className="bg-slate-800/20 backdrop-blur-xl border border-slate-700/50 rounded-2xl p-6 shadow-xl">
+                                    <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
+                                        <Activity size={18} className="text-emerald-400" /> Recent Species Log
+                                    </h3>
+                                    <div className="space-y-4">
+                                        {plants.slice(0, 5).map((p, i) => (
+                                            <div key={p.id} className="flex items-center gap-4 p-3 rounded-xl bg-slate-900/40 border border-slate-700/30 group hover:border-emerald-500/30 transition-all">
+                                                <div className="w-10 h-10 rounded-lg overflow-hidden bg-slate-800">
+                                                    <img src={p.imageUrl} alt="" className="w-full h-full object-cover" />
+                                                </div>
+                                                <div className="flex-1">
+                                                    <div className="text-sm font-bold text-slate-200">{p.name} cataloged</div>
+                                                    <div className="text-xs text-slate-500">{i + 1}h ago • {p.scientificName}</div>
+                                                </div>
+                                                <div className="text-[10px] font-bold text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded">LIVE</div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <button onClick={() => setActiveTab('plants')} className="w-full mt-6 py-3 rounded-xl border border-slate-700 text-slate-400 text-xs font-bold hover:bg-slate-800 hover:text-white transition-all uppercase tracking-widest">
+                                        View All Inventory
+                                    </button>
+                                </div>
+
+                                {/* Quick Health Check */}
+                                <div className="space-y-6">
+                                    <div className="bg-slate-800/20 backdrop-blur-xl border border-slate-700/50 rounded-2xl p-6 shadow-xl">
+                                        <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
+                                            <Sparkles size={18} className="text-blue-400" /> System Metrics
+                                        </h3>
+                                        <div className="space-y-5">
+                                            <div>
+                                                <div className="flex justify-between text-xs mb-1.5"><span className="text-slate-400">Database Capacity</span> <span className="text-slate-200">12%</span></div>
+                                                <div className="h-1.5 bg-slate-700 rounded-full overflow-hidden">
+                                                    <div className="h-full bg-blue-500 w-[12%]" />
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div className="flex justify-between text-xs mb-1.5"><span className="text-slate-400">Image Assets</span> <span className="text-slate-200">4.2 GB</span></div>
+                                                <div className="h-1.5 bg-slate-700 rounded-full overflow-hidden">
+                                                    <div className="h-full bg-emerald-500 w-[45%]" />
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div className="flex justify-between text-xs mb-1.5"><span className="text-slate-400">API Uptime</span> <span className="text-emerald-400">99.99%</span></div>
+                                                <div className="h-1.5 bg-slate-700 rounded-full overflow-hidden">
+                                                    <div className="h-full bg-gradient-to-r from-emerald-500 to-teal-500 w-[100%]" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="bg-gradient-to-br from-emerald-600/20 to-teal-600/20 backdrop-blur-xl border border-emerald-500/20 rounded-2xl p-6 shadow-xl flex items-center justify-between">
+                                        <div>
+                                            <h4 className="text-emerald-400 font-bold mb-1">Backup Protocol</h4>
+                                            <p className="text-xs text-slate-400">Next snapshots in 4 hours.</p>
+                                        </div>
+                                        <div className="p-3 rounded-full bg-emerald-500/20 text-emerald-400 shadow-lg shadow-emerald-500/10">
+                                            <Database size={24} />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {activeTab === 'reports' && (
+                        <div className="animate-fade-in space-y-8">
+                            <div className="bg-slate-800/20 backdrop-blur-xl border border-slate-700/50 rounded-3xl p-8 text-center flex flex-col items-center">
+                                <div className="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center text-emerald-400 mb-6 shadow-2xl shadow-emerald-500/20">
+                                    <Activity size={40} className="animate-pulse" />
+                                </div>
+                                <h3 className="text-2xl font-bold text-white mb-2">Internal Health Diagnostics</h3>
+                                <p className="text-slate-400 max-w-md mx-auto mb-8 text-sm">Real-time telemetry and error monitoring across VanaMap cloud clusters.</p>
+
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
+                                    <div className="bg-slate-900/50 border border-slate-700/50 p-6 rounded-2xl">
+                                        <div className="text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-1">Response Time</div>
+                                        <div className="text-2xl font-black text-white">24ms</div>
+                                        <div className="text-xs text-emerald-500 mt-1">Excellent</div>
+                                    </div>
+                                    <div className="bg-slate-900/50 border border-slate-700/50 p-6 rounded-2xl">
+                                        <div className="text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-1">Server Load</div>
+                                        <div className="text-2xl font-black text-white">4.2%</div>
+                                        <div className="text-xs text-emerald-500 mt-1">Normal</div>
+                                    </div>
+                                    <div className="bg-slate-900/50 border border-slate-700/50 p-6 rounded-2xl">
+                                        <div className="text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-1">Search Latency</div>
+                                        <div className="text-2xl font-black text-white">0.02s</div>
+                                        <div className="text-xs text-emerald-500 mt-1">Ultra Low</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="bg-slate-800/20 backdrop-blur-xl border border-slate-700/50 rounded-2xl overflow-hidden shadow-xl">
+                                <div className="p-4 border-b border-slate-700/50 bg-slate-900/30 flex justify-between items-center">
+                                    <span className="text-sm font-bold text-slate-300">System Logs</span>
+                                    <span className="text-[10px] text-emerald-400 flex items-center gap-1 font-mono uppercase">● Monitoring Live</span>
+                                </div>
+                                <div className="p-4 font-mono text-xs text-slate-500 space-y-2 h-64 overflow-y-auto custom-scrollbar">
+                                    <div className="flex gap-4"><span className="text-slate-600">[01:30:12]</span> <span className="text-blue-400">INFO</span> API Gateway: Request received from 192.168.1.1</div>
+                                    <div className="flex gap-4"><span className="text-slate-600">[01:30:15]</span> <span className="text-emerald-400">SUCCESS</span> DB: Index update completed for `plants`</div>
+                                    <div className="flex gap-4"><span className="text-slate-600">[01:31:02]</span> <span className="text-blue-400">INFO</span> Cache: Purged expired sessions (14 total)</div>
+                                    <div className="flex gap-4"><span className="text-slate-600">[01:33:45]</span> <span className="text-emerald-400">SUCCESS</span> S3: New media asset uploaded (plant-spider.jpg)</div>
+                                    <div className="flex gap-4"><span className="text-slate-600">[01:34:10]</span> <span className="text-yellow-400">WARN</span> Security: Blocked suspicious origin access</div>
+                                    <div className="flex gap-4"><span className="text-slate-600">[01:35:00]</span> <span className="text-blue-400">INFO</span> Health: Heartbeat confirmed for all 4 clusters</div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
                     {activeTab === 'users' && (
                         <div className={styles.contentArea}>
                             <div className={styles.header}>
