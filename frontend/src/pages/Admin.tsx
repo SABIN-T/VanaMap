@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { fetchVendors, fetchPlants, addPlant, updatePlant, deletePlant, fetchUsers } from '../services/api';
 import type { Vendor, Plant } from '../types';
-import { Check, Trash2, Edit, Image as ImageIcon, Users, Sprout, Activity, LogOut, Sparkles, Search, Database, Leaf, HelpCircle, Droplets, Thermometer, Sun } from 'lucide-react';
+import { Trash2, Edit, Image as ImageIcon, Users, Sprout, Activity, LogOut, Sparkles, Search, Database, Leaf, Droplets, Thermometer, Sun } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/common/Button';
 import styles from './Admin.module.css';
@@ -228,7 +228,7 @@ export const Admin = () => {
     // Plant Form State
     const [isEditing, setIsEditing] = useState(false);
     const [currentPlantId, setCurrentPlantId] = useState<string | null>(null);
-    const [lastAutoFilled, setLastAutoFilled] = useState<string[]>([]); // Track which fields were auto-filled
+    // Track which fields were auto-filled
 
     const initialFormState: Partial<Plant> = {
         name: '',
@@ -322,7 +322,6 @@ export const Admin = () => {
                 if (!newFormData.oxygenLevel) missingFields.push("O2 Level");
 
                 setFormData(newFormData);
-                setLastAutoFilled(updatedFields);
 
                 toast.success(`Verified: ${match.name} found!`, { id: toastId });
 
@@ -352,15 +351,12 @@ export const Admin = () => {
 
                 if (isSucculent) {
                     setFormData(prev => ({ ...prev, ecosystem: 'Semi-Arid', minHumidity: 20, sunlight: 'direct', isNocturnal: true }));
-                    setLastAutoFilled(['ecosystem', 'minHumidity', 'sunlight', 'isNocturnal']);
                     toast.success("Inferred Arid traits (Succulent Family)", { id: toastId, icon: '🌵' });
                 } else if (isFern) {
                     setFormData(prev => ({ ...prev, ecosystem: 'Rainforest Floor', minHumidity: 70, sunlight: 'low' }));
-                    setLastAutoFilled(['ecosystem', 'minHumidity', 'sunlight']);
                     toast.success("Inferred Rainforest traits (Fern Family)", { id: toastId, icon: '🌿' });
                 } else if (isPalm) {
                     setFormData(prev => ({ ...prev, ecosystem: 'Tropical', minHumidity: 50, sunlight: 'medium', oxygenLevel: 'very-high' }));
-                    setLastAutoFilled(['ecosystem', 'minHumidity', 'sunlight', 'oxygenLevel']);
                     toast.success("Inferred Tropical traits (Palm Family)", { id: toastId, icon: '🌴' });
                 } else {
                     toast.error("No exact botanical match found. Please fill manually.", { id: toastId });
@@ -405,7 +401,7 @@ export const Admin = () => {
             setFormData(initialFormState);
             setIsEditing(false);
             setCurrentPlantId(null);
-            setLastAutoFilled([]);
+
             loadAll();
         } catch (err) {
             toast.error("Catalog failure", { id: tid });
@@ -416,7 +412,7 @@ export const Admin = () => {
         setIsEditing(true);
         setCurrentPlantId(plant.id);
         setFormData({ ...plant });
-        setLastAutoFilled([]);
+
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
@@ -480,10 +476,6 @@ export const Admin = () => {
         }
     };
 
-    // --- RENDER HELPERS ---
-    const isFieldAutoFilled = (fieldName: string) => lastAutoFilled.includes(fieldName);
-    const getFieldStyle = (fieldName: string) => isFieldAutoFilled(fieldName) ?
-        { border: '1px solid #10b981', boxShadow: '0 0 10px rgba(16, 185, 129, 0.1)' } : {};
 
     return (
         <div className={styles.container}>
@@ -746,267 +738,244 @@ export const Admin = () => {
 
                     {activeTab === 'plants' && (
                         <div className="animate-fade-in">
-                            {/* PLANT FORM */}
                             {/* PLANT FORM PRO */}
-                            <div className="bg-slate-800/20 backdrop-blur-xl border border-slate-700/50 rounded-2xl p-6 mb-10 shadow-2xl relative overflow-hidden">
-                                <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+                            <div className={`${styles['premium-card']} p-8 mb-12 relative overflow-hidden group`}>
+                                <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/10 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 group-hover:bg-emerald-500/20 transition-all duration-1000" />
 
-                                <h3 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400 mb-6 flex items-center justify-between relative z-10">
-                                    <span>{isEditing ? `Editing: ${formData.name} ` : 'Catalog New Species'}</span>
+                                <h3 className={`text-2xl font-black mb-8 flex items-center justify-between relative z-10 ${styles['glow-text']}`}>
+                                    <span className="flex items-center gap-3">
+                                        <Database className="text-emerald-400" />
+                                        {isEditing ? `Refining: ${formData.name}` : 'Catalog New Species'}
+                                    </span>
                                     {isEditing && (
                                         <button
-                                            onClick={() => { setIsEditing(false); setFormData(initialFormState); setLastAutoFilled([]); }}
-                                            className="text-xs flex items-center gap-1 text-red-400 bg-red-500/10 hover:bg-red-500/20 px-3 py-1.5 rounded-full transition-colors border border-red-500/20"
+                                            onClick={() => { setIsEditing(false); setFormData(initialFormState); }}
+                                            className="text-[10px] uppercase tracking-widest flex items-center gap-1.5 text-red-400 bg-red-500/10 hover:bg-red-500/20 px-4 py-2 rounded-full transition-all border border-red-500/20 hover:scale-105"
                                         >
-                                            <LogOut size={12} className="rotate-180" /> Cancel Edit
+                                            <LogOut size={12} className="rotate-180" /> Abort Edit
                                         </button>
                                     )}
                                 </h3>
 
-                                <form onSubmit={handlePlantSubmit} className="space-y-8 relative z-10">
-
-                                    {/* SECTION 1: IDENTITY */}
-                                    <div className="space-y-4">
-                                        <h4 className="text-sm font-bold text-emerald-400 uppercase tracking-widest border-b border-emerald-500/20 pb-2 mb-4">Core Identity</h4>
-
-                                        {/* Smart Fetch Bar */}
-                                        <div className="bg-slate-900/50 p-4 rounded-xl border border-slate-700/50 flex flex-col md:flex-row gap-4 items-end md:items-center transition-all focus-within:border-emerald-500/50 focus-within:ring-1 focus-within:ring-emerald-500/20">
-                                            <div className="flex-1 w-full">
-                                                <div className="flex justify-between items-center mb-1.5">
-                                                    <label className="text-xs font-semibold text-slate-400 flex items-center gap-2"> Scientific Taxonomy <HelpCircle size={10} /></label>
-                                                    {lastAutoFilled.length > 0 && <span className="text-[10px] text-emerald-400 flex items-center gap-1 bg-emerald-500/10 px-2 py-0.5 rounded-full"><Sparkles size={8} /> Auto-Verified</span>}
+                                <form onSubmit={handlePlantSubmit} className="space-y-10 relative z-10">
+                                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+                                        {/* LEFT COLUMN: IDENTITY & BIOLOGY */}
+                                        <div className="lg:col-span-8 space-y-8">
+                                            <div className="space-y-4">
+                                                <h4 className="text-[10px] font-black text-emerald-500/50 uppercase tracking-[0.2em] mb-4">I. Botanical Identity</h4>
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                                    <div className={`${styles['premium-box']} focus-within:border-emerald-500/50 transition-all`}>
+                                                        <label className="text-[10px] uppercase tracking-widest text-slate-500 mb-2 block">Common Nomenclature</label>
+                                                        <input className={`${styles.input} bg-transparent border-none p-0 focus:ring-0 text-lg font-bold`} value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} placeholder="e.g. Fiddle Leaf Fig" required />
+                                                    </div>
+                                                    <div className={`${styles['premium-box']} focus-within:border-emerald-500/50 transition-all flex items-center gap-4`}>
+                                                        <div className="flex-1">
+                                                            <label className="text-[10px] uppercase tracking-widest text-slate-500 mb-2 block">Scientific Taxonomy</label>
+                                                            <input className={`${styles.input} bg-transparent border-none p-0 focus:ring-0 text-sm italic font-serif`} value={formData.scientificName} onChange={e => setFormData({ ...formData, scientificName: e.target.value })} placeholder="e.g. Ficus lyrata" required />
+                                                        </div>
+                                                        <Button type="button" onClick={handleSmartFetch} size="sm" className="bg-emerald-500/10 hover:bg-emerald-500 text-emerald-400 hover:text-white border border-emerald-500/20 p-2">
+                                                            <Search size={14} />
+                                                        </Button>
+                                                    </div>
                                                 </div>
-                                                <input
-                                                    className="w-full bg-slate-800 border-none rounded-lg p-3 text-slate-200 placeholder:text-slate-600 focus:ring-2 focus:ring-emerald-500/50"
-                                                    placeholder="e.g. Monstera deliciosa"
-                                                    value={formData.scientificName}
-                                                    onChange={e => setFormData({ ...formData, scientificName: e.target.value })}
-                                                    required
-                                                    style={getFieldStyle('scientificName')}
+                                            </div>
+
+                                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                                <div className={styles['premium-box']}>
+                                                    <label className="text-[10px] uppercase tracking-widest text-slate-500 mb-2 block">classification</label>
+                                                    <select className={`${styles.select} bg-transparent border-none p-0 focus:ring-0 font-bold`} value={formData.type} onChange={e => setFormData({ ...formData, type: e.target.value as any })}>
+                                                        <option value="indoor">Indoor (Houseplant)</option>
+                                                        <option value="outdoor">Outdoor (Wild)</option>
+                                                    </select>
+                                                </div>
+                                                <div className={styles['premium-box']}>
+                                                    <label className="text-[10px] uppercase tracking-widest text-slate-500 mb-2 block">Market Price (INR)</label>
+                                                    <div className="flex items-center gap-1">
+                                                        <span className="text-slate-500 font-bold">₹</span>
+                                                        <input type="number" className="bg-transparent border-none p-0 focus:ring-0 font-bold w-full" value={formData.price} onChange={e => setFormData({ ...formData, price: Number(e.target.value) })} required />
+                                                    </div>
+                                                </div>
+                                                <div className={styles['premium-box']}>
+                                                    <label className="text-[10px] uppercase tracking-widest text-slate-500 mb-2 block">Origin Ecosystem</label>
+                                                    <input className="bg-transparent border-none p-0 focus:ring-0 font-bold w-full" value={formData.ecosystem || ''} onChange={e => setFormData({ ...formData, ecosystem: e.target.value })} placeholder="e.g. Mediterranean" />
+                                                </div>
+                                            </div>
+
+                                            <div className="space-y-4">
+                                                <h4 className="text-[10px] font-black text-blue-500/50 uppercase tracking-[0.2em] mb-4">II. Environmental Parameters</h4>
+                                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                                    <div className={styles['premium-box']}>
+                                                        <div className="flex justify-between items-center mb-4 text-[10px] uppercase tracking-widest text-slate-400">
+                                                            <span>Vital Temperature Range</span>
+                                                            <span className="text-blue-400 font-bold">{formData.idealTempMin}-{formData.idealTempMax}°C</span>
+                                                        </div>
+                                                        <div className="space-y-2">
+                                                            <input type="range" min="0" max="40" value={formData.idealTempMin} onChange={e => setFormData({ ...formData, idealTempMin: Number(e.target.value) })} className="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-500" />
+                                                            <input type="range" min="10" max="50" value={formData.idealTempMax} onChange={e => setFormData({ ...formData, idealTempMax: Number(e.target.value) })} className="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-400" />
+                                                        </div>
+                                                    </div>
+                                                    <div className={styles['premium-box']}>
+                                                        <div className="flex justify-between items-center mb-4 text-[10px] uppercase tracking-widest text-slate-400">
+                                                            <span>Moisture Matrix</span>
+                                                            <span className="text-teal-400 font-bold">{formData.minHumidity}%+</span>
+                                                        </div>
+                                                        <input type="range" min="10" max="100" value={formData.minHumidity} onChange={e => setFormData({ ...formData, minHumidity: Number(e.target.value) })} className="w-full h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-teal-500" />
+                                                        <div className="mt-2 text-[8px] uppercase tracking-widest text-slate-500 flex justify-between">
+                                                            <span>Arid</span>
+                                                            <span>Tropical</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* RIGHT COLUMN: MEDIA & ACTION */}
+                                        <div className="lg:col-span-4 space-y-8">
+                                            <div className="space-y-4">
+                                                <h4 className="text-[10px] font-black text-purple-500/50 uppercase tracking-[0.2em] mb-4">III. Visual Asset</h4>
+                                                <div className="relative group/img overflow-hidden rounded-2xl border border-slate-700/50 aspect-square bg-slate-900/40">
+                                                    {formData.imageUrl ? (
+                                                        <img src={formData.imageUrl} alt="Ref" className="w-full h-full object-cover transition-transform duration-700 group-hover/img:scale-110" />
+                                                    ) : (
+                                                        <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-600">
+                                                            <ImageIcon size={48} className="mb-4 opacity-20" />
+                                                            <span className="text-[10px] uppercase tracking-widest font-bold">No Render Loaded</span>
+                                                        </div>
+                                                    )}
+                                                    <label className="absolute inset-0 bg-black/60 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center cursor-pointer backdrop-blur-sm">
+                                                        <div className="text-white text-[10px] font-black uppercase tracking-widest bg-emerald-500 px-6 py-3 rounded-full shadow-xl">Source Image</div>
+                                                        <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
+                                                    </label>
+                                                </div>
+                                            </div>
+
+                                            <div className="space-y-4">
+                                                <h4 className="text-[10px] font-black text-amber-500/50 uppercase tracking-[0.2em] mb-4">IV. Metadata</h4>
+                                                <textarea
+                                                    className={`${styles.input} h-32 bg-slate-900/40 border-slate-700/50 text-xs`}
+                                                    value={formData.description}
+                                                    onChange={e => setFormData({ ...formData, description: e.target.value })}
+                                                    placeholder="Synthesize species characteristics and lore..."
                                                 />
                                             </div>
-                                            <Button type="button" onClick={handleSmartFetch} className="w-full md:w-auto md:mb-0.5 bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-900/20">
-                                                <Search size={16} className="mr-2" /> Verify & Fetch
-                                            </Button>
-                                        </div>
 
-                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                            <div>
-                                                <label className="text-xs font-semibold text-slate-400 mb-1.5 block">Common Name</label>
-                                                <input className={styles.input} value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} required />
-                                            </div>
-                                            <div>
-                                                <label className="text-xs font-semibold text-slate-400 mb-1.5 block">Classification</label>
-                                                <select className={styles.select} value={formData.type} onChange={e => setFormData({ ...formData, type: e.target.value as any })}>
-                                                    <option value="indoor">Indoor (Houseplant)</option>
-                                                    <option value="outdoor">Outdoor (Garden/Wild)</option>
-                                                </select>
-                                            </div>
-                                            <div>
-                                                <label className="text-xs font-semibold text-slate-400 mb-1.5 block">Market Price (₹)</label>
-                                                <div className="relative">
-                                                    <span className="absolute left-3 top-2.5 text-slate-500">₹</span>
-                                                    <input type="number" className={`${styles.input} pl-8`} value={formData.price} onChange={e => setFormData({ ...formData, price: Number(e.target.value) })} required />
-                                                </div>
-                                                <div className="text-[10px] text-slate-500 mt-1 h-4">
-                                                    {(formData.price || 0) > 0 && ((formData.price || 0) < 150 ? <span className="text-emerald-400">Budget Friendly</span> : (formData.price || 0) > 800 ? <span className="text-purple-400">Premium Species</span> : 'Standard Market Range')}
-                                                </div>
+                                            <div className="pt-6">
+                                                <Button type="submit" className="w-full h-16 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-black uppercase tracking-[0.2em] text-xs shadow-2xl shadow-emerald-500/20 group-hover:scale-[1.02] transition-transform">
+                                                    {isEditing ? 'Push Data Updates' : 'Commit To Registry'}
+                                                </Button>
                                             </div>
                                         </div>
-                                    </div>
-
-                                    {/* SECTION 2: ENVIRONMENTAL & BIOLOGY */}
-                                    <div className="space-y-4">
-                                        <h4 className="text-sm font-bold text-blue-400 uppercase tracking-widest border-b border-blue-500/20 pb-2 mb-4">Environmental Profile</h4>
-
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-                                            <div>
-                                                <label className="text-xs font-semibold text-slate-400 mb-1.5 block">Ecosystem Origin</label>
-                                                <input className={styles.input} placeholder="e.g. Tropical Rainforest" value={formData.ecosystem || ''} onChange={e => setFormData({ ...formData, ecosystem: e.target.value })} style={getFieldStyle('ecosystem')} />
-                                                <textarea className={`${styles.input} mt-2 text-xs`} rows={2} placeholder="Describe the natural habitat..." value={formData.ecosystemDescription || ''} onChange={e => setFormData({ ...formData, ecosystemDescription: e.target.value })} style={getFieldStyle('ecosystemDescription')} />
-                                            </div>
-
-                                            <div className="bg-slate-900/30 rounded-xl p-4 border border-slate-700/30">
-                                                <div className="flex justify-between items-start mb-4">
-                                                    <label className="text-xs font-semibold text-slate-400 flex items-center gap-1"><Sparkles size={12} /> Bio-Efficiency</label>
-                                                    {isFieldAutoFilled('oxygenLevel') && <Check size={12} className="text-emerald-500" />}
-                                                </div>
-                                                <select className={`${styles.select} mb-4`} value={formData.oxygenLevel} onChange={e => setFormData({ ...formData, oxygenLevel: e.target.value as any })} style={getFieldStyle('oxygenLevel')}>
-                                                    <option value="low">Standard O₂ Production</option>
-                                                    <option value="moderate">Moderate Air Purifier</option>
-                                                    <option value="high">High Efficiency Purifier</option>
-                                                    <option value="very-high">Super Oxygenator (NASA List)</option>
-                                                </select>
-                                                <div className="flex items-center gap-2">
-                                                    <input type="checkbox" checked={formData.isNocturnal || false} onChange={e => setFormData({ ...formData, isNocturnal: e.target.checked })} className="w-4 h-4 rounded border-slate-600 bg-slate-700 accent-purple-500" />
-                                                    <span className="text-xs text-slate-300">Nocturnal O₂ (CAM)</span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        {/* RANGE SLIDERS GRID */}
-                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 bg-slate-900/30 p-4 rounded-xl border border-slate-700/30">
-                                            {/* TEMP */}
-                                            <div>
-                                                <div className="flex justify-between mb-2"><span className="text-xs text-slate-400">Temperature</span> <span className="text-xs font-bold text-slate-200">{formData.idealTempMin}-{formData.idealTempMax}°C</span></div>
-                                                <input type="range" min="0" max="40" value={formData.idealTempMin} onChange={e => setFormData({ ...formData, idealTempMin: Number(e.target.value) })} className="w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer mb-2" />
-                                                <input type="range" min="10" max="50" value={formData.idealTempMax} onChange={e => setFormData({ ...formData, idealTempMax: Number(e.target.value) })} className="w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer" />
-                                            </div>
-                                            {/* HUMIDITY */}
-                                            <div>
-                                                <div className="flex justify-between mb-2"><span className="text-xs text-slate-400">Humidity</span> <span className="text-xs font-bold text-slate-200">{formData.minHumidity}%+</span></div>
-                                                <input type="range" min="10" max="100" value={formData.minHumidity} onChange={e => setFormData({ ...formData, minHumidity: Number(e.target.value) })} className="w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer" />
-                                                <div className="text-[10px] text-right text-slate-500 mt-1">{(formData.minHumidity || 0) > 60 ? 'Misting Required' : 'Drought Tolerant'}</div>
-                                            </div>
-                                            {/* LIGHT */}
-                                            <div>
-                                                <div className="flex justify-between mb-2"><span className="text-xs text-slate-400">Sunlight</span> <span className="text-xs font-bold text-slate-200 capitalize">{formData.sunlight}</span></div>
-                                                <select className={styles.select} value={formData.sunlight} onChange={e => setFormData({ ...formData, sunlight: e.target.value as any })} style={getFieldStyle('sunlight')}>
-                                                    <option value="low">Low (Indirect)</option>
-                                                    <option value="medium">Medium (Bright Indirect)</option>
-                                                    <option value="high">High (Direct)</option>
-                                                    <option value="direct">Full Direct Sun</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    {/* SECTION 3: MEDIA & DETAILS */}
-                                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                        <div className="md:col-span-2">
-                                            <label className="text-xs font-semibold text-slate-400 mb-1.5 block">Description</label>
-                                            <textarea className={styles.input} rows={4} value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} style={getFieldStyle('description')} placeholder="Detailed description of the species..." />
-                                        </div>
-                                        <div>
-                                            <label className="text-xs font-semibold text-slate-400 mb-1.5 block">Reference Image</label>
-                                            <label className="cursor-pointer border-2 border-dashed border-slate-700 hover:border-emerald-500/50 rounded-xl h-32 flex flex-col items-center justify-center transition-colors bg-slate-900/20 group">
-                                                {formData.imageUrl ? (
-                                                    <img src={formData.imageUrl} alt="Preview" className="h-full w-full object-cover rounded-xl opacity-80 group-hover:opacity-100 transition-opacity" />
-                                                ) : (
-                                                    <>
-                                                        <ImageIcon size={24} className="text-slate-500 group-hover:text-emerald-400 mb-2 transition-colors" />
-                                                        <span className="text-[10px] text-slate-500">Upload / Drag & Drop</span>
-                                                    </>
-                                                )}
-                                                <input type="file" className="hidden" accept="image/*" onChange={handleFileChange} />
-                                            </label>
-                                        </div>
-                                    </div>
-
-                                    <div className="flex justify-end gap-4 pt-4 border-t border-emerald-500/10">
-                                        <Button type="button" variant="outline" onClick={() => { setFormData(initialFormState); setIsEditing(false); }} className="border-slate-600 text-slate-400 hover:text-white">Clear Form</Button>
-                                        <Button type="submit" className="bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-500/20 px-8">
-                                            {isEditing ? 'Update Botanical Record' : 'AddTo Global Database'}
-                                        </Button>
                                     </div>
                                 </form>
                             </div>
 
-                            {/* PLANTS LIST HEADER & SEARCH */}
-                            <div className="flex flex-col md:flex-row justify-between items-end md:items-center mb-8 gap-4 sticky top-0 z-10 bg-slate-900/80 backdrop-blur-xl p-4 -mx-4 border-b border-slate-700/50">
-                                <div className="flex gap-2 p-1 bg-slate-800 rounded-full border border-slate-700">
-                                    {['all', 'indoor', 'outdoor'].map(filterVal => (
+                            {/* PLANTS CATALOGUE FEED */}
+                            <div className="flex flex-col md:flex-row justify-between items-center mb-10 gap-6">
+                                <div className="flex items-center gap-1 p-1.5 bg-slate-800/40 backdrop-blur rounded-2xl border border-slate-700/50">
+                                    {['all', 'indoor', 'outdoor'].map(f => (
                                         <button
-                                            key={filterVal}
-                                            onClick={() => setPlantFilter(filterVal as any)}
-                                            className={`px-6 py-2 rounded-full text-xs font-bold transition-all duration-300 ${plantFilter === filterVal
-                                                ? 'bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/25'
-                                                : 'text-slate-400 hover:text-white hover:bg-slate-700'}`}
+                                            key={f}
+                                            onClick={() => setPlantFilter(f as any)}
+                                            className={`px-8 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all ${plantFilter === f
+                                                ? 'bg-emerald-500 text-white shadow-xl shadow-emerald-500/20'
+                                                : 'text-slate-500 hover:text-white hover:bg-slate-700/50'}`}
                                         >
-                                            {filterVal === 'all' ? 'All Collection' : filterVal.charAt(0).toUpperCase() + filterVal.slice(1)}
+                                            {f}
                                         </button>
                                     ))}
                                 </div>
-                                <div className="relative w-full md:w-80 group">
-                                    <Search className="absolute left-4 top-3 text-slate-500 group-focus-within:text-emerald-400 transition-colors" size={18} />
+                                <div className="relative w-full md:w-96 group">
+                                    <div className="absolute inset-y-0 left-5 flex items-center pointer-events-none text-slate-500 group-focus-within:text-emerald-400 transition-colors">
+                                        <Search size={18} />
+                                    </div>
                                     <input
                                         type="text"
-                                        placeholder="Search taxonomy..."
-                                        className="w-full bg-slate-800/50 border border-slate-700 rounded-full py-2.5 pl-12 pr-4 text-sm text-slate-200 focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 outline-none transition-all placeholder:text-slate-600"
+                                        placeholder="FILTER BY TAXONOMY..."
+                                        className="w-full bg-slate-800/30 border border-slate-700/50 rounded-2xl py-4 pl-14 pr-6 text-[10px] font-bold tracking-[0.2em] text-slate-200 outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500/50 transition-all placeholder:text-slate-600"
                                         value={searchQuery}
                                         onChange={(e) => setSearchQuery(e.target.value)}
                                     />
                                 </div>
                             </div>
 
-                            {/* PLANTS GRID PRO */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 pb-20">
-                                {plants.filter(p => (plantFilter === 'all' || p.type === plantFilter) && (p.name.toLowerCase().includes(searchQuery.toLowerCase()) || p.scientificName?.toLowerCase().includes(searchQuery.toLowerCase()))).map(p => (
-                                    <div key={p.id} className="group relative bg-slate-800/20 hover:bg-slate-800/80 rounded-2xl overflow-hidden border border-slate-700/50 hover:border-emerald-500/50 transition-all duration-500 hover:shadow-2xl hover:shadow-emerald-900/20 hover:-translate-y-1">
-                                        {/* Image Area */}
-                                        <div className="h-48 overflow-hidden relative bg-slate-900">
-                                            <img src={p.imageUrl} alt={p.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 opacity-90 group-hover:opacity-100" />
-                                            <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
+                            <div className={`${styles['animate-staggered']} grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 pb-32`}>
+                                {plants.filter(p => (plantFilter === 'all' || p.type === plantFilter) && (p.name.toLowerCase().includes(searchQuery.toLowerCase()) || p.scientificName?.toLowerCase().includes(searchQuery.toLowerCase()))).map((p, index) => (
+                                    <div
+                                        key={p.id}
+                                        className={styles['premium-card']}
+                                        style={{ animationDelay: `${index * 0.1}s` }}
+                                    >
+                                        <div className={styles['image-container']}>
+                                            <img src={p.imageUrl} alt="" className={styles['plant-image']} />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/20 to-transparent opacity-80" />
 
-                                            {/* Floating Badge */}
-                                            <div className="absolute top-3 left-3">
-                                                <span className={`px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider backdrop-blur-md border border-white/10 shadow-lg ${p.type === 'indoor' ? 'bg-indigo-500/80 text-white' : 'bg-orange-500/80 text-white'}`}>
+                                            {/* Top Badges */}
+                                            <div className="absolute top-4 left-4 flex gap-2">
+                                                <span className={`px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-widest backdrop-blur-xl border border-white/10 ${p.type === 'indoor' ? 'bg-indigo-500/30 text-indigo-200' : 'bg-orange-500/30 text-orange-200'}`}>
                                                     {p.type}
                                                 </span>
+                                                {(p.price || 0) > 800 && <span className="bg-purple-500/30 text-purple-200 px-2.5 py-1 rounded-full text-[9px] font-black uppercase tracking-widest backdrop-blur-xl border border-white/10">Premium</span>}
                                             </div>
 
-                                            {/* Action Buttons (Reveal on Hover) */}
-                                            <div className="absolute top-3 right-3 flex flex-col gap-2 translate-x-10 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300">
-                                                <button onClick={(e) => { e.stopPropagation(); startEdit(p); }} className="w-8 h-8 rounded-full bg-slate-900/80 backdrop-blur text-blue-400 flex items-center justify-center hover:bg-blue-500 hover:text-white transition-colors border border-white/10" title="Edit">
-                                                    <Edit size={14} />
+                                            {/* Edit Overlay */}
+                                            <div className={styles['edit-overlay']}>
+                                                <button onClick={() => startEdit(p)} className="w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-xl text-white flex items-center justify-center hover:bg-emerald-500 transition-all border border-white/20 active:scale-95 shadow-2xl">
+                                                    <Edit size={20} />
                                                 </button>
-                                                <button onClick={(e) => { e.stopPropagation(); deletePlantHandler(p.id, p.name); }} className="w-8 h-8 rounded-full bg-slate-900/80 backdrop-blur text-red-400 flex items-center justify-center hover:bg-red-500 hover:text-white transition-colors border border-white/10" title="Delete">
-                                                    <Trash2 size={14} />
+                                                <button onClick={() => deletePlantHandler(p.id, p.name)} className="w-12 h-12 rounded-2xl bg-white/10 backdrop-blur-xl text-white flex items-center justify-center hover:bg-red-500 transition-all border border-white/20 active:scale-95 shadow-2xl">
+                                                    <Trash2 size={20} />
                                                 </button>
                                             </div>
                                         </div>
 
-                                        {/* Content Area */}
-                                        <div className="p-4 pt-2">
-                                            <div className="flex justify-between items-start mb-1">
+                                        <div className="p-6">
+                                            <div className="flex justify-between items-start mb-4">
                                                 <div>
-                                                    <h3 className="font-bold text-slate-100 text-lg leading-tight group-hover:text-emerald-400 transition-colors">{p.name}</h3>
-                                                    <p className="text-xs text-emerald-500/70 italic font-serif flex items-center gap-1 mt-0.5">
-                                                        <Leaf size={10} /> {p.scientificName || 'Unknown Taxon'}
+                                                    <h3 className="font-black text-white text-lg leading-tight mb-1 group-hover:text-emerald-400 transition-colors uppercase tracking-tight">{p.name}</h3>
+                                                    <p className="text-[10px] text-emerald-500 font-serif italic flex items-center gap-1.5 opacity-70">
+                                                        <Leaf size={10} /> {p.scientificName || 'Unclassified'}
                                                     </p>
                                                 </div>
                                                 <div className="text-right">
-                                                    <span className="text-sm font-bold text-slate-200 block">₹{p.price || 0}</span>
+                                                    <div className="text-sm font-black text-white">₹{p.price}</div>
+                                                    <div className="text-[8px] text-slate-500 uppercase font-bold">Standard</div>
                                                 </div>
                                             </div>
 
-                                            {/* Micro Stats */}
-                                            <div className="grid grid-cols-3 gap-1 mt-4 pt-3 border-t border-slate-700/50">
-                                                <div className="flex flex-col items-center p-1.5 rounded-lg bg-slate-900/30 group-hover:bg-slate-900/50 transition-colors">
-                                                    <Sun size={12} className="text-amber-400 mb-1" />
-                                                    <span className="text-[9px] text-slate-400 capitalize">{p.sunlight === 'direct' ? 'Direct' : p.sunlight === 'high' ? 'Bright' : 'Low'}</span>
+                                            <div className="grid grid-cols-3 gap-2 mt-6">
+                                                <div className="flex flex-col items-center justify-center py-2.5 rounded-xl bg-slate-900/50 border border-slate-800 group-hover:border-slate-700 transition-colors">
+                                                    <Sun size={14} className="text-amber-400 mb-1.5" />
+                                                    <span className="text-[8px] text-slate-400 font-black uppercase tracking-tighter">{p.sunlight}</span>
                                                 </div>
-                                                <div className="flex flex-col items-center p-1.5 rounded-lg bg-slate-900/30 group-hover:bg-slate-900/50 transition-colors">
-                                                    <Droplets size={12} className="text-blue-400 mb-1" />
-                                                    <span className="text-[9px] text-slate-400">{p.minHumidity}% Hum</span>
+                                                <div className="flex flex-col items-center justify-center py-2.5 rounded-xl bg-slate-900/50 border border-slate-800 group-hover:border-slate-700 transition-colors">
+                                                    <Droplets size={14} className="text-blue-400 mb-1.5" />
+                                                    <span className="text-[8px] text-slate-400 font-black uppercase tracking-tighter">{p.minHumidity}%</span>
                                                 </div>
-                                                <div className="flex flex-col items-center p-1.5 rounded-lg bg-slate-900/30 group-hover:bg-slate-900/50 transition-colors">
-                                                    <Thermometer size={12} className="text-rose-400 mb-1" />
-                                                    <span className="text-[9px] text-slate-400">{p.idealTempMin}-{p.idealTempMax}°</span>
+                                                <div className="flex flex-col items-center justify-center py-2.5 rounded-xl bg-slate-900/50 border border-slate-800 group-hover:border-slate-700 transition-colors">
+                                                    <Thermometer size={14} className="text-rose-400 mb-1.5" />
+                                                    <span className="text-[8px] text-slate-400 font-black uppercase tracking-tighter">{p.idealTempMin}°C</span>
                                                 </div>
                                             </div>
 
                                             {p.isNocturnal && (
-                                                <div className="mt-3 flex items-center gap-1.5 justify-center text-[10px] text-purple-300 bg-purple-500/10 py-1 rounded-md border border-purple-500/20">
-                                                    <Sparkles size={10} /> 24/7 Oxygen Producer
+                                                <div className="mt-4 flex items-center gap-2 justify-center text-[8px] font-black uppercase tracking-[0.2em] text-purple-400 bg-purple-500/5 py-2.5 rounded-xl border border-purple-500/10">
+                                                    <Sparkles size={10} /> Night Purifier
                                                 </div>
                                             )}
                                         </div>
                                     </div>
                                 ))}
                                 {plants.length === 0 && (
-                                    <div className="col-span-full py-20 text-center border-2 border-dashed border-slate-700 rounded-3xl">
-                                        <div className="flex justify-center mb-4"><Sprout size={48} className="text-slate-600" /></div>
-                                        <h3 className="text-xl font-bold text-slate-500">Inventory Empty</h3>
-                                        <p className="text-slate-600 mb-6">Start by importing the database.</p>
-                                        <Button onClick={handleBulkImport} variant="outline" className="opacity-50 hover:opacity-100">Simulate Import</Button>
+                                    <div className="col-span-full py-32 text-center border border-dashed border-slate-700 rounded-[2.5rem] bg-slate-950/20 backdrop-blur">
+                                        <div className="flex justify-center mb-6"><Sprout size={64} className="text-slate-800" /></div>
+                                        <h3 className="text-2xl font-black text-slate-700 uppercase tracking-widest mb-2">Registry Offline</h3>
+                                        <p className="text-slate-700 mb-8 text-sm">No botanical data discovered in local clusters.</p>
+                                        <Button onClick={handleBulkImport} variant="outline" className="border-slate-800 text-slate-600 hover:text-emerald-500 hover:border-emerald-500 px-12 h-14">Initialize Seed Protocol</Button>
                                     </div>
                                 )}
                             </div>
                         </div>
                     )}
-
-
                 </div>
             </main>
         </div>
