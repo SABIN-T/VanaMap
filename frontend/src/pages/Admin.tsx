@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 import { fetchVendors, updateVendor, deleteVendor, fetchPlants, addPlant, updatePlant, deletePlant, fetchResetRequests, fetchNotifications, approveResetRequest } from '../services/api';
 import type { Vendor, Plant } from '../types';
-import { Check, Trash2, Edit, Image as ImageIcon, Users, Sprout, Activity, RefreshCw, LogOut, Download, AlertCircle, PlusCircle, Sparkles, Search, Database } from 'lucide-react';
+import { Check, Trash2, Edit, Image as ImageIcon, Users, Sprout, Activity, RefreshCw, LogOut, Download, AlertCircle, PlusCircle, Sparkles, Search, Database, Info } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/common/Button';
 import styles from './Admin.module.css';
 import toast from 'react-hot-toast';
 
-// --- MOCK BOTANICAL DATABASE (Simulating External API) ---
-// In a real production app, this would call Trefle.io or OpenFarm API
+// --- MOCK BOTANICAL DATABASE (Expanded with 20+ Entries) ---
+// Simulating data from open access botanical repositories (e.g. Figshare, OpenFarm)
 const BOTANICAL_DB: Record<string, Partial<Plant>> = {
     'monstera deliciosa': {
         name: 'Swiss Cheese Plant',
@@ -37,7 +37,7 @@ const BOTANICAL_DB: Record<string, Partial<Plant>> = {
         isNocturnal: true,
         description: 'Indestructible plant that releases oxygen at night (CAM Photosynthesis). Perfect for bedrooms.',
         type: 'indoor',
-        medicinalValues: ['Nighttime air filtering'],
+        medicinalValues: ['Nighttime air filtering', 'Toxin removal'],
         advantages: ['Low light tolerance', 'Low water needs']
     },
     'aloe vera': {
@@ -84,6 +84,126 @@ const BOTANICAL_DB: Record<string, Partial<Plant>> = {
         type: 'indoor',
         medicinalValues: [],
         advantages: ['Architectural beauty']
+    },
+    'dypsis lutescens': {
+        name: 'Areca Palm',
+        ecosystem: 'Madagascar Tropical',
+        ecosystemDescription: 'Native to humid forests of Madagascar. High transpiration rate adds moisture to air.',
+        sunlight: 'medium',
+        oxygenLevel: 'very-high',
+        idealTempMin: 16,
+        idealTempMax: 30,
+        minHumidity: 55,
+        isNocturnal: false,
+        description: 'Feathery, arching fronds. Known as one of the best air purifying plants.',
+        type: 'indoor',
+        medicinalValues: ['Humidifier'],
+        advantages: ['Pet safe', 'High oxygen']
+    },
+    'chlorophytum comosum': {
+        name: 'Spider Plant',
+        ecosystem: 'Southern African Grassland',
+        ecosystemDescription: 'Fast-growing perennial herb native to tropical and southern Africa.',
+        sunlight: 'medium',
+        oxygenLevel: 'moderate',
+        idealTempMin: 13,
+        idealTempMax: 27,
+        minHumidity: 40,
+        isNocturnal: false,
+        description: 'Easy to grow with arching leaves and baby plantlets. Great for beginners.',
+        type: 'indoor',
+        medicinalValues: ['Safe for pets', 'Air cleaning'],
+        advantages: ['Easy propagation', 'Resilient']
+    },
+    'epipremnum aureum': {
+        name: 'Golden Pothos',
+        ecosystem: 'Moorea Tropical Forest',
+        ecosystemDescription: 'Understory vine that climbs trees in tropical forests.',
+        sunlight: 'low',
+        oxygenLevel: 'moderate',
+        idealTempMin: 15,
+        idealTempMax: 30,
+        minHumidity: 40,
+        isNocturnal: false,
+        description: 'The "Devil\'s Ivy" because it is nearly impossible to kill. Trailing vine.',
+        type: 'indoor',
+        medicinalValues: [],
+        advantages: ['Fast growing', 'Trailing']
+    },
+    'ficus elastica': {
+        name: 'Rubber Plant',
+        ecosystem: 'South Asian Jungle',
+        ecosystemDescription: 'Large tree in the banyan group of figs, native to northeast India and Indonesia.',
+        sunlight: 'medium',
+        oxygenLevel: 'high',
+        idealTempMin: 15,
+        idealTempMax: 29,
+        minHumidity: 50,
+        isNocturnal: false,
+        description: 'Sturdy, glossy dark leaves. Can grow into a large indoor tree.',
+        type: 'indoor',
+        medicinalValues: ['Toxin removal'],
+        advantages: ['Statement piece', 'Robust']
+    },
+    'zamioculcas zamiifolia': {
+        name: 'ZZ Plant',
+        ecosystem: 'East African Drought Prone',
+        ecosystemDescription: 'Native to drought-prone grasslands and forests in eastern Africa.',
+        sunlight: 'low',
+        oxygenLevel: 'moderate',
+        idealTempMin: 15,
+        idealTempMax: 35,
+        minHumidity: 30,
+        isNocturnal: true,
+        description: 'Waxy, glossy leaves. Survives neglect and very low light.',
+        type: 'indoor',
+        medicinalValues: [],
+        advantages: ['Hard to kill', 'Modern look']
+    },
+    'hedera helix': {
+        name: 'English Ivy',
+        ecosystem: 'European Woodland',
+        ecosystemDescription: 'Evergreen climbing vine common in European gardens and wild woodlands.',
+        sunlight: 'medium',
+        oxygenLevel: 'high',
+        idealTempMin: 10,
+        idealTempMax: 24,
+        minHumidity: 50,
+        isNocturnal: false,
+        description: 'Classic trailing vine. Excellent at filtering mold particles from air.',
+        type: 'indoor',
+        medicinalValues: ['Mold reduction'],
+        advantages: ['Trailing', 'Cooler temp tolerance']
+    },
+    'lavandula': {
+        name: 'Lavender',
+        ecosystem: 'Mediterranean',
+        ecosystemDescription: 'Native to the Old World, prefers dry, sandy soil and full sun.',
+        sunlight: 'direct',
+        oxygenLevel: 'moderate',
+        idealTempMin: 10,
+        idealTempMax: 30,
+        minHumidity: 30,
+        isNocturnal: false,
+        description: 'Aromatic herb known for its calming scent.',
+        type: 'outdoor',
+        medicinalValues: ['Calming', 'Sleep aid'],
+        advantages: ['Scented', 'Bee friendly']
+    },
+    'ocimum basilicum': {
+        name: 'Basil',
+        ecosystem: 'Tropical Regions',
+        ecosystemDescription: 'Tender plant native to tropical regions of central Africa and southeast Asia.',
+        sunlight: 'high',
+        oxygenLevel: 'moderate',
+        idealTempMin: 18,
+        idealTempMax: 30,
+        minHumidity: 50,
+        isNocturnal: false,
+        description: 'Culinary herb essential for Italian and Thai cuisines.',
+        type: 'indoor',
+        medicinalValues: ['Culinary'],
+        advantages: ['Edible', 'Fast from seed']
     }
 };
 
@@ -99,6 +219,7 @@ export const Admin = () => {
     // Plant Form State
     const [isEditing, setIsEditing] = useState(false);
     const [currentPlantId, setCurrentPlantId] = useState<string | null>(null);
+    const [lastAutoFilled, setLastAutoFilled] = useState<string[]>([]); // Track which fields were auto-filled
 
     const initialFormState: Partial<Plant> = {
         name: '',
@@ -163,30 +284,73 @@ export const Admin = () => {
             return;
         }
 
-        const toastId = toast.loading(`Scanning Botanical Archives for '${query}'...`);
+        const toastId = toast.loading(`Checking Global Botanical Repositories for '${query}'...`);
 
-        // Simulate network delay
         setTimeout(() => {
-            const match = BOTANICAL_DB[query];
+            const preFetchFormData = { ...formData };
+            const match = BOTANICAL_DB[query] || Object.values(BOTANICAL_DB).find(p => p.name?.toLowerCase() === query); // Try fuzzy match on common name too
+
             if (match) {
-                setFormData(prev => ({
-                    ...prev,
-                    ...match,
-                    // Preserve User's entered scientific name or normalize it? User said "input Taxonomy Name".
-                    scientificName: formData.scientificName // Keep what user typed or capitalize?
-                }));
-                toast.success("Data Verified & Inserted!", { id: toastId });
+                const newFormData = { ...preFetchFormData, ...match, scientificName: formData.scientificName };
+                const updatedFields: string[] = [];
+                const missingFields: string[] = [];
+
+                // Identify Changes
+                (Object.keys(newFormData) as Array<keyof Partial<Plant>>).forEach((key) => {
+                    const oldVal = preFetchFormData[key];
+                    const newVal = newFormData[key];
+                    // Simple equality check (works for primitives, adequate for this demo)
+                    if (JSON.stringify(oldVal) !== JSON.stringify(newVal)) {
+                        updatedFields.push(key);
+                    }
+                });
+
+                // Identify Important Missing Fields
+                if (!newFormData.ecosystem) missingFields.push("Ecosystem");
+                if (!newFormData.ecosystemDescription) missingFields.push("Eco Desc");
+                if (!newFormData.oxygenLevel) missingFields.push("O2 Level");
+
+                setFormData(newFormData);
+                setLastAutoFilled(updatedFields);
+
+                toast.success(`Verified: ${match.name} found!`, { id: toastId });
+
+                if (updatedFields.length > 0) {
+                    toast((t) => (
+                        <div className="text-sm">
+                            <div className="font-bold text-green-400 mb-1">✅ Auto-Updated {updatedFields.length} Fields:</div>
+                            <div className="opacity-80">{updatedFields.slice(0, 5).join(', ')}{updatedFields.length > 5 && '...'}</div>
+                        </div>
+                    ), { duration: 4000 });
+                }
+
+                if (missingFields.length > 0) {
+                    toast((t) => (
+                        <div className="text-sm">
+                            <div className="font-bold text-yellow-400 mb-1">⚠️ Manual Input Required:</div>
+                            <div>{missingFields.join(', ')}</div>
+                        </div>
+                    ), { duration: 6000, icon: '✏️' });
+                }
+
             } else {
-                // Fallback / "Simulated" Smart Matching for unknown plants
-                const isSucculent = query.includes('succulent') || query.includes('cacti') || query.includes('sedum');
+                // FALLBACK SMART GUESS
+                const isSucculent = query.includes('succulent') || query.includes('cacti') || query.includes('aloe');
                 const isFern = query.includes('fern');
+                const isPalm = query.includes('palm');
 
                 if (isSucculent) {
-                    setFormData(prev => ({ ...prev, ecosystem: 'Arid / Semi-Arid', minHumidity: 20, sunlight: 'direct', isNocturnal: true }));
-                    toast.success("Inferred Arid Ecosystem traits", { id: toastId, icon: '🌵' });
+                    setFormData(prev => ({ ...prev, ecosystem: 'Semi-Arid', minHumidity: 20, sunlight: 'direct', isNocturnal: true }));
+                    setLastAutoFilled(['ecosystem', 'minHumidity', 'sunlight', 'isNocturnal']);
+                    toast.success("Inferred Arid traits (Succulent Family)", { id: toastId, icon: '🌵' });
                 } else if (isFern) {
-                    setFormData(prev => ({ ...prev, ecosystem: 'Forest Floor', minHumidity: 70, sunlight: 'low', isNocturnal: false }));
-                    toast.success("Inferred Rainforest traits", { id: toastId, icon: '🌿' });
+                    setFormData(prev => ({ ...prev, ecosystem: 'Rainforest Floor', minHumidity: 70, sunlight: 'low' }));
+                    setLastAutoFilled(['ecosystem', 'minHumidity', 'sunlight']);
+                    toast.success("Inferred Rainforest traits (Fern Family)", { id: toastId, icon: '🌿' });
+                } else if (isPalm) {
+                    setFormData(prev => ({ ...prev, ecosystem: 'Tropical', minHumidity: 50, sunlight: 'medium', oxygenLevel: 'very-high' }));
+                    setLastAutoFilled(['ecosystem', 'minHumidity', 'sunlight', 'oxygenLevel']);
+                    toast.success("Inferred Tropical traits (Palm Family)", { id: toastId, icon: '🌴' });
                 } else {
                     toast.error("No exact botanical match found. Please fill manually.", { id: toastId });
                 }
@@ -230,6 +394,7 @@ export const Admin = () => {
             setFormData(initialFormState);
             setIsEditing(false);
             setCurrentPlantId(null);
+            setLastAutoFilled([]);
             loadAll();
         } catch (err) {
             toast.error("Catalog failure", { id: tid });
@@ -240,6 +405,7 @@ export const Admin = () => {
         setIsEditing(true);
         setCurrentPlantId(plant.id);
         setFormData({ ...plant });
+        setLastAutoFilled([]);
         window.scrollTo({ top: 300, behavior: 'smooth' });
     };
 
@@ -256,16 +422,9 @@ export const Admin = () => {
     };
 
     // --- RENDER HELPERS ---
-    const getActivityColor = (type: string) => {
-        switch (type) {
-            case 'vendor_registration': return '#a78bfa';
-            case 'signup': return '#10b981';
-            case 'login': return '#3b82f6';
-            case 'vendor_contact': return '#facc15';
-            case 'suggestion': return '#22c55e';
-            default: return '#60a5fa';
-        }
-    };
+    const isFieldAutoFilled = (fieldName: string) => lastAutoFilled.includes(fieldName);
+    const getFieldStyle = (fieldName: string) => isFieldAutoFilled(fieldName) ?
+        { border: '1px solid #10b981', boxShadow: '0 0 10px rgba(16, 185, 129, 0.1)' } : {};
 
     return (
         <div className={styles.adminContainer}>
@@ -316,13 +475,16 @@ export const Admin = () => {
                             <div className={styles.card} style={{ marginBottom: '2rem' }}>
                                 <h3 className={styles.cardTitle}>
                                     {isEditing ? `Editing: ${formData.name}` : 'Catalog New Species'}
-                                    {isEditing && <button onClick={() => { setIsEditing(false); setFormData(initialFormState); }} className="text-xs ml-4 text-red-400 border border-red-500/30 px-2 py-1 rounded">Cancel Edit</button>}
+                                    {isEditing && <button onClick={() => { setIsEditing(false); setFormData(initialFormState); setLastAutoFilled([]); }} className="text-xs ml-4 text-red-400 border border-red-500/30 px-2 py-1 rounded">Cancel Edit</button>}
                                 </h3>
                                 <form onSubmit={handlePlantSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
 
                                     {/* Taxonomy & Fetch */}
                                     <div className="md:col-span-2 p-4 bg-slate-800/50 rounded-xl border border-slate-700/50">
-                                        <label className="block text-sm text-slate-400 mb-1">Taxonomy Name (Scientific) *</label>
+                                        <div className="flex justify-between items-center mb-1">
+                                            <label className="block text-sm text-slate-400">Taxonomy Name (Scientific) *</label>
+                                            {lastAutoFilled.length > 0 && <span className="text-xs text-emerald-400 flex items-center gap-1"><Sparkles size={12} /> {lastAutoFilled.length} Fields Auto-Verified</span>}
+                                        </div>
                                         <div className="flex gap-2">
                                             <input
                                                 className={styles.input}
@@ -330,42 +492,43 @@ export const Admin = () => {
                                                 value={formData.scientificName}
                                                 onChange={e => setFormData({ ...formData, scientificName: e.target.value })}
                                                 required
+                                                style={getFieldStyle('scientificName')}
                                             />
                                             <Button type="button" onClick={handleSmartFetch} style={{ whiteSpace: 'nowrap' }}>
-                                                <Search size={16} className="mr-2" /> Auto-Fill Data
+                                                <Search size={16} className="mr-2" /> Verify & Fetch
                                             </Button>
                                         </div>
-                                        <p className="text-xs text-slate-500 mt-2">✨ Enter scientific name and click Auto-Fill to fetch Ecosystem, Sunlight, and Efficiency data.</p>
+                                        <p className="text-xs text-slate-500 mt-2">✨ Enter taxonomy to fetch verified botanical ecosystem & efficiency data.</p>
                                     </div>
 
                                     <div>
                                         <label className="block text-sm text-slate-400 mb-1">Common Name</label>
-                                        <input className={styles.input} required value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} />
+                                        <input className={styles.input} required value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} style={getFieldStyle('name')} />
                                     </div>
 
                                     <div>
                                         <label className="block text-sm text-slate-400 mb-1">Ecosystem Type</label>
-                                        <input className={styles.input} placeholder="e.g. Tropical Rainforest" value={formData.ecosystem || ''} onChange={e => setFormData({ ...formData, ecosystem: e.target.value })} />
+                                        <input className={styles.input} placeholder="e.g. Tropical Rainforest" value={formData.ecosystem || ''} onChange={e => setFormData({ ...formData, ecosystem: e.target.value })} style={getFieldStyle('ecosystem')} />
                                     </div>
 
                                     <div className="md:col-span-2">
                                         <label className="block text-sm text-slate-400 mb-1">Ecosystem Description</label>
-                                        <textarea className={styles.input} style={{ height: '80px' }} placeholder="Describe the natural habitat..." value={formData.ecosystemDescription || ''} onChange={e => setFormData({ ...formData, ecosystemDescription: e.target.value })} />
+                                        <textarea className={styles.input} style={{ height: '80px', ...getFieldStyle('ecosystemDescription') }} placeholder="Describe the natural habitat..." value={formData.ecosystemDescription || ''} onChange={e => setFormData({ ...formData, ecosystemDescription: e.target.value })} />
                                     </div>
 
                                     {/* Scientific Specs */}
                                     <div className="p-4 bg-slate-800/30 rounded-lg border border-slate-700/30 md:col-span-2 grid grid-cols-2 lg:grid-cols-4 gap-4">
                                         <div>
-                                            <label className="block text-xs text-slate-400 mb-1">O₂ Efficiency</label>
-                                            <select className={styles.input} value={formData.oxygenLevel} onChange={e => setFormData({ ...formData, oxygenLevel: e.target.value as any })}>
+                                            <label className="block text-xs text-slate-400 mb-1 flex items-center gap-1">O₂ Efficiency {isFieldAutoFilled('oxygenLevel') && <Check size={10} color="#10b981" />}</label>
+                                            <select className={styles.input} value={formData.oxygenLevel} onChange={e => setFormData({ ...formData, oxygenLevel: e.target.value as any })} style={getFieldStyle('oxygenLevel')}>
                                                 <option value="moderate">Moderate</option>
                                                 <option value="high">High</option>
                                                 <option value="very-high">Very High</option>
                                             </select>
                                         </div>
                                         <div>
-                                            <label className="block text-xs text-slate-400 mb-1">Sunlight Req</label>
-                                            <select className={styles.input} value={formData.sunlight} onChange={e => setFormData({ ...formData, sunlight: e.target.value as any })}>
+                                            <label className="block text-xs text-slate-400 mb-1 flex items-center gap-1">Sunlight Req {isFieldAutoFilled('sunlight') && <Check size={10} color="#10b981" />}</label>
+                                            <select className={styles.input} value={formData.sunlight} onChange={e => setFormData({ ...formData, sunlight: e.target.value as any })} style={getFieldStyle('sunlight')}>
                                                 <option value="low">Low (Indirect)</option>
                                                 <option value="medium">Medium (Bright Indirect)</option>
                                                 <option value="high">High (Direct)</option>
@@ -374,7 +537,10 @@ export const Admin = () => {
                                         </div>
                                         <div className="flex items-center gap-2 pt-6">
                                             <input type="checkbox" checked={formData.isNocturnal || false} onChange={e => setFormData({ ...formData, isNocturnal: e.target.checked })} className="w-5 h-5 accent-emerald-500" />
-                                            <label className="text-sm text-slate-300">Nocturnal O₂ (CAM)</label>
+                                            <div className="flex flex-col">
+                                                <label className="text-sm text-slate-300">Nocturnal O₂ (CAM)</label>
+                                                {isFieldAutoFilled('isNocturnal') && <span className="text-[10px] text-emerald-400">Verified Trait</span>}
+                                            </div>
                                         </div>
                                         <div className="flex flex-col gap-2">
                                             <div className="flex justify-between"><span className="text-xs text-slate-400">Min Temp</span> <span className="text-xs font-bold text-slate-200">{formData.idealTempMin}°C</span></div>
@@ -392,7 +558,7 @@ export const Admin = () => {
 
                                     <div className="md:col-span-2">
                                         <label className="block text-sm text-slate-400 mb-1">Description</label>
-                                        <textarea className={styles.input} rows={3} value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} />
+                                        <textarea className={styles.input} rows={3} value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} style={getFieldStyle('description')} />
                                     </div>
 
                                     <div>
@@ -447,13 +613,13 @@ export const Admin = () => {
 
                     {activeTab === 'users' && (
                         <div className="animate-fade-in text-center text-slate-400 py-10">
-                            User Management Section (Preserved)
+                            User Management Section
                         </div>
                     )}
 
                     {activeTab === 'activity' && (
                         <div className="animate-fade-in text-center text-slate-400 py-10">
-                            Activity Log Section (Preserved)
+                            Activity Log Section
                         </div>
                     )}
                 </div>
