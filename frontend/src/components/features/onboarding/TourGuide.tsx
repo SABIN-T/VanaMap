@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { ChevronRight, MapPin, ShoppingBag, BookOpen, Leaf } from 'lucide-react';
+import { ChevronRight, MapPin, ShoppingBag, BookOpen, Leaf, MoveHorizontal } from 'lucide-react';
 
 interface Step {
     targetId: string;
@@ -14,6 +14,12 @@ const TOUR_STEPS: Step[] = [
         title: 'Hi! I\'m Sprout.',
         content: 'I\'ll be your eco-guide today! Let\'s find the perfect plants for your sanctuary.',
         icon: <Leaf className="text-emerald-400" size={24} />
+    },
+    {
+        targetId: 'mobile-swipe',
+        title: 'Swipe to Navigate',
+        content: 'On mobile? Swipe left or right anywhere to quickly switch between Home, Shops, Dr. AI, and Cart! 📱',
+        icon: <MoveHorizontal className="text-blue-400" size={24} />
     },
     {
         targetId: 'plant-grid',

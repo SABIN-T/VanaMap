@@ -1,0 +1,59 @@
+import { Routes, Route, useLocation } from 'react-router-dom';
+import { lazy, Suspense } from 'react';
+
+// Lazy Load Pages
+const Home = lazy(() => import('../../pages/Home').then(m => ({ default: m.Home })));
+const Nearby = lazy(() => import('../../pages/Nearby').then(m => ({ default: m.Nearby })));
+const UserDashboard = lazy(() => import('../../pages/UserDashboard').then(m => ({ default: m.UserDashboard })));
+const VendorPortal = lazy(() => import('../../pages/VendorPortal').then(m => ({ default: m.VendorPortal })));
+const Auth = lazy(() => import('../../pages/Auth').then(m => ({ default: m.Auth })));
+const Cart = lazy(() => import('../../pages/Cart').then(m => ({ default: m.Cart })));
+const Admin = lazy(() => import('../../pages/Admin').then(m => ({ default: m.Admin })));
+const DoctorAIPage = lazy(() => import('../../pages/DoctorAIPage').then(m => ({ default: m.DoctorAIPage })));
+const Guide = lazy(() => import('../../pages/Guide').then(m => ({ default: m.Guide })));
+
+const LoadingScreen = () => (
+    <div style={{
+        height: '100vh', width: '100vw', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0f172a'
+    }}>
+        <div className="pre-loader-pulse"></div>
+    </div>
+);
+
+export const AnimatedRoutes = () => {
+    const location = useLocation();
+
+    return (
+        <>
+            <style>{`
+                .page-enter {
+                    animation: pageFadeIn 0.4s ease-out;
+                }
+                @keyframes pageFadeIn {
+                    from { opacity: 0; transform: translateY(8px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+            `}</style>
+            <Suspense fallback={<LoadingScreen />}>
+                {/* 
+                    We apply a key to a wrapper div to force re-render animation on path change.
+                    However, wrapping Routes breaks layout sometimes if not 100% height.
+                    We ensure the wrapper matches standard layout.
+                */}
+                <div key={location.pathname} className="page-enter" style={{ minHeight: '100vh' }}>
+                    <Routes location={location}>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/dashboard" element={<UserDashboard />} />
+                        <Route path="/nearby" element={<Nearby />} />
+                        <Route path="/vendor" element={<VendorPortal />} />
+                        <Route path="/auth" element={<Auth />} />
+                        <Route path="/cart" element={<Cart />} />
+                        <Route path="/admin" element={<Admin />} />
+                        <Route path="/doctor-ai" element={<DoctorAIPage />} />
+                        <Route path="/guide" element={<Guide />} />
+                    </Routes>
+                </div>
+            </Suspense>
+        </>
+    );
+};
