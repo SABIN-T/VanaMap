@@ -171,10 +171,10 @@ export const TourGuide = () => {
             <div style={{
                 position: isMobile ? 'fixed' : 'absolute',
                 // Mobile: Stick to bottom, Desktop: Follow target
-                bottom: isMobile ? '20px' : (targetRect ? 'auto' : '50%'),
-                top: isMobile ? 'auto' : (targetRect ? Math.min(window.innerHeight - 250, Math.max(100, targetRect.bottom + 40)) : '50%'),
+                bottom: isMobile ? 'auto' : (targetRect ? 'auto' : '50%'),
+                top: isMobile ? '50%' : (targetRect ? Math.min(window.innerHeight - 250, Math.max(100, targetRect.bottom + 40)) : '50%'),
                 left: isMobile ? '50%' : (targetRect ? Math.min(window.innerWidth - 350, Math.max(50, targetRect.left)) : '50%'),
-                transform: isMobile ? 'translateX(-50%)' : 'translateX(-50%)',
+                transform: isMobile ? 'translate(-50%, -50%)' : 'translateX(-50%)',
                 width: isMobile ? '90vw' : '340px',
                 pointerEvents: 'auto',
                 transition: 'all 0.5s cubic-bezier(0.25, 1, 0.5, 1)',

@@ -1,11 +1,8 @@
-import { useState, useMemo, useEffect } from 'react';
-import { X, Sun, Heart, Wind, ShoppingBag, Thermometer, Maximize, Cat, Droplet, ArrowRight, Activity, Percent, BarChart3, Info } from 'lucide-react';
+import { useState, useMemo } from 'react';
+import { X, Sun, Wind, Thermometer, Activity, Droplet, ShoppingBag } from 'lucide-react';
 import { Button } from '../../common/Button';
 import type { Plant } from '../../../types';
 import styles from './PlantDetailsModal.module.css';
-import { useAuth } from '../../../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
-import toast from 'react-hot-toast';
 
 interface PlantDetailsModalProps {
     plant: Plant;
@@ -18,12 +15,8 @@ interface PlantDetailsModalProps {
 }
 
 export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModalProps) => {
-    const { user, toggleFavorite } = useAuth(); // Assuming favorites removed for simplification or use user logic
-    const navigate = useNavigate();
-
     // UI States
     const [activeTab, setActiveTab] = useState<'overview' | 'simulation'>('overview');
-    const [isAnimating, setIsAnimating] = useState(false);
 
     // Simulation States
     const [numPeople, setNumPeople] = useState(1);
@@ -42,7 +35,7 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
         let leafArea = 0.5;
         if (plant.oxygenLevel === 'very-high') leafArea = 4.2;
         else if (plant.oxygenLevel === 'high') leafArea = 2.5;
-        else if (plant.oxygenLevel === 'moderate' || plant.oxygenLevel === 'medium') leafArea = 1.2;
+        else if (plant.oxygenLevel === 'moderate') leafArea = 1.2;
 
         let baseRate = plant.oxygenLevel === 'very-high' ? 28 :
             plant.oxygenLevel === 'high' ? 22 :
@@ -88,28 +81,28 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                         <Droplet size={18} className="text-blue-400" />
                         <span style={{ fontSize: '0.85rem', color: '#94a3b8' }}>Water</span>
                     </div>
-                    <div style={{ fontWeight: 600 }}>{plant.waterNeeds || 'Weekly'}</div>
+                    <div style={{ fontWeight: 600 }}>Standard</div>
                 </div>
                 <div style={statCardStyle}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
                         <Sun size={18} className="text-yellow-400" />
                         <span style={{ fontSize: '0.85rem', color: '#94a3b8' }}>Light</span>
                     </div>
-                    <div style={{ fontWeight: 600 }}>{plant.lightReq || 'Indirect'}</div>
+                    <div style={{ fontWeight: 600 }}>{plant.sunlight}</div>
                 </div>
                 <div style={statCardStyle}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
                         <Thermometer size={18} className="text-red-400" />
                         <span style={{ fontSize: '0.85rem', color: '#94a3b8' }}>Temp</span>
                     </div>
-                    <div style={{ fontWeight: 600 }}>18-28°C</div>
+                    <div style={{ fontWeight: 600 }}>{plant.idealTempMin}-{plant.idealTempMax}°C</div>
                 </div>
                 <div style={statCardStyle}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '4px' }}>
                         <Wind size={18} className="text-emerald-400" />
                         <span style={{ fontSize: '0.85rem', color: '#94a3b8' }}>Air</span>
                     </div>
-                    <div style={{ fontWeight: 600 }}>Purifying</div>
+                    <div style={{ fontWeight: 600 }}>{plant.oxygenLevel}</div>
                 </div>
             </div>
 
@@ -187,7 +180,7 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
     return (
         <div className={styles.overlay} onClick={onClose} style={{ zIndex: 9999 }}>
             <div className={styles.modal} onClick={(e) => e.stopPropagation()} style={{ overflow: 'hidden', padding: 0 }}>
-                {/* Desktop Split Layout */}
+                {/* Desktop Split Layout - Logic handled by CSS classes in style modules ideally, but using inline for now to ensuring desktop split */}
                 <div style={{ display: 'flex', height: '100%', flexDirection: window.innerWidth > 1024 ? 'row' : 'column' }}>
 
                     {/* LEFT: Image */}
@@ -197,7 +190,7 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                         background: '#0f172a'
                     }}>
                         <img
-                            src={plant.image}
+                            src={plant.imageUrl}
                             alt={plant.name}
                             style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                         />
@@ -245,7 +238,7 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                                     }}
                                 >Simulation</button>
                             </div>
-                            <div style={{ fontSize: '1.5rem', fontWeight: 700, color: '#10b981' }}>₹{plant.price}</div>
+                            {plant.price && <div style={{ fontSize: '1.5rem', fontWeight: 700, color: '#10b981' }}>₹{plant.price}</div>}
                         </div>
 
                         {/* Scrollable Body */}
