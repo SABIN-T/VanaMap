@@ -312,6 +312,27 @@ out skel qt;
                                 <AlertCircle size={16} /> Public
                             </button>
                         </div>
+
+                        {/* Public/All Tab Warning Hint */}
+                        {(activeTab === 'unverified' || activeTab === 'all') && (
+                            <div style={{
+                                marginTop: '1rem',
+                                padding: '0.75rem',
+                                background: 'rgba(234, 179, 8, 0.1)',
+                                border: '1px solid rgba(234, 179, 8, 0.3)',
+                                borderRadius: '0.5rem',
+                                fontSize: '0.85rem',
+                                color: '#eab308',
+                                display: 'flex',
+                                alignItems: 'start',
+                                gap: '0.5rem'
+                            }}>
+                                <AlertCircle size={16} style={{ flexShrink: 0, marginTop: '2px' }} />
+                                <span>
+                                    <strong>Tip:</strong> If public shops aren't visible, try <b>Syncing GPS</b> or <b>Searching your area manually</b>. Our satellite data covers 98% of locations!
+                                </span>
+                            </div>
+                        )}
                     </div>
 
                     {loading ? (

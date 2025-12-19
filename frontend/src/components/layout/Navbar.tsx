@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingCart, User as UserIcon, LogOut, BookOpen, Leaf, Sun, Moon, Menu, X, ChevronRight, Bot } from 'lucide-react';
+import { ShoppingCart, User as UserIcon, LogOut, BookOpen, Leaf, Sun, Moon, Menu, X, ChevronRight, Bot, Download } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
 import { useTheme } from '../../context/ThemeContext';
@@ -130,6 +130,15 @@ export const Navbar = () => {
                     </Link>
                     <button onClick={handleDownloadGuide} className={styles.mobileNavLink}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><BookOpen size={20} /> Caring Guide</div>
+                        <ChevronRight size={18} />
+                    </button>
+                    <button className={styles.mobileNavLink} onClick={() => {
+                        setIsMenuOpen(false);
+                        import('react-hot-toast').then(({ default: toast }) => {
+                            toast("To install app: Tap Share/Menu -> 'Add to Home Screen'", { icon: '📲', style: { borderRadius: '10px', background: '#333', color: '#fff' } });
+                        });
+                    }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><Download size={20} /> Get App</div>
                         <ChevronRight size={18} />
                     </button>
 
