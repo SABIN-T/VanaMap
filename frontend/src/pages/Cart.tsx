@@ -1,21 +1,37 @@
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
-import { Trash2, ArrowLeft } from 'lucide-react';
+import { Trash2, ArrowLeft, Minus, Plus } from 'lucide-react';
 import { Button } from '../components/common/Button';
 
 export const Cart = () => {
-    const { items, removeFromCart } = useCart();
+    const { items, removeFromCart, updateQuantity } = useCart();
     const { user } = useAuth();
     const navigate = useNavigate();
 
-
-
     return (
         <div className="container" style={{ padding: '2rem 1rem' }}>
+            <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+                <h1 style={{
+                    fontSize: 'clamp(1.5rem, 5vw, 2.5rem)',
+                    fontWeight: 900,
+                    background: 'linear-gradient(to right, #4ade80, #38bdf8)',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    marginBottom: '0.5rem',
+                    textTransform: 'uppercase',
+                    letterSpacing: '-1px'
+                }}>
+                    The Forest Land for Future
+                </h1>
+                <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem', letterSpacing: '1px' }}>
+                    YOUR PERSONAL BOTANICAL SANCTUARY
+                </p>
+            </div>
+
             <div className="glass-panel" style={{ padding: '2rem', maxWidth: '800px', margin: '0 auto' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem' }}>
-                    <button onClick={() => navigate(-1)} style={{ background: 'none', border: 'none', color: 'var(--color-primary)', cursor: 'pointer' }}>
+                    <button onClick={() => navigate(-1)} style={{ background: 'none', border: 'none', color: 'var(--color-primary)', cursor: 'pointer', padding: '0.5rem', borderRadius: '50%', display: 'flex' }}>
                         <ArrowLeft size={24} />
                     </button>
                     <h2 style={{ fontSize: '2rem', margin: 0, color: 'var(--color-text-main)' }}>Your Cart</h2>
@@ -40,15 +56,43 @@ export const Cart = () => {
                                     gap: '1rem',
                                     padding: '1rem',
                                     background: 'var(--glass-bg)',
-                                    borderRadius: '0.5rem',
+                                    borderRadius: '1rem',
                                     border: 'var(--glass-border)'
                                 }}>
                                     <img src={item.plant.imageUrl} alt={item.plant.name} style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '0.5rem' }} />
 
                                     <div style={{ flex: 1 }}>
-                                        <h3 style={{ color: 'var(--color-text-main)', marginBottom: '0.25rem' }}>{item.plant.name}</h3>
-                                        <div style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>
-                                            Quantity: {item.quantity}
+                                        <h3 style={{ color: 'var(--color-text-main)', marginBottom: '0.25rem', fontSize: '1.1rem' }}>{item.plant.name}</h3>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginTop: '0.5rem' }}>
+                                            {/* Quantity Stepper */}
+                                            <div style={{
+                                                display: 'flex', alignItems: 'center', gap: '0.5rem',
+                                                background: 'rgba(255,255,255,0.05)', padding: '4px', borderRadius: '8px'
+                                            }}>
+                                                <button
+                                                    onClick={() => updateQuantity(item.plant.id, item.quantity - 1)}
+                                                    style={{
+                                                        width: '28px', height: '28px', borderRadius: '6px', border: 'none',
+                                                        background: 'transparent', color: 'var(--color-text-main)', cursor: 'pointer',
+                                                        display: 'flex', alignItems: 'center', justifyContent: 'center'
+                                                    }}
+                                                >
+                                                    <Minus size={14} />
+                                                </button>
+                                                <span style={{ fontWeight: 700, minWidth: '20px', textAlign: 'center', fontSize: '0.9rem', color: 'white' }}>
+                                                    {item.quantity}
+                                                </span>
+                                                <button
+                                                    onClick={() => updateQuantity(item.plant.id, item.quantity + 1)}
+                                                    style={{
+                                                        width: '28px', height: '28px', borderRadius: '6px', border: 'none',
+                                                        background: 'var(--color-primary)', color: '#000', cursor: 'pointer',
+                                                        display: 'flex', alignItems: 'center', justifyContent: 'center'
+                                                    }}
+                                                >
+                                                    <Plus size={14} />
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
 
@@ -58,10 +102,12 @@ export const Cart = () => {
                                             background: 'rgba(239, 68, 68, 0.1)',
                                             color: '#ef4444',
                                             border: 'none',
-                                            padding: '0.5rem',
-                                            borderRadius: '0.5rem',
-                                            cursor: 'pointer'
+                                            padding: '0.75rem',
+                                            borderRadius: '0.75rem',
+                                            cursor: 'pointer',
+                                            transition: '0.2s'
                                         }}
+                                        title="Remove Item"
                                     >
                                         <Trash2 size={20} />
                                     </button>

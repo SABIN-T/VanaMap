@@ -19,6 +19,7 @@ interface CartContextType {
     items: CartItem[];
     addToCart: (plant: Plant) => void;
     removeFromCart: (plantId: string) => void;
+    updateQuantity: (plantId: string, quantity: number) => void;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -33,7 +34,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
             const parsed = JSON.parse(savedUser);
             if (parsed.cart) {
                 // Prevent crash: Only use cached cart if it contains full plant objects.
-                // If it contains raw IDs (unhydrated), return empty and let useEffect hydrate it.
                 if (parsed.cart.length > 0 && !parsed.cart[0].plant) {
                     return [];
                 }
@@ -49,7 +49,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     useEffect(() => {
         const hydrateCart = async () => {
             if (user && user.cart && user.cart.length > 0) {
-                // Check if the first item needs hydration (has plantId but no plant object)
                 const firstItem = user.cart[0] as unknown as RawCartItem;
                 const needsHydration = !firstItem.plant && (firstItem.plantId || firstItem._id);
 
@@ -60,7 +59,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
                         const hydratedItems: CartItem[] = (user.cart as any[]).map((item: any) => {
                             const raw = item as RawCartItem;
-                            // Handle both plantId and _id formats from different DB schemas
                             const targetId = raw.plantId || raw._id;
                             const fullPlant = allPlants.find(p => p.id === targetId);
                             if (fullPlant) {
@@ -70,24 +68,32 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
                                 };
                             }
                             return null;
-                        }).filter((i): i is CartItem => i !== null); // Remove nulls if plant not found
+                        }).filter((i): i is CartItem => i !== null);
 
                         setItems(hydratedItems);
                     } catch (err) {
                         console.error("Failed to hydrate cart", err);
                     }
                 } else {
-                    // Already hydrated or empty
                     setItems(user.cart as unknown as CartItem[]);
                 }
             } else if (user && (!user.cart || user.cart.length === 0)) {
-                // User has empty cart in DB (or cleared it)
                 setItems([]);
             }
         };
 
         hydrateCart();
     }, [user]);
+
+    const persistCart = (newItems: CartItem[]) => {
+        const cartPayload = newItems.map(i => ({ plantId: i.plant.id, quantity: i.quantity }));
+        if (user) {
+            updateUser({ cart: cartPayload });
+            import('../services/api').then(({ syncCart }) => syncCart(user.email, cartPayload));
+        } else {
+            localStorage.setItem('guest_cart', JSON.stringify(newItems));
+        }
+    };
 
     const addToCart = (plant: Plant) => {
         setItems(prev => {
@@ -98,38 +104,36 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
             } else {
                 newItems = [...prev, { plant, quantity: 1 }];
             }
-
-            // Persistence logic
-            const cartPayload = newItems.map(i => ({ plantId: i.plant.id, quantity: i.quantity }));
-            if (user) {
-                // Keep Auth state and global DB in sync
-                updateUser({ cart: cartPayload });
-                import('../services/api').then(({ syncCart }) => syncCart(user.email, cartPayload));
-            } else {
-                // Persistent guest cart
-                localStorage.setItem('guest_cart', JSON.stringify(newItems));
-            }
+            persistCart(newItems);
             return newItems;
         });
         toast.success(`${plant.name} added to cart!`);
     };
 
-    const removeFromCart = (plantId: string) => {
+    const updateQuantity = (plantId: string, quantity: number) => {
         setItems(prev => {
-            const newItems = prev.filter(i => i.plant.id !== plantId);
-            const cartPayload = newItems.map(i => ({ plantId: i.plant.id, quantity: i.quantity }));
-            if (user) {
-                updateUser({ cart: cartPayload });
-                import('../services/api').then(({ syncCart }) => syncCart(user.email, cartPayload));
+            let newItems;
+            if (quantity <= 0) {
+                newItems = prev.filter(i => i.plant.id !== plantId);
             } else {
-                localStorage.setItem('guest_cart', JSON.stringify(newItems));
+                newItems = prev.map(i => i.plant.id === plantId ? { ...i, quantity } : i);
             }
+            persistCart(newItems);
             return newItems;
         });
     };
 
+    const removeFromCart = (plantId: string) => {
+        setItems(prev => {
+            const newItems = prev.filter(i => i.plant.id !== plantId);
+            persistCart(newItems);
+            return newItems;
+        });
+        toast.success(`Item removed`);
+    };
+
     return (
-        <CartContext.Provider value={{ items, addToCart, removeFromCart }}>
+        <CartContext.Provider value={{ items, addToCart, removeFromCart, updateQuantity }}>
             {children}
         </CartContext.Provider>
     );
