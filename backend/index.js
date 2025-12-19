@@ -115,18 +115,61 @@ const getAIResponse = async (query) => {
             return response;
         }
 
+        // 1.5 RECOMMENDATION ENGINE (Human-like Logic)
+        if (q.match(/(best|top|recommend|suggestion|good|beginner|easy|safe)/)) {
+            let recommended = plants;
+            let criteria = "general wellness";
+
+            // Filter Logic
+            if (q.includes('indoor') || q.includes('room')) {
+                recommended = recommended.filter(p => p.type === 'Indoor' || p.type === 'Succulent');
+                criteria = "indoor living";
+            }
+            if (q.includes('outside') || q.includes('outdoor')) {
+                recommended = recommended.filter(p => p.type === 'Outdoor');
+                criteria = "outdoor gardens";
+            }
+            if (q.includes('air') || q.includes('purify') || q.includes('oxygen')) {
+                recommended = recommended.filter(p => p.oxygenLevel === 'high' || p.oxygenLevel === 'very-high');
+                criteria = "air purification";
+            }
+            if (q.includes('pet') || q.includes('dog') || q.includes('cat') || q.includes('safe')) {
+                recommended = recommended.filter(p => p.petFriendly === true);
+                criteria = "pet safety";
+            }
+            if (q.includes('low light') || q.includes('dark')) {
+                recommended = recommended.filter(p => p.lightReq === 'low');
+                criteria = "low-light adaptability";
+            }
+
+            // Fallback if filter too strict
+            if (recommended.length === 0) recommended = plants.filter(p => p.maintenance === 'low');
+
+            // Pick top 3
+            const top3 = recommended.slice(0, 3);
+
+            let reply = `**🌟 Top Recommendations for ${criteria.toUpperCase()}**\n\n`;
+            reply += `Based on your request, I strongly suggest these species:\n\n`;
+
+            top3.forEach(p => {
+                reply += `- **${p.name}**: Excellent because it is ${p.maintenance} maintenance and provides ${p.oxygenLevel} oxygen output.\n`;
+            });
+
+            reply += `\n**Why these?** They match your specific environmental criteria perfectly. Looking for one? Check the 'Nearby' tab!`;
+            return reply;
+        }
+
         // 2. VENDOR & LOGISTICS
         if (q.match(/(shop|vendor|store|location|near|where to buy)/)) {
             const list = verifiedVendors.map(v => `- **${v.name}** (${v.address})`).join('\n');
             return `**📍 Authorized Distribution Nodes**\n\nI have located the following verified partners near your coordinates:\n\n${list}\n\n*Navigation data is available in the 'Nearby Shops' tab.*`;
         }
 
-        // 3. GENERAL BOTANY (Deep Learning Simulation)
-        return `**🧠 Training Data Synthesis**\n\nQuery: "${query}"\n\nBased on my botanical algorithms, here is the consensus:\n\n` +
-            `- **Analysis**: This appears to be a general inquiry about plant care or biology. Most indoor plants require a Nitrogen-rich soil matrix and distinct wet/dry cycles.\n` +
-            `- **Assessment**: If you are seeing yellow leaves, it indicates *Chlorosis* (often over-watering). If brown tips, check for humidity deficiency.\n\n` +
-            `**Recommendation**: Search for a specific plant name (e.g., "Snake Plant") for a precise generated report.\n\n` +
-            `*(Source: VanaMap Global Botanical Index v2.4)*`;
+        // 3. GENERAL BOTANY (Human Expert Persona)
+        return `**🧠 Dr. AI Insight**\n\nThat's an excellent question. While I'm trained on specific species data, here is my general botanical advice:\n\n` +
+            `**Professional Opinion**: "${query}" touches on core plant biology. In my experience, success usually comes down to mimicking the plant's native environment (e.g., tropical plants need humidity!).\n\n` +
+            `**Advice**: If you're dealing with a specific issue like yellowing leaves or pests, try asking me about a specific plant name (like "Aloe Vera") so I can give you a precise diagnosis.\n\n` +
+            `*Need a suggestion? Ask me 'What are the best indoor plants?'*`;
 
     } catch (e) {
         console.error("AI Logic Failure", e);
