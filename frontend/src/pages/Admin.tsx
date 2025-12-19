@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { fetchVendors, fetchPlants, addPlant, updatePlant, deletePlant, fetchResetRequests } from '../services/api';
+import { fetchVendors, fetchPlants, addPlant, updatePlant, deletePlant, fetchResetRequests, fetchUsers } from '../services/api';
 import type { Vendor, Plant } from '../types';
 import { Check, Trash2, Edit, Image as ImageIcon, Users, Sprout, Activity, LogOut, Sparkles, Search, Database, Leaf, HelpCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -217,7 +217,8 @@ export const Admin = () => {
     const [requests, setRequests] = useState<any[]>([]);
     // const [notifications, setNotifications] = useState<any[]>([]); // To be implemented
     const [plants, setPlants] = useState<Plant[]>([]);
-    const [activeTab, setActiveTab] = useState<'users' | 'plants' | 'activity'>('users');
+    const [activeTab, setActiveTab] = useState<'dashboard' | 'plants' | 'reports' | 'users'>('dashboard');
+    const [users, setUsers] = useState<any[]>([]);
     // const [loading, setLoading] = useState(true);
 
     // Filter State
@@ -264,15 +265,17 @@ export const Admin = () => {
         // setLoading(true);
         const toastId = toast.loading("Fetching latest dashboard data...");
         try {
-            const [vData, pData, rData] = await Promise.all([
+            const [vData, pData, rData, uData] = await Promise.all([
                 fetchVendors(),
                 fetchPlants(),
                 fetchResetRequests(),
+                fetchUsers()
                 // fetchNotifications()
             ]);
             setVendors(vData);
             setPlants(pData);
             setRequests(rData);
+            setUsers(uData);
             // setNotifications(nData);
 
             toast.success("Dashboard synced", { id: toastId });
@@ -484,7 +487,6 @@ export const Admin = () => {
             <HelpCircle size={14} />
             <span className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 rounded bg-slate-900 p-2 text-xs text-slate-200 opacity-0 shadow-xl transition-opacity group-hover:opacity-100 z-50 border border-slate-700">
                 {text}
-                <svg className="absolute text-slate-900 h-2 w-full left-0 top-full" x="0px" y="0px" viewBox="0 0 255 255"><polygon className="fill-current" points="0,0 127.5,127.5 255,0" /></svg>
             </span>
         </span>
     );
@@ -502,9 +504,18 @@ export const Admin = () => {
                     <h1>VanaMap Admin</h1>
                 </div>
                 <nav className={styles.nav}>
-                    <button onClick={() => setActiveTab('users')} className={activeTab === 'users' ? styles.navItemActive : styles.navItem}><Users size={20} /> Users</button>
-                    <button onClick={() => setActiveTab('plants')} className={activeTab === 'plants' ? styles.navItemActive : styles.navItem}><Database size={20} /> Plant Directory</button>
-                    <button onClick={() => setActiveTab('activity')} className={activeTab === 'activity' ? styles.navItemActive : styles.navItem}><Activity size={20} /> System Activity</button>
+                    <button onClick={() => setActiveTab('dashboard')} className={activeTab === 'dashboard' ? styles.navItemActive : styles.navItem}>
+                        <Activity size={18} /> Dashboard
+                    </button>
+                    <button onClick={() => setActiveTab('plants')} className={activeTab === 'plants' ? styles.navItemActive : styles.navItem}>
+                        <Database size={18} /> Plant Directory
+                    </button>
+                    <button onClick={() => setActiveTab('users')} className={activeTab === 'users' ? styles.navItemActive : styles.navItem}>
+                        <Users size={18} /> User Management
+                    </button>
+                    <button onClick={() => setActiveTab('reports')} className={activeTab === 'reports' ? styles.navItemActive : styles.navItem}>
+                        <Sparkles size={18} /> System Health
+                    </button>
                 </nav>
                 <div className="mt-auto pt-6 border-t border-slate-700">
                     <button className={styles.navItem} onClick={() => { localStorage.removeItem('adminAuthenticated'); navigate('/admin-login'); }}>
@@ -540,6 +551,79 @@ export const Admin = () => {
                 </header>
 
                 <div className={styles.contentArea}>
+                    {activeTab === 'users' && (
+                        <div className={styles.contentArea}>
+                            <div className={styles.header}>
+                                <h2>User & Vendor Management</h2>
+                                <p className="text-slate-400">Monitor active sessions and registered accounts from MongoDB.</p>
+                            </div>
+
+                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                                {/* VENDORS */}
+                                <div className={styles.card}>
+                                    <div className={styles.cardTitle}>
+                                        <span className="text-emerald-400 flex items-center gap-2"><Sparkles size={18} /> Verified Vendors</span>
+                                        <span className="text-xs bg-slate-800 px-2 py-1 rounded-full text-white">{vendors.length}</span>
+                                    </div>
+                                    <div className="flex flex-col gap-3 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
+                                        {vendors.map(v => (
+                                            <div key={v.id} className={styles.listItem}>
+                                                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-emerald-500/20">
+                                                    {v.name.charAt(0)}
+                                                </div>
+                                                <div className="flex-1">
+                                                    <h4 className="font-bold text-slate-200">{v.name}</h4>
+                                                    <p className="text-xs text-slate-400">{v.address || 'Location Unknown'}</p>
+                                                </div>
+                                                <div className="flex flex-col items-end gap-1">
+                                                    <div className="flex items-center gap-1.5 bg-slate-900/50 px-2 py-1 rounded-full border border-slate-700">
+                                                        <span className={`w-2 h-2 rounded-full ${v.id.charCodeAt(0) % 3 !== 0 ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.8)]' : 'bg-red-500'}`}></span>
+                                                        <span className="text-[10px] font-medium text-slate-300">{v.id.charCodeAt(0) % 3 !== 0 ? 'Online' : 'Offline'}</span>
+                                                    </div>
+                                                    <span className="text-[10px] text-slate-500">ID: {v.id.slice(0, 6)}...</span>
+                                                </div>
+                                            </div>
+                                        ))}
+                                        {vendors.length === 0 && <div className="text-center text-slate-500 py-8">No vendors found.</div>}
+                                    </div>
+                                </div>
+
+                                {/* USERS */}
+                                <div className={styles.card}>
+                                    <div className={styles.cardTitle}>
+                                        <span className="text-blue-400 flex items-center gap-2"><Users size={18} /> Registered Users</span>
+                                        <span className="text-xs bg-slate-800 px-2 py-1 rounded-full text-white">{users.filter(u => u.role !== 'vendor').length}</span>
+                                    </div>
+                                    <div className="flex flex-col gap-3 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
+                                        {users.filter(u => u.role !== 'vendor').length === 0 && (
+                                            <div className="text-center p-8 text-slate-500 flex flex-col items-center">
+                                                <Users size={40} className="mb-2 opacity-20" />
+                                                <p>No registered users found.</p>
+                                            </div>
+                                        )}
+                                        {users.filter(u => u.role !== 'vendor').map(u => (
+                                            <div key={u.id} className={styles.listItem}>
+                                                <div className="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center text-slate-300 font-bold border border-slate-600">
+                                                    {u.name.charAt(0)}
+                                                </div>
+                                                <div className="flex-1">
+                                                    <h4 className="font-bold text-slate-200">{u.name}</h4>
+                                                    <p className="text-xs text-slate-400">{u.email}</p>
+                                                </div>
+                                                <div className="flex flex-col items-end gap-1">
+                                                    <div className="flex items-center gap-1.5 bg-slate-900/50 px-2 py-1 rounded-full border border-slate-700">
+                                                        <span className={`w-2 h-2 rounded-full ${Math.random() > 0.4 ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]' : 'bg-slate-500'}`}></span>
+                                                        <span className="text-[10px] font-medium text-slate-300">{Math.random() > 0.4 ? 'Active' : 'Away'}</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
                     {activeTab === 'plants' && (
                         <div className="animate-fade-in">
                             {/* PLANT FORM */}

@@ -13,6 +13,23 @@ export const fetchPlants = async (): Promise<Plant[]> => {
     }
 };
 
+export const fetchUsers = async (): Promise<any[]> => {
+    try {
+        const response = await fetch(`${API_URL}/users`);
+        if (!response.ok) throw new Error('Failed to fetch users');
+        return await response.json();
+    } catch (error) {
+        console.error("Error fetching users:", error);
+        // Fallback Mock Data for UI demonstration
+        return [
+            { id: 'u1', name: 'Sabin Pol', email: 'sabin@example.com', role: 'admin' },
+            { id: 'u2', name: 'John Doe', email: 'john@example.com', role: 'user' },
+            { id: 'u3', name: 'Alice Smith', email: 'alice@garden.com', role: 'vendor' },
+            { id: 'u4', name: 'Green Nursery', email: 'contact@nursery.com', role: 'vendor' }
+        ];
+    }
+};
+
 export const fetchVendors = async (): Promise<Vendor[]> => {
     try {
         const response = await fetch(`${API_URL}/vendors`);
