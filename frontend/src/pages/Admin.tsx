@@ -527,23 +527,44 @@ export const Admin = () => {
 
                     {activeTab === 'dashboard' && (
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 animate-fade-in">
-                            <div className="bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700/50 p-6 rounded-2xl relative overflow-hidden group hover:border-emerald-500/30 transition-all">
-                                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"><Users size={64} /></div>
-                                <div className="text-slate-400 text-sm font-medium tracking-wider uppercase mb-1">Total Vendors</div>
-                                <div className="text-4xl font-black text-white">{vendors.length}</div>
-                                <div className="text-xs text-emerald-400 mt-2 flex items-center gap-1"><Activity size={10} /> Active Partner Network</div>
+                            <div className={`${styles['premium-card']} p-6 flex flex-col justify-between group`}>
+                                <div className="flex justify-between items-start mb-4">
+                                    <div className="p-3 rounded-lg bg-blue-50 text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-colors duration-300">
+                                        <Users size={24} />
+                                    </div>
+                                    <div className="text-xs font-bold text-slate-400 bg-slate-50 px-2 py-1 rounded-full border border-slate-100">+12% this week</div>
+                                </div>
+                                <div>
+                                    <div className="text-3xl font-black text-slate-800 mb-1">{vendors.length}</div>
+                                    <div className="text-sm font-medium text-slate-500">Active Partners</div>
+                                </div>
                             </div>
-                            <div className="bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700/50 p-6 rounded-2xl relative overflow-hidden group hover:border-emerald-500/30 transition-all">
-                                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"><Database size={64} /></div>
-                                <div className="text-slate-400 text-sm font-medium tracking-wider uppercase mb-1">Plants Cataloged</div>
-                                <div className="text-4xl font-black text-white">{plants.length}</div>
-                                <div className="text-xs text-emerald-400 mt-2 flex items-center gap-1"><Sprout size={10} /> Verified Species</div>
+                            <div className={`${styles['premium-card']} p-6 flex flex-col justify-between group`}>
+                                <div className="flex justify-between items-start mb-4">
+                                    <div className="p-3 rounded-lg bg-emerald-50 text-emerald-500 group-hover:bg-emerald-500 group-hover:text-white transition-colors duration-300">
+                                        <Database size={24} />
+                                    </div>
+                                    <span className="flex h-2 w-2 relative">
+                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                                        <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                                    </span>
+                                </div>
+                                <div>
+                                    <div className="text-3xl font-black text-slate-800 mb-1">{plants.length}</div>
+                                    <div className="text-sm font-medium text-slate-500">Botanical Records</div>
+                                </div>
                             </div>
-                            <div className="bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700/50 p-6 rounded-2xl relative overflow-hidden group hover:border-emerald-500/30 transition-all">
-                                <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity"><Sparkles size={64} /></div>
-                                <div className="text-slate-400 text-sm font-medium tracking-wider uppercase mb-1">System Status</div>
-                                <div className="text-4xl font-black text-emerald-400">98%</div>
-                                <div className="text-xs text-slate-400 mt-2 flex items-center gap-1">Operational</div>
+                            <div className={`${styles['premium-card']} p-6 flex flex-col justify-between group`}>
+                                <div className="flex justify-between items-start mb-4">
+                                    <div className="p-3 rounded-lg bg-orange-50 text-orange-500 group-hover:bg-orange-500 group-hover:text-white transition-colors duration-300">
+                                        <Activity size={24} />
+                                    </div>
+                                    <div className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full border border-emerald-100">Optimal</div>
+                                </div>
+                                <div>
+                                    <div className="text-3xl font-black text-slate-800 mb-1">99.8%</div>
+                                    <div className="text-sm font-medium text-slate-500">System Uptime</div>
+                                </div>
                             </div>
                         </div>
                     )}
@@ -554,46 +575,48 @@ export const Admin = () => {
                         <div className="animate-fade-in space-y-8">
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                                 {/* Recent Activity Feed */}
-                                <div className="bg-slate-800/20 backdrop-blur-xl border border-slate-700/50 rounded-2xl p-6 shadow-xl">
-                                    <h3 className="text-lg font-bold text-white mb-6 flex items-center gap-2">
-                                        <Activity size={18} className="text-emerald-400" /> Recent Species Log
-                                    </h3>
-                                    <div className="space-y-4">
-                                        {plants.slice(0, 5).map((p, i) => (
-                                            <div key={p.id} className="flex items-center gap-4 p-3 rounded-xl bg-slate-900/40 border border-slate-700/30 group hover:border-emerald-500/30 transition-all">
-                                                <div className="w-10 h-10 rounded-lg overflow-hidden bg-slate-800">
+                                <div className={`${styles['premium-card']} p-0 overflow-hidden`}>
+                                    <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                                        <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2">
+                                            <Activity size={18} className="text-emerald-500" /> Recent Species Log
+                                        </h3>
+                                        <button onClick={() => setActiveTab('plants')} className="text-xs font-bold text-emerald-600 hover:text-emerald-700 uppercase tracking-widest">
+                                            View All
+                                        </button>
+                                    </div>
+                                    <div className="divide-y divide-slate-100">
+                                        {plants.slice(0, 5).map((p) => (
+                                            <div key={p.id} className="flex items-center gap-4 p-4 hover:bg-slate-50/80 transition-colors group cursor-pointer">
+                                                <div className="w-12 h-12 rounded-lg overflow-hidden bg-slate-100 border border-slate-200 group-hover:border-emerald-200 transition-colors">
                                                     <img src={p.imageUrl} alt="" className="w-full h-full object-cover" />
                                                 </div>
                                                 <div className="flex-1">
-                                                    <div className="text-sm font-bold text-slate-200">{p.name} cataloged</div>
-                                                    <div className="text-xs text-slate-500">{i + 1}h ago • {p.scientificName}</div>
+                                                    <div className="text-sm font-bold text-slate-800 group-hover:text-emerald-700 transition-colors">{p.name}</div>
+                                                    <div className="text-xs text-slate-500 italic">{p.scientificName}</div>
                                                 </div>
-                                                <div className="text-[10px] font-bold text-emerald-500 bg-emerald-500/10 px-2 py-1 rounded">LIVE</div>
+                                                <div className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded border border-emerald-100">NEW</div>
                                             </div>
                                         ))}
                                     </div>
-                                    <button onClick={() => setActiveTab('plants')} className="w-full mt-6 py-3 rounded-xl border border-slate-700 text-slate-400 text-xs font-bold hover:bg-slate-800 hover:text-white transition-all uppercase tracking-widest">
-                                        View All Inventory
-                                    </button>
                                 </div>
 
                                 {/* Quick Health Check */}
                                 <div className="space-y-6">
-                                    <div className="bg-slate-800/20 backdrop-blur-xl border border-slate-700/50 rounded-2xl p-6 shadow-xl">
-                                        <h3 className="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                                            <Sparkles size={18} className="text-blue-400" /> System Metrics
+                                    <div className={`${styles['premium-card']} p-6`}>
+                                        <h3 className="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
+                                            <Sparkles size={18} className="text-blue-500" /> Platform Metrics
                                         </h3>
-                                        <div className="space-y-5">
+                                        <div className="space-y-6">
                                             <div>
-                                                <div className="flex justify-between text-xs mb-1.5"><span className="text-slate-400">Database Capacity</span> <span className="text-slate-200">12%</span></div>
-                                                <div className="h-1.5 bg-slate-700 rounded-full overflow-hidden">
-                                                    <div className="h-full bg-blue-500 w-[12%]" />
+                                                <div className="flex justify-between text-xs font-bold mb-2"><span className="text-slate-500">Database Load</span> <span className="text-slate-800">12%</span></div>
+                                                <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+                                                    <div className="h-full bg-blue-500 rounded-full w-[12%]" />
                                                 </div>
                                             </div>
                                             <div>
-                                                <div className="flex justify-between text-xs mb-1.5"><span className="text-slate-400">Image Assets</span> <span className="text-slate-200">4.2 GB</span></div>
-                                                <div className="h-1.5 bg-slate-700 rounded-full overflow-hidden">
-                                                    <div className="h-full bg-emerald-500 w-[45%]" />
+                                                <div className="flex justify-between text-xs font-bold mb-2"><span className="text-slate-500">Asset Storage</span> <span className="text-slate-800">4.2 GB</span></div>
+                                                <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+                                                    <div className="h-full bg-emerald-500 rounded-full w-[45%]" />
                                                 </div>
                                             </div>
                                             <div>
@@ -604,12 +627,12 @@ export const Admin = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="bg-gradient-to-br from-emerald-600/20 to-teal-600/20 backdrop-blur-xl border border-emerald-500/20 rounded-2xl p-6 shadow-xl flex items-center justify-between">
+                                    <div className="bg-gradient-to-br from-emerald-600/5 to-teal-600/5 border border-emerald-500/20 rounded-2xl p-6 shadow-sm flex items-center justify-between">
                                         <div>
-                                            <h4 className="text-emerald-400 font-bold mb-1">Backup Protocol</h4>
-                                            <p className="text-xs text-slate-400">Next snapshots in 4 hours.</p>
+                                            <h4 className="text-emerald-700 font-bold mb-1">Backup Protocol</h4>
+                                            <p className="text-xs text-slate-500">Next snapshots in 4 hours.</p>
                                         </div>
-                                        <div className="p-3 rounded-full bg-emerald-500/20 text-emerald-400 shadow-lg shadow-emerald-500/10">
+                                        <div className="p-3 rounded-full bg-emerald-100 text-emerald-600">
                                             <Database size={24} />
                                         </div>
                                     </div>
@@ -620,28 +643,28 @@ export const Admin = () => {
 
                     {activeTab === 'reports' && (
                         <div className="animate-fade-in space-y-8">
-                            <div className="bg-slate-800/20 backdrop-blur-xl border border-slate-700/50 rounded-3xl p-8 text-center flex flex-col items-center">
-                                <div className="w-20 h-20 bg-emerald-500/10 rounded-full flex items-center justify-center text-emerald-400 mb-6 shadow-2xl shadow-emerald-500/20">
-                                    <Activity size={40} className="animate-pulse" />
+                            <div className={`${styles['premium-card']} p-12 text-center flex flex-col items-center shadow-none border-dashed border-2 bg-slate-50/50`}>
+                                <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center text-emerald-500 mb-6 shadow-xl shadow-emerald-500/10 border border-emerald-50">
+                                    <Activity size={48} className="animate-pulse" />
                                 </div>
-                                <h3 className="text-2xl font-bold text-white mb-2">Internal Health Diagnostics</h3>
-                                <p className="text-slate-400 max-w-md mx-auto mb-8 text-sm">Real-time telemetry and error monitoring across VanaMap cloud clusters.</p>
+                                <h3 className="text-3xl font-black text-slate-800 mb-2">System Diagnostics</h3>
+                                <p className="text-slate-500 max-w-md mx-auto mb-10 text-sm">Real-time telemetry and error monitoring across VanaMap cloud clusters.</p>
 
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
-                                    <div className="bg-slate-900/50 border border-slate-700/50 p-6 rounded-2xl">
-                                        <div className="text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-1">Response Time</div>
-                                        <div className="text-2xl font-black text-white">24ms</div>
-                                        <div className="text-xs text-emerald-500 mt-1">Excellent</div>
+                                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl">
+                                    <div className="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm hover:shadow-md transition-all">
+                                        <div className="text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-2">Response Time</div>
+                                        <div className="text-4xl font-black text-slate-800 mb-1">24ms</div>
+                                        <div className="text-xs font-bold text-emerald-600 bg-emerald-50 inline-block px-2 py-1 rounded-full">Excellent</div>
                                     </div>
-                                    <div className="bg-slate-900/50 border border-slate-700/50 p-6 rounded-2xl">
-                                        <div className="text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-1">Server Load</div>
-                                        <div className="text-2xl font-black text-white">4.2%</div>
-                                        <div className="text-xs text-emerald-500 mt-1">Normal</div>
+                                    <div className="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm hover:shadow-md transition-all">
+                                        <div className="text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-2">Server Load</div>
+                                        <div className="text-4xl font-black text-slate-800 mb-1">4.2%</div>
+                                        <div className="text-xs font-bold text-blue-600 bg-blue-50 inline-block px-2 py-1 rounded-full">Nominal</div>
                                     </div>
-                                    <div className="bg-slate-900/50 border border-slate-700/50 p-6 rounded-2xl">
-                                        <div className="text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-1">Search Latency</div>
-                                        <div className="text-2xl font-black text-white">0.02s</div>
-                                        <div className="text-xs text-emerald-500 mt-1">Ultra Low</div>
+                                    <div className="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm hover:shadow-md transition-all">
+                                        <div className="text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-2">Search Latency</div>
+                                        <div className="text-4xl font-black text-slate-800 mb-1">0.02s</div>
+                                        <div className="text-xs font-bold text-purple-600 bg-purple-50 inline-block px-2 py-1 rounded-full">Ultra Fast</div>
                                     </div>
                                 </div>
                             </div>
@@ -672,64 +695,69 @@ export const Admin = () => {
 
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                                 {/* VENDORS */}
-                                <div className={styles.card}>
-                                    <div className={styles.cardTitle}>
-                                        <span className="text-emerald-400 flex items-center gap-2"><Sparkles size={18} /> Verified Vendors</span>
-                                        <span className="text-xs bg-slate-800 px-2 py-1 rounded-full text-white">{vendors.length}</span>
+                                <div className="flex flex-col gap-6">
+                                    <div className="flex items-center justify-between mb-2">
+                                        <div className="flex items-center gap-2">
+                                            <div className="p-2 bg-emerald-100 rounded-lg text-emerald-600"><Sparkles size={18} /></div>
+                                            <h3 className="font-bold text-slate-800">Partner Network</h3>
+                                        </div>
+                                        <span className="text-xs font-bold bg-slate-100 text-slate-500 px-3 py-1 rounded-full">{vendors.length} Active</span>
                                     </div>
-                                    <div className="flex flex-col gap-3 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
+
+                                    <div className="space-y-3">
                                         {vendors.map(v => (
-                                            <div key={v.id} className={styles.listItem}>
-                                                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-emerald-500/20">
+                                            <div key={v.id} className={`${styles.listItem}`}>
+                                                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-emerald-500/20">
                                                     {v.name.charAt(0)}
                                                 </div>
                                                 <div className="flex-1">
-                                                    <h4 className="font-bold text-slate-200">{v.name}</h4>
-                                                    <p className="text-xs text-slate-400">{v.address || 'Location Unknown'}</p>
+                                                    <h4 className="font-bold text-slate-800 text-sm">{v.name}</h4>
+                                                    <p className="text-xs text-slate-500 font-medium">{v.address || 'Global HQ'}</p>
                                                 </div>
                                                 <div className="flex flex-col items-end gap-1">
-                                                    <div className="flex items-center gap-1.5 bg-slate-900/50 px-2 py-1 rounded-full border border-slate-700">
-                                                        <span className={`w-2 h-2 rounded-full ${v.id.charCodeAt(0) % 3 !== 0 ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.8)]' : 'bg-red-500'}`}></span>
-                                                        <span className="text-[10px] font-medium text-slate-300">{v.id.charCodeAt(0) % 3 !== 0 ? 'Online' : 'Offline'}</span>
+                                                    <div className="flex items-center gap-1.5 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">
+                                                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                                        <span className="text-[10px] font-bold text-emerald-700 uppercase tracking-wide">Live</span>
                                                     </div>
-                                                    <span className="text-[10px] text-slate-500">ID: {v.id.slice(0, 6)}...</span>
                                                 </div>
                                             </div>
                                         ))}
-                                        {vendors.length === 0 && <div className="text-center text-slate-500 py-8">No vendors found.</div>}
                                     </div>
                                 </div>
 
                                 {/* USERS */}
-                                <div className={styles.card}>
-                                    <div className={styles.cardTitle}>
-                                        <span className="text-blue-400 flex items-center gap-2"><Users size={18} /> Registered Users</span>
-                                        <span className="text-xs bg-slate-800 px-2 py-1 rounded-full text-white">{users.filter(u => u.role !== 'vendor').length}</span>
+                                <div className="flex flex-col gap-6">
+                                    <div className="flex items-center justify-between mb-2">
+                                        <div className="flex items-center gap-2">
+                                            <div className="p-2 bg-blue-100 rounded-lg text-blue-600"><Users size={18} /></div>
+                                            <h3 className="font-bold text-slate-800">Community Access</h3>
+                                        </div>
+                                        <span className="text-xs font-bold bg-slate-100 text-slate-500 px-3 py-1 rounded-full">{users.filter(u => u.role !== 'vendor').length} Registered</span>
                                     </div>
-                                    <div className="flex flex-col gap-3 max-h-[600px] overflow-y-auto pr-2 custom-scrollbar">
-                                        {users.filter(u => u.role !== 'vendor').length === 0 && (
-                                            <div className="text-center p-8 text-slate-500 flex flex-col items-center">
-                                                <Users size={40} className="mb-2 opacity-20" />
-                                                <p>No registered users found.</p>
-                                            </div>
-                                        )}
+
+                                    <div className="space-y-3">
                                         {users.filter(u => u.role !== 'vendor').map(u => (
-                                            <div key={u.id} className={styles.listItem}>
-                                                <div className="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center text-slate-300 font-bold border border-slate-600">
+                                            <div key={u.id} className={`${styles.listItem}`}>
+                                                <div className="w-12 h-12 rounded-xl bg-white border border-slate-100 flex items-center justify-center text-slate-400 font-bold shadow-sm">
                                                     {u.name.charAt(0)}
                                                 </div>
                                                 <div className="flex-1">
-                                                    <h4 className="font-bold text-slate-200">{u.name}</h4>
-                                                    <p className="text-xs text-slate-400">{u.email}</p>
+                                                    <h4 className="font-bold text-slate-800 text-sm">{u.name}</h4>
+                                                    <p className="text-xs text-slate-400 font-medium">{u.email}</p>
                                                 </div>
-                                                <div className="flex flex-col items-end gap-1">
-                                                    <div className="flex items-center gap-1.5 bg-slate-900/50 px-2 py-1 rounded-full border border-slate-700">
-                                                        <span className={`w-2 h-2 rounded-full ${Math.random() > 0.4 ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]' : 'bg-slate-500'}`}></span>
-                                                        <span className="text-[10px] font-medium text-slate-300">{Math.random() > 0.4 ? 'Active' : 'Away'}</span>
-                                                    </div>
+                                                <div className="text-[10px] font-bold text-slate-400 bg-slate-50 px-2 py-1 rounded-lg border border-slate-100 uppercase tracking-wider">
+                                                    Standard
                                                 </div>
                                             </div>
                                         ))}
+                                        {users.filter(u => u.role !== 'vendor').length === 0 && (
+                                            <div className="p-12 text-center border-2 border-dashed border-slate-200 rounded-2xl">
+                                                <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-300">
+                                                    <Users size={32} />
+                                                </div>
+                                                <p className="text-slate-500 font-medium text-sm">No community members yet.</p>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
