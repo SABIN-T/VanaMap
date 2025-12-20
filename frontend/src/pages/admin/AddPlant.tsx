@@ -2,10 +2,11 @@ import { useState } from 'react';
 import { Button } from '../../components/common/Button';
 import { addPlant } from '../../services/api';
 import { AdminPageLayout } from './AdminPageLayout';
-import { Search, Upload, Thermometer, Sun, Leaf, Sprout, Link as LinkIcon, AlertCircle } from 'lucide-react';
+import { Search, Upload, Thermometer, Sun, Leaf, Sprout, Link as LinkIcon, Wind, Droplets } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { INDIAN_PLANT_DB } from '../../data/indianPlants';
 import type { Plant } from '../../types';
+import { PlantCard } from '../../components/features/plants/PlantCard';
 
 // --- HELPERS ---
 const smartFillPlant = (sciName: string) => {
@@ -156,246 +157,238 @@ export const AddPlant = () => {
         }
     };
 
+    // Construct Preview Object
+    const previewPlant: Plant = {
+        id: 'preview',
+        name: newPlant.name || 'Plant Name',
+        scientificName: newPlant.scientificName || 'Scientific Name',
+        description: newPlant.description || 'Description...',
+        imageUrl: newPlant.imageUrl || 'https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?auto=format&fit=crop',
+        price: Number(newPlant.price),
+        type: newPlant.type as any || 'indoor',
+        sunlight: newPlant.sunlight as any || 'medium',
+        idealTempMin: 18, idealTempMax: 30,
+        minHumidity: Number(newPlant.minHumidity),
+        oxygenLevel: newPlant.oxygenLevel as any || 'moderate',
+        medicinalValues: [],
+        advantages: [],
+        isNocturnal: false
+    };
+
     return (
-        <AdminPageLayout title="New Specimen Entry">
-            <div className="w-full space-y-6">
+        <AdminPageLayout title="Add New Specimen">
+            <div className="w-full">
 
-                {/* 1. Smart Fill Bar */}
-                <div className="bg-slate-800/50 border border-slate-700 p-4 rounded-xl flex flex-col md:flex-row gap-4 items-center shadow-sm">
-                    <div className="flex items-center gap-3 text-emerald-400 font-bold whitespace-nowrap">
-                        <Sprout size={20} />
-                        <span>AI Smart Fill</span>
-                    </div>
-                    <div className="flex-1 w-full relative">
-                        <input
-                            value={scientificNameSearch}
-                            onChange={(e) => setScientificNameSearch(e.target.value)}
-                            placeholder="Type scientific name to auto-complete (e.g. Ocimum)..."
-                            className="w-full bg-slate-900 border border-slate-700 rounded-lg py-2.5 pl-10 pr-4 text-sm text-white focus:border-emerald-500 outline-none transition-colors"
-                        />
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" size={16} />
-                    </div>
-                    <Button onClick={handleSmartFill} className="whitespace-nowrap bg-emerald-600 hover:bg-emerald-500 text-white px-6 py-2.5 rounded-lg font-medium shadow-lg shadow-emerald-900/20">
-                        Auto-Fill
-                    </Button>
-                </div>
+                {/* Workflow Container */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start relative">
 
-                <form onSubmit={handleAddPlant} className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-
-                    {/* LEFT COLUMN (Media & Quick Stats) - Span 1 */}
-                    <div className="lg:col-span-1 space-y-6">
-                        {/* Image Upload */}
-                        <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-5 shadow-sm hover:border-slate-600 transition-colors">
-                            <h3 className="text-white font-bold mb-4 flex justify-between items-center">
-                                <span>Plant Image</span>
-                                <div className="flex bg-slate-900 rounded-md p-0.5">
-                                    <button type="button" onClick={() => setUploadMode('file')} className={`px-3 py-1 text-[10px] rounded hover:text-white transition ${uploadMode === 'file' ? 'bg-slate-700 text-white' : 'text-slate-400'}`}>Upload</button>
-                                    <button type="button" onClick={() => setUploadMode('url')} className={`px-3 py-1 text-[10px] rounded hover:text-white transition ${uploadMode === 'url' ? 'bg-slate-700 text-white' : 'text-slate-400'}`}>URL</button>
-                                </div>
+                    {/* LEFT COLUMN: LIVE PREVIEW & ASSETS (Sticky) - Span 4 */}
+                    <div className="lg:col-span-4 lg:sticky lg:top-8 space-y-6">
+                        <div className="bg-slate-800/50 border border-slate-700 rounded-2xl p-6 shadow-xl backdrop-blur-sm">
+                            <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                                <Leaf size={14} className="text-emerald-400" /> Live Preview
                             </h3>
 
-                            <div className="aspect-square bg-slate-900 rounded-lg border-2 border-dashed border-slate-700 flex flex-col items-center justify-center relative overflow-hidden group">
-                                {newPlant.imageUrl ? (
-                                    <>
-                                        <img src={newPlant.imageUrl} alt="Preview" className="w-full h-full object-cover" />
-                                        <button
-                                            type="button"
-                                            onClick={() => setNewPlant({ ...newPlant, imageUrl: '' })}
-                                            className="absolute top-2 right-2 bg-red-500/80 p-1.5 rounded-full text-white opacity-0 group-hover:opacity-100 transition-opacity z-20"
-                                        >
-                                            <AlertCircle size={16} />
-                                        </button>
-                                    </>
+                            {/* Card Preview Wrapper - Pointer events disabled to prevent clicking "Add to Cart" */}
+                            <div className="pointer-events-none transform transition-all duration-500">
+                                <PlantCard plant={previewPlant} onAdd={() => { }} />
+                            </div>
+
+                            <div className="mt-6 pt-6 border-t border-slate-700/50 space-y-4">
+                                <div className="flex justify-between items-center mb-2">
+                                    <label className="text-xs font-bold text-slate-300 uppercase">Cover Image</label>
+                                    <div className="flex bg-slate-900 rounded-md p-0.5 border border-slate-700">
+                                        <button type="button" onClick={() => setUploadMode('file')} className={`px-2 py-0.5 text-[10px] rounded transition ${uploadMode === 'file' ? 'bg-slate-700 text-white shadow-sm' : 'text-slate-400'}`}>Upload</button>
+                                        <button type="button" onClick={() => setUploadMode('url')} className={`px-2 py-0.5 text-[10px] rounded transition ${uploadMode === 'url' ? 'bg-slate-700 text-white shadow-sm' : 'text-slate-400'}`}>URL</button>
+                                    </div>
+                                </div>
+
+                                {uploadMode === 'file' ? (
+                                    <div className="relative group w-full">
+                                        <div className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-slate-900 border border-slate-700 border-dashed rounded-xl hover:border-emerald-500 hover:bg-slate-800/80 transition-all cursor-pointer">
+                                            <Upload size={16} className="text-emerald-400" />
+                                            <span className="text-xs font-medium text-slate-300">Choose File</span>
+                                        </div>
+                                        <input
+                                            type="file"
+                                            accept="image/*"
+                                            onChange={handleImageUpload}
+                                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                        />
+                                    </div>
                                 ) : (
-                                    <div className="text-center p-6 pointer-events-none">
-                                        {uploadMode === 'file' ? (
-                                            <>
-                                                <Upload className="mx-auto text-emerald-500 mb-3" size={32} />
-                                                <span className="text-sm text-slate-400 block font-medium">Click to Upload</span>
-                                                <span className="text-xs text-slate-600">JPG/PNG max 5MB</span>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <LinkIcon className="mx-auto text-blue-500 mb-3" size={32} />
-                                                <span className="text-sm text-slate-400">Paste URL Below</span>
-                                            </>
-                                        )}
+                                    <div className="relative">
+                                        <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" size={14} />
+                                        <input
+                                            value={newPlant.imageUrl}
+                                            onChange={(e) => setNewPlant({ ...newPlant, imageUrl: e.target.value })}
+                                            placeholder="Paste Image URL..."
+                                            className="w-full bg-slate-900 border border-slate-700 rounded-xl py-2.5 pl-9 pr-3 text-xs text-white focus:border-blue-500 outline-none"
+                                        />
                                     </div>
                                 )}
-
-                                {uploadMode === 'file' && (
-                                    <input
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={handleImageUpload}
-                                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
-                                        style={{ opacity: 0 }}
-                                    />
-                                )}
                             </div>
+                        </div>
+                    </div>
 
-                            {uploadMode === 'url' && (
-                                <input
-                                    value={newPlant.imageUrl}
-                                    onChange={(e) => setNewPlant({ ...newPlant, imageUrl: e.target.value })}
-                                    placeholder="https://..."
-                                    className="mt-3 w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-xs text-white focus:border-blue-500 outline-none"
-                                />
-                            )}
+                    {/* RIGHT COLUMN: DATA ENTRY - Span 8 */}
+                    <form onSubmit={handleAddPlant} className="lg:col-span-8 space-y-8">
+
+                        {/* 1. Smart Fill */}
+                        <div className="bg-gradient-to-r from-emerald-900/20 to-teal-900/20 border border-emerald-500/30 rounded-2xl p-1 relative overflow-hidden group">
+                            <div className="absolute inset-0 bg-emerald-500/5 blur-xl group-hover:bg-emerald-500/10 transition-colors"></div>
+                            <div className="bg-slate-900/80 backdrop-blur-md rounded-xl p-5 relative flex flex-col sm:flex-row gap-4 items-center">
+                                <div className="flex-1 w-full">
+                                    <label className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider mb-1 block">Quick Start</label>
+                                    <div className="relative">
+                                        <input
+                                            value={scientificNameSearch}
+                                            onChange={(e) => setScientificNameSearch(e.target.value)}
+                                            placeholder="Enter Scientific Name (e.g. Ocimum)..."
+                                            className="w-full bg-transparent border-b border-slate-600 py-2 pl-8 pr-4 text-white placeholder:text-slate-600 focus:border-emerald-500 outline-none transition-colors"
+                                        />
+                                        <Search className="absolute left-0 top-1/2 -translate-y-1/2 text-slate-500" size={16} />
+                                    </div>
+                                </div>
+                                <Button type="button" onClick={handleSmartFill} size="sm" className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-900/20 border-0">
+                                    <Sprout size={16} className="mr-2" /> Auto-Fill Data
+                                </Button>
+                            </div>
                         </div>
 
-                        {/* Quick Stats */}
-                        <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-5 shadow-sm space-y-4">
-                            <h3 className="text-slate-400 text-xs font-bold uppercase tracking-wider">Classification</h3>
-
-                            <div>
-                                <label className="text-sm text-slate-300 block mb-1.5">Category</label>
-                                <select
-                                    value={newPlant.type}
-                                    onChange={(e) => setNewPlant({ ...newPlant, type: e.target.value as any })}
-                                    className="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white focus:border-emerald-500 outline-none"
-                                >
-                                    <option value="indoor">🏠 Indoor Specimen</option>
-                                    <option value="outdoor">🌳 Outdoor Specimen</option>
-                                </select>
-                            </div>
-
-                            <div>
-                                <label className="text-sm text-slate-300 block mb-1.5">Market Price (₹)</label>
-                                <div className="relative">
-                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500">₹</span>
+                        {/* 2. Core Info */}
+                        <section className="space-y-4">
+                            <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                                <div className="p-1.5 bg-slate-800 rounded-lg border border-slate-700 text-slate-300"><Leaf size={18} /></div>
+                                <span>Identification</span>
+                            </h2>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 bg-slate-800/30 border border-slate-800 rounded-2xl p-6">
+                                <div className="space-y-1.5">
+                                    <label className="text-xs font-bold text-slate-400 uppercase ml-1">Common Name</label>
+                                    <input
+                                        value={newPlant.name}
+                                        onChange={(e) => setNewPlant({ ...newPlant, name: e.target.value })}
+                                        className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:border-emerald-500 outline-none transition-all focus:ring-1 focus:ring-emerald-500/50"
+                                        placeholder="e.g. Snake Plant"
+                                        required
+                                    />
+                                </div>
+                                <div className="space-y-1.5">
+                                    <label className="text-xs font-bold text-slate-400 uppercase ml-1">Scientific Name</label>
+                                    <input
+                                        value={newPlant.scientificName}
+                                        onChange={(e) => setNewPlant({ ...newPlant, scientificName: e.target.value })}
+                                        className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white italic focus:border-emerald-500 outline-none transition-all "
+                                        placeholder="e.g. Sansevieria trifasciata"
+                                        required
+                                    />
+                                </div>
+                                <div className="md:col-span-2 space-y-1.5">
+                                    <label className="text-xs font-bold text-slate-400 uppercase ml-1">Marketing Description</label>
+                                    <textarea
+                                        value={newPlant.description}
+                                        onChange={(e) => setNewPlant({ ...newPlant, description: e.target.value })}
+                                        className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:border-emerald-500 outline-none transition-all min-h-[120px]"
+                                        placeholder="Describe the plant's key features..."
+                                        required
+                                    />
+                                </div>
+                                <div className="space-y-1.5">
+                                    <label className="text-xs font-bold text-slate-400 uppercase ml-1">Category</label>
+                                    <select
+                                        value={newPlant.type}
+                                        onChange={(e) => setNewPlant({ ...newPlant, type: e.target.value as any })}
+                                        className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:border-emerald-500 outline-none appearance-none"
+                                    >
+                                        <option value="indoor">🏠 Indoor</option>
+                                        <option value="outdoor">🌳 Outdoor</option>
+                                    </select>
+                                </div>
+                                <div className="space-y-1.5">
+                                    <label className="text-xs font-bold text-slate-400 uppercase ml-1">Price (₹)</label>
                                     <input
                                         type="number"
                                         value={newPlant.price}
                                         onChange={(e) => setNewPlant({ ...newPlant, price: Number(e.target.value) })}
-                                        className="w-full bg-slate-900 border border-slate-700 rounded-lg py-3 pl-8 pr-3 text-white font-mono focus:border-emerald-500 outline-none"
-                                    />
-                                </div>
-                            </div>
-                        </div>
-
-                        <Button type="submit" variant="primary" className="w-full py-4 text-lg font-bold bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-500 hover:to-green-500 shadow-lg shadow-emerald-900/40">
-                            Register Specimen
-                        </Button>
-                    </div>
-
-                    {/* RIGHT COLUMN (Main Details) - Span 2 */}
-                    <div className="lg:col-span-2 space-y-6">
-                        {/* Basic Info */}
-                        <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6 shadow-sm">
-                            <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-                                <Leaf size={20} className="text-emerald-400" /> Identification
-                            </h3>
-
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div className="space-y-2">
-                                    <label className="text-xs font-bold text-slate-400 uppercase">Common Name</label>
-                                    <input
-                                        value={newPlant.name}
-                                        onChange={(e) => setNewPlant({ ...newPlant, name: e.target.value })}
-                                        className="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white focus:border-emerald-500 outline-none placeholder:text-slate-600"
-                                        placeholder="e.g. Aloe Vera"
-                                        required
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <label className="text-xs font-bold text-slate-400 uppercase">Scientific Name</label>
-                                    <input
-                                        value={newPlant.scientificName}
-                                        onChange={(e) => setNewPlant({ ...newPlant, scientificName: e.target.value })}
-                                        className="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white italic focus:border-emerald-500 outline-none placeholder:text-slate-600"
-                                        placeholder="e.g. Aloe barbadensis miller"
-                                        required
-                                    />
-                                </div>
-                                <div className="col-span-1 md:col-span-2 space-y-2">
-                                    <label className="text-xs font-bold text-slate-400 uppercase">Description</label>
-                                    <textarea
-                                        value={newPlant.description}
-                                        onChange={(e) => setNewPlant({ ...newPlant, description: e.target.value })}
-                                        className="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white h-32 focus:border-emerald-500 outline-none resize-none placeholder:text-slate-600"
-                                        placeholder="Detailed plant description..."
+                                        className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white font-mono focus:border-emerald-500 outline-none"
                                         required
                                     />
                                 </div>
                             </div>
-                        </div>
+                        </section>
 
-                        {/* Environment */}
-                        <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6 shadow-sm">
-                            <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
-                                <Sun size={20} className="text-amber-400" /> Environment
-                            </h3>
-
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        {/* 3. Environment */}
+                        <section className="space-y-4">
+                            <h2 className="text-xl font-bold text-white flex items-center gap-2">
+                                <div className="p-1.5 bg-slate-800 rounded-lg border border-slate-700 text-amber-400"><Sun size={18} /></div>
+                                <span>Bio-Requirements</span>
+                            </h2>
+                            <div className="bg-slate-800/30 border border-slate-800 rounded-2xl p-6 space-y-6">
+                                {/* Sunlight */}
                                 <div className="space-y-3">
-                                    <label className="text-xs font-bold text-slate-400 uppercase block">Sunlight Requirement</label>
-                                    <div className="flex flex-col gap-2">
+                                    <label className="text-xs font-bold text-slate-400 uppercase block">Sunlight Intensity</label>
+                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                                         {['low', 'medium', 'high', 'direct'].map((lvl) => (
-                                            <label key={lvl} className={`flex items-center gap-3 p-3 rounded-lg border cursor-pointer transition-all ${newPlant.sunlight === lvl ? 'bg-amber-500/20 border-amber-500 text-white' : 'bg-slate-900 border-slate-700 text-slate-400 hover:border-slate-500'}`}>
-                                                <input
-                                                    type="radio"
-                                                    name="sunlight"
-                                                    checked={newPlant.sunlight === lvl}
-                                                    onChange={() => setNewPlant({ ...newPlant, sunlight: lvl as any })}
-                                                    className="w-4 h-4 accent-amber-500"
-                                                />
-                                                <span className="capitalize font-medium">{lvl} Light</span>
+                                            <label key={lvl} className={`relative flex flex-col items-center justify-center p-3 rounded-xl border-2 cursor-pointer transition-all ${newPlant.sunlight === lvl ? 'bg-amber-500/10 border-amber-500 text-amber-400' : 'bg-slate-900 border-slate-800 text-slate-500 hover:border-slate-600'}`}>
+                                                <input type="radio" name="sunlight" checked={newPlant.sunlight === lvl} onChange={() => setNewPlant({ ...newPlant, sunlight: lvl as any })} className="sr-only" />
+                                                <Sun size={20} className={newPlant.sunlight === lvl ? 'fill-amber-500/20' : ''} />
+                                                <span className="text-[10px] font-bold uppercase mt-2">{lvl}</span>
                                             </label>
                                         ))}
                                     </div>
                                 </div>
 
-                                <div className="md:col-span-2 space-y-6">
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div className="space-y-2">
-                                            <label className="text-xs font-bold text-slate-400 uppercase flex items-center gap-2">
-                                                <Thermometer size={14} /> Min Temp (°C)
-                                            </label>
-                                            <input
-                                                type="number"
-                                                value={newPlant.idealTempMin}
-                                                onChange={(e) => setNewPlant({ ...newPlant, idealTempMin: Number(e.target.value) })}
-                                                className="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white text-center font-mono focus:border-blue-500 outline-none"
-                                            />
-                                        </div>
-                                        <div className="space-y-2">
-                                            <label className="text-xs font-bold text-slate-400 uppercase flex items-center gap-2">
-                                                <Thermometer size={14} /> Max Temp (°C)
-                                            </label>
-                                            <input
-                                                type="number"
-                                                value={newPlant.idealTempMax}
-                                                onChange={(e) => setNewPlant({ ...newPlant, idealTempMax: Number(e.target.value) })}
-                                                className="w-full bg-slate-900 border border-slate-700 rounded-lg p-3 text-white text-center font-mono focus:border-red-500 outline-none"
-                                            />
+                                {/* Temp & Oxygen */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div className="space-y-1.5">
+                                        <label className="text-xs font-bold text-slate-400 uppercase flex items-center gap-2">
+                                            <Thermometer size={14} /> Ideal Temp Range (°C)
+                                        </label>
+                                        <div className="flex items-center gap-2">
+                                            <input type="number" value={newPlant.idealTempMin} onChange={(e) => setNewPlant({ ...newPlant, idealTempMin: Number(e.target.value) })} className="w-full bg-slate-900 border border-slate-700 rounded-xl py-3 text-center text-white focus:border-blue-500 outline-none" />
+                                            <span className="text-slate-600">-</span>
+                                            <input type="number" value={newPlant.idealTempMax} onChange={(e) => setNewPlant({ ...newPlant, idealTempMax: Number(e.target.value) })} className="w-full bg-slate-900 border border-slate-700 rounded-xl py-3 text-center text-white focus:border-red-500 outline-none" />
                                         </div>
                                     </div>
-
-                                    <div className="space-y-2">
+                                    <div className="space-y-1.5">
                                         <label className="text-xs font-bold text-slate-400 uppercase flex items-center gap-2">
-                                            Min Humidity (%) - Current: <span className="text-blue-400">{newPlant.minHumidity}%</span>
+                                            <Wind size={14} /> Oxygen Output
                                         </label>
-                                        <input
-                                            type="range"
-                                            min="0" max="100" // Correction: max 100
-                                            step="5"
-                                            value={newPlant.minHumidity}
-                                            onChange={(e) => setNewPlant({ ...newPlant, minHumidity: Number(e.target.value) })}
-                                            className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500"
-                                        />
-                                        <div className="flex justify-between text-[10px] text-slate-500">
-                                            <span>Dry (0%)</span>
-                                            <span>Moderate (50%)</span>
-                                            <span>Tropical (100%)</span>
-                                        </div>
+                                        <select value={newPlant.oxygenLevel} onChange={(e) => setNewPlant({ ...newPlant, oxygenLevel: e.target.value as any })} className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:border-blue-500 outline-none">
+                                            <option value="low">Low</option>
+                                            <option value="moderate">Moderate</option>
+                                            <option value="high">High</option>
+                                            <option value="very-high">Purifier Grade (Very High)</option>
+                                        </select>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
 
-                    </div>
-                </form>
+                                {/* Humidity */}
+                                <div className="space-y-2">
+                                    <label className="text-xs font-bold text-slate-400 uppercase flex justify-between">
+                                        <span className="flex items-center gap-2"><Droplets size={14} /> Humidity Needs</span>
+                                        <span className="text-blue-400">{newPlant.minHumidity}%</span>
+                                    </label>
+                                    <input
+                                        type="range"
+                                        min="0" max="100"
+                                        step="5"
+                                        value={newPlant.minHumidity}
+                                        onChange={(e) => setNewPlant({ ...newPlant, minHumidity: Number(e.target.value) })}
+                                        className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500"
+                                    />
+                                </div>
+                            </div>
+                        </section>
+
+                        {/* Submit Action */}
+                        <div className="pt-4 flex justify-end">
+                            <Button type="submit" variant="primary" className="px-12 py-4 text-lg font-bold bg-gradient-to-r from-emerald-600 to-green-600 hover:scale-105 shadow-xl shadow-emerald-900/40 rounded-xl transition-all">
+                                Register Specimen
+                            </Button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </AdminPageLayout>
     );
