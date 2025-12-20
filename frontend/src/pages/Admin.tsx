@@ -8,7 +8,7 @@ import {
     Activity, Users, Sprout, MapPin,
     ArrowUpRight,
     Plus, Zap, Settings, Shield, LogOut, X, Search,
-    CheckCircle, Trash2, Star, Store
+    CheckCircle, Trash2, Star, Store, Server, Database, Lock, Bell
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/common/Button';
@@ -20,9 +20,8 @@ export const Admin = () => {
     const [stats, setStats] = useState({ plants: 0, users: 0, vendors: 0 });
     const [recentActivity, setRecentActivity] = useState<any[]>([]);
 
-    // Manage state for specific features
-    const [drawerOpen, setDrawerOpen] = useState<'plant' | 'vendor' | null>(null);
-    const [showVendorManager, setShowVendorManager] = useState(false);
+    // Unified Modal State: 'add-plant', 'add-vendor', 'manage-vendors', 'settings', 'diag'
+    const [activeModal, setActiveModal] = useState<string | null>(null);
 
     // Data State
     const [allVendors, setAllVendors] = useState<Vendor[]>([]);
@@ -76,7 +75,7 @@ export const Admin = () => {
                 price: Number(newPlant.price)
             } as Plant);
             toast.success("Plant Added", { id: tid });
-            setDrawerOpen(null);
+            setActiveModal(null);
             loadData();
         } catch (err) {
             toast.error("Failed to add plant", { id: tid });
@@ -89,7 +88,7 @@ export const Admin = () => {
         try {
             await registerVendor(newVendor);
             toast.success("Partner Onboarded", { id: tid });
-            setDrawerOpen(null);
+            setActiveModal(null);
             loadData();
         } catch (err) {
             toast.error("Failed to add vendor", { id: tid });
@@ -136,6 +135,211 @@ export const Admin = () => {
             toast.success("Vendor Deleted", { id: tid });
             loadData();
         } catch (e) { toast.error("Deletion failed", { id: tid }); }
+    };
+
+    // Render Helper for Modals
+    const renderModal = () => {
+        if (!activeModal) return null;
+
+        const modalContent = {
+            'add-plant': {
+                title: 'Add New Species',
+                icon: <Sprout className="text-emerald-400" />,
+                content: (
+                    <form onSubmit={handleSavePlant} className="space-y-6">
+                        <div className="bg-slate-800/50 p-4 rounded-xl border border-slate-700">
+                            <label className="text-xs font-bold text-emerald-500 uppercase mb-2 block">Smart Fill</label>
+                            <div className="flex gap-2">
+                                <input className="flex-1 bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white text-sm" placeholder="Scientific Name (e.g. Ocimum tenuiflorum)" value={newPlant.scientificName} onChange={e => setNewPlant({ ...newPlant, scientificName: e.target.value })} />
+                                <Button type="button" size="sm" onClick={smartFillPlant}><Search size={16} /></Button>
+                            </div>
+                        </div>
+                        <div className="space-y-2">
+                            <label className="text-xs text-slate-400 uppercase font-bold">Name</label>
+                            <input className="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-white" required value={newPlant.name} onChange={e => setNewPlant({ ...newPlant, name: e.target.value })} />
+                        </div>
+                        <div className="space-y-2">
+                            <label className="text-xs text-slate-400 uppercase font-bold">Image URL</label>
+                            <input className="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-white" value={newPlant.imageUrl} onChange={e => setNewPlant({ ...newPlant, imageUrl: e.target.value })} />
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <label className="text-xs text-slate-400 uppercase font-bold">Price (₹)</label>
+                                <input type="number" className="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-white" value={newPlant.price} onChange={e => setNewPlant({ ...newPlant, price: Number(e.target.value) })} />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-xs text-slate-400 uppercase font-bold">Sunlight</label>
+                                <select className="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-white" value={newPlant.sunlight} onChange={e => setNewPlant({ ...newPlant, sunlight: e.target.value as any })}>
+                                    <option value="low">Low</option>
+                                    <option value="medium">Medium</option>
+                                    <option value="high">High</option>
+                                </select>
+                            </div>
+                        </div>
+                        <Button className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl shadow-lg shadow-emerald-900/20">Save Plant to Database</Button>
+                    </form>
+                )
+            },
+            'add-vendor': {
+                title: 'Onboard New Partner',
+                icon: <MapPin className="text-amber-400" />,
+                content: (
+                    <form onSubmit={handleSaveVendor} className="space-y-6">
+                        <div className="space-y-2">
+                            <label className="text-xs text-slate-400 uppercase font-bold">Vendor Name</label>
+                            <input className="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-white" required value={newVendor.name} onChange={e => setNewVendor({ ...newVendor, name: e.target.value })} />
+                        </div>
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <label className="text-xs text-slate-400 uppercase font-bold">Latitude</label>
+                                <input className="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-white" value={newVendor.latitude} onChange={e => setNewVendor({ ...newVendor, latitude: Number(e.target.value) })} />
+                            </div>
+                            <div className="space-y-2">
+                                <label className="text-xs text-slate-400 uppercase font-bold">Longitude</label>
+                                <input className="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-white" value={newVendor.longitude} onChange={e => setNewVendor({ ...newVendor, longitude: Number(e.target.value) })} />
+                            </div>
+                        </div>
+                        <div className="space-y-2">
+                            <label className="text-xs text-slate-400 uppercase font-bold">Full Address</label>
+                            <textarea className="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-white h-24 resize-none" required value={newVendor.address} onChange={e => setNewVendor({ ...newVendor, address: e.target.value })} />
+                        </div>
+                        <Button className="w-full bg-amber-600 hover:bg-amber-500 text-white font-bold py-3 rounded-xl shadow-lg shadow-amber-900/20">Register Vendor</Button>
+                    </form>
+                )
+            },
+            'manage-vendors': {
+                title: 'Vendor Management',
+                icon: <Store className="text-purple-400" />,
+                content: (
+                    <div className="flex-1 overflow-y-auto pr-2 space-y-4 max-h-[60vh]">
+                        {allVendors.length === 0 ? (
+                            <div className="text-center py-12 text-slate-500">
+                                <Store size={48} className="mx-auto mb-4 opacity-50" />
+                                <p>No vendors found in the network.</p>
+                            </div>
+                        ) : (
+                            allVendors.map(vendor => (
+                                <div key={vendor.id} className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 p-4 bg-slate-800/40 border border-slate-700/50 rounded-xl hover:bg-slate-800/60 transition-colors group">
+                                    <div className="flex items-start gap-4">
+                                        <div className={`p-3 rounded-lg ${vendor.verified ? 'bg-emerald-500/10 text-emerald-500' : 'bg-amber-500/10 text-amber-500'}`}>
+                                            <Store size={24} />
+                                        </div>
+                                        <div>
+                                            <div className="flex items-center gap-2">
+                                                <h3 className="font-bold text-white text-lg">{vendor.name}</h3>
+                                                {vendor.verified && <CheckCircle size={16} className="text-emerald-500" fill="currentColor" />}
+                                                {vendor.highlyRecommended && <Star size={16} className="text-yellow-400" fill="currentColor" />}
+                                            </div>
+                                            <p className="text-slate-400 text-sm">{vendor.address || "No address provided"}</p>
+                                            <div className="flex gap-2 mt-2">
+                                                <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${vendor.verified ? 'bg-emerald-500/10 text-emerald-400' : 'bg-amber-500/10 text-amber-400'}`}>
+                                                    {vendor.verified ? 'VERIFIED' : 'PENDING APPROVAL'}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="flex items-center gap-3 w-full md:w-auto mt-2 md:mt-0">
+                                        <Button size="sm" variant="outline" onClick={() => toggleVendorVerification(vendor)} className={`flex-1 md:flex-none ${vendor.verified ? 'border-red-500/30 text-red-400 hover:bg-red-500/10' : 'border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10'}`}>
+                                            {vendor.verified ? 'Revoke' : 'Approve'}
+                                        </Button>
+                                        <Button size="sm" variant="outline" onClick={() => toggleVendorRecommendation(vendor)} className={`flex-1 md:flex-none ${vendor.highlyRecommended ? 'bg-yellow-500/10 border-yellow-500/30 text-yellow-400' : 'text-slate-400 hover:text-yellow-400'}`}>
+                                            <Star size={18} fill={vendor.highlyRecommended ? "currentColor" : "none"} />
+                                        </Button>
+                                        <Button size="sm" variant="outline" onClick={() => handleDeleteVendor(vendor.id)} className="border-red-500/20 text-red-500 hover:bg-red-500 hover:text-white">
+                                            <Trash2 size={18} />
+                                        </Button>
+                                    </div>
+                                </div>
+                            ))
+                        )}
+                    </div>
+                )
+            },
+            'diag': {
+                title: 'System Diagnostics',
+                icon: <Activity className="text-blue-400" />,
+                content: (
+                    <div className="space-y-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div className="bg-slate-800/50 p-4 rounded-xl border border-slate-700">
+                                <div className="flex items-center gap-3 mb-2">
+                                    <Server size={20} className="text-blue-400" />
+                                    <span className="text-slate-300 font-bold">API Latency</span>
+                                </div>
+                                <div className="text-2xl font-mono text-emerald-400">42ms</div>
+                                <div className="w-full bg-slate-700 h-1 mt-2 rounded-full"><div className="bg-emerald-500 h-1 w-[20%] rounded-full"></div></div>
+                            </div>
+                            <div className="bg-slate-800/50 p-4 rounded-xl border border-slate-700">
+                                <div className="flex items-center gap-3 mb-2">
+                                    <Database size={20} className="text-purple-400" />
+                                    <span className="text-slate-300 font-bold">DB Connection</span>
+                                </div>
+                                <div className="text-2xl font-mono text-emerald-400">Healthy</div>
+                                <div className="text-xs text-slate-500 mt-1">Uptime: 99.98%</div>
+                            </div>
+                        </div>
+                        <div className="bg-black/40 p-4 rounded-xl border border-slate-800 font-mono text-xs text-slate-400 h-48 overflow-y-auto">
+                            <div className="text-emerald-500 pb-2 border-b border-slate-800 mb-2">System Logs</div>
+                            <p>[15:42:01] Worker process started</p>
+                            <p>[15:42:05] Connected to MongoDB Cluster0</p>
+                            <p>[15:43:12] Backup routine executed successfully</p>
+                            <p>[15:45:00] Cleaning up temporary files...</p>
+                            <p>[15:45:01] Cleanup complete. 12mb freed.</p>
+                            <p className="animate-pulse">_</p>
+                        </div>
+                    </div>
+                )
+            },
+            'settings': {
+                title: 'Admin Settings',
+                icon: <Settings className="text-slate-400" />,
+                content: (
+                    <div className="space-y-2">
+                        {['Two-Factor Authentication', 'Email Notifications', 'Auto-Backup Database', 'Maintenance Mode'].map((setting, i) => (
+                            <div key={i} className="flex items-center justify-between p-4 bg-slate-800/30 rounded-xl border border-slate-700/50">
+                                <div className="flex items-center gap-3">
+                                    {i === 0 ? <Lock size={18} className="text-slate-400" /> : i === 1 ? <Bell size={18} className="text-slate-400" /> : i === 2 ? <Database size={18} className="text-slate-400" /> : <Shield size={18} className="text-slate-400" />}
+                                    <span className="text-slate-200">{setting}</span>
+                                </div>
+                                <div className="relative inline-block w-10 h-6 transition duration-200 ease-in-out bg-slate-700 rounded-full cursor-pointer">
+                                    <span className={`absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform ${i === 1 ? 'translate-x-4 bg-emerald-400' : ''}`}></span>
+                                </div>
+                            </div>
+                        ))}
+                        <div className="mt-4 p-4 bg-rose-500/10 border border-rose-500/20 rounded-xl">
+                            <h4 className="text-rose-400 font-bold mb-1 flex items-center gap-2"><Shield size={16} /> Danger Zone</h4>
+                            <p className="text-xs text-rose-300/70 mb-3">Irreversible actions that affect the entire platform.</p>
+                            <Button size="sm" className="bg-rose-500 hover:bg-rose-600 text-white w-full">Reset System Cache</Button>
+                        </div>
+                    </div>
+                )
+            }
+        };
+
+        const currentModal = (modalContent as any)[activeModal];
+        if (!currentModal) return null;
+
+        return (
+            <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4" onClick={() => setActiveModal(null)}>
+                <div className="w-full max-w-2xl bg-slate-900/90 border border-slate-700 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in fade-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
+                    {/* Header */}
+                    <div className="p-6 border-b border-slate-800 flex justify-between items-center bg-slate-900 sticky top-0 z-10">
+                        <div>
+                            <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+                                {currentModal.icon} {currentModal.title}
+                            </h2>
+                        </div>
+                        <button onClick={() => setActiveModal(null)} className="p-2 hover:bg-slate-800 rounded-full text-slate-400 hover:text-white transition-colors">
+                            <X size={24} />
+                        </button>
+                    </div>
+                    {/* Content */}
+                    <div className="p-6 overflow-y-auto custom-scrollbar">
+                        {currentModal.content}
+                    </div>
+                </div>
+            </div>
+        );
     };
 
     return (
@@ -233,19 +437,23 @@ export const Admin = () => {
                         <span className={styles.cardTitle}>Quick Actions</span>
                     </div>
                     <div className={styles.actionGrid}>
-                        <button onClick={() => setDrawerOpen('plant')} className={styles.actionBtn}>
+                        <button onClick={() => setActiveModal('add-plant')} className={styles.actionBtn}>
                             <Plus size={24} className="text-emerald-400" />
                             <span>Add Plant</span>
                         </button>
-                        <button onClick={() => setDrawerOpen('vendor')} className={styles.actionBtn}>
+                        <button onClick={() => setActiveModal('add-vendor')} className={styles.actionBtn}>
                             <MapPin size={24} className="text-amber-400" />
                             <span>Add Vendor</span>
                         </button>
-                        <button className={styles.actionBtn} onClick={() => setShowVendorManager(true)}>
+                        <button className={styles.actionBtn} onClick={() => setActiveModal('manage-vendors')}>
                             <Store size={24} className="text-purple-400" />
                             <span>Existing Vendors</span>
                         </button>
-                        <button className={styles.actionBtn} onClick={() => toast('Settings locked')}>
+                        <button className={styles.actionBtn} onClick={() => setActiveModal('diag')}>
+                            <Activity size={24} className="text-blue-400" />
+                            <span>Run Diag</span>
+                        </button>
+                        <button className={styles.actionBtn} onClick={() => setActiveModal('settings')}>
                             <Settings size={24} className="text-slate-400" />
                             <span>Settings</span>
                         </button>
@@ -253,139 +461,9 @@ export const Admin = () => {
                 </div>
             </div>
 
-            {/* DRAWERS (Minimalist Overlay) */}
-            {drawerOpen && (
-                <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex justify-end transition-all" onClick={() => setDrawerOpen(null)}>
-                    <div className="w-full max-w-md h-full bg-slate-900 border-l border-slate-800 p-6 overflow-y-auto" onClick={e => e.stopPropagation()}>
-                        <div className="flex justify-between items-center mb-8">
-                            <h2 className="text-2xl font-bold text-white">{drawerOpen === 'plant' ? 'Add New Species' : 'Onboard Partner'}</h2>
-                            <button onClick={() => setDrawerOpen(null)}><X className="text-slate-400 hover:text-white" /></button>
-                        </div>
+            {/* Unified Modal Rendering */}
+            {renderModal()}
 
-                        {drawerOpen === 'plant' && (
-                            <form onSubmit={handleSavePlant} className="space-y-6">
-                                <div className="bg-slate-800/50 p-4 rounded-xl border border-slate-700">
-                                    <label className="text-xs font-bold text-emerald-500 uppercase mb-2 block">Smart Fill</label>
-                                    <div className="flex gap-2">
-                                        <input className="flex-1 bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-white text-sm" placeholder="Scientific Name..." value={newPlant.scientificName} onChange={e => setNewPlant({ ...newPlant, scientificName: e.target.value })} />
-                                        <Button type="button" size="sm" onClick={smartFillPlant}><Search size={16} /></Button>
-                                    </div>
-                                </div>
-                                <div className="space-y-2">
-                                    <label className="text-xs text-slate-400 uppercase font-bold">Name</label>
-                                    <input className="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-white" required value={newPlant.name} onChange={e => setNewPlant({ ...newPlant, name: e.target.value })} />
-                                </div>
-                                <div className="space-y-2">
-                                    <label className="text-xs text-slate-400 uppercase font-bold">Image URL</label>
-                                    <input className="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-white" value={newPlant.imageUrl} onChange={e => setNewPlant({ ...newPlant, imageUrl: e.target.value })} />
-                                </div>
-                                <Button className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-3 rounded-xl">Save Plant</Button>
-                            </form>
-                        )}
-
-                        {drawerOpen === 'vendor' && (
-                            <form onSubmit={handleSaveVendor} className="space-y-6">
-                                <div className="space-y-2">
-                                    <label className="text-xs text-slate-400 uppercase font-bold">Vendor Name</label>
-                                    <input className="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-white" required value={newVendor.name} onChange={e => setNewVendor({ ...newVendor, name: e.target.value })} />
-                                </div>
-                                <div className="space-y-2">
-                                    <label className="text-xs text-slate-400 uppercase font-bold">Address</label>
-                                    <textarea className="w-full bg-slate-950 border border-slate-800 rounded-lg p-3 text-white h-24" required value={newVendor.address} onChange={e => setNewVendor({ ...newVendor, address: e.target.value })} />
-                                </div>
-                                <Button className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl">Onboard Vendor</Button>
-                            </form>
-                        )}
-                    </div>
-                </div>
-            )}
-
-            {/* VENDOR MANAGEMENT MODAL (Glassmorphism Popup) */}
-            {showVendorManager && (
-                <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4" onClick={() => setShowVendorManager(false)}>
-                    <div className="w-full max-w-4xl bg-slate-900/90 border border-slate-700 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh] animate-in fade-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
-
-                        {/* Modal Header */}
-                        <div className="p-6 border-b border-slate-800 flex justify-between items-center bg-slate-900">
-                            <div>
-                                <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-                                    <Store className="text-purple-400" /> Vendor Management
-                                </h2>
-                                <p className="text-slate-400 text-sm mt-1">Approve, Feature, or remove partner shops.</p>
-                            </div>
-                            <button onClick={() => setShowVendorManager(false)} className="p-2 hover:bg-slate-800 rounded-full text-slate-400 hover:text-white transition-colors">
-                                <X size={24} />
-                            </button>
-                        </div>
-
-                        {/* Modal Content - Scrollable List */}
-                        <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-black/20">
-                            {allVendors.length === 0 ? (
-                                <div className="text-center py-12 text-slate-500">
-                                    <Store size={48} className="mx-auto mb-4 opacity-50" />
-                                    <p>No vendors found in the network.</p>
-                                </div>
-                            ) : (
-                                allVendors.map(vendor => (
-                                    <div key={vendor.id} className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 p-4 bg-slate-800/40 border border-slate-700/50 rounded-xl hover:bg-slate-800/60 transition-colors group">
-
-                                        <div className="flex items-start gap-4">
-                                            <div className={`p-3 rounded-lg ${vendor.verified ? 'bg-emerald-500/10 text-emerald-500' : 'bg-amber-500/10 text-amber-500'}`}>
-                                                <Store size={24} />
-                                            </div>
-                                            <div>
-                                                <div className="flex items-center gap-2">
-                                                    <h3 className="font-bold text-white text-lg">{vendor.name}</h3>
-                                                    {vendor.verified && <CheckCircle size={16} className="text-emerald-500" fill="currentColor" />}
-                                                    {vendor.highlyRecommended && <Star size={16} className="text-yellow-400" fill="currentColor" />}
-                                                </div>
-                                                <p className="text-slate-400 text-sm">{vendor.address || "No address provided"}</p>
-                                                <div className="flex gap-2 mt-2">
-                                                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${vendor.verified ? 'bg-emerald-500/10 text-emerald-400' : 'bg-amber-500/10 text-amber-400'}`}>
-                                                        {vendor.verified ? 'VERIFIED' : 'PENDING APPROVAL'}
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div className="flex items-center gap-3 w-full md:w-auto mt-2 md:mt-0">
-                                            <Button
-                                                size="sm"
-                                                variant="outline"
-                                                onClick={() => toggleVendorVerification(vendor)}
-                                                className={`flex-1 md:flex-none ${vendor.verified ? 'border-red-500/30 text-red-400 hover:bg-red-500/10' : 'border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10'}`}
-                                            >
-                                                {vendor.verified ? 'Revoke' : 'Approve'}
-                                            </Button>
-
-                                            <Button
-                                                size="sm"
-                                                variant="outline"
-                                                title={vendor.highlyRecommended ? "Remove from Top Recommended" : "Mark as Top Recommended"}
-                                                onClick={() => toggleVendorRecommendation(vendor)}
-                                                className={`flex-1 md:flex-none ${vendor.highlyRecommended ? 'bg-yellow-500/10 border-yellow-500/30 text-yellow-400' : 'text-slate-400 hover:text-yellow-400'}`}
-                                            >
-                                                <Star size={18} fill={vendor.highlyRecommended ? "currentColor" : "none"} />
-                                            </Button>
-
-                                            <Button
-                                                size="sm"
-                                                variant="outline"
-                                                title="Delete Vendor"
-                                                onClick={() => handleDeleteVendor(vendor.id)}
-                                                className="border-red-500/20 text-red-500 hover:bg-red-500 hover:text-white"
-                                            >
-                                                <Trash2 size={18} />
-                                            </Button>
-                                        </div>
-
-                                    </div>
-                                ))
-                            )}
-                        </div>
-                    </div>
-                </div>
-            )}
         </div>
     );
 };
