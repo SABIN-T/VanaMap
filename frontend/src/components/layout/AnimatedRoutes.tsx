@@ -12,6 +12,15 @@ const Admin = lazy(() => import('../../pages/Admin').then(m => ({ default: m.Adm
 const DoctorAIPage = lazy(() => import('../../pages/DoctorAIPage').then(m => ({ default: m.DoctorAIPage })));
 const Guide = lazy(() => import('../../pages/Guide').then(m => ({ default: m.Guide })));
 
+// Admin Sub-Pages
+const AddPlant = lazy(() => import('../../pages/admin/AddPlant').then(m => ({ default: m.AddPlant })));
+const AddVendor = lazy(() => import('../../pages/admin/AddVendor').then(m => ({ default: m.AddVendor })));
+const ManagePlants = lazy(() => import('../../pages/admin/ManagePlants').then(m => ({ default: m.ManagePlants })));
+const ManageVendors = lazy(() => import('../../pages/admin/ManageVendors').then(m => ({ default: m.ManageVendors })));
+const ManageUsers = lazy(() => import('../../pages/admin/ManageUsers').then(m => ({ default: m.ManageUsers })));
+const SystemDiagnostics = lazy(() => import('../../pages/admin/SystemDiagnostics').then(m => ({ default: m.SystemDiagnostics })));
+const Settings = lazy(() => import('../../pages/admin/Settings').then(m => ({ default: m.Settings })));
+
 const LoadingScreen = () => (
     <div style={{
         height: '100vh', width: '100vw', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0f172a'
@@ -49,6 +58,16 @@ export const AnimatedRoutes = () => {
                         <Route path="/auth" element={<Auth />} />
                         <Route path="/cart" element={<Cart />} />
                         <Route path="/admin" element={<Admin />} />
+
+                        {/* Admin Sub-Routes */}
+                        <Route path="/admin/add-plant" element={<AddPlant />} />
+                        <Route path="/admin/add-vendor" element={<AddVendor />} />
+                        <Route path="/admin/manage-plants" element={<ManagePlants />} />
+                        <Route path="/admin/manage-vendors" element={<ManageVendors />} />
+                        <Route path="/admin/manage-users" element={<ManageUsers />} />
+                        <Route path="/admin/diag" element={<SystemDiagnostics />} />
+                        <Route path="/admin/settings" element={<Settings />} />
+
                         <Route path="/doctor-ai" element={<DoctorAIPage />} />
                         <Route path="/guide" element={<Guide />} />
                     </Routes>
