@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import {
     fetchVendors, fetchPlants, fetchUsers, addPlant, registerVendor,
     updateVendor, deleteVendor
@@ -319,8 +320,8 @@ export const Admin = () => {
         const currentModal = (modalContent as any)[activeModal];
         if (!currentModal) return null;
 
-        return (
-            <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4" onClick={() => setActiveModal(null)}>
+        return createPortal(
+            <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-[9999] flex items-center justify-center p-4" onClick={() => setActiveModal(null)}>
                 <div className="w-full max-w-2xl bg-slate-900/90 border border-slate-700 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] animate-in fade-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
                     {/* Header */}
                     <div className="p-6 border-b border-slate-800 flex justify-between items-center bg-slate-900 sticky top-0 z-10">
@@ -338,7 +339,8 @@ export const Admin = () => {
                         {currentModal.content}
                     </div>
                 </div>
-            </div>
+            </div>,
+            document.body
         );
     };
 
