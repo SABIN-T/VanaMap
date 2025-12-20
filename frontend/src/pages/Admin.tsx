@@ -1,13 +1,12 @@
-
 import { useState, useEffect, useCallback } from 'react';
 import {
     fetchVendors, fetchPlants, fetchUsers, addPlant, registerVendor
 } from '../services/api';
-import type { Plant, Vendor, User } from '../types';
+import type { Plant, Vendor } from '../types';
 import {
     Activity, Users, Sprout, MapPin,
-    ArrowUpRight, ArrowDownRight, Clock,
-    Plus, Zap, Settings, Shield, LogOut, X, Search, Sparkles, Save
+    ArrowUpRight,
+    Plus, Zap, Settings, Shield, LogOut, X, Search
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/common/Button';
@@ -159,7 +158,7 @@ export const Admin = () => {
                     </div>
                     <div className={styles.cardValue}>4%</div>
                     <div className={styles.cardTrend}>
-                        <span className={styles.trendUp} className="text-emerald-500">Optimal</span> performance
+                        <span className={`${styles.trendUp} text-emerald-500`}>Optimal</span> performance
                     </div>
                 </div>
 
