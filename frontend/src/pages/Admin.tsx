@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { fetchVendors, fetchPlants, addPlant, updatePlant, deletePlant, fetchUsers } from '../services/api';
 import type { Vendor, Plant } from '../types';
-import { MoreHorizontal, MapPin, Trash2, Edit, Image as ImageIcon, Users, Sprout, Activity, LogOut, Sparkles, Search, Database, Leaf, Droplets, Thermometer, Sun } from 'lucide-react';
+import { MapPin, Trash2, Image as ImageIcon, Users, Sprout, Activity, LogOut, Sparkles, Search, Database, Leaf, Droplets, Thermometer, Sun, Star, Bell, Plus, Pen } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/common/Button';
 import styles from './Admin.module.css';
@@ -507,7 +507,7 @@ export const Admin = () => {
                 <header className={styles.header}>
                     <div className="flex justify-between items-center w-full mb-8">
                         <div>
-                            <h2 className="text-3xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+                            <h2 className="text-3xl font-bold bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
                                 {activeTab === 'users' ? 'User Access Control' :
                                     activeTab === 'plants' ? 'Botanical Matrix' :
                                         activeTab === 'reports' ? 'System Health' : 'Mission Control'}
@@ -516,11 +516,45 @@ export const Admin = () => {
                                 {activeTab === 'users' ? 'Manage vendor permissions and user sessions' : 'Real-time database operations and analytics'}
                             </p>
                         </div>
-                        {activeTab === 'plants' && (
-                            <Button onClick={handleBulkImport} variant="outline" size="sm" className="border-emerald-500/50 text-emerald-400 hover:bg-emerald-500/10 gap-2">
-                                <Database size={16} /> Run Diagnostics
-                            </Button>
-                        )}
+                        <div className="flex gap-4">
+                            <div className="relative group">
+                                <div className="p-2.5 rounded-full bg-slate-900 border border-slate-800 text-slate-400 hover:text-emerald-400 transition-colors cursor-pointer relative">
+                                    <Bell size={20} />
+                                    <span className="absolute top-2 right-2.5 w-2 h-2 bg-emerald-500 rounded-full animate-pulse border border-slate-900"></span>
+                                </div>
+                                <div className="absolute right-0 top-full mt-4 w-80 bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-4 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50 transform translate-y-2">
+                                    <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-3 border-b border-slate-800 pb-2">Live Activity Feed</h4>
+                                    <div className="space-y-3">
+                                        <div className="flex gap-3 items-start">
+                                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0"></div>
+                                            <div>
+                                                <p className="text-xs text-slate-300">New user <span className="text-emerald-400 font-bold">@alex_green</span> verified email.</p>
+                                                <p className="text-[9px] text-slate-600 mt-0.5">2 mins ago</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex gap-3 items-start">
+                                            <div className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5 shrink-0"></div>
+                                            <div>
+                                                <p className="text-xs text-slate-300">Vendor <span className="text-blue-400 font-bold">BotanicHeaven</span> updated inventory.</p>
+                                                <p className="text-[9px] text-slate-600 mt-0.5">15 mins ago</p>
+                                            </div>
+                                        </div>
+                                        <div className="flex gap-3 items-start">
+                                            <div className="w-1.5 h-1.5 rounded-full bg-amber-500 mt-1.5 shrink-0"></div>
+                                            <div>
+                                                <p className="text-xs text-slate-300">System Backup completed successfully.</p>
+                                                <p className="text-[9px] text-slate-600 mt-0.5">1 hour ago</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {activeTab === 'plants' && (
+                                <Button onClick={handleBulkImport} variant="outline" size="sm" className="border-emerald-500/50 text-emerald-400 hover:bg-emerald-500/10 gap-2">
+                                    <Database size={16} /> Run Diagnostics
+                                </Button>
+                            )}
+                        </div>
                     </div>
 
                     {activeTab === 'dashboard' && (
@@ -530,11 +564,11 @@ export const Admin = () => {
                                     <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-500 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-sm">
                                         <Users size={24} strokeWidth={2.5} />
                                     </div>
-                                    <div className="text-[11px] font-bold text-slate-500 bg-slate-50 px-2.5 py-1 rounded-full border border-slate-100 uppercase tracking-wide">+12% vs week</div>
+                                    <div className="text-[11px] font-bold text-slate-400 bg-slate-800/50 px-2.5 py-1 rounded-full border border-slate-700 uppercase tracking-wide">+12% vs week</div>
                                 </div>
                                 <div className="mt-auto">
-                                    <div className="text-4xl font-black text-slate-800 tracking-tight leading-none mb-2">{vendors.length}</div>
-                                    <div className="text-sm font-bold text-slate-400 uppercase tracking-wider">Active Partners</div>
+                                    <div className="text-4xl font-black text-slate-100 tracking-tight leading-none mb-2">{vendors.length}</div>
+                                    <div className="text-sm font-bold text-slate-500 uppercase tracking-wider">Active Partners</div>
                                 </div>
                             </div>
 
@@ -549,8 +583,8 @@ export const Admin = () => {
                                     </span>
                                 </div>
                                 <div className="mt-auto">
-                                    <div className="text-4xl font-black text-slate-800 tracking-tight leading-none mb-2">{plants.length}</div>
-                                    <div className="text-sm font-bold text-slate-400 uppercase tracking-wider">Botanical Records</div>
+                                    <div className="text-4xl font-black text-slate-100 tracking-tight leading-none mb-2">{plants.length}</div>
+                                    <div className="text-sm font-bold text-slate-500 uppercase tracking-wider">Botanical Records</div>
                                 </div>
                             </div>
 
@@ -562,8 +596,8 @@ export const Admin = () => {
                                     <div className="text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100 uppercase tracking-wide">Optimal</div>
                                 </div>
                                 <div className="mt-auto">
-                                    <div className="text-4xl font-black text-slate-800 tracking-tight leading-none mb-2">99.8%</div>
-                                    <div className="text-sm font-bold text-slate-400 uppercase tracking-wider">System Uptime</div>
+                                    <div className="text-4xl font-black text-slate-100 tracking-tight leading-none mb-2">99.8%</div>
+                                    <div className="text-sm font-bold text-slate-500 uppercase tracking-wider">System Uptime</div>
                                 </div>
                             </div>
                         </div>
@@ -576,25 +610,25 @@ export const Admin = () => {
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                                 {/* Recent Activity Feed */}
                                 <div className={`${styles['premium-card']} p - 0 overflow - hidden`}>
-                                    <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-                                        <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2">
+                                    <div className="p-6 border-b border-slate-800 flex justify-between items-center bg-slate-900/50">
+                                        <h3 className="text-lg font-bold text-slate-200 flex items-center gap-2">
                                             <Activity size={18} className="text-emerald-500" /> Recent Species Log
                                         </h3>
-                                        <button onClick={() => setActiveTab('plants')} className="text-xs font-bold text-emerald-600 hover:text-emerald-700 uppercase tracking-widest">
+                                        <button onClick={() => setActiveTab('plants')} className="text-xs font-bold text-emerald-400 hover:text-emerald-300 uppercase tracking-widest">
                                             View All
                                         </button>
                                     </div>
-                                    <div className="divide-y divide-slate-100">
+                                    <div className="divide-y divide-slate-800">
                                         {plants.slice(0, 5).map((p) => (
-                                            <div key={p.id} className="flex items-center gap-4 p-4 hover:bg-slate-50/80 transition-colors group cursor-pointer">
-                                                <div className="w-12 h-12 rounded-lg overflow-hidden bg-slate-100 border border-slate-200 group-hover:border-emerald-200 transition-colors">
-                                                    <img src={p.imageUrl} alt="" className="w-full h-full object-cover" />
+                                            <div key={p.id} className="flex items-center gap-4 p-4 hover:bg-slate-900/50 transition-colors group cursor-pointer">
+                                                <div className="w-12 h-12 rounded-lg overflow-hidden bg-slate-800 border border-slate-700 group-hover:border-emerald-500/30 transition-colors">
+                                                    <img src={p.imageUrl} alt="" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity" />
                                                 </div>
                                                 <div className="flex-1">
-                                                    <div className="text-sm font-bold text-slate-800 group-hover:text-emerald-700 transition-colors">{p.name}</div>
+                                                    <div className="text-sm font-bold text-slate-200 group-hover:text-emerald-400 transition-colors">{p.name}</div>
                                                     <div className="text-xs text-slate-500 italic">{p.scientificName}</div>
                                                 </div>
-                                                <div className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded border border-emerald-100">NEW</div>
+                                                <div className="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded border border-emerald-500/20">NEW</div>
                                             </div>
                                         ))}
                                     </div>
@@ -604,18 +638,18 @@ export const Admin = () => {
                                 <div className="space-y-6">
                                     <div className={`${styles['premium-card']} p-6`}>
                                         <h3 className="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
-                                            <Sparkles size={18} className="text-blue-500" /> Platform Metrics
+                                            <Sparkles size={18} className="text-blue-400" /> Platform Metrics
                                         </h3>
                                         <div className="space-y-6">
                                             <div>
-                                                <div className="flex justify-between text-xs font-bold mb-2"><span className="text-slate-500">Database Load</span> <span className="text-slate-800">12%</span></div>
-                                                <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+                                                <div className="flex justify-between text-xs font-bold mb-2"><span className="text-slate-500">Database Load</span> <span className="text-slate-300">12%</span></div>
+                                                <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
                                                     <div className="h-full bg-blue-500 rounded-full w-[12%]" />
                                                 </div>
                                             </div>
                                             <div>
-                                                <div className="flex justify-between text-xs font-bold mb-2"><span className="text-slate-500">Asset Storage</span> <span className="text-slate-800">4.2 GB</span></div>
-                                                <div className="h-2 bg-slate-100 rounded-full overflow-hidden">
+                                                <div className="flex justify-between text-xs font-bold mb-2"><span className="text-slate-500">Asset Storage</span> <span className="text-slate-300">4.2 GB</span></div>
+                                                <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
                                                     <div className="h-full bg-emerald-500 rounded-full w-[45%]" />
                                                 </div>
                                             </div>
@@ -627,12 +661,12 @@ export const Admin = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="bg-gradient-to-br from-white to-slate-50 border border-slate-200 rounded-2xl p-6 shadow-sm flex items-center justify-between group hover:border-emerald-500/30 transition-all">
+                                    <div className="bg-gradient-to-br from-slate-900 to-slate-950 border border-slate-800 rounded-2xl p-6 shadow-sm flex items-center justify-between group hover:border-emerald-500/30 transition-all">
                                         <div>
-                                            <h4 className="text-emerald-800 font-bold mb-1">Backup Protocol</h4>
-                                            <p className="text-[10px] font-medium text-slate-400">ADMINISTRATOR</p>
+                                            <h4 className="text-emerald-400 font-bold mb-1">Backup Protocol</h4>
+                                            <p className="text-[10px] font-medium text-slate-500">ADMINISTRATOR</p>
                                         </div>
-                                        <div className="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center text-white font-bold shadow-lg shadow-emerald-500/20 border-2 border-slate-900">
+                                        <div className="w-10 h-10 rounded-full bg-emerald-500/10 flex items-center justify-center text-emerald-400 font-bold shadow-lg shadow-emerald-500/5 border border-emerald-500/20 group-hover:bg-emerald-500 group-hover:text-white transition-all">
                                             A
                                         </div>
                                     </div>
@@ -643,28 +677,28 @@ export const Admin = () => {
 
                     {activeTab === 'reports' && (
                         <div className="animate-fade-in space-y-8">
-                            <div className={`${styles['premium-card']} p-12 text-center flex flex-col items-center shadow-none border-dashed border-2 bg-slate-50/50`}>
-                                <div className="w-24 h-24 bg-white rounded-full flex items-center justify-center text-emerald-500 mb-6 shadow-xl shadow-emerald-500/10 border border-emerald-50">
+                            <div className={`${styles['premium-card']} p-12 text-center flex flex-col items-center shadow-none border-dashed border-2 border-slate-800 bg-slate-900/50`}>
+                                <div className="w-24 h-24 bg-slate-950 rounded-full flex items-center justify-center text-emerald-500 mb-6 shadow-xl shadow-emerald-500/10 border border-slate-800">
                                     <Activity size={48} className="animate-pulse" />
                                 </div>
-                                <h3 className="text-3xl font-black text-slate-800 mb-2">System Diagnostics</h3>
-                                <p className="text-slate-500 max-w-md mx-auto mb-10 text-sm">Real-time telemetry and error monitoring across VanaMap cloud clusters.</p>
+                                <h3 className="text-3xl font-black text-slate-100 mb-2">System Diagnostics</h3>
+                                <p className="text-slate-400 max-w-md mx-auto mb-10 text-sm">Real-time telemetry and error monitoring across VanaMap cloud clusters.</p>
 
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-4xl">
-                                    <div className="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm hover:shadow-md transition-all">
-                                        <div className="text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-2">Response Time</div>
-                                        <div className="text-4xl font-black text-slate-800 mb-1">24ms</div>
-                                        <div className="text-xs font-bold text-emerald-600 bg-emerald-50 inline-block px-2 py-1 rounded-full">Excellent</div>
+                                    <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-sm hover:shadow-md transition-all">
+                                        <div className="text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-2">Response Time</div>
+                                        <div className="text-4xl font-black text-slate-100 mb-1">24ms</div>
+                                        <div className="text-xs font-bold text-emerald-400 bg-emerald-500/10 inline-block px-2 py-1 rounded-full border border-emerald-500/20">Excellent</div>
                                     </div>
-                                    <div className="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm hover:shadow-md transition-all">
-                                        <div className="text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-2">Server Load</div>
-                                        <div className="text-4xl font-black text-slate-800 mb-1">4.2%</div>
-                                        <div className="text-xs font-bold text-blue-600 bg-blue-50 inline-block px-2 py-1 rounded-full">Nominal</div>
+                                    <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-sm hover:shadow-md transition-all">
+                                        <div className="text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-2">Server Load</div>
+                                        <div className="text-4xl font-black text-slate-100 mb-1">4.2%</div>
+                                        <div className="text-xs font-bold text-blue-400 bg-blue-500/10 inline-block px-2 py-1 rounded-full border border-blue-500/20">Nominal</div>
                                     </div>
-                                    <div className="bg-white border border-slate-200 p-6 rounded-2xl shadow-sm hover:shadow-md transition-all">
-                                        <div className="text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-2">Search Latency</div>
-                                        <div className="text-4xl font-black text-slate-800 mb-1">0.02s</div>
-                                        <div className="text-xs font-bold text-purple-600 bg-purple-50 inline-block px-2 py-1 rounded-full">Ultra Fast</div>
+                                    <div className="bg-slate-900 border border-slate-800 p-6 rounded-2xl shadow-sm hover:shadow-md transition-all">
+                                        <div className="text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-2">Search Latency</div>
+                                        <div className="text-4xl font-black text-slate-100 mb-1">0.02s</div>
+                                        <div className="text-xs font-bold text-purple-400 bg-purple-500/10 inline-block px-2 py-1 rounded-full border border-purple-500/20">Ultra Fast</div>
                                     </div>
                                 </div>
                             </div>
@@ -716,29 +750,36 @@ export const Admin = () => {
 
                                     <div className="grid grid-cols-1 gap-4">
                                         {vendors.map(v => (
-                                            <div key={v.id} className="group relative bg-white border border-slate-200 rounded-2xl p-5 hover:border-emerald-500/30 hover:shadow-xl hover:shadow-emerald-500/5 transition-all duration-300">
+                                            <div key={v.id} className="group relative bg-slate-900 border border-slate-800 rounded-2xl p-5 hover:border-emerald-500/30 hover:shadow-xl hover:shadow-emerald-500/5 transition-all duration-300">
                                                 <div className="flex items-start gap-4">
-                                                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center text-emerald-400 font-black text-xl shadow-lg border border-slate-700">
+                                                    <div className="w-14 h-14 rounded-2xl bg-slate-950 flex items-center justify-center text-emerald-400 font-black text-xl shadow-inner border border-slate-800">
                                                         {v.name.charAt(0)}
                                                     </div>
                                                     <div className="flex-1 min-w-0">
                                                         <div className="flex justify-between items-start">
-                                                            <h4 className="font-bold text-slate-900 text-base truncate pr-8 group-hover:text-emerald-700 transition-colors">{v.name}</h4>
-                                                            <div className="flex items-center gap-1.5 bg-emerald-50 px-2 py-1 rounded-full border border-emerald-100/50">
+                                                            <h4 className="font-bold text-slate-200 text-base truncate pr-8 group-hover:text-emerald-400 transition-colors">{v.name}</h4>
+                                                            <div className="flex items-center gap-1.5 bg-emerald-500/10 px-2 py-1 rounded-full border border-emerald-500/20">
                                                                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                                                                <span className="text-[9px] font-black text-emerald-700 uppercase tracking-wider">Live</span>
+                                                                <span className="text-[9px] font-black text-emerald-400 uppercase tracking-wider">Live</span>
                                                             </div>
                                                         </div>
                                                         <p className="text-xs text-slate-500 font-medium mt-1 mb-3 flex items-center gap-1.5">
                                                             <MapPin size={12} /> {v.address || 'Global HQ'}
                                                         </p>
+                                                        <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 transform translate-y-2 group-hover:translate-y-0">
+                                                            <button className="text-[10px] font-bold bg-slate-800 text-slate-400 hover:text-white px-2 py-1 rounded hover:bg-slate-700 transition-colors">Edit Profile</button>
+                                                            <button className="text-[10px] font-bold bg-amber-500/10 text-amber-500 hover:bg-amber-500/20 px-2 py-1 rounded transition-colors flex items-center gap-1"><Star size={10} fill="currentColor" /> Recommend</button>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div className="absolute top-5 right-5 opacity-0 group-hover:opacity-100 transition-opacity">
-                                                    <button className="text-slate-400 hover:text-slate-600"><MoreHorizontal size={20} /></button>
+                                                <div className="absolute top-5 right-5">
+                                                    <button className="text-slate-600 hover:text-red-400 transition-colors"><Trash2 size={16} /></button>
                                                 </div>
                                             </div>
                                         ))}
+                                        <button className="w-full py-3 rounded-xl border border-dashed border-slate-700 text-slate-500 hover:text-emerald-400 hover:border-emerald-500/50 hover:bg-emerald-500/5 transition-all flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-wider">
+                                            <Plus size={16} /> Add New Partner
+                                        </button>
                                     </div>
                                 </div>
 
@@ -746,35 +787,35 @@ export const Admin = () => {
                                 <div className="space-y-6">
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-3">
-                                            <div className="p-3 bg-white border border-slate-200 rounded-xl text-indigo-600 shadow-sm"><Users size={20} /></div>
+                                            <div className="p-3 bg-indigo-500/10 border border-indigo-500/20 rounded-xl text-indigo-400 shadow-sm"><Users size={20} /></div>
                                             <div>
-                                                <h3 className="font-black text-slate-800 text-lg tracking-tight">Community Access</h3>
+                                                <h3 className="font-black text-slate-200 text-lg tracking-tight">Community Access</h3>
                                                 <p className="text-xs text-slate-500 font-medium">Registered platform users</p>
                                             </div>
                                         </div>
-                                        <span className="text-[10px] font-black uppercase tracking-widest bg-indigo-50 text-indigo-700 px-3 py-1.5 rounded-lg border border-indigo-100">{users.filter(u => u.role !== 'vendor').length} Users</span>
+                                        <span className="text-[10px] font-black uppercase tracking-widest bg-indigo-500/10 text-indigo-400 px-3 py-1.5 rounded-lg border border-indigo-500/20">{users.filter(u => u.role !== 'vendor').length} Users</span>
                                     </div>
 
                                     <div className="grid grid-cols-1 gap-3">
                                         {users.filter(u => u.role !== 'vendor').map(u => (
-                                            <div key={u.id} className="flex items-center gap-4 bg-white border border-slate-200 p-4 rounded-xl hover:bg-slate-50 transition-colors group">
-                                                <div className="w-10 h-10 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-500 font-bold text-sm group-hover:bg-white group-hover:border-indigo-200 group-hover:text-indigo-600 transition-colors">
+                                            <div key={u.id} className="flex items-center gap-4 bg-slate-900 border border-slate-800 p-4 rounded-xl hover:bg-slate-800 transition-colors group">
+                                                <div className="w-10 h-10 rounded-full bg-slate-950 border border-slate-800 flex items-center justify-center text-slate-500 font-bold text-sm group-hover:border-indigo-500/30 group-hover:text-indigo-400 transition-colors">
                                                     {u.name.charAt(0)}
                                                 </div>
                                                 <div className="flex-1">
-                                                    <h4 className="font-bold text-slate-800 text-sm">{u.name}</h4>
-                                                    <p className="text-xs text-slate-400 font-mono">{u.email}</p>
+                                                    <h4 className="font-bold text-slate-200 text-sm">{u.name}</h4>
+                                                    <p className="text-xs text-slate-500 font-mono">{u.email}</p>
                                                 </div>
-                                                <span className="text-[10px] font-bold text-slate-400 bg-slate-50 px-2.5 py-1 rounded-md border border-slate-100 uppercase tracking-wider group-hover:border-slate-200">Standard</span>
+                                                <span className="text-[10px] font-bold text-slate-500 bg-slate-800 px-2.5 py-1 rounded-md border border-slate-700 uppercase tracking-wider group-hover:text-slate-300">Standard</span>
                                             </div>
                                         ))}
                                         {users.filter(u => u.role !== 'vendor').length === 0 && (
-                                            <div className="p-12 text-center border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
-                                                <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 text-slate-300 shadow-sm border border-slate-100">
+                                            <div className="p-12 text-center border-2 border-dashed border-slate-800 rounded-2xl bg-slate-900/50">
+                                                <div className="w-16 h-16 bg-slate-900 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-700 shadow-sm border border-slate-800">
                                                     <Users size={28} />
                                                 </div>
-                                                <p className="text-slate-500 font-bold text-sm">No community members yet</p>
-                                                <p className="text-xs text-slate-400 mt-1">Invite users to grow the platform</p>
+                                                <p className="text-slate-400 font-bold text-sm">No community members yet</p>
+                                                <p className="text-xs text-slate-600 mt-1">Invite users to grow the platform</p>
                                             </div>
                                         )}
                                     </div>
@@ -966,7 +1007,7 @@ export const Admin = () => {
                                             {/* Edit Overlay */}
                                             <div className={styles['edit-overlay']}>
                                                 <button onClick={() => startEdit(p)} className="w-12 h-12 rounded-2xl bg-white text-emerald-600 flex items-center justify-center hover:bg-emerald-500 hover:text-white transition-all shadow-xl hover:scale-110">
-                                                    <Edit size={22} />
+                                                    <Pen size={22} />
                                                 </button>
                                                 <button onClick={() => deletePlantHandler(p.id, p.name)} className="w-12 h-12 rounded-2xl bg-white text-rose-500 flex items-center justify-center hover:bg-rose-500 hover:text-white transition-all shadow-xl hover:scale-110">
                                                     <Trash2 size={22} />

@@ -8,11 +8,11 @@
 .container {
     display: flex;
     min-height: 100vh;
-    background-color: #f8fafc;
-    /* Slate-50 */
+    background-color: #020617;
+    /* Slate-950 (Deep Black) */
     font-family: 'Inter', system-ui, sans-serif;
-    color: #0f172a;
-    /* Slate-900 */
+    color: #f8fafc;
+    /* Slate-50 */
     position: relative;
     overflow-x: hidden;
 }
@@ -108,8 +108,8 @@
     position: sticky;
     top: 0;
     z-index: 40;
-    background: rgba(248, 250, 252, 0.85);
-    /* Translucent slate-50 */
+    background: rgba(2, 6, 23, 0.85);
+    /* Slate-950 translucent */
     backdrop-filter: blur(16px);
     padding: 2rem 3rem 1.5rem 3rem;
     border-bottom: 1px solid transparent;
@@ -117,8 +117,9 @@
 }
 
 .header.scrolled {
-    border-color: #e2e8f0;
-    background: rgba(255, 255, 255, 0.9);
+    border-color: #1e293b;
+    /* Slate-800 */
+    background: rgba(2, 6, 23, 0.95);
 }
 
 .contentArea {
@@ -138,11 +139,12 @@
 
 /* --- MODERN INNOVATIVE CARDS --- */
 .premium-card {
-    background: #ffffff;
+    background: #0f172a;
+    /* Slate-900 */
     border-radius: 1.5rem;
-    border: 1px solid #f1f5f9;
-    /* Subtle border */
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.01), 0 10px 15px -3px rgba(0, 0, 0, 0.01);
+    border: 1px solid #1e293b;
+    /* Slate-800 */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 10px 15px -3px rgba(0, 0, 0, 0.2);
     transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     position: relative;
     overflow: hidden;
@@ -153,8 +155,11 @@
 
 .premium-card:hover {
     transform: translateY(-6px);
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01);
-    border-color: rgba(16, 185, 129, 0.2);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.3);
+    border-color: rgba(16, 185, 129, 0.4);
+    /* Emerald-500 */
+    background: #1e293b;
+    /* Slate-800 */
 }
 
 /* Card Image Area */
@@ -163,7 +168,7 @@
     width: 100%;
     aspect-ratio: 4/3;
     overflow: hidden;
-    background-color: #f1f5f9;
+    background-color: #020617;
 }
 
 .plant-image {
@@ -180,7 +185,7 @@
 .edit-overlay {
     position: absolute;
     inset: 0;
-    background: rgba(255, 255, 255, 0.8);
+    background: rgba(2, 6, 23, 0.8);
     backdrop-filter: blur(8px);
     display: flex;
     align-items: center;
@@ -196,23 +201,27 @@
 
 /* --- FORM ELEMENTS (Premium Box) --- */
 .premium-box {
-    background-color: #f8fafc;
-    border: 1px solid #e2e8f0;
+    background-color: #1e293b;
+    /* Slate-800 */
+    border: 1px solid #334155;
+    /* Slate-700 */
     border-radius: 1rem;
     padding: 1rem 1.25rem;
     transition: all 0.2s ease;
     position: relative;
+    color: #f8fafc;
 }
 
 .premium-box:hover {
-    background-color: #f1f5f9;
-    border-color: #cbd5e1;
+    background-color: #334155;
+    border-color: #475569;
 }
 
 .premium-box:focus-within {
-    background-color: #ffffff;
+    background-color: #0f172a;
+    /* Slate-900 */
     border-color: #10b981;
-    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.08);
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
     transform: translateY(-2px);
 }
 
@@ -222,7 +231,8 @@
     background: transparent;
     border: none;
     outline: none;
-    color: #0f172a;
+    color: #f8fafc;
+    /* White text */
     font-weight: 700;
     font-size: 1rem;
     padding: 0;
@@ -231,8 +241,8 @@
 }
 
 .input::placeholder {
-    color: #94a3b8;
-    /* Slate-400 */
+    color: #475569;
+    /* Slate-600 */
     font-weight: 500;
     font-size: 0.9rem;
 }
@@ -240,7 +250,7 @@
 /* --- ANIMATIONS & DECORATION --- */
 .glow-text {
     position: relative;
-    color: #0f172a;
+    color: #f8fafc;
 }
 
 .glow-text::after {
@@ -279,21 +289,24 @@
 }
 
 /* List Item (User Management) */
+/* List Item (User Management) */
 .listItem {
     display: flex;
     align-items: center;
     gap: 1.25rem;
     padding: 1.25rem;
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
+    background: #0f172a;
+    /* Slate-900 */
+    border: 1px solid #1e293b;
     border-radius: 1.25rem;
     margin-bottom: 0.75rem;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .listItem:hover {
-    border-color: rgba(16, 185, 129, 0.3);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+    border-color: rgba(16, 185, 129, 0.5);
+    background: #1e293b;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
     transform: scale(1.01);
 }
 
