@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Button } from '../../components/common/Button';
 import { addPlant } from '../../services/api';
 import { AdminPageLayout } from './AdminPageLayout';
-import { Search, Upload, Thermometer, Sun, Leaf, Sprout, Link as LinkIcon, Wind, Droplets } from 'lucide-react';
+import { Search, Upload, Thermometer, Wind, Droplets, Leaf, ArrowRight } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { INDIAN_PLANT_DB } from '../../data/indianPlants';
 import type { Plant } from '../../types';
@@ -65,7 +65,6 @@ const compressImage = (file: File): Promise<string> => {
 
 export const AddPlant = () => {
     const [scientificNameSearch, setScientificNameSearch] = useState('');
-    const [uploadMode, setUploadMode] = useState<'file' | 'url'>('file');
 
     const [newPlant, setNewPlant] = useState<Partial<Plant>>({
         name: '',
@@ -82,6 +81,8 @@ export const AddPlant = () => {
         medicinalValues: [],
         advantages: []
     });
+
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     const handleSmartFill = () => {
         if (!scientificNameSearch) return;
@@ -101,20 +102,20 @@ export const AddPlant = () => {
                 medicinalValues: found.medicinalValues || [],
                 advantages: found.advantages || []
             }));
-            toast.success(`Match Found: ${found.name}`, { icon: '✨' });
+            toast.success(`Populated: ${found.name}`, { icon: '✨' });
         } else {
-            toast.error("No match found in local database.");
+            toast.error("Specimen not found in database.");
         }
     };
 
     const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
-        const tid = toast.loading("Optimizing Image...");
+        const tid = toast.loading("Processing...");
         try {
             const compressedBase64 = await compressImage(file);
             setNewPlant({ ...newPlant, imageUrl: compressedBase64 });
-            toast.success("Image Ready", { id: tid });
+            toast.success("Image Set", { id: tid });
         } catch (err) {
             toast.error("Image Error", { id: tid });
         }
@@ -122,7 +123,7 @@ export const AddPlant = () => {
 
     const handleAddPlant = async (e: React.FormEvent) => {
         e.preventDefault();
-        const tid = toast.loading("Adding Specimen...");
+        const tid = toast.loading("Saving Specimen...");
         try {
             const plantData: Plant = {
                 id: crypto.randomUUID(),
@@ -142,7 +143,7 @@ export const AddPlant = () => {
                 isNocturnal: false
             };
             await addPlant(plantData);
-            toast.success("Successfully Registered", { id: tid });
+            toast.success("Specimen Registered", { id: tid });
 
             // Reset
             setNewPlant({
@@ -153,16 +154,15 @@ export const AddPlant = () => {
             });
             setScientificNameSearch('');
         } catch (err) {
-            toast.error("Failed to add plant", { id: tid });
+            toast.error("Save Failed", { id: tid });
         }
     };
 
-    // Construct Preview Object
     const previewPlant: Plant = {
         id: 'preview',
-        name: newPlant.name || 'Plant Name',
+        name: newPlant.name || 'Specimen Name',
         scientificName: newPlant.scientificName || 'Scientific Name',
-        description: newPlant.description || 'Description...',
+        description: newPlant.description || '...',
         imageUrl: newPlant.imageUrl || 'https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?auto=format&fit=crop',
         price: Number(newPlant.price),
         type: newPlant.type as any || 'indoor',
@@ -170,223 +170,210 @@ export const AddPlant = () => {
         idealTempMin: 18, idealTempMax: 30,
         minHumidity: Number(newPlant.minHumidity),
         oxygenLevel: newPlant.oxygenLevel as any || 'moderate',
-        medicinalValues: [],
-        advantages: [],
-        isNocturnal: false
+        medicinalValues: [], advantages: [], isNocturnal: false
     };
 
     return (
-        <AdminPageLayout title="Add New Specimen">
-            <div className="w-full">
+        <AdminPageLayout title="New Specimen">
+            <div className="-m-6 flex flex-col lg:flex-row min-h-[600px] bg-slate-900 rounded-2xl overflow-hidden">
+                {/* --- LEFT PANEL: VISUAL & PREVIEW (40%) --- */}
+                <div className="relative w-full lg:w-2/5 bg-slate-950 border-r border-slate-800 flex flex-col items-center justify-center p-8 overflow-hidden group">
+                    {/* Blurred Background */}
+                    <div
+                        className="absolute inset-0 opacity-30 blur-3xl scale-125 transition-all duration-1000"
+                        style={{
+                            backgroundImage: `url(${newPlant.imageUrl || 'https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?auto=format&fit=crop'})`,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center'
+                        }}
+                    ></div>
 
-                {/* Workflow Container */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start relative">
-
-                    {/* LEFT COLUMN: LIVE PREVIEW & ASSETS (Sticky) - Span 4 */}
-                    <div className="lg:col-span-4 lg:sticky lg:top-8 space-y-6">
-                        <div className="bg-slate-800/50 border border-slate-700 rounded-2xl p-6 shadow-xl backdrop-blur-sm">
-                            <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-                                <Leaf size={14} className="text-emerald-400" /> Live Preview
-                            </h3>
-
-                            {/* Card Preview Wrapper - Pointer events disabled to prevent clicking "Add to Cart" */}
-                            <div className="pointer-events-none transform transition-all duration-500">
-                                <PlantCard plant={previewPlant} onAdd={() => { }} />
-                            </div>
-
-                            <div className="mt-6 pt-6 border-t border-slate-700/50 space-y-4">
-                                <div className="flex justify-between items-center mb-2">
-                                    <label className="text-xs font-bold text-slate-300 uppercase">Cover Image</label>
-                                    <div className="flex bg-slate-900 rounded-md p-0.5 border border-slate-700">
-                                        <button type="button" onClick={() => setUploadMode('file')} className={`px-2 py-0.5 text-[10px] rounded transition ${uploadMode === 'file' ? 'bg-slate-700 text-white shadow-sm' : 'text-slate-400'}`}>Upload</button>
-                                        <button type="button" onClick={() => setUploadMode('url')} className={`px-2 py-0.5 text-[10px] rounded transition ${uploadMode === 'url' ? 'bg-slate-700 text-white shadow-sm' : 'text-slate-400'}`}>URL</button>
-                                    </div>
-                                </div>
-
-                                {uploadMode === 'file' ? (
-                                    <div className="relative group w-full">
-                                        <div className="flex items-center justify-center gap-2 w-full px-4 py-3 bg-slate-900 border border-slate-700 border-dashed rounded-xl hover:border-emerald-500 hover:bg-slate-800/80 transition-all cursor-pointer">
-                                            <Upload size={16} className="text-emerald-400" />
-                                            <span className="text-xs font-medium text-slate-300">Choose File</span>
-                                        </div>
-                                        <input
-                                            type="file"
-                                            accept="image/*"
-                                            onChange={handleImageUpload}
-                                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                                        />
-                                    </div>
-                                ) : (
-                                    <div className="relative">
-                                        <LinkIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" size={14} />
-                                        <input
-                                            value={newPlant.imageUrl}
-                                            onChange={(e) => setNewPlant({ ...newPlant, imageUrl: e.target.value })}
-                                            placeholder="Paste Image URL..."
-                                            className="w-full bg-slate-900 border border-slate-700 rounded-xl py-2.5 pl-9 pr-3 text-xs text-white focus:border-blue-500 outline-none"
-                                        />
-                                    </div>
-                                )}
-                            </div>
-                        </div>
+                    {/* The Card */}
+                    <div className="relative z-10 scale-100 transition-transform duration-300">
+                        <PlantCard plant={previewPlant} onAdd={() => { }} />
                     </div>
 
-                    {/* RIGHT COLUMN: DATA ENTRY - Span 8 */}
-                    <form onSubmit={handleAddPlant} className="lg:col-span-8 space-y-8">
+                    {/* Upload Overlay */}
+                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-4 z-20 backdrop-blur-sm">
+                        <Button
+                            onClick={() => fileInputRef.current?.click()}
+                            className="bg-white text-black hover:bg-slate-200"
+                        >
+                            <Upload size={18} className="mr-2" /> Upload Image
+                        </Button>
+                        <span className="text-xs text-slate-400 font-medium">Or paste URL below</span>
+                        <input
+                            value={newPlant.imageUrl}
+                            onChange={(e) => setNewPlant({ ...newPlant, imageUrl: e.target.value })}
+                            placeholder="https://image-url.com..."
+                            className="bg-black/50 border border-white/20 rounded px-3 py-1 text-xs text-white outline-none w-64 text-center"
+                            onClick={(e) => e.stopPropagation()}
+                        />
+                        <input
+                            ref={fileInputRef}
+                            type="file"
+                            accept="image/*"
+                            className="hidden"
+                            onChange={handleImageUpload}
+                        />
+                    </div>
 
-                        {/* 1. Smart Fill */}
-                        <div className="bg-gradient-to-r from-emerald-900/20 to-teal-900/20 border border-emerald-500/30 rounded-2xl p-1 relative overflow-hidden group">
-                            <div className="absolute inset-0 bg-emerald-500/5 blur-xl group-hover:bg-emerald-500/10 transition-colors"></div>
-                            <div className="bg-slate-900/80 backdrop-blur-md rounded-xl p-5 relative flex flex-col sm:flex-row gap-4 items-center">
-                                <div className="flex-1 w-full">
-                                    <label className="text-[10px] font-bold text-emerald-400 uppercase tracking-wider mb-1 block">Quick Start</label>
-                                    <div className="relative">
-                                        <input
-                                            value={scientificNameSearch}
-                                            onChange={(e) => setScientificNameSearch(e.target.value)}
-                                            placeholder="Enter Scientific Name (e.g. Ocimum)..."
-                                            className="w-full bg-transparent border-b border-slate-600 py-2 pl-8 pr-4 text-white placeholder:text-slate-600 focus:border-emerald-500 outline-none transition-colors"
-                                        />
-                                        <Search className="absolute left-0 top-1/2 -translate-y-1/2 text-slate-500" size={16} />
-                                    </div>
-                                </div>
-                                <Button type="button" onClick={handleSmartFill} size="sm" className="w-full sm:w-auto bg-emerald-600 hover:bg-emerald-500 text-white shadow-lg shadow-emerald-900/20 border-0">
-                                    <Sprout size={16} className="mr-2" /> Auto-Fill Data
-                                </Button>
+                    <div className="absolute bottom-6 text-slate-500 text-xs font-mono uppercase tracking-widest z-10">
+                        Live Preview Mode
+                    </div>
+                </div>
+
+                {/* --- RIGHT PANEL: FORM (60%) --- */}
+                <div className="w-full lg:w-3/5 p-8 lg:p-12 overflow-y-auto max-h-[800px]">
+                    <form onSubmit={handleAddPlant} className="max-w-xl mx-auto space-y-10">
+
+                        {/* 1. SMART SEARCH */}
+                        <div className="relative">
+                            <input
+                                value={scientificNameSearch}
+                                onChange={(e) => setScientificNameSearch(e.target.value)}
+                                placeholder="Search DB to auto-fill (e.g. Ocimum)..."
+                                className="w-full bg-transparent text-2xl font-light text-white placeholder:text-slate-600 border-b border-slate-700 py-4 focus:border-emerald-500 outline-none transition-colors"
+                            />
+                            <div className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                                {scientificNameSearch && (
+                                    <button
+                                        type="button"
+                                        onClick={handleSmartFill}
+                                        className="text-emerald-400 text-xs font-bold uppercase tracking-wider hover:text-emerald-300 transition-colors flex items-center gap-1"
+                                    >
+                                        Auto-Fill <ArrowRight size={12} />
+                                    </button>
+                                )}
+                                <Search size={20} className="text-slate-600" />
                             </div>
                         </div>
 
-                        {/* 2. Core Info */}
-                        <section className="space-y-4">
-                            <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                                <div className="p-1.5 bg-slate-800 rounded-lg border border-slate-700 text-slate-300"><Leaf size={18} /></div>
-                                <span>Identification</span>
-                            </h2>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-5 bg-slate-800/30 border border-slate-800 rounded-2xl p-6">
-                                <div className="space-y-1.5">
-                                    <label className="text-xs font-bold text-slate-400 uppercase ml-1">Common Name</label>
+                        {/* 2. IDENTITY */}
+                        <div className="space-y-6">
+                            <div className="flex items-center gap-2 text-emerald-500 mb-2">
+                                <Leaf size={20} /> <span className="text-sm font-bold uppercase tracking-widest">Identity</span>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="space-y-2">
+                                    <label className="text-xs text-slate-400 font-semibold uppercase">Common Name</label>
                                     <input
                                         value={newPlant.name}
                                         onChange={(e) => setNewPlant({ ...newPlant, name: e.target.value })}
-                                        className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:border-emerald-500 outline-none transition-all focus:ring-1 focus:ring-emerald-500/50"
-                                        placeholder="e.g. Snake Plant"
-                                        required
+                                        className="w-full bg-slate-800 border-none rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-emerald-500/50"
+                                        placeholder="Plant Name"
                                     />
                                 </div>
-                                <div className="space-y-1.5">
-                                    <label className="text-xs font-bold text-slate-400 uppercase ml-1">Scientific Name</label>
+                                <div className="space-y-2">
+                                    <label className="text-xs text-slate-400 font-semibold uppercase">Scientific Name</label>
                                     <input
                                         value={newPlant.scientificName}
                                         onChange={(e) => setNewPlant({ ...newPlant, scientificName: e.target.value })}
-                                        className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white italic focus:border-emerald-500 outline-none transition-all "
-                                        placeholder="e.g. Sansevieria trifasciata"
-                                        required
+                                        className="w-full bg-slate-800 border-none rounded-lg px-4 py-3 text-white italic focus:ring-2 focus:ring-emerald-500/50"
+                                        placeholder="Latin Name"
                                     />
                                 </div>
-                                <div className="md:col-span-2 space-y-1.5">
-                                    <label className="text-xs font-bold text-slate-400 uppercase ml-1">Marketing Description</label>
-                                    <textarea
-                                        value={newPlant.description}
-                                        onChange={(e) => setNewPlant({ ...newPlant, description: e.target.value })}
-                                        className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:border-emerald-500 outline-none transition-all min-h-[120px]"
-                                        placeholder="Describe the plant's key features..."
-                                        required
-                                    />
-                                </div>
-                                <div className="space-y-1.5">
-                                    <label className="text-xs font-bold text-slate-400 uppercase ml-1">Category</label>
+                            </div>
+
+                            <div className="space-y-2">
+                                <label className="text-xs text-slate-400 font-semibold uppercase">Description</label>
+                                <textarea
+                                    value={newPlant.description}
+                                    onChange={(e) => setNewPlant({ ...newPlant, description: e.target.value })}
+                                    className="w-full bg-slate-800 border-none rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-emerald-500/50 min-h-[100px]"
+                                    placeholder="Story about this plant..."
+                                />
+                            </div>
+                        </div>
+
+                        {/* 3. METRICS */}
+                        <div className="space-y-6">
+                            <div className="flex items-center gap-2 text-amber-500 mb-2">
+                                <Thermometer size={20} /> <span className="text-sm font-bold uppercase tracking-widest">Metrics</span>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-6">
+                                <div className="space-y-2">
+                                    <label className="text-xs text-slate-400 font-semibold uppercase">Category</label>
                                     <select
                                         value={newPlant.type}
                                         onChange={(e) => setNewPlant({ ...newPlant, type: e.target.value as any })}
-                                        className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:border-emerald-500 outline-none appearance-none"
+                                        className="w-full bg-slate-800 border-none rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-amber-500/50 appearance-none cursor-pointer"
                                     >
-                                        <option value="indoor">🏠 Indoor</option>
-                                        <option value="outdoor">🌳 Outdoor</option>
+                                        <option value="indoor">Indoor</option>
+                                        <option value="outdoor">Outdoor</option>
                                     </select>
                                 </div>
-                                <div className="space-y-1.5">
-                                    <label className="text-xs font-bold text-slate-400 uppercase ml-1">Price (₹)</label>
+                                <div className="space-y-2">
+                                    <label className="text-xs text-slate-400 font-semibold uppercase">Price (₹)</label>
                                     <input
                                         type="number"
                                         value={newPlant.price}
                                         onChange={(e) => setNewPlant({ ...newPlant, price: Number(e.target.value) })}
-                                        className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white font-mono focus:border-emerald-500 outline-none"
-                                        required
+                                        className="w-full bg-slate-800 border-none rounded-lg px-4 py-3 text-white font-mono focus:ring-2 focus:ring-amber-500/50"
                                     />
                                 </div>
                             </div>
-                        </section>
 
-                        {/* 3. Environment */}
-                        <section className="space-y-4">
-                            <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                                <div className="p-1.5 bg-slate-800 rounded-lg border border-slate-700 text-amber-400"><Sun size={18} /></div>
-                                <span>Bio-Requirements</span>
-                            </h2>
-                            <div className="bg-slate-800/30 border border-slate-800 rounded-2xl p-6 space-y-6">
-                                {/* Sunlight */}
+                            {/* Sunlight Segmented Control */}
+                            <div className="space-y-2">
+                                <label className="text-xs text-slate-400 font-semibold uppercase block mb-1">Sunlight</label>
+                                <div className="flex bg-slate-800 rounded-lg p-1">
+                                    {['low', 'medium', 'high', 'direct'].map(lvl => (
+                                        <button
+                                            key={lvl}
+                                            type="button"
+                                            onClick={() => setNewPlant({ ...newPlant, sunlight: lvl as any })}
+                                            className={`flex-1 py-1.5 text-xs font-bold uppercase rounded-md transition-all ${newPlant.sunlight === lvl ? 'bg-amber-500 text-black shadow-lg' : 'text-slate-500 hover:text-white'}`}
+                                        >
+                                            {lvl}
+                                        </button>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* Sliders & Oxygen */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
                                 <div className="space-y-3">
-                                    <label className="text-xs font-bold text-slate-400 uppercase block">Sunlight Intensity</label>
-                                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                                        {['low', 'medium', 'high', 'direct'].map((lvl) => (
-                                            <label key={lvl} className={`relative flex flex-col items-center justify-center p-3 rounded-xl border-2 cursor-pointer transition-all ${newPlant.sunlight === lvl ? 'bg-amber-500/10 border-amber-500 text-amber-400' : 'bg-slate-900 border-slate-800 text-slate-500 hover:border-slate-600'}`}>
-                                                <input type="radio" name="sunlight" checked={newPlant.sunlight === lvl} onChange={() => setNewPlant({ ...newPlant, sunlight: lvl as any })} className="sr-only" />
-                                                <Sun size={20} className={newPlant.sunlight === lvl ? 'fill-amber-500/20' : ''} />
-                                                <span className="text-[10px] font-bold uppercase mt-2">{lvl}</span>
-                                            </label>
-                                        ))}
+                                    <div className="flex items-center justify-between">
+                                        <label className="text-xs text-slate-400 font-semibold uppercase flex items-center gap-2"><Droplets size={14} /> Humidity</label>
+                                        <span className="text-xs font-mono text-blue-400">{newPlant.minHumidity}%</span>
                                     </div>
-                                </div>
-
-                                {/* Temp & Oxygen */}
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div className="space-y-1.5">
-                                        <label className="text-xs font-bold text-slate-400 uppercase flex items-center gap-2">
-                                            <Thermometer size={14} /> Ideal Temp Range (°C)
-                                        </label>
-                                        <div className="flex items-center gap-2">
-                                            <input type="number" value={newPlant.idealTempMin} onChange={(e) => setNewPlant({ ...newPlant, idealTempMin: Number(e.target.value) })} className="w-full bg-slate-900 border border-slate-700 rounded-xl py-3 text-center text-white focus:border-blue-500 outline-none" />
-                                            <span className="text-slate-600">-</span>
-                                            <input type="number" value={newPlant.idealTempMax} onChange={(e) => setNewPlant({ ...newPlant, idealTempMax: Number(e.target.value) })} className="w-full bg-slate-900 border border-slate-700 rounded-xl py-3 text-center text-white focus:border-red-500 outline-none" />
-                                        </div>
-                                    </div>
-                                    <div className="space-y-1.5">
-                                        <label className="text-xs font-bold text-slate-400 uppercase flex items-center gap-2">
-                                            <Wind size={14} /> Oxygen Output
-                                        </label>
-                                        <select value={newPlant.oxygenLevel} onChange={(e) => setNewPlant({ ...newPlant, oxygenLevel: e.target.value as any })} className="w-full bg-slate-900 border border-slate-700 rounded-xl px-4 py-3 text-white focus:border-blue-500 outline-none">
-                                            <option value="low">Low</option>
-                                            <option value="moderate">Moderate</option>
-                                            <option value="high">High</option>
-                                            <option value="very-high">Purifier Grade (Very High)</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                {/* Humidity */}
-                                <div className="space-y-2">
-                                    <label className="text-xs font-bold text-slate-400 uppercase flex justify-between">
-                                        <span className="flex items-center gap-2"><Droplets size={14} /> Humidity Needs</span>
-                                        <span className="text-blue-400">{newPlant.minHumidity}%</span>
-                                    </label>
                                     <input
-                                        type="range"
-                                        min="0" max="100"
-                                        step="5"
+                                        type="range" min="0" max="100" step="10"
                                         value={newPlant.minHumidity}
                                         onChange={(e) => setNewPlant({ ...newPlant, minHumidity: Number(e.target.value) })}
-                                        className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500"
+                                        className="w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500"
                                     />
                                 </div>
-                            </div>
-                        </section>
 
-                        {/* Submit Action */}
-                        <div className="pt-4 flex justify-end">
-                            <Button type="submit" variant="primary" className="px-12 py-4 text-lg font-bold bg-gradient-to-r from-emerald-600 to-green-600 hover:scale-105 shadow-xl shadow-emerald-900/40 rounded-xl transition-all">
-                                Register Specimen
+                                <div className="space-y-2">
+                                    <label className="text-xs text-slate-400 font-semibold uppercase flex items-center gap-2"><Wind size={14} /> Oxygen</label>
+                                    <select
+                                        value={newPlant.oxygenLevel}
+                                        onChange={(e) => setNewPlant({ ...newPlant, oxygenLevel: e.target.value as any })}
+                                        className="w-full bg-slate-800 border-none rounded-lg px-4 py-2.5 text-white focus:ring-2 focus:ring-blue-500/50 appearance-none cursor-pointer text-sm"
+                                    >
+                                        <option value="low">Low</option>
+                                        <option value="moderate">Moderate</option>
+                                        <option value="high">High</option>
+                                        <option value="very-high">Purifier (Very High)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* SUBMIT */}
+                        <div className="pt-8 border-t border-slate-800 flex justify-end">
+                            <Button
+                                type="submit"
+                                className="px-8 py-3 bg-white text-black font-bold text-sm tracking-widest hover:bg-slate-200 transition-colors uppercase rounded-none border border-white"
+                            >
+                                Publish Specimen
                             </Button>
                         </div>
+
                     </form>
                 </div>
             </div>
