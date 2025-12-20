@@ -180,10 +180,10 @@ export const AddPlant = () => {
                     </Button>
                 </div>
 
-                <form onSubmit={handleAddPlant} className="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
+                <form onSubmit={handleAddPlant} className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
 
-                    {/* LEFT COLUMN (Media & Quick Stats) - Span 4 */}
-                    <div className="xl:col-span-4 space-y-6">
+                    {/* LEFT COLUMN (Media & Quick Stats) - Span 1 */}
+                    <div className="lg:col-span-1 space-y-6">
                         {/* Image Upload */}
                         <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-5 shadow-sm hover:border-slate-600 transition-colors">
                             <h3 className="text-white font-bold mb-4 flex justify-between items-center">
@@ -201,13 +201,13 @@ export const AddPlant = () => {
                                         <button
                                             type="button"
                                             onClick={() => setNewPlant({ ...newPlant, imageUrl: '' })}
-                                            className="absolute top-2 right-2 bg-red-500/80 p-1.5 rounded-full text-white opacity-0 group-hover:opacity-100 transition-opacity"
+                                            className="absolute top-2 right-2 bg-red-500/80 p-1.5 rounded-full text-white opacity-0 group-hover:opacity-100 transition-opacity z-20"
                                         >
                                             <AlertCircle size={16} />
                                         </button>
                                     </>
                                 ) : (
-                                    <div className="text-center p-6">
+                                    <div className="text-center p-6 pointer-events-none">
                                         {uploadMode === 'file' ? (
                                             <>
                                                 <Upload className="mx-auto text-emerald-500 mb-3" size={32} />
@@ -224,7 +224,13 @@ export const AddPlant = () => {
                                 )}
 
                                 {uploadMode === 'file' && (
-                                    <input type="file" accept="image/*" onChange={handleImageUpload} className="absolute inset-0 opacity-0 cursor-pointer" />
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={handleImageUpload}
+                                        className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                                        style={{ opacity: 0 }}
+                                    />
                                 )}
                             </div>
 
@@ -273,8 +279,8 @@ export const AddPlant = () => {
                         </Button>
                     </div>
 
-                    {/* RIGHT COLUMN (Main Details) - Span 8 */}
-                    <div className="xl:col-span-8 space-y-6">
+                    {/* RIGHT COLUMN (Main Details) - Span 2 */}
+                    <div className="lg:col-span-2 space-y-6">
                         {/* Basic Info */}
                         <div className="bg-slate-800/50 border border-slate-700 rounded-xl p-6 shadow-sm">
                             <h3 className="text-xl font-bold text-white mb-6 flex items-center gap-2">
