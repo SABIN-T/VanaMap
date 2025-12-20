@@ -23,15 +23,16 @@
     height: 100vh;
     position: sticky;
     top: 0;
-    background-color: #ffffff;
-    border-right: 1px solid #e2e8f0;
-    /* Slate-200 */
+    background-color: #020617;
+    /* Slate-950 (BLACK) */
+    border-right: 1px solid #1e293b;
+    /* Slate-800 */
     display: flex;
     flex-direction: column;
     padding: 2rem;
     z-index: 50;
     transition: width 0.3s ease;
-    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.02);
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.2);
 }
 
 .logoArea {
@@ -45,7 +46,7 @@
 .logoArea h1 {
     font-size: 1.5rem;
     font-weight: 800;
-    color: #0f172a;
+    color: #ffffff;
     letter-spacing: -0.03em;
     margin: 0;
     background: linear-gradient(135deg, #10b981 0%, #059669 100%);
@@ -68,8 +69,8 @@
     border-radius: 1rem;
     font-size: 0.9375rem;
     font-weight: 600;
-    color: #64748b;
-    /* Slate-500 */
+    color: #94a3b8;
+    /* Slate-400 */
     background: transparent;
     border: 1px solid transparent;
     cursor: pointer;
@@ -77,19 +78,21 @@
 }
 
 .navItem:hover {
-    background-color: #f1f5f9;
-    /* Slate-100 */
-    color: #0f172a;
+    background-color: rgba(255, 255, 255, 0.05);
+    /* White glass hover */
+    color: #ffffff;
     transform: translateX(4px);
 }
 
 .navItemActive {
     composes: navItem;
-    background-color: rgba(16, 185, 129, 0.08);
-    /* Emerald-500 with opacity */
-    color: #059669;
-    /* Emerald-600 */
-    border-color: rgba(16, 185, 129, 0.1);
+    background-color: transparent;
+    background: linear-gradient(90deg, rgba(16, 185, 129, 0.15), transparent);
+    color: #34d399;
+    /* Emerald-400 */
+    border-left: 3px solid #10b981;
+    border-color: transparent;
+    /* Reset standard border */
 }
 
 /* --- MAIN CONTENT LAYOUT --- */

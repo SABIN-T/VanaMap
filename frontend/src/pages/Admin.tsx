@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { fetchVendors, fetchPlants, addPlant, updatePlant, deletePlant, fetchUsers } from '../services/api';
 import type { Vendor, Plant } from '../types';
-import { Trash2, Edit, Image as ImageIcon, Users, Sprout, Activity, LogOut, Sparkles, Search, Database, Leaf, Droplets, Thermometer, Sun } from 'lucide-react';
+import { MoreHorizontal, MapPin, Trash2, Edit, Image as ImageIcon, Users, Sprout, Activity, LogOut, Sparkles, Search, Database, Leaf, Droplets, Thermometer, Sun } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/common/Button';
 import styles from './Admin.module.css';
@@ -524,8 +524,8 @@ export const Admin = () => {
                     </div>
 
                     {activeTab === 'dashboard' && (
-                        <div className={`${styles['stats-grid']} animate-fade-in`}>
-                            <div className={`${styles['premium-card']} p-6 group`}>
+                        <div className={`${styles['stats-grid']} animate - fade -in `}>
+                            <div className={`${styles['premium-card']} p - 6 group`}>
                                 <div className="flex justify-between items-start mb-6">
                                     <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-500 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-sm">
                                         <Users size={24} strokeWidth={2.5} />
@@ -538,7 +538,7 @@ export const Admin = () => {
                                 </div>
                             </div>
 
-                            <div className={`${styles['premium-card']} p-6 group`}>
+                            <div className={`${styles['premium-card']} p - 6 group`}>
                                 <div className="flex justify-between items-start mb-6">
                                     <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-500 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-sm">
                                         <Database size={24} strokeWidth={2.5} />
@@ -554,7 +554,7 @@ export const Admin = () => {
                                 </div>
                             </div>
 
-                            <div className={`${styles['premium-card']} p-6 group`}>
+                            <div className={`${styles['premium-card']} p - 6 group`}>
                                 <div className="flex justify-between items-start mb-6">
                                     <div className="w-12 h-12 rounded-2xl bg-orange-50 text-orange-500 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-sm">
                                         <Activity size={24} strokeWidth={2.5} />
@@ -575,7 +575,7 @@ export const Admin = () => {
                         <div className="animate-fade-in space-y-8">
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                                 {/* Recent Activity Feed */}
-                                <div className={`${styles['premium-card']} p-0 overflow-hidden`}>
+                                <div className={`${styles['premium-card']} p - 0 overflow - hidden`}>
                                     <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
                                         <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2">
                                             <Activity size={18} className="text-emerald-500" /> Recent Species Log
@@ -627,13 +627,13 @@ export const Admin = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="bg-gradient-to-br from-emerald-600/5 to-teal-600/5 border border-emerald-500/20 rounded-2xl p-6 shadow-sm flex items-center justify-between">
+                                    <div className="bg-gradient-to-br from-white to-slate-50 border border-slate-200 rounded-2xl p-6 shadow-sm flex items-center justify-between group hover:border-emerald-500/30 transition-all">
                                         <div>
-                                            <h4 className="text-emerald-700 font-bold mb-1">Backup Protocol</h4>
-                                            <p className="text-xs text-slate-500">Next snapshots in 4 hours.</p>
+                                            <h4 className="text-emerald-800 font-bold mb-1">Backup Protocol</h4>
+                                            <p className="text-[10px] font-medium text-slate-400">ADMINISTRATOR</p>
                                         </div>
-                                        <div className="p-3 rounded-full bg-emerald-100 text-emerald-600">
-                                            <Database size={24} />
+                                        <div className="w-10 h-10 rounded-full bg-emerald-500 flex items-center justify-center text-white font-bold shadow-lg shadow-emerald-500/20 border-2 border-slate-900">
+                                            A
                                         </div>
                                     </div>
                                 </div>
@@ -669,18 +669,25 @@ export const Admin = () => {
                                 </div>
                             </div>
 
-                            <div className="bg-slate-800/20 backdrop-blur-xl border border-slate-700/50 rounded-2xl overflow-hidden shadow-xl">
-                                <div className="p-4 border-b border-slate-700/50 bg-slate-900/30 flex justify-between items-center">
-                                    <span className="text-sm font-bold text-slate-300">System Logs</span>
-                                    <span className="text-[10px] text-emerald-400 flex items-center gap-1 font-mono uppercase">● Monitoring Live</span>
+                            <div className="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl">
+                                <div className="p-5 border-b border-slate-800 bg-slate-950/50 flex justify-between items-center backdrop-blur-sm">
+                                    <div className="flex items-center gap-3">
+                                        <div className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
+                                        <span className="text-sm font-bold text-slate-200 tracking-wide">Live Telemetry Stream</span>
+                                    </div>
+                                    <div className="flex gap-2">
+                                        <div className="h-2.5 w-2.5 rounded-full bg-red-500/20 border border-red-500/50" />
+                                        <div className="h-2.5 w-2.5 rounded-full bg-amber-500/20 border border-amber-500/50" />
+                                        <div className="h-2.5 w-2.5 rounded-full bg-emerald-500/20 border border-emerald-500/50" />
+                                    </div>
                                 </div>
-                                <div className="p-4 font-mono text-xs text-slate-500 space-y-2 h-64 overflow-y-auto custom-scrollbar">
-                                    <div className="flex gap-4"><span className="text-slate-600">[01:30:12]</span> <span className="text-blue-400">INFO</span> API Gateway: Request received from 192.168.1.1</div>
-                                    <div className="flex gap-4"><span className="text-slate-600">[01:30:15]</span> <span className="text-emerald-400">SUCCESS</span> DB: Index update completed for `plants`</div>
-                                    <div className="flex gap-4"><span className="text-slate-600">[01:31:02]</span> <span className="text-blue-400">INFO</span> Cache: Purged expired sessions (14 total)</div>
-                                    <div className="flex gap-4"><span className="text-slate-600">[01:33:45]</span> <span className="text-emerald-400">SUCCESS</span> S3: New media asset uploaded (plant-spider.jpg)</div>
-                                    <div className="flex gap-4"><span className="text-slate-600">[01:34:10]</span> <span className="text-yellow-400">WARN</span> Security: Blocked suspicious origin access</div>
-                                    <div className="flex gap-4"><span className="text-slate-600">[01:35:00]</span> <span className="text-blue-400">INFO</span> Health: Heartbeat confirmed for all 4 clusters</div>
+                                <div className="p-6 font-mono text-xs text-slate-400 space-y-3 h-72 overflow-y-auto custom-scrollbar bg-slate-900/50">
+                                    <div className="flex gap-4 border-l-2 border-slate-700 pl-3 opacity-50"><span className="text-slate-600 w-16">[01:30:12]</span> <span className="text-blue-400 font-bold w-16">INFO</span> <span>API Gateway initialized</span></div>
+                                    <div className="flex gap-4 border-l-2 border-emerald-500/50 pl-3 bg-emerald-500/5 py-1"><span className="text-slate-500 w-16">[01:30:15]</span> <span className="text-emerald-400 font-bold w-16">SUCCESS</span> <span className="text-slate-300">Database connection established (MongoDB Cluster)</span></div>
+                                    <div className="flex gap-4 border-l-2 border-slate-700 pl-3"><span className="text-slate-600 w-16">[01:31:02]</span> <span className="text-blue-400 font-bold w-16">INFO</span> <span>Cache: Purged 14 expired sessions</span></div>
+                                    <div className="flex gap-4 border-l-2 border-amber-500/50 pl-3"><span className="text-slate-600 w-16">[01:32:45]</span> <span className="text-amber-400 font-bold w-16">WARN</span> <span>High latency detected on region: ap-south-1</span></div>
+                                    <div className="flex gap-4 border-l-2 border-slate-700 pl-3"><span className="text-slate-600 w-16">[01:35:10]</span> <span className="text-blue-400 font-bold w-16">INFO</span> <span>User authentication token refreshed</span></div>
+                                    <div className="flex gap-4 border-l-2 border-emerald-500/50 pl-3 py-1"><span className="text-slate-500 w-16">[01:38:22]</span> <span className="text-emerald-400 font-bold w-16">VITAL</span> <span className="text-emerald-200">System running at optimal performance (99.9% health)</span></div>
                                 </div>
                             </div>
                         </div>
@@ -693,69 +700,81 @@ export const Admin = () => {
                                 <p className="text-slate-400">Monitor active sessions and registered accounts from MongoDB.</p>
                             </div>
 
-                            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                                {/* VENDORS */}
-                                <div className="flex flex-col gap-6">
-                                    <div className="flex items-center justify-between mb-2">
-                                        <div className="flex items-center gap-2">
-                                            <div className="p-2 bg-emerald-100 rounded-lg text-emerald-600"><Sparkles size={18} /></div>
-                                            <h3 className="font-bold text-slate-800">Partner Network</h3>
+                            <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 animate-fade-in">
+                                {/* VENDORS COLUMN */}
+                                <div className="space-y-6">
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-3">
+                                            <div className="p-3 bg-slate-900 rounded-xl text-emerald-400 shadow-lg shadow-slate-900/10"><Sparkles size={20} /></div>
+                                            <div>
+                                                <h3 className="font-black text-slate-800 text-lg tracking-tight">Partner Network</h3>
+                                                <p className="text-xs text-slate-500 font-medium">Verified botanical suppliers</p>
+                                            </div>
                                         </div>
-                                        <span className="text-xs font-bold bg-slate-100 text-slate-500 px-3 py-1 rounded-full">{vendors.length} Active</span>
+                                        <span className="text-[10px] font-black uppercase tracking-widest bg-emerald-100/50 text-emerald-700 px-3 py-1.5 rounded-lg border border-emerald-100">{vendors.length} Active</span>
                                     </div>
 
-                                    <div className="space-y-3">
+                                    <div className="grid grid-cols-1 gap-4">
                                         {vendors.map(v => (
-                                            <div key={v.id} className={`${styles.listItem}`}>
-                                                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-emerald-500/20">
-                                                    {v.name.charAt(0)}
-                                                </div>
-                                                <div className="flex-1">
-                                                    <h4 className="font-bold text-slate-800 text-sm">{v.name}</h4>
-                                                    <p className="text-xs text-slate-500 font-medium">{v.address || 'Global HQ'}</p>
-                                                </div>
-                                                <div className="flex flex-col items-end gap-1">
-                                                    <div className="flex items-center gap-1.5 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">
-                                                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
-                                                        <span className="text-[10px] font-bold text-emerald-700 uppercase tracking-wide">Live</span>
+                                            <div key={v.id} className="group relative bg-white border border-slate-200 rounded-2xl p-5 hover:border-emerald-500/30 hover:shadow-xl hover:shadow-emerald-500/5 transition-all duration-300">
+                                                <div className="flex items-start gap-4">
+                                                    <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 flex items-center justify-center text-emerald-400 font-black text-xl shadow-lg border border-slate-700">
+                                                        {v.name.charAt(0)}
                                                     </div>
+                                                    <div className="flex-1 min-w-0">
+                                                        <div className="flex justify-between items-start">
+                                                            <h4 className="font-bold text-slate-900 text-base truncate pr-8 group-hover:text-emerald-700 transition-colors">{v.name}</h4>
+                                                            <div className="flex items-center gap-1.5 bg-emerald-50 px-2 py-1 rounded-full border border-emerald-100/50">
+                                                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                                                                <span className="text-[9px] font-black text-emerald-700 uppercase tracking-wider">Live</span>
+                                                            </div>
+                                                        </div>
+                                                        <p className="text-xs text-slate-500 font-medium mt-1 mb-3 flex items-center gap-1.5">
+                                                            <MapPin size={12} /> {v.address || 'Global HQ'}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div className="absolute top-5 right-5 opacity-0 group-hover:opacity-100 transition-opacity">
+                                                    <button className="text-slate-400 hover:text-slate-600"><MoreHorizontal size={20} /></button>
                                                 </div>
                                             </div>
                                         ))}
                                     </div>
                                 </div>
 
-                                {/* USERS */}
-                                <div className="flex flex-col gap-6">
-                                    <div className="flex items-center justify-between mb-2">
-                                        <div className="flex items-center gap-2">
-                                            <div className="p-2 bg-blue-100 rounded-lg text-blue-600"><Users size={18} /></div>
-                                            <h3 className="font-bold text-slate-800">Community Access</h3>
+                                {/* USERS COLUMN */}
+                                <div className="space-y-6">
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-3">
+                                            <div className="p-3 bg-white border border-slate-200 rounded-xl text-indigo-600 shadow-sm"><Users size={20} /></div>
+                                            <div>
+                                                <h3 className="font-black text-slate-800 text-lg tracking-tight">Community Access</h3>
+                                                <p className="text-xs text-slate-500 font-medium">Registered platform users</p>
+                                            </div>
                                         </div>
-                                        <span className="text-xs font-bold bg-slate-100 text-slate-500 px-3 py-1 rounded-full">{users.filter(u => u.role !== 'vendor').length} Registered</span>
+                                        <span className="text-[10px] font-black uppercase tracking-widest bg-indigo-50 text-indigo-700 px-3 py-1.5 rounded-lg border border-indigo-100">{users.filter(u => u.role !== 'vendor').length} Users</span>
                                     </div>
 
-                                    <div className="space-y-3">
+                                    <div className="grid grid-cols-1 gap-3">
                                         {users.filter(u => u.role !== 'vendor').map(u => (
-                                            <div key={u.id} className={`${styles.listItem}`}>
-                                                <div className="w-12 h-12 rounded-xl bg-white border border-slate-100 flex items-center justify-center text-slate-400 font-bold shadow-sm">
+                                            <div key={u.id} className="flex items-center gap-4 bg-white border border-slate-200 p-4 rounded-xl hover:bg-slate-50 transition-colors group">
+                                                <div className="w-10 h-10 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-500 font-bold text-sm group-hover:bg-white group-hover:border-indigo-200 group-hover:text-indigo-600 transition-colors">
                                                     {u.name.charAt(0)}
                                                 </div>
                                                 <div className="flex-1">
                                                     <h4 className="font-bold text-slate-800 text-sm">{u.name}</h4>
-                                                    <p className="text-xs text-slate-400 font-medium">{u.email}</p>
+                                                    <p className="text-xs text-slate-400 font-mono">{u.email}</p>
                                                 </div>
-                                                <div className="text-[10px] font-bold text-slate-400 bg-slate-50 px-2 py-1 rounded-lg border border-slate-100 uppercase tracking-wider">
-                                                    Standard
-                                                </div>
+                                                <span className="text-[10px] font-bold text-slate-400 bg-slate-50 px-2.5 py-1 rounded-md border border-slate-100 uppercase tracking-wider group-hover:border-slate-200">Standard</span>
                                             </div>
                                         ))}
                                         {users.filter(u => u.role !== 'vendor').length === 0 && (
-                                            <div className="p-12 text-center border-2 border-dashed border-slate-200 rounded-2xl">
-                                                <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mx-auto mb-4 text-slate-300">
-                                                    <Users size={32} />
+                                            <div className="p-12 text-center border-2 border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
+                                                <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4 text-slate-300 shadow-sm border border-slate-100">
+                                                    <Users size={28} />
                                                 </div>
-                                                <p className="text-slate-500 font-medium text-sm">No community members yet.</p>
+                                                <p className="text-slate-500 font-bold text-sm">No community members yet</p>
+                                                <p className="text-xs text-slate-400 mt-1">Invite users to grow the platform</p>
                                             </div>
                                         )}
                                     </div>
@@ -767,13 +786,13 @@ export const Admin = () => {
                     {activeTab === 'plants' && (
                         <div className="animate-fade-in">
                             {/* PLANT FORM PRO */}
-                            <div className={`${styles['premium-card']} p-8 mb-12 relative overflow-hidden group`}>
+                            <div className={`${styles['premium-card']} p - 8 mb - 12 relative overflow - hidden group`}>
                                 <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-500/5 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/2" />
 
-                                <h3 className={`text-2xl font-black mb-8 flex items-center justify-between relative z-10 ${styles['glow-text']}`}>
+                                <h3 className={`text - 2xl font - black mb - 8 flex items - center justify - between relative z - 10 ${styles['glow-text']} `}>
                                     <span className="flex items-center gap-3">
                                         <Database className="text-emerald-400" />
-                                        {isEditing ? `Refining: ${formData.name}` : 'Catalog New Species'}
+                                        {isEditing ? `Refining: ${formData.name} ` : 'Catalog New Species'}
                                     </span>
                                     {isEditing && (
                                         <button
@@ -792,14 +811,14 @@ export const Admin = () => {
                                             <div className="space-y-4">
                                                 <h4 className="text-[10px] font-black text-emerald-500/50 uppercase tracking-[0.2em] mb-4">I. Botanical Identity</h4>
                                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                                    <div className={`${styles['premium-box']} focus-within:ring-2 ring-emerald-500/10`}>
+                                                    <div className={`${styles['premium-box']} focus - within: ring - 2 ring - emerald - 500 / 10`}>
                                                         <label className="text-[11px] font-bold text-slate-400 mb-1.5 block uppercase tracking-wider">Common Nomenclature</label>
-                                                        <input className={`${styles.input} text-xl`} value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} placeholder="e.g. Fiddle Leaf Fig" required />
+                                                        <input className={`${styles.input} text - xl`} value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} placeholder="e.g. Fiddle Leaf Fig" required />
                                                     </div>
-                                                    <div className={`${styles['premium-box']} flex items-center gap-4`}>
+                                                    <div className={`${styles['premium-box']} flex items - center gap - 4`}>
                                                         <div className="flex-1">
                                                             <label className="text-[11px] font-bold text-slate-400 mb-1.5 block uppercase tracking-wider">Scientific Taxonomy</label>
-                                                            <input className={`${styles.input} text-sm font-medium italic`} value={formData.scientificName} onChange={e => setFormData({ ...formData, scientificName: e.target.value })} placeholder="e.g. Ficus lyrata" required />
+                                                            <input className={`${styles.input} text - sm font - medium italic`} value={formData.scientificName} onChange={e => setFormData({ ...formData, scientificName: e.target.value })} placeholder="e.g. Ficus lyrata" required />
                                                         </div>
                                                         <Button type="button" onClick={handleSmartFetch} size="sm" className="bg-emerald-50 text-emerald-600 hover:bg-emerald-500 hover:text-white border border-emerald-100 p-2.5 rounded-xl transition-all shadow-sm">
                                                             <Search size={16} strokeWidth={2.5} />
@@ -811,7 +830,7 @@ export const Admin = () => {
                                             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                                                 <div className={styles['premium-box']}>
                                                     <label className="text-[11px] font-bold text-slate-400 mb-1.5 block uppercase tracking-wider">Classification</label>
-                                                    <select className={`${styles.select}`} value={formData.type} onChange={e => setFormData({ ...formData, type: e.target.value as any })}>
+                                                    <select className={`${styles.select} `} value={formData.type} onChange={e => setFormData({ ...formData, type: e.target.value as any })}>
                                                         <option value="indoor">Indoor (Houseplant)</option>
                                                         <option value="outdoor">Outdoor (Wild)</option>
                                                     </select>
@@ -820,12 +839,12 @@ export const Admin = () => {
                                                     <label className="text-[11px] font-bold text-slate-400 mb-1.5 block uppercase tracking-wider">Market Price</label>
                                                     <div className="flex items-center gap-1">
                                                         <span className="text-slate-800 font-bold text-lg">₹</span>
-                                                        <input type="number" className={`${styles.input} text-lg`} value={formData.price} onChange={e => setFormData({ ...formData, price: Number(e.target.value) })} required />
+                                                        <input type="number" className={`${styles.input} text - lg`} value={formData.price} onChange={e => setFormData({ ...formData, price: Number(e.target.value) })} required />
                                                     </div>
                                                 </div>
                                                 <div className={styles['premium-box']}>
                                                     <label className="text-[11px] font-bold text-slate-400 mb-1.5 block uppercase tracking-wider">Origin Ecosystem</label>
-                                                    <input className={`${styles.input} text-base`} value={formData.ecosystem || ''} onChange={e => setFormData({ ...formData, ecosystem: e.target.value })} placeholder="e.g. Mediterranean" />
+                                                    <input className={`${styles.input} text - base`} value={formData.ecosystem || ''} onChange={e => setFormData({ ...formData, ecosystem: e.target.value })} placeholder="e.g. Mediterranean" />
                                                 </div>
                                             </div>
 
@@ -880,7 +899,7 @@ export const Admin = () => {
                                             <div className="space-y-4">
                                                 <h4 className="text-[10px] font-black text-amber-500/50 uppercase tracking-[0.2em] mb-4">IV. Metadata</h4>
                                                 <textarea
-                                                    className={`${styles.input} h-32 bg-slate-50 border border-slate-200 rounded-xl p-4 text-sm resize-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all`}
+                                                    className={`${styles.input} h - 32 bg - slate - 50 border border - slate - 200 rounded - xl p - 4 text - sm resize - none focus: ring - 2 focus: ring - emerald - 500 / 20 focus: border - emerald - 500 transition - all`}
                                                     value={formData.description}
                                                     onChange={e => setFormData({ ...formData, description: e.target.value })}
                                                     placeholder="Synthesize species characteristics and lore..."
@@ -904,9 +923,10 @@ export const Admin = () => {
                                         <button
                                             key={f}
                                             onClick={() => setPlantFilter(f as any)}
-                                            className={`px-6 py-2.5 rounded-xl text-[11px] font-bold uppercase tracking-wider transition-all ${plantFilter === f
+                                            className={`px - 6 py - 2.5 rounded - xl text - [11px] font - bold uppercase tracking - wider transition - all ${plantFilter === f
                                                 ? 'bg-slate-900 text-white shadow-lg shadow-slate-900/20'
-                                                : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50'}`}
+                                                : 'text-slate-500 hover:text-slate-800 hover:bg-slate-50'
+                                                } `}
                                         >
                                             {f}
                                         </button>
@@ -926,18 +946,18 @@ export const Admin = () => {
                                 </div>
                             </div>
 
-                            <div className={`${styles['animate-staggered']} pb-32`}>
+                            <div className={`${styles['animate-staggered']} pb - 32`}>
                                 {plants.filter(p => (plantFilter === 'all' || p.type === plantFilter) && (p.name.toLowerCase().includes(searchQuery.toLowerCase()) || p.scientificName?.toLowerCase().includes(searchQuery.toLowerCase()))).map((p, index) => (
                                     <div
                                         key={p.id}
                                         className={styles['premium-card']}
-                                        style={{ animationDelay: `${index * 0.1}s` }}
+                                        style={{ animationDelay: `${index * 0.1} s` }}
                                     >
                                         <div className={styles['image-container']}>
                                             <img src={p.imageUrl} alt="" className={styles['plant-image']} />
                                             {/* Top Badges */}
                                             <div className="absolute top-4 left-4 flex gap-2 z-10">
-                                                <span className={`px-3 py-1.5 rounded-3xl text-[10px] font-bold uppercase tracking-wide backdrop-blur-md shadow-sm border border-white/40 ${p.type === 'indoor' ? 'bg-white/90 text-indigo-600' : 'bg-white/90 text-orange-600'}`}>
+                                                <span className={`px - 3 py - 1.5 rounded - 3xl text - [10px] font - bold uppercase tracking - wide backdrop - blur - md shadow - sm border border - white / 40 ${p.type === 'indoor' ? 'bg-white/90 text-indigo-600' : 'bg-white/90 text-orange-600'} `}>
                                                     {p.type}
                                                 </span>
                                                 {(p.price || 0) > 800 && <span className="bg-white/90 text-purple-600 px-3 py-1.5 rounded-3xl text-[10px] font-bold uppercase tracking-wide backdrop-blur-md shadow-sm border border-white/40">Premium</span>}
