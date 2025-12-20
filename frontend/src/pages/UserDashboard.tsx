@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import { Button } from '../components/common/Button';
-import { Trash2, ShoppingBag, MapPin, Heart, ArrowRight, Activity, Loader2 } from 'lucide-react';
+import { Trash2, ShoppingBag, MapPin, Heart, ArrowRight, Activity, Loader2, Store } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { fetchPlants } from '../services/api';
-import type { Plant } from '../types';
+import { fetchPlants, fetchVendors, updateVendor } from '../services/api';
+import type { Plant, Vendor } from '../types';
+import toast from 'react-hot-toast';
 
 export const UserDashboard = () => {
     const { items, removeFromCart } = useCart();
@@ -15,6 +16,96 @@ export const UserDashboard = () => {
     // Favorites State
     const [allPlants, setAllPlants] = useState<Plant[]>([]);
     const [loadingFavs, setLoadingFavs] = useState(true);
+
+    // Vendor Onboarding State
+    const [showVendorModal, setShowVendorModal] = useState(false);
+    const [detectingLoc, setDetectingLoc] = useState(false);
+    const [myVendor, setMyVendor] = useState<Vendor | null>(null);
+    const [vendorForm, setVendorForm] = useState({
+        name: '',
+        address: '',
+        phone: '',
+        latitude: 0,
+        longitude: 0
+    });
+
+    useEffect(() => {
+        const loadVendorData = async () => {
+            if (user?.role === 'vendor') {
+                try {
+                    const vendors = await fetchVendors();
+                    // Soft match on ID (mongo _id vs. string id)
+                    const vendor = vendors.find(v => v.id === user.id || v.id === (user as any)._id);
+                    if (vendor) {
+                        setMyVendor(vendor);
+                        setVendorForm(prev => ({
+                            ...prev,
+                            name: vendor.name,
+                            address: vendor.address || '',
+                            phone: vendor.phone || '',
+                            latitude: vendor.latitude || 0,
+                            longitude: vendor.longitude || 0
+                        }));
+
+                        // Prompt if location missing (essential for Nearby Shops)
+                        if (!vendor.latitude || !vendor.longitude) {
+                            setShowVendorModal(true);
+                        }
+                    }
+                } catch (e) {
+                    console.error("Vendor check failed", e);
+                }
+            }
+        };
+        loadVendorData();
+    }, [user]);
+
+    const detectLocation = () => {
+        setDetectingLoc(true);
+        if (!navigator.geolocation) {
+            toast.error("GPS not supported");
+            setDetectingLoc(false);
+            return;
+        }
+        navigator.geolocation.getCurrentPosition(
+            (pos) => {
+                setVendorForm(prev => ({
+                    ...prev,
+                    latitude: pos.coords.latitude,
+                    longitude: pos.coords.longitude
+                }));
+                setDetectingLoc(false);
+                toast.success("Location detected!");
+            },
+            (err) => {
+                console.error(err);
+                toast.error("Could not fetch location");
+                setDetectingLoc(false);
+            }
+        );
+    };
+
+    const submitVendorProfile = async () => {
+        if (!myVendor) return;
+        const tid = toast.loading("Updating shop profile...");
+        try {
+            const updated = await updateVendor(myVendor.id, {
+                ...vendorForm,
+                verified: true // AUTO-VERIFY as requested for instant visibility
+            });
+
+            if (updated) {
+                toast.success("Shop is LIVE on Nearby Map!", { id: tid });
+                setShowVendorModal(false);
+            } else {
+                toast.error("Failed to update profile", { id: tid });
+            }
+        } catch (e) {
+            toast.error("Network error saving profile", { id: tid });
+        }
+    };
+
+
 
     useEffect(() => {
         const loadData = async () => {
@@ -56,6 +147,125 @@ export const UserDashboard = () => {
 
     return (
         <div className="container" style={{ padding: '3rem 1rem' }}>
+            {/* VENDOR ONBOARDING MODAL */}
+            {showVendorModal && (
+                <div style={{
+                    position: 'fixed', inset: 0, zIndex: 1000,
+                    background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(8px)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem'
+                }}>
+                    <div style={{
+                        width: '100%', maxWidth: '500px',
+                        background: 'var(--color-bg-card)', border: '1px solid var(--glass-border)',
+                        borderRadius: '1.5rem', padding: '2rem',
+                        boxShadow: '0 20px 50px rgba(0,0,0,0.3)',
+                        animation: 'fadeIn 0.3s ease-out'
+                    }}>
+                        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+                            <div style={{ display: 'inline-flex', padding: '1rem', background: 'rgba(250, 204, 21, 0.1)', borderRadius: '50%', marginBottom: '1rem' }}>
+                                <Store size={32} color="#facc15" />
+                            </div>
+                            <h2 style={{ fontSize: '1.8rem', fontWeight: 800, margin: 0 }}>Register Your Shop</h2>
+                            <p style={{ color: 'var(--color-text-muted)', marginTop: '0.5rem' }}>
+                                To appear on the "Nearby Shops" map, we need your exact location.
+                            </p>
+                        </div>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                            <div>
+                                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Shop Name</label>
+                                <input
+                                    type="text"
+                                    value={vendorForm.name}
+                                    onChange={e => setVendorForm({ ...vendorForm, name: e.target.value })}
+                                    style={{
+                                        width: '100%', padding: '0.8rem', borderRadius: '0.75rem',
+                                        background: 'rgba(255,255,255,0.05)', border: '1px solid var(--glass-border)',
+                                        color: 'var(--color-text-main)'
+                                    }}
+                                />
+                            </div>
+                            <div>
+                                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Phone / WhatsApp</label>
+                                <input
+                                    type="text"
+                                    value={vendorForm.phone}
+                                    placeholder="+91..."
+                                    onChange={e => setVendorForm({ ...vendorForm, phone: e.target.value })}
+                                    style={{
+                                        width: '100%', padding: '0.8rem', borderRadius: '0.75rem',
+                                        background: 'rgba(255,255,255,0.05)', border: '1px solid var(--glass-border)',
+                                        color: 'var(--color-text-main)'
+                                    }}
+                                />
+                            </div>
+                            <div>
+                                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Store Coordinates (GPS)</label>
+                                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                    <input
+                                        type="text"
+                                        readOnly
+                                        placeholder="Latitude"
+                                        value={vendorForm.latitude || ''}
+                                        style={{ flex: 1, padding: '0.8rem', borderRadius: '0.75rem', background: 'rgba(0,0,0,0.2)', border: 'none', color: 'var(--color-text-muted)' }}
+                                    />
+                                    <input
+                                        type="text"
+                                        readOnly
+                                        placeholder="Longitude"
+                                        value={vendorForm.longitude || ''}
+                                        style={{ flex: 1, padding: '0.8rem', borderRadius: '0.75rem', background: 'rgba(0,0,0,0.2)', border: 'none', color: 'var(--color-text-muted)' }}
+                                    />
+                                </div>
+                                <Button
+                                    onClick={detectLocation}
+                                    disabled={detectingLoc}
+                                    variant="outline"
+                                    style={{
+                                        width: '100%', marginTop: '0.5rem',
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem'
+                                    }}
+                                >
+                                    {detectingLoc ? <Loader2 className="animate-spin" size={16} /> : <MapPin size={16} />}
+                                    {vendorForm.latitude ? 'Update GPS Location' : 'Auto-Detect My Shop Location'}
+                                </Button>
+                            </div>
+                            <div>
+                                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Full Address</label>
+                                <textarea
+                                    value={vendorForm.address}
+                                    onChange={e => setVendorForm({ ...vendorForm, address: e.target.value })}
+                                    placeholder="Street, City, Landmark..."
+                                    style={{
+                                        width: '100%', padding: '0.8rem', borderRadius: '0.75rem',
+                                        background: 'rgba(255,255,255,0.05)', border: '1px solid var(--glass-border)',
+                                        color: 'var(--color-text-main)', minHeight: '80px'
+                                    }}
+                                />
+                            </div>
+                        </div>
+
+                        <div style={{ marginTop: '2rem', display: 'flex', gap: '1rem' }}>
+                            <Button
+                                variant="outline"
+                                onClick={() => setShowVendorModal(false)}
+                                style={{ flex: 1 }}
+                            >
+                                Cancel
+                            </Button>
+                            <Button
+                                variant="primary"
+                                onClick={submitVendorProfile}
+                                disabled={!vendorForm.latitude || !vendorForm.name}
+                                style={{ flex: 2, background: 'var(--color-primary)', color: 'white' }}
+                            >
+                                Save & Go Live
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
             <div style={{ marginBottom: '3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'end', flexWrap: 'wrap', gap: '1rem' }}>
                 <div>
                     <h1 style={{
@@ -73,20 +283,28 @@ export const UserDashboard = () => {
                     </p>
                 </div>
 
-                {user.role === 'admin' && (
-                    <Link to="/admin">
-                        <Button style={{
-                            background: '#facc15',
-                            color: 'black',
-                            fontWeight: 800,
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '0.5rem'
-                        }}>
-                            <Activity size={18} /> ADMIN PANEL
+                <div style={{ display: 'flex', gap: '1rem' }}>
+                    {user.role === 'vendor' && (
+                        <Button onClick={() => setShowVendorModal(true)} variant="outline" style={{ gap: '0.5rem', display: 'flex', alignItems: 'center' }}>
+                            <Store size={18} /> Edit Shop Details
                         </Button>
-                    </Link>
-                )}
+                    )}
+
+                    {user.role === 'admin' && (
+                        <Link to="/admin">
+                            <Button style={{
+                                background: '#facc15',
+                                color: 'black',
+                                fontWeight: 800,
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.5rem'
+                            }}>
+                                <Activity size={18} /> ADMIN PANEL
+                            </Button>
+                        </Link>
+                    )}
+                </div>
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '4rem' }}>
