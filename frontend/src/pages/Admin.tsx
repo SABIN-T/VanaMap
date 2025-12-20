@@ -1,12 +1,14 @@
 import { useState, useEffect, useCallback } from 'react';
 import {
-    fetchVendors, fetchPlants, fetchUsers, addPlant, registerVendor
+    fetchVendors, fetchPlants, fetchUsers, addPlant, registerVendor,
+    updateVendor, deleteVendor
 } from '../services/api';
 import type { Plant, Vendor } from '../types';
 import {
     Activity, Users, Sprout, MapPin,
     ArrowUpRight,
-    Plus, Zap, Settings, Shield, LogOut, X, Search
+    Plus, Zap, Settings, Shield, LogOut, X, Search,
+    CheckCircle, Trash2, Star, Store
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/common/Button';
@@ -17,7 +19,13 @@ import { INDIAN_PLANT_DB } from '../data/indianPlants';
 export const Admin = () => {
     const [stats, setStats] = useState({ plants: 0, users: 0, vendors: 0 });
     const [recentActivity, setRecentActivity] = useState<any[]>([]);
+
+    // Manage state for specific features
     const [drawerOpen, setDrawerOpen] = useState<'plant' | 'vendor' | null>(null);
+    const [showVendorManager, setShowVendorManager] = useState(false);
+
+    // Data State
+    const [allVendors, setAllVendors] = useState<Vendor[]>([]);
 
     // Form States
     const [newPlant, setNewPlant] = useState<Partial<Plant>>({
@@ -39,6 +47,8 @@ export const Admin = () => {
                 plants: p.length,
                 users: u.length
             });
+            setAllVendors(v);
+
             // Simulate recent activity from real data
             const activity = [
                 ...p.slice(-2).map(x => ({ type: 'plant', name: x.name, time: '2 mins ago' })),
@@ -95,6 +105,37 @@ export const Admin = () => {
         } else {
             toast.error("Not found in database");
         }
+    };
+
+    // Vendor Management Handlers
+    const toggleVendorVerification = async (v: Vendor) => {
+        const newStatus = !v.verified;
+        const tid = toast.loading(newStatus ? "Verifying Vendor..." : "Revoking Verification...");
+        try {
+            await updateVendor(v.id, { verified: newStatus });
+            toast.success(newStatus ? "Vendor Approved!" : "Vendor Access Revoked", { id: tid });
+            loadData();
+        } catch (e) { toast.error("Update failed", { id: tid }); }
+    };
+
+    const toggleVendorRecommendation = async (v: Vendor) => {
+        const newStatus = !v.highlyRecommended;
+        const tid = toast.loading(newStatus ? "Promoting Vendor..." : "Demoting Vendor...");
+        try {
+            await updateVendor(v.id, { highlyRecommended: newStatus });
+            toast.success(newStatus ? "Vendor Promoted to Top Tier!" : "Vendor Demoted", { id: tid });
+            loadData();
+        } catch (e) { toast.error("Update failed", { id: tid }); }
+    };
+
+    const handleDeleteVendor = async (id: string) => {
+        if (!window.confirm("Are you sure you want to PERMANENTLY delete this vendor?")) return;
+        const tid = toast.loading("Deleting Vendor...");
+        try {
+            await deleteVendor(id);
+            toast.success("Vendor Deleted", { id: tid });
+            loadData();
+        } catch (e) { toast.error("Deletion failed", { id: tid }); }
     };
 
     return (
@@ -200,9 +241,9 @@ export const Admin = () => {
                             <MapPin size={24} className="text-amber-400" />
                             <span>Add Vendor</span>
                         </button>
-                        <button className={styles.actionBtn} onClick={() => toast('System scan initiated')}>
-                            <Activity size={24} className="text-blue-400" />
-                            <span>Run Diag</span>
+                        <button className={styles.actionBtn} onClick={() => setShowVendorManager(true)}>
+                            <Store size={24} className="text-purple-400" />
+                            <span>Existing Vendors</span>
                         </button>
                         <button className={styles.actionBtn} onClick={() => toast('Settings locked')}>
                             <Settings size={24} className="text-slate-400" />
@@ -255,6 +296,93 @@ export const Admin = () => {
                                 <Button className="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-xl">Onboard Vendor</Button>
                             </form>
                         )}
+                    </div>
+                </div>
+            )}
+
+            {/* VENDOR MANAGEMENT MODAL (Glassmorphism Popup) */}
+            {showVendorManager && (
+                <div className="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4" onClick={() => setShowVendorManager(false)}>
+                    <div className="w-full max-w-4xl bg-slate-900/90 border border-slate-700 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh] animate-in fade-in zoom-in-95 duration-200" onClick={e => e.stopPropagation()}>
+
+                        {/* Modal Header */}
+                        <div className="p-6 border-b border-slate-800 flex justify-between items-center bg-slate-900">
+                            <div>
+                                <h2 className="text-2xl font-bold text-white flex items-center gap-2">
+                                    <Store className="text-purple-400" /> Vendor Management
+                                </h2>
+                                <p className="text-slate-400 text-sm mt-1">Approve, Feature, or remove partner shops.</p>
+                            </div>
+                            <button onClick={() => setShowVendorManager(false)} className="p-2 hover:bg-slate-800 rounded-full text-slate-400 hover:text-white transition-colors">
+                                <X size={24} />
+                            </button>
+                        </div>
+
+                        {/* Modal Content - Scrollable List */}
+                        <div className="flex-1 overflow-y-auto p-6 space-y-4 bg-black/20">
+                            {allVendors.length === 0 ? (
+                                <div className="text-center py-12 text-slate-500">
+                                    <Store size={48} className="mx-auto mb-4 opacity-50" />
+                                    <p>No vendors found in the network.</p>
+                                </div>
+                            ) : (
+                                allVendors.map(vendor => (
+                                    <div key={vendor.id} className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 p-4 bg-slate-800/40 border border-slate-700/50 rounded-xl hover:bg-slate-800/60 transition-colors group">
+
+                                        <div className="flex items-start gap-4">
+                                            <div className={`p-3 rounded-lg ${vendor.verified ? 'bg-emerald-500/10 text-emerald-500' : 'bg-amber-500/10 text-amber-500'}`}>
+                                                <Store size={24} />
+                                            </div>
+                                            <div>
+                                                <div className="flex items-center gap-2">
+                                                    <h3 className="font-bold text-white text-lg">{vendor.name}</h3>
+                                                    {vendor.verified && <CheckCircle size={16} className="text-emerald-500" fill="currentColor" />}
+                                                    {vendor.highlyRecommended && <Star size={16} className="text-yellow-400" fill="currentColor" />}
+                                                </div>
+                                                <p className="text-slate-400 text-sm">{vendor.address || "No address provided"}</p>
+                                                <div className="flex gap-2 mt-2">
+                                                    <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${vendor.verified ? 'bg-emerald-500/10 text-emerald-400' : 'bg-amber-500/10 text-amber-400'}`}>
+                                                        {vendor.verified ? 'VERIFIED' : 'PENDING APPROVAL'}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="flex items-center gap-3 w-full md:w-auto mt-2 md:mt-0">
+                                            <Button
+                                                size="sm"
+                                                variant="outline"
+                                                onClick={() => toggleVendorVerification(vendor)}
+                                                className={`flex-1 md:flex-none ${vendor.verified ? 'border-red-500/30 text-red-400 hover:bg-red-500/10' : 'border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10'}`}
+                                            >
+                                                {vendor.verified ? 'Revoke' : 'Approve'}
+                                            </Button>
+
+                                            <Button
+                                                size="sm"
+                                                variant="outline"
+                                                title={vendor.highlyRecommended ? "Remove from Top Recommended" : "Mark as Top Recommended"}
+                                                onClick={() => toggleVendorRecommendation(vendor)}
+                                                className={`flex-1 md:flex-none ${vendor.highlyRecommended ? 'bg-yellow-500/10 border-yellow-500/30 text-yellow-400' : 'text-slate-400 hover:text-yellow-400'}`}
+                                            >
+                                                <Star size={18} fill={vendor.highlyRecommended ? "currentColor" : "none"} />
+                                            </Button>
+
+                                            <Button
+                                                size="sm"
+                                                variant="outline"
+                                                title="Delete Vendor"
+                                                onClick={() => handleDeleteVendor(vendor.id)}
+                                                className="border-red-500/20 text-red-500 hover:bg-red-500 hover:text-white"
+                                            >
+                                                <Trash2 size={18} />
+                                            </Button>
+                                        </div>
+
+                                    </div>
+                                ))
+                            )}
+                        </div>
                     </div>
                 </div>
             )}

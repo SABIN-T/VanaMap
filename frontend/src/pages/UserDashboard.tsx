@@ -91,11 +91,11 @@ export const UserDashboard = () => {
         try {
             const updated = await updateVendor(myVendor.id, {
                 ...vendorForm,
-                verified: true // AUTO-VERIFY as requested for instant visibility
+                verified: false // Admin approval required now
             });
 
             if (updated) {
-                toast.success("Shop is LIVE on Nearby Map!", { id: tid });
+                toast.success("Profile submitted! Awaiting Admin verification.", { id: tid });
                 setShowVendorModal(false);
             } else {
                 toast.error("Failed to update profile", { id: tid });
