@@ -5,6 +5,7 @@ import { User, Store, AlertTriangle, ArrowLeft } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { countryCodes } from '../data/countryCodes';
 import { countryStates } from '../data/states';
+import { toast } from 'react-hot-toast';
 import styles from './Auth.module.css';
 
 export const Auth = () => {
@@ -50,34 +51,42 @@ export const Auth = () => {
         e.preventDefault();
 
         if (view === 'login') {
+            const tid = toast.loading("Authenticating...");
             const result = await login({ email, password });
             if (result.success) {
-                // Toast logic handled in context or by effect
+                toast.success("Login Successful! Welcome back.", { id: tid });
             } else {
-                alert(`Authentication failed: ${result.message}`);
+                // User requested specific error phrasing
+                toast.error(
+                    result.message || "Something is wrong. Please type it correctly or change your password.",
+                    { id: tid, duration: 4000 }
+                );
             }
         } else if (view === 'signup') {
+            const tid = toast.loading("Creating Account...");
             const result = await signup({ email, password, name, role });
             if (result.success) {
-                // Navigation handled by useEffect
+                toast.success("Account Created Successfully!", { id: tid });
             } else {
-                alert(`Signup failed: ${result.message}`);
+                toast.error(`Signup Failed: ${result.message}`, { id: tid });
             }
         } else if (view === 'forgot') {
+            const tid = toast.loading("Sending Request...");
             try {
                 await import('../services/api').then(api => api.requestPasswordReset(email));
-                alert("Request sent. Pending Admin Approval.");
+                toast.success("Request sent! Pending Admin Approval.", { id: tid });
                 setView('login');
             } catch (err) {
-                alert("Failed to send request.");
+                toast.error("Failed to send request. Check email.", { id: tid });
             }
         } else if (view === 'reset') {
+            const tid = toast.loading("Updating Password...");
             try {
                 await import('../services/api').then(api => api.resetPassword(email, password));
-                alert("Password updated!");
+                toast.success("Password Updated! Please Login.", { id: tid });
                 setView('login');
             } catch (err) {
-                alert("Reset failed.");
+                toast.error("Reset Failed. Try again.", { id: tid });
             }
         }
     };
