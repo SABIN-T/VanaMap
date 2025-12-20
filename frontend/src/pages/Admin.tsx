@@ -558,46 +558,68 @@ export const Admin = () => {
                     </div>
 
                     {activeTab === 'dashboard' && (
-                        <div className={`${styles['stats-grid']} animate - fade -in `}>
-                            <div className={`${styles['premium-card']} p - 6 group`}>
-                                <div className="flex justify-between items-start mb-6">
-                                    <div className="w-12 h-12 rounded-2xl bg-blue-50 text-blue-500 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-sm">
-                                        <Users size={24} strokeWidth={2.5} />
+                        <div className="mt-8 animate-fade-in">
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                                <div className={`${styles['premium-card']} p-6 group relative overflow-hidden`}>
+                                    <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                                        <Users size={80} />
                                     </div>
-                                    <div className="text-[11px] font-bold text-slate-400 bg-slate-800/50 px-2.5 py-1 rounded-full border border-slate-700 uppercase tracking-wide">+12% vs week</div>
+                                    <div className="flex flex-col h-full justify-between relative z-10">
+                                        <div>
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <div className="p-2 bg-blue-500/10 rounded-lg text-blue-400"><Users size={18} /></div>
+                                                <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Total Partners</span>
+                                            </div>
+                                            <div className="text-4xl font-black text-slate-100 mt-2">{vendors.length}</div>
+                                        </div>
+                                        <div className="flex items-center gap-2 mt-4">
+                                            <span className="text-[10px] bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded border border-emerald-500/20 font-bold">+12% this week</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="mt-auto">
-                                    <div className="text-4xl font-black text-slate-100 tracking-tight leading-none mb-2">{vendors.length}</div>
-                                    <div className="text-sm font-bold text-slate-500 uppercase tracking-wider">Active Partners</div>
-                                </div>
-                            </div>
 
-                            <div className={`${styles['premium-card']} p - 6 group`}>
-                                <div className="flex justify-between items-start mb-6">
-                                    <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-emerald-500 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-sm">
-                                        <Database size={24} strokeWidth={2.5} />
+                                <div className={`${styles['premium-card']} p-6 group relative overflow-hidden`}>
+                                    <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                                        <Database size={80} />
                                     </div>
-                                    <span className="flex h-3 w-3 relative">
-                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                                        <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500 border-2 border-white"></span>
-                                    </span>
+                                    <div className="flex flex-col h-full justify-between relative z-10">
+                                        <div>
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <div className="p-2 bg-emerald-500/10 rounded-lg text-emerald-400"><Database size={18} /></div>
+                                                <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Botanical DB</span>
+                                            </div>
+                                            <div className="text-4xl font-black text-slate-100 mt-2">{plants.length}</div>
+                                        </div>
+                                        <div className="flex items-center gap-2 mt-4">
+                                            <div className="flex -space-x-2">
+                                                <div className="w-6 h-6 rounded-full bg-slate-800 border border-slate-700"></div>
+                                                <div className="w-6 h-6 rounded-full bg-slate-700 border border-slate-600"></div>
+                                                <div className="w-6 h-6 rounded-full bg-slate-600 border border-slate-500 flex items-center justify-center text-[8px] text-white font-bold">+5</div>
+                                            </div>
+                                            <span className="text-xs text-slate-500">New entries</span>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="mt-auto">
-                                    <div className="text-4xl font-black text-slate-100 tracking-tight leading-none mb-2">{plants.length}</div>
-                                    <div className="text-sm font-bold text-slate-500 uppercase tracking-wider">Botanical Records</div>
-                                </div>
-                            </div>
 
-                            <div className={`${styles['premium-card']} p - 6 group`}>
-                                <div className="flex justify-between items-start mb-6">
-                                    <div className="w-12 h-12 rounded-2xl bg-orange-50 text-orange-500 flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-sm">
-                                        <Activity size={24} strokeWidth={2.5} />
+                                <div className={`${styles['premium-card']} p-6 group relative overflow-hidden`}>
+                                    <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                                        <Activity size={80} />
                                     </div>
-                                    <div className="text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100 uppercase tracking-wide">Optimal</div>
-                                </div>
-                                <div className="mt-auto">
-                                    <div className="text-4xl font-black text-slate-100 tracking-tight leading-none mb-2">99.8%</div>
-                                    <div className="text-sm font-bold text-slate-500 uppercase tracking-wider">System Uptime</div>
+                                    <div className="flex flex-col h-full justify-between relative z-10">
+                                        <div>
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <div className="p-2 bg-orange-500/10 rounded-lg text-orange-400"><Activity size={18} /></div>
+                                                <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">System Status</span>
+                                            </div>
+                                            <div className="text-4xl font-black text-slate-100 mt-2">99.9%</div>
+                                        </div>
+                                        <div className="flex items-center gap-2 mt-4">
+                                            <div className="h-2 w-full bg-slate-800 rounded-full overflow-hidden flex-1">
+                                                <div className="h-full bg-gradient-to-r from-emerald-500 to-emerald-400 w-[99.9%]"></div>
+                                            </div>
+                                            <span className="text-xs font-bold text-emerald-400">Stable</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -609,7 +631,7 @@ export const Admin = () => {
                         <div className="animate-fade-in space-y-8">
                             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                                 {/* Recent Activity Feed */}
-                                <div className={`${styles['premium-card']} p - 0 overflow - hidden`}>
+                                <div className={`${styles['premium-card']} min-h-[400px] flex flex-col`}>
                                     <div className="p-6 border-b border-slate-800 flex justify-between items-center bg-slate-900/50">
                                         <h3 className="text-lg font-bold text-slate-200 flex items-center gap-2">
                                             <Activity size={18} className="text-emerald-500" /> Recent Species Log
@@ -637,7 +659,7 @@ export const Admin = () => {
                                 {/* Quick Health Check */}
                                 <div className="space-y-6">
                                     <div className={`${styles['premium-card']} p-6`}>
-                                        <h3 className="text-lg font-bold text-slate-800 mb-6 flex items-center gap-2">
+                                        <h3 className="text-lg font-bold text-slate-200 mb-6 flex items-center gap-2">
                                             <Sparkles size={18} className="text-blue-400" /> Platform Metrics
                                         </h3>
                                         <div className="space-y-6">
