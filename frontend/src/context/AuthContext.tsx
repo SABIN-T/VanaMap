@@ -39,14 +39,26 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         if (saved) {
             try {
                 const parsed = JSON.parse(saved);
-                // Handle legacy structure { user: {...}, token: "..." } or new { ..., token: "..." }
-                const userData = parsed.user ? { ...parsed.user, token: parsed.token } : parsed;
 
-                // Basic validation: ensure we have at least a role and name
+                // Normalizing legacy vs current structures
+                let userData: any = null;
+
+                if (parsed.user && typeof parsed.user === 'object') {
+                    // Legacy structure: { user: {...}, token: "..." }
+                    userData = { ...parsed.user, token: parsed.token || parsed.user.token };
+                } else {
+                    // Current flat structure: { ..., token: "..." }
+                    userData = parsed;
+                }
+
+                // Strictly validate role and name to prevent poisoned state
                 if (userData && userData.role && userData.name) {
+                    // Ensure crucial arrays exist
+                    userData.favorites = Array.isArray(userData.favorites) ? userData.favorites : [];
+                    userData.cart = Array.isArray(userData.cart) ? userData.cart : [];
                     setUser(userData);
                 } else {
-                    console.warn("Invalid user data in storage, clearing.");
+                    console.warn("Invalid user session detected, purging local storage.");
                     localStorage.removeItem('user');
                 }
             } catch (e) {
@@ -68,7 +80,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             const data = await res.json();
             if (!res.ok) throw new Error(data.error || 'Login failed');
 
-            // Data contains { user, token } - Merge them into one object for high-availability access
+            // data.user is already normalized by backend
             const userData = { ...data.user, token: data.token };
 
             setUser(userData);
@@ -152,12 +164,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUser(prev => {
             if (!prev) return null;
             const updated = { ...prev, ...updates };
-            // Persist the token too!
+            // Flatten if legacy structure exists in localStorage to prevent corruption
             const saved = localStorage.getItem('user');
             if (saved) {
-                const parsed = JSON.parse(saved);
-                const currentToken = parsed.token || prev.token;
-                localStorage.setItem('user', JSON.stringify({ ...parsed, ...updates, token: currentToken }));
+                try {
+                    const parsed = JSON.parse(saved);
+                    const base = parsed.user ? { ...parsed.user, token: parsed.token } : parsed;
+                    const final = { ...base, ...updates };
+                    localStorage.setItem('user', JSON.stringify(final));
+                } catch (e) {
+                    localStorage.setItem('user', JSON.stringify(updated));
+                }
+            } else {
+                localStorage.setItem('user', JSON.stringify(updated));
             }
             return updated;
         });

@@ -8,17 +8,17 @@ interface Props {
 
 interface State {
     hasError: boolean;
-    errorType: 'crash' | 'timeout' | null;
+    error: Error | null;
 }
 
 class ErrorBoundary extends Component<Props, State> {
     public state: State = {
         hasError: false,
-        errorType: null
+        error: null
     };
 
-    public static getDerivedStateFromError(_: Error): State {
-        return { hasError: true, errorType: 'crash' };
+    public static getDerivedStateFromError(error: Error): State {
+        return { hasError: true, error };
     }
 
     public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
@@ -26,6 +26,7 @@ class ErrorBoundary extends Component<Props, State> {
     }
 
     private handleRefresh = () => {
+        localStorage.clear(); // Clear storage on crash recovery
         window.location.reload();
     };
 
@@ -39,8 +40,22 @@ class ErrorBoundary extends Component<Props, State> {
                         </div>
                         <h2 className={styles.title}>System Interruption</h2>
                         <p className={styles.desc}>
-                            The application encountered an unexpected state. A refresh is required to restore visual stability.
+                            {this.state.error?.message || "The application encountered an unexpected state."}
                         </p>
+                        <div style={{
+                            background: 'rgba(0,0,0,0.2)',
+                            padding: '1rem',
+                            borderRadius: '1rem',
+                            marginBottom: '2rem',
+                            textAlign: 'left',
+                            fontSize: '0.8rem',
+                            color: '#64748b',
+                            maxHeight: '100px',
+                            overflow: 'auto',
+                            fontFamily: 'monospace'
+                        }}>
+                            {this.state.error?.stack?.split('\n').slice(0, 3).join('\n')}
+                        </div>
                         <button onClick={this.handleRefresh} className={styles.refreshBtn}>
                             <RefreshCcw size={18} />
                             Reset & Refresh

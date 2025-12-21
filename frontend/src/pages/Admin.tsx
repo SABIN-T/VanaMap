@@ -38,8 +38,12 @@ export const Admin = () => {
     }, [fetchPlants, fetchUsers, fetchVendors]);
 
     useEffect(() => {
-        if (!localStorage.getItem('adminAuthenticated')) navigate('/admin-login');
-        else loadData();
+        // Redirect to unified auth if not logged in or not admin
+        if (!localStorage.getItem('user')) {
+            navigate('/auth');
+        } else {
+            loadData();
+        }
     }, [navigate, loadData]);
 
     return (
