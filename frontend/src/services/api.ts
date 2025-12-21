@@ -263,3 +263,11 @@ export const adminResetPassword = async (userId: string, newPassword?: string) =
         body: JSON.stringify({ userId, newPassword })
     }).then(res => res.json());
 };
+
+export const changePassword = async (oldPassword: string, newPassword: string) => {
+    return await fetch(`${API_URL}/user/change-password`, {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify({ oldPassword, newPassword })
+    }).then(res => res.json());
+};

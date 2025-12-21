@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import { Button } from '../components/common/Button';
-import { Trash2, ShoppingBag, MapPin, Heart, ArrowRight, Loader2, Store, Shield } from 'lucide-react';
+import { Trash2, ShoppingBag, MapPin, Heart, ArrowRight, Loader2, Store, Shield, Lock } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { fetchPlants, fetchVendors, updateVendor } from '../services/api';
+import { fetchPlants, fetchVendors, updateVendor, changePassword } from '../services/api';
 import type { Plant, Vendor } from '../types';
 import toast from 'react-hot-toast';
 
@@ -28,6 +28,9 @@ export const UserDashboard = () => {
         latitude: 0,
         longitude: 0
     });
+
+    const [showPasswordModal, setShowPasswordModal] = useState(false);
+    const [pwdForm, setPwdForm] = useState({ old: '', new: '', confirm: '' });
 
     useEffect(() => {
         const loadVendorData = async () => {
@@ -130,6 +133,27 @@ export const UserDashboard = () => {
     const handleRemoveFavorite = (plantId: string) => {
         if (!user) return;
         toggleFavorite(plantId); // Context handles optimistic update & API
+    };
+
+    const handlePasswordChange = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (pwdForm.new !== pwdForm.confirm) {
+            toast.error("New passwords do not match!");
+            return;
+        }
+        const tid = toast.loading("Updating security key...");
+        try {
+            const res = await changePassword(pwdForm.old, pwdForm.new);
+            if (res.success) {
+                toast.success("Password Updated Successfully!", { id: tid });
+                setShowPasswordModal(false);
+                setPwdForm({ old: '', new: '', confirm: '' });
+            } else {
+                toast.error(res.error || "Failed to update", { id: tid });
+            }
+        } catch (err) {
+            toast.error("System error updating password", { id: tid });
+        }
     };
 
     if (loading) {
@@ -266,6 +290,71 @@ export const UserDashboard = () => {
                 </div>
             )}
 
+            {/* PASSWORD RESET MODAL */}
+            {showPasswordModal && (
+                <div style={{
+                    position: 'fixed', inset: 0, zIndex: 1001,
+                    background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(8px)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem'
+                }}>
+                    <div style={{
+                        width: '100%', maxWidth: '400px',
+                        background: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(255,255,255,0.1)',
+                        borderRadius: '24px', padding: '2.5rem',
+                        boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)',
+                        animation: 'fadeInSlide 0.3s ease-out'
+                    }}>
+                        <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+                            <Shield size={40} color="#00ff9d" style={{ marginBottom: '1rem' }} />
+                            <h2 style={{ fontSize: '1.5rem', fontWeight: 800, margin: 0 }}>Update Security Key</h2>
+                            <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginTop: '0.5rem' }}>Verify identity to change access credentials</p>
+                        </div>
+
+                        <form onSubmit={handlePasswordChange} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                            <div>
+                                <label style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', display: 'block', marginBottom: '0.5rem' }}>Old Password</label>
+                                <input
+                                    type="password"
+                                    required
+                                    value={pwdForm.old}
+                                    onChange={e => setPwdForm({ ...pwdForm, old: e.target.value })}
+                                    placeholder="••••••••"
+                                    style={{ width: '100%', padding: '0.9rem', borderRadius: '12px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
+                                />
+                            </div>
+                            <div>
+                                <label style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', display: 'block', marginBottom: '0.5rem' }}>New Password</label>
+                                <input
+                                    type="password"
+                                    required
+                                    minLength={6}
+                                    value={pwdForm.new}
+                                    onChange={e => setPwdForm({ ...pwdForm, new: e.target.value })}
+                                    placeholder="••••••••"
+                                    style={{ width: '100%', padding: '0.9rem', borderRadius: '12px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
+                                />
+                            </div>
+                            <div>
+                                <label style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', display: 'block', marginBottom: '0.5rem' }}>Confirm New Password</label>
+                                <input
+                                    type="password"
+                                    required
+                                    value={pwdForm.confirm}
+                                    onChange={e => setPwdForm({ ...pwdForm, confirm: e.target.value })}
+                                    placeholder="••••••••"
+                                    style={{ width: '100%', padding: '0.9rem', borderRadius: '12px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
+                                />
+                            </div>
+
+                            <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
+                                <Button type="button" variant="outline" onClick={() => setShowPasswordModal(false)} style={{ flex: 1 }}>Cancel</Button>
+                                <Button type="submit" variant="primary" style={{ flex: 2 }}>Update Now</Button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
             <div style={{ marginBottom: '3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'end', flexWrap: 'wrap', gap: '1rem' }}>
                 <div>
                     <h1 style={{
@@ -284,6 +373,10 @@ export const UserDashboard = () => {
                 </div>
 
                 <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                    <Button onClick={() => setShowPasswordModal(true)} variant="outline" style={{ gap: '0.5rem', display: 'flex', alignItems: 'center', borderColor: 'rgba(239, 68, 68, 0.2)', color: '#f87171' }}>
+                        <Lock size={18} /> Reset Password
+                    </Button>
+
                     {user.role === 'vendor' && (
                         <Button onClick={() => navigate('/vendor')} variant="outline" style={{ gap: '0.5rem', display: 'flex', alignItems: 'center' }}>
                             <Store size={18} /> Edit Shop Details

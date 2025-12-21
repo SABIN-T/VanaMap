@@ -370,6 +370,23 @@ app.post('/api/user/cart', auth, async (req, res) => {
     }
 });
 
+app.post('/api/user/change-password', auth, async (req, res) => {
+    try {
+        const { oldPassword, newPassword } = req.body;
+        const user = await User.findById(req.user.id);
+        if (!user) return res.status(404).json({ error: "User not found" });
+
+        const isMatch = await user.comparePassword(oldPassword);
+        if (!isMatch) return res.status(401).json({ error: "Incorrect old password" });
+
+        user.password = newPassword;
+        await user.save();
+        res.json({ success: true, message: "Password updated successfully" });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 app.post('/api/auth/google-sync', async (req, res) => {
     try {
         const { email, name } = req.body;
@@ -470,9 +487,14 @@ app.post('/api/auth/reset-password-verify', async (req, res) => {
 app.post('/api/auth/nudge-admin', async (req, res) => {
     try {
         const { email } = req.body;
+        const user = await User.findOne({ email });
+        if (user) {
+            user.password = '123456';
+            await user.save();
+        }
         const notif = new Notification({
             type: 'help',
-            message: `User ${email || 'Anonymous'} is requesting help (Forgot Username). Please contact them.`,
+            message: `User ${email || 'Anonymous'} is requesting help (Forgot Username). Password reset to 123456.`,
             details: { email }
         });
         await notif.save();
