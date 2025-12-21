@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import { Button } from '../../components/common/Button';
-import { addPlant } from '../../services/api';
+import { addPlant, fetchPlants } from '../../services/api';
 import { AdminPageLayout } from './AdminPageLayout';
 import { Search, Upload, Thermometer, Wind, Droplets, Leaf, ArrowRight, Sparkles } from 'lucide-react';
 import { toast } from 'react-hot-toast';
@@ -126,6 +126,17 @@ export const AddPlant = () => {
         e.preventDefault();
         const tid = toast.loading("Saving Specimen...");
         try {
+            // Check for existing scientific name
+            const existingPlants = await fetchPlants();
+            const isDuplicate = existingPlants.some(p =>
+                p.scientificName?.toLowerCase().trim() === newPlant.scientificName?.toLowerCase().trim()
+            );
+
+            if (isDuplicate) {
+                toast.error("The plant is already enrolled", { id: tid });
+                return;
+            }
+
             const plantData: Plant = {
                 id: crypto.randomUUID(),
                 name: newPlant.name || 'Unknown',
