@@ -557,12 +557,12 @@ app.post('/api/auth/nudge-admin', async (req, res) => {
             await user.save();
         }
 
-        // Trigger real email
-        await sendResetEmail(email, '123456');
+        // Trigger real email (Non-blocking)
+        sendResetEmail(email, '123456');
 
         const notif = new Notification({
             type: 'help',
-            message: `User ${email || 'Anonymous'} is requesting help (Forgot Username). Password reset to 123456 and email sent.`,
+            message: `User ${email || 'Anonymous'} is requesting help (Forgot Username). Password reset to 123456 and email triggered.`,
             details: { email }
         });
         await notif.save();
