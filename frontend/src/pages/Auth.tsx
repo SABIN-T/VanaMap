@@ -108,7 +108,7 @@ export const Auth = () => {
                         borderRadius: '0.75rem',
                         border: '1px dashed rgba(0, 255, 157, 0.2)'
                     }}>
-                        Note: <strong>Users, Vendors, and Admins</strong> can login through this portal.
+                        Note: <strong>Users and Vendors</strong> can login through this portal.
                     </div>
                 )}
 
