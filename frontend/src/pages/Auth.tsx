@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/common/Button';
-import { User, Store, AlertTriangle, ArrowLeft, Shield } from 'lucide-react';
+import { User, ArrowLeft, Store, AlertTriangle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { countryCodes } from '../data/countryCodes';
 import { countryStates } from '../data/states';
@@ -69,7 +69,7 @@ export const Auth = () => {
             if (result.success) {
                 toast.success("Account Created Successfully!", { id: tid });
             } else {
-                toast.error(`Signup Failed: ${result.message}`, { id: tid });
+                toast.error(`Signup Failed: ${result.message} `, { id: tid });
             }
         } else if (view === 'forgot') {
             const tid = toast.loading("Sending Request...");
@@ -90,10 +90,6 @@ export const Auth = () => {
                 toast.error("Reset Failed. Try again.", { id: tid });
             }
         }
-    };
-
-    const handleAdminLogin = () => {
-        navigate('/admin/login');
     };
 
     return (
@@ -125,14 +121,14 @@ export const Auth = () => {
                     <div className={styles.roleToggle}>
                         <button
                             type="button"
-                            className={`${styles.roleBtn} ${role === 'user' ? styles.active : ''}`}
+                            className={`${styles.roleBtn} ${role === 'user' ? styles.active : ''} `}
                             onClick={() => setRole('user')}
                         >
                             <User size={24} /> Plant Lover
                         </button>
                         <button
                             type="button"
-                            className={`${styles.roleBtn} ${role === 'vendor' ? styles.active : ''}`}
+                            className={`${styles.roleBtn} ${role === 'vendor' ? styles.active : ''} `}
                             onClick={() => setRole('vendor')}
                         >
                             <Store size={24} /> Shop Owner
@@ -265,18 +261,6 @@ export const Auth = () => {
                             <p style={{ marginBottom: '1rem', color: 'var(--color-text-muted)', fontSize: '0.85rem' }}>
                                 New to VanaMap? <button onClick={() => setView('signup')}>Initialize Identity</button>
                             </p>
-                            <div className={styles.adminPortal}>
-                                <div className={styles.adminDivider}>
-                                    <span>SYSTEM OVERSEER</span>
-                                </div>
-                                <button
-                                    onClick={handleAdminLogin}
-                                    className={styles.adminLoginBtn}
-                                    title="Access Management Suite"
-                                >
-                                    <Shield size={18} /> Secure Admin Access
-                                </button>
-                            </div>
                         </>
                     )}
                     {view === 'signup' && (

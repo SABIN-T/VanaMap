@@ -268,15 +268,6 @@ export const UserDashboard = () => {
 
             <div style={{ marginBottom: '3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'end', flexWrap: 'wrap', gap: '1rem' }}>
                 <div>
-                    {/* DEBUG SECTION - REMOVE AFTER FIXING */}
-                    <div style={{ background: '#334155', color: 'white', padding: '10px', borderRadius: '8px', marginBottom: '20px', fontSize: '12px', fontFamily: 'monospace' }}>
-                        <strong>DEBUG INFO:</strong><br />
-                        Role: {user.role || 'undefined'}<br />
-                        Name: {user.name}<br />
-                        Email: {user.email}<br />
-                        ID: {user.id}
-                    </div>
-
                     <h1 style={{
                         fontSize: '2.5rem',
                         fontWeight: '800',
