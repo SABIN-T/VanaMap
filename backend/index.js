@@ -373,6 +373,22 @@ app.post('/api/seed', auth, admin, async (req, res) => {
     res.json({ message: 'Seeded' });
 });
 
+app.post('/api/auth/reset-password-request', async (req, res) => {
+    try {
+        const { email } = req.body;
+        const user = await User.findOne({ email });
+        if (!user) {
+            await new Promise(r => setTimeout(r, 500));
+            return res.json({ success: true, message: "If account exists, request sent." });
+        }
+        user.resetRequest = { requested: true, approved: false, requestDate: new Date() };
+        await user.save();
+        res.json({ success: true, message: "Request submitted for admin review." });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 app.get('/', (req, res) => res.send('VanaMap API v3.0 - Secure & Fast'));
 
 const PORT = process.env.PORT || 5000;
