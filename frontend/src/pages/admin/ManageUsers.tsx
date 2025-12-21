@@ -1,88 +1,172 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
-import { Users, Key, Shield } from 'lucide-react';
+import { Users, Key, Shield, Search, X, User as UserIcon, Lock } from 'lucide-react';
 import { AdminPageLayout } from './AdminPageLayout';
-import { Button } from '../../components/common/Button';
 import { fetchUsers, resetPassword } from '../../services/api';
+import styles from './ManageUsers.module.css';
 
 export const ManageUsers = () => {
     const [allUsers, setAllUsers] = useState<any[]>([]);
+    const [filteredUsers, setFilteredUsers] = useState<any[]>([]);
+    const [searchQuery, setSearchQuery] = useState("");
     const [selectedUser, setSelectedUser] = useState<any>(null);
     const [resetPwd, setResetPwd] = useState("");
 
     useEffect(() => { loadUsers(); }, []);
 
+    // client-side search filtering
+    useEffect(() => {
+        if (!searchQuery.trim()) {
+            setFilteredUsers(allUsers);
+        } else {
+            const query = searchQuery.toLowerCase();
+            setFilteredUsers(allUsers.filter(u =>
+                u.name?.toLowerCase().includes(query) ||
+                u.email?.toLowerCase().includes(query) ||
+                u.role?.toLowerCase().includes(query)
+            ));
+        }
+    }, [searchQuery, allUsers]);
+
     const loadUsers = async () => {
         try {
             const data = await fetchUsers();
             setAllUsers(data);
+            setFilteredUsers(data);
         } catch (e) {
             console.error(e);
+            toast.error("Failed to load users");
         }
     };
 
     const handlePasswordReset = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!selectedUser || !resetPwd) return;
-        const tid = toast.loading("Updating Password...");
+        const tid = toast.loading("Updating Credentials...");
         try {
             await resetPassword(selectedUser.email, resetPwd);
-            toast.success("Password Updated!", { id: tid });
+            toast.success("Security Credentials Updated", { id: tid, icon: '🔐' });
             setResetPwd("");
             setSelectedUser(null);
         } catch (err) {
-            toast.error("Failed to reset password", { id: tid });
+            toast.error("Update prevented by security policy", { id: tid });
         }
     };
 
     return (
         <AdminPageLayout title="User Security & Access">
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* User List */}
-                <div className="lg:col-span-2 space-y-4">
-                    <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2"><Users className="text-indigo-400" /> Registered Users</h2>
-                    {allUsers.map(user => (
-                        <div key={user.id} className="flex items-center justify-between p-4 bg-slate-800/40 border border-slate-700/50 rounded-xl hover:border-indigo-500/30 transition-all">
-                            <div>
-                                <div className="font-bold text-white">{user.name || "Unknown User"}</div>
-                                <div className="text-sm text-slate-400">{user.email}</div>
-                                <div className="mt-1 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-slate-700 text-slate-300 capitalize">
-                                    {user.role || 'user'}
-                                </div>
-                            </div>
-                            <Button size="sm" onClick={() => setSelectedUser(user)} className="bg-indigo-600/20 text-indigo-400 hover:bg-indigo-600 hover:text-white border border-indigo-500/20">
-                                <Key size={16} className="mr-2" /> Reset Pwd
-                            </Button>
-                        </div>
-                    ))}
+            <div className={styles.pageContainer}>
+
+                {/* Search Bar */}
+                <div className={styles.searchContainer}>
+                    <Search className={styles.searchIcon} size={22} />
+                    <input
+                        type="text"
+                        placeholder="Search users by name, email, or role..."
+                        className={styles.searchBar}
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                    {searchQuery && (
+                        <button onClick={() => setSearchQuery("")} className={styles.clearButton}>
+                            <X size={18} />
+                        </button>
+                    )}
                 </div>
 
-                {/* Reset Form Sidebar */}
-                <div className="lg:col-span-1">
-                    <div className="bg-slate-800/80 p-6 rounded-xl border border-slate-700 sticky top-8">
-                        <h3 className="font-bold text-white mb-4 flex items-center gap-2"><Shield size={18} className="text-amber-400" /> Admin Action</h3>
-
-                        {selectedUser ? (
-                            <form onSubmit={handlePasswordReset} className="space-y-4 animate-in fade-in slide-in-from-right-4">
-                                <div className="p-4 bg-amber-500/10 border border-amber-500/20 rounded-lg">
-                                    <p className="text-amber-200 text-xs uppercase font-bold mb-1">Target Account</p>
-                                    <p className="font-bold text-white break-all">{selectedUser.email}</p>
-                                </div>
-
-                                <div className="space-y-2">
-                                    <label className="text-xs text-slate-400 uppercase font-bold">New Password</label>
-                                    <input type="text" placeholder="Enter secure password" required className="w-full bg-slate-950 border border-slate-600 rounded-lg p-3 text-white focus:ring-2 focus:ring-amber-500 outline-none" value={resetPwd} onChange={e => setResetPwd(e.target.value)} />
-                                </div>
-
-                                <div className="flex gap-2 pt-2">
-                                    <Button type="submit" className="flex-1 bg-amber-600 hover:bg-amber-500 text-white font-bold">Confirm</Button>
-                                    <Button type="button" variant="outline" onClick={() => { setSelectedUser(null); setResetPwd(""); }}>Cancel</Button>
-                                </div>
-                            </form>
+                <div className={styles.layoutGrid}>
+                    {/* LEFT COLUMN: User List */}
+                    <div className={styles.userList}>
+                        {filteredUsers.length === 0 ? (
+                            <div className="text-center py-12 text-slate-500 bg-slate-800/20 rounded-2xl border border-slate-700/50">
+                                <Users size={48} className="mx-auto mb-4 opacity-30" />
+                                <h3 className="text-lg font-bold">No Users Found</h3>
+                            </div>
                         ) : (
-                            <div className="text-center py-12 text-slate-500">
-                                <Key size={48} className="mx-auto mb-4 opacity-20" />
-                                <p className="text-sm">Select a user from the list to perform administrative actions.</p>
+                            filteredUsers.map(user => (
+                                <div
+                                    key={user.id}
+                                    className={`${styles.userCard} ${selectedUser?.id === user.id ? styles.active : ''}`}
+                                    onClick={() => setSelectedUser(user)}
+                                >
+                                    <div className={styles.userInfo}>
+                                        <div className={`${styles.avatar} ${user.role === 'admin' ? styles.avatarAdmin : ''}`}>
+                                            {user.name ? user.name.charAt(0).toUpperCase() : <UserIcon size={20} />}
+                                        </div>
+                                        <div className={styles.userDetails}>
+                                            <div className={styles.userName}>{user.name || "Unknown User"}</div>
+                                            <div className={styles.userEmail}>{user.email}</div>
+                                            <div>
+                                                <span className={`${styles.roleBadge} ${user.role === 'admin' ? styles.roleAdmin : styles.roleUser}`}>
+                                                    {user.role || 'user'}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <button
+                                        className={styles.actionBtn}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setSelectedUser(user);
+                                        }}
+                                        title="Manage User Security"
+                                    >
+                                        <Key size={18} />
+                                    </button>
+                                </div>
+                            ))
+                        )}
+                    </div>
+
+                    {/* RIGHT COLUMN: Action Sidebar */}
+                    <div className={styles.sidebar}>
+                        {selectedUser ? (
+                            <div className={styles.actionPanel}>
+                                <div className={styles.panelTitle}>
+                                    <Shield size={20} className="text-indigo-400" />
+                                    Security Actions
+                                </div>
+
+                                <form onSubmit={handlePasswordReset}>
+                                    <div className={styles.targetInfo}>
+                                        <div className={styles.targetLabel}>Target Account</div>
+                                        <div className={styles.targetValue}>{selectedUser.email}</div>
+                                    </div>
+
+                                    <div className={styles.formGroup}>
+                                        <label className={styles.label}>New Secure Password</label>
+                                        <div className="relative">
+                                            <input
+                                                type="text"
+                                                placeholder="Enter new password..."
+                                                required
+                                                className={styles.glassInput}
+                                                value={resetPwd}
+                                                onChange={e => setResetPwd(e.target.value)}
+                                            />
+                                            <Lock size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400" />
+                                        </div>
+                                    </div>
+
+                                    <button type="submit" className={styles.submitBtn}>
+                                        Update Credentials
+                                    </button>
+
+                                    <button
+                                        type="button"
+                                        className={styles.cancelBtn}
+                                        onClick={() => { setSelectedUser(null); setResetPwd(""); }}
+                                    >
+                                        Cancel
+                                    </button>
+                                </form>
+                            </div>
+                        ) : (
+                            <div className={styles.emptyPanel}>
+                                <UserIcon size={48} className="mb-4 opacity-20" />
+                                <h3 className="text-lg font-bold text-slate-400 mb-2">No Selection</h3>
+                                <p className="text-sm px-4">Select a user from the list to view security options and manage credentials.</p>
                             </div>
                         )}
                     </div>
