@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/common/Button';
-import { User, Store, AlertTriangle, ArrowLeft } from 'lucide-react';
+import { User, Store, AlertTriangle, ArrowLeft, Shield } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { countryCodes } from '../data/countryCodes';
 import { countryStates } from '../data/states';
@@ -257,7 +257,35 @@ export const Auth = () => {
 
                 <div className={styles.footer}>
                     {view === 'login' && (
-                        <>New to VanaMap? <button onClick={() => setView('signup')}>Initialize Identity</button></>
+                        <>
+                            <p style={{ marginBottom: '1rem', color: 'var(--color-text-muted)', fontSize: '0.85rem' }}>
+                                New to VanaMap? <button onClick={() => setView('signup')}>Initialize Identity</button>
+                            </p>
+                            <div style={{ borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '1rem' }}>
+                                <button
+                                    onClick={() => { setEmail('admin@plantai.com'); setPassword('Defender123'); }}
+                                    style={{
+                                        width: '100%',
+                                        padding: '0.75rem',
+                                        borderRadius: '12px',
+                                        background: 'rgba(250, 204, 21, 0.1)',
+                                        border: '1px solid rgba(250, 204, 21, 0.2)',
+                                        color: '#facc15',
+                                        fontSize: '0.8rem',
+                                        fontWeight: 600,
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        gap: '0.5rem',
+                                        transition: 'all 0.3s'
+                                    }}
+                                    onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(250, 204, 21, 0.2)'}
+                                    onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(250, 204, 21, 0.1)'}
+                                >
+                                    <Shield size={16} /> Quick Admin Access
+                                </button>
+                            </div>
+                        </>
                     )}
                     {view === 'signup' && (
                         <>Already registered? <button onClick={() => setView('login')}>Log In</button></>
