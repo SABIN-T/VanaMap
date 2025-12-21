@@ -323,6 +323,44 @@
     line-height: 1.5;
 }
 
+@media (min-width: 1024px) {
+    .categorySelectionList {
+        max-width: 750px;
+        margin-inline: auto;
+        gap: 1.25rem;
+    }
+
+    .categoryCard {
+        padding: 1rem 1.5rem;
+        flex-direction: row;
+        text-align: left;
+        gap: 1.25rem;
+        border-radius: 1.5rem;
+    }
+
+    .categoryIcon {
+        width: 44px;
+        height: 44px;
+        border-radius: 1rem;
+        flex-shrink: 0;
+    }
+
+    .categoryIcon svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .categoryName {
+        font-size: 1.1rem;
+        margin-bottom: 2px;
+    }
+
+    .categoryDesc {
+        font-size: 0.75rem;
+        max-width: 260px;
+    }
+}
+
 @media (max-width: 640px) {
     .categorySelectionList {
         grid-template-columns: 1fr;
@@ -545,13 +583,13 @@
         font-size: 0.85rem !important;
     }
 }
- . a p t n e s s L e g e n d   { 
-         a n i m a t i o n :   f a d e I n   0 . 8 s   e a s e - o u t ; 
- } 
- 
- @ m e d i a   ( m a x - w i d t h :   7 6 8 p x )   { 
-         . a p t n e s s L e g e n d   { 
-                 p a d d i n g :   1 . 2 5 r e m   ! i m p o r t a n t ; 
-         } 
- }  
- 
+
+.aptnessLegend {
+    animation: fadeIn 0.8s ease-out;
+}
+
+@media (max-width: 768px) {
+    .aptnessLegend {
+        padding: 1.25rem !important;
+    }
+}
