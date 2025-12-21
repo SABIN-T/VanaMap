@@ -456,11 +456,13 @@
 }
 
 .featuresGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
     margin-top: 6rem;
     padding: 0 1rem;
+    max-width: 600px;
+    margin-inline: auto;
 }
 
 .fadeIn {

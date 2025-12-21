@@ -218,6 +218,15 @@ export const fetchNotifications = async () => {
     }
 };
 
+export const deleteNotification = async (id: string) => {
+    const res = await fetch(`${API_URL}/admin/notifications/${id}`, {
+        method: 'DELETE',
+        headers: getHeaders()
+    });
+    if (!res.ok) throw new Error("Failed to clear notification");
+    return res.json();
+};
+
 export const fetchVendorNotifications = async () => {
     try {
         const res = await fetch(`${API_URL}/vendor/notifications`, { headers: getHeaders() });

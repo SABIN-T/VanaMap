@@ -138,6 +138,15 @@ app.get('/api/admin/notifications', auth, admin, async (req, res) => {
     }
 });
 
+app.delete('/api/admin/notifications/:id', auth, admin, async (req, res) => {
+    try {
+        await Notification.findByIdAndDelete(req.params.id);
+        res.json({ message: "Notification cleared" });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 app.get('/api/vendor/notifications', auth, async (req, res) => {
     try {
         // Find notifications where details.vendorId matches the logged-in user's ID

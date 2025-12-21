@@ -105,16 +105,33 @@ export const ManageUsers = () => {
                                         <span className={styles.alarmTime}>{new Date(alert.createdAt).toLocaleTimeString()}</span>
                                     </div>
                                 </div>
-                                <button
-                                    className={styles.actionBtn}
-                                    style={{ background: 'rgba(220, 38, 38, 0.2)', color: '#fca5a5' }}
-                                    onClick={() => {
-                                        setSearchQuery(alert.details?.email || "");
-                                        // Optional: Clear alert on click logic could go here
-                                    }}
-                                >
-                                    Review Now
-                                </button>
+                                <div className="flex gap-2">
+                                    <button
+                                        className={styles.actionBtn}
+                                        style={{ background: 'rgba(220, 38, 38, 0.2)', color: '#fca5a5' }}
+                                        onClick={() => {
+                                            setSearchQuery(alert.details?.email || "");
+                                        }}
+                                    >
+                                        Review
+                                    </button>
+                                    <button
+                                        className={styles.actionBtn}
+                                        style={{ background: 'rgba(255, 255, 255, 0.1)', color: 'white' }}
+                                        onClick={async () => {
+                                            try {
+                                                const { deleteNotification } = await import('../../services/api');
+                                                await deleteNotification(alert._id);
+                                                loadAlerts();
+                                                toast.success("Alert cleared");
+                                            } catch (e) {
+                                                toast.error("Failed to clear alert");
+                                            }
+                                        }}
+                                    >
+                                        <X size={16} />
+                                    </button>
+                                </div>
                             </div>
                         ))}
                     </div>

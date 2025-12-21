@@ -227,6 +227,17 @@ out skel qt;
         return activeTab === 'verified' ? v.verified : !v.verified;
     });
 
+    const resultsHeaderRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (!loading && displayVendors.length > 0 && position) {
+            // Scroll to first outlet after short delay for map zoom
+            setTimeout(() => {
+                resultsHeaderRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 800);
+        }
+    }, [loading, displayVendors.length, position]);
+
     return (
         <div className={styles.nearbyContainer}>
             <div className={styles.noticeBanner}>
@@ -296,7 +307,7 @@ out skel qt;
                 </div>
 
                 <div className={styles.resultsSection}>
-                    <div className={styles.resultsHeader} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                    <div className={styles.resultsHeader} ref={resultsHeaderRef} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', scrollMarginTop: '2rem' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
                             <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 800 }}>Nearby Outlets ({displayVendors.length})</h3>
                         </div>
