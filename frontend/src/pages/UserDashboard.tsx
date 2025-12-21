@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import { Button } from '../components/common/Button';
-import { Trash2, ShoppingBag, MapPin, Heart, ArrowRight, Activity, Loader2, Store } from 'lucide-react';
+import { Trash2, ShoppingBag, MapPin, Heart, ArrowRight, Activity, Loader2, Store, Shield } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { fetchPlants, fetchVendors, updateVendor } from '../services/api';
@@ -308,6 +308,42 @@ export const UserDashboard = () => {
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '4rem' }}>
+                {user.role === 'admin' && (
+                    <section>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
+                            <div style={{ padding: '0.75rem', background: 'rgba(250, 204, 21, 0.1)', borderRadius: '1rem', color: '#facc15' }}>
+                                <Shield size={24} />
+                            </div>
+                            <h2 style={{ fontSize: '1.8rem', fontWeight: 700, margin: 0 }}>Admin Command Center</h2>
+                        </div>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem' }}>
+                            <div className="glass-panel" style={{ padding: '1.5rem', borderRadius: '1.5rem', border: '1px solid rgba(250, 204, 21, 0.2)' }}>
+                                <h3 style={{ margin: '0 0 1rem 0', color: '#facc15' }}>System Management</h3>
+                                <p style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)', marginBottom: '1.5rem' }}>
+                                    Access full controls for plants, vendors, users, and system diagnostics.
+                                </p>
+                                <Link to="/admin">
+                                    <Button style={{ width: '100%', background: '#facc15', color: 'black', fontWeight: 700 }}>
+                                        Enter Admin Panel
+                                    </Button>
+                                </Link>
+                            </div>
+                            <div className="glass-panel" style={{ padding: '1.5rem', borderRadius: '1.5rem', opacity: 0.8 }}>
+                                <h3 style={{ margin: '0 0 1rem 0' }}>Quick Stats</h3>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                                    <div style={{ padding: '1rem', background: 'rgba(255,255,255,0.03)', borderRadius: '1rem' }}>
+                                        <div style={{ fontSize: '0.7rem', color: '#64748b', textTransform: 'uppercase' }}>System Health</div>
+                                        <div style={{ fontSize: '1.2rem', fontWeight: 800, color: '#4ade80' }}>100%</div>
+                                    </div>
+                                    <div style={{ padding: '1rem', background: 'rgba(255,255,255,0.03)', borderRadius: '1rem' }}>
+                                        <div style={{ fontSize: '0.7rem', color: '#64748b', textTransform: 'uppercase' }}>Latency</div>
+                                        <div style={{ fontSize: '1.2rem', fontWeight: 800 }}>24ms</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                )}
 
                 {/* FAVORITES SECTION */}
                 <section>
