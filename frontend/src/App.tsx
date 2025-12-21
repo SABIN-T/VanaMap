@@ -10,47 +10,50 @@ import { TourGuide } from './components/features/onboarding/TourGuide';
 import { AnimatedRoutes } from './components/layout/AnimatedRoutes';
 
 import { NetworkIndicator } from './components/common/NetworkIndicator';
+import { SystemGuard } from './components/common/SystemGuard';
 
 function App() {
   return (
     <div className="app-shell">
-      <AuthProvider>
-        <CartProvider>
-          <Router>
-            <TourGuide />
-            <NetworkIndicator />
-            <Toaster
-              position="top-center"
-              toastOptions={{
-                style: {
-                  background: '#ffffff',
-                  color: '#0f172a',
-                  border: '1px solid rgba(0,0,0,0.1)',
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-                },
-                success: {
-                  iconTheme: {
-                    primary: '#10b981',
-                    secondary: '#fff',
+      <SystemGuard>
+        <AuthProvider>
+          <CartProvider>
+            <Router>
+              <TourGuide />
+              <NetworkIndicator />
+              <Toaster
+                position="top-center"
+                toastOptions={{
+                  style: {
+                    background: '#ffffff',
+                    color: '#0f172a',
+                    border: '1px solid rgba(0,0,0,0.1)',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
                   },
-                },
-                error: {
-                  iconTheme: {
-                    primary: '#ef4444',
-                    secondary: '#fff',
+                  success: {
+                    iconTheme: {
+                      primary: '#10b981',
+                      secondary: '#fff',
+                    },
+                  },
+                  error: {
+                    iconTheme: {
+                      primary: '#ef4444',
+                      secondary: '#fff',
+                    }
                   }
-                }
-              }}
-            />
-            <Navbar />
-            <MobileTabBar />
-            <SwipeNavigator />
-            <InstallPrompt />
+                }}
+              />
+              <Navbar />
+              <MobileTabBar />
+              <SwipeNavigator />
+              <InstallPrompt />
 
-            <AnimatedRoutes />
-          </Router>
-        </CartProvider>
-      </AuthProvider>
+              <AnimatedRoutes />
+            </Router>
+          </CartProvider>
+        </AuthProvider>
+      </SystemGuard>
     </div>
   );
 }
