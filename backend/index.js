@@ -266,6 +266,23 @@ app.delete('/api/vendors/:id', auth, admin, async (req, res) => {
     }
 });
 
+
+// --- USER ROUTES ---
+app.get('/api/users', auth, admin, async (req, res) => {
+    try {
+        const users = await User.find().select('-password');
+        res.json(users.map(u => ({
+            id: u._id,
+            name: u.name,
+            email: u.email,
+            role: u.role,
+            createdAt: u.createdAt
+        })));
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // --- AUTH ---
 
 app.post('/api/auth/signup', async (req, res) => {
