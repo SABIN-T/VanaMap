@@ -156,49 +156,7 @@
 }
 
 /* --- WIDGETS --- */
-.activityList {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    margin-top: 1rem;
-}
 
-.activityItem {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 0.75rem;
-    border-radius: 1rem;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid transparent;
-    transition: all 0.2s;
-}
-
-.activityItem:hover {
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.05);
-}
-
-.iconBox {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: rgba(16, 185, 129, 0.1);
-    color: var(--primary);
-}
-
-.activityInfo div:first-child {
-    font-weight: 600;
-    font-size: 0.95rem;
-}
-
-.activityInfo div:last-child {
-    font-size: 0.8rem;
-    color: var(--text-secondary);
-}
 
 /* Quick Actions */
 .actionGrid {

@@ -10,25 +10,19 @@ import {
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import styles from './Admin.module.css';
-import { ActivityFeed, type ActivityItem } from './admin/ActivityFeed';
+
 
 export const Admin = () => {
     const [stats, setStats] = useState({ plants: 0, users: 0, vendors: 0 });
-    const [activities, setActivities] = useState<ActivityItem[]>([]);
-    const [loading, setLoading] = useState(true);
+
+
     const navigate = useNavigate();
 
-    const getTimestampFromId = (id: string) => {
-        try {
-            return new Date(parseInt(id.substring(0, 8), 16) * 1000);
-        } catch (e) {
-            return new Date();
-        }
-    };
+
 
     const loadData = useCallback(async () => {
         try {
-            setLoading(true);
+
             const [vendors, plants, users] = await Promise.all([fetchVendors(), fetchPlants(), fetchUsers()]);
 
             setStats({
@@ -37,46 +31,11 @@ export const Admin = () => {
                 users: users.length
             });
 
-            // Process Real Data for Activity Feed
-            const plantActivities: ActivityItem[] = plants.map((p: any) => ({
-                id: p.id || p._id,
-                type: 'plant',
-                title: `New Plant Added`,
-                description: `${p.name} (${p.scientificName || 'Species'}) was added to the catalog.`,
-                timestamp: p.createdAt || getTimestampFromId(p.id || p._id),
-                meta: p.type
-            }));
 
-            const vendorActivities: ActivityItem[] = vendors.map((v: any) => ({
-                id: v.id || v._id,
-                type: 'vendor',
-                title: `New Partner Joined`,
-                description: `${v.name} registered as a ${v.category || 'Vendor'} in ${v.district || 'Unknown Location'}.`,
-                timestamp: v.createdAt || getTimestampFromId(v.id || v._id),
-                meta: v.verified ? 'Verified' : 'Pending'
-            }));
-
-            const userActivities: ActivityItem[] = users.map((u: any) => ({
-                id: u.id || u._id,
-                type: 'user',
-                title: `New User Registration`,
-                description: `${u.name || 'User'} joined the platform.`,
-                timestamp: u.createdAt || getTimestampFromId(u.id || u._id),
-                meta: u.role
-            }));
-
-            // Merge and Sort by Date Descending
-            const allActivities = [...plantActivities, ...vendorActivities, ...userActivities]
-                .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
-                .slice(0, 50); // Limit to last 50 actions
-
-            setActivities(allActivities);
         } catch (err) {
             console.error(err);
-        } finally {
-            setLoading(false);
         }
-    }, []);
+    }, [fetchPlants, fetchUsers, fetchVendors]);
 
     useEffect(() => {
         if (!localStorage.getItem('adminAuthenticated')) navigate('/admin-login');
@@ -148,18 +107,7 @@ export const Admin = () => {
                     </div>
                 </div>
 
-                {/* LARGE ACTIVITY FEED */}
-                <div className={`${styles.card} ${styles.cardLarge}`}>
-                    <div className={styles.cardHeader}>
-                        <span className={styles.cardTitle}>Live Activity Feed</span>
-                        <div className="flex gap-2">
-                            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                        </div>
-                    </div>
-                    <div className={styles.activityList}>
-                        <ActivityFeed activities={activities} isLoading={loading} />
-                    </div>
-                </div>
+
 
                 {/* QUICK ACTIONS */}
                 <div className={`${styles.card} ${styles.cardTall}`}>
