@@ -345,7 +345,10 @@ export const Home = () => {
                         <div className={styles.categorySelectionList}>
                             <div
                                 className={`${styles.categoryCard} ${filter === 'indoor' ? styles.indoorActive : ''}`}
-                                onClick={() => setFilter(filter === 'indoor' ? 'all' : 'indoor')}
+                                onClick={() => {
+                                    setFilter(filter === 'indoor' ? 'all' : 'indoor');
+                                    scrollToPlants();
+                                }}
                             >
                                 <div className={styles.categoryIcon}><Wind size={32} /></div>
                                 <div className={styles.categoryText}>
@@ -356,7 +359,10 @@ export const Home = () => {
 
                             <div
                                 className={`${styles.categoryCard} ${filter === 'outdoor' ? styles.outdoorActive : ''}`}
-                                onClick={() => setFilter(filter === 'outdoor' ? 'all' : 'outdoor')}
+                                onClick={() => {
+                                    setFilter(filter === 'outdoor' ? 'all' : 'outdoor');
+                                    scrollToPlants();
+                                }}
                             >
                                 <div className={styles.categoryIcon}><Sprout size={32} /></div>
                                 <div className={styles.categoryText}>
