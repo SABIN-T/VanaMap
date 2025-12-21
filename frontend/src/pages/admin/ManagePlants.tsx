@@ -97,6 +97,35 @@ export const ManagePlants = () => {
                             <X size={18} />
                         </button>
                     )}
+
+                    {/* Stats & Quick Selection List */}
+                    <div className={styles.statsContainer}>
+                        <span>Total Flora</span>
+                        <span className={styles.countHighlight}>{allPlants.length} SPECIMENS</span>
+                    </div>
+
+                    {searchQuery && (
+                        <div className={styles.quickList}>
+                            <div className="px-4 py-2 text-xs font-bold text-slate-500 uppercase tracking-wider flex justify-between border-b border-slate-700/50 mb-1">
+                                <span>Quick Selection (A-Z)</span>
+                                <span className="text-emerald-500">{filteredPlants.length} Matches</span>
+                            </div>
+                            {filteredPlants.length > 0 ? (
+                                [...filteredPlants]
+                                    .sort((a, b) => (a.name || '').localeCompare(b.name || ''))
+                                    .map((plant) => (
+                                        <div key={plant.id} className={styles.quickListItem}>
+                                            <span>{plant.name}</span>
+                                            <span className={styles.quickListItemIndex}>{plant.type}</span>
+                                        </div>
+                                    ))
+                            ) : (
+                                <div className="p-4 text-center text-slate-500 text-sm">
+                                    No plants align with your query
+                                </div>
+                            )}
+                        </div>
+                    )}
                 </div>
 
                 {/* Grid Content */}
