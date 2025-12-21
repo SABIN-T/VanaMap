@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import { Users, Key, Shield, Search, X, User as UserIcon, Lock } from 'lucide-react';
-import { AdminPageLayout } from './AdminPageLayout';
+import { AdminLayout } from './AdminLayout';
 import { fetchUsers, resetPassword } from '../../services/api';
 import styles from './ManageUsers.module.css';
 
@@ -54,7 +54,7 @@ export const ManageUsers = () => {
     };
 
     return (
-        <AdminPageLayout title="User Security & Access">
+        <AdminLayout title="User Security Directory">
             <div className={styles.pageContainer}>
 
                 {/* Search Bar */}
@@ -172,6 +172,6 @@ export const ManageUsers = () => {
                     </div>
                 </div>
             </div>
-        </AdminPageLayout>
+        </AdminLayout>
     );
 };

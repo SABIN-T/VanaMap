@@ -4,7 +4,7 @@ import { MapPin, Navigation, Store, CheckCircle, Globe, Crosshair } from 'lucide
 import { MapContainer, TileLayer, Marker, useMap, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import { AdminPageLayout } from './AdminPageLayout';
+import { AdminLayout } from './AdminLayout';
 import { registerVendor } from '../../services/api';
 import type { Vendor } from '../../types';
 import styles from './AddVendor.module.css';
@@ -93,7 +93,7 @@ export const AddVendor = () => {
     };
 
     return (
-        <AdminPageLayout title="Onboard Partner">
+        <AdminLayout title="Partner Onboarding">
             <div className={styles.pageContainer}>
 
                 <div className={styles.mainCard}>
@@ -227,6 +227,6 @@ export const AddVendor = () => {
                 </div>
 
             </div>
-        </AdminPageLayout>
+        </AdminLayout>
     );
 };

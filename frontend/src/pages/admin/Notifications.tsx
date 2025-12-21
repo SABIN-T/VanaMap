@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { AdminPageLayout } from './AdminPageLayout';
+import { AdminLayout } from './AdminLayout';
 import {
     User, Store, Sprout, Clock, Search
 } from 'lucide-react';
@@ -140,16 +140,16 @@ export const Notifications = () => {
 
     if (loading) {
         return (
-            <AdminPageLayout title="Notifications Center">
+            <AdminLayout title="Notifications Center">
                 <div style={{ padding: '2rem', textAlign: 'center', color: '#94a3b8' }}>
                     Loading system logs...
                 </div>
-            </AdminPageLayout>
+            </AdminLayout>
         );
     }
 
     return (
-        <AdminPageLayout title="Notifications Center">
+        <AdminLayout title="Notifications Center">
             <div className={styles.pageContainer}>
                 <header className={styles.header}>
                     <div className={styles.searchContainer}>
@@ -272,6 +272,6 @@ export const Notifications = () => {
 
                 </div>
             </div>
-        </AdminPageLayout>
+        </AdminLayout>
     );
 };

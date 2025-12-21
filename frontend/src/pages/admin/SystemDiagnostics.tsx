@@ -1,10 +1,10 @@
-import { AdminPageLayout } from './AdminPageLayout';
+import { AdminLayout } from './AdminLayout';
 import { Server, Database, Activity } from 'lucide-react';
 import styles from './SystemDiagnostics.module.css';
 
 export const SystemDiagnostics = () => {
     return (
-        <AdminPageLayout title="System Diagnostics">
+        <AdminLayout title="System Health">
             <div className={styles.pageContainer}>
 
                 <div className={styles.grid}>
@@ -109,6 +109,6 @@ export const SystemDiagnostics = () => {
                 </div>
 
             </div>
-        </AdminPageLayout>
+        </AdminLayout>
     );
 };

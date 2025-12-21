@@ -6,7 +6,7 @@ import {
     Thermometer, Droplets, Upload, Wind, Sun, Leaf, Activity,
     ShieldCheck, PlusCircle, XCircle
 } from 'lucide-react';
-import { AdminPageLayout } from './AdminPageLayout';
+import { AdminLayout } from './AdminLayout';
 import { fetchPlants, updatePlant } from '../../services/api';
 import type { Plant } from '../../types';
 import styles from './EditPlant.module.css';
@@ -146,19 +146,19 @@ export const EditPlant = () => {
 
     if (loading) {
         return (
-            <AdminPageLayout title="Specimen Analysis">
+            <AdminLayout title="Specimen Analysis">
                 <div className="flex items-center justify-center p-20 text-slate-400">
                     <div className="animate-pulse flex flex-col items-center gap-4">
                         <Sparkles size={48} className="text-blue-500 animate-spin" />
                         <p className="font-bold tracking-widest text-sm uppercase">Accessing Flora Database...</p>
                     </div>
                 </div>
-            </AdminPageLayout>
+            </AdminLayout>
         );
     }
 
     return (
-        <AdminPageLayout title="Modify Specimen">
+        <AdminLayout title="Specimen Editor">
             <div className={styles.editContainer}>
                 <header className={styles.header}>
                     <div className={styles.headerTitle}>
@@ -444,6 +444,6 @@ export const EditPlant = () => {
                     </div>
                 </form>
             </div>
-        </AdminPageLayout>
+        </AdminLayout>
     );
 };

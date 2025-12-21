@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import { Edit, Trash2, X, Search, Leaf } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { AdminPageLayout } from './AdminPageLayout';
+import { AdminLayout } from './AdminLayout';
 import { fetchPlants, deletePlant } from '../../services/api';
 import type { Plant } from '../../types';
 import styles from './ManagePlants.module.css';
@@ -61,7 +61,7 @@ export const ManagePlants = () => {
     };
 
     return (
-        <AdminPageLayout title="Manage Flora Registry">
+        <AdminLayout title="Flora Registry">
             <div className={styles.pageContainer}>
                 <div className={styles.searchContainer}>
                     <Search className={styles.searchIcon} size={22} />
@@ -156,6 +156,6 @@ export const ManagePlants = () => {
                     </div>
                 )}
             </div>
-        </AdminPageLayout>
+        </AdminLayout>
     );
 };

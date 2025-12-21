@@ -1,22 +1,19 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
     fetchVendors, fetchPlants, fetchUsers
 } from '../services/api';
 import {
     Activity, Users, Sprout, MapPin,
-    ArrowUpRight,
-    Plus, Zap, Settings, Shield, LogOut,
-    Store, Edit, Database, Bell
+    ArrowUpRight, Zap
 } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { AdminLayout } from './admin/AdminLayout';
 import styles from './Admin.module.css';
 
-
 export const Admin = () => {
-    const { user, logout, loading: authLoading } = useAuth();
+    const { user, loading: authLoading } = useAuth();
     const [stats, setStats] = useState({ plants: 0, users: 0, vendors: 0 });
-    const navigate = useNavigate();
 
     const loadData = useCallback(async () => {
         try {
@@ -31,15 +28,19 @@ export const Admin = () => {
         }
     }, []);
 
+    const navigate = useNavigate();
+
     useEffect(() => {
-        if (!authLoading) {
-            if (!user || user.role !== 'admin') {
-                navigate('/auth', { replace: true });
-            } else {
-                loadData();
-            }
+        if (!authLoading && (!user || user.role !== 'admin')) {
+            navigate('/auth', { replace: true });
         }
-    }, [user, navigate, loadData, authLoading]);
+    }, [user, authLoading, navigate]);
+
+    useEffect(() => {
+        if (!authLoading && user?.role === 'admin') {
+            loadData();
+        }
+    }, [user, loadData, authLoading]);
 
     if (authLoading || !user || user.role !== 'admin') {
         return (
@@ -50,24 +51,7 @@ export const Admin = () => {
     }
 
     return (
-        <div className={styles.container}>
-            <header className={styles.header}>
-                <div className={styles.titleSection}>
-                    <h1>Command Center</h1>
-                    <div className={styles.subtitle}>
-                        <Shield size={14} className="text-emerald-500" /> System Secure • {new Date().toLocaleDateString()}
-                    </div>
-                </div>
-                <div className="flex gap-4">
-                    <button onClick={() => window.location.reload()} className="p-3 rounded-full bg-slate-800/50 text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">
-                        <Activity size={20} />
-                    </button>
-                    <button onClick={logout} className="px-6 py-3 rounded-full bg-rose-500/10 text-rose-500 hover:bg-rose-500 hover:text-white font-bold text-sm transition-all flex items-center gap-2">
-                        <LogOut size={16} /> Logout
-                    </button>
-                </div>
-            </header>
-
+        <AdminLayout title="System Overview">
             <div className={styles.dashboardGrid}>
                 {/* STAT CARDS */}
                 <div className={`${styles.card} ${styles.cardStat}`}>
@@ -114,54 +98,42 @@ export const Admin = () => {
                     </div>
                 </div>
 
+                {/* CENTRAL MONITOR */}
+                <div className={`${styles.card} ${styles.cardLarge}`}>
+                    <div className={styles.cardHeader}>
+                        <span className={styles.cardTitle}>System Pulse</span>
+                        <Activity size={20} className="text-rose-500" />
+                    </div>
+                    <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: '1rem', opacity: 0.5 }}>
+                        <Activity size={48} className="animate-pulse" />
+                        <div className="text-center">
+                            <h3 className="text-white font-bold">Real-time monitoring active</h3>
+                            <p className="text-xs text-slate-400 max-w-xs">Connecting to secure stream... metrics will populate shortly.</p>
+                        </div>
+                    </div>
+                </div>
 
-
-                {/* QUICK ACTIONS */}
+                {/* SERVER STATUS */}
                 <div className={`${styles.card} ${styles.cardTall}`}>
                     <div className={styles.cardHeader}>
-                        <span className={styles.cardTitle}>Quick Actions</span>
+                        <span className={styles.cardTitle}>Server Nodes</span>
                     </div>
-                    <div className={styles.actionGrid}>
-                        <button onClick={() => navigate('/admin/add-plant')} className={styles.actionBtn}>
-                            <Plus size={24} className="text-emerald-400" />
-                            <span>Add Plant</span>
-                        </button>
-                        <button onClick={() => navigate('/admin/add-vendor')} className={styles.actionBtn}>
-                            <MapPin size={24} className="text-amber-400" />
-                            <span>Add Vendor</span>
-                        </button>
-                        <button className={styles.actionBtn} onClick={() => navigate('/admin/manage-plants')}>
-                            <Edit size={24} className="text-pink-400" />
-                            <span>Manage Plants</span>
-                        </button>
-                        <button className={styles.actionBtn} onClick={() => navigate('/admin/manage-vendors')}>
-                            <Store size={24} className="text-purple-400" />
-                            <span>Manage Vendors</span>
-                        </button>
-                        <button className={styles.actionBtn} onClick={() => navigate('/admin/manage-users')}>
-                            <Users size={24} className="text-indigo-400" />
-                            <span>Manage Users</span>
-                        </button>
-                        <button className={styles.actionBtn} onClick={() => navigate('/admin/diag')}>
-                            <Activity size={24} className="text-blue-400" />
-                            <span>Run Diag</span>
-                        </button>
-                        <button className={styles.actionBtn} onClick={() => navigate('/admin/notifications')}>
-                            <Bell size={24} className="text-orange-400" />
-                            <span>Notifications</span>
-                        </button>
-                        <button className={styles.actionBtn} onClick={() => navigate('/admin/settings')}>
-                            <Settings size={24} className="text-slate-400" />
-                            <span>Settings</span>
-                        </button>
-                        <button className={styles.actionBtn} onClick={() => navigate('/admin/all-plants')}>
-                            <Database size={24} className="text-teal-400" />
-                            <span>All Plants</span>
-                        </button>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                        {[
+                            { name: 'US-EAST-1', status: 'Online', color: '#10b981' },
+                            { name: 'EU-WEST-2', status: 'Online', color: '#10b981' },
+                            { name: 'AP-SOUTH-1', status: 'Healthy', color: '#10b981' },
+                            { name: 'REPLICA-01', status: 'Syncing', color: '#3b82f6' }
+                        ].map(node => (
+                            <div key={node.name} style={{ display: 'flex', justifyContent: 'space-between', padding: '0.75rem', background: 'rgba(255,255,255,0.02)', borderRadius: '0.75rem', fontSize: '0.8rem' }}>
+                                <span className="font-bold">{node.name}</span>
+                                <span style={{ color: node.color }}>{node.status}</span>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>
-        </div>
+        </AdminLayout>
     );
 };
 

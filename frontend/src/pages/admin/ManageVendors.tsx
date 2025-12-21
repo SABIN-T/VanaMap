@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import { Store, Star, Trash2, ShieldCheck, AlertCircle, MapPin, Search, X } from 'lucide-react';
-import { AdminPageLayout } from './AdminPageLayout';
+import { AdminLayout } from './AdminLayout';
 import { fetchVendors, updateVendor, deleteVendor } from '../../services/api';
 import type { Vendor } from '../../types';
 import styles from './ManageVendors.module.css';
@@ -61,7 +61,7 @@ export const ManageVendors = () => {
     };
 
     return (
-        <AdminPageLayout title="Vendor Network Management">
+        <AdminLayout title="Partner Network">
             <div className={styles.pageContainer}>
 
                 {/* Search Bar */}
@@ -159,6 +159,6 @@ export const ManageVendors = () => {
                     </div>
                 )}
             </div>
-        </AdminPageLayout>
+        </AdminLayout>
     );
 };

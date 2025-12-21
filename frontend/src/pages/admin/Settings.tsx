@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { AdminPageLayout } from './AdminPageLayout';
+import { AdminLayout } from './AdminLayout';
 import { Lock, Bell, Database, Shield, Zap, Globe, Mail, Key, UserPlus, Fingerprint, Smartphone, MessageSquare, Webhook, Code2, Users } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import styles from './Settings.module.css';
@@ -45,7 +45,7 @@ export const Settings = () => {
 
 
     return (
-        <AdminPageLayout title="Platform Configuration">
+        <AdminLayout title="Configuration">
             <div className={styles.pageContainer}>
                 <div className={styles.layout}>
 
@@ -269,6 +269,6 @@ export const Settings = () => {
                     </div>
                 </div>
             </div>
-        </AdminPageLayout>
+        </AdminLayout>
     );
 };

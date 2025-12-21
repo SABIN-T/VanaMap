@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import { Button } from '../components/common/Button';
-import { Trash2, ShoppingBag, MapPin, Heart, ArrowRight, Activity, Loader2, Store, Shield } from 'lucide-react';
+import { Trash2, ShoppingBag, MapPin, Heart, ArrowRight, Loader2, Store, Shield } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { fetchPlants, fetchVendors, updateVendor } from '../services/api';
@@ -28,6 +28,12 @@ export const UserDashboard = () => {
         latitude: 0,
         longitude: 0
     });
+
+    useEffect(() => {
+        if (!loading && user?.role === 'admin') {
+            navigate('/admin', { replace: true });
+        }
+    }, [user, loading, navigate]);
 
     useEffect(() => {
         const loadVendorData = async () => {
@@ -283,7 +289,7 @@ export const UserDashboard = () => {
                     </p>
                 </div>
 
-                <div style={{ display: 'flex', gap: '1rem' }}>
+                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
                     {user.role === 'vendor' && (
                         <Button onClick={() => setShowVendorModal(true)} variant="outline" style={{ gap: '0.5rem', display: 'flex', alignItems: 'center' }}>
                             <Store size={18} /> Edit Shop Details
@@ -291,59 +297,91 @@ export const UserDashboard = () => {
                     )}
 
                     {user.role === 'admin' && (
-                        <Link to="/admin">
-                            <Button style={{
-                                background: '#facc15',
+                        <button
+                            onClick={() => navigate('/admin')}
+                            style={{
+                                background: 'linear-gradient(135deg, #facc15 0%, #ca8a04 100%)',
                                 color: 'black',
-                                fontWeight: 800,
+                                border: 'none',
+                                padding: '0.8rem 1.5rem',
+                                borderRadius: '14px',
+                                fontWeight: '800',
                                 display: 'flex',
                                 alignItems: 'center',
-                                gap: '0.5rem'
-                            }}>
-                                <Activity size={18} /> ADMIN PANEL
-                            </Button>
-                        </Link>
+                                gap: '0.75rem',
+                                cursor: 'pointer',
+                                boxShadow: '0 10px 20px rgba(234, 179, 8, 0.2)',
+                                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
+                            }}
+                            onMouseOver={(e) => {
+                                e.currentTarget.style.transform = 'translateY(-2px)';
+                                e.currentTarget.style.boxShadow = '0 15px 30px rgba(234, 179, 8, 0.3)';
+                            }}
+                            onMouseOut={(e) => {
+                                e.currentTarget.style.transform = 'translateY(0)';
+                                e.currentTarget.style.boxShadow = '0 10px 20px rgba(234, 179, 8, 0.2)';
+                            }}
+                        >
+                            <Shield size={20} />
+                            ADMIN CONTROL HUB
+                        </button>
                     )}
                 </div>
             </div>
 
+            {user.role === 'admin' && (
+                <div style={{
+                    marginBottom: '3rem',
+                    padding: '2rem',
+                    background: 'rgba(250, 204, 21, 0.05)',
+                    border: '1px solid rgba(250, 204, 21, 0.2)',
+                    borderRadius: '24px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '1.5rem',
+                    animation: 'fadeInSlide 0.6s ease-out'
+                }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                        <div>
+                            <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#facc15', margin: 0 }}>System Management Active</h2>
+                            <p style={{ color: '#94a3b8', marginTop: '0.5rem' }}>You are currently authenticated as a global administrator.</p>
+                        </div>
+                        <div style={{ padding: '0.5rem 1rem', background: 'rgba(34, 197, 94, 0.1)', color: '#22c55e', borderRadius: '10px', fontSize: '0.8rem', fontWeight: 700, border: '1px solid rgba(34, 197, 94, 0.2)' }}>
+                            ONLINE
+                        </div>
+                    </div>
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+                        <Button
+                            onClick={() => navigate('/admin')}
+                            variant="primary"
+                            style={{
+                                background: '#facc15',
+                                color: 'black',
+                                fontWeight: 800,
+                                height: '60px',
+                                fontSize: '1rem'
+                            }}
+                        >
+                            <Shield size={20} style={{ marginRight: '8px' }} /> Enter Admin Panel
+                        </Button>
+                        <Button
+                            onClick={() => navigate('/admin/manage-plants')}
+                            variant="outline"
+                            style={{ height: '60px', borderColor: 'rgba(255,255,255,0.1)' }}
+                        >
+                            Manage Catalog
+                        </Button>
+                    </div>
+                </div>
+            )}
+
             <div style={{ display: 'flex', flexDirection: 'column', gap: '4rem' }}>
-                {user.role === 'admin' && (
-                    <section>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
-                            <div style={{ padding: '0.75rem', background: 'rgba(250, 204, 21, 0.1)', borderRadius: '1rem', color: '#facc15' }}>
-                                <Shield size={24} />
-                            </div>
-                            <h2 style={{ fontSize: '1.8rem', fontWeight: 700, margin: 0 }}>Admin Command Center</h2>
-                        </div>
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '1.5rem' }}>
-                            <div className="glass-panel" style={{ padding: '1.5rem', borderRadius: '1.5rem', border: '1px solid rgba(250, 204, 21, 0.2)' }}>
-                                <h3 style={{ margin: '0 0 1rem 0', color: '#facc15' }}>System Management</h3>
-                                <p style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)', marginBottom: '1.5rem' }}>
-                                    Access full controls for plants, vendors, users, and system diagnostics.
-                                </p>
-                                <Link to="/admin">
-                                    <Button style={{ width: '100%', background: '#facc15', color: 'black', fontWeight: 700 }}>
-                                        Enter Admin Panel
-                                    </Button>
-                                </Link>
-                            </div>
-                            <div className="glass-panel" style={{ padding: '1.5rem', borderRadius: '1.5rem', opacity: 0.8 }}>
-                                <h3 style={{ margin: '0 0 1rem 0' }}>Quick Stats</h3>
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                                    <div style={{ padding: '1rem', background: 'rgba(255,255,255,0.03)', borderRadius: '1rem' }}>
-                                        <div style={{ fontSize: '0.7rem', color: '#64748b', textTransform: 'uppercase' }}>System Health</div>
-                                        <div style={{ fontSize: '1.2rem', fontWeight: 800, color: '#4ade80' }}>100%</div>
-                                    </div>
-                                    <div style={{ padding: '1rem', background: 'rgba(255,255,255,0.03)', borderRadius: '1rem' }}>
-                                        <div style={{ fontSize: '0.7rem', color: '#64748b', textTransform: 'uppercase' }}>Latency</div>
-                                        <div style={{ fontSize: '1.2rem', fontWeight: 800 }}>24ms</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                )}
+                <style>{`
+                    @keyframes fadeInSlide {
+                        from { opacity: 0; transform: translateY(20px); }
+                        to { opacity: 1; transform: translateY(0); }
+                    }
+                `}</style>
 
                 {/* FAVORITES SECTION */}
                 <section>
