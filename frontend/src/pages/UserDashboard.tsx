@@ -38,7 +38,12 @@ export const UserDashboard = () => {
                 try {
                     const vendors = await fetchVendors();
                     // Soft match on ID (mongo _id vs. string id)
-                    const vendor = vendors.find(v => v.id === user.id || v.id === (user as any)._id);
+                    // Robust matching for different ID formats (mongo _id vs. string id)
+                    const vendor = vendors.find(v =>
+                        String(v.id) === String(user.id) ||
+                        String(v.id) === String((user as any)._id) ||
+                        String((v as any)._id) === String(user.id)
+                    );
                     if (vendor) {
                         setMyVendor(vendor);
                         setVendorForm(prev => ({

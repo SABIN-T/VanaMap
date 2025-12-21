@@ -2,17 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { Send, Bot, X, ShieldAlert, CreditCard } from 'lucide-react';
 import { useAuth } from '../../../context/AuthContext';
 import { Button } from '../../common/Button';
-
-// Mock API call (should be in services/api.ts but inline for speed)
-const sendChat = async (userId: string, message: string) => {
-    const API_URL = import.meta.env.VITE_API_URL || 'https://plantoxy.onrender.com/api';
-    const res = await fetch(`${API_URL}/ai/chat`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId, message })
-    });
-    return res.json();
-};
+import { sendAiChat } from '../../../services/api';
 
 export const DoctorAIModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) => {
     const { user } = useAuth();
@@ -41,7 +31,7 @@ export const DoctorAIModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
         setLoading(true);
 
         try {
-            const data = await sendChat(user.email, userMsg);
+            const data = await sendAiChat(user.email, userMsg);
 
             if (data.limitReached && !localStorage.getItem('premium_unlocked')) {
                 setLimitReached(true);

@@ -3,18 +3,7 @@ import { Send, Bot, ShieldAlert, CreditCard, ArrowLeft, Sparkles, User, Cpu } fr
 import { useAuth } from '../context/AuthContext';
 import { Button } from '../components/common/Button';
 import { useNavigate } from 'react-router-dom';
-
-// Mock API call
-const sendChat = async (userId: string, message: string) => {
-    const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-    const API_URL = import.meta.env.VITE_API_URL || (isLocal ? 'http://localhost:5000/api' : 'https://plantoxy.onrender.com/api');
-    const res = await fetch(`${API_URL}/ai/chat`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId, message })
-    });
-    return res.json();
-};
+import { sendAiChat } from '../services/api';
 
 export const DoctorAIPage = () => {
     const { user } = useAuth();
@@ -76,7 +65,7 @@ export const DoctorAIPage = () => {
         setLoading(true);
 
         try {
-            const data = await sendChat(user.email, userMsg);
+            const data = await sendAiChat(user.email, userMsg);
 
             if (data.limitReached && !localStorage.getItem('premium_unlocked')) {
                 setLimitReached(true);

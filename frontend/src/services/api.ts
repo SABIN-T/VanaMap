@@ -271,3 +271,12 @@ export const changePassword = async (oldPassword: string, newPassword: string) =
         body: JSON.stringify({ oldPassword, newPassword })
     }).then(res => res.json());
 };
+
+export const sendAiChat = async (userId: string, message: string) => {
+    const res = await fetch(`${API_URL}/ai/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, message })
+    });
+    return res.json();
+};
