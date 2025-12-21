@@ -15,6 +15,7 @@ const transporter = nodemailer.createTransport({
 });
 
 const sendResetEmail = async (email, tempPass) => {
+    console.log(`ATTEMPTING TO SEND EMAIL TO: ${email} via ${process.env.EMAIL_USER}`);
     const mailOptions = {
         from: `"Defender of VanaMap" <${process.env.EMAIL_USER}>`,
         to: email,
@@ -52,10 +53,12 @@ const sendResetEmail = async (email, tempPass) => {
     };
 
     try {
-        await transporter.sendMail(mailOptions);
-        console.log(`Email sent to: ${email}`);
+        const info = await transporter.sendMail(mailOptions);
+        console.log(`Email successfully sent to: ${email}`);
+        console.log(`Response: ${info.response}`);
     } catch (e) {
-        console.error("Mail Error:", e);
+        console.error("CRITICAL MAIL ERROR:", e.message);
+        console.error("Transporter Auth:", { user: process.env.EMAIL_USER, pass: '****' });
     }
 };
 
