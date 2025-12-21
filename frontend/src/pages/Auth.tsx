@@ -95,6 +95,23 @@ export const Auth = () => {
     return (
         <div className={styles.authContainer}>
             <div className={styles.authCard}>
+
+                {/* Unified Login Notice */}
+                {view === 'login' && (
+                    <div style={{
+                        textAlign: 'center',
+                        marginBottom: '1.5rem',
+                        fontSize: '0.85rem',
+                        color: 'var(--color-primary)',
+                        background: 'rgba(0, 255, 157, 0.05)',
+                        padding: '0.75rem',
+                        borderRadius: '0.75rem',
+                        border: '1px dashed rgba(0, 255, 157, 0.2)'
+                    }}>
+                        Note: <strong>Users, Vendors, and Admins</strong> can login through this portal.
+                    </div>
+                )}
+
                 <div className={styles.authHeader}>
                     <h2 className={styles.authTitle}>
                         {view === 'login' && 'Welcome Back'}
