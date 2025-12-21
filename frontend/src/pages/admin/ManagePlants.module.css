@@ -398,3 +398,57 @@
     background: rgba(255, 255, 255, 0.1);
     border-radius: 10px;
 }
+
+.filterContainer {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2.5rem;
+    gap: 1rem;
+}
+
+.filterSegment {
+    display: flex;
+    background: rgba(15, 23, 42, 0.6);
+    padding: 6px;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(8px);
+}
+
+.filterBtn {
+    padding: 0.75rem 2rem;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #94a3b8;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.filterBtn:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.filterBtnActive {
+    background: #10b981;
+    color: white;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.filterBtnActive.indoorActive {
+    background: #6366f1;
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+}
+
+.filterBtnActive.outdoorActive {
+    background: #f59e0b;
+    box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+}

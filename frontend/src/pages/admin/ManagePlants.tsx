@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
-import { Edit, Trash2, X, Search, Leaf } from 'lucide-react';
+import { Edit, Trash2, X, Search, Leaf, Layers, Sprout, Wind } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { AdminPageLayout } from './AdminPageLayout';
 import { fetchPlants, deletePlant } from '../../services/api';
@@ -11,6 +11,7 @@ export const ManagePlants = () => {
     const [allPlants, setAllPlants] = useState<Plant[]>([]);
     const [filteredPlants, setFilteredPlants] = useState<Plant[]>([]);
     const [searchQuery, setSearchQuery] = useState("");
+    const [activeFilter, setActiveFilter] = useState<'all' | 'indoor' | 'outdoor'>('all');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -18,22 +19,29 @@ export const ManagePlants = () => {
     }, []);
 
     useEffect(() => {
-        if (!searchQuery.trim()) {
-            setFilteredPlants(allPlants);
-        } else {
+        let result = [...allPlants];
+
+        // 1. Filter by Category
+        if (activeFilter !== 'all') {
+            result = result.filter(p => p.type === activeFilter);
+        }
+
+        // 2. Filter by Search Query
+        if (searchQuery.trim()) {
             const query = searchQuery.toLowerCase();
-            setFilteredPlants(allPlants.filter(p =>
+            result = result.filter(p =>
                 p.name?.toLowerCase().includes(query) ||
                 p.scientificName?.toLowerCase().includes(query) ||
                 p.type?.toLowerCase().includes(query)
-            ));
+            );
         }
-    }, [searchQuery, allPlants]);
+
+        setFilteredPlants(result);
+    }, [searchQuery, activeFilter, allPlants]);
 
     const loadPlants = async () => {
         const data = await fetchPlants();
         setAllPlants(data);
-        setFilteredPlants(data);
     };
 
     const handleEdit = (plant: Plant) => {
@@ -105,6 +113,30 @@ export const ManagePlants = () => {
                             )}
                         </div>
                     )}
+                </div>
+
+                {/* --- Category Filter Segment --- */}
+                <div className={styles.filterContainer}>
+                    <div className={styles.filterSegment}>
+                        <button
+                            className={`${styles.filterBtn} ${activeFilter === 'all' ? styles.filterBtnActive : ''}`}
+                            onClick={() => setActiveFilter('all')}
+                        >
+                            <Layers size={16} /> All Registry
+                        </button>
+                        <button
+                            className={`${styles.filterBtn} ${activeFilter === 'indoor' ? `${styles.filterBtnActive} ${styles.indoorActive}` : ''}`}
+                            onClick={() => setActiveFilter('indoor')}
+                        >
+                            <Wind size={16} /> Indoor Lab
+                        </button>
+                        <button
+                            className={`${styles.filterBtn} ${activeFilter === 'outdoor' ? `${styles.filterBtnActive} ${styles.outdoorActive}` : ''}`}
+                            onClick={() => setActiveFilter('outdoor')}
+                        >
+                            <Sprout size={16} /> Outdoor Nature
+                        </button>
+                    </div>
                 </div>
 
                 {filteredPlants.length === 0 ? (
