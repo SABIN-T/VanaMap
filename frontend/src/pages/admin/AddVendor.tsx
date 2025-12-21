@@ -1,14 +1,18 @@
 import { useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { MapPin } from 'lucide-react';
+import { MapPin, Navigation, Store, CheckCircle, Globe } from 'lucide-react';
 import { AdminPageLayout } from './AdminPageLayout';
-import { Button } from '../../components/common/Button';
 import { registerVendor } from '../../services/api';
 import type { Vendor } from '../../types';
+import styles from './AddVendor.module.css';
 
 export const AddVendor = () => {
     const [newVendor, setNewVendor] = useState<Partial<Vendor>>({
-        latitude: 28.61, longitude: 77.23, verified: true
+        latitude: 28.61,
+        longitude: 77.23,
+        verified: true,
+        address: '',
+        name: ''
     });
 
     const handleSaveVendor = async (e: React.FormEvent) => {
@@ -16,47 +20,120 @@ export const AddVendor = () => {
         const tid = toast.loading("Onboarding Partner...");
         try {
             await registerVendor(newVendor);
-            toast.success("Partner Onboarded", { id: tid });
-            setNewVendor({ latitude: 28.61, longitude: 77.23, verified: true });
+            toast.success("Partner Onboarded Successfully", { id: tid, icon: '🤝' });
+            setNewVendor({ latitude: 28.61, longitude: 77.23, verified: true, address: '', name: '' });
         } catch (err) {
-            toast.error("Failed to add vendor", { id: tid });
+            toast.error("Failed to register vendor", { id: tid });
         }
     };
 
     return (
-        <AdminPageLayout title="Onboard New Partner">
-            <form onSubmit={handleSaveVendor} className="space-y-8 max-w-2xl mx-auto">
-                <div className="bg-slate-800/30 p-8 rounded-2xl border border-slate-700">
-                    <div className="space-y-6">
-                        <div className="space-y-2">
-                            <label className="text-xs text-slate-400 uppercase font-bold ml-1">Vendor Name</label>
-                            <input className="w-full bg-slate-950 border border-slate-700 rounded-xl p-4 text-white focus:ring-2 focus:ring-amber-500 outline-none" required value={newVendor.name || ''} onChange={e => setNewVendor({ ...newVendor, name: e.target.value })} placeholder="e.g. Green Earth Nursery" />
-                        </div>
+        <AdminPageLayout title="Onboard Partner">
+            <div className={styles.pageContainer}>
 
-                        <div className="grid grid-cols-2 gap-6">
-                            <div className="space-y-2">
-                                <label className="text-xs text-slate-400 uppercase font-bold ml-1">Latitude</label>
-                                <input className="w-full bg-slate-950 border border-slate-700 rounded-xl p-4 text-white font-mono" value={newVendor.latitude || ''} onChange={e => setNewVendor({ ...newVendor, latitude: Number(e.target.value) })} />
-                            </div>
-                            <div className="space-y-2">
-                                <label className="text-xs text-slate-400 uppercase font-bold ml-1">Longitude</label>
-                                <input className="w-full bg-slate-950 border border-slate-700 rounded-xl p-4 text-white font-mono" value={newVendor.longitude || ''} onChange={e => setNewVendor({ ...newVendor, longitude: Number(e.target.value) })} />
+                <div className={styles.mainCard}>
+                    <div className={styles.header}>
+                        <div className="flex justify-center mb-4">
+                            <div className="p-4 bg-amber-500/20 rounded-full text-amber-500">
+                                <Store size={40} />
                             </div>
                         </div>
-
-                        <div className="space-y-2">
-                            <label className="text-xs text-slate-400 uppercase font-bold ml-1">Full Address</label>
-                            <textarea className="w-full bg-slate-950 border border-slate-700 rounded-xl p-4 text-white h-32 resize-none focus:ring-2 focus:ring-amber-500 outline-none" required value={newVendor.address || ''} onChange={e => setNewVendor({ ...newVendor, address: e.target.value })} placeholder="Complete street address..." />
-                        </div>
-
-                        <div className="pt-4">
-                            <Button className="w-full bg-amber-600 hover:bg-amber-500 text-white font-bold py-4 rounded-xl shadow-lg shadow-amber-900/20 text-lg">
-                                <MapPin className="mr-2" /> Register Vendor
-                            </Button>
-                        </div>
+                        <h1 className={styles.title}>Register New Vendor</h1>
+                        <p className={styles.subtitle}>Add a verified garden center or nursery to the network.</p>
                     </div>
+
+                    <form onSubmit={handleSaveVendor}>
+                        {/* 1. Identity Section */}
+                        <div className={styles.section}>
+                            <div className={styles.sectionTitle}>
+                                <CheckCircle size={16} /> Partner Identity
+                            </div>
+
+                            <div className={styles.inputGroup}>
+                                <label className={styles.label}>Business Name</label>
+                                <input
+                                    className={styles.glassInput}
+                                    value={newVendor.name || ''}
+                                    onChange={e => setNewVendor({ ...newVendor, name: e.target.value })}
+                                    placeholder="e.g. Green Earth Nursery"
+                                    required
+                                />
+                            </div>
+                        </div>
+
+                        {/* 2. Location Section */}
+                        <div className={styles.section}>
+                            <div className={styles.sectionTitle}>
+                                <Globe size={16} /> Geographic Data
+                            </div>
+
+                            {/* Decorative Map Preview */}
+                            <div className={styles.mapPreview} title="Map Preview (Visual Only)">
+                                <div className={styles.mapPulse}></div>
+                                <span className="mt-8 text-xs font-bold uppercase tracking-widest">
+                                    Simulated Location Source
+                                </span>
+                                <span className="font-mono text-xs text-slate-500 mt-1">
+                                    {newVendor.latitude?.toFixed(4)}, {newVendor.longitude?.toFixed(4)}
+                                </span>
+                            </div>
+
+                            <div className={styles.coordGrid}>
+                                <div>
+                                    <label className={styles.label}>Latitude</label>
+                                    <input
+                                        className={styles.glassInput}
+                                        type="number"
+                                        step="any"
+                                        value={newVendor.latitude || ''}
+                                        onChange={e => setNewVendor({ ...newVendor, latitude: Number(e.target.value) })}
+                                        placeholder="28.61"
+                                    />
+                                </div>
+                                <div>
+                                    <label className={styles.label}>Longitude</label>
+                                    <input
+                                        className={styles.glassInput}
+                                        type="number"
+                                        step="any"
+                                        value={newVendor.longitude || ''}
+                                        onChange={e => setNewVendor({ ...newVendor, longitude: Number(e.target.value) })}
+                                        placeholder="77.23"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* 3. Address Section */}
+                        <div className={styles.section}>
+                            <div className={styles.sectionTitle}>
+                                <Navigation size={16} /> Physical Address
+                            </div>
+
+                            <div>
+                                <label className={styles.label}>Full Street Address</label>
+                                <textarea
+                                    className={styles.glassTextarea}
+                                    value={newVendor.address || ''}
+                                    onChange={e => setNewVendor({ ...newVendor, address: e.target.value })}
+                                    placeholder="Enter the complete address for navigation purposes..."
+                                    required
+                                />
+                            </div>
+                        </div>
+
+                        {/* Submit */}
+                        <div className="pt-2">
+                            <button type="submit" className={styles.submitBtn}>
+                                <MapPin size={20} />
+                                Confirm Registration
+                            </button>
+                        </div>
+
+                    </form>
                 </div>
-            </form>
+
+            </div>
         </AdminPageLayout>
     );
 };
