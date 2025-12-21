@@ -345,16 +345,21 @@
 }
 
 .quickList {
-    background: rgba(30, 41, 59, 0.8);
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    right: 0;
+    margin-bottom: 0.5rem;
+    background: rgba(15, 23, 42, 0.95);
     backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 1rem;
-    margin-top: 0.5rem;
     padding: 0.5rem;
     max-height: 250px;
     overflow-y: auto;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.3);
     animation: fadeIn 0.2s ease-out;
+    z-index: 20;
 }
 
 .quickListItem {
