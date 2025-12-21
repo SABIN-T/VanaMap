@@ -1,10 +1,46 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
-import { MapPin, Navigation, Store, CheckCircle, Globe } from 'lucide-react';
+import { MapPin, Navigation, Store, CheckCircle, Globe, Crosshair } from 'lucide-react';
+import { MapContainer, TileLayer, Marker, useMap, useMapEvents } from 'react-leaflet';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
 import { AdminPageLayout } from './AdminPageLayout';
 import { registerVendor } from '../../services/api';
 import type { Vendor } from '../../types';
 import styles from './AddVendor.module.css';
+
+// Fix Leaflet's default icon path issues
+import icon from 'leaflet/dist/images/marker-icon.png';
+import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+
+const DefaultIcon = L.icon({
+    iconUrl: icon,
+    shadowUrl: iconShadow,
+    iconSize: [25, 41],
+    iconAnchor: [12, 41]
+});
+L.Marker.prototype.options.icon = DefaultIcon;
+
+// Sub-component to center map when coords change
+const MapUpdater = ({ center }: { center: [number, number] }) => {
+    const map = useMap();
+    useEffect(() => {
+        map.setView(center, map.getZoom());
+    }, [center, map]);
+    return null;
+};
+
+// Sub-component to handle clicks
+const LocationMarker = ({ position, setPosition }: { position: [number, number], setPosition: (lat: number, lng: number) => void }) => {
+    useMapEvents({
+        click(e) {
+            setPosition(e.latlng.lat, e.latlng.lng);
+        },
+    });
+    return position === null ? null : (
+        <Marker position={position} />
+    );
+};
 
 export const AddVendor = () => {
     const [newVendor, setNewVendor] = useState<Partial<Vendor>>({
@@ -14,6 +50,8 @@ export const AddVendor = () => {
         address: '',
         name: ''
     });
+
+    const [isLocating, setIsLocating] = useState(false);
 
     const handleSaveVendor = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -25,6 +63,33 @@ export const AddVendor = () => {
         } catch (err) {
             toast.error("Failed to register vendor", { id: tid });
         }
+    };
+
+    const handleGPS = () => {
+        if (!navigator.geolocation) {
+            toast.error("Geolocation not supported");
+            return;
+        }
+        setIsLocating(true);
+        navigator.geolocation.getCurrentPosition(
+            (pos) => {
+                setNewVendor(prev => ({
+                    ...prev,
+                    latitude: pos.coords.latitude,
+                    longitude: pos.coords.longitude
+                }));
+                setIsLocating(false);
+                toast.success("Location Updated");
+            },
+            (err) => {
+                toast.error("Location access denied");
+                setIsLocating(false);
+            }
+        );
+    };
+
+    const updateCoords = (lat: number, lng: number) => {
+        setNewVendor(prev => ({ ...prev, latitude: lat, longitude: lng }));
     };
 
     return (
@@ -40,6 +105,19 @@ export const AddVendor = () => {
                         </div>
                         <h1 className={styles.title}>Register New Vendor</h1>
                         <p className={styles.subtitle}>Add a verified garden center or nursery to the network.</p>
+                    </div>
+
+                    {/* --- GPS ACTION --- */}
+                    <div className="absolute top-8 right-8 z-[20]">
+                        <button
+                            type="button"
+                            onClick={handleGPS}
+                            disabled={isLocating}
+                            className="bg-amber-500 hover:bg-amber-400 text-black font-bold text-xs uppercase tracking-widest px-4 py-2 rounded-full flex items-center gap-2 transition-transform active:scale-95 shadow-lg shadow-amber-900/40 relative z-50"
+                        >
+                            <Crosshair size={16} className={isLocating ? 'animate-spin' : ''} />
+                            {isLocating ? 'Locating...' : 'Use GPS'}
+                        </button>
                     </div>
 
                     <form onSubmit={handleSaveVendor}>
@@ -61,21 +139,36 @@ export const AddVendor = () => {
                             </div>
                         </div>
 
-                        {/* 2. Location Section */}
+                        {/* 2. Visual Location Section */}
                         <div className={styles.section}>
                             <div className={styles.sectionTitle}>
-                                <Globe size={16} /> Geographic Data
+                                <Globe size={16} /> Location & Mapping
                             </div>
 
-                            {/* Decorative Map Preview */}
-                            <div className={styles.mapPreview} title="Map Preview (Visual Only)">
-                                <div className={styles.mapPulse}></div>
-                                <span className="mt-8 text-xs font-bold uppercase tracking-widest">
-                                    Simulated Location Source
-                                </span>
-                                <span className="font-mono text-xs text-slate-500 mt-1">
-                                    {newVendor.latitude?.toFixed(4)}, {newVendor.longitude?.toFixed(4)}
-                                </span>
+                            <div className="mb-4 text-xs text-slate-400 flex items-center gap-2">
+                                <span className="bg-amber-500/10 text-amber-500 px-2 py-0.5 rounded border border-amber-500/20">Tip</span>
+                                Click on the map to pinpoint the exact location.
+                            </div>
+
+                            {/* --- INTERACTIVE MAP --- */}
+                            <div className={styles.mapContainer}>
+                                <MapContainer
+                                    center={[newVendor.latitude || 28.61, newVendor.longitude || 77.23]}
+                                    zoom={13}
+                                    scrollWheelZoom={false}
+                                    className="h-full w-full"
+                                    style={{ height: '100%', background: '#0f172a' }}
+                                >
+                                    <TileLayer
+                                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                        url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
+                                    />
+                                    <MapUpdater center={[newVendor.latitude || 28.61, newVendor.longitude || 77.23]} />
+                                    <LocationMarker
+                                        position={[newVendor.latitude || 28.61, newVendor.longitude || 77.23]}
+                                        setPosition={updateCoords}
+                                    />
+                                </MapContainer>
                             </div>
 
                             <div className={styles.coordGrid}>
