@@ -88,8 +88,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     const persistCart = (newItems: CartItem[]) => {
         const cartPayload = newItems.map(i => ({ plantId: i.plant.id, quantity: i.quantity }));
         if (user) {
-            updateUser({ cart: cartPayload });
-            import('../services/api').then(({ syncCart }) => syncCart(user.email, cartPayload));
+            updateUser({ cart: cartPayload as any });
+            import('../services/api').then(({ syncCart }) => syncCart(cartPayload));
         } else {
             localStorage.setItem('guest_cart', JSON.stringify(newItems));
         }

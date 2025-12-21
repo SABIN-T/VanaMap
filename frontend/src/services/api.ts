@@ -2,6 +2,20 @@ import type { Plant, Vendor } from '../types';
 
 const API_URL = import.meta.env.VITE_API_URL || 'https://plantoxy.onrender.com/api';
 
+const getHeaders = () => {
+    const saved = localStorage.getItem('user');
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (saved) {
+        try {
+            const { token } = JSON.parse(saved);
+            if (token) headers['Authorization'] = `Bearer ${token}`;
+        } catch (e) {
+            console.error("Token parse error", e);
+        }
+    }
+    return headers;
+};
+
 export const fetchPlants = async (): Promise<Plant[]> => {
     try {
         const response = await fetch(`${API_URL}/plants`);
@@ -15,26 +29,24 @@ export const fetchPlants = async (): Promise<Plant[]> => {
 
 export const fetchUsers = async (): Promise<any[]> => {
     try {
-        const response = await fetch(`${API_URL}/users`);
+        const response = await fetch(`${API_URL}/users`, { headers: getHeaders() });
         if (!response.ok) throw new Error('Failed to fetch users');
         return await response.json();
     } catch (error) {
         console.error("Error fetching users:", error);
-        // Fallback Mock Data for UI demonstration
-        return [
-            { id: 'u1', name: 'Sabin Pol', email: 'sabin@example.com', role: 'admin' },
-            { id: 'u2', name: 'John Doe', email: 'john@example.com', role: 'user' },
-            { id: 'u3', name: 'Alice Smith', email: 'alice@garden.com', role: 'vendor' },
-            { id: 'u4', name: 'Green Nursery', email: 'contact@nursery.com', role: 'vendor' }
-        ];
+        return [];
     }
 };
 
+let vendorCache: Vendor[] | null = null;
 export const fetchVendors = async (): Promise<Vendor[]> => {
+    if (vendorCache) return vendorCache;
     try {
         const response = await fetch(`${API_URL}/vendors`);
         if (!response.ok) throw new Error('Failed to fetch vendors');
-        return await response.json();
+        const data = await response.json();
+        vendorCache = data;
+        return data;
     } catch (error) {
         console.error("Error fetching vendors:", error);
         return [];
@@ -45,7 +57,7 @@ export const registerVendor = async (vendorData: Partial<Vendor>): Promise<Vendo
     try {
         const response = await fetch(`${API_URL}/vendors`, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: getHeaders(),
             body: JSON.stringify(vendorData)
         });
         if (!response.ok) throw new Error('Failed to register vendor');
@@ -60,7 +72,7 @@ export const updateVendor = async (id: string, updates: Partial<Vendor>): Promis
     try {
         const response = await fetch(`${API_URL}/vendors/${id}`, {
             method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
+            headers: getHeaders(),
             body: JSON.stringify(updates)
         });
         if (!response.ok) throw new Error('Failed to update vendor');
@@ -74,7 +86,8 @@ export const updateVendor = async (id: string, updates: Partial<Vendor>): Promis
 export const deleteVendor = async (id: string): Promise<boolean> => {
     try {
         const response = await fetch(`${API_URL}/vendors/${id}`, {
-            method: 'DELETE'
+            method: 'DELETE',
+            headers: getHeaders()
         });
         return response.ok;
     } catch (error) {
@@ -86,26 +99,26 @@ export const deleteVendor = async (id: string): Promise<boolean> => {
 export const seedDatabase = async (plants: Plant[], vendors: Vendor[], users: unknown[] = []) => {
     await fetch(`${API_URL}/seed`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getHeaders(),
         body: JSON.stringify({ plants, vendors, users })
     });
 };
 
-export const toggleFavorite = async (email: string, plantId: string) => {
+export const toggleFavorite = async (plantId: string) => {
     const res = await fetch(`${API_URL}/user/favorites`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, plantId })
+        headers: getHeaders(),
+        body: JSON.stringify({ plantId })
     });
     if (!res.ok) throw new Error("Failed to toggle favorite");
     return res.json();
 };
 
-export const syncCart = async (email: string, cart: { plantId: string; quantity: number }[]) => {
+export const syncCart = async (cart: { plantId: string; quantity: number }[]) => {
     const res = await fetch(`${API_URL}/user/cart`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, cart })
+        headers: getHeaders(),
+        body: JSON.stringify({ cart })
     });
     if (!res.ok) throw new Error("Failed to sync cart");
     return res.json();
@@ -133,7 +146,7 @@ export const resetPassword = async (email: string, newPassword: string) => {
 
 export const fetchResetRequests = async () => {
     try {
-        const res = await fetch(`${API_URL}/admin/requests`);
+        const res = await fetch(`${API_URL}/admin/requests`, { headers: getHeaders() });
         if (!res.ok) throw new Error("Failed to fetch requests");
         return await res.json();
     } catch (error) {
@@ -145,7 +158,7 @@ export const fetchResetRequests = async () => {
 export const approveResetRequest = async (userId: string) => {
     const res = await fetch(`${API_URL}/admin/approve-reset`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getHeaders(),
         body: JSON.stringify({ userId })
     });
     if (!res.ok) throw new Error("Failed to approve");
@@ -155,7 +168,7 @@ export const approveResetRequest = async (userId: string) => {
 export const addPlant = async (plantData: Partial<Plant>) => {
     const res = await fetch(`${API_URL}/plants`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getHeaders(),
         body: JSON.stringify(plantData)
     });
     if (!res.ok) throw new Error("Failed to add plant");
@@ -165,7 +178,7 @@ export const addPlant = async (plantData: Partial<Plant>) => {
 export const updatePlant = async (id: string, updates: Partial<Plant>) => {
     const res = await fetch(`${API_URL}/plants/${id}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
+        headers: getHeaders(),
         body: JSON.stringify(updates)
     });
     if (!res.ok) throw new Error("Failed to update plant");
@@ -174,7 +187,8 @@ export const updatePlant = async (id: string, updates: Partial<Plant>) => {
 
 export const deletePlant = async (id: string) => {
     const res = await fetch(`${API_URL}/plants/${id}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: getHeaders()
     });
     if (!res.ok) throw new Error("Failed to delete plant");
     return res.json();
@@ -182,7 +196,7 @@ export const deletePlant = async (id: string) => {
 
 export const fetchNotifications = async () => {
     try {
-        const res = await fetch(`${API_URL}/admin/notifications`);
+        const res = await fetch(`${API_URL}/admin/notifications`, { headers: getHeaders() });
         if (!res.ok) throw new Error("Failed to fetch notifications");
         return await res.json();
     } catch (error) {

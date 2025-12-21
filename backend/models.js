@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
 
 const PlantSchema = new mongoose.Schema({
     id: { type: String, required: true, unique: true },
@@ -37,7 +38,7 @@ const VendorSchema = new mongoose.Schema({
 
 const UserSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
-    password: { type: String, required: true }, // In real app, hash this!
+    password: { type: String, required: true },
     name: { type: String, required: true },
     role: { type: String, enum: ['user', 'vendor', 'admin'], default: 'user' },
     favorites: [String],
@@ -49,6 +50,23 @@ const UserSchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
+// Hash password before saving
+UserSchema.pre('save', async function (next) {
+    if (!this.isModified('password')) return next();
+    try {
+        const salt = await bcrypt.genSalt(10);
+        this.password = await bcrypt.hash(this.password, salt);
+        next();
+    } catch (err) {
+        next(err);
+    }
+});
+
+// Compare password method
+UserSchema.methods.comparePassword = async function (candidatePassword) {
+    return bcrypt.compare(candidatePassword, this.password);
+};
+
 const NotificationSchema = new mongoose.Schema({
     type: { type: String, required: true },
     message: { type: String, required: true },
@@ -57,9 +75,17 @@ const NotificationSchema = new mongoose.Schema({
     read: { type: Boolean, default: false }
 });
 
+const ChatSchema = new mongoose.Schema({
+    userId: { type: String, required: true },
+    message: { type: String, required: true },
+    response: { type: String, required: true },
+    timestamp: { type: Date, default: Date.now }
+});
+
 module.exports = {
     Plant: mongoose.model('Plant', PlantSchema),
     Vendor: mongoose.model('Vendor', VendorSchema),
     User: mongoose.model('User', UserSchema),
-    Notification: mongoose.model('Notification', NotificationSchema)
+    Notification: mongoose.model('Notification', NotificationSchema),
+    Chat: mongoose.model('Chat', ChatSchema)
 };

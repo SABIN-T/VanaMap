@@ -37,7 +37,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     useEffect(() => {
         const saved = localStorage.getItem('user');
         if (saved) {
-            setUser(JSON.parse(saved));
+            try {
+                const parsed = JSON.parse(saved);
+                // In a perfect world, we'd verify the token is not expired here too
+                setUser(parsed.user || parsed);
+            } catch (e) {
+                console.error("Local storage corruption", e);
+                localStorage.removeItem('user');
+            }
         }
         setLoading(false);
     }, []);
@@ -50,27 +57,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 body: JSON.stringify(credentials)
             });
 
-            const contentType = res.headers.get("content-type");
-            if (contentType && contentType.indexOf("application/json") !== -1) {
-                const data = await res.json();
-                if (!res.ok) throw new Error(data.error || 'Login failed');
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || 'Login failed');
 
-                // Fetch latest profile to ensure favorites are synced
-                let fullProfile = data;
-                try {
-                    const profileRes = await fetch(`${API_URL}/user/profile?email=${data.email}`);
-                    if (profileRes.ok) {
-                        fullProfile = await profileRes.json();
-                    }
-                } catch (e) { console.warn("Could not fetch full profile", e); }
+            // Data contains { user, token }
+            const userData = { ...data.user, token: data.token };
 
-                setUser(fullProfile);
-                localStorage.setItem('user', JSON.stringify(fullProfile));
-                return { success: true };
-            } else {
-                const text = await res.text();
-                throw new Error(`Server Error (${res.status}): ${text.slice(0, 100)}`);
-            }
+            setUser(userData);
+            localStorage.setItem('user', JSON.stringify(userData));
+            return { success: true };
         } catch (err: any) {
             console.error(err);
             return { success: false, message: err.message };
@@ -85,18 +80,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 body: JSON.stringify(userData)
             });
 
-            const contentType = res.headers.get("content-type");
-            if (contentType && contentType.indexOf("application/json") !== -1) {
-                const data = await res.json();
-                if (!res.ok) throw new Error(data.error || 'Signup failed');
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || 'Signup failed');
 
-                setUser(data);
-                localStorage.setItem('user', JSON.stringify(data));
-                return { success: true };
-            } else {
-                const text = await res.text();
-                throw new Error(`Server Error (${res.status}): ${text.slice(0, 100)}`);
-            }
+            const fullUser = { ...data.user, token: data.token };
+            setUser(fullUser);
+            localStorage.setItem('user', JSON.stringify(fullUser));
+            return { success: true };
         } catch (err: any) {
             console.error(err);
             return { success: false, message: err.message };
@@ -106,33 +96,20 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const googleLogin = async (credentialResponse: any) => {
         try {
             if (!credentialResponse.credential) return false;
+            const decoded = jwtDecode(credentialResponse.credential) as { name: string; email: string };
 
-            const decoded = jwtDecode(credentialResponse.credential) as { sub: string; name: string; email: string };
+            const res = await fetch(`${API_URL}/auth/google-sync`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: decoded.email, name: decoded.name })
+            });
 
-            // Check if user exists in DB, otherwise create
-            let googleUser: User = {
-                id: decoded.sub || 'google-user',
-                name: decoded.name || 'Google User',
-                email: decoded.email,
-                role: 'user',
-                favorites: [],
-                cart: []
-            };
+            if (!res.ok) throw new Error("Google sync failed");
+            const data = await res.json();
+            const fullUser = { ...data.user, token: data.token };
 
-            // Attempt backend sync
-            try {
-                const res = await fetch(`${API_URL}/auth/google-sync`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(googleUser)
-                });
-                if (res.ok) {
-                    googleUser = await res.json();
-                }
-            } catch (e) { console.warn("Google sync failed", e); }
-
-            setUser(googleUser);
-            localStorage.setItem('user', JSON.stringify(googleUser));
+            setUser(fullUser);
+            localStorage.setItem('user', JSON.stringify(fullUser));
             return true;
         } catch (error) {
             console.error("Google Login Error:", error);
@@ -148,24 +125,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     const toggleFavorite = async (plantId: string) => {
         if (!user) return;
-
-        // Optimistic UI update
-        const isFav = user.favorites.includes(plantId);
+        const isFav = user.favorites?.includes(plantId);
         const newFavorites = isFav
             ? user.favorites.filter(id => id !== plantId)
-            : [...user.favorites, plantId];
+            : [...(user.favorites || []), plantId];
 
-        const updatedUser = { ...user, favorites: newFavorites };
-        setUser(updatedUser);
-        localStorage.setItem('user', JSON.stringify(updatedUser)); // Keep local sync
+        updateUser({ favorites: newFavorites });
 
         try {
-            // Push to MongoDB
             const { toggleFavorite } = await import('../services/api');
-            await toggleFavorite(user.email, plantId);
+            await toggleFavorite(plantId);
         } catch (e) {
-            console.error("Failed to sync favorites to Cloud", e);
-            // Verify state on next reload
+            console.error("Failed to sync favorites", e);
         }
     };
 
@@ -173,7 +144,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         setUser(prev => {
             if (!prev) return null;
             const updated = { ...prev, ...updates };
-            localStorage.setItem('user', JSON.stringify(updated));
+            // Persist the token too!
+            const saved = localStorage.getItem('user');
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                localStorage.setItem('user', JSON.stringify({ ...parsed, ...updates }));
+            }
             return updated;
         });
     };
