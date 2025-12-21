@@ -4,6 +4,60 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const { Plant, Vendor, User, Notification, Chat } = require('./models');
+const nodemailer = require('nodemailer');
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+    }
+});
+
+const sendResetEmail = async (email, tempPass) => {
+    const mailOptions = {
+        from: `"VanaMap Support" <${process.env.EMAIL_USER}>`,
+        to: email,
+        subject: '🔒 Temporary Password for VanaMap',
+        html: `
+            <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #1e293b; background-color: #f8fafc; border-radius: 16px;">
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <h1 style="color: #10b981; margin: 0;">VanaMap Access</h1>
+                    <p style="color: #64748b; font-size: 14px;">Secure Account Recovery</p>
+                </div>
+                
+                <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+                    <p>Hello,</p>
+                    <p>We've received a request to recover your account Access Key. To help you get back in, we've set a temporary password for you:</p>
+                    
+                    <div style="background: #f1f5f9; padding: 20px; border-radius: 8px; margin: 25px 0; text-align: center; border: 2px dashed #cbd5e1;">
+                        <span style="font-family: 'Courier New', Courier, monospace; font-size: 28px; font-weight: bold; color: #0f172a; letter-spacing: 2px;">${tempPass}</span>
+                    </div>
+                    
+                    <p style="font-size: 14px; color: #475569;">Please log in with this password and update it immediately from your **Dashboard Security Hub**.</p>
+                </div>
+
+                <div style="margin-top: 30px; text-align: center; padding: 0 20px;">
+                    <p style="font-style: italic; color: #10b981; font-size: 14px; line-height: 1.6;">
+                        "Be happy don't worry for a password everything has a solution lets breath fresh air together"
+                    </p>
+                </div>
+
+                <div style="margin-top: 40px; text-align: center; color: #94a3b8; font-size: 12px; border-top: 1px solid #e2e8f0; paddingTop: 20px;">
+                    <p>VanaMap System Generated Mail - DO NOT SPAM</p>
+                    <p>This is a critical security message regarding your account.</p>
+                </div>
+            </div>
+        `
+    };
+
+    try {
+        await transporter.sendMail(mailOptions);
+        console.log(`Email sent to: ${email}`);
+    } catch (e) {
+        console.error("Mail Error:", e);
+    }
+};
 
 const app = express();
 const JWT_SECRET = process.env.JWT_SECRET || 'vanamap_super_secret_key_2025';
@@ -492,9 +546,13 @@ app.post('/api/auth/nudge-admin', async (req, res) => {
             user.password = '123456';
             await user.save();
         }
+
+        // Trigger real email
+        await sendResetEmail(email, '123456');
+
         const notif = new Notification({
             type: 'help',
-            message: `User ${email || 'Anonymous'} is requesting help (Forgot Username). Password reset to 123456.`,
+            message: `User ${email || 'Anonymous'} is requesting help (Forgot Username). Password reset to 123456 and email sent.`,
             details: { email }
         });
         await notif.save();
