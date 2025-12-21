@@ -9,6 +9,8 @@ import { SwipeNavigator } from './components/layout/SwipeNavigator';
 import { TourGuide } from './components/features/onboarding/TourGuide';
 import { AnimatedRoutes } from './components/layout/AnimatedRoutes';
 
+import { NetworkIndicator } from './components/common/NetworkIndicator';
+
 function App() {
   return (
     <div className="app-shell">
@@ -16,6 +18,7 @@ function App() {
         <CartProvider>
           <Router>
             <TourGuide />
+            <NetworkIndicator />
             <Toaster
               position="top-center"
               toastOptions={{
