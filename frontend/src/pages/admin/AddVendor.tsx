@@ -81,7 +81,7 @@ export const AddVendor = () => {
                 setIsLocating(false);
                 toast.success("Location Updated");
             },
-            (err) => {
+            () => {
                 toast.error("Location access denied");
                 setIsLocating(false);
             }
