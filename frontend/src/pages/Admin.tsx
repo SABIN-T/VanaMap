@@ -6,7 +6,7 @@ import {
     Activity, Users, Sprout, MapPin,
     ArrowUpRight,
     Plus, Zap, Settings, Shield, LogOut,
-    Store, Edit, Database
+    Store, Edit, Database, Bell
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import styles from './Admin.module.css';
@@ -138,6 +138,10 @@ export const Admin = () => {
                         <button className={styles.actionBtn} onClick={() => navigate('/admin/diag')}>
                             <Activity size={24} className="text-blue-400" />
                             <span>Run Diag</span>
+                        </button>
+                        <button className={styles.actionBtn} onClick={() => navigate('/admin/notifications')}>
+                            <Bell size={24} className="text-orange-400" />
+                            <span>Notifications</span>
                         </button>
                         <button className={styles.actionBtn} onClick={() => navigate('/admin/settings')}>
                             <Settings size={24} className="text-slate-400" />

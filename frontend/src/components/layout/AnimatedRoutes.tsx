@@ -20,6 +20,7 @@ const ManageVendors = lazy(() => import('../../pages/admin/ManageVendors').then(
 const ManageUsers = lazy(() => import('../../pages/admin/ManageUsers').then(m => ({ default: m.ManageUsers })));
 const SystemDiagnostics = lazy(() => import('../../pages/admin/SystemDiagnostics').then(m => ({ default: m.SystemDiagnostics })));
 const Settings = lazy(() => import('../../pages/admin/Settings').then(m => ({ default: m.Settings })));
+const Notifications = lazy(() => import('../../pages/admin/Notifications').then(m => ({ default: m.Notifications })));
 
 const LoadingScreen = () => (
     <div style={{
@@ -67,6 +68,7 @@ export const AnimatedRoutes = () => {
                         <Route path="/admin/manage-users" element={<ManageUsers />} />
                         <Route path="/admin/diag" element={<SystemDiagnostics />} />
                         <Route path="/admin/settings" element={<Settings />} />
+                        <Route path="/admin/notifications" element={<Notifications />} />
 
                         <Route path="/doctor-ai" element={<DoctorAIPage />} />
                         <Route path="/guide" element={<Guide />} />
