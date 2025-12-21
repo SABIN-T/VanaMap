@@ -392,6 +392,24 @@ app.get('/api/admin/requests', auth, admin, async (req, res) => {
     res.json(users);
 });
 
+app.delete('/api/users/:id', auth, admin, async (req, res) => {
+    try {
+        await User.findByIdAndDelete(req.params.id);
+        res.json({ success: true });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.post('/api/admin/reset-user-password', auth, admin, async (req, res) => {
+    try {
+        const { userId, newPassword } = req.body;
+        const user = await User.findById(userId);
+        if (!user) return res.status(404).json({ error: "User not found" });
+        user.password = newPassword || '123456';
+        await user.save();
+        res.json({ success: true });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
 app.get('/api/admin/init-emergency', async (req, res) => {
     // Only allow if no admin exists or with a secret key
     const secret = req.query.secret;
@@ -447,6 +465,19 @@ app.post('/api/auth/reset-password-verify', async (req, res) => {
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
+});
+
+app.post('/api/auth/nudge-admin', async (req, res) => {
+    try {
+        const { email } = req.body;
+        const notif = new Notification({
+            type: 'help',
+            message: `User ${email || 'Anonymous'} is requesting help (Forgot Username). Please contact them.`,
+            details: { email }
+        });
+        await notif.save();
+        res.json({ success: true });
+    } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
 app.post('/api/auth/reset-password-request', async (req, res) => {

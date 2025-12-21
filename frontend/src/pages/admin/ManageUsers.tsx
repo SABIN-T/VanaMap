@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import { Users, Key, Shield, Search, X, User as UserIcon, Lock } from 'lucide-react';
 import { AdminLayout } from './AdminLayout';
-import { fetchUsers, resetPassword } from '../../services/api';
+import { fetchUsers, adminResetPassword, deleteUser } from '../../services/api';
 import styles from './ManageUsers.module.css';
 
 export const ManageUsers = () => {
@@ -44,13 +44,36 @@ export const ManageUsers = () => {
         if (!selectedUser || !resetPwd) return;
         const tid = toast.loading("Updating Credentials...");
         try {
-            await resetPassword(selectedUser.email, resetPwd);
+            await adminResetPassword(selectedUser.id, resetPwd);
             toast.success("Security Credentials Updated", { id: tid, icon: '🔐' });
             setResetPwd("");
             setSelectedUser(null);
         } catch (err) {
             toast.error("Update prevented by security policy", { id: tid });
         }
+    };
+
+    const handleQuickReset = async () => {
+        if (!selectedUser) return;
+        if (!window.confirm("Reset password to '123456'?")) return;
+        const tid = toast.loading("Reseting to Default...");
+        try {
+            await adminResetPassword(selectedUser.id, '123456');
+            toast.success("Password Reset to '123456'", { id: tid });
+            setSelectedUser(null);
+        } catch (e) { toast.error("Reset Failed"); }
+    };
+
+    const handleDelete = async () => {
+        if (!selectedUser) return;
+        if (!window.confirm(`Permanently DELETE user ${selectedUser.email}?`)) return;
+        const tid = toast.loading("Deleting User...");
+        try {
+            await deleteUser(selectedUser.id);
+            toast.success("User Deleted", { id: tid });
+            setSelectedUser(null);
+            loadUsers();
+        } catch (e) { toast.error("Delete Failed", { id: tid }); }
     };
 
     return (
@@ -128,6 +151,16 @@ export const ManageUsers = () => {
                                     Security Actions
                                 </div>
 
+                                <div className="mb-4">
+                                    <button
+                                        type="button"
+                                        onClick={handleQuickReset}
+                                        className={styles.quickResetBtn}
+                                    >
+                                        Auto-Reset to '123456'
+                                    </button>
+                                </div>
+
                                 <form onSubmit={handlePasswordReset}>
                                     <div className={styles.targetInfo}>
                                         <div className={styles.targetLabel}>Target Account</div>
@@ -135,7 +168,7 @@ export const ManageUsers = () => {
                                     </div>
 
                                     <div className={styles.formGroup}>
-                                        <label className={styles.label}>New Secure Password</label>
+                                        <label className={styles.label}>Custom Password</label>
                                         <div className="relative">
                                             <input
                                                 type="text"
@@ -161,6 +194,15 @@ export const ManageUsers = () => {
                                         Cancel
                                     </button>
                                 </form>
+
+                                <div className="mt-8 pt-4 border-t border-slate-700">
+                                    <button
+                                        onClick={handleDelete}
+                                        className={styles.deleteBtn}
+                                    >
+                                        Delete Account
+                                    </button>
+                                </div>
                             </div>
                         ) : (
                             <div className={styles.emptyPanel}>

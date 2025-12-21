@@ -240,3 +240,26 @@ export const logVendorContact = async (data: { vendorId: string, vendorName: str
         console.error("Failed to log contact", err);
     }
 };
+
+export const nudgeAdmin = async (email: string) => {
+    return await fetch(`${API_URL}/auth/nudge-admin`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+    }).then(res => res.json());
+};
+
+export const deleteUser = async (id: string) => {
+    return await fetch(`${API_URL}/users/${id}`, {
+        method: 'DELETE',
+        headers: getHeaders()
+    }).then(res => res.json());
+};
+
+export const adminResetPassword = async (userId: string, newPassword?: string) => {
+    return await fetch(`${API_URL}/admin/reset-user-password`, {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify({ userId, newPassword })
+    }).then(res => res.json());
+};

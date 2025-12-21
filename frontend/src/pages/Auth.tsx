@@ -48,6 +48,15 @@ export const Auth = () => {
         }
     }, [user, navigate]);
 
+    const handleNudge = async () => {
+        if (!email) { toast.error("Please enter your email address first"); return; }
+        const tid = toast.loading("Signaling Admin...");
+        try {
+            await import('../services/api').then(api => api.nudgeAdmin(email));
+            toast.success("Admin Alerted! Manual recovery initiated.", { id: tid });
+        } catch (e) { toast.error("Failed to signal admin", { id: tid }); }
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -278,6 +287,25 @@ export const Auth = () => {
                         {view === 'forgot' && 'Verify & Update Password'}
                         {view === 'reset' && 'Update Security Key'}
                     </Button>
+
+                    {view === 'forgot' && (
+                        <div style={{ marginTop: '1.5rem', textAlign: 'center', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '1rem' }}>
+                            <p style={{ fontSize: '0.85rem', color: '#94a3b8', marginBottom: '0.5rem' }}>
+                                Forgot username too?
+                            </p>
+                            <button
+                                type="button"
+                                onClick={handleNudge}
+                                className={styles.linkBtn}
+                                style={{ color: '#f59e0b', fontSize: '0.9rem', marginBottom: '1rem' }}
+                            >
+                                Contact Admin (Trigger Reset)
+                            </button>
+                            <p style={{ fontSize: '0.75rem', color: '#10b981', fontStyle: 'italic', maxWidth: '80%', margin: '0 auto', lineHeight: '1.4' }}>
+                                "Be happy don't worry for a password everything has a solution lets breath fresh air together"
+                            </p>
+                        </div>
+                    )}
                 </form>
 
                 <div className={styles.footer}>
