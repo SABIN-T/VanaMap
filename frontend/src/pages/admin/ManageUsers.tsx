@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
-import { Users, Key, Shield, Search, X, User as UserIcon, Lock } from 'lucide-react';
+import { fetchUsers, adminResetPassword, deleteUser, fetchNotifications } from '../../services/api';
+import { AlertCircle, Users, Key, Shield, Search, X, User as UserIcon, Lock } from 'lucide-react';
 import { AdminLayout } from './AdminLayout';
-import { fetchUsers, adminResetPassword, deleteUser } from '../../services/api';
 import styles from './ManageUsers.module.css';
 
 export const ManageUsers = () => {
@@ -11,8 +11,12 @@ export const ManageUsers = () => {
     const [searchQuery, setSearchQuery] = useState("");
     const [selectedUser, setSelectedUser] = useState<any>(null);
     const [resetPwd, setResetPwd] = useState("");
+    const [alerts, setAlerts] = useState<any[]>([]);
 
-    useEffect(() => { loadUsers(); }, []);
+    useEffect(() => {
+        loadUsers();
+        loadAlerts();
+    }, []);
 
     // client-side search filtering
     useEffect(() => {
@@ -37,6 +41,14 @@ export const ManageUsers = () => {
             console.error(e);
             toast.error("Failed to load users");
         }
+    };
+
+    const loadAlerts = async () => {
+        try {
+            const notifs = await fetchNotifications();
+            // Filter only help/contact triggers
+            setAlerts(notifs.filter((n: any) => n.type === 'help'));
+        } catch (e) { console.error("Alerts load failed", e); }
     };
 
     const handlePasswordReset = async (e: React.FormEvent) => {
@@ -79,6 +91,34 @@ export const ManageUsers = () => {
     return (
         <AdminLayout title="User Security Directory">
             <div className={styles.pageContainer}>
+
+                {/* ALARM / ALERTS SECTION */}
+                {alerts.length > 0 && (
+                    <div className={styles.alarmContainer}>
+                        {alerts.map(alert => (
+                            <div key={alert._id} className={styles.alarmCard}>
+                                <div className={styles.alarmContent}>
+                                    <AlertCircle className={styles.alarmIcon} size={24} />
+                                    <div>
+                                        <span style={{ color: 'white' }}>CRITICAL HELP REQUEST:</span>{' '}
+                                        User <span className={styles.alarmEmail}>{alert.details?.email || alert.message.split(' ')[1]}</span> triggered admin recovery.
+                                        <span className={styles.alarmTime}>{new Date(alert.createdAt).toLocaleTimeString()}</span>
+                                    </div>
+                                </div>
+                                <button
+                                    className={styles.actionBtn}
+                                    style={{ background: 'rgba(220, 38, 38, 0.2)', color: '#fca5a5' }}
+                                    onClick={() => {
+                                        setSearchQuery(alert.details?.email || "");
+                                        // Optional: Clear alert on click logic could go here
+                                    }}
+                                >
+                                    Review Now
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                )}
 
                 {/* Search Bar */}
                 <div className={styles.searchContainer}>
