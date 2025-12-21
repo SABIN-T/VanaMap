@@ -30,12 +30,6 @@ export const UserDashboard = () => {
     });
 
     useEffect(() => {
-        if (!loading && user?.role === 'admin') {
-            navigate('/admin', { replace: true });
-        }
-    }, [user, loading, navigate]);
-
-    useEffect(() => {
         const loadVendorData = async () => {
             if (user?.role === 'vendor') {
                 try {

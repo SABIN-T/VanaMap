@@ -26,8 +26,11 @@ export const AdminLogin = () => {
         try {
             const result = await login({ email, password });
             if (result.success) {
-                // The useEffect above will handle redirection
                 toast.success("Access Granted. Welcome, Overseer.", { id: tid });
+                // Explicitly navigate to admin dashboard
+                setTimeout(() => {
+                    navigate('/admin', { replace: true });
+                }, 500);
             } else {
                 toast.error(result.message || "Invalid credentials for security level 4", { id: tid });
                 setIsSubmitting(false);
