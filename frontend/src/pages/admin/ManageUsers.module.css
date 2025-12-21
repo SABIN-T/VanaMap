@@ -470,3 +470,39 @@
     color: rgba(252, 165, 165, 0.6);
     margin-left: 0.5rem;
 }
+
+@media (max-width: 640px) {
+    .alarmCard {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .alarmContent {
+        font-size: 0.85rem;
+    }
+
+    .searchBar {
+        font-size: 0.95rem;
+        padding: 0.8rem 3rem;
+    }
+
+    .userCard {
+        padding: 1rem;
+    }
+
+    .userInfo {
+        gap: 0.75rem;
+    }
+
+    .avatar {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+
+    .sidebar {
+        position: static;
+        margin-top: 2rem;
+    }
+}

@@ -295,5 +295,64 @@
         left: 0;
         top: 0;
         bottom: 0;
+        z-index: 2000;
+        box-shadow: 20px 0 50px rgba(0, 0, 0, 0.5);
+    }
+
+    .sidebarClosed {
+        transform: translateX(-100%) !important;
+        width: 280px;
+        /* Keep width for animation consistency */
+    }
+
+    .sidebarOpen {
+        transform: translateX(0) !important;
+    }
+
+    .main {
+        width: 100%;
+    }
+
+    .topBar {
+        padding: 0 1rem;
+    }
+
+    .breadcrumbs {
+        display: none;
+    }
+
+    .content {
+        padding: 1.5rem;
+    }
+
+    .pageTitle {
+        font-size: 1.5rem;
+    }
+
+    .adminInfo {
+        display: none;
+    }
+
+    .adminBadge {
+        padding: 0.25rem;
+    }
+}
+
+.backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(2, 6, 23, 0.8);
+    backdrop-filter: blur(4px);
+    z-index: 1500;
+    animation: backdropFadeIn 0.3s ease-out;
+}
+
+@keyframes backdropFadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
     }
 }

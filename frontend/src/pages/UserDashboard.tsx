@@ -7,6 +7,7 @@ import { useAuth } from '../context/AuthContext';
 import { fetchPlants, fetchVendors, updateVendor, changePassword } from '../services/api';
 import type { Plant, Vendor } from '../types';
 import toast from 'react-hot-toast';
+import styles from './UserDashboard.module.css';
 
 export const UserDashboard = () => {
     const { items, removeFromCart } = useCart();
@@ -302,51 +303,41 @@ export const UserDashboard = () => {
                     background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(8px)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem'
                 }}>
-                    <div style={{
-                        width: '100%', maxWidth: '400px',
-                        background: 'rgba(15, 23, 42, 0.95)', border: '1px solid rgba(255,255,255,0.1)',
-                        borderRadius: '24px', padding: '2.5rem',
-                        boxShadow: '0 25px 50px -12px rgba(0,0,0,0.5)',
-                        animation: 'fadeInSlide 0.3s ease-out'
+                    <div className="glass-panel" style={{
+                        width: '100%', maxWidth: '400px', padding: '2.5rem', borderRadius: '24px'
                     }}>
                         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-                            <Shield size={40} color="#00ff9d" style={{ marginBottom: '1rem' }} />
-                            <h2 style={{ fontSize: '1.5rem', fontWeight: 800, margin: 0 }}>Update Security Key</h2>
-                            <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginTop: '0.5rem' }}>Verify identity to change access credentials</p>
+                            <div className={styles.passwordModalIcon}>
+                                <Lock size={28} />
+                            </div>
+                            <h2 className={styles.passwordModalTitle}>Update Security</h2>
+                            <p className={styles.passwordModalSubtitle}>Change your account password</p>
                         </div>
-
                         <form onSubmit={handlePasswordChange} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
                             <div>
-                                <label style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', display: 'block', marginBottom: '0.5rem' }}>Old Password</label>
+                                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.85rem', fontWeight: 600, color: '#94a3b8' }}>Current Password</label>
                                 <input
-                                    type="password"
-                                    required
+                                    type="password" required
                                     value={pwdForm.old}
                                     onChange={e => setPwdForm({ ...pwdForm, old: e.target.value })}
-                                    placeholder="••••••••"
                                     style={{ width: '100%', padding: '0.9rem', borderRadius: '12px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
                                 />
                             </div>
                             <div>
-                                <label style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', display: 'block', marginBottom: '0.5rem' }}>New Password</label>
+                                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.85rem', fontWeight: 600, color: '#94a3b8' }}>New Password</label>
                                 <input
-                                    type="password"
-                                    required
-                                    minLength={6}
+                                    type="password" required
                                     value={pwdForm.new}
                                     onChange={e => setPwdForm({ ...pwdForm, new: e.target.value })}
-                                    placeholder="••••••••"
                                     style={{ width: '100%', padding: '0.9rem', borderRadius: '12px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
                                 />
                             </div>
                             <div>
-                                <label style={{ fontSize: '0.75rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', display: 'block', marginBottom: '0.5rem' }}>Confirm New Password</label>
+                                <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.85rem', fontWeight: 600, color: '#94a3b8' }}>Confirm New Password</label>
                                 <input
-                                    type="password"
-                                    required
+                                    type="password" required
                                     value={pwdForm.confirm}
                                     onChange={e => setPwdForm({ ...pwdForm, confirm: e.target.value })}
-                                    placeholder="••••••••"
                                     style={{ width: '100%', padding: '0.9rem', borderRadius: '12px', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }}
                                 />
                             </div>
@@ -360,24 +351,17 @@ export const UserDashboard = () => {
                 </div>
             )}
 
-            <div style={{ marginBottom: '3rem', display: 'flex', justifyContent: 'space-between', alignItems: 'end', flexWrap: 'wrap', gap: '1rem' }}>
-                <div>
-                    <h1 style={{
-                        fontSize: '2.5rem',
-                        fontWeight: '800',
-                        margin: 0,
-                        background: 'var(--gradient-primary)',
-                        WebkitBackgroundClip: 'text',
-                        WebkitTextFillColor: 'transparent'
-                    }}>
+            <div className={styles.header}>
+                <div className={styles.titleSection}>
+                    <h1 className={styles.dashboardTitle}>
                         User Dashboard
                     </h1>
-                    <p style={{ color: 'var(--color-text-muted)', marginTop: '0.5rem', fontSize: '1.1rem' }}>
+                    <p className={styles.subtitle}>
                         Welcome back, {user.name}!
                     </p>
                 </div>
 
-                <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                <div className={styles.actionGroup}>
                     <Button onClick={() => setShowPasswordModal(true)} variant="outline" style={{ gap: '0.5rem', display: 'flex', alignItems: 'center', borderColor: 'rgba(239, 68, 68, 0.2)', color: '#f87171' }}>
                         <Lock size={18} /> Reset Password
                     </Button>
@@ -433,7 +417,7 @@ export const UserDashboard = () => {
                     gap: '1.5rem',
                     animation: 'fadeInSlide 0.6s ease-out'
                 }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
                         <div>
                             <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#facc15', margin: 0 }}>System Management Active</h2>
                             <p style={{ color: '#94a3b8', marginTop: '0.5rem' }}>You are currently authenticated as a global administrator.</p>
@@ -467,28 +451,15 @@ export const UserDashboard = () => {
                 </div>
             )}
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '4rem' }}>
-                <style>{`
-                    @keyframes fadeInSlide {
-                        from { opacity: 0; transform: translateY(20px); }
-                        to { opacity: 1; transform: translateY(0); }
-                    }
-                `}</style>
-
+            <div className={styles.section}>
                 {/* FAVORITES SECTION */}
                 <section>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
-                        <div style={{ padding: '0.75rem', background: 'rgba(239, 68, 68, 0.1)', borderRadius: '1rem', color: '#ef4444' }}>
+                    <div className={styles.sectionHeader}>
+                        <div className={styles.sectionIcon} style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444' }}>
                             <Heart size={24} fill="#ef4444" />
                         </div>
-                        <h2 style={{ fontSize: '1.8rem', fontWeight: 700, margin: 0 }}>My Favorites</h2>
-                        <span style={{
-                            background: 'rgba(255,255,255,0.05)',
-                            padding: '0.25rem 0.8rem',
-                            borderRadius: '99px',
-                            color: '#ef4444',
-                            fontWeight: 600
-                        }}>
+                        <h2 className={styles.sectionTitle}>My Favorites</h2>
+                        <span className={styles.badge} style={{ color: '#ef4444' }}>
                             {user.favorites?.length || 0}
                         </span>
                     </div>
@@ -505,21 +476,11 @@ export const UserDashboard = () => {
                             <Link to="/"><Button variant="outline">Browse Plants</Button></Link>
                         </div>
                     ) : (
-                        <div style={{
-                            display: 'grid',
-                            gridTemplateColumns: 'repeat(auto-fill, minmax(250px, 1fr))',
-                            gap: '1.5rem'
-                        }}>
+                        <div className={styles.grid}>
                             {favoritePlants.map(plant => (
-                                <div key={plant.id} className="glass-panel" style={{
-                                    padding: '0',
-                                    borderRadius: '1.5rem',
-                                    overflow: 'hidden',
-                                    transition: 'transform 0.2s',
-                                    position: 'relative'
-                                }}>
-                                    <div style={{ height: '180px', position: 'relative' }}>
-                                        <img src={plant.imageUrl} alt={plant.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                <div key={plant.id} className={styles.card}>
+                                    <div className={styles.cardImage}>
+                                        <img src={plant.imageUrl} alt={plant.name} />
                                         <button
                                             onClick={() => handleRemoveFavorite(plant.id)}
                                             title="Remove from favorites"
@@ -540,9 +501,9 @@ export const UserDashboard = () => {
                                             <Heart size={16} fill="#ef4444" color="#ef4444" />
                                         </button>
                                     </div>
-                                    <div style={{ padding: '1.25rem' }}>
-                                        <h3 style={{ fontSize: '1.1rem', fontWeight: 700, margin: '0 0 0.25rem 0' }}>{plant.name}</h3>
-                                        <p style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)', margin: 0, fontStyle: 'italic' }}>{plant.scientificName}</p>
+                                    <div className={styles.cardContent}>
+                                        <h3 className={styles.cardTitle}>{plant.name}</h3>
+                                        <p className={styles.cardSubtitle}>{plant.scientificName}</p>
                                         <div style={{ marginTop: '1rem', display: 'flex', gap: '0.5rem' }}>
                                             <span style={{ fontSize: '0.75rem', padding: '0.2rem 0.6rem', borderRadius: '4px', background: 'rgba(56, 189, 248, 0.1)', color: '#38bdf8' }}>
                                                 {(plant as any).waterNeeds || "Moderate"} Water
@@ -555,27 +516,21 @@ export const UserDashboard = () => {
                     )}
                 </section>
 
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '4rem' }}>
+                <div className={styles.sideGrid}>
                     {/* WISHLIST / CART SECTION */}
                     <section>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1.5rem' }}>
-                            <div style={{ padding: '0.75rem', background: 'rgba(56, 189, 248, 0.1)', borderRadius: '1rem', color: '#38bdf8' }}>
+                        <div className={styles.sectionHeader}>
+                            <div className={styles.sectionIcon} style={{ background: 'rgba(56, 189, 248, 0.1)', color: '#38bdf8' }}>
                                 <ShoppingBag size={24} />
                             </div>
-                            <h2 style={{ fontSize: '1.8rem', fontWeight: 700, margin: 0 }}>Shopping List</h2>
-                            <span style={{
-                                background: 'rgba(255,255,255,0.05)',
-                                padding: '0.25rem 0.8rem',
-                                borderRadius: '99px',
-                                color: '#38bdf8',
-                                fontWeight: 600
-                            }}>
+                            <h2 className={styles.sectionTitle}>Shopping List</h2>
+                            <span className={styles.badge} style={{ color: '#38bdf8' }}>
                                 {items.length}
                             </span>
                         </div>
 
                         {items.length === 0 ? (
-                            <div className="glass-panel" style={{ padding: '2rem', textAlign: 'center', borderRadius: '1.5rem' }}>
+                            <div className="glass-panel" style={{ padding: '2.5rem', textAlign: 'center', borderRadius: '1.5rem' }}>
                                 <p style={{ color: 'var(--color-text-muted)' }}>Your cart is empty.</p>
                                 <Link to="/" style={{ display: 'inline-block', marginTop: '1rem' }}><Button variant="outline" size="sm">Add Items</Button></Link>
                             </div>
@@ -607,10 +562,11 @@ export const UserDashboard = () => {
 
                     {/* Nearby Shops Section */}
                     <section>
-                        <div style={{ marginBottom: '2rem' }}>
-                            <h2 style={{ fontSize: '1.5rem', margin: 0, display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                                <MapPin color="#facc15" /> Nearby Shops
-                            </h2>
+                        <div className={styles.sectionHeader}>
+                            <div className={styles.sectionIcon} style={{ background: 'rgba(250, 204, 21, 0.1)', color: '#facc15' }}>
+                                <MapPin size={24} />
+                            </div>
+                            <h2 className={styles.sectionTitle}>Nearby Shops</h2>
                         </div>
                         <div className="glass-panel" style={{ padding: '2rem', borderRadius: '1.5rem' }}>
                             <div style={{ background: 'url(https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?auto=format&fit=crop&q=80)', height: '150px', borderRadius: '1rem', backgroundSize: 'cover', backgroundPosition: 'center', marginBottom: '1.5rem', position: 'relative' }}>
