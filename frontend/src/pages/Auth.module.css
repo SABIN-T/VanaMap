@@ -207,6 +207,69 @@
     }
 }
 
+.adminPortal {
+    margin-top: 1.5rem;
+    animation: fadeIn 0.8s ease-out;
+}
+
+.adminDivider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 1.5rem 0;
+    color: rgba(255, 255, 255, 0.2);
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+}
+
+.adminDivider::before,
+.adminDivider::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.adminDivider span {
+    padding: 0 1rem;
+}
+
+.adminLoginBtn {
+    width: 100%;
+    padding: 1.1rem;
+    border-radius: 1.25rem;
+    background: rgba(250, 204, 21, 0.05);
+    border: 1px solid rgba(250, 204, 21, 0.1);
+    color: #facc15;
+    font-size: 0.9rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.adminLoginBtn:hover {
+    background: rgba(250, 204, 21, 0.15);
+    border-color: rgba(250, 204, 21, 0.3);
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
 @media(max-width: 600px) {
     .authCard {
         padding: 2rem;

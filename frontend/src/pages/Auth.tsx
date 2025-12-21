@@ -92,6 +92,20 @@ export const Auth = () => {
         }
     };
 
+    const handleAdminLogin = async () => {
+        const tid = toast.loading("Establishing Secure Connection...");
+        try {
+            const result = await login({ email: 'admin@plantai.com', password: 'Defender123' });
+            if (result.success) {
+                toast.success("Identity Verified. Accessing Command Center...", { id: tid });
+            } else {
+                toast.error("Security mismatch. Please use valid credentials.", { id: tid });
+            }
+        } catch (err) {
+            toast.error("Gateway timeout. Try again.", { id: tid });
+        }
+    };
+
     return (
         <div className={styles.authContainer}>
             <div className={styles.authCard}>
@@ -261,28 +275,16 @@ export const Auth = () => {
                             <p style={{ marginBottom: '1rem', color: 'var(--color-text-muted)', fontSize: '0.85rem' }}>
                                 New to VanaMap? <button onClick={() => setView('signup')}>Initialize Identity</button>
                             </p>
-                            <div style={{ borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '1rem' }}>
+                            <div className={styles.adminPortal}>
+                                <div className={styles.adminDivider}>
+                                    <span>SYSTEM OVERSEER</span>
+                                </div>
                                 <button
-                                    onClick={() => { setEmail('admin@plantai.com'); setPassword('Defender123'); }}
-                                    style={{
-                                        width: '100%',
-                                        padding: '0.75rem',
-                                        borderRadius: '12px',
-                                        background: 'rgba(250, 204, 21, 0.1)',
-                                        border: '1px solid rgba(250, 204, 21, 0.2)',
-                                        color: '#facc15',
-                                        fontSize: '0.8rem',
-                                        fontWeight: 600,
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        gap: '0.5rem',
-                                        transition: 'all 0.3s'
-                                    }}
-                                    onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(250, 204, 21, 0.2)'}
-                                    onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(250, 204, 21, 0.1)'}
+                                    onClick={handleAdminLogin}
+                                    className={styles.adminLoginBtn}
+                                    title="Access Management Suite"
                                 >
-                                    <Shield size={16} /> Quick Admin Access
+                                    <Shield size={18} /> Secure Admin Access
                                 </button>
                             </div>
                         </>
