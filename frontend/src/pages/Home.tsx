@@ -321,7 +321,7 @@ export const Home = () => {
                 </div>
             </section>
 
-            <div className="container" id="plant-grid" ref={plantsSectionRef} style={{ scrollMarginTop: '2rem' }}>
+            <div className="container" id="plant-grid" style={{ scrollMarginTop: '2rem' }}>
                 <div className={styles.sectionHeader}>
                     <h2 style={{ fontSize: '2.5rem', fontWeight: 900 }}>{weather ? 'BEST MATCHES FOR YOU' : 'EXPLORE PLANTS'}</h2>
                     <p style={{ color: 'var(--color-text-muted)' }}>{weather ? 'These plants grow best in your area.' : 'Browse our collection of air-purifying plants.'}</p>
@@ -430,7 +430,7 @@ export const Home = () => {
                     </div>
                 )}
 
-                <div className={styles.grid}>
+                <div className={styles.grid} ref={plantsSectionRef} style={{ scrollMarginTop: '80px' }}>
                     {plantsLoading ? (
                         <div style={{ gridColumn: '1 / -1', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
                             {isSlowLoading && (
