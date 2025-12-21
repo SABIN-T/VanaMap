@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/common/Button';
-import { User, ArrowLeft, Store, AlertTriangle } from 'lucide-react';
+import { User, ArrowLeft, Store } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { countryCodes } from '../data/countryCodes';
 import { countryStates } from '../data/states';
@@ -72,13 +72,13 @@ export const Auth = () => {
                 toast.error(`Signup Failed: ${result.message} `, { id: tid });
             }
         } else if (view === 'forgot') {
-            const tid = toast.loading("Sending Request...");
+            const tid = toast.loading("Verifying Identity...");
             try {
-                await import('../services/api').then(api => api.requestPasswordReset(email));
-                toast.success("Request sent! Pending Admin Approval.", { id: tid });
+                await import('../services/api').then(api => api.resetPasswordVerify(email, name, password));
+                toast.success("Password Reset Successful! Login with new credentials.", { id: tid });
                 setView('login');
-            } catch (err) {
-                toast.error("Failed to send request. Check email.", { id: tid });
+            } catch (err: any) {
+                toast.error(err.message || "Verification failed. Check Name/Email.", { id: tid });
             }
         } else if (view === 'reset') {
             const tid = toast.loading("Updating Password...");
@@ -126,12 +126,6 @@ export const Auth = () => {
                     </p>
                 </div>
 
-                {view === 'forgot' && (
-                    <div className={styles.noticeBox}>
-                        <AlertTriangle size={20} style={{ minWidth: '20px' }} />
-                        <span>Security Notice: Reset requests are manually audited by Admin. This process may take up to 1 hour for valid verification.</span>
-                    </div>
-                )}
 
                 {/* Role Toggle */}
                 {view === 'signup' && (
@@ -236,11 +230,25 @@ export const Auth = () => {
                         />
                     </div>
 
-                    {view !== 'forgot' && (
+                    {view === 'forgot' && (
+                        <div className={styles.formGroup}>
+                            <label className={styles.label}>Username (As Before)</label>
+                            <input
+                                className={styles.input}
+                                type="text"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                required
+                                placeholder="Verify your identity"
+                            />
+                        </div>
+                    )}
+
+                    {(view === 'login' || view === 'signup' || view === 'reset' || view === 'forgot') && (
                         <div className={styles.formGroup}>
                             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
                                 <label className={styles.label} style={{ marginBottom: 0 }}>
-                                    {view === 'reset' ? 'New Password' : 'Password'}
+                                    {(view === 'reset' || view === 'forgot') ? 'New Password' : 'Password'}
                                 </label>
                                 {view === 'login' && (
                                     <button
@@ -267,7 +275,7 @@ export const Auth = () => {
                     <Button type="submit" variant="primary" className={styles.submitBtn}>
                         {view === 'login' && 'Authenticate'}
                         {view === 'signup' && 'Complete Registration'}
-                        {view === 'forgot' && 'Submit Request'}
+                        {view === 'forgot' && 'Verify & Update Password'}
                         {view === 'reset' && 'Update Security Key'}
                     </Button>
                 </form>

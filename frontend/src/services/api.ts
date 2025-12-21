@@ -125,12 +125,25 @@ export const syncCart = async (cart: { plantId: string; quantity: number }[]) =>
 };
 
 export const requestPasswordReset = async (email: string) => {
-    const res = await fetch(`${API_URL}/auth/forgot-password`, {
+    const res = await fetch(`${API_URL}/auth/reset-password-request`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email })
     });
     if (!res.ok) throw new Error("Failed to request reset");
+    return res.json();
+};
+
+export const resetPasswordVerify = async (email: string, name: string, newPassword: string) => {
+    const res = await fetch(`${API_URL}/auth/reset-password-verify`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, name, newPassword })
+    });
+    if (!res.ok) {
+        const d = await res.json();
+        throw new Error(d.error || "Verification failed");
+    }
     return res.json();
 };
 

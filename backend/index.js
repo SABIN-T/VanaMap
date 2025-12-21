@@ -283,6 +283,15 @@ app.get('/api/users', auth, admin, async (req, res) => {
     }
 });
 
+app.get('/api/admin/notifications', auth, admin, async (req, res) => {
+    try {
+        const notifs = await Notification.find({}).sort({ date: -1 }).limit(20);
+        res.json(notifs);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // --- AUTH ---
 
 app.post('/api/auth/signup', async (req, res) => {
@@ -406,6 +415,38 @@ app.post('/api/seed', auth, admin, async (req, res) => {
     if (plants) { await Plant.deleteMany({}); await Plant.insertMany(plants); }
     if (vendors) { await Vendor.deleteMany({}); await Vendor.insertMany(vendors); }
     res.json({ message: 'Seeded' });
+});
+
+app.post('/api/auth/reset-password-verify', async (req, res) => {
+    try {
+        const { email, name, newPassword } = req.body;
+        const user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(404).json({ error: "Account not found." });
+        }
+
+        // Verify "username as before"
+        if (user.name.trim().toLowerCase() !== name.trim().toLowerCase()) {
+            return res.status(400).json({ error: "Verification failed: Name does not match our records." });
+        }
+
+        user.password = newPassword;
+        user.resetRequest = { requested: false, approved: true, requestDate: new Date() };
+        await user.save();
+
+        // Notify Admin via Notification system
+        const notif = new Notification({
+            type: 'security',
+            message: `User ${user.name} (${user.email}) changed password via verified reset.`,
+            details: { userId: user._id, email: user.email }
+        });
+        await notif.save();
+
+        res.json({ success: true, message: "Password updated successfully." });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 });
 
 app.post('/api/auth/reset-password-request', async (req, res) => {
