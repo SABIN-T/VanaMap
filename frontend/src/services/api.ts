@@ -205,6 +205,17 @@ export const fetchNotifications = async () => {
     }
 };
 
+export const fetchVendorNotifications = async () => {
+    try {
+        const res = await fetch(`${API_URL}/vendor/notifications`, { headers: getHeaders() });
+        if (!res.ok) throw new Error("Failed to fetch vendor notifications");
+        return await res.json();
+    } catch (error) {
+        console.error("Error fetching vendor notifications:", error);
+        return [];
+    }
+};
+
 export const logVendorContact = async (data: { vendorId: string, vendorName: string, userEmail: string, contactType: 'whatsapp' | 'call' }) => {
     try {
         await fetch(`${API_URL}/tracking/vendor-contact`, {

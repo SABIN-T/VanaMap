@@ -2,8 +2,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { Button } from '../components/common/Button';
-import { Store, Phone, MessageCircle, Navigation, Info, Locate } from 'lucide-react';
-import { registerVendor, fetchVendors, updateVendor } from '../services/api';
+import { Store, Phone, MessageCircle, Navigation, Info, Locate, Bell, User } from 'lucide-react';
+import { registerVendor, fetchVendors, updateVendor, fetchVendorNotifications } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 
@@ -64,6 +64,7 @@ export const VendorPortal = () => {
     const [existingVendorId, setExistingVendorId] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [isLocating, setIsLocating] = useState(false);
+    const [notifications, setNotifications] = useState<any[]>([]);
 
     const [formData, setFormData] = useState({
         shopName: '',
@@ -77,6 +78,17 @@ export const VendorPortal = () => {
             loadVendorData();
         }
     }, [user]);
+
+    useEffect(() => {
+        if (isEditing) {
+            loadNotifications();
+        }
+    }, [isEditing]);
+
+    const loadNotifications = async () => {
+        const notifs = await fetchVendorNotifications();
+        setNotifications(notifs);
+    };
 
     const loadVendorData = async () => {
         const vendors = await fetchVendors();
@@ -300,8 +312,8 @@ export const VendorPortal = () => {
                     </Button>
                 </form>
 
-                {/* Map Section */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                {/* Map & Notifications Section */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
                     <div className="glass-panel" style={{ padding: '1.5rem', background: 'rgba(0, 255, 157, 0.05)', border: '1px dashed var(--color-primary)' }}>
                         <h3 style={{ margin: 0, fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                             <Info size={16} /> Pin Your Location
@@ -328,6 +340,50 @@ export const VendorPortal = () => {
                             <RecenterMap center={markerPos} />
                         </MapContainer>
                     </div>
+
+                    {/* Notifications Panel - Only visible when editing (registered) */}
+                    {isEditing && (
+                        <div className="glass-panel" style={{ padding: '2rem', border: 'var(--glass-border)' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
+                                <Bell size={20} color="#facc15" />
+                                <h3 style={{ fontSize: '1.25rem', margin: 0 }}>Recent Customer Activity</h3>
+                            </div>
+
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxHeight: '300px', overflowY: 'auto' }}>
+                                {notifications.length === 0 ? (
+                                    <div style={{ color: 'var(--color-text-muted)', textAlign: 'center', padding: '2rem', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '1rem' }}>
+                                        No recent activity. Interaction logs will appear here.
+                                    </div>
+                                ) : (
+                                    notifications.map((note, i) => (
+                                        <div key={i} style={{
+                                            background: 'rgba(255,255,255,0.03)',
+                                            padding: '1rem',
+                                            borderRadius: '0.75rem',
+                                            borderLeft: '3px solid var(--color-primary)',
+                                            display: 'flex',
+                                            justifyContent: 'space-between',
+                                            alignItems: 'start'
+                                        }}>
+                                            <div>
+                                                <div style={{ fontWeight: 'bold', fontSize: '0.9rem', marginBottom: '0.25rem' }}>
+                                                    {note.message}
+                                                </div>
+                                                <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
+                                                    {new Date(note.date).toLocaleString()}
+                                                </div>
+                                            </div>
+                                            {note.details?.userEmail && (
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)' }}>
+                                                    <User size={12} /> {note.details.userEmail}
+                                                </div>
+                                            )}
+                                        </div>
+                                    ))
+                                )}
+                            </div>
+                        </div>
+                    )}
                 </div>
             </div>
 

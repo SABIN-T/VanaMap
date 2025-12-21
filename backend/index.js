@@ -76,6 +76,22 @@ app.get('/api/admin/notifications', auth, admin, async (req, res) => {
     }
 });
 
+app.get('/api/vendor/notifications', auth, async (req, res) => {
+    try {
+        // Find notifications where details.vendorId matches the logged-in user's ID
+        // Note: We check both direct ID and potentially "v" prefixed ID if implementation varies
+        const notifications = await Notification.find({
+            $or: [
+                { "details.vendorId": req.user.id },
+                { "details.vendorId": req.user._id }
+            ]
+        }).sort({ date: -1 }).limit(50);
+        res.json(notifications);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 app.post('/api/tracking/vendor-contact', async (req, res) => {
     try {
         const { vendorId, vendorName, userEmail, contactType } = req.body;
