@@ -237,7 +237,9 @@ app.get('/api/vendors', async (req, res) => {
 
 app.post('/api/vendors', auth, async (req, res) => {
     try {
-        const newVendor = new Vendor({ ...req.body, id: "v" + Date.now() });
+        // Allow frontend to specify ID (linking to User ID), fallback to timestamp if missing
+        const itemData = { id: "v" + Date.now(), ...req.body };
+        const newVendor = new Vendor(itemData);
         await newVendor.save();
         res.status(201).json(newVendor);
     } catch (err) {
