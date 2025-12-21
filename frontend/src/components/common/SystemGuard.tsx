@@ -1,4 +1,4 @@
-import React, { Component, useState, useEffect, type ErrorInfo, type ReactNode } from 'react';
+import { Component, type ErrorInfo, type ReactNode } from 'react';
 import { RefreshCcw, AlertTriangle } from 'lucide-react';
 import styles from './SystemGuard.module.css';
 
@@ -50,39 +50,8 @@ class ErrorBoundary extends Component<Props, State> {
             );
         }
 
-        return <SafetyCheck>{this.props.children}</SafetyCheck>;
+        return <>{this.props.children}</>;
     }
 }
-
-const SafetyCheck: React.FC<Props> = ({ children }) => {
-    const [isBlank, setIsBlank] = useState(false);
-
-    useEffect(() => {
-        // Detect if page remains blank after 8 seconds (Lazy loading failure or white-screen)
-        const timer = setTimeout(() => {
-            const mainContent = document.querySelector('main') || document.querySelector('.container');
-            if (!mainContent || mainContent.innerHTML === '') {
-                setIsBlank(true);
-            }
-        }, 8000);
-
-        return () => clearTimeout(timer);
-    }, []);
-
-    if (isBlank) {
-        return (
-            <div className={styles.miniGuard}>
-                <div className={styles.miniCard}>
-                    <RefreshCcw size={16} className={styles.spin} />
-                    <span>Page taking too long?</span>
-                    <button onClick={() => window.location.reload()}>Refresh</button>
-                    <button onClick={() => setIsBlank(false)} className={styles.close}>×</button>
-                </div>
-            </div>
-        );
-    }
-
-    return <>{children}</>;
-};
 
 export const SystemGuard = ErrorBoundary;
