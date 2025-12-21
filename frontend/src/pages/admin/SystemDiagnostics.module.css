@@ -1,0 +1,290 @@
+/* Page Container */
+.pageContainer {
+    padding-bottom: 4rem;
+    animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes glow {
+    0% {
+        box-shadow: 0 0 5px rgba(16, 185, 129, 0.2);
+    }
+
+    50% {
+        box-shadow: 0 0 20px rgba(16, 185, 129, 0.6);
+    }
+
+    100% {
+        box-shadow: 0 0 5px rgba(16, 185, 129, 0.2);
+    }
+}
+
+/* Grid Layout */
+.grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* Metric Cards */
+.card {
+    background: rgba(30, 41, 59, 0.4);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 1.25rem;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.card:hover {
+    background: rgba(30, 41, 59, 0.6);
+    border-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.3);
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    z-index: 2;
+    position: relative;
+}
+
+.iconWrapper {
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+    background: rgba(255, 255, 255, 0.05);
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.iconApi {
+    background: rgba(59, 130, 246, 0.1);
+    color: #60a5fa;
+}
+
+.iconDb {
+    background: rgba(168, 85, 247, 0.1);
+    color: #c084fc;
+}
+
+.title {
+    color: white;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.subtitle {
+    color: #64748b;
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+}
+
+.metricValue {
+    font-family: 'Geist Mono', monospace;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+}
+
+.unit {
+    font-size: 1rem;
+    color: #64748b;
+    font-weight: 600;
+}
+
+/* Status Indicator */
+.statusGood {
+    color: #34d399;
+}
+
+.statusWarn {
+    color: #fbbf24;
+}
+
+.statusBad {
+    color: #f87171;
+}
+
+/* Progress Bar */
+.progressTrack {
+    width: 100%;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.fill {
+    height: 100%;
+    border-radius: 999px;
+    animation: pulse 2s infinite ease-in-out;
+}
+
+.fillBlue {
+    background: #60a5fa;
+    width: 42%;
+}
+
+.fillPurple {
+    background: #c084fc;
+    width: 99%;
+}
+
+.meta {
+    font-family: monospace;
+    font-size: 0.75rem;
+    color: #94a3b8;
+    margin-top: 0.75rem;
+}
+
+/* Terminal Sytle Logs */
+.terminalCard {
+    margin-top: 2rem;
+    background: #0f172a;
+    /* Darker background for terminal feel */
+    border-color: #1e293b;
+    min-height: 400px;
+    display: flex;
+    flex-direction: column;
+}
+
+.terminalHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 1rem;
+}
+
+.terminalTitle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #34d399;
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.liveDot {
+    width: 8px;
+    height: 8px;
+    background: #34d399;
+    border-radius: 50%;
+    animation: glow 2s infinite;
+}
+
+.terminalCommand {
+    font-family: monospace;
+    color: #475569;
+    font-size: 0.75rem;
+}
+
+.logs {
+    font-family: 'Geist Mono', 'Fira Code', monospace;
+    font-size: 0.85rem;
+    line-height: 1.6;
+    color: #cbd5e1;
+    overflow-y: auto;
+    flex: 1;
+    padding-right: 0.5rem;
+}
+
+.logs::-webkit-scrollbar {
+    width: 6px;
+}
+
+.logs::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+}
+
+.logs::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.logEntry {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 0.25rem;
+    opacity: 0.9;
+}
+
+.timestamp {
+    color: #64748b;
+    flex-shrink: 0;
+}
+
+.level {
+    font-weight: 700;
+}
+
+.info {
+    color: #60a5fa;
+}
+
+.warn {
+    color: #fbbf24;
+}
+
+.error {
+    color: #f87171;
+}
+
+.success {
+    color: #34d399;
+}
+
+.cursor {
+    display: inline-block;
+    width: 8px;
+    height: 16px;
+    background: #34d399;
+    animation: pulse 1s infinite steps(2);
+    vertical-align: middle;
+    margin-left: 0.5rem;
+}

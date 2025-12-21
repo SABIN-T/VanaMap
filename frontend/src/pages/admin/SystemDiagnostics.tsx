@@ -1,52 +1,113 @@
 import { AdminPageLayout } from './AdminPageLayout';
 import { Server, Database, Activity } from 'lucide-react';
+import styles from './SystemDiagnostics.module.css';
 
 export const SystemDiagnostics = () => {
     return (
         <AdminPageLayout title="System Diagnostics">
-            <div className="space-y-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="bg-slate-800/50 p-6 rounded-2xl border border-slate-700">
-                        <div className="flex items-center gap-4 mb-4">
-                            <div className="p-3 bg-blue-500/10 rounded-xl text-blue-400"><Server size={24} /></div>
+            <div className={styles.pageContainer}>
+
+                <div className={styles.grid}>
+                    {/* API Latency Card */}
+                    <div className={styles.card}>
+                        <div className={styles.header}>
+                            <div className={`${styles.iconWrapper} ${styles.iconApi}`}>
+                                <Server size={24} />
+                            </div>
                             <div>
-                                <h3 className="text-slate-200 font-bold">API Latency</h3>
-                                <p className="text-xs text-slate-500">Response time from server</p>
+                                <div className={styles.title}>API Latency</div>
+                                <div className={styles.subtitle}>Response time from server</div>
                             </div>
                         </div>
-                        <div className="text-4xl font-mono text-emerald-400 mb-4">42ms</div>
-                        <div className="w-full bg-slate-700 h-2 rounded-full overflow-hidden"><div className="bg-emerald-500 h-full w-[20%] rounded-full animate-pulse"></div></div>
+                        <div className={`${styles.metricValue} ${styles.statusGood}`}>
+                            42<span className={styles.unit}>ms</span>
+                        </div>
+                        <div className={styles.progressTrack}>
+                            <div className={`${styles.fill} ${styles.fillBlue}`}></div>
+                        </div>
+                        <div className={styles.meta}>Global Average: 45ms</div>
                     </div>
 
-                    <div className="bg-slate-800/50 p-6 rounded-2xl border border-slate-700">
-                        <div className="flex items-center gap-4 mb-4">
-                            <div className="p-3 bg-purple-500/10 rounded-xl text-purple-400"><Database size={24} /></div>
+                    {/* Database Health Card */}
+                    <div className={styles.card}>
+                        <div className={styles.header}>
+                            <div className={`${styles.iconWrapper} ${styles.iconDb}`}>
+                                <Database size={24} />
+                            </div>
                             <div>
-                                <h3 className="text-slate-200 font-bold">Database Health</h3>
-                                <p className="text-xs text-slate-500">MongoDB Cluster Status</p>
+                                <div className={styles.title}>Database Health</div>
+                                <div className={styles.subtitle}>MongoDB Cluster Status</div>
                             </div>
                         </div>
-                        <div className="text-4xl font-mono text-emerald-400 mb-4">Healthy</div>
-                        <div className="text-xs text-emerald-500/80 font-mono">Uptime: 99.998% • Connections: 14/100</div>
+                        <div className={`${styles.metricValue} ${styles.statusGood}`}>
+                            Healthy
+                        </div>
+                        <div className={styles.progressTrack}>
+                            <div className={`${styles.fill} ${styles.fillPurple}`}></div>
+                        </div>
+                        <div className={styles.meta}>Uptime: 99.998% • Connections: 14/100</div>
                     </div>
                 </div>
 
-                <div className="bg-black/80 p-6 rounded-2xl border border-slate-700 font-mono text-xs md:text-sm text-slate-400 h-96 overflow-y-auto shadow-inner">
-                    <div className="flex items-center justify-between pb-4 border-b border-slate-800 mb-4">
-                        <span className="text-emerald-500 font-bold flex items-center gap-2"><Activity size={16} /> LIVE SYSTEM LOGS</span>
-                        <span className="text-xs text-slate-600">tail -f /var/log/syslog</span>
+                {/* Live Logs Terminal */}
+                <div className={`${styles.card} ${styles.terminalCard}`}>
+                    <div className={styles.terminalHeader}>
+                        <div className={styles.terminalTitle}>
+                            <Activity size={18} />
+                            <div className={styles.liveDot}></div>
+                            LIVE SYSTEM LOGS
+                        </div>
+                        <div className={styles.terminalCommand}>{`> tail -f /var/log/syslog`}</div>
                     </div>
-                    <div className="space-y-2">
-                        <p>[15:42:01] <span className="text-blue-400">INFO</span> Worker process started (PID 24102)</p>
-                        <p>[15:42:05] <span className="text-blue-400">INFO</span> Connected to MongoDB Cluster0 (AWS_US_EAST_1)</p>
-                        <p>[15:43:12] <span className="text-emerald-400">SUCCESS</span> Backup routine executed successfully (snapshot_42)</p>
-                        <p>[15:45:00] <span className="text-yellow-400">WARN</span> Memory usage spike detected (Heap: 84%) - GC triggered</p>
-                        <p>[15:45:01] <span className="text-blue-400">INFO</span> Cleaning up temporary files...</p>
-                        <p>[15:45:01] <span className="text-blue-400">INFO</span> Cleanup complete. 12mb freed.</p>
-                        <p>[15:46:22] <span className="text-blue-400">INFO</span> User login: admin@vanamap.online (IP: 192.168.1.4)</p>
-                        <p className="animate-pulse text-emerald-500">_</p>
+
+                    <div className={styles.logs}>
+                        <div className={styles.logEntry}>
+                            <span className={styles.timestamp}>[15:42:01]</span>
+                            <span className={`${styles.level} ${styles.info}`}>INFO</span>
+                            <span>Worker process started (PID 24102)</span>
+                        </div>
+                        <div className={styles.logEntry}>
+                            <span className={styles.timestamp}>[15:42:05]</span>
+                            <span className={`${styles.level} ${styles.info}`}>INFO</span>
+                            <span>Connected to MongoDB Cluster0 (AWS_US_EAST_1)</span>
+                        </div>
+                        <div className={styles.logEntry}>
+                            <span className={styles.timestamp}>[15:43:12]</span>
+                            <span className={`${styles.level} ${styles.success}`}>SUCCESS</span>
+                            <span>Backup routine executed successfully (snapshot_42)</span>
+                        </div>
+                        <div className={styles.logEntry}>
+                            <span className={styles.timestamp}>[15:45:00]</span>
+                            <span className={`${styles.level} ${styles.warn}`}>WARN</span>
+                            <span>Memory usage spike detected (Heap: 84%) - GC triggered</span>
+                        </div>
+                        <div className={styles.logEntry}>
+                            <span className={styles.timestamp}>[15:45:01]</span>
+                            <span className={`${styles.level} ${styles.info}`}>INFO</span>
+                            <span>Cleaning up temporary files...</span>
+                        </div>
+                        <div className={styles.logEntry}>
+                            <span className={styles.timestamp}>[15:45:01]</span>
+                            <span className={`${styles.level} ${styles.info}`}>INFO</span>
+                            <span>Cleanup complete. 12mb freed.</span>
+                        </div>
+                        <div className={styles.logEntry}>
+                            <span className={styles.timestamp}>[15:46:22]</span>
+                            <span className={`${styles.level} ${styles.info}`}>INFO</span>
+                            <span>User login: admin@vanamap.online (IP: 192.168.1.4)</span>
+                        </div>
+                        <div className={styles.logEntry}>
+                            <span className={styles.timestamp}>[15:46:45]</span>
+                            <span className={`${styles.level} ${styles.info}`}>INFO</span>
+                            <span>Health check request received from 127.0.0.1</span>
+                        </div>
+                        <div className={styles.logEntry}>
+                            <span>_</span>
+                            <span className={styles.cursor}></span>
+                        </div>
                     </div>
                 </div>
+
             </div>
         </AdminPageLayout>
     );
