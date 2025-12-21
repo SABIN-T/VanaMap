@@ -12,7 +12,7 @@ export const Auth = () => {
     const navigate = useNavigate();
     const { login, signup, user } = useAuth();
 
-    type AuthView = 'login' | 'signup' | 'forgot' | 'reset';
+    type AuthView = 'login' | 'signup' | 'forgot' | 'reset' | 'admin';
     const [view, setView] = useState<AuthView>('login');
 
     // Form States
@@ -51,11 +51,11 @@ export const Auth = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (view === 'login') {
-            const tid = toast.loading("Authenticating...");
+        if (view === 'login' || view === 'admin') {
+            const tid = toast.loading(view === 'admin' ? "Verifying Security Clearance..." : "Authenticating...");
             const result = await login({ email, password });
             if (result.success) {
-                toast.success("Login Successful! Welcome back.", { id: tid });
+                toast.success(view === 'admin' ? "Access Granted. Welcome, Overseer." : "Login Successful! Welcome back.", { id: tid });
             } else {
                 // User requested specific error phrasing
                 toast.error(
@@ -92,18 +92,10 @@ export const Auth = () => {
         }
     };
 
-    const handleAdminLogin = async () => {
-        const tid = toast.loading("Establishing Secure Connection...");
-        try {
-            const result = await login({ email: 'admin@plantai.com', password: 'Defender123' });
-            if (result.success) {
-                toast.success("Identity Verified. Accessing Command Center...", { id: tid });
-            } else {
-                toast.error("Security mismatch. Please use valid credentials.", { id: tid });
-            }
-        } catch (err) {
-            toast.error("Gateway timeout. Try again.", { id: tid });
-        }
+    const handleAdminLogin = () => {
+        setView('admin');
+        setEmail('');
+        setPassword('');
     };
 
     return (
@@ -112,12 +104,14 @@ export const Auth = () => {
                 <div className={styles.authHeader}>
                     <h2 className={styles.authTitle}>
                         {view === 'login' && 'Welcome Back'}
+                        {view === 'admin' && 'Security Clearance'}
                         {view === 'signup' && 'Create Identity'}
                         {view === 'forgot' && 'Reset Access'}
                         {view === 'reset' && 'New Credential'}
                     </h2>
                     <p className={styles.authSubtitle}>
                         {view === 'login' && 'Access your simulation dashboard'}
+                        {view === 'admin' && 'System Overseer Authentication'}
                         {view === 'signup' && 'Join the eco-simulation network'}
                         {view === 'forgot' && 'Recover your account secure key'}
                     </p>
@@ -263,6 +257,7 @@ export const Auth = () => {
 
                     <Button type="submit" variant="primary" className={styles.submitBtn}>
                         {view === 'login' && 'Authenticate'}
+                        {view === 'admin' && 'Initialize Command Link'}
                         {view === 'signup' && 'Complete Registration'}
                         {view === 'forgot' && 'Submit Request'}
                         {view === 'reset' && 'Update Security Key'}
@@ -292,7 +287,7 @@ export const Auth = () => {
                     {view === 'signup' && (
                         <>Already registered? <button onClick={() => setView('login')}>Log In</button></>
                     )}
-                    {(view === 'forgot' || view === 'reset') && (
+                    {(view === 'forgot' || view === 'reset' || view === 'admin') && (
                         <><button onClick={() => setView('login')} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', margin: '0 auto' }}>
                             <ArrowLeft size={16} /> Return to Login
                         </button></>
