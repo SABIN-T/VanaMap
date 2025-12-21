@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { Button } from '../components/common/Button';
-import { Store, Phone, MessageCircle, Navigation, Info, Locate, Bell, User } from 'lucide-react';
+import { Store, Phone, MessageCircle, Navigation, Info, Locate, Bell, User, AlertTriangle, BadgeCheck } from 'lucide-react';
 import { registerVendor, fetchVendors, updateVendor, fetchVendorNotifications } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
@@ -201,6 +201,62 @@ export const VendorPortal = () => {
                     {isEditing ? `Managing: ${formData.shopName}` : 'Join our network of verified plant suppliers.'}
                 </p>
             </div>
+
+            {/* Verified Partner Banner */}
+            {isEditing && (
+                <div className="glass-panel" style={{
+                    marginBottom: '2.5rem',
+                    padding: '2rem',
+                    background: 'linear-gradient(135deg, rgba(234, 179, 8, 0.15) 0%, rgba(202, 138, 4, 0.05) 100%)',
+                    border: '1px solid rgba(234, 179, 8, 0.4)',
+                    borderRadius: '1.5rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '2rem',
+                    flexWrap: 'wrap',
+                    animation: 'fadeIn 0.5s ease-out'
+                }}>
+                    <div style={{
+                        background: 'rgba(234, 179, 8, 0.2)',
+                        padding: '1.25rem',
+                        borderRadius: '50%',
+                        boxShadow: '0 0 30px rgba(234, 179, 8, 0.2)',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center'
+                    }}>
+                        <AlertTriangle size={48} color="#facc15" fill="rgba(250, 204, 21, 0.2)" />
+                    </div>
+                    <div style={{ flex: 1 }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
+                            <BadgeCheck size={24} color="#facc15" fill="#facc15" className="text-black" />
+                            <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#facc15', margin: 0 }}>
+                                Become a Verified Partner
+                            </h2>
+                        </div>
+                        <p style={{ margin: 0, color: 'rgba(255,255,255,0.9)', lineHeight: '1.6', fontSize: '1rem' }}>
+                            <strong>Get Verified Status properly!</strong> Partners receive the "Verified Badge" on VanaMap, ranking higher in search results and gaining customer trust.
+                            <br />
+                            <span style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.6)' }}>Your shop will be marked as "Verified Partner" across the platform.</span>
+                        </p>
+                    </div>
+                    <Button
+                        onClick={() => window.open('https://wa.me/9188773534', '_blank')}
+                        style={{
+                            background: '#25D366',
+                            color: 'white',
+                            border: 'none',
+                            fontWeight: 700,
+                            padding: '1rem 2rem',
+                            borderRadius: '1rem',
+                            minWidth: '220px',
+                            boxShadow: '0 4px 15px rgba(37, 211, 102, 0.3)'
+                        }}
+                    >
+                        <MessageCircle size={20} style={{ marginRight: '0.75rem' }} />
+                        WhatsApp Admin
+                        <div style={{ fontSize: '0.7rem', fontWeight: 400, opacity: 0.9, marginTop: '2px' }}>+91 88773534</div>
+                    </Button>
+                </div>
+            )}
 
             <div style={{
                 display: 'grid',
