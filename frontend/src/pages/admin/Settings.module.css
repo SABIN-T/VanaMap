@@ -49,6 +49,10 @@
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s;
+    background: transparent;
+    width: 100%;
+    text-align: left;
+    border: none;
 }
 
 .navItem:hover,
@@ -216,4 +220,147 @@
     background: rgba(244, 63, 94, 0.1);
     border-color: rgba(244, 63, 94, 0.4);
     transform: translateY(-1px);
+}
+
+/* Action Buttons */
+.actionBtnOutline {
+    background: transparent;
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    color: #818cf8;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.actionBtnOutline:hover {
+    background: rgba(99, 102, 241, 0.1);
+    border-color: #818cf8;
+}
+
+/* API Key Section */
+.apiKeyContainer {
+    background: rgba(15, 23, 42, 0.6);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.apiKeyLabel {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: #94a3b8;
+    margin-bottom: 0.75rem;
+}
+
+.apiKeyBox {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #0f172a;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.apiKeyBox code {
+    font-family: 'Geist Mono', monospace;
+    color: #e2e8f0;
+    font-size: 0.9rem;
+}
+
+.copyBtn {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: none;
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.5rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.copyBtn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Team Management */
+.teamList {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.teamMember {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 1rem;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.roleBadge {
+    padding: 0.25rem 0.75rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 999px;
+    font-size: 0.75rem;
+    color: #cbd5e1;
+    font-weight: 600;
+}
+
+.removeBtn {
+    color: #ef4444;
+    font-size: 0.8rem;
+    font-weight: 600;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.teamMember:hover .removeBtn {
+    opacity: 1;
+}
+
+.inviteBtn {
+    width: 100%;
+    padding: 1rem;
+    border: 1px dashed rgba(255, 255, 255, 0.2);
+    border-radius: 1rem;
+    background: transparent;
+    color: #94a3b8;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.inviteBtn:hover {
+    border-color: #6366f1;
+    color: #818cf8;
+    background: rgba(99, 102, 241, 0.05);
 }

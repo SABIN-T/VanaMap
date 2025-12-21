@@ -6,34 +6,75 @@ import {
     Activity, Users, Sprout, MapPin,
     ArrowUpRight,
     Plus, Zap, Settings, Shield, LogOut,
-    Store, Edit
+    Store, Edit, Database
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import styles from './Admin.module.css';
+import { ActivityFeed, type ActivityItem } from './admin/ActivityFeed';
 
 export const Admin = () => {
     const [stats, setStats] = useState({ plants: 0, users: 0, vendors: 0 });
-    const [recentActivity, setRecentActivity] = useState<any[]>([]);
+    const [activities, setActivities] = useState<ActivityItem[]>([]);
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
+
+    const getTimestampFromId = (id: string) => {
+        try {
+            return new Date(parseInt(id.substring(0, 8), 16) * 1000);
+        } catch (e) {
+            return new Date();
+        }
+    };
 
     const loadData = useCallback(async () => {
         try {
-            const [v, p, u] = await Promise.all([fetchVendors(), fetchPlants(), fetchUsers()]);
+            setLoading(true);
+            const [vendors, plants, users] = await Promise.all([fetchVendors(), fetchPlants(), fetchUsers()]);
+
             setStats({
-                vendors: v.length,
-                plants: p.length,
-                users: u.length
+                vendors: vendors.length,
+                plants: plants.length,
+                users: users.length
             });
 
-            // Simulate recent activity from real data
-            const activity = [
-                ...p.slice(-2).map(x => ({ type: 'plant', name: x.name, time: '2 mins ago' })),
-                ...v.slice(-1).map(x => ({ type: 'vendor', name: x.name, time: '1 hour ago' })),
-                ...u.slice(-2).map(x => ({ type: 'user', name: x.name || x.email, time: '3 hours ago' }))
-            ].sort(() => Math.random() - 0.5);
-            setRecentActivity(activity);
+            // Process Real Data for Activity Feed
+            const plantActivities: ActivityItem[] = plants.map((p: any) => ({
+                id: p.id || p._id,
+                type: 'plant',
+                title: `New Plant Added`,
+                description: `${p.name} (${p.scientificName || 'Species'}) was added to the catalog.`,
+                timestamp: p.createdAt || getTimestampFromId(p.id || p._id),
+                meta: p.type
+            }));
+
+            const vendorActivities: ActivityItem[] = vendors.map((v: any) => ({
+                id: v.id || v._id,
+                type: 'vendor',
+                title: `New Partner Joined`,
+                description: `${v.name} registered as a ${v.category || 'Vendor'} in ${v.district || 'Unknown Location'}.`,
+                timestamp: v.createdAt || getTimestampFromId(v.id || v._id),
+                meta: v.verified ? 'Verified' : 'Pending'
+            }));
+
+            const userActivities: ActivityItem[] = users.map((u: any) => ({
+                id: u.id || u._id,
+                type: 'user',
+                title: `New User Registration`,
+                description: `${u.name || 'User'} joined the platform.`,
+                timestamp: u.createdAt || getTimestampFromId(u.id || u._id),
+                meta: u.role
+            }));
+
+            // Merge and Sort by Date Descending
+            const allActivities = [...plantActivities, ...vendorActivities, ...userActivities]
+                .sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
+                .slice(0, 50); // Limit to last 50 actions
+
+            setActivities(allActivities);
         } catch (err) {
             console.error(err);
+        } finally {
+            setLoading(false);
         }
     }, []);
 
@@ -70,7 +111,7 @@ export const Admin = () => {
                     </div>
                     <div className={styles.cardValue}>{stats.users}</div>
                     <div className={styles.cardTrend}>
-                        <span className={styles.trendUp}><ArrowUpRight size={14} /> +12%</span> this week
+                        <span className={styles.trendUp}><ArrowUpRight size={14} /> Live</span> Count
                     </div>
                 </div>
 
@@ -81,7 +122,7 @@ export const Admin = () => {
                     </div>
                     <div className={styles.cardValue}>{stats.plants}</div>
                     <div className={styles.cardTrend}>
-                        <span className={styles.trendUp}><ArrowUpRight size={14} /> +5</span> new species
+                        <span className={styles.trendUp}><ArrowUpRight size={14} /> Catalog</span> Size
                     </div>
                 </div>
 
@@ -92,7 +133,7 @@ export const Admin = () => {
                     </div>
                     <div className={styles.cardValue}>{stats.vendors}</div>
                     <div className={styles.cardTrend}>
-                        <span className={styles.trendNeutral}><ArrowUpRight size={14} /> Stable</span> network
+                        <span className={styles.trendNeutral}><ArrowUpRight size={14} /> Network</span> Reach
                     </div>
                 </div>
 
@@ -116,18 +157,7 @@ export const Admin = () => {
                         </div>
                     </div>
                     <div className={styles.activityList}>
-                        {recentActivity.map((item, i) => (
-                            <div key={i} className={styles.activityItem}>
-                                <div className={styles.iconBox}>
-                                    {item.type === 'plant' ? <Sprout size={18} /> : item.type === 'user' ? <Users size={18} /> : <MapPin size={18} />}
-                                </div>
-                                <div className={styles.activityInfo}>
-                                    <div className="text-white capitalize">{item.type} Update</div>
-                                    <div>{item.type === 'plant' ? 'New species discovered:' : item.type === 'user' ? 'New user joined:' : 'Partner updated:'} <span className="text-slate-300 font-medium">{item.name}</span> • {item.time}</div>
-                                </div>
-                            </div>
-                        ))}
-                        {recentActivity.length === 0 && <div className="text-center text-slate-500 py-10">No recent activity detected.</div>}
+                        <ActivityFeed activities={activities} isLoading={loading} />
                     </div>
                 </div>
 
@@ -164,6 +194,10 @@ export const Admin = () => {
                         <button className={styles.actionBtn} onClick={() => navigate('/admin/settings')}>
                             <Settings size={24} className="text-slate-400" />
                             <span>Settings</span>
+                        </button>
+                        <button className={styles.actionBtn} onClick={() => navigate('/admin/all-plants')}>
+                            <Database size={24} className="text-teal-400" />
+                            <span>All Plants</span>
                         </button>
                     </div>
                 </div>

@@ -15,7 +15,7 @@ const PlantSchema = new mongoose.Schema({
     advantages: [String],
     price: Number,
     type: { type: String, enum: ['indoor', 'outdoor'], required: true }
-});
+}, { timestamps: true });
 
 const VendorSchema = new mongoose.Schema({
     id: { type: String, required: true, unique: true },
@@ -33,7 +33,7 @@ const VendorSchema = new mongoose.Schema({
     verified: { type: Boolean, default: false },
     highlyRecommended: { type: Boolean, default: false },
     category: { type: String, default: 'Plant Shop' }
-});
+}, { timestamps: true });
 
 const UserSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
@@ -47,7 +47,7 @@ const UserSchema = new mongoose.Schema({
         approved: { type: Boolean, default: false },
         requestDate: { type: Date }
     }
-});
+}, { timestamps: true });
 
 const NotificationSchema = new mongoose.Schema({
     type: { type: String, required: true },
