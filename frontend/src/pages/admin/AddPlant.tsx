@@ -2,11 +2,12 @@ import { useState, useRef } from 'react';
 import { Button } from '../../components/common/Button';
 import { addPlant } from '../../services/api';
 import { AdminPageLayout } from './AdminPageLayout';
-import { Search, Upload, Thermometer, Wind, Droplets, Leaf, ArrowRight } from 'lucide-react';
+import { Search, Upload, Thermometer, Wind, Droplets, Leaf, ArrowRight, Sparkles } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { INDIAN_PLANT_DB } from '../../data/indianPlants';
 import type { Plant } from '../../types';
 import { PlantCard } from '../../components/features/plants/PlantCard';
+import styles from './AddPlant.module.css';
 
 // --- HELPERS ---
 const smartFillPlant = (sciName: string) => {
@@ -160,9 +161,9 @@ export const AddPlant = () => {
 
     const previewPlant: Plant = {
         id: 'preview',
-        name: newPlant.name || 'Specimen Name',
-        scientificName: newPlant.scientificName || 'Scientific Name',
-        description: newPlant.description || '...',
+        name: newPlant.name || 'Botanic Name',
+        scientificName: newPlant.scientificName || 'Scientific classification',
+        description: newPlant.description || 'Plant description will appear here...',
         imageUrl: newPlant.imageUrl || 'https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?auto=format&fit=crop',
         price: Number(newPlant.price),
         type: newPlant.type as any || 'indoor',
@@ -175,206 +176,218 @@ export const AddPlant = () => {
 
     return (
         <AdminPageLayout title="New Specimen">
-            <div className="-m-6 flex flex-col lg:flex-row min-h-[600px] bg-slate-900 rounded-2xl overflow-hidden">
-                {/* --- LEFT PANEL: VISUAL & PREVIEW (40%) --- */}
-                <div className="relative w-full lg:w-2/5 bg-slate-950 border-r border-slate-800 flex flex-col items-center justify-center p-8 overflow-hidden group">
-                    {/* Blurred Background */}
-                    <div
-                        className="absolute inset-0 opacity-30 blur-3xl scale-125 transition-all duration-1000"
-                        style={{
-                            backgroundImage: `url(${newPlant.imageUrl || 'https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?auto=format&fit=crop'})`,
-                            backgroundSize: 'cover',
-                            backgroundPosition: 'center'
-                        }}
-                    ></div>
+            <div className={styles.pageContainer}>
 
-                    {/* The Card */}
-                    <div className="relative z-10 scale-100 transition-transform duration-300">
-                        <PlantCard plant={previewPlant} onAdd={() => { }} />
-                    </div>
-
-                    {/* Upload Overlay */}
-                    <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-4 z-20 backdrop-blur-sm">
-                        <Button
-                            onClick={() => fileInputRef.current?.click()}
-                            className="bg-white text-black hover:bg-slate-200"
-                        >
-                            <Upload size={18} className="mr-2" /> Upload Image
-                        </Button>
-                        <span className="text-xs text-slate-400 font-medium">Or paste URL below</span>
-                        <input
-                            value={newPlant.imageUrl}
-                            onChange={(e) => setNewPlant({ ...newPlant, imageUrl: e.target.value })}
-                            placeholder="https://image-url.com..."
-                            className="bg-black/50 border border-white/20 rounded px-3 py-1 text-xs text-white outline-none w-64 text-center"
-                            onClick={(e) => e.stopPropagation()}
+                <div className={styles.mainLayout}>
+                    {/* --- LEFT PANEL: VISUAL & PREVIEW --- */}
+                    <div className={styles.previewPanel}>
+                        {/* Dynamic Background */}
+                        <div
+                            className={styles.previewBg}
+                            style={{
+                                backgroundImage: `url(${newPlant.imageUrl || 'https://images.unsplash.com/photo-1459411552884-841db9b3cc2a?auto=format&fit=crop'})`
+                            }}
                         />
-                        <input
-                            ref={fileInputRef}
-                            type="file"
-                            accept="image/*"
-                            className="hidden"
-                            onChange={handleImageUpload}
-                        />
-                    </div>
 
-                    <div className="absolute bottom-6 text-slate-500 text-xs font-mono uppercase tracking-widest z-10">
-                        Live Preview Mode
-                    </div>
-                </div>
-
-                {/* --- RIGHT PANEL: FORM (60%) --- */}
-                <div className="w-full lg:w-3/5 p-8 lg:p-12 overflow-y-auto max-h-[800px]">
-                    <form onSubmit={handleAddPlant} className="max-w-xl mx-auto space-y-10">
-
-                        {/* 1. SMART SEARCH */}
-                        <div className="relative">
-                            <input
-                                value={scientificNameSearch}
-                                onChange={(e) => setScientificNameSearch(e.target.value)}
-                                placeholder="Search DB to auto-fill (e.g. Ocimum)..."
-                                className="w-full bg-transparent text-2xl font-light text-white placeholder:text-slate-600 border-b border-slate-700 py-4 focus:border-emerald-500 outline-none transition-colors"
-                            />
-                            <div className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center gap-2">
-                                {scientificNameSearch && (
-                                    <button
-                                        type="button"
-                                        onClick={handleSmartFill}
-                                        className="text-emerald-400 text-xs font-bold uppercase tracking-wider hover:text-emerald-300 transition-colors flex items-center gap-1"
-                                    >
-                                        Auto-Fill <ArrowRight size={12} />
-                                    </button>
-                                )}
-                                <Search size={20} className="text-slate-600" />
-                            </div>
+                        {/* 3D Card Containment */}
+                        <div className={styles.cardWrapper}>
+                            <PlantCard plant={previewPlant} onAdd={() => { }} />
                         </div>
 
-                        {/* 2. IDENTITY */}
-                        <div className="space-y-6">
-                            <div className="flex items-center gap-2 text-emerald-500 mb-2">
-                                <Leaf size={20} /> <span className="text-sm font-bold uppercase tracking-widest">Identity</span>
-                            </div>
+                        {/* Interactive Overlay */}
+                        <div className={styles.uploadOverlay}>
+                            <Button
+                                onClick={() => fileInputRef.current?.click()}
+                                className="bg-white text-black hover:bg-slate-200 shadow-xl mb-4"
+                            >
+                                <Upload size={18} className="mr-2" /> Upload Photo
+                            </Button>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                <div className="space-y-2">
-                                    <label className="text-xs text-slate-400 font-semibold uppercase">Common Name</label>
-                                    <input
-                                        value={newPlant.name}
-                                        onChange={(e) => setNewPlant({ ...newPlant, name: e.target.value })}
-                                        className="w-full bg-slate-800 border-none rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-emerald-500/50"
-                                        placeholder="Plant Name"
-                                    />
-                                </div>
-                                <div className="space-y-2">
-                                    <label className="text-xs text-slate-400 font-semibold uppercase">Scientific Name</label>
-                                    <input
-                                        value={newPlant.scientificName}
-                                        onChange={(e) => setNewPlant({ ...newPlant, scientificName: e.target.value })}
-                                        className="w-full bg-slate-800 border-none rounded-lg px-4 py-3 text-white italic focus:ring-2 focus:ring-emerald-500/50"
-                                        placeholder="Latin Name"
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="space-y-2">
-                                <label className="text-xs text-slate-400 font-semibold uppercase">Description</label>
-                                <textarea
-                                    value={newPlant.description}
-                                    onChange={(e) => setNewPlant({ ...newPlant, description: e.target.value })}
-                                    className="w-full bg-slate-800 border-none rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-emerald-500/50 min-h-[100px]"
-                                    placeholder="Story about this plant..."
+                            <div className="w-64">
+                                <span className="text-xs text-slate-300 font-medium mb-1 block text-center">Or paste external URL</span>
+                                <input
+                                    value={newPlant.imageUrl}
+                                    onChange={(e) => setNewPlant({ ...newPlant, imageUrl: e.target.value })}
+                                    placeholder="https://..."
+                                    className="w-full bg-black/50 border border-white/20 rounded px-3 py-1.5 text-xs text-white outline-none text-center focus:border-emerald-500 transition-colors"
+                                    onClick={(e) => e.stopPropagation()}
                                 />
                             </div>
+
+                            <input
+                                ref={fileInputRef}
+                                type="file"
+                                accept="image/*"
+                                className="hidden"
+                                onChange={handleImageUpload}
+                            />
                         </div>
 
-                        {/* 3. METRICS */}
-                        <div className="space-y-6">
-                            <div className="flex items-center gap-2 text-amber-500 mb-2">
-                                <Thermometer size={20} /> <span className="text-sm font-bold uppercase tracking-widest">Metrics</span>
-                            </div>
+                        <div className="absolute bottom-6 flex items-center gap-2 text-slate-400 text-xs font-mono uppercase tracking-widest z-10 opacity-70">
+                            <Sparkles size={12} className="text-emerald-400" /> Live Preview
+                        </div>
+                    </div>
 
-                            <div className="grid grid-cols-2 gap-6">
-                                <div className="space-y-2">
-                                    <label className="text-xs text-slate-400 font-semibold uppercase">Category</label>
-                                    <select
-                                        value={newPlant.type}
-                                        onChange={(e) => setNewPlant({ ...newPlant, type: e.target.value as any })}
-                                        className="w-full bg-slate-800 border-none rounded-lg px-4 py-3 text-white focus:ring-2 focus:ring-amber-500/50 appearance-none cursor-pointer"
-                                    >
-                                        <option value="indoor">Indoor</option>
-                                        <option value="outdoor">Outdoor</option>
-                                    </select>
-                                </div>
-                                <div className="space-y-2">
-                                    <label className="text-xs text-slate-400 font-semibold uppercase">Price (₹)</label>
-                                    <input
-                                        type="number"
-                                        value={newPlant.price}
-                                        onChange={(e) => setNewPlant({ ...newPlant, price: Number(e.target.value) })}
-                                        className="w-full bg-slate-800 border-none rounded-lg px-4 py-3 text-white font-mono focus:ring-2 focus:ring-amber-500/50"
-                                    />
-                                </div>
-                            </div>
+                    {/* --- RIGHT PANEL: FORM --- */}
+                    <div className={styles.formPanel}>
+                        <form onSubmit={handleAddPlant}>
 
-                            {/* Sunlight Segmented Control */}
-                            <div className="space-y-2">
-                                <label className="text-xs text-slate-400 font-semibold uppercase block mb-1">Sunlight</label>
-                                <div className="flex bg-slate-800 rounded-lg p-1">
-                                    {['low', 'medium', 'high', 'direct'].map(lvl => (
+                            {/* 1. Smart Search */}
+                            <div className={styles.smartSearchWrapper}>
+                                <div className="flex justify-between items-baseline mb-2">
+                                    <label className="text-sm text-emerald-500 font-bold uppercase tracking-wider">Quick Populator</label>
+                                    {scientificNameSearch && (
                                         <button
-                                            key={lvl}
                                             type="button"
-                                            onClick={() => setNewPlant({ ...newPlant, sunlight: lvl as any })}
-                                            className={`flex-1 py-1.5 text-xs font-bold uppercase rounded-md transition-all ${newPlant.sunlight === lvl ? 'bg-amber-500 text-black shadow-lg' : 'text-slate-500 hover:text-white'}`}
+                                            onClick={handleSmartFill}
+                                            className="text-xs bg-emerald-500/10 text-emerald-400 px-3 py-1 rounded-full uppercase font-bold tracking-widest hover:bg-emerald-500/20 transition-all flex items-center gap-1"
                                         >
-                                            {lvl}
+                                            Auto-Fill <ArrowRight size={12} />
                                         </button>
-                                    ))}
+                                    )}
+                                </div>
+                                <div className="relative">
+                                    <input
+                                        value={scientificNameSearch}
+                                        onChange={(e) => setScientificNameSearch(e.target.value)}
+                                        placeholder="Type a scientific name (e.g. Ocimum)..."
+                                        className={styles.smartSearchInput}
+                                    />
+                                    <Search size={22} className={styles.smartSearchIcon} />
                                 </div>
                             </div>
 
-                            {/* Sliders & Oxygen */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
-                                <div className="space-y-3">
-                                    <div className="flex items-center justify-between">
-                                        <label className="text-xs text-slate-400 font-semibold uppercase flex items-center gap-2"><Droplets size={14} /> Humidity</label>
-                                        <span className="text-xs font-mono text-blue-400">{newPlant.minHumidity}%</span>
+                            {/* 2. Primary Identity */}
+                            <div className="mb-10">
+                                <div className={styles.sectionTitle}>
+                                    <Leaf size={18} /> Identity
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div className={styles.inputGroup}>
+                                        <label className={styles.label}>Common Name</label>
+                                        <input
+                                            value={newPlant.name}
+                                            onChange={(e) => setNewPlant({ ...newPlant, name: e.target.value })}
+                                            className={styles.glassInput}
+                                            placeholder="e.g. Peace Lily"
+                                            required
+                                        />
                                     </div>
-                                    <input
-                                        type="range" min="0" max="100" step="10"
-                                        value={newPlant.minHumidity}
-                                        onChange={(e) => setNewPlant({ ...newPlant, minHumidity: Number(e.target.value) })}
-                                        className="w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500"
+                                    <div className={styles.inputGroup}>
+                                        <label className={styles.label}>Scientific Name</label>
+                                        <input
+                                            value={newPlant.scientificName}
+                                            onChange={(e) => setNewPlant({ ...newPlant, scientificName: e.target.value })}
+                                            className={`${styles.glassInput} italic`}
+                                            placeholder="e.g. Spathiphyllum"
+                                        />
+                                    </div>
+                                </div>
+                                <div className={styles.inputGroup}>
+                                    <label className={styles.label}>Description</label>
+                                    <textarea
+                                        value={newPlant.description}
+                                        onChange={(e) => setNewPlant({ ...newPlant, description: e.target.value })}
+                                        className={styles.glassTextarea}
+                                        placeholder="Describe the plant's origin, care needs, and unique features..."
                                     />
                                 </div>
+                            </div>
 
-                                <div className="space-y-2">
-                                    <label className="text-xs text-slate-400 font-semibold uppercase flex items-center gap-2"><Wind size={14} /> Oxygen</label>
-                                    <select
-                                        value={newPlant.oxygenLevel}
-                                        onChange={(e) => setNewPlant({ ...newPlant, oxygenLevel: e.target.value as any })}
-                                        className="w-full bg-slate-800 border-none rounded-lg px-4 py-2.5 text-white focus:ring-2 focus:ring-blue-500/50 appearance-none cursor-pointer text-sm"
-                                    >
-                                        <option value="low">Low</option>
-                                        <option value="moderate">Moderate</option>
-                                        <option value="high">High</option>
-                                        <option value="very-high">Purifier (Very High)</option>
-                                    </select>
+                            {/* 3. Vital Metrics */}
+                            <div className="mb-10">
+                                <div className={styles.sectionTitle}>
+                                    <Thermometer size={18} className="text-amber-500" /> Vital Metrics
+                                </div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                    <div className={styles.inputGroup}>
+                                        <label className={styles.label}>Environment Type</label>
+                                        <select
+                                            value={newPlant.type}
+                                            onChange={(e) => setNewPlant({ ...newPlant, type: e.target.value as any })}
+                                            className={styles.glassSelect}
+                                        >
+                                            <option value="indoor">Indoor</option>
+                                            <option value="outdoor">Outdoor</option>
+                                        </select>
+                                    </div>
+                                    <div className={styles.inputGroup}>
+                                        <label className={styles.label}>Base Price (₹)</label>
+                                        <input
+                                            type="number"
+                                            value={newPlant.price}
+                                            onChange={(e) => setNewPlant({ ...newPlant, price: Number(e.target.value) })}
+                                            className={styles.glassInput}
+                                            min="0"
+                                        />
+                                    </div>
+                                </div>
+
+                                {/* Sunlight Control */}
+                                <div className={styles.inputGroup}>
+                                    <label className={styles.label}>Sunlight Requirement</label>
+                                    <div className={styles.segmentedControl}>
+                                        {['low', 'medium', 'high', 'direct'].map(lvl => (
+                                            <button
+                                                key={lvl}
+                                                type="button"
+                                                onClick={() => setNewPlant({ ...newPlant, sunlight: lvl as any })}
+                                                className={`${styles.segmentBtn} ${newPlant.sunlight === lvl ? styles.segmentBtnActive : ''}`}
+                                            >
+                                                {lvl}
+                                            </button>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                {/* Sliders & Advanced */}
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+                                    <div>
+                                        <div className="flex justify-between items-center mb-4">
+                                            <label className="text-xs font-bold uppercase text-slate-400 flex items-center gap-2">
+                                                <Droplets size={14} className="text-blue-400" /> Humidity
+                                            </label>
+                                            <span className="text-sm font-mono text-blue-400 font-bold">{newPlant.minHumidity}%</span>
+                                        </div>
+                                        <div className={styles.rangeWrapper}>
+                                            <input
+                                                type="range" min="0" max="100" step="10"
+                                                value={newPlant.minHumidity}
+                                                onChange={(e) => setNewPlant({ ...newPlant, minHumidity: Number(e.target.value) })}
+                                                className={styles.rangeInput}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label className="text-xs font-bold uppercase text-slate-400 flex items-center gap-2 mb-3">
+                                            <Wind size={14} className="text-purple-400" /> Oxygen Output
+                                        </label>
+                                        <select
+                                            value={newPlant.oxygenLevel}
+                                            onChange={(e) => setNewPlant({ ...newPlant, oxygenLevel: e.target.value as any })}
+                                            className={styles.glassSelect}
+                                        >
+                                            <option value="low">Low</option>
+                                            <option value="moderate">Moderate</option>
+                                            <option value="high">High</option>
+                                            <option value="very-high">Purifier (Very High)</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        {/* SUBMIT */}
-                        <div className="pt-8 border-t border-slate-800 flex justify-end">
-                            <Button
-                                type="submit"
-                                className="px-8 py-3 bg-white text-black font-bold text-sm tracking-widest hover:bg-slate-200 transition-colors uppercase rounded-none border border-white"
-                            >
-                                Publish Specimen
-                            </Button>
-                        </div>
+                            {/* Submit Area */}
+                            <div className="pt-8 border-t border-slate-700/50 flex justify-end">
+                                <button type="submit" className={styles.submitBtn}>
+                                    Register Specimen
+                                </button>
+                            </div>
 
-                    </form>
+                        </form>
+                    </div>
+
                 </div>
             </div>
         </AdminPageLayout>
