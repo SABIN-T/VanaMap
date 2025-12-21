@@ -29,11 +29,71 @@
     }
 }
 
-/* Header Section (could be used for search/sort in future) */
-.controlsBar {
+/* Search Bar */
+.searchContainer {
+    position: relative;
+    max-width: 600px;
+    margin: 0 auto 3rem;
+    z-index: 10;
+}
+
+.searchBar {
+    width: 100%;
+    background: rgba(30, 41, 59, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 9999px;
+    /* Pill shape */
+    padding: 1rem 3.5rem 1rem 3.5rem;
+    font-size: 1.1rem;
+    color: white;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.searchBar:focus {
+    background: rgba(30, 41, 59, 0.9);
+    border-color: #f59e0b;
+    /* Amber 500 for Vendors */
+    box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.2);
+}
+
+.searchIcon {
+    position: absolute;
+    left: 1.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #64748b;
+    pointer-events: none;
+    transition: color 0.3s;
+}
+
+.searchBar:focus~.searchIcon {
+    color: #f59e0b;
+}
+
+.clearButton {
+    position: absolute;
+    right: 1.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 50%;
+    transition: all 0.2s;
+    background: transparent;
+    border: none;
     display: flex;
-    justify-content: flex-end;
-    margin-bottom: 2rem;
+    align-items: center;
+    justify-content: center;
+}
+
+.clearButton:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
 }
 
 /* Vendor Grid/List Layout */
