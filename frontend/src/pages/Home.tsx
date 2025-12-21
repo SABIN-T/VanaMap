@@ -29,6 +29,7 @@ export const Home = () => {
     const [citySearch, setCitySearch] = useState('');
 
     const plantsSectionRef = useRef<HTMLDivElement>(null);
+    const filterSectionRef = useRef<HTMLDivElement>(null);
 
 
     const { addToCart } = useCart();
@@ -99,6 +100,12 @@ export const Home = () => {
         }, 300);
     };
 
+    const scrollToFilters = () => {
+        setTimeout(() => {
+            filterSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }, 100);
+    };
+
     const handleCitySearch = async () => {
         if (!citySearch) return;
         setLocationLoading(true);
@@ -108,7 +115,7 @@ export const Home = () => {
             if (weatherData) {
                 setWeather(weatherData);
                 toast.success(`Synced location: ${citySearch}`);
-                scrollToPlants();
+                scrollToFilters();
             } else {
                 toast.error("Data unavailable.");
             }
@@ -136,7 +143,7 @@ export const Home = () => {
                     if (weatherData) {
                         setWeather(weatherData);
                         toast.success("Location set!", { id: toastId });
-                        scrollToPlants();
+                        scrollToFilters();
                     } else {
                         toast.error("Sync failed.", { id: toastId });
                     }
@@ -328,7 +335,7 @@ export const Home = () => {
                 </div>
 
                 {/* Integrated Search and Filtering */}
-                <div className={styles.filterDiscoverySection}>
+                <div className={styles.filterDiscoverySection} ref={filterSectionRef} style={{ scrollMarginTop: '100px' }}>
                     <div className={styles.searchBarWrapper}>
                         <Search size={20} className={styles.searchIcon} />
                         <input
