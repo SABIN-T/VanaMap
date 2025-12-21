@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
-import { Store, CheckCircle, Star, Trash2 } from 'lucide-react';
+import { Store, Star, Trash2, ShieldCheck, AlertCircle, MapPin } from 'lucide-react';
 import { AdminPageLayout } from './AdminPageLayout';
-import { Button } from '../../components/common/Button';
 import { fetchVendors, updateVendor, deleteVendor } from '../../services/api';
 import type { Vendor } from '../../types';
+import styles from './ManageVendors.module.css';
 
 export const ManageVendors = () => {
     const [allVendors, setAllVendors] = useState<Vendor[]>([]);
@@ -18,68 +18,114 @@ export const ManageVendors = () => {
 
     const toggleVerification = async (v: Vendor) => {
         const newStatus = !v.verified;
+        const tid = toast.loading(newStatus ? "Verifying Partner..." : "Revoking Status...");
         try {
             await updateVendor(v.id, { verified: newStatus });
-            toast.success(newStatus ? "Approved!" : "Revoked");
+            toast.success(newStatus ? "Partner Verified" : "Verification Revoked", { id: tid });
             loadVendors();
-        } catch (e) { toast.error("Update failed"); }
+        } catch (e) { toast.error("Status Update Failed", { id: tid }); }
     };
 
     const toggleRecommendation = async (v: Vendor) => {
         const newStatus = !v.highlyRecommended;
         try {
             await updateVendor(v.id, { highlyRecommended: newStatus });
-            toast.success(newStatus ? "Promoted!" : "Demoted");
+            if (newStatus) toast.success("Marked as Top Partner!", { icon: '🌟' });
             loadVendors();
-        } catch (e) { toast.error("Update failed"); }
+        } catch (e) { toast.error("Promotion Failed"); }
     };
 
     const handleDelete = async (id: string) => {
-        if (!window.confirm("Permanently delete?")) return;
+        if (!window.confirm("Permanently delete this partner account?")) return;
+        const tid = toast.loading("Removing Partner...");
         try {
             await deleteVendor(id);
-            toast.success("Deleted");
+            toast.success("Partner Removed", { id: tid });
             loadVendors();
-        } catch (e) { toast.error("Deletion failed"); }
+        } catch (e) { toast.error("Deletion failed", { id: tid }); }
     };
 
     return (
         <AdminPageLayout title="Vendor Network Management">
-            <div className="space-y-4">
-                {allVendors.map(vendor => (
-                    <div key={vendor.id} className="flex flex-col md:flex-row items-center justify-between p-6 bg-slate-800/40 border border-slate-700/50 rounded-2xl hover:bg-slate-800/60 transition-colors">
-                        <div className="flex items-center gap-6 w-full md:w-auto mb-4 md:mb-0">
-                            <div className={`p-4 rounded-xl ${vendor.verified ? 'bg-emerald-500/10 text-emerald-500' : 'bg-amber-500/10 text-amber-500'}`}>
-                                <Store size={28} />
-                            </div>
-                            <div>
-                                <div className="flex items-center gap-3">
-                                    <h3 className="font-bold text-white text-xl">{vendor.name}</h3>
-                                    {vendor.verified && <CheckCircle size={18} className="text-emerald-500" fill="currentColor" />}
-                                    {vendor.highlyRecommended && <Star size={18} className="text-yellow-400" fill="currentColor" />}
-                                </div>
-                                <p className="text-slate-400 text-sm mt-1">{vendor.address || "No address provided"}</p>
-                                <div className="flex gap-2 mt-3">
-                                    <span className={`text-xs px-3 py-1 rounded-full font-medium tracking-wide ${vendor.verified ? 'bg-emerald-500/10 text-emerald-400' : 'bg-amber-500/10 text-amber-400'}`}>
-                                        {vendor.verified ? 'VERIFIED PARTNER' : 'PENDING APPROVAL'}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
+            <div className={styles.pageContainer}>
 
-                        <div className="flex items-center gap-3 w-full md:w-auto">
-                            <Button size="sm" variant="outline" onClick={() => toggleVerification(vendor)} className={`flex-1 md:flex-none ${vendor.verified ? 'border-red-500/30 text-red-400 hover:bg-red-500/10' : 'border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10'}`}>
-                                {vendor.verified ? 'Revoke' : 'Approve'}
-                            </Button>
-                            <Button size="sm" variant="outline" onClick={() => toggleRecommendation(vendor)} className={`flex-1 md:flex-none ${vendor.highlyRecommended ? 'bg-yellow-500/10 border-yellow-500/30 text-yellow-400' : 'text-slate-400 hover:text-yellow-400'}`}>
-                                <Star size={18} fill={vendor.highlyRecommended ? "currentColor" : "none"} />
-                            </Button>
-                            <Button size="sm" variant="outline" onClick={() => handleDelete(vendor.id)} className="border-red-500/20 text-red-500 hover:bg-red-500 hover:text-white">
-                                <Trash2 size={18} />
-                            </Button>
-                        </div>
+                {allVendors.length === 0 ? (
+                    <div className={styles.emptyState}>
+                        <Store size={48} className="mx-auto mb-4 opacity-50" />
+                        <h3 className="text-xl font-bold mb-2">No Registered Partners</h3>
+                        <p>New vendor registrations will appear here.</p>
                     </div>
-                ))}
+                ) : (
+                    <div className={styles.listLayout}>
+                        {allVendors.map((vendor, idx) => (
+                            <div key={vendor.id} className={styles.card} style={{ animationDelay: `${idx * 50}ms`, animationName: 'slideIn' }}>
+
+                                {/* Info Block */}
+                                <div className={styles.infoSection}>
+                                    <div className={`${styles.iconBox} ${vendor.verified ? styles.verifiedIconBox : styles.pendingIconBox}`}>
+                                        <Store size={28} strokeWidth={1.5} />
+                                    </div>
+
+                                    <div className={styles.details}>
+                                        <div className={styles.nameRow}>
+                                            <h3 className={styles.vendorName}>{vendor.name}</h3>
+
+                                            {/* Badges */}
+                                            {vendor.verified ? (
+                                                <span className={`${styles.badge} ${styles.verifiedBadge}`}>
+                                                    <ShieldCheck size={10} /> Verified
+                                                </span>
+                                            ) : (
+                                                <span className={`${styles.badge} ${styles.pendingBadge}`}>
+                                                    <AlertCircle size={10} /> Pending
+                                                </span>
+                                            )}
+
+                                            {vendor.highlyRecommended && (
+                                                <span className={`${styles.badge} ${styles.hotBadge}`}>
+                                                    <Star size={10} fill="currentColor" /> Top Rated
+                                                </span>
+                                            )}
+                                        </div>
+
+                                        <div className="flex items-start gap-1.5 text-slate-400">
+                                            <MapPin size={14} className="mt-0.5 shrink-0" />
+                                            <p className={styles.address}>{vendor.address || "No physical address listed"}</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Actions Block */}
+                                <div className={styles.actionSection}>
+                                    <button
+                                        onClick={() => toggleVerification(vendor)}
+                                        className={`${styles.actionBtn} ${vendor.verified ? styles.btnRevoke : styles.btnVerify}`}
+                                    >
+                                        {vendor.verified ? 'Revoke Status' : 'Approve Partner'}
+                                    </button>
+
+                                    <button
+                                        onClick={() => toggleRecommendation(vendor)}
+                                        className={`${styles.actionBtn} ${vendor.highlyRecommended ? styles.btnStarActive : styles.btnStar}`}
+                                        title={vendor.highlyRecommended ? "Remove from Top Rated" : "Mark as Top Rated"}
+                                    >
+                                        <Star size={16} fill={vendor.highlyRecommended ? "currentColor" : "none"} />
+                                        {vendor.highlyRecommended && <span className="text-xs">Featured</span>}
+                                    </button>
+
+                                    <button
+                                        onClick={() => handleDelete(vendor.id)}
+                                        className={`${styles.actionBtn} ${styles.btnDelete}`}
+                                        title="Delete Account"
+                                    >
+                                        <Trash2 size={16} />
+                                    </button>
+                                </div>
+
+                            </div>
+                        ))}
+                    </div>
+                )}
             </div>
         </AdminPageLayout>
     );

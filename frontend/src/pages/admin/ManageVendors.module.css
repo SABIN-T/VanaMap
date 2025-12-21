@@ -1,0 +1,272 @@
+/* Page Container to handle layout spacing */
+.pageContainer {
+    padding-bottom: 4rem;
+    animation: fadeIn 0.6s ease-out;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Header Section (could be used for search/sort in future) */
+.controlsBar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 2rem;
+}
+
+/* Vendor Grid/List Layout */
+.listLayout {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Vendor Card */
+.card {
+    display: flex;
+    flex-direction: column;
+    background: rgba(30, 41, 59, 0.4);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+@media (min-width: 768px) {
+    .card {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding: 2rem;
+    }
+}
+
+.card:hover {
+    background: rgba(30, 41, 59, 0.6);
+    border-color: rgba(16, 185, 129, 0.3);
+    /* Subtle emerald border on hover */
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.3);
+}
+
+/* Left Side: Info */
+.infoSection {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+    flex: 1;
+}
+
+.iconBox {
+    width: 64px;
+    height: 64px;
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.verifiedIconBox {
+    color: #10b981;
+    /* Emerald */
+    background: rgba(16, 185, 129, 0.1);
+    border-color: rgba(16, 185, 129, 0.2);
+    box-shadow: 0 0 20px -5px rgba(16, 185, 129, 0.3);
+}
+
+.pendingIconBox {
+    color: #f59e0b;
+    /* Amber */
+    background: rgba(245, 158, 11, 0.1);
+    border-color: rgba(245, 158, 11, 0.2);
+}
+
+.details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.nameRow {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.vendorName {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: white;
+    line-height: 1.2;
+}
+
+.badge {
+    font-size: 0.65rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding: 0.25rem 0.6rem;
+    border-radius: 9999px;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.verifiedBadge {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.pendingBadge {
+    background: rgba(245, 158, 11, 0.15);
+    color: #fbbf24;
+    border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.hotBadge {
+    background: linear-gradient(135deg, rgba(234, 179, 8, 0.2), rgba(234, 88, 12, 0.2));
+    color: #fbbf24;
+    border: 1px solid rgba(234, 179, 8, 0.4);
+    box-shadow: 0 0 10px rgba(234, 179, 8, 0.1);
+}
+
+.address {
+    font-size: 0.9rem;
+    color: #94a3b8;
+    line-height: 1.4;
+    max-width: 450px;
+}
+
+/* Right Side: Actions */
+.actionSection {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+@media (min-width: 768px) {
+    .actionSection {
+        margin-top: 0;
+        margin-left: 2rem;
+    }
+}
+
+.actionBtn {
+    height: 40px;
+    padding: 0 1.25rem;
+    border-radius: 0.75rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+    background: transparent;
+    cursor: pointer;
+}
+
+/* Different Button Styles */
+.btnVerify {
+    background: rgba(16, 185, 129, 0.1);
+    color: #34d399;
+    border-color: rgba(16, 185, 129, 0.2);
+}
+
+.btnVerify:hover {
+    background: rgba(16, 185, 129, 0.2);
+    transform: translateY(-1px);
+}
+
+.btnRevoke {
+    background: rgba(244, 63, 94, 0.1);
+    /* Rose */
+    color: #fb7185;
+    border-color: rgba(244, 63, 94, 0.2);
+}
+
+.btnRevoke:hover {
+    background: rgba(244, 63, 94, 0.2);
+    color: #fda4af;
+    transform: translateY(-1px);
+}
+
+.btnStar {
+    color: #64748b;
+    border-color: rgba(148, 163, 184, 0.2);
+}
+
+.btnStar:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+}
+
+.btnStarActive {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    color: black;
+    border: none;
+    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+}
+
+.btnStarActive:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px) rotate(5deg);
+}
+
+.btnDelete {
+    width: 40px;
+    padding: 0;
+    justify-content: center;
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.05);
+    border-color: rgba(239, 68, 68, 0.1);
+}
+
+.btnDelete:hover {
+    background: #ef4444;
+    color: white;
+    border-color: #ef4444;
+    transform: scale(1.05);
+}
+
+/* Empty State */
+.emptyState {
+    text-align: center;
+    padding: 4rem;
+    color: #64748b;
+    border: 2px dashed rgba(255, 255, 255, 0.05);
+    border-radius: 1.5rem;
+}
