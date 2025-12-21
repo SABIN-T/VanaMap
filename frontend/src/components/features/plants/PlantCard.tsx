@@ -42,14 +42,40 @@ export const PlantCard = ({ plant, onAdd, score, isTopMatch }: PlantCardProps) =
                 />
 
                 <div className={styles.overlayTop}>
-                    {score && score > 80 && (
-                        <div className={styles.matchBadge} style={{ background: 'linear-gradient(135deg, #facc15, #fbbf24)', color: 'black', fontWeight: 800 }}>
-                            {score.toFixed(0)}% MATCH
+                    {score !== undefined && (
+                        <div className={styles.matchBadge} style={{
+                            background: score >= 80 ? 'linear-gradient(135deg, #10b981, #059669)' :
+                                score >= 50 ? 'linear-gradient(135deg, #facc15, #fbbf24)' :
+                                    'linear-gradient(135deg, #f87171, #ef4444)',
+                            color: score >= 50 && score < 80 ? '#000' : '#fff',
+                            fontWeight: 900,
+                            padding: '4px 8px',
+                            borderRadius: '8px',
+                            fontSize: '0.7rem'
+                        }}>
+                            {score}% APTNESS
                         </div>
                     )}
                     <button onClick={handleHeartClick} className={styles.favBtn}>
                         <Heart size={20} fill={isFavorite ? "#ef4444" : "rgba(0,0,0,0.5)"} color={isFavorite ? "#ef4444" : "white"} />
                     </button>
+                </div>
+
+                <div className={styles.overlayBottom}>
+                    <div className={styles.typeLabel} style={{
+                        background: plant.type === 'indoor' ? 'rgba(59, 130, 246, 0.9)' : 'rgba(245, 158, 11, 0.9)',
+                        color: 'white',
+                        padding: '2px 8px',
+                        borderRadius: '6px',
+                        fontSize: '0.65rem',
+                        fontWeight: 800,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.5px',
+                        backdropFilter: 'blur(4px)',
+                        border: '1px solid rgba(255,255,255,0.2)'
+                    }}>
+                        {plant.type === 'indoor' ? 'Indoor Specimen' : 'Outdoor Nature'}
+                    </div>
                 </div>
 
                 {/* Kid/Pet Friendly Badges */}

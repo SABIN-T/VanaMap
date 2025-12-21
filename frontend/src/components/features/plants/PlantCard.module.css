@@ -57,11 +57,20 @@
     left: 0;
     width: 100%;
     display: flex;
-    justify-content: space-between;
-    align-items: end;
+    justify-content: flex-start;
+    align-items: flex-end;
     padding: 0.75rem;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
     z-index: 2;
+}
+
+.typeLabel {
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s;
+}
+
+.card:hover .typeLabel {
+    transform: scale(1.05);
 }
 
 .favBtn {

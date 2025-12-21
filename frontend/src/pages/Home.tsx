@@ -7,7 +7,7 @@ import { fetchPlants } from '../services/api';
 import { getWeather, geocodeCity } from '../services/weather';
 import { calculateAptness } from '../utils/logic';
 import type { Plant } from '../types';
-import { Sprout, MapPin, Thermometer, Wind, ArrowDown, Sparkles, Search, AlertCircle, Heart, Sun } from 'lucide-react';
+import { Sprout, MapPin, Thermometer, Wind, ArrowDown, Sparkles, Search, AlertCircle, Heart, Sun, Activity } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
 // Lazy load modal for performance
@@ -384,6 +384,49 @@ export const Home = () => {
                         </div>
                     </div>
                 </div>
+
+                {/* --- APTNESS LEGEND NOTICE --- */}
+                {weather && (
+                    <div className={styles.aptnessLegend} style={{
+                        background: 'rgba(30, 41, 59, 0.4)',
+                        border: '1px solid rgba(255, 255, 255, 0.05)',
+                        borderRadius: '1.5rem',
+                        padding: '1.5rem',
+                        marginBottom: '3rem',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '1rem',
+                        backdropFilter: 'blur(10px)'
+                    }}>
+                        <div className="flex items-center gap-2 mb-2">
+                            <Activity size={18} className="text-emerald-500" />
+                            <h4 className="text-sm font-bold text-white uppercase tracking-wider">Aptness Intelligence Guide</h4>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div className="flex items-start gap-3 p-3 rounded-xl bg-emerald-500/5 border border-emerald-500/10">
+                                <div className="w-3 h-3 rounded-full bg-emerald-500 mt-1 shrink-0" />
+                                <div>
+                                    <div className="text-xs font-black text-emerald-400 uppercase tracking-tighter">Superior Match (80-100%)</div>
+                                    <p className="text-[10px] text-slate-400 leading-tight">Elite biological compatibility. These specimens will thrive effortlessly in your current climate.</p>
+                                </div>
+                            </div>
+                            <div className="flex items-start gap-3 p-3 rounded-xl bg-amber-500/5 border border-amber-500/10">
+                                <div className="w-3 h-3 rounded-full bg-amber-500 mt-1 shrink-0" />
+                                <div>
+                                    <div className="text-xs font-black text-amber-400 uppercase tracking-tighter">Moderate Survival (50-79%)</div>
+                                    <p className="text-[10px] text-slate-400 leading-tight">Viable with maintenance. Requires careful monitoring of hydration and localized temperature.</p>
+                                </div>
+                            </div>
+                            <div className="flex items-start gap-3 p-3 rounded-xl bg-red-500/5 border border-red-500/10">
+                                <div className="w-3 h-3 rounded-full bg-red-500 mt-1 shrink-0" />
+                                <div>
+                                    <div className="text-xs font-black text-red-400 uppercase tracking-tighter">Critical Alert (0-49%)</div>
+                                    <p className="text-[10px] text-slate-400 leading-tight">Environmental mismatch. Artificial climate control (AC/Humidifiers) is mandatory for specimen survival.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
                 <div className={styles.grid}>
                     {plantsLoading ? (
