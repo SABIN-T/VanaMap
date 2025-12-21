@@ -348,11 +348,17 @@
 }
 
 .cardActions {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 0.75rem;
 }
 
+.cardActions>*:nth-last-child(1):nth-child(odd) {
+    grid-column: span 2;
+}
+
 .actionBtn {
+    width: 100%;
     flex: 1;
     display: flex;
     align-items: center;
