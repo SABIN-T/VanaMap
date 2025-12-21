@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { AdminPageLayout } from './AdminPageLayout';
 import {
-    User, Store, Sprout, Clock
+    User, Store, Sprout, Clock, Search
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import styles from './Notifications.module.css';
@@ -22,6 +22,7 @@ export const Notifications = () => {
     const [vendorActivity, setVendorActivity] = useState<ActivityItem[]>([]);
     const [plantActivity, setPlantActivity] = useState<ActivityItem[]>([]);
     const [loading, setLoading] = useState(true);
+    const [searchQuery, setSearchQuery] = useState('');
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -37,9 +38,10 @@ export const Notifications = () => {
                 const oneDay = 24 * 60 * 60 * 1000;
 
                 const uActs: ActivityItem[] = users.map((u: any, i) => {
-                    const ts = new Date(Date.now() - Math.random() * 86400000 * 3);
+                    // Use real createdAt if available, else fallback to random for demo
+                    const ts = u.createdAt ? new Date(u.createdAt) : new Date(Date.now() - Math.random() * 86400000 * 3);
                     return {
-                        id: `u-${i}`,
+                        id: u._id || `u-${i}`,
                         type: 'user' as const,
                         title: `New User: ${u.name || u.email.split('@')[0]}`,
                         description: `Joined using ${u.email}`,
@@ -50,11 +52,11 @@ export const Notifications = () => {
                 }).sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
 
                 const vActs: ActivityItem[] = vendors.map((v: any, i) => {
-                    const ts = new Date(Date.now() - Math.random() * 86400000 * 5);
+                    const ts = v.createdAt ? new Date(v.createdAt) : new Date(Date.now() - Math.random() * 86400000 * 5);
                     return {
-                        id: `v-${i}`,
+                        id: v._id || `v-${i}`,
                         type: 'vendor' as const,
-                        title: `Vendor Update: ${v.name}`,
+                        title: `Vendor: ${v.name}`,
                         description: `Location: ${v.address || 'Unknown'}`,
                         timestamp: ts,
                         status: (i % 3 === 0 ? 'update' : 'new') as 'update' | 'new',
@@ -63,11 +65,11 @@ export const Notifications = () => {
                 }).sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
 
                 const pActs: ActivityItem[] = plants.map((p: any, i) => {
-                    const ts = new Date(Date.now() - Math.random() * 86400000 * 7);
+                    const ts = p.createdAt ? new Date(p.createdAt) : new Date(Date.now() - Math.random() * 86400000 * 7);
                     return {
-                        id: `p-${i}`,
+                        id: p._id || `p-${i}`,
                         type: 'plant' as const,
-                        title: `Plant Added: ${p.name}`,
+                        title: `Plant: ${p.name}`,
                         description: `${p.price ? `$${p.price}` : 'Price unset'} • ${p.category || 'General'}`,
                         timestamp: ts,
                         status: (p.stock < 5 ? 'alert' : 'new') as 'alert' | 'new',
@@ -88,16 +90,46 @@ export const Notifications = () => {
         loadData();
     }, []);
 
-    const formatTime = (date: Date) => {
+    const filteredUsers = useMemo(() =>
+        userActivity.filter(item =>
+            item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            item.description.toLowerCase().includes(searchQuery.toLowerCase())
+        ), [userActivity, searchQuery]);
+
+    const filteredVendors = useMemo(() =>
+        vendorActivity.filter(item =>
+            item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            item.description.toLowerCase().includes(searchQuery.toLowerCase())
+        ), [vendorActivity, searchQuery]);
+
+    const filteredPlants = useMemo(() =>
+        plantActivity.filter(item =>
+            item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            item.description.toLowerCase().includes(searchQuery.toLowerCase())
+        ), [plantActivity, searchQuery]);
+
+    const formatRelativeTime = (date: Date) => {
         const now = new Date();
         const diff = now.getTime() - date.getTime();
         const mins = Math.floor(diff / 60000);
         const hours = Math.floor(mins / 60);
         const days = Math.floor(hours / 24);
 
-        if (mins < 60) return `${mins} mins ago`;
-        if (hours < 24) return `${hours} hours ago`;
-        return `${days} days ago`;
+        if (mins < 1) return 'just now';
+        if (mins < 60) return `${mins}m ago`;
+        if (hours < 24) return `${hours}h ago`;
+        return `${days}d ago`;
+    };
+
+    const formatFullTimestamp = (date: Date) => {
+        return date.toLocaleString('en-US', {
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true
+        });
     };
 
     const handleItemClick = (type: 'user' | 'vendor' | 'plant') => {
@@ -110,7 +142,7 @@ export const Notifications = () => {
         return (
             <AdminPageLayout title="Notifications Center">
                 <div style={{ padding: '2rem', textAlign: 'center', color: '#94a3b8' }}>
-                    Loading activity streams...
+                    Loading system logs...
                 </div>
             </AdminPageLayout>
         );
@@ -119,8 +151,20 @@ export const Notifications = () => {
     return (
         <AdminPageLayout title="Notifications Center">
             <div className={styles.pageContainer}>
-                <div className={styles.grid}>
+                <header className={styles.header}>
+                    <div className={styles.searchContainer}>
+                        <Search className={styles.searchIcon} size={18} />
+                        <input
+                            type="text"
+                            className={styles.searchInput}
+                            placeholder="Search names, shops or plants..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                        />
+                    </div>
+                </header>
 
+                <div className={styles.grid}>
                     {/* USERS COLUMN */}
                     <div className={styles.card}>
                         <div className={styles.cardHeader}>
@@ -128,10 +172,10 @@ export const Notifications = () => {
                                 <User size={20} />
                             </div>
                             <span className={styles.sectionTitle}>User Activity</span>
-                            <span className="text-xs text-slate-500 ml-auto">{userActivity.length} events</span>
+                            <span className="text-xs text-slate-500 ml-auto">{filteredUsers.length}</span>
                         </div>
                         <div className={styles.scrollArea}>
-                            {userActivity.map(item => (
+                            {filteredUsers.length > 0 ? filteredUsers.map(item => (
                                 <button
                                     key={item.id}
                                     className={`${styles.item} ${item.isNewToAdmin ? styles.newItem : ''}`}
@@ -142,15 +186,17 @@ export const Notifications = () => {
                                             <span className={item.isNewToAdmin ? styles.newBadgePulse : ''}>
                                                 {item.title}
                                             </span>
-                                            <span className={`${styles.badge} ${item.status === 'new' ? styles.badgeNew : styles.badgeUpdate}`}>
-                                                {item.status}
-                                            </span>
                                         </div>
                                         <div className={styles.subText}>{item.description}</div>
-                                        <span className={styles.time}><Clock size={10} className="inline mr-1" />{formatTime(item.timestamp)}</span>
+                                        <span className={styles.time}>
+                                            <span className={styles.fullDate}>{formatFullTimestamp(item.timestamp)}</span>
+                                            <Clock size={10} className="inline mr-1" />{formatRelativeTime(item.timestamp)}
+                                        </span>
                                     </div>
                                 </button>
-                            ))}
+                            )) : (
+                                <div className="text-center py-10 text-slate-600 text-sm italic">No users found</div>
+                            )}
                         </div>
                     </div>
 
@@ -161,10 +207,10 @@ export const Notifications = () => {
                                 <Store size={20} />
                             </div>
                             <span className={styles.sectionTitle}>Vendor Updates</span>
-                            <span className="text-xs text-slate-500 ml-auto">{vendorActivity.length} events</span>
+                            <span className="text-xs text-slate-500 ml-auto">{filteredVendors.length}</span>
                         </div>
                         <div className={styles.scrollArea}>
-                            {vendorActivity.map(item => (
+                            {filteredVendors.length > 0 ? filteredVendors.map(item => (
                                 <button
                                     key={item.id}
                                     className={`${styles.item} ${item.isNewToAdmin ? styles.newItem : ''}`}
@@ -177,10 +223,15 @@ export const Notifications = () => {
                                             </span>
                                         </div>
                                         <div className={styles.subText}>{item.description}</div>
-                                        <span className={styles.time}><Clock size={10} className="inline mr-1" />{formatTime(item.timestamp)}</span>
+                                        <span className={styles.time}>
+                                            <span className={styles.fullDate}>{formatFullTimestamp(item.timestamp)}</span>
+                                            <Clock size={10} className="inline mr-1" />{formatRelativeTime(item.timestamp)}
+                                        </span>
                                     </div>
                                 </button>
-                            ))}
+                            )) : (
+                                <div className="text-center py-10 text-slate-600 text-sm italic">No vendors found</div>
+                            )}
                         </div>
                     </div>
 
@@ -191,10 +242,10 @@ export const Notifications = () => {
                                 <Sprout size={20} />
                             </div>
                             <span className={styles.sectionTitle}>Plant Log</span>
-                            <span className="text-xs text-slate-500 ml-auto">{plantActivity.length} events</span>
+                            <span className="text-xs text-slate-500 ml-auto">{filteredPlants.length}</span>
                         </div>
                         <div className={styles.scrollArea}>
-                            {plantActivity.map(item => (
+                            {filteredPlants.length > 0 ? filteredPlants.map(item => (
                                 <button
                                     key={item.id}
                                     className={`${styles.item} ${item.isNewToAdmin ? styles.newItem : ''}`}
@@ -205,15 +256,17 @@ export const Notifications = () => {
                                             <span className={item.isNewToAdmin ? styles.newBadgePulse : ''}>
                                                 {item.title}
                                             </span>
-                                            {item.status === 'alert' && (
-                                                <span className={`${styles.badge} bg-red-500/20 text-red-400`}>Low Stock</span>
-                                            )}
                                         </div>
                                         <div className={styles.subText}>{item.description}</div>
-                                        <span className={styles.time}><Clock size={10} className="inline mr-1" />{formatTime(item.timestamp)}</span>
+                                        <span className={styles.time}>
+                                            <span className={styles.fullDate}>{formatFullTimestamp(item.timestamp)}</span>
+                                            <Clock size={10} className="inline mr-1" />{formatRelativeTime(item.timestamp)}
+                                        </span>
                                     </div>
                                 </button>
-                            ))}
+                            )) : (
+                                <div className="text-center py-10 text-slate-600 text-sm italic">No plants found</div>
+                            )}
                         </div>
                     </div>
 
