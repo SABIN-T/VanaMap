@@ -1,0 +1,219 @@
+/* Page Container */
+.pageContainer {
+    padding-bottom: 4rem;
+    animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Settings Layout */
+.layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+@media (min-width: 1024px) {
+    .layout {
+        grid-template-columns: 280px 1fr;
+        align-items: start;
+    }
+}
+
+/* Sidebar Navigation (Future proofing) */
+.settingsNav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.navItem {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem;
+    border-radius: 0.75rem;
+    color: #94a3b8;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.navItem:hover,
+.navItemActive {
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+}
+
+.navItemActive {
+    background: rgba(99, 102, 241, 0.1);
+    color: #818cf8;
+}
+
+/* Main Content Area */
+.mainContent {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+/* Card Styles */
+.card {
+    background: rgba(30, 41, 59, 0.4);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 1.5rem;
+    padding: 2rem;
+    transition: all 0.3s ease;
+}
+
+.cardHeader {
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.cardTitle {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 0.5rem;
+}
+
+.cardDesc {
+    color: #94a3b8;
+    font-size: 0.9rem;
+}
+
+/* Toggle Control Row */
+.settingRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.settingRow:last-child {
+    border-bottom: none;
+}
+
+.settingInfo {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+
+.iconBox {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.03);
+    color: #94a3b8;
+}
+
+.settingDetails {
+    display: flex;
+    flex-direction: column;
+}
+
+.settingName {
+    font-weight: 600;
+    color: white;
+    font-size: 1rem;
+}
+
+.settingHelper {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin-top: 0.25rem;
+}
+
+/* Toggle Switch */
+.toggle {
+    width: 48px;
+    height: 28px;
+    border-radius: 999px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    background: #334155;
+}
+
+.toggle[data-active="true"] {
+    background: #6366f1;
+    /* Indigo 500 */
+    box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+}
+
+.toggleKnob {
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.toggle[data-active="true"] .toggleKnob {
+    transform: translateX(20px);
+}
+
+/* Danger Zone */
+.dangerCard {
+    background: rgba(244, 63, 94, 0.05);
+    /* Rose tint */
+    border-color: rgba(244, 63, 94, 0.1);
+}
+
+.dangerTitle {
+    color: #fb7185;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.dangerDesc {
+    color: rgba(253, 164, 175, 0.7);
+}
+
+.dangerActions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.dangerBtn {
+    background: transparent;
+    border: 1px solid rgba(244, 63, 94, 0.2);
+    color: #fb7185;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.dangerBtn:hover {
+    background: rgba(244, 63, 94, 0.1);
+    border-color: rgba(244, 63, 94, 0.4);
+    transform: translateY(-1px);
+}
