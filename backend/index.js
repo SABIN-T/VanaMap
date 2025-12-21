@@ -219,7 +219,7 @@ app.get('/api/vendors', async (req, res) => {
     }
 });
 
-app.post('/api/vendors', auth, admin, async (req, res) => {
+app.post('/api/vendors', auth, async (req, res) => {
     try {
         const newVendor = new Vendor({ ...req.body, id: "v" + Date.now() });
         await newVendor.save();
