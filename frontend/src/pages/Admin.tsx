@@ -9,42 +9,45 @@ import {
     Store, Edit, Database, Bell
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import styles from './Admin.module.css';
 
 
 export const Admin = () => {
+    const { user, logout, loading: authLoading } = useAuth();
     const [stats, setStats] = useState({ plants: 0, users: 0, vendors: 0 });
-
-
     const navigate = useNavigate();
-
-
 
     const loadData = useCallback(async () => {
         try {
-
             const [vendors, plants, users] = await Promise.all([fetchVendors(), fetchPlants(), fetchUsers()]);
-
             setStats({
                 vendors: vendors.length,
                 plants: plants.length,
                 users: users.length
             });
-
-
         } catch (err) {
             console.error(err);
         }
-    }, [fetchPlants, fetchUsers, fetchVendors]);
+    }, []);
 
     useEffect(() => {
-        // Redirect to unified auth if not logged in or not admin
-        if (!localStorage.getItem('user')) {
-            navigate('/auth');
-        } else {
-            loadData();
+        if (!authLoading) {
+            if (!user || user.role !== 'admin') {
+                navigate('/auth', { replace: true });
+            } else {
+                loadData();
+            }
         }
-    }, [navigate, loadData]);
+    }, [user, navigate, loadData, authLoading]);
+
+    if (authLoading || !user || user.role !== 'admin') {
+        return (
+            <div style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center', background: '#0f172a' }}>
+                <div className="pre-loader-pulse"></div>
+            </div>
+        );
+    }
 
     return (
         <div className={styles.container}>
@@ -59,7 +62,7 @@ export const Admin = () => {
                     <button onClick={() => window.location.reload()} className="p-3 rounded-full bg-slate-800/50 text-slate-400 hover:text-white hover:bg-slate-800 transition-colors">
                         <Activity size={20} />
                     </button>
-                    <button onClick={() => { localStorage.removeItem('adminAuthenticated'); navigate('/admin-login'); }} className="px-6 py-3 rounded-full bg-rose-500/10 text-rose-500 hover:bg-rose-500 hover:text-white font-bold text-sm transition-all flex items-center gap-2">
+                    <button onClick={logout} className="px-6 py-3 rounded-full bg-rose-500/10 text-rose-500 hover:bg-rose-500 hover:text-white font-bold text-sm transition-all flex items-center gap-2">
                         <LogOut size={16} /> Logout
                     </button>
                 </div>

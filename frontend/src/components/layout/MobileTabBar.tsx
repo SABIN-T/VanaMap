@@ -1,11 +1,13 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Home, MapPin, Bot, ShoppingBag, BookOpen } from 'lucide-react';
+import { Home, MapPin, Bot, ShoppingBag, BookOpen, Shield } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
+import { useAuth } from '../../context/AuthContext';
 import { useEffect, useState } from 'react';
 
 export const MobileTabBar = () => {
     const location = useLocation();
     const { items } = useCart();
+    const { user } = useAuth();
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
     useEffect(() => {
@@ -18,6 +20,7 @@ export const MobileTabBar = () => {
 
     const tabs = [
         { path: '/', icon: Home, label: 'Home' },
+        ...(user?.role === 'admin' ? [{ path: '/admin', icon: Shield, label: 'Admin' }] : []),
         { path: '/nearby', icon: MapPin, label: 'Shops' },
         { path: '/doctor-ai', icon: Bot, label: 'Dr. AI' },
         { path: '/guide', icon: BookOpen, label: 'Guide' },

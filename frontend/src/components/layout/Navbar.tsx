@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingCart, User as UserIcon, LogOut, BookOpen, Leaf, Sun, Moon, Menu, X, ChevronRight, Bot, Download } from 'lucide-react';
+import { ShoppingCart, User as UserIcon, LogOut, BookOpen, Leaf, Sun, Moon, Menu, X, ChevronRight, Bot, Download, Shield } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
 import { useTheme } from '../../context/ThemeContext';
@@ -88,7 +88,12 @@ export const Navbar = () => {
 
                 <div className={styles.authDesktop}>
                     {user ? (
-                        <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                        <div style={{ display: 'flex', gap: '0.8rem', alignItems: 'center' }}>
+                            {user.role === 'admin' && (
+                                <Link to="/admin" className="btn btn-outline" style={{ border: '1px solid #facc15', color: '#facc15', padding: '0.4rem 1rem', fontSize: '0.85rem' }}>
+                                    Admin Panel
+                                </Link>
+                            )}
                             <Link to="/dashboard" className="btn btn-primary" style={{ padding: '0.4rem 1rem', fontSize: '0.85rem' }}>
                                 <UserIcon size={14} /> {user.name?.split(' ')[0] || 'User'}
                             </Link>
@@ -146,6 +151,12 @@ export const Navbar = () => {
 
                     {user ? (
                         <>
+                            {user.role === 'admin' && (
+                                <Link to="/admin" className={styles.mobileNavLink} onClick={() => setIsMenuOpen(false)} style={{ color: '#facc15' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><Shield size={20} /> Admin Control</div>
+                                    <ChevronRight size={18} />
+                                </Link>
+                            )}
                             <Link to="/dashboard" className={styles.mobileNavLink} onClick={() => setIsMenuOpen(false)}>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><UserIcon size={20} /> My Profile</div>
                                 <ChevronRight size={18} />
