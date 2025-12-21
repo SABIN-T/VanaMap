@@ -49,7 +49,7 @@ export const UserDashboard = () => {
 
                         // Prompt if location missing (essential for Nearby Shops)
                         if (!vendor.latitude || !vendor.longitude) {
-                            setShowVendorModal(true);
+                            navigate('/vendor');
                         }
                     }
                 } catch (e) {
@@ -285,7 +285,7 @@ export const UserDashboard = () => {
 
                 <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
                     {user.role === 'vendor' && (
-                        <Button onClick={() => setShowVendorModal(true)} variant="outline" style={{ gap: '0.5rem', display: 'flex', alignItems: 'center' }}>
+                        <Button onClick={() => navigate('/vendor')} variant="outline" style={{ gap: '0.5rem', display: 'flex', alignItems: 'center' }}>
                             <Store size={18} /> Edit Shop Details
                         </Button>
                     )}
