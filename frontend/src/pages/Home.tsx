@@ -341,31 +341,46 @@ export const Home = () => {
                     </div>
 
                     <div className={styles.filterWrapper}>
-                        <div className={styles.filterChipGroup}>
-                            <span className={styles.groupLabel}>LOCATION</span>
-                            {['all', 'indoor', 'outdoor'].map((f) => (
-                                <button
-                                    key={f}
-                                    className={`${styles.filterBtn} ${filter === f ? styles.active : ''}`}
-                                    onClick={() => setFilter(f as any)}
-                                >
-                                    {f.toUpperCase()}
-                                </button>
-                            ))}
+                        {/* 1. Category Selection - High Prominence */}
+                        <div className={styles.categorySelectionList}>
+                            <div
+                                className={`${styles.categoryCard} ${filter === 'indoor' ? styles.indoorActive : ''}`}
+                                onClick={() => setFilter(filter === 'indoor' ? 'all' : 'indoor')}
+                            >
+                                <div className={styles.categoryIcon}><Wind size={32} /></div>
+                                <div className={styles.categoryText}>
+                                    <h3 className={styles.categoryName}>Indoor Collection</h3>
+                                    <p className={styles.categoryDesc}>Air-purifying laboratory-grade specimens for your room.</p>
+                                </div>
+                            </div>
+
+                            <div
+                                className={`${styles.categoryCard} ${filter === 'outdoor' ? styles.outdoorActive : ''}`}
+                                onClick={() => setFilter(filter === 'outdoor' ? 'all' : 'outdoor')}
+                            >
+                                <div className={styles.categoryIcon}><Sprout size={32} /></div>
+                                <div className={styles.categoryText}>
+                                    <h3 className={styles.categoryName}>Outdoor Nature</h3>
+                                    <p className={styles.categoryDesc}>Resilient natural varieties for your garden and balcony.</p>
+                                </div>
+                            </div>
                         </div>
 
+                        {/* 2. Sunlight Filter - Secondary */}
                         <div className={styles.filterChipGroup}>
-                            <span className={styles.groupLabel}>SUNLIGHT</span>
-                            {['all', 'low', 'medium', 'high'].map((l) => (
-                                <button
-                                    key={l}
-                                    className={`${styles.filterBtn} ${lightFilter === l ? styles.active : ''}`}
-                                    onClick={() => setLightFilter(l as any)}
-                                >
-                                    <Sun size={12} style={{ marginRight: '4px', display: 'inline-block' }} />
-                                    {l.toUpperCase()}
-                                </button>
-                            ))}
+                            <span className={styles.groupLabel}>PRECISE SUNLIGHT FILTER</span>
+                            <div className="flex flex-wrap gap-2">
+                                {['all', 'low', 'medium', 'high'].map((l) => (
+                                    <button
+                                        key={l}
+                                        className={`${styles.filterBtn} ${lightFilter === l ? styles.active : ''}`}
+                                        onClick={() => setLightFilter(l as any)}
+                                    >
+                                        <Sun size={12} style={{ marginRight: '4px', display: 'inline-block' }} />
+                                        {l.toUpperCase()}
+                                    </button>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>
