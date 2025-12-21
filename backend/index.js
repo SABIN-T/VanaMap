@@ -37,6 +37,17 @@ const admin = (req, res, next) => {
     next();
 };
 
+// Helper to normalize user for frontend (stripping sensitive data)
+const normalizeUser = (user) => {
+    if (!user) return null;
+    const obj = user.toObject ? user.toObject() : user;
+    const { password, __v, _id, ...rest } = obj;
+    return {
+        id: _id ? _id.toString() : (obj.id || ''),
+        ...rest
+    };
+};
+
 // --- HELPER: Mock WhatsApp Notification ---
 const sendWhatsApp = async (msg, type, details = {}) => {
     const adminPhone = "9188773534";
@@ -249,7 +260,7 @@ app.post('/api/auth/signup', async (req, res) => {
         await user.save();
 
         const token = jwt.sign({ id: user._id, email: user.email, role: user.role }, JWT_SECRET, { expiresIn: '7d' });
-        res.status(201).json({ user, token });
+        res.status(201).json({ user: normalizeUser(user), token });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -265,14 +276,14 @@ app.post('/api/auth/login', async (req, res) => {
         if (!isMatch) {
             // Check hardcoded admin recovery
             if (email === 'admin@plantai.com' && password === 'Defender123') {
-                // Allow login and fix password if needed? No, just match.
+                // Allow recovery login
             } else {
                 return res.status(401).json({ error: "Invalid credentials" });
             }
         }
 
         const token = jwt.sign({ id: user._id, email: user.email, role: user.role }, JWT_SECRET, { expiresIn: '7d' });
-        res.json({ user, token });
+        res.json({ user: normalizeUser(user), token });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -281,7 +292,7 @@ app.post('/api/auth/login', async (req, res) => {
 app.get('/api/user/profile', auth, async (req, res) => {
     try {
         const user = await User.findById(req.user.id).lean();
-        res.json(user);
+        res.json(normalizeUser(user));
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -324,7 +335,7 @@ app.post('/api/auth/google-sync', async (req, res) => {
             await user.save();
         }
         const token = jwt.sign({ id: user._id, email: user.email, role: user.role }, JWT_SECRET, { expiresIn: '7d' });
-        res.json({ user, token });
+        res.json({ user: normalizeUser(user), token });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }

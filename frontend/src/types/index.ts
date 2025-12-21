@@ -50,6 +50,7 @@ export interface User {
     role: UserRole;
     favorites: string[]; // Plant IDs
     cart: { plantId: string; quantity: number }[];
+    token?: string; // JWT Session Token
     resetRequest?: {
         requested: boolean;
         approved: boolean;

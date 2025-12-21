@@ -39,8 +39,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         if (saved) {
             try {
                 const parsed = JSON.parse(saved);
-                // In a perfect world, we'd verify the token is not expired here too
-                setUser(parsed.user || parsed);
+                // Handle legacy structure { user: {...}, token: "..." } or new { ..., token: "..." }
+                const userData = parsed.user ? { ...parsed.user, token: parsed.token } : parsed;
+
+                // Basic validation: ensure we have at least a role and name
+                if (userData && userData.role && userData.name) {
+                    setUser(userData);
+                } else {
+                    console.warn("Invalid user data in storage, clearing.");
+                    localStorage.removeItem('user');
+                }
             } catch (e) {
                 console.error("Local storage corruption", e);
                 localStorage.removeItem('user');
@@ -60,7 +68,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             const data = await res.json();
             if (!res.ok) throw new Error(data.error || 'Login failed');
 
-            // Data contains { user, token }
+            // Data contains { user, token } - Merge them into one object for high-availability access
             const userData = { ...data.user, token: data.token };
 
             setUser(userData);
@@ -148,7 +156,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             const saved = localStorage.getItem('user');
             if (saved) {
                 const parsed = JSON.parse(saved);
-                localStorage.setItem('user', JSON.stringify({ ...parsed, ...updates }));
+                const currentToken = parsed.token || prev.token;
+                localStorage.setItem('user', JSON.stringify({ ...parsed, ...updates, token: currentToken }));
             }
             return updated;
         });
