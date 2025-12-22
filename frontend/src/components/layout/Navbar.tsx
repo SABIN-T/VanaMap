@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingCart, User as UserIcon, LogOut, Leaf, Sun, Moon, Menu, X, ChevronRight, Bot, Download, Shield, ShoppingBag } from 'lucide-react';
+import { ShoppingCart, User as UserIcon, LogOut, Leaf, Sun, Moon, Menu, X, ChevronRight, Bot, Download, Shield, ShoppingBag, Phone, Mail, MessageCircle } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
 import { useTheme } from '../../context/ThemeContext';
@@ -40,12 +40,11 @@ export const Navbar = () => {
 
                 {/* Doctor AI Button - Desktop Only */}
                 <Link
-                    to="/doctor-ai"
-                    target="_blank"
-                    className={`${styles.navLink} desktop-only`}
-                    style={{ color: '#38bdf8', display: 'flex', alignItems: 'center', gap: '5px' }}
+                    to="/contact"
+                    className={styles.navLink}
+                    style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
                 >
-                    <Bot size={18} /> Doctor AI
+                    <MessageCircle size={18} /> Support
                 </Link>
 
                 <Link id="nav-shops" to="/shops" className={styles.navLink}>
@@ -97,8 +96,8 @@ export const Navbar = () => {
                         <ChevronRight size={18} />
                     </Link>
 
-                    <Link to="/doctor-ai" target="_blank" className={styles.mobileNavLink} onClick={() => setIsMenuOpen(false)} style={{ color: '#38bdf8' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><Bot size={20} /> Doctor AI</div>
+                    <Link to="/contact" className={styles.mobileNavLink} onClick={() => setIsMenuOpen(false)}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><MessageCircle size={20} /> Support</div>
                         <ChevronRight size={18} />
                     </Link>
 
