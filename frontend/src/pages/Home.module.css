@@ -33,16 +33,46 @@
 
 .heroContent {
     max-width: 1200px;
-    /* Expanded for Desktop */
     width: 100%;
+    position: relative;
+    z-index: 10;
+}
+
+.heroBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--color-primary);
+    padding: 0.35rem 0.85rem;
+    border-radius: 99px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    letter-spacing: 0.5px;
+}
+
+.heroTitle {
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+    color: white;
+    letter-spacing: -1px;
+    background: linear-gradient(180deg, #fff 0%, #cbd5e1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .heroSubtitle {
-    font-size: 1.1rem;
-    color: var(--color-text-muted);
+    font-size: 1.05rem;
+    color: #94a3b8;
     line-height: 1.6;
-    margin-bottom: 3.5rem;
-    max-width: 650px;
+    margin-bottom: 2.5rem;
+    max-width: 500px;
     margin-inline: auto;
 }
 
