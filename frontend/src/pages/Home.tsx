@@ -530,6 +530,11 @@ export const Home = () => {
                                 </a>
                             </li>
                             <li>
+                                <a href="/about" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                    <Sparkles size={14} /> About VanaMap
+                                </a>
+                            </li>
+                            <li>
                                 <a href="/nearby" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '0.9rem' }}>Vendor Login</a>
                             </li>
                         </ul>

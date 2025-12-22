@@ -32,6 +32,9 @@ const LoadingScreen = () => (
     </div>
 );
 
+// About Page - Corrected Path
+const About = lazy(() => import('../../pages/About').then(module => ({ default: module.About })));
+
 export const AnimatedRoutes = () => {
     const location = useLocation();
 
@@ -55,6 +58,7 @@ export const AnimatedRoutes = () => {
                 <div key={location.pathname} className="page-enter" style={{ minHeight: '100vh' }}>
                     <Routes location={location}>
                         <Route path="/" element={<Home />} />
+                        <Route path="/about" element={<About />} />
                         <Route path="/dashboard" element={<UserDashboard />} />
                         <Route path="/nearby" element={<Nearby />} />
                         <Route path="/vendor" element={<VendorPortal />} />
