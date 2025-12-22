@@ -27,7 +27,7 @@ export const Home = () => {
     const [isSlowLoading, setIsSlowLoading] = useState(false);
     const [selectedPlant, setSelectedPlant] = useState<Plant | null>(null);
     const [citySearch, setCitySearch] = useState('');
-    const [visibleLimit, setVisibleLimit] = useState(10);
+    const [visibleLimit, setVisibleLimit] = useState(() => window.innerWidth < 768 ? 4 : 10);
 
     const plantsSectionRef = useRef<HTMLDivElement>(null);
     const filterSectionRef = useRef<HTMLDivElement>(null);
