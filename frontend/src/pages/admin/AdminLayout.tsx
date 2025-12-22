@@ -3,7 +3,7 @@ import { useLocation, Link } from 'react-router-dom';
 import {
     LayoutDashboard, Sprout, Store,
     Users, Activity, Bell, Settings,
-    Menu, X, Shield, LogOut, ChevronRight
+    Menu, X, LogOut, ChevronRight
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import styles from './AdminLayout.module.css';
@@ -41,7 +41,7 @@ export const AdminLayout = ({ title, children }: AdminLayoutProps) => {
                 <div className={styles.sidebarHeader}>
                     <div className={styles.brand}>
                         <div className={styles.logoBox}>
-                            <Shield size={24} color="#facc15" />
+                            <img src="/logo.png" alt="VanaMap" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
                         </div>
                         <span className={styles.brandName}>VANAMAP</span>
                     </div>
