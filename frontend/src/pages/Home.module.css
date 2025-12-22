@@ -1,13 +1,21 @@
 .homeContainer {
     max-width: 1400px;
     margin: 0 auto;
-    width: 100%;
 }
 
-@media (min-width: 1500px) {
-    .homeContainer {
-        max-width: 1800px;
-        /* Allow 5 columns */
+
+/* --- MOBILE OPTIMIZATION (App View) --- */
+@media (max-width: 768px) {
+    .hero {
+        padding: 5rem 1rem 2rem !important;
+        /* Reduced top padding for mobile */
+        min-height: auto;
+        /* Allow content to dictate height on small screens */
+    }
+
+    .heroSubtitle {
+        margin-bottom: 2rem !important;
+        /* Tighten vertical rhythm */
     }
 }
 
@@ -24,32 +32,9 @@
 }
 
 .heroContent {
-    max-width: 900px;
+    max-width: 1200px;
+    /* Expanded for Desktop */
     width: 100%;
-}
-
-.heroBadge {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    background: rgba(0, 255, 157, 0.1);
-    color: var(--color-primary);
-    padding: 0.4rem 1rem;
-    border-radius: 99px;
-    font-size: 0.75rem;
-    font-weight: 700;
-    margin-bottom: 1.5rem;
-    border: 1px solid rgba(0, 255, 157, 0.2);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.heroTitle {
-    font-size: clamp(2.5rem, 5vw, 3.8rem);
-    font-weight: 900;
-    line-height: 1.1;
-    margin-bottom: 1rem;
-    color: var(--color-text-main);
 }
 
 .heroSubtitle {

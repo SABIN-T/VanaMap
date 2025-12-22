@@ -30,6 +30,20 @@
     justify-content: center;
 }
 
+.logoImage {
+    height: 64px;
+    width: auto;
+    object-fit: contain;
+    transition: height 0.3s ease;
+}
+
+@media (max-width: 768px) {
+    .logoImage {
+        height: 40px;
+        /* Standard mobile app bar icon size */
+    }
+}
+
 .logoText {
     display: flex;
     flex-direction: column;
