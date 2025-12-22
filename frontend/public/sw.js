@@ -3,7 +3,7 @@ const CACHE_NAME = 'vanamap-v3-robust-update';
 const ASSETS_TO_CACHE = [
     '/',
     '/index.html',
-    '/logo.svg',
+    '/logo.png',
     '/manifest.json'
 ];
 
