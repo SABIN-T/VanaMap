@@ -96,8 +96,18 @@ export const Navbar = () => {
                         <ChevronRight size={18} />
                     </Link>
 
+                    <Link to="/nearby" className={styles.mobileNavLink} onClick={() => setIsMenuOpen(false)}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><Sun size={20} /> Nearby Shops</div>
+                        <ChevronRight size={18} />
+                    </Link>
+
                     <Link to="/contact" className={styles.mobileNavLink} onClick={() => setIsMenuOpen(false)}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><MessageCircle size={20} /> Support</div>
+                        <ChevronRight size={18} />
+                    </Link>
+
+                    <Link to="/shops" className={styles.mobileNavLink} onClick={() => setIsMenuOpen(false)}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><ShoppingBag size={20} /> Shops</div>
                         <ChevronRight size={18} />
                     </Link>
 
@@ -105,14 +115,7 @@ export const Navbar = () => {
                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><ShoppingCart size={20} /> My Cart {cartItems.length > 0 && `(${cartItems.length})`}</div>
                         <ChevronRight size={18} />
                     </Link>
-                    <Link to="/nearby" className={styles.mobileNavLink} onClick={() => setIsMenuOpen(false)}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><Sun size={20} /> Nearby Shops</div>
-                        <ChevronRight size={18} />
-                    </Link>
-                    <Link to="/shops" className={styles.mobileNavLink} onClick={() => setIsMenuOpen(false)}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><ShoppingBag size={20} /> Online Shop</div>
-                        <ChevronRight size={18} />
-                    </Link>
+
                     <button className={styles.mobileNavLink} onClick={() => {
                         setIsMenuOpen(false);
                         import('react-hot-toast').then(({ default: toast }) => {
