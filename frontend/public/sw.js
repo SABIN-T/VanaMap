@@ -35,43 +35,46 @@ self.addEventListener('activate', (event) => {
     self.clients.claim(); // Take control immediately
 });
 
-// Fetch: Network First for HTML/API, Cache First for static assets
+// Fetch: Strategies
 self.addEventListener('fetch', (event) => {
     const url = new URL(event.request.url);
 
-    // 1. Navigation (HTML) & API: Network First
-    // This ensures users always get the latest version if they are online.
-    if (event.request.mode === 'navigate' || url.pathname.startsWith('/api')) {
+    // 1. Navigation (HTML): Network First
+    if (event.request.mode === 'navigate') {
         event.respondWith(
             fetch(event.request)
-                .then((response) => {
-                    return response;
-                })
-                .catch(() => {
-                    // Offline fallback
-                    return caches.match(event.request) || caches.match('/index.html');
-                })
+                .catch(() => caches.match('/index.html'))
         );
         return;
     }
 
-    // 2. Static Assets (Images, JS, CSS): Stale-While-Revalidate
-    // Serve from cache specifically for speed, but update in background
-    event.respondWith(
-        caches.match(event.request).then((cachedResponse) => {
-            const fetchPromise = fetch(event.request).then((networkResponse) => {
-                // Update cache with new version
-                if (networkResponse && networkResponse.status === 200) {
-                    const responseClone = networkResponse.clone();
-                    caches.open(CACHE_NAME).then((cache) => {
-                        cache.put(event.request, responseClone);
+    // 2. API & Static Assets: Stale-While-Revalidate
+    // Strategy: Serve cached content right away (fast), update cache in background.
+    if (url.pathname.startsWith('/api') ||
+        url.pathname.match(/\.(js|css|png|jpg|jpeg|svg|ico|woff2)$/)
+    ) {
+        event.respondWith(
+            caches.open(CACHE_NAME).then((cache) => {
+                return cache.match(event.request).then((cachedResponse) => {
+                    const fetchPromise = fetch(event.request).then((networkResponse) => {
+                        // Update cache
+                        if (networkResponse && networkResponse.status === 200) {
+                            cache.put(event.request, networkResponse.clone());
+                        }
+                        return networkResponse;
+                    }).catch(() => {
+                        // Network failed
+                        return cachedResponse;
                     });
-                }
-                return networkResponse;
-            });
 
-            // Return cached response if available, otherwise wait for network
-            return cachedResponse || fetchPromise;
-        })
-    );
+                    // Return cache if available, else wait for network
+                    return cachedResponse || fetchPromise;
+                });
+            })
+        );
+        return;
+    }
+
+    // 3. Default: Network Only
+    event.respondWith(fetch(event.request));
 });
