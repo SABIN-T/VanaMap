@@ -24,13 +24,10 @@
 }
 
 .logoIcon {
-    background: var(--gradient-primary);
-    padding: 0.5rem;
-    border-radius: 0.75rem;
+    /* Removed box styling */
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 15px rgba(0, 255, 157, 0.3);
 }
 
 .logoText {

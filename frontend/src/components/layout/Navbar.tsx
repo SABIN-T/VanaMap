@@ -47,8 +47,8 @@ export const Navbar = () => {
     return (
         <nav className={styles.navbar}>
             <Link to="/" className={styles.logo} onClick={() => setIsMenuOpen(false)}>
-                <div className={styles.logoIcon} style={{ background: 'transparent' }}>
-                    <img src="/logo.png" alt="VanaMap Logo" style={{ width: '32px', height: '32px' }} />
+                <div className={styles.logoIcon}>
+                    <img src="/logo.png" alt="VanaMap Logo" style={{ width: '48px', height: '48px', objectFit: 'contain' }} />
                 </div>
                 <div className={styles.logoText}>
                     <span className={styles.brandName}>VanaMap</span>
