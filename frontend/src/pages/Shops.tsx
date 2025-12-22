@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { Plant } from '../types';
+import type { Plant } from '../types';
 import { fetchPlants } from '../services/api';
-import { Search, ShoppingBag, Leaf } from 'lucide-react';
+import { Search, ShoppingBag } from 'lucide-react';
 import { Button } from '../components/common/Button';
 
 export const Shops = () => {
@@ -147,12 +147,15 @@ export const Shops = () => {
                                     </div>
                                     <Button
                                         disabled
-                                        variant="secondary"
+                                        variant="outline"
                                         style={{
                                             opacity: 0.7,
                                             cursor: 'not-allowed',
                                             padding: '0.5rem 1rem',
-                                            fontSize: '0.9rem'
+                                            fontSize: '0.9rem',
+                                            background: 'rgba(255,255,255,0.1)',
+                                            color: 'white',
+                                            border: 'none'
                                         }}
                                     >
                                         Coming Soon
