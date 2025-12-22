@@ -558,6 +558,7 @@ export const Home = () => {
                         <p style={{ color: '#64748b', fontSize: '0.8rem' }}>© 2025 VanaMap - Green Earth Project</p>
                     </div>
                 </footer>
-            </div >
-            );
+            </div>
+        </div>
+    );
 };
