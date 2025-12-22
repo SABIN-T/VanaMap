@@ -398,6 +398,14 @@
     margin-bottom: 6rem;
 }
 
+/* Mobile: Force 2 columns */
+@media (max-width: 640px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+}
+
 /* Desktop: Force 5 columns for detailed view on wide screens */
 @media (min-width: 1440px) {
     .grid {
