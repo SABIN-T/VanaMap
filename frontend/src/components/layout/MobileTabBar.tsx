@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Home, MapPin, Bot, ShoppingBag, BookOpen, Shield } from 'lucide-react';
+import { Home, MapPin, ShoppingBag, ShoppingCart, Shield, MessageCircle } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
 import { useAuth } from '../../context/AuthContext';
 import { useEffect, useState } from 'react';
@@ -21,10 +21,10 @@ export const MobileTabBar = () => {
     const tabs = [
         { path: '/', icon: Home, label: 'Home' },
         ...(user?.role === 'admin' ? [{ path: '/admin', icon: Shield, label: 'Admin' }] : []),
-        { path: '/nearby', icon: MapPin, label: 'Shops' },
-        { path: '/doctor-ai', icon: Bot, label: 'Dr. AI' },
-        { path: '/guide', icon: BookOpen, label: 'Guide' },
-        { path: '/cart', icon: ShoppingBag, label: 'Cart', badge: items.length },
+        { path: '/nearby', icon: MapPin, label: 'Nearby' },
+        { path: '/shops', icon: ShoppingBag, label: 'Shops' },
+        { path: '/contact', icon: MessageCircle, label: 'Support' },
+        { path: '/cart', icon: ShoppingCart, label: 'Cart', badge: items.length },
     ];
 
     const isActive = (path: string) => location.pathname === path;
