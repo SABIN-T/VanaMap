@@ -8,6 +8,7 @@ import type { Vendor } from '../types';
 import { MessageCircle, MapPin, ExternalLink, RefreshCw, AlertCircle, Star, Sparkles, Search, Zap } from 'lucide-react';
 import { Button } from '../components/common/Button';
 import { useAuth } from '../context/AuthContext';
+import { useCart } from '../context/CartContext';
 import toast from 'react-hot-toast';
 import styles from './Nearby.module.css';
 
@@ -51,6 +52,7 @@ function ChangeView({ center }: { center: [number, number] }) {
 
 export const Nearby = () => {
     const { user } = useAuth();
+    const { items } = useCart();
     const location = useLocation(); // Hook usage
     const [position, setPosition] = useState<[number, number] | null>(null);
     const [placeName, setPlaceName] = useState<string>("");
@@ -428,7 +430,23 @@ out skel qt;
                                                 <MapPin size={14} /> Google Places
                                             </Button>
                                             {(vendor.whatsapp || vendor.phone !== 'N/A') && (
-                                                <Button size="sm" className={styles.actionBtn} style={{ background: '#25D366', color: '#fff', border: 'none' }} onClick={() => { logVendorContact({ vendorId: vendor.id, vendorName: vendor.name, userEmail: user?.email || 'guest', contactType: 'whatsapp' }); window.open(`https://wa.me/${(vendor.whatsapp || vendor.phone).replace(/[^0-9]/g, '')}`, '_blank'); }}>
+                                                <Button size="sm" className={styles.actionBtn} style={{ background: '#25D366', color: '#fff', border: 'none' }} onClick={() => {
+                                                    logVendorContact({ vendorId: vendor.id, vendorName: vendor.name, userEmail: user?.email || 'guest', contactType: 'whatsapp' });
+
+                                                    // Generate Message from Cart
+                                                    let message = `Hi ${vendor.name},`;
+                                                    if (items.length > 0) {
+                                                        message += ` I am interested in checking availability for:\n`;
+                                                        items.forEach(item => {
+                                                            message += `- ${item.plant.name} (x${item.quantity})\n`;
+                                                        });
+                                                        message += `\nDo you have these in stock?`;
+                                                    } else {
+                                                        message += ` I saw your shop on VanaMap. Do you have [Plant Name] in stock?`;
+                                                    }
+
+                                                    window.open(`https://wa.me/${(vendor.whatsapp || vendor.phone).replace(/[^0-9]/g, '')}?text=${encodeURIComponent(message)}`, '_blank');
+                                                }}>
                                                     <MessageCircle size={14} /> {(vendor.whatsapp || vendor.phone)}
                                                 </Button>
                                             )}

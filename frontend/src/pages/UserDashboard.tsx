@@ -535,7 +535,7 @@ export const UserDashboard = () => {
                                 <Link to="/" style={{ display: 'inline-block', marginTop: '1rem' }}><Button variant="outline" size="sm">Add Items</Button></Link>
                             </div>
                         ) : (
-                            <div style={{ display: 'grid', gap: '1rem' }}>
+                            <div className={styles.cartScrollBox} style={{ display: 'grid', gap: '1rem' }}>
                                 {items.map(({ plant, quantity }) => (
                                     <div key={plant.id} className="glass-panel" style={{
                                         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
