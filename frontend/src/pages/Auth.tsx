@@ -110,28 +110,28 @@ export const Auth = () => {
                     <div style={{
                         textAlign: 'center',
                         marginBottom: '1.5rem',
-                        fontSize: '0.85rem',
-                        color: 'var(--color-primary)',
-                        background: 'rgba(0, 255, 157, 0.05)',
-                        padding: '0.75rem',
-                        borderRadius: '0.75rem',
-                        border: '1px dashed rgba(0, 255, 157, 0.2)'
+                        fontSize: '0.9rem',
+                        color: 'white',
+                        background: 'rgba(255, 255, 255, 0.05)',
+                        padding: '1rem',
+                        borderRadius: '1rem',
+                        border: '1px solid rgba(255, 255, 255, 0.1)'
                     }}>
-                        Note: <strong>Users and Vendors</strong> can login through this portal.
+                        Note: <strong>Users and Vendors</strong> can login here.
                     </div>
                 )}
 
                 <div className={styles.authHeader}>
                     <h2 className={styles.authTitle}>
                         {view === 'login' && 'Welcome Back'}
-                        {view === 'signup' && 'Create Identity'}
-                        {view === 'forgot' && 'Reset Access'}
-                        {view === 'reset' && 'New Credential'}
+                        {view === 'signup' && 'Create Account'}
+                        {view === 'forgot' && 'Reset Password'}
+                        {view === 'reset' && 'New Password'}
                     </h2>
                     <p className={styles.authSubtitle}>
-                        {view === 'login' && 'Access your simulation dashboard'}
-                        {view === 'signup' && 'Join the eco-simulation network'}
-                        {view === 'forgot' && 'Recover your account secure key'}
+                        {view === 'login' && 'Enter your details to access your account'}
+                        {view === 'signup' && 'Join the VanaMap community today'}
+                        {view === 'forgot' && 'We’ll help you get back in'}
                     </p>
                 </div>
 
@@ -144,14 +144,20 @@ export const Auth = () => {
                             className={`${styles.roleBtn} ${role === 'user' ? styles.active : ''} `}
                             onClick={() => setRole('user')}
                         >
-                            <User size={24} /> Plant Lover
+                            <div style={{ background: role === 'user' ? 'white' : 'rgba(255,255,255,0.1)', padding: '8px', borderRadius: '50%', color: role === 'user' ? 'black' : 'white' }}>
+                                <User size={20} />
+                            </div>
+                            <span>Plant Lover</span>
                         </button>
                         <button
                             type="button"
                             className={`${styles.roleBtn} ${role === 'vendor' ? styles.active : ''} `}
                             onClick={() => setRole('vendor')}
                         >
-                            <Store size={24} /> Shop Owner
+                            <div style={{ background: role === 'vendor' ? 'white' : 'rgba(255,255,255,0.1)', padding: '8px', borderRadius: '50%', color: role === 'vendor' ? 'black' : 'white' }}>
+                                <Store size={20} />
+                            </div>
+                            <span>Shop Owner</span>
                         </button>
                     </div>
                 )}
@@ -266,7 +272,7 @@ export const Auth = () => {
                                         className={styles.linkBtn}
                                         style={{ fontSize: '0.8rem' }}
                                     >
-                                        Forgot?
+                                        Forgot Password?
                                     </button>
                                 )}
                             </div>
@@ -282,10 +288,10 @@ export const Auth = () => {
                     )}
 
                     <Button type="submit" variant="primary" className={styles.submitBtn}>
-                        {view === 'login' && 'Authenticate'}
-                        {view === 'signup' && 'Complete Registration'}
-                        {view === 'forgot' && 'Verify & Update Password'}
-                        {view === 'reset' && 'Update Security Key'}
+                        {view === 'login' && 'Log In'}
+                        {view === 'signup' && 'Create Account'}
+                        {view === 'forgot' && 'Reset Password'}
+                        {view === 'reset' && 'Update Password'}
                     </Button>
 
                     {view === 'forgot' && (
@@ -299,11 +305,8 @@ export const Auth = () => {
                                 className={styles.linkBtn}
                                 style={{ color: '#f59e0b', fontSize: '0.9rem', marginBottom: '1rem' }}
                             >
-                                Contact Admin (Trigger Reset)
+                                Contact Admin (Manual Reset)
                             </button>
-                            <p style={{ fontSize: '0.75rem', color: '#10b981', fontStyle: 'italic', maxWidth: '80%', margin: '0 auto', lineHeight: '1.4' }}>
-                                "Be happy don't worry for a password everything has a solution lets breath fresh air together"
-                            </p>
                         </div>
                     )}
                 </form>
@@ -311,16 +314,16 @@ export const Auth = () => {
                 <div className={styles.footer}>
                     {view === 'login' && (
                         <>
-                            <p style={{ marginBottom: '1rem', color: 'var(--color-text-muted)', fontSize: '0.85rem' }}>
-                                New to VanaMap? <button onClick={() => setView('signup')}>Initialize Identity</button>
+                            <p style={{ marginBottom: '1rem', color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>
+                                New to VanaMap? <button onClick={() => setView('signup')} style={{ color: '#10b981', fontWeight: 600 }}>Create Account</button>
                             </p>
                         </>
                     )}
                     {view === 'signup' && (
-                        <>Already registered? <button onClick={() => setView('login')}>Log In</button></>
+                        <>Already have an account? <button onClick={() => setView('login')} style={{ color: '#10b981', fontWeight: 600 }}>Log In</button></>
                     )}
                     {(view === 'forgot' || view === 'reset') && (
-                        <><button onClick={() => setView('login')} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', margin: '0 auto' }}>
+                        <><button onClick={() => setView('login')} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', margin: '0 auto', color: '#cbd5e1' }}>
                             <ArrowLeft size={16} /> Return to Login
                         </button></>
                     )}

@@ -242,28 +242,29 @@ out skel qt;
 
     return (
         <div className={styles.nearbyContainer}>
-            <div className={styles.noticeBanner}>
-                <AlertCircle className={styles.noticeIcon} size={24} />
-                <div className={styles.noticeText}>
+            <div className={styles.noticeBanner} style={{ background: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.2)' }}>
+                <MapPin className={styles.noticeIcon} size={20} color="#10b981" />
+                <div className={styles.noticeText} style={{ color: '#ecfdf5' }}>
                     {placeName ? (
                         <>
-                            <span>LOCATION DETECTED: {placeName.toUpperCase()}</span> — Found verified simulation partners in your radius.
+                            <span style={{ color: '#34d399', fontWeight: 700 }}>{placeName.toUpperCase()}</span> — Identifying nearby green spaces...
                         </>
                     ) : (
                         <>
-                            <span>SATELLITE SYNC ACTIVE:</span> Find real nurseries verified in our simulation network.
-                            Locate yourself to see nearest high-oxygen suppliers.
+                            <span>GPS Active:</span> We are locating the best nurseries around you.
                         </>
                     )}
                 </div>
-                <Button variant="outline" size="sm" onClick={() => handleGetLocation(true)} disabled={loading} style={{ marginLeft: 'auto' }}>
-                    <RefreshCw size={14} className={loading ? 'animate-spin' : ''} /> Sync GPS
+                <Button variant="outline" size="sm" onClick={() => handleGetLocation(true)} disabled={loading} style={{ marginLeft: 'auto', borderColor: 'rgba(255,255,255,0.2)', color: 'white' }}>
+                    <RefreshCw size={14} className={loading ? 'animate-spin' : ''} /> Refresh GPS
                 </Button>
             </div>
 
-            <div className={styles.headerSection}>
-                <h1 className={styles.title}>NURSERY EXPLORER</h1>
-                <p className={styles.subtitle}>Discover plant shops and gardens providing sustainable inventory near you.</p>
+            <div className={styles.headerSection} style={{ textAlign: 'center', marginBottom: '3rem' }}>
+                <h1 className={styles.title} style={{ fontSize: '2.5rem', fontWeight: 900, marginBottom: '0.5rem' }}>Find Local Nurseries</h1>
+                <p className={styles.subtitle} style={{ fontSize: '1.1rem', color: '#94a3b8', maxWidth: '600px', margin: '0 auto' }}>
+                    Connect with sustainable plant shops and botanical gardens in your area.
+                </p>
             </div>
 
             <div className={styles.splitLayout}>
