@@ -27,6 +27,7 @@ export const Home = () => {
     const [isSlowLoading, setIsSlowLoading] = useState(false);
     const [selectedPlant, setSelectedPlant] = useState<Plant | null>(null);
     const [citySearch, setCitySearch] = useState('');
+    const [visibleLimit, setVisibleLimit] = useState(10);
 
     const plantsSectionRef = useRef<HTMLDivElement>(null);
     const filterSectionRef = useRef<HTMLDivElement>(null);
@@ -465,7 +466,7 @@ export const Home = () => {
                             </div>
                         </div>
                     ) : (
-                        displayedPlants.map((plant: Plant, index: number) => (
+                        displayedPlants.slice(0, visibleLimit).map((plant: Plant, index: number) => (
                             <div
                                 key={plant.id}
                                 onClick={() => openDetails(plant)}
@@ -485,65 +486,78 @@ export const Home = () => {
                         ))
                     )}
                 </div>
-            </div>
 
-            {/* --- FOOTER SECTION --- */}
-            <footer style={{
-                marginTop: '6rem',
-                padding: '4rem 2rem 2rem',
-                borderTop: '1px solid rgba(255,255,255,0.05)',
-                background: 'linear-gradient(to bottom, transparent, rgba(0,0,0,0.4))',
-                textAlign: 'center'
-            }}>
-                <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', justifyContent: 'center' }}>
-                    <div style={{ textAlign: 'center' }}>
-                        <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '0.5rem' }}>For Mobile Users</p>
-                        <div style={{
-                            padding: '0.75rem',
-                            background: 'white',
-                            borderRadius: '1rem',
-                            boxShadow: '0 0 20px rgba(16, 185, 129, 0.2)',
-                            display: 'inline-block'
-                        }}>
-                            <QRCodeSVG
-                                value="https://www.vanamap.online"
-                                size={100}
-                                bgColor={"#ffffff"}
-                                fgColor={"#000000"}
-                                level={"L"}
-                                includeMargin={false}
-                            />
+                {/* View More Button */}
+                {!plantsLoading && displayedPlants.length > visibleLimit && (
+                    <div style={{ textAlign: 'center', marginTop: '3rem' }}>
+                        <Button
+                            onClick={() => setVisibleLimit(displayedPlants.length)}
+                            variant="primary"
+                            size="lg"
+                            className={styles.pulseBtn}
+                        >
+                            View More Plants <ArrowDown size={18} />
+                        </Button>
+                    </div>
+                )}
+
+                {/* --- FOOTER SECTION --- */}
+                <footer style={{
+                    marginTop: '6rem',
+                    padding: '4rem 2rem 2rem',
+                    borderTop: '1px solid rgba(255,255,255,0.05)',
+                    background: 'linear-gradient(to bottom, transparent, rgba(0,0,0,0.4))',
+                    textAlign: 'center'
+                }}>
+                    <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+                        <div style={{ textAlign: 'center' }}>
+                            <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '0.5rem' }}>For Mobile Users</p>
+                            <div style={{
+                                padding: '0.75rem',
+                                background: 'white',
+                                borderRadius: '1rem',
+                                boxShadow: '0 0 20px rgba(16, 185, 129, 0.2)',
+                                display: 'inline-block'
+                            }}>
+                                <QRCodeSVG
+                                    value="https://www.vanamap.online"
+                                    size={100}
+                                    bgColor={"#ffffff"}
+                                    fgColor={"#000000"}
+                                    level={"L"}
+                                    includeMargin={false}
+                                />
+                            </div>
+                        </div>
+
+                        <div style={{ textAlign: 'left', minWidth: '200px' }}>
+                            <h4 style={{ color: 'white', marginBottom: '1rem', fontSize: '1rem' }}>Links</h4>
+                            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                                <li>
+                                    <a href="#" style={{ color: '#10b981', textDecoration: 'none', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                        <Heart size={14} fill="#10b981" /> Support Us
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" style={{ color: '#facc15', textDecoration: 'none', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                        <Sparkles size={14} /> Become a Partner
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/about" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                        <Sparkles size={14} /> About VanaMap
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/nearby" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '0.9rem' }}>Vendor Login</a>
+                                </li>
+                            </ul>
                         </div>
                     </div>
-
-                    <div style={{ textAlign: 'left', minWidth: '200px' }}>
-                        <h4 style={{ color: 'white', marginBottom: '1rem', fontSize: '1rem' }}>Links</h4>
-                        <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                            <li>
-                                <a href="#" style={{ color: '#10b981', textDecoration: 'none', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                    <Heart size={14} fill="#10b981" /> Support Us
-                                </a>
-                            </li>
-                            <li>
-                                <a href="#" style={{ color: '#facc15', textDecoration: 'none', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                    <Sparkles size={14} /> Become a Partner
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/about" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                    <Sparkles size={14} /> About VanaMap
-                                </a>
-                            </li>
-                            <li>
-                                <a href="/nearby" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '0.9rem' }}>Vendor Login</a>
-                            </li>
-                        </ul>
+                    <div style={{ marginTop: '3rem', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '1.5rem', width: '100%' }}>
+                        <p style={{ color: '#64748b', fontSize: '0.8rem' }}>© 2025 VanaMap - Green Earth Project</p>
                     </div>
-                </div>
-                <div style={{ marginTop: '3rem', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '1.5rem', width: '100%' }}>
-                    <p style={{ color: '#64748b', fontSize: '0.8rem' }}>© 2025 VanaMap - Green Earth Project</p>
-                </div>
-            </footer>
-        </div>
-    );
+                </footer>
+            </div >
+            );
 };
