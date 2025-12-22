@@ -1,5 +1,5 @@
 // Advanced Service Worker for VanaMap v2.0
-const CACHE_NAME = 'vanamap-v3-robust-update';
+const CACHE_NAME = 'vanamap-v4-logo-fix';
 const ASSETS_TO_CACHE = [
     '/',
     '/index.html',

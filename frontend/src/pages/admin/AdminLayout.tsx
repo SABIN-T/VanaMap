@@ -41,7 +41,7 @@ export const AdminLayout = ({ title, children }: AdminLayoutProps) => {
                 <div className={styles.sidebarHeader}>
                     <div className={styles.brand}>
                         <div className={styles.logoBox}>
-                            <img src="/logo.png" alt="VanaMap" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
+                            <img src="/logo.png?v=2" alt="VanaMap" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
                         </div>
                         <span className={styles.brandName}>VANAMAP</span>
                     </div>
