@@ -3,7 +3,12 @@ const { User } = require('./models.js');
 const dotenv = require('dotenv');
 dotenv.config();
 
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb+srv://sabin:sabin@cluster0.pujhf.mongodb.net/plant-finder?retryWrites=true&w=majority";
+const MONGODB_URI = process.env.MONGO_URI;
+
+if (!MONGODB_URI) {
+    console.error("Error: MONGO_URI environment variable is not defined.");
+    process.exit(1);
+}
 
 async function verify() {
     try {
