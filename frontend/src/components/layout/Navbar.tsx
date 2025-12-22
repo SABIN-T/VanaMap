@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingCart, User as UserIcon, LogOut, BookOpen, Leaf, Sun, Moon, Menu, X, ChevronRight, Bot, Download, Shield } from 'lucide-react';
+import { ShoppingCart, User as UserIcon, LogOut, Leaf, Sun, Moon, Menu, X, ChevronRight, Bot, Download, Shield } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
 import { useTheme } from '../../context/ThemeContext';
@@ -12,29 +12,6 @@ export const Navbar = () => {
     const { theme, toggleTheme } = useTheme();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const navigate = useNavigate();
-
-    const handleDownloadGuide = () => {
-        setIsMenuOpen(false);
-        import('react-hot-toast').then(({ default: toast }) => {
-            const downloadPromise = (async () => {
-                const { generateAndDownloadPDF } = await import('../../utils/pdfGenerator');
-                generateAndDownloadPDF();
-                await new Promise(resolve => setTimeout(resolve, 1500));
-            })();
-
-            toast.promise(
-                downloadPromise,
-                {
-                    loading: 'Preparing Simulation Handbook...',
-                    success: 'Handbook downloaded successfully!',
-                    error: 'Could not generate PDF.'
-                },
-                {
-                    style: { background: '#333', color: '#fff' }
-                }
-            );
-        });
-    };
 
     const handleLogout = () => {
         logout();
@@ -70,10 +47,6 @@ export const Navbar = () => {
                 >
                     <Bot size={18} /> Doctor AI
                 </Link>
-
-                <button id="nav-guide" onClick={handleDownloadGuide} className={styles.navLink}>
-                    <BookOpen size={16} /> Guide
-                </button>
             </div>
 
             <div className={styles.actions}>
@@ -133,10 +106,6 @@ export const Navbar = () => {
                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><Sun size={20} /> Nearby Shops</div>
                         <ChevronRight size={18} />
                     </Link>
-                    <button onClick={handleDownloadGuide} className={styles.mobileNavLink}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><BookOpen size={20} /> Caring Guide</div>
-                        <ChevronRight size={18} />
-                    </button>
                     <button className={styles.mobileNavLink} onClick={() => {
                         setIsMenuOpen(false);
                         import('react-hot-toast').then(({ default: toast }) => {
