@@ -14,6 +14,7 @@ interface CartContextType {
     items: CartItem[];
     addToCart: (plant: Plant, vendorId?: string, price?: number) => void;
     removeFromCart: (plantId: string, vendorId?: string) => void;
+    removeItems: (itemsToRemove: { plantId: string, vendorId?: string }[]) => void;
     updateQuantity: (plantId: string, quantity: number, vendorId?: string) => void;
 }
 
@@ -150,8 +151,19 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
         toast.success(`Item removed`);
     };
 
+    const removeItems = (itemsToRemove: { plantId: string, vendorId?: string }[]) => {
+        setItems(prev => {
+            const newItems = prev.filter(i =>
+                !itemsToRemove.some(r => r.plantId === i.plant.id && r.vendorId === i.vendorId)
+            );
+            persistCart(newItems);
+            return newItems;
+        });
+        toast.success(`Items removed from cart`);
+    };
+
     return (
-        <CartContext.Provider value={{ items, addToCart, removeFromCart, updateQuantity }}>
+        <CartContext.Provider value={{ items, addToCart, removeFromCart, removeItems, updateQuantity }}>
             {children}
         </CartContext.Provider>
     );

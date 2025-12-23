@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
-import { Trash2, ArrowLeft, Minus, Plus, ShoppingCart, MessageCircle, MapPin, Store, Lock, ShieldCheck } from 'lucide-react';
+import { Trash2, ArrowLeft, Minus, Plus, ShoppingCart, MessageCircle, MapPin, Store, Lock, ShieldCheck, Info, Phone } from 'lucide-react';
 import { Button } from '../components/common/Button';
 import { fetchVendors } from '../services/api';
 import { formatCurrency } from '../utils/currency';
@@ -10,7 +10,7 @@ import type { Vendor, CartItem } from '../types';
 import styles from './Cart.module.css';
 
 export const Cart = () => {
-    const { items, removeFromCart, updateQuantity } = useCart();
+    const { items, removeFromCart, removeItems, updateQuantity } = useCart();
     const { user } = useAuth();
     const navigate = useNavigate();
     const [vendors, setVendors] = useState<Record<string, Vendor>>({});
@@ -72,7 +72,7 @@ export const Cart = () => {
         window.open(url, '_blank');
 
         // Remove items from cart
-        vItems.forEach(i => removeFromCart(i.plant.id, vendorId === 'vanamap' ? undefined : vendorId));
+        removeItems(vItems.map(i => ({ plantId: i.plant.id, vendorId: i.vendorId })));
     };
 
     return (
@@ -91,6 +91,14 @@ export const Cart = () => {
                     </div>
                     {items.length > 0 && <span className={styles.itemCount}>{items.length} items</span>}
                 </div>
+
+                {/* Multi-Vendor Alert */}
+                {Object.keys(groupedItems).length > 1 && (
+                    <div className={styles.multiVendorAlert}>
+                        <Info size={20} />
+                        <span>Your cart contains items from multiple sellers. Please checkout from each seller separately to ensure separate delivery.</span>
+                    </div>
+                )}
 
                 {/* Empty State */}
                 {items.length === 0 ? (
@@ -118,36 +126,45 @@ export const Cart = () => {
                                 <div key={vendorId} className={styles.vendorGroup}>
                                     {/* Group Header */}
                                     <div className={styles.groupHeader}>
-                                        <div className={styles.vendorInfo}>
-                                            <Store size={22} className={isVanaMap ? "text-emerald-400" : "text-amber-400"} />
-                                            <div>
+                                        <div className={styles.vendorInfoWrapper}>
+                                            <div className={styles.vendorTitleRow}>
+                                                <Store size={22} className={isVanaMap ? "text-emerald-400" : "text-amber-400"} />
                                                 <div className={styles.vendorName}>
                                                     {isVanaMap ? 'VanaMap Official' : (vendor?.name || 'Unknown Vendor')}
                                                 </div>
-                                                {!isVanaMap && vendor && (
-                                                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginTop: '4px', fontSize: '0.8rem', color: '#94a3b8' }}>
-                                                        <MapPin size={12} /> {vendor.address}
-                                                    </div>
+                                                {isVanaMap ? (
+                                                    <span className={styles.officialBadge}><ShieldCheck size={12} /> Official</span>
+                                                ) : (
+                                                    <span className={styles.partnerBadge}>Partner</span>
                                                 )}
                                             </div>
-                                            {isVanaMap ? (
-                                                <span className={styles.officialBadge}><ShieldCheck size={12} /> Official</span>
-                                            ) : (
-                                                <span className={styles.partnerBadge}>Partner</span>
+
+                                            {!isVanaMap && vendor && (
+                                                <div className={styles.vendorMeta}>
+                                                    {vendor.address && (
+                                                        <div className={styles.metaItem}>
+                                                            <MapPin size={12} /> {vendor.address}
+                                                        </div>
+                                                    )}
+                                                    {vendor.phone && (
+                                                        <div className={styles.metaItem}>
+                                                            <Phone size={12} /> {vendor.phone}
+                                                        </div>
+                                                    )}
+                                                </div>
                                             )}
                                         </div>
 
-                                        {/* Vendor Action */}
-                                        <div style={{ marginTop: '0.5rem' }}>
+                                        <div className={styles.headerRight}>
                                             {user ? (
                                                 <button
                                                     className={styles.whatsappBtn}
                                                     onClick={() => handleWhatsAppCheckout(vendorId)}
                                                 >
-                                                    <MessageCircle size={18} /> Proceed to Order
+                                                    <MessageCircle size={18} /> Checkout from {isVanaMap ? 'VanaMap' : vendor.name}
                                                 </button>
                                             ) : (
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#fbbf24', fontSize: '0.85rem', fontWeight: 700, background: 'rgba(251, 191, 36, 0.1)', padding: '6px 12px', borderRadius: '8px' }}>
+                                                <div className={styles.loginPrompt}>
                                                     <Lock size={14} /> Login to Order
                                                 </div>
                                             )}
