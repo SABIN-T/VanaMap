@@ -839,9 +839,90 @@
         padding: 4rem 1rem;
     }
 
+    /* Collapsible Logic for Mobile */
+    .capabilityCard,
     .onboardingCard {
-        padding: 2.5rem;
-        border-radius: 2rem;
+        cursor: pointer;
+        padding: 1.25rem !important;
+        border-radius: 1.25rem !important;
+        min-height: auto;
+        justify-content: center;
+        gap: 0.5rem;
+        /* Minimal gap when closed */
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        active-behavior: scale(0.98);
+    }
+
+    .onboardingCard:active,
+    .capabilityCard:active {
+        transform: scale(0.98);
+    }
+
+    /* Closed State: Hide Details */
+    .capabilityCard p,
+    .onboardingCard p,
+    .onboardingMeta {
+        display: none;
+    }
+
+    /* Closed State: Small Icons & Titles */
+    .onboardingIcon {
+        width: 36px;
+        height: 36px;
+        border-radius: 0.75rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .onboardingIcon svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .capabilityCard h3,
+    .onboardingCard h3 {
+        font-size: 1rem !important;
+        margin-bottom: 0;
+    }
+
+    /* --- EXPANDED STATE --- */
+    .cardExpanded {
+        padding: 2rem !important;
+        gap: 1rem;
+        background: var(--color-bg-card);
+        border-color: var(--color-primary);
+        box-shadow: var(--glass-shadow);
+    }
+
+    .cardExpanded p {
+        display: block;
+        animation: fadeIn 0.4s ease;
+        margin-top: 0.5rem;
+        color: var(--color-text-muted);
+        font-size: 0.95rem;
+    }
+
+    .cardExpanded .onboardingMeta {
+        display: block;
+        animation: fadeIn 0.4s ease;
+        margin-top: 1.5rem;
+    }
+
+    .cardExpanded .onboardingIcon {
+        width: 56px;
+        height: 56px;
+        border-radius: 1.25rem;
+        margin-bottom: 1rem;
+    }
+
+    .cardExpanded .onboardingIcon svg {
+        width: 28px;
+        height: 28px;
+    }
+
+    .cardExpanded h3 {
+        font-size: 1.35rem !important;
+        margin-bottom: 0.5rem;
+        color: var(--color-primary);
     }
 }
 

@@ -37,6 +37,25 @@ export const Home = () => {
     const { addToCart } = useCart();
     const navigate = useNavigate();
 
+    // Mobile Card Logic
+    const [expandedCards, setExpandedCards] = useState<Record<string, boolean>>({});
+
+    const toggleCard = (id: string) => {
+        setExpandedCards(prev => ({ ...prev, [id]: !prev[id] }));
+    };
+
+    const capabilities = [
+        { id: 'cap-smart', title: 'Smart Match', icon: <Sparkles size={32} />, color: '#34d399', bg: 'rgba(52, 211, 153, 0.1)', desc: 'We score plants based on your local temperature and air quality to ensure they survive.' },
+        { id: 'cap-oxygen', title: 'Oxygen Boost', icon: <Wind size={32} />, color: '#38bdf8', bg: 'rgba(56, 189, 248, 0.1)', desc: 'See how much oxygen each plant produces to help you breathe better and sleep deeper.' },
+        { id: 'cap-care', title: 'Care Guides', icon: <Sprout size={32} />, color: '#a855f7', bg: 'rgba(168, 85, 247, 0.1)', desc: 'Simple tips for watering, sunlight, and care for every plant in your home.' }
+    ];
+
+    const personas = [
+        { id: 'role-student', title: 'For Students', icon: <GraduationCap size={32} />, color: '#38bdf8', bg: 'rgba(56, 189, 248, 0.1)', desc: 'Learn plant biology, analyze local weather effects, and use our oxygen simulation for your research projects.', meta: 'Educational Mode' },
+        { id: 'role-vendor', title: 'For Vendors', icon: <ShoppingBag size={32} />, color: '#facc15', bg: 'rgba(250, 204, 21, 0.1)', desc: 'Register your nursery, list rare specimens, and connect with local plant lovers in your area instantly.', meta: 'Business Portal' },
+        { id: 'role-lover', title: 'For Plant Lovers', icon: <Heart size={32} />, color: '#10b981', bg: 'rgba(16, 185, 129, 0.1)', desc: 'Find the perfect match for your home, track your collection, and learn how to care for your green companions.', meta: 'Social Collector' }
+    ];
+
     useEffect(() => {
         const handlePopState = () => {
             setSelectedPlant(null);
@@ -363,27 +382,21 @@ export const Home = () => {
                     <p className={styles.sectionSubtitle}>VanaMap bridges the gap between atmospheric science and interior design.</p>
                 </div>
                 <div className={styles.onboardingGrid} style={{ marginTop: '4rem' }}>
-                    <div className={styles.capabilityCard}>
-                        <div className={styles.onboardingIcon} style={{ background: 'rgba(52, 211, 153, 0.1)', color: '#34d399' }}>
-                            <Sparkles size={32} />
+                    {capabilities.map((cap) => (
+                        <div
+                            key={cap.id}
+                            className={`${styles.capabilityCard} ${expandedCards[cap.id] ? styles.cardExpanded : ''}`}
+                            onClick={() => toggleCard(cap.id)}
+                            role="button"
+                            tabIndex={0}
+                        >
+                            <div className={styles.onboardingIcon} style={{ background: cap.bg, color: cap.color }}>
+                                {cap.icon}
+                            </div>
+                            <h3>{cap.title}</h3>
+                            <p>{cap.desc}</p>
                         </div>
-                        <h3>Smart Match</h3>
-                        <p>We score plants based on your local temperature and air quality to ensure they survive.</p>
-                    </div>
-                    <div className={styles.capabilityCard}>
-                        <div className={styles.onboardingIcon} style={{ background: 'rgba(56, 189, 248, 0.1)', color: '#38bdf8' }}>
-                            <Wind size={32} />
-                        </div>
-                        <h3>Oxygen Boost</h3>
-                        <p>See how much oxygen each plant produces to help you breathe better and sleep deeper.</p>
-                    </div>
-                    <div className={styles.capabilityCard}>
-                        <div className={styles.onboardingIcon} style={{ background: 'rgba(168, 85, 247, 0.1)', color: '#a855f7' }}>
-                            <Sprout size={32} />
-                        </div>
-                        <h3>Care Guides</h3>
-                        <p>Simple tips for watering, sunlight, and care for every plant in your home.</p>
-                    </div>
+                    ))}
                 </div>
             </div>
 
@@ -395,32 +408,22 @@ export const Home = () => {
                 </div>
 
                 <div className={styles.onboardingGrid}>
-                    <div className={styles.onboardingCard}>
-                        <div className={styles.onboardingIcon} style={{ background: 'rgba(56, 189, 248, 0.1)', color: '#38bdf8' }}>
-                            <GraduationCap size={32} />
+                    {personas.map((p) => (
+                        <div
+                            key={p.id}
+                            className={`${styles.onboardingCard} ${expandedCards[p.id] ? styles.cardExpanded : ''}`}
+                            onClick={() => toggleCard(p.id)}
+                            role="button"
+                            tabIndex={0}
+                        >
+                            <div className={styles.onboardingIcon} style={{ background: p.bg, color: p.color }}>
+                                {p.icon}
+                            </div>
+                            <h3>{p.title}</h3>
+                            <p>{p.desc}</p>
+                            <span className={styles.onboardingMeta}>{p.meta}</span>
                         </div>
-                        <h3>For Students</h3>
-                        <p>Learn plant biology, analyze local weather effects, and use our oxygen simulation for your research projects.</p>
-                        <span className={styles.onboardingMeta}>Educational Mode</span>
-                    </div>
-
-                    <div className={styles.onboardingCard}>
-                        <div className={styles.onboardingIcon} style={{ background: 'rgba(250, 204, 21, 0.1)', color: '#facc15' }}>
-                            <ShoppingBag size={32} />
-                        </div>
-                        <h3>For Vendors</h3>
-                        <p>Register your nursery, list rare specimens, and connect with local plant lovers in your area instantly.</p>
-                        <span className={styles.onboardingMeta}>Business Portal</span>
-                    </div>
-
-                    <div className={styles.onboardingCard}>
-                        <div className={styles.onboardingIcon} style={{ background: 'rgba(16, 185, 129, 0.1)', color: '#10b981' }}>
-                            <Heart size={32} />
-                        </div>
-                        <h3>For Plant Lovers</h3>
-                        <p>Find the perfect match for your home, track your collection, and learn how to care for your green companions.</p>
-                        <span className={styles.onboardingMeta}>Social Collector</span>
-                    </div>
+                    ))}
                 </div>
             </section>
 
