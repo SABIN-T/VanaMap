@@ -2,20 +2,15 @@ import { useState, useEffect } from 'react';
 import { AdminLayout } from './AdminLayout';
 import { Clock, User, Sparkles, MessageSquare, CheckCircle, XCircle } from 'lucide-react';
 import { toast } from 'react-hot-toast';
-import { useAuth } from '../../context/AuthContext';
+import { fetchSuggestions as apiFetchSuggestions } from '../../services/api';
 
 export const ManageSuggestions = () => {
-    const { user } = useAuth();
-    const token = (user as any)?.token;
     const [suggestions, setSuggestions] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 
     const fetchSuggestions = async () => {
         try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/suggestions`, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            const data = await res.json();
+            const data = await apiFetchSuggestions();
             if (Array.isArray(data)) {
                 setSuggestions(data);
             }

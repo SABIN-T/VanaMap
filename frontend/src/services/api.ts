@@ -289,3 +289,21 @@ export const sendAiChat = async (userId: string, message: string) => {
     });
     return res.json();
 };
+
+export const submitSuggestion = async (data: { userId?: string, userName?: string, plantName: string, description: string }) => {
+    const res = await fetch(`${API_URL}/suggestions`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    });
+    if (!res.ok) throw new Error("Failed to submit suggestion");
+    return res.json();
+};
+
+export const fetchSuggestions = async () => {
+    const res = await fetch(`${API_URL}/suggestions`, {
+        headers: getHeaders()
+    });
+    if (!res.ok) throw new Error("Failed to fetch suggestions");
+    return res.json();
+};

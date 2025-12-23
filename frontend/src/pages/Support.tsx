@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/common/Button';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-hot-toast';
+import { submitSuggestion } from '../services/api';
 import styles from './Support.module.css';
 
 export const Support = () => {
@@ -22,26 +23,18 @@ export const Support = () => {
 
         setIsSubmitting(true);
         try {
-            const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5000'}/api/suggestions`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    userId: user?.id,
-                    userName: user?.name,
-                    plantName,
-                    description: reason
-                })
+            await submitSuggestion({
+                userId: user?.id,
+                userName: user?.name,
+                plantName,
+                description: reason
             });
 
-            if (res.ok) {
-                toast.success("Suggestion sent successfully!");
-                setPlantName('');
-                setReason('');
-            } else {
-                toast.error("Failed to send suggestion.");
-            }
+            toast.success("Suggestion sent successfully!");
+            setPlantName('');
+            setReason('');
         } catch (err) {
-            toast.error("Network error.");
+            toast.error("Failed to send suggestion.");
         } finally {
             setIsSubmitting(false);
         }
