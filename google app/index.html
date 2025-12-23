@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="/logo.png?v=2" />
+  <link rel="preload" as="image" href="/logo.png?v=2" />
+
+  <!-- Primary SEO -->
+  <title>VanaMap - Find Plants, Nearby Nurseries & Air Quality Simulator</title>
+  <meta name="title" content="VanaMap - Find Plants, Nearby Nurseries & Air Quality Simulator" />
+  <meta name="description"
+    content="VanaMap is your ultimate smart plant companion. Features include: AI Plant Doctor for disease diagnosis, Nearby Nursery Locator with WhatsApp integration, Real-time Air Quality & Oxygen Simulator, and a curated database of air-purifying plants for your home. Grow a healthier life today." />
+  <meta name="keywords"
+    content="plant finder, plant doctor AI, identify plant disease, nearby nursery locator, garden center near me, buy plants online Kathmandu, oxygen calculator, NASA clean air plants, home gardening app, VanaMap, VanaMap Online, smart gardening assistant, plant care guide free" />
+  <meta name="robots" content="index, follow" />
+  <meta name="language" content="English" />
+  <meta name="author" content="VanaMap Team" />
+  <meta name="theme-color" content="#10b981" />
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="VanaMap" />
+  <link rel="apple-touch-icon" href="/logo.png?v=2" />
+  <link rel="canonical" href="https://www.vanamap.online/" />
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://www.vanamap.online/" />
+  <meta property="og:title" content="VanaMap - AI Plant Doctor & Nursery Finder" />
+  <meta property="og:description"
+    content="Diagnose plant diseases with AI, find nearby nurseries, and simulate your home's air quality. The all-in-one app for plant lovers." />
+  <meta property="og:image" content="https://www.vanamap.online/og-image.jpg" />
+
+  <!-- Twitter -->
+  <meta property="twitter:card" content="summary_large_image" />
+  <meta property="twitter:url" content="https://www.vanamap.online/" />
+  <meta property="twitter:title" content="VanaMap - AI Plant Doctor & Nursery Finder" />
+  <meta property="twitter:description"
+    content="Diagnose plant diseases with AI, find nearby nurseries, and simulate your home's air quality. The all-in-one app for plant lovers." />
+  <meta property="twitter:image" content="https://www.vanamap.online/og-image.jpg" />
+
+  <!-- Performance Hints -->
+  <link rel="preconnect" href="https://plantoxy.onrender.com">
+  <link rel="dns-prefetch" href="https://plantoxy.onrender.com">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    #pre-loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: #0f172a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.5s;
+    }
+
+    .pulse {
+      width: 60px;
+      height: 60px;
+      background-color: #10b981;
+      border-radius: 100%;
+      animation: sk-scaleout 1.0s infinite ease-in-out;
+      box-shadow: 0 0 30px rgba(16, 185, 129, 0.4);
+    }
+
+    @keyframes sk-scaleout {
+      0% {
+        transform: scale(0);
+      }
+
+      100% {
+        transform: scale(1.0);
+        opacity: 0;
+      }
+    }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "VanaMap",
+    "url": "https://www.vanamap.online/",
+    "logo": "https://www.vanamap.online/logo.png",
+    "description": "Smart Ecosystem Simulator & Plant Finder",
+    "sameAs": [
+      "https://twitter.com/vanamap",
+      "https://facebook.com/vanamap"
+    ]
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "VanaMap",
+    "applicationCategory": "LifestyleApplication",
+    "operatingSystem": "Any",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "featureList": "AI Plant Doctor, Nearby Nursery Locator, Air Quality Simulator, Oxygen Calculator"
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "name": "About VanaMap",
+    "url": "https://www.vanamap.online/about",
+    "description": "Information about VanaMap, its mission to improve urban ecosystems, and its team.",
+    "mainEntity": {
+      "@type": "Organization",
+      "name": "VanaMap",
+      "logo": "https://www.vanamap.online/logo.png"
+    }
+  }
+  </script>
+</head>
+
+<body>
+  <div id="pre-loader">
+    <div class="pulse"></div>
+  </div>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
+</html>
