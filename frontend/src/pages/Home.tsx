@@ -283,7 +283,7 @@ export const Home = () => {
                                         onKeyDown={(e) => e.key === 'Enter' && handleCitySearch()}
                                         className={styles.searchInput}
                                     />
-                                    {showSuggestions && suggestions.length > 0 && (
+                                    {showSuggestions && Array.isArray(suggestions) && suggestions.length > 0 && (
                                         <ul className={styles.suggestionsList}>
                                             {suggestions.map((place: any, i) => (
                                                 <li key={i} className={styles.suggestionItem} onClick={() => {
@@ -329,7 +329,7 @@ export const Home = () => {
                                 <div className={styles.statInfo}>
                                     <span className={styles.statLabel}>AVG TEMPERATURE</span>
                                     <div className={styles.statValue}>
-                                        {weather.avgTemp30Days.toFixed(1)}°C
+                                        {typeof weather.avgTemp30Days === 'number' ? weather.avgTemp30Days.toFixed(1) : '--'}°C
                                     </div>
                                     <span style={{ color: '#94a3b8', fontSize: '0.7rem' }}>30-Day Mean</span>
                                 </div>
@@ -345,7 +345,7 @@ export const Home = () => {
                                 <div className={styles.statInfo}>
                                     <span className={styles.statLabel}>AIR QUALITY (AQI)</span>
                                     <div className={styles.statValue}>
-                                        {weather.air_quality?.aqi || 'N/A'}
+                                        {weather.air_quality?.aqi ?? 'N/A'}
                                     </div>
                                     <span style={{ color: getPollutionStatus(weather.air_quality?.aqi).color, fontSize: '0.7rem', fontWeight: 800 }}>
                                         {getPollutionStatus(weather.air_quality?.aqi).label.toUpperCase()}
