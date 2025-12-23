@@ -292,6 +292,24 @@ app.get('/api/suggestions', auth, admin, async (req, res) => {
     }
 });
 
+app.patch('/api/suggestions/:id', auth, admin, async (req, res) => {
+    try {
+        const suggestion = await PlantSuggestion.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        res.json(suggestion);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.delete('/api/suggestions/:id', auth, admin, async (req, res) => {
+    try {
+        await PlantSuggestion.findByIdAndDelete(req.params.id);
+        res.json({ success: true });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 
 // --- PLANT ROUTES ---
 

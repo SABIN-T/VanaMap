@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { AdminLayout } from './AdminLayout';
 import { Clock, User, Sparkles, MessageSquare, CheckCircle, XCircle } from 'lucide-react';
 import { toast } from 'react-hot-toast';
-import { fetchSuggestions as apiFetchSuggestions } from '../../services/api';
+import { fetchSuggestions as apiFetchSuggestions, updateSuggestion, deleteSuggestion } from '../../services/api';
 
 export const ManageSuggestions = () => {
     const [suggestions, setSuggestions] = useState<any[]>([]);
@@ -120,17 +120,38 @@ export const ManageSuggestions = () => {
                             </div>
 
                             <div style={{ display: 'flex', gap: '1rem', marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-                                <button
-                                    className="flex-1 flex items-center justify-center gap-2"
-                                    style={{ background: 'rgba(16, 185, 129, 0.1)', color: '#10b981', border: '1px solid rgba(16, 185, 129, 0.2)', padding: '0.75rem', borderRadius: '0.75rem', fontSize: '0.85rem', fontWeight: '700', cursor: 'pointer' }}
-                                    onClick={() => toast.success("Added to review queue")}
-                                >
-                                    <CheckCircle size={16} /> APPROVE
-                                </button>
+                                {s.status !== 'approved' ? (
+                                    <button
+                                        className="flex-1 flex items-center justify-center gap-2"
+                                        style={{ background: 'rgba(16, 185, 129, 0.1)', color: '#10b981', border: '1px solid rgba(16, 185, 129, 0.2)', padding: '0.75rem', borderRadius: '0.75rem', fontSize: '0.85rem', fontWeight: '700', cursor: 'pointer' }}
+                                        onClick={async () => {
+                                            const tid = toast.loading("Approving...");
+                                            try {
+                                                await updateSuggestion(s._id, { status: 'approved' });
+                                                toast.success("Suggestion Approved", { id: tid });
+                                                fetchSuggestions();
+                                            } catch (e) { toast.error("Failed to approve", { id: tid }); }
+                                        }}
+                                    >
+                                        <CheckCircle size={16} /> APPROVE
+                                    </button>
+                                ) : (
+                                    <div className="flex-1 flex items-center justify-center gap-2" style={{ color: '#10b981', padding: '0.75rem', fontSize: '0.85rem', fontWeight: '800' }}>
+                                        <CheckCircle size={16} /> APPROVED
+                                    </div>
+                                )}
                                 <button
                                     className="flex-shrink-0"
                                     style={{ background: 'rgba(244, 63, 94, 0.1)', color: '#f43f5e', border: '1px solid rgba(244, 63, 94, 0.2)', padding: '0.75rem', borderRadius: '0.75rem', cursor: 'pointer' }}
-                                    onClick={() => toast.error("Rejection noted")}
+                                    onClick={async () => {
+                                        if (!window.confirm("Delete this suggestion permanently?")) return;
+                                        const tid = toast.loading("Removing...");
+                                        try {
+                                            await deleteSuggestion(s._id);
+                                            toast.success("Suggestion Removed", { id: tid });
+                                            setSuggestions(prev => prev.filter(item => item._id !== s._id));
+                                        } catch (e) { toast.error("Failed to remove", { id: tid }); }
+                                    }}
                                 >
                                     <XCircle size={16} />
                                 </button>

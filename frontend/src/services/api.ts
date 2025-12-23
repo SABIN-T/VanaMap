@@ -307,3 +307,22 @@ export const fetchSuggestions = async () => {
     if (!res.ok) throw new Error("Failed to fetch suggestions");
     return res.json();
 };
+
+export const updateSuggestion = async (id: string, updates: any) => {
+    const res = await fetch(`${API_URL}/suggestions/${id}`, {
+        method: 'PATCH',
+        headers: getHeaders(),
+        body: JSON.stringify(updates)
+    });
+    if (!res.ok) throw new Error("Failed to update suggestion");
+    return res.json();
+};
+
+export const deleteSuggestion = async (id: string) => {
+    const res = await fetch(`${API_URL}/suggestions/${id}`, {
+        method: 'DELETE',
+        headers: getHeaders()
+    });
+    if (!res.ok) throw new Error("Failed to delete suggestion");
+    return res.json();
+};
