@@ -2,18 +2,18 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
-import { Trash2, ArrowLeft, Minus, Plus, ShoppingCart, MessageCircle, MapPin, Store, Lock } from 'lucide-react';
+import { Trash2, ArrowLeft, Minus, Plus, ShoppingCart, MessageCircle, MapPin, Store, Lock, ShieldCheck } from 'lucide-react';
 import { Button } from '../components/common/Button';
 import { fetchVendors } from '../services/api';
 import { formatCurrency } from '../utils/currency';
 import type { Vendor, CartItem } from '../types';
+import styles from './Cart.module.css';
 
 export const Cart = () => {
     const { items, removeFromCart, updateQuantity } = useCart();
     const { user } = useAuth();
     const navigate = useNavigate();
     const [vendors, setVendors] = useState<Record<string, Vendor>>({});
-
 
     useEffect(() => {
         const loadVendors = async () => {
@@ -58,37 +58,35 @@ export const Cart = () => {
     };
 
     return (
-        <div className="container" style={{ padding: '8rem 1rem 4rem' }}>
-            <div className="glass-panel" style={{ padding: '2.5rem', maxWidth: '900px', margin: '0 auto', background: 'rgba(15, 23, 42, 0.9)', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2.5rem' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                        <button
-                            onClick={() => navigate(-1)}
-                            className="bg-white/5 hover:bg-white/10 text-white p-3 rounded-xl transition-all border border-white/10"
-                        >
+        <div className={styles.container}>
+            <div className={styles.glassPanel}>
+                {/* Header */}
+                <div className={styles.header}>
+                    <div className={styles.headerLeft}>
+                        <button onClick={() => navigate(-1)} className={styles.backBtn}>
                             <ArrowLeft size={20} />
                         </button>
-                        <h1 style={{ fontSize: '2rem', fontWeight: 800, margin: 0, color: 'white', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                            <ShoppingCart size={28} className="text-emerald-400" /> Your Garden Cart
+                        <h1 className={styles.titleMain}>
+                            <ShoppingCart size={32} className={styles.titleIcon} />
+                            Your Garden Cart
                         </h1>
                     </div>
-                    {items.length > 0 && <span style={{ color: '#94a3b8', fontSize: '0.9rem', fontWeight: 600 }}>{items.length} items</span>}
+                    {items.length > 0 && <span className={styles.itemCount}>{items.length} items</span>}
                 </div>
 
+                {/* Empty State */}
                 {items.length === 0 ? (
-                    <div className="text-center py-24 bg-white/5 rounded-3xl border border-dashed border-white/10">
-                        <div className="w-24 h-24 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-8">
-                            <ShoppingCart size={48} className="text-emerald-500" />
+                    <div className={styles.emptyState}>
+                        <div className={styles.emptyIconBox}>
+                            <ShoppingCart size={48} color="#10b981" />
                         </div>
-                        <h2 className="text-2xl text-white font-bold mb-4">Your cart is empty</h2>
-                        <p className="text-slate-400 max-w-sm mx-auto mb-8 leading-relaxed">
-                            Discover rare specimens and verified sellers in your area.
+                        <h2 className={styles.emptyTitle}>Your cart is empty</h2>
+                        <p className={styles.emptyDesc}>
+                            Looks like you haven't discovered your perfect plant match yet. Explore our collection of air-purifying plants.
                         </p>
-                        <div className="flex justify-center gap-4">
-                            <Button onClick={() => navigate('/shops')} variant="primary" size="lg">
-                                Browse Market
-                            </Button>
-                        </div>
+                        <Button onClick={() => navigate('/shops')} variant="primary" size="lg">
+                            Brows Market
+                        </Button>
                     </div>
                 ) : (
                     <div className="space-y-8">
@@ -99,37 +97,40 @@ export const Cart = () => {
                             const totalPrice = cartItems.reduce((sum, i) => sum + ((i.vendorPrice || i.plant.price || 0) * i.quantity), 0);
 
                             return (
-                                <div key={vendorId} className="bg-slate-800/50 rounded-2xl border border-white/5 overflow-hidden">
+                                <div key={vendorId} className={styles.vendorGroup}>
                                     {/* Group Header */}
-                                    <div className="p-4 bg-white/5 border-b border-white/5 flex items-center justify-between">
-                                        <div className="flex items-center gap-2">
-                                            {isVanaMap ? (
-                                                <Store size={20} className="text-emerald-400" />
-                                            ) : (
-                                                <Store size={20} className="text-amber-400" />
-                                            )}
-                                            <span className="font-bold text-white text-lg">
-                                                {isVanaMap ? 'VanaMap Official' : (vendor?.name || 'Unknown Vendor')}
-                                            </span>
-                                            {!isVanaMap && vendor && (
-                                                <div className="flex items-center gap-1 text-xs text-slate-400 ml-2">
-                                                    <MapPin size={12} /> {vendor.address}
+                                    <div className={styles.groupHeader}>
+                                        <div className={styles.vendorInfo}>
+                                            <Store size={22} className={isVanaMap ? "text-emerald-400" : "text-amber-400"} />
+                                            <div>
+                                                <div className={styles.vendorName}>
+                                                    {isVanaMap ? 'VanaMap Official' : (vendor?.name || 'Unknown Vendor')}
                                                 </div>
+                                                {!isVanaMap && vendor && (
+                                                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginTop: '4px', fontSize: '0.8rem', color: '#94a3b8' }}>
+                                                        <MapPin size={12} /> {vendor.address}
+                                                    </div>
+                                                )}
+                                            </div>
+                                            {isVanaMap ? (
+                                                <span className={styles.officialBadge}><ShieldCheck size={12} /> Official</span>
+                                            ) : (
+                                                <span className={styles.partnerBadge}>Partner</span>
                                             )}
                                         </div>
+
                                         {/* Vendor Action */}
                                         {!isVanaMap && (
                                             <div>
                                                 {user ? (
-                                                    <Button
-                                                        size="sm"
-                                                        className="bg-[#25D366] hover:bg-[#128C7E] text-white border-none flex items-center gap-2"
+                                                    <button
+                                                        className={styles.whatsappBtn}
                                                         onClick={() => handleWhatsAppCheckout(vendorId)}
                                                     >
-                                                        <MessageCircle size={16} /> Send Order via WhatsApp
-                                                    </Button>
+                                                        <MessageCircle size={18} /> Send Order via WhatsApp
+                                                    </button>
                                                 ) : (
-                                                    <div className="flex items-center gap-2 text-amber-500 text-sm font-bold bg-amber-500/10 px-3 py-1 rounded-lg">
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#fbbf24', fontSize: '0.85rem', fontWeight: 700, background: 'rgba(251, 191, 36, 0.1)', padding: '6px 12px', borderRadius: '8px' }}>
                                                         <Lock size={14} /> Login to Order
                                                     </div>
                                                 )}
@@ -138,60 +139,59 @@ export const Cart = () => {
                                     </div>
 
                                     {/* Items */}
-                                    <div className="p-4 space-y-4">
+                                    <div className={styles.itemsList}>
                                         {cartItems.map((item) => (
-                                            <div key={`${item.plant.id}-${vendorId}`} className="flex items-center gap-4 p-4 bg-slate-900/50 rounded-xl border border-white/5 transition-all hover:border-white/10">
+                                            <div key={`${item.plant.id}-${vendorId}`} className={styles.itemCard}>
                                                 <img
                                                     src={item.plant.imageUrl}
-                                                    className="w-20 h-20 rounded-lg object-cover border border-white/10 shadow-lg"
+                                                    className={styles.itemThumb}
                                                     alt={item.plant.name}
                                                 />
-                                                <div className="flex-1">
-                                                    <div className="flex justify-between items-start">
+                                                <div className={styles.itemDetails}>
+                                                    <div className={styles.itemHeader}>
                                                         <div>
-                                                            <h3 className="text-lg font-bold text-white">{item.plant.name}</h3>
-                                                            <p className="text-sm text-slate-400 italic">{item.plant.scientificName}</p>
+                                                            <h3 className={styles.itemName}>{item.plant.name}</h3>
+                                                            <p className={styles.itemScientific}>{item.plant.scientificName}</p>
                                                         </div>
-                                                        <div className="text-right">
-                                                            <div className="text-emerald-400 font-bold mb-1">
-                                                                {formatCurrency(item.vendorPrice || item.plant.price || 0)}
-                                                            </div>
+                                                        <div className={styles.itemPrice}>
+                                                            {formatCurrency(item.vendorPrice || item.plant.price || 0)}
                                                         </div>
                                                     </div>
 
-                                                    <div className="flex justify-between items-end mt-4">
-                                                        <div className="flex items-center gap-2 bg-white/5 p-1 rounded-lg border border-white/5">
+                                                    <div className={styles.controlsRow}>
+                                                        <div className={styles.stepper}>
                                                             <button
                                                                 onClick={() => updateQuantity(item.plant.id, item.quantity - 1, vendorId === 'vanamap' ? undefined : vendorId)}
-                                                                className="w-8 h-8 flex items-center justify-center text-white hover:bg-white/10 rounded-md transition-colors"
+                                                                className={styles.stepperBtn}
                                                             >
                                                                 <Minus size={14} />
                                                             </button>
-                                                            <span className="w-8 text-center text-white font-bold">{item.quantity}</span>
+                                                            <span className={styles.quantityVal}>{item.quantity}</span>
                                                             <button
                                                                 onClick={() => updateQuantity(item.plant.id, item.quantity + 1, vendorId === 'vanamap' ? undefined : vendorId)}
-                                                                className="w-8 h-8 flex items-center justify-center bg-emerald-500 text-black rounded-md hover:bg-emerald-400 transition-colors shadow-lg shadow-emerald-500/20"
+                                                                className={`${styles.stepperBtn} ${styles.add}`}
                                                             >
                                                                 <Plus size={14} />
                                                             </button>
                                                         </div>
+
                                                         <button
                                                             onClick={() => removeFromCart(item.plant.id, vendorId === 'vanamap' ? undefined : vendorId)}
-                                                            className="text-red-400 hover:text-red-300 p-2 hover:bg-red-500/10 rounded-lg transition-colors"
+                                                            className={styles.removeBtn}
                                                             title="Remove"
                                                         >
-                                                            <Trash2 size={18} />
+                                                            <Trash2 size={16} /> Remove
                                                         </button>
                                                     </div>
                                                 </div>
                                             </div>
                                         ))}
+                                    </div>
 
-                                        {/* Subtotal */}
-                                        <div className="pt-4 border-t border-white/10 flex justify-between items-center text-white">
-                                            <span className="text-slate-400 text-sm font-medium">Subtotal ({cartItems.length} items)</span>
-                                            <span className="text-xl font-bold">{formatCurrency(totalPrice)}</span>
-                                        </div>
+                                    {/* Subtotal */}
+                                    <div className={styles.groupFooter}>
+                                        <span className={styles.subtotalLabel}>Subtotal ({cartItems.length} items)</span>
+                                        <span className={styles.subtotalValue}>{formatCurrency(totalPrice)}</span>
                                     </div>
                                 </div>
                             );
@@ -201,8 +201,8 @@ export const Cart = () => {
 
                 {/* Footer Note */}
                 {items.length > 0 && (
-                    <div className="mt-8 text-center text-slate-500 text-sm">
-                        <p>Prices are set by individual vendors. Delivery terms may vary.</p>
+                    <div className={styles.footerNote}>
+                        <p>Prices are set by individual vendors. Delivery terms and final availability are confirmed upon order.</p>
                         {!user && (
                             <Button variant="outline" className="mt-4" onClick={() => navigate('/auth')}>
                                 Sign In / Register Account
