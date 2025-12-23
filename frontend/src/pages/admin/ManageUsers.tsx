@@ -108,12 +108,29 @@ export const ManageUsers = () => {
                                 <div className="flex gap-2">
                                     <button
                                         className={styles.actionBtn}
-                                        style={{ background: 'rgba(220, 38, 38, 0.2)', color: '#fca5a5' }}
-                                        onClick={() => {
-                                            setSearchQuery(alert.details?.email || "");
+                                        style={{ background: '#f59e0b', color: 'black', fontWeight: 'bold' }}
+                                        onClick={async () => {
+                                            const emailStr = alert.details?.email || alert.message.split(' ')[1];
+                                            const userToReset = allUsers.find(u => u.email === emailStr);
+                                            if (userToReset) {
+                                                if (window.confirm(`Reset password to '123456' for ${emailStr}?`)) {
+                                                    const tid = toast.loading("Reseting...");
+                                                    try {
+                                                        await adminResetPassword(userToReset.id, '123456');
+                                                        toast.success("Password Reset Successfully", { id: tid });
+                                                        // Automatically clear alert after reset
+                                                        const { deleteNotification } = await import('../../services/api');
+                                                        await deleteNotification(alert._id);
+                                                        loadAlerts();
+                                                    } catch (e) { toast.error("Reset Failed"); }
+                                                }
+                                            } else {
+                                                toast.error("User not found in directory. Try searching manually.");
+                                                setSearchQuery(emailStr || "");
+                                            }
                                         }}
                                     >
-                                        Review
+                                        RESET TO 123456
                                     </button>
                                     <button
                                         className={styles.actionBtn}

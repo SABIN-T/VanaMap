@@ -604,18 +604,12 @@ app.post('/api/auth/nudge-admin', async (req, res) => {
     try {
         const { email } = req.body;
         const user = await User.findOne({ email });
-        if (user) {
-            user.password = '123456';
-            await user.save();
-        }
-
-        // Trigger real email (Non-blocking)
-        sendResetEmail(email, '123456');
+        // No automatic reset here, admin will do it manually.
 
         const notif = new Notification({
             type: 'help',
-            message: `User ${email || 'Anonymous'} is requesting help (Forgot Username). Password reset to 123456 and email triggered.`,
-            details: { email }
+            message: `User with email ${email || 'Anonymous'} is requesting help (Forgot Username or Access). Manual password reset requested.`,
+            details: { email, userId: user ? user._id : null }
         });
         await notif.save();
         res.json({ success: true });

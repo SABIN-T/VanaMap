@@ -53,7 +53,7 @@ export const Auth = () => {
         const tid = toast.loading("Signaling Admin...");
         try {
             await import('../services/api').then(api => api.nudgeAdmin(email));
-            toast.success("email is sented check email for temporetry password", { id: tid });
+            toast.success("Admin will change the password to 123456 for this email shortly. Please try after 1hr.", { id: tid, duration: 6000 });
         } catch (e) { toast.error("Failed to signal admin", { id: tid }); }
     };
 
