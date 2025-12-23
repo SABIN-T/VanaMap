@@ -139,8 +139,12 @@ export const Home = () => {
         if (result) {
             const weatherData = await getWeather(result.lat, result.lng);
             if (weatherData) {
-                setWeather(weatherData);
-                toast.success(`Synced location: ${query.charAt(0).toUpperCase() + query.slice(1)}`);
+                // Formatting city name to be clean
+                const cityName = query.split(',')[0].trim();
+                const cleanName = cityName.charAt(0).toUpperCase() + cityName.slice(1);
+
+                setWeather({ ...weatherData, locationName: cleanName });
+                toast.success(`Synced location: ${cleanName}`);
                 scrollToFilters();
                 setSuggestions([]);
             } else {
@@ -168,7 +172,10 @@ export const Home = () => {
                 try {
                     const weatherData = await getWeather(latitude, longitude);
                     if (weatherData) {
-                        setWeather(weatherData);
+                        // Reverse Geocoding would be ideal here, but for now we'll say "Current Location"
+                        // Or if the API returned city, use it.
+                        // Let's assume weatherData might have something, or we default.
+                        setWeather({ ...weatherData, locationName: "Detected Location" });
                         toast.success("Location set!", { id: toastId });
                         scrollToFilters();
                     } else {
@@ -338,7 +345,9 @@ export const Home = () => {
                                 <div className={styles.weatherMain}>
                                     <div className={styles.locationInfo}>
                                         <span className={styles.label}>YOUR ZONE</span>
-                                        <h3 className={styles.h3}>Live Environment</h3>
+                                        <h3 className={styles.h3}>
+                                            {weather.locationName || weather.city || 'Live Environment'}
+                                        </h3>
                                         <button onClick={() => setWeather(null)} className={styles.changeBtn}>Change Location</button>
                                     </div>
                                     <div className={styles.vDivider}></div>
