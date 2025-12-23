@@ -98,67 +98,67 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
     // ==========================================
 
     const renderControls = () => (
-        <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1.25rem', borderRadius: '1rem', display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-
+        <div className={styles.mobileControlsContainer}>
             {/* GPS Warning */}
-            <div style={{ background: 'rgba(234, 179, 8, 0.1)', border: '1px solid rgba(234, 179, 8, 0.2)', padding: '0.75rem', borderRadius: '0.5rem', display: 'flex', alignItems: 'start', gap: '0.75rem' }}>
+            <div className={styles.instructionNotice}>
                 <AlertTriangle size={16} className="text-yellow-500" style={{ marginTop: 2, flexShrink: 0 }} />
-                <div style={{ fontSize: '0.75rem', color: '#fde047', lineHeight: 1.4 }}>
-                    <strong>Pro Tip:</strong> Enable GPS for accurate local climate simulation results.
-                </div>
+                <div><strong>Pro Tip:</strong> Enable GPS for accurate local climate simulation results.</div>
             </div>
 
             {/* People */}
-            <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.9rem' }}>
-                    <span style={{ color: '#cbd5e1' }}>Occupants</span>
-                    <span style={{ color: '#38bdf8', fontWeight: 700 }}>{numPeople}</span>
+            <div className={styles.controlItem}>
+                <div className={styles.controlHeader}>
+                    <span>Occupants</span>
+                    <span className={styles.controlValue}>{numPeople}</span>
                 </div>
                 <input
                     type="range" min="1" max="10" value={numPeople}
                     onChange={(e) => setNumPeople(Number(e.target.value))}
-                    className="no-swipe"
-                    style={{ width: '100%', accentColor: '#38bdf8' }}
+                    className={styles.rangeInput}
                 />
             </div>
 
             {/* Light */}
-            <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.9rem' }}>
-                    <span style={{ color: '#cbd5e1', display: 'flex', alignItems: 'center', gap: 6 }}><Lightbulb size={14} /> Light Level</span>
-                    <span style={{ color: '#facc15', fontWeight: 700 }}>{lightLevel}%</span>
+            <div className={styles.controlItem}>
+                <div className={styles.controlHeader}>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}><Lightbulb size={14} /> Light Level</span>
+                    <span className={styles.controlValue} style={{ color: '#facc15' }}>{lightLevel}%</span>
                 </div>
                 <input
                     type="range" min="10" max="100" value={lightLevel}
                     onChange={(e) => setLightLevel(Number(e.target.value))}
-                    className="no-swipe"
-                    style={{ width: '100%', accentColor: '#facc15' }}
+                    className={styles.rangeInput}
+                    style={{ '--thumb-color': '#facc15' } as any}
                 />
             </div>
 
             {/* AC/Temp */}
-            <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
-                    <div style={{ fontSize: '0.9rem', color: '#cbd5e1', display: 'flex', alignItems: 'center', gap: 6 }}><Fan size={14} /> AC Control</div>
-                    <div onClick={() => setIsACMode(!isACMode)} style={{ cursor: 'pointer', width: 36, height: 20, background: isACMode ? '#38bdf8' : '#334155', borderRadius: 20, position: 'relative' }}>
-                        <div style={{ width: 16, height: 16, background: 'white', borderRadius: '50%', position: 'absolute', top: 2, left: isACMode ? 18 : 2, transition: 'all 0.2s' }} />
-                    </div>
+            <div className={styles.controlItem}>
+                <div className={styles.controlHeader}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}><Fan size={14} /> AC Control</div>
+                    <button
+                        onClick={() => setIsACMode(!isACMode)}
+                        className={`${styles.toggleSwitch} ${isACMode ? styles.active : ''}`}
+                    />
                 </div>
-                {isACMode && (
-                    <div className="animate-fade-in">
-                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', fontSize: '0.8rem' }}>
-                            <span style={{ color: '#64748b' }}>Target Temp</span>
-                            <span style={{ color: '#38bdf8', fontWeight: 700 }}>{targetTemp}°C</span>
+
+                {isACMode ? (
+                    <div className="animate-fade-in space-y-2 mt-2">
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: '#64748b' }}>
+                            <span>Target Temp</span>
+                            <span className={styles.controlValue}>{targetTemp}°C</span>
                         </div>
                         <input
                             type="range" min="16" max="30" value={targetTemp}
                             onChange={(e) => setTargetTemp(Number(e.target.value))}
-                            className="no-swipe"
-                            style={{ width: '100%', accentColor: '#38bdf8' }}
+                            className={styles.rangeInput}
                         />
                     </div>
+                ) : (
+                    <div style={{ fontSize: '0.8rem', color: '#64748b', fontStyle: 'italic' }}>
+                        Using local weather: <strong style={{ color: '#94a3b8' }}>{weather?.avgTemp30Days || 25}°C</strong>
+                    </div>
                 )}
-                {!isACMode && <div style={{ fontSize: '0.8rem', color: '#64748b' }}>Using local weather: {weather?.avgTemp30Days || 25}°C</div>}
             </div>
         </div>
     );

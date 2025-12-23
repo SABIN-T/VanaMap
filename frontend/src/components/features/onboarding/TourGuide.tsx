@@ -10,9 +10,9 @@ interface Step {
 
 const TOUR_STEPS: Step[] = [
     {
-        targetId: 'nav-home',
-        title: 'Hi! I\'m Sprout.',
-        content: 'I\'ll be your eco-guide today! Let\'s find the perfect plants for your sanctuary.',
+        targetId: 'location-action-area',
+        title: 'Start Here! 📍',
+        content: 'To find plants that actually survive, we need your location. Tap "Auto-Detect" or enter your city.',
         icon: <Leaf className="text-emerald-400" size={24} />
     },
     {

@@ -239,36 +239,50 @@ export const Home = () => {
                         <Sparkles size={16} /> Home Ecosystem App
                     </div>
 
-                    <h1 className={styles.heroTitle}>FIND THE PERFECT<br />PLANT FOR YOU</h1>
+                    <h1 className={styles.heroTitle}>BRING NATURE<br />HOME</h1>
                     <p className={styles.heroSubtitle}>
-                        Discover plants that clean your air and fit your life.
-                        See what grows best in your city.
+                        Transform your living space. <strong>Start by setting your location below</strong> to see what grows best in your ecosystem.
                     </p>
 
                     {!weather ? (
-                        <div className={styles.actionContainer}>
+                        <div id="location-action-area" className={styles.actionContainer}>
+                            <div className={styles.buttonGroup} style={{ width: '100%', justifyContent: 'center' }}>
+                                <Button
+                                    variant="primary"
+                                    size="lg"
+                                    onClick={handleGetLocation}
+                                    className={styles.gpsBtn}
+                                    style={{
+                                        width: '100%',
+                                        maxWidth: '300px',
+                                        padding: '1rem'
+                                    }}
+                                >
+                                    <MapPin size={22} className="animate-bounce" style={{ marginRight: '8px' }} /> Auto-Detect Location
+                                </Button>
+                            </div>
+
+                            <div className={styles.divider}>
+                                <span>OR ENTER MANUALLY</span>
+                            </div>
+
                             <div className={styles.searchBox}>
                                 <input
                                     type="text"
-                                    placeholder="Enter your City (e.g. Kathmandu)"
+                                    placeholder="Enter City (e.g. Kathmandu)"
                                     value={citySearch}
                                     onChange={e => setCitySearch(e.target.value)}
                                     onKeyDown={e => e.key === 'Enter' && handleCitySearch()}
                                     className={styles.searchInput}
                                 />
-                                <Button onClick={handleCitySearch} disabled={locationLoading}>
-                                    {locationLoading ? 'Checking...' : 'Check My Location'}
+                                <Button onClick={handleCitySearch} disabled={locationLoading} variant="outline">
+                                    {locationLoading ? '...' : 'Search'}
                                 </Button>
                             </div>
 
-                            <div className={styles.divider}>- OR -</div>
-
-                            <div className={styles.buttonGroup}>
-                                <Button variant="outline" size="lg" onClick={handleGetLocation} className={styles.gpsBtn}>
-                                    <MapPin size={20} /> Use GPS
-                                </Button>
-                                <Button variant="outline" size="lg" onClick={() => navigate('/nearby')}>
-                                    Find Nearby Shop
+                            <div style={{ marginTop: '1rem', display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+                                <Button variant="ghost" size="sm" onClick={() => navigate('/nearby')} style={{ color: '#94a3b8' }}>
+                                    Find Nearby Shop Instead
                                 </Button>
                             </div>
                         </div>
@@ -534,12 +548,12 @@ export const Home = () => {
                             <h4 style={{ color: 'white', marginBottom: '1rem', fontSize: '1rem' }}>Links</h4>
                             <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                                 <li>
-                                    <a href="#" style={{ color: '#10b981', textDecoration: 'none', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                    <a href="/contact" style={{ color: '#10b981', textDecoration: 'none', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                         <Heart size={14} fill="#10b981" /> Support Us
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#" style={{ color: '#facc15', textDecoration: 'none', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                    <a href="/vendor" style={{ color: '#facc15', textDecoration: 'none', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                                         <Sparkles size={14} /> Become a Partner
                                     </a>
                                 </li>
@@ -549,7 +563,7 @@ export const Home = () => {
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="/nearby" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '0.9rem' }}>Vendor Login</a>
+                                    <a href="/auth" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '0.9rem' }}>Vendor Login</a>
                                 </li>
                             </ul>
                         </div>

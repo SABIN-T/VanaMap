@@ -1,6 +1,7 @@
 .homeContainer {
-    max-width: 1400px;
+    max-width: 1440px;
     margin: 0 auto;
+    overflow-x: hidden;
 }
 
 
@@ -26,45 +27,64 @@
     justify-content: center;
     text-align: center;
     padding: 6rem 2rem 4rem;
-    background: radial-gradient(circle at top right, rgba(0, 255, 157, 0.05), transparent 40%),
-        radial-gradient(circle at bottom left, rgba(56, 189, 248, 0.05), transparent 40%);
-    margin-bottom: 3rem;
+    position: relative;
+    overflow: hidden;
+    /* Premium Dark Mesh Gradient */
+    background:
+        radial-gradient(circle at 15% 50%, rgba(16, 185, 129, 0.15), transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(59, 130, 246, 0.15), transparent 25%),
+        linear-gradient(180deg, #0f172a 0%, #0f172a 100%);
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(56, 189, 248, 0.3), transparent);
 }
 
 .heroContent {
-    max-width: 1200px;
+    max-width: 1000px;
     width: 100%;
     position: relative;
     z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .heroBadge {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
-    background: rgba(255, 255, 255, 0.05);
-    color: var(--color-primary);
-    padding: 0.35rem 0.85rem;
+    background: rgba(16, 185, 129, 0.1);
+    color: #34d399;
+    padding: 0.5rem 1rem;
     border-radius: 99px;
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     font-weight: 600;
-    margin-bottom: 1.5rem;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 2rem;
+    border: 1px solid rgba(16, 185, 129, 0.2);
     backdrop-filter: blur(10px);
     letter-spacing: 0.5px;
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.1);
 }
 
 .heroTitle {
-    font-size: clamp(2.5rem, 5vw, 3.5rem);
+    font-size: clamp(3rem, 6vw, 4.5rem);
     font-weight: 800;
     line-height: 1.1;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     color: white;
-    letter-spacing: -1px;
+    letter-spacing: -2px;
     background: linear-gradient(180deg, #fff 0%, #cbd5e1 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    text-shadow: 0 0 60px rgba(16, 185, 129, 0.3);
 }
 
 .heroSubtitle {
@@ -92,16 +112,89 @@
     justify-content: center;
 }
 
+/* GPS Button - Always Glowing & Push Effect */
 .gpsBtn {
-    background: rgba(0, 255, 157, 0.1) !important;
-    border-color: rgba(0, 255, 157, 0.3) !important;
-    color: var(--color-primary) !important;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+    border: none !important;
+    color: white !important;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    /* The Glow/Push Animation */
+    animation: glowPush 2s infinite ease-in-out;
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.6), 0 0 40px rgba(16, 185, 129, 0.3);
+    transition: all 0.3s ease;
+}
+
+.gpsBtn::after {
+    content: '';
+    position: absolute;
+    inset: -5px;
+    background: linear-gradient(45deg, #34d399, #10b981, #059669);
+    filter: blur(15px);
+    z-index: -1;
+    opacity: 0.6;
+    animation: rotateGlow 5s linear infinite;
+}
+
+@keyframes glowPush {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+    }
+
+    50% {
+        transform: scale(1.05);
+        /* Push effect */
+        box-shadow: 0 0 20px 10px rgba(16, 185, 129, 0);
+        /* Expanding glow ring */
+    }
+
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+    }
+}
+
+@keyframes rotateGlow {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .gpsBtn:hover {
-    background: rgba(0, 255, 157, 0.2) !important;
-    box-shadow: 0 0 20px rgba(0, 255, 157, 0.2);
+    animation: none;
+    /* Pause on hover or intensify? Let's keep it steady on hover for usability */
+    transform: scale(1.05);
+    box-shadow: 0 0 30px rgba(16, 185, 129, 0.8);
 }
+
+.pulseBtn {
+    /* Keeping this for other buttons that might use it, but GPS btn overrides it */
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+        transform: scale(1);
+    }
+
+    70% {
+        box-shadow: 0 0 0 15px rgba(16, 185, 129, 0);
+        transform: scale(1.02);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+        transform: scale(1);
+    }
+}
+
 
 .divider {
     display: flex;
@@ -126,14 +219,22 @@
 .searchBox {
     display: flex;
     gap: 0.5rem;
-    background: var(--color-bg-card);
-    padding: 0.5rem;
-    border-radius: 1rem;
-    border: 1px solid var(--glass-border);
+    background: rgba(255, 255, 255, 0.03);
+    padding: 0.75rem;
+    border-radius: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     width: 100%;
-    max-width: 450px;
-    box-shadow: var(--glass-shadow);
-    transition: 0.3s;
+    max-width: 500px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(12px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.searchBox:focus-within {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(16, 185, 129, 0.3);
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+    transform: translateY(-2px);
 }
 
 .searchInput {
@@ -147,14 +248,34 @@
 }
 
 .weatherCard {
-    background: var(--color-bg-card);
-    border: var(--glass-border);
+    background: rgba(30, 41, 59, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 2.5rem;
     overflow: hidden;
     backdrop-filter: blur(20px);
-    box-shadow: var(--glass-shadow);
+    box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.5);
     max-width: 900px;
     margin: 0 auto;
+    transition: transform 0.5s ease;
+    position: relative;
+}
+
+.weatherCard::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 2.5rem;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
+}
+
+.weatherCard:hover {
+    transform: translateY(-5px);
 }
 
 .h3 {
@@ -196,24 +317,28 @@
 }
 
 .sectionHeader h2 {
-    font-size: 2.25rem;
+    font-size: 2.5rem;
     font-weight: 900;
     margin-bottom: 0.5rem;
-    color: var(--color-text-main);
-    letter-spacing: -0.02em;
+    color: white;
+    /* clearer contrast */
+    letter-spacing: -1px;
 }
 
 /* Filter Discovery Section */
 .filterDiscoverySection {
-    background: var(--color-bg-card);
-    border: var(--glass-border);
+    background: rgba(30, 41, 59, 0.4);
+    /* Cleaner dark glass */
+    border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 2.5rem;
     padding: 3rem;
     margin-bottom: 4rem;
     display: flex;
     flex-direction: column;
     gap: 3rem;
-    box-shadow: var(--glass-shadow);
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+    /* Deep shadow */
+    backdrop-filter: blur(20px);
 }
 
 .searchBarWrapper {
@@ -230,11 +355,11 @@
 
 .searchSpeciesInput {
     width: 100%;
-    background: var(--color-bg);
-    border: 1px solid var(--glass-border);
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     padding: 1rem 1rem 1rem 3.5rem;
     border-radius: 1rem;
-    color: var(--color-text-main);
+    color: white;
     font-size: 1.1rem;
     outline: none;
     transition: 0.3s;
@@ -243,6 +368,7 @@
 .searchSpeciesInput:focus {
     border-color: var(--color-primary);
     box-shadow: 0 0 0 4px rgba(0, 255, 157, 0.1);
+    background: rgba(15, 23, 42, 0.8);
 }
 
 .filterWrapper {
@@ -288,15 +414,15 @@
 }
 
 .indoorActive {
-    background: rgba(59, 130, 246, 0.1) !important;
+    background: rgba(59, 130, 246, 0.15) !important;
     border-color: #3b82f6 !important;
-    box-shadow: 0 0 40px -10px rgba(59, 130, 246, 0.2);
+    box-shadow: 0 0 40px -10px rgba(59, 130, 246, 0.3);
 }
 
 .outdoorActive {
-    background: rgba(245, 158, 11, 0.1) !important;
+    background: rgba(245, 158, 11, 0.15) !important;
     border-color: #f59e0b !important;
-    box-shadow: 0 0 40px -10px rgba(245, 158, 11, 0.2);
+    box-shadow: 0 0 40px -10px rgba(245, 158, 11, 0.3);
 }
 
 .categoryIcon {
@@ -340,39 +466,34 @@
 
 @media (min-width: 1024px) {
     .categorySelectionList {
-        max-width: 750px;
+        max-width: 800px;
         margin-inline: auto;
-        gap: 1.25rem;
+        gap: 2rem;
     }
 
     .categoryCard {
-        padding: 1rem 1.5rem;
+        padding: 2rem;
         flex-direction: row;
         text-align: left;
-        gap: 1.25rem;
+        gap: 1.5rem;
         border-radius: 1.5rem;
     }
 
     .categoryIcon {
-        width: 44px;
-        height: 44px;
+        width: 56px;
+        height: 56px;
         border-radius: 1rem;
         flex-shrink: 0;
     }
 
-    .categoryIcon svg {
-        width: 20px;
-        height: 20px;
-    }
-
     .categoryName {
-        font-size: 1.1rem;
-        margin-bottom: 2px;
+        font-size: 1.2rem;
+        margin-bottom: 4px;
     }
 
     .categoryDesc {
-        font-size: 0.75rem;
-        max-width: 260px;
+        font-size: 0.85rem;
+        max-width: 280px;
     }
 }
 
@@ -399,56 +520,56 @@
 .filterBtn {
     padding: 0.6rem 1.25rem;
     border-radius: 0.75rem;
-    background: var(--color-bg);
-    border: 1px solid var(--glass-border);
+    background: rgba(255, 255, 255, 0.03);
+    /* Glassy default */
+    border: 1px solid rgba(255, 255, 255, 0.1);
     color: var(--color-text-muted);
     font-size: 0.85rem;
     font-weight: 700;
     cursor: pointer;
-    transition: 0.2s;
+    transition: all 0.2s;
     margin-right: 0.5rem;
 }
 
 .filterBtn:hover {
     border-color: var(--color-primary);
     color: var(--color-text-main);
+    background: rgba(255, 255, 255, 0.05);
 }
 
 .filterBtn.active {
     background: var(--color-primary);
     color: #000;
     border-color: var(--color-primary);
-    box-shadow: 0 4px 12px rgba(0, 255, 157, 0.2);
+    box-shadow: 0 4px 12px rgba(0, 255, 157, 0.3);
+    /* Stronger glow */
+    transform: translateY(-2px);
 }
 
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    /* Slightly wider cards */
+    gap: 2.5rem;
+    /* More breathing room */
     margin-bottom: 6rem;
+    padding: 1rem;
 }
 
 /* Mobile: Force 2 columns */
 @media (max-width: 640px) {
     .grid {
         grid-template-columns: repeat(2, 1fr);
-        gap: 0.75rem;
+        gap: 1rem;
+        padding: 0;
     }
 }
 
-/* Desktop: Force 5 columns for detailed view on wide screens */
+/* Desktop: Optimizations */
 @media (min-width: 1440px) {
     .grid {
         grid-template-columns: repeat(4, 1fr);
-        gap: 1.5rem;
-    }
-}
-
-/* Laptop: 4 columns */
-@media (min-width: 1100px) and (max-width: 1439px) {
-    .grid {
-        grid-template-columns: repeat(4, 1fr);
-        gap: 1.5rem;
+        gap: 2rem;
     }
 }
 
@@ -461,20 +582,6 @@
     to {
         opacity: 1;
         transform: translateY(0);
-    }
-}
-
-@keyframes pulse {
-    0% {
-        box-shadow: 0 0 0 0 rgba(0, 255, 157, 0.4);
-    }
-
-    70% {
-        box-shadow: 0 0 0 10px rgba(0, 255, 157, 0);
-    }
-
-    100% {
-        box-shadow: 0 0 0 0 rgba(0, 255, 157, 0);
     }
 }
 
@@ -565,11 +672,11 @@
     }
 
     .filterDiscoverySection {
-        padding: 1.25rem;
+        padding: 1.5rem;
     }
 
     .filterWrapper {
-        gap: 1.5rem;
+        gap: 2rem;
     }
 }
 
@@ -642,7 +749,8 @@
     width: 200%;
     height: 200%;
     background: radial-gradient(circle at center, rgba(16, 185, 129, 0.03) 0%, transparent 70%);
-    animation: pulse 10s infinite;
+    animation: rotateGlow 20s linear infinite;
+    /* Subtler background motion */
     pointer-events: none;
 }
 
