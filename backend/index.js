@@ -133,13 +133,14 @@ const sendWhatsApp = async (msg, type, details = {}) => {
 
 app.get('/api/gamification/leaderboard', async (req, res) => {
     try {
-        const topUsers = await User.find({ role: 'user' })
+        // Only real users with role 'user', having at least some points
+        const topUsers = await User.find({ role: 'user', points: { $gt: 0 } })
             .sort({ points: -1 })
             .limit(10)
             .select('name points city state');
 
         const cityRankings = await User.aggregate([
-            { $match: { role: 'user' } },
+            { $match: { role: 'user', points: { $gt: 0 } } },
             {
                 $group: {
                     _id: { city: '$city', state: '$state' },
@@ -152,6 +153,30 @@ app.get('/api/gamification/leaderboard', async (req, res) => {
         ]);
 
         res.json({ users: topUsers, cities: cityRankings });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.post('/api/user/complete-purchase', auth, async (req, res) => {
+    try {
+        const { items } = req.body;
+        const user = await User.findById(req.user.id);
+        if (!user) return res.status(404).json({ error: "User not found" });
+
+        // Award 100 points per plant selected for purchase
+        const pointsToAward = (items?.length || 0) * 100;
+        user.points = (user.points || 0) + pointsToAward;
+        await user.save();
+
+        // Create log
+        await Notification.create({
+            type: 'system',
+            message: `User ${user.name} earned ${pointsToAward} points for starting a purchase.`,
+            details: { userId: user._id, points: pointsToAward }
+        });
+
+        res.json({ success: true, newPoints: user.points });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -725,6 +750,17 @@ app.post('/api/admin/reset-user-password', auth, admin, async (req, res) => {
         user.password = newPassword || '123456';
         await user.save();
         res.json({ success: true });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.patch('/api/admin/users/:id/points', auth, admin, async (req, res) => {
+    try {
+        const { points } = req.body;
+        const user = await User.findById(req.params.id);
+        if (!user) return res.status(404).json({ error: "User not found" });
+        user.points = points;
+        await user.save();
+        res.json({ success: true, points: user.points });
     } catch (e) { res.status(500).json({ error: e.message }); }
 });
 

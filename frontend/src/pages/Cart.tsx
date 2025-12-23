@@ -4,7 +4,7 @@ import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { Trash2, ArrowLeft, Minus, Plus, ShoppingCart, MessageCircle, MapPin, Store, Lock, ShieldCheck, Info, Phone } from 'lucide-react';
 import { Button } from '../components/common/Button';
-import { fetchVendors } from '../services/api';
+import { fetchVendors, completePurchase } from '../services/api';
 import { formatCurrency } from '../utils/currency';
 import type { Vendor, CartItem } from '../types';
 import styles from './Cart.module.css';
@@ -71,6 +71,10 @@ export const Cart = () => {
         const waNumber = vendor.whatsapp || vendor.phone;
         const cleanNumber = waNumber.replace(/[^0-9]/g, '');
         const url = `https://wa.me/${cleanNumber.length < 10 ? '91' + cleanNumber : cleanNumber}?text=${encodeURIComponent(msg)}`;
+
+        // Background award points (no need to await if we want it fast)
+        completePurchase(vItems).catch(console.error);
+
         window.open(url, '_blank');
 
         // Note: We don't automatically remove items to allow user to retry if WA fails, 

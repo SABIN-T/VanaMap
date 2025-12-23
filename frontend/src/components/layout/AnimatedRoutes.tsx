@@ -25,6 +25,7 @@ const EditPlant = lazy(() => import('../../pages/admin/EditPlant').then(m => ({ 
 const AdminLogin = lazy(() => import('../../pages/admin/AdminLogin').then(m => ({ default: m.AdminLogin })));
 const ManageSuggestions = lazy(() => import('../../pages/admin/ManageSuggestions').then(m => ({ default: m.ManageSuggestions })));
 const PriceManagement = lazy(() => import('../../pages/admin/PriceManagement').then(m => ({ default: m.PriceManagement })));
+const ManagePoints = lazy(() => import('../../pages/admin/ManagePoints').then(m => ({ default: m.ManagePoints })));
 const Leaderboard = lazy(() => import('../../pages/Leaderboard').then(m => ({ default: m.Leaderboard })));
 
 
@@ -81,6 +82,7 @@ export const AnimatedRoutes = () => {
                         <Route path="/admin/settings" element={<Settings />} />
                         <Route path="/admin/notifications" element={<Notifications />} />
                         <Route path="/admin/price-management" element={<PriceManagement />} />
+                        <Route path="/admin/manage-points" element={<ManagePoints />} />
                         <Route path="/admin/suggestions" element={<ManageSuggestions />} />
 
                         <Route path="/admin/edit-plant/:id" element={<EditPlant />} />

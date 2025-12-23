@@ -378,3 +378,23 @@ export const fetchVendorAnalytics = async (vendorId: string) => {
     if (!res.ok) throw new Error("Failed to fetch analytics");
     return res.json();
 };
+
+export const completePurchase = async (items: any[]) => {
+    const res = await fetch(`${API_URL}/user/complete-purchase`, {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify({ items })
+    });
+    if (!res.ok) throw new Error("Failed to complete purchase");
+    return res.json();
+};
+
+export const updateUserPoints = async (userId: string, points: number) => {
+    const res = await fetch(`${API_URL}/admin/users/${userId}/points`, {
+        method: 'PATCH',
+        headers: getHeaders(),
+        body: JSON.stringify({ points })
+    });
+    if (!res.ok) throw new Error("Failed to update user points");
+    return res.json();
+};
