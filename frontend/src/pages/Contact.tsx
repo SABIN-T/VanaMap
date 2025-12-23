@@ -1,171 +1,108 @@
-import { Mail, Phone, MapPin, Send, MessageCircle, HelpCircle } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, Sparkles } from 'lucide-react';
 import { Button } from '../components/common/Button';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
+import styles from './Contact.module.css';
 
 export const Contact = () => {
+    const navigate = useNavigate();
+
+    const handleSendMessage = (e: React.FormEvent) => {
+        e.preventDefault();
+        toast.success("Message received! We'll get back to you soon.", {
+            icon: '✉️',
+            style: {
+                borderRadius: '1rem',
+                background: '#0f172a',
+                color: '#fff',
+                border: '1px solid rgba(56, 189, 248, 0.2)'
+            }
+        });
+    };
+
     return (
-        <div style={{
-            padding: '2rem',
-            maxWidth: '1200px',
-            margin: '0 auto',
-            minHeight: '100vh',
-            paddingTop: '6rem',
-            color: 'white'
-        }}>
-
+        <div className={styles.contactContainer}>
             {/* Header */}
-            <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
-                <h1 style={{
-                    fontSize: '2.5rem',
-                    fontWeight: 900,
-                    marginBottom: '1rem',
-                    background: 'linear-gradient(135deg, #38bdf8 0%, #3b82f6 100%)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '0.75rem'
-                }}>
-                    <MessageCircle size={40} color="#38bdf8" /> Contact Support
-                </h1>
-                <p style={{ color: '#94a3b8', fontSize: '1.1rem', maxWidth: '600px', margin: '0 auto' }}>
-                    Have questions about your plants, orders, or our app? We're here to help you grow.
+            <header className={styles.header}>
+                <div className={styles.badge}>
+                    READY TO ASSIST
+                </div>
+                <h1 className={styles.title}>VANAMAP<br />CONCIERGE</h1>
+                <p className={styles.subtitle}>
+                    Have questions about your specimens, orders, or ecosystem? Our botanical experts are standing by.
                 </p>
-            </div>
+            </header>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '3rem' }}>
-
+            <div className={styles.grid}>
                 {/* Contact Information */}
-                <div>
-                    <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '2rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <HelpCircle size={24} color="#facc15" /> Get in Touch
-                    </h2>
-
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-                        <div style={{
-                            background: 'rgba(30, 41, 59, 0.5)',
-                            padding: '1.5rem',
-                            borderRadius: '1rem',
-                            border: '1px solid rgba(255,255,255,0.05)',
-                            display: 'flex',
-                            alignItems: 'flex-start',
-                            gap: '1rem'
-                        }}>
-                            <div style={{ background: 'rgba(56, 189, 248, 0.1)', padding: '0.75rem', borderRadius: '50%' }}>
-                                <Mail size={24} color="#38bdf8" />
-                            </div>
-                            <div>
-                                <h3 style={{ fontSize: '1.1rem', fontWeight: 600, marginBottom: '0.25rem' }}>Email Us</h3>
-                                <p style={{ color: '#94a3b8', fontSize: '0.95rem' }}>support@vanamap.com</p>
-                                <p style={{ color: '#94a3b8', fontSize: '0.8rem', marginTop: '0.5rem' }}>Response time: Within 24 hours</p>
-                            </div>
+                <div className={styles.infoSection}>
+                    <div className={styles.infoCard}>
+                        <div className={styles.iconBox} style={{ background: 'rgba(56, 189, 248, 0.1)' }}>
+                            <Mail size={24} color="#38bdf8" />
                         </div>
-
-                        <div style={{
-                            background: 'rgba(30, 41, 59, 0.5)',
-                            padding: '1.5rem',
-                            borderRadius: '1rem',
-                            border: '1px solid rgba(255,255,255,0.05)',
-                            display: 'flex',
-                            alignItems: 'flex-start',
-                            gap: '1rem'
-                        }}>
-                            <div style={{ background: 'rgba(16, 185, 129, 0.1)', padding: '0.75rem', borderRadius: '50%' }}>
-                                <Phone size={24} color="#10b981" />
-                            </div>
-                            <div>
-                                <h3 style={{ fontSize: '1.1rem', fontWeight: 600, marginBottom: '0.25rem' }}>Call Us</h3>
-                                <p style={{ color: '#94a3b8', fontSize: '0.95rem' }}>+1 (555) 123-4567</p>
-                                <p style={{ color: '#94a3b8', fontSize: '0.8rem', marginTop: '0.5rem' }}>Mon-Fri, 9am - 6pm EST</p>
-                            </div>
+                        <div>
+                            <h3 className={styles.cardTitle}>Email Support</h3>
+                            <p className={styles.cardValue}>support@vanamap.online</p>
+                            <p style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.25rem' }}>Average response: 2h</p>
                         </div>
+                    </div>
 
-                        <div style={{
-                            background: 'rgba(30, 41, 59, 0.5)',
-                            padding: '1.5rem',
-                            borderRadius: '1rem',
-                            border: '1px solid rgba(255,255,255,0.05)',
-                            display: 'flex',
-                            alignItems: 'flex-start',
-                            gap: '1rem'
-                        }}>
-                            <div style={{ background: 'rgba(244, 63, 94, 0.1)', padding: '0.75rem', borderRadius: '50%' }}>
-                                <MapPin size={24} color="#f43f5e" />
-                            </div>
-                            <div>
-                                <h3 style={{ fontSize: '1.1rem', fontWeight: 600, marginBottom: '0.25rem' }}>Visit HQ</h3>
-                                <p style={{ color: '#94a3b8', fontSize: '0.95rem' }}>
-                                    123 Green Earth Blvd<br />
-                                    Eco City, EC 90210
-                                </p>
-                            </div>
+                    <div className={styles.infoCard}>
+                        <div className={styles.iconBox} style={{ background: 'rgba(16, 185, 129, 0.1)' }}>
+                            <Phone size={24} color="#10b981" />
+                        </div>
+                        <div>
+                            <h3 className={styles.cardTitle}>Botanist Hotline</h3>
+                            <p className={styles.cardValue}>+1 (555) VANA-MAP</p>
+                            <p style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.25rem' }}>Mon-Fri, 9am - 6pm</p>
+                        </div>
+                    </div>
+
+                    <div className={styles.infoCard}>
+                        <div className={styles.iconBox} style={{ background: 'rgba(244, 63, 94, 0.1)' }}>
+                            <MapPin size={24} color="#f43f5e" />
+                        </div>
+                        <div>
+                            <h3 className={styles.cardTitle}>Global HQ</h3>
+                            <p className={styles.cardValue}>123 Biosphere Way,<br />Green Valley, EC 90210</p>
                         </div>
                     </div>
                 </div>
 
                 {/* Contact Form */}
-                <div style={{
-                    background: 'rgba(30, 41, 59, 0.3)',
-                    padding: '2rem',
-                    borderRadius: '1.5rem',
-                    border: '1px solid rgba(255,255,255,0.05)',
-                    backdropFilter: 'blur(10px)'
-                }}>
-                    <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '2rem' }}>Send a Message</h2>
-                    <form onSubmit={(e) => e.preventDefault()} style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                        <div>
-                            <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: '#cbd5e1' }}>Your Name</label>
-                            <input
-                                type="text"
-                                placeholder="John Doe"
-                                style={{
-                                    width: '100%',
-                                    padding: '0.8rem 1rem',
-                                    background: 'rgba(15, 23, 42, 0.6)',
-                                    border: '1px solid rgba(255,255,255,0.1)',
-                                    borderRadius: '0.5rem',
-                                    color: 'white',
-                                    outline: 'none'
-                                }}
-                            />
+                <div className={styles.formCard}>
+                    <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: 'white', marginBottom: '2rem' }}>Send Inquiry</h2>
+                    <form onSubmit={handleSendMessage}>
+                        <div className={styles.inputGroup}>
+                            <label className={styles.label}>Identity</label>
+                            <input type="text" placeholder="Your Name" className={styles.input} required />
                         </div>
-                        <div>
-                            <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: '#cbd5e1' }}>Email Address</label>
-                            <input
-                                type="email"
-                                placeholder="john@example.com"
-                                style={{
-                                    width: '100%',
-                                    padding: '0.8rem 1rem',
-                                    background: 'rgba(15, 23, 42, 0.6)',
-                                    border: '1px solid rgba(255,255,255,0.1)',
-                                    borderRadius: '0.5rem',
-                                    color: 'white',
-                                    outline: 'none'
-                                }}
-                            />
+                        <div className={styles.inputGroup}>
+                            <label className={styles.label}>Channel</label>
+                            <input type="email" placeholder="Email Address" className={styles.input} required />
                         </div>
-                        <div>
-                            <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem', color: '#cbd5e1' }}>Message</label>
-                            <textarea
-                                rows={5}
-                                placeholder="How can we help you?"
-                                style={{
-                                    width: '100%',
-                                    padding: '0.8rem 1rem',
-                                    background: 'rgba(15, 23, 42, 0.6)',
-                                    border: '1px solid rgba(255,255,255,0.1)',
-                                    borderRadius: '0.5rem',
-                                    color: 'white',
-                                    outline: 'none',
-                                    resize: 'vertical'
-                                }}
-                            />
+                        <div className={styles.inputGroup}>
+                            <label className={styles.label}>Manifesto</label>
+                            <textarea rows={4} placeholder="How can we help your ecosystem grow?" className={styles.textarea} required />
                         </div>
-                        <Button variant="primary" style={{ marginTop: '1rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
-                            <Send size={18} /> Send Message
+                        <Button variant="primary" style={{ width: '100%', padding: '1.25rem', borderRadius: '1rem', fontWeight: '800' }}>
+                            <Send size={18} /> DISPATCH MESSAGE
                         </Button>
                     </form>
+                </div>
+
+                {/* Plant Suggestion Promotion */}
+                <div className={styles.suggestionPromo}>
+                    <div className={styles.promoContent}>
+                        <h2 className={styles.promoTitle}>Missing a Specimen?</h2>
+                        <p className={styles.promoDesc}>
+                            If you've discovered a rare plant species that isn't in our database yet, let us know!
+                            Our team will analyze its oxygen output and add it to the ecosystem.
+                        </p>
+                    </div>
+                    <button className={styles.suggestionBtn} onClick={() => navigate('/support')}>
+                        <Sparkles size={20} /> SUGGEST A PLANT
+                    </button>
                 </div>
             </div>
         </div>
