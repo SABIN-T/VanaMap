@@ -832,6 +832,13 @@
         text-align: left !important;
     }
 
+    .heroTextContent {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 0.5rem !important;
+    }
+
     .heroTitle {
         font-size: 3.5rem !important;
         margin-bottom: 1rem !important;

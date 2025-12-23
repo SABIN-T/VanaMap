@@ -258,14 +258,16 @@ export const Home = () => {
 
             <section className={styles.hero}>
                 <div className={styles.heroContent}>
-                    <div className={styles.heroBadge}>
-                        <Sparkles size={16} /> Home Ecosystem App
-                    </div>
+                    <div className={styles.heroTextContent}>
+                        <div className={styles.heroBadge}>
+                            <Sparkles size={16} /> Home Ecosystem App
+                        </div>
 
-                    <h1 className={styles.heroTitle}>BRING NATURE<br />HOME</h1>
-                    <p className={styles.heroSubtitle}>
-                        Transform your living space. <strong>Start by setting your location below</strong> to see what grows best in your ecosystem.
-                    </p>
+                        <h1 className={styles.heroTitle}>BRING NATURE<br />HOME</h1>
+                        <p className={styles.heroSubtitle}>
+                            Transform your living space. <strong>Start by setting your location below</strong> to see what grows best in your ecosystem.
+                        </p>
+                    </div>
 
                     {!weather ? (
                         <div id="location-action-area" className={styles.actionContainer}>
