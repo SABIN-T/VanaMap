@@ -432,16 +432,7 @@ export const Home = () => {
                 </div>
 
                 <div className={styles.filterDiscoverySection} ref={filterSectionRef} style={{ scrollMarginTop: '100px' }}>
-                    <div className={styles.searchBarWrapper}>
-                        <Search className={styles.searchIcon} size={22} />
-                        <input
-                            type="text"
-                            placeholder="Search by species name, genus, or air benefit..."
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            className={styles.searchSpeciesInput}
-                        />
-                    </div>
+
 
                     <div className={styles.filterWrapper}>
                         <h3 className={styles.filterQuestion}>Which plant are you looking for?</h3>
@@ -492,6 +483,19 @@ export const Home = () => {
                             </div>
                         </div>
                     </div>
+                </div>
+
+
+
+                <div className={styles.searchBarWrapper} style={{ margin: '0 auto 3rem auto' }}>
+                    <Search className={styles.searchIcon} size={22} />
+                    <input
+                        type="text"
+                        placeholder="Search by species name, genus, or air benefit..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className={styles.searchSpeciesInput}
+                    />
                 </div>
 
                 <div className={styles.grid} ref={plantsSectionRef} style={{ scrollMarginTop: '80px' }}>
@@ -593,6 +597,6 @@ export const Home = () => {
                     <p style={{ color: 'var(--color-text-dim)', fontSize: '0.8rem' }}>© 2025 VanaMap - Earth's Digital Botanical Archive</p>
                 </footer>
             </div>
-        </div>
+        </div >
     );
 };
