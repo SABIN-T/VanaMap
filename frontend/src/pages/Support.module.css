@@ -1,0 +1,267 @@
+.supportContainer {
+    padding: 8rem 2rem 4rem;
+    max-width: 900px;
+    margin: 0 auto;
+    min-height: 100vh;
+}
+
+.backBtn {
+    margin-bottom: 2rem;
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.backBtn:hover {
+    color: white;
+    transform: translateX(-4px);
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 5rem;
+    animation: fadeInDown 0.8s ease-out;
+}
+
+.badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(59, 130, 246, 0.1);
+    color: #60a5fa;
+    padding: 0.5rem 1.25rem;
+    border-radius: 99px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(59, 130, 246, 0.2);
+    letter-spacing: 1px;
+}
+
+.title {
+    font-size: 3.5rem;
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    letter-spacing: -2px;
+    background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.subtitle {
+    color: #94a3b8;
+    font-size: 1.1rem;
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+.sectionGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+}
+
+.glassCard {
+    background: rgba(30, 41, 59, 0.4);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 2rem;
+    padding: 3rem;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.glassCard:hover {
+    transform: translateY(-8px);
+    background: rgba(30, 41, 59, 0.6);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.sponsorCard {
+    background: linear-gradient(135deg, rgba(250, 204, 21, 0.05) 0%, rgba(30, 41, 59, 0.4) 100%);
+    border: 1px solid rgba(250, 204, 21, 0.2);
+}
+
+.sponsorCard:hover {
+    border-color: rgba(250, 204, 21, 0.4);
+    box-shadow: 0 20px 40px -20px rgba(250, 204, 21, 0.2);
+}
+
+.cardHeader {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.iconWrapper {
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 1.25rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.sponsorIcon {
+    background: rgba(250, 204, 21, 0.1);
+    color: #facc15;
+}
+
+.sparkleIcon {
+    background: rgba(59, 130, 246, 0.1);
+    color: #60a5fa;
+}
+
+.cardTitle {
+    font-size: 1.75rem;
+    font-weight: 800;
+    margin: 0;
+    color: white;
+}
+
+.cardSubtitle {
+    font-size: 0.95rem;
+    color: #94a3b8;
+    display: block;
+    margin-top: 0.25rem;
+}
+
+.cardDesc {
+    color: #cbd5e1;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    margin-bottom: 2.5rem;
+}
+
+.formGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.label {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #94a3b8;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.input,
+.textarea {
+    width: 100%;
+    padding: 1.25rem;
+    border-radius: 1.25rem;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    color: white;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.input:focus,
+.textarea:focus {
+    background: rgba(15, 23, 42, 0.8);
+    border-color: #60a5fa;
+    box-shadow: 0 0 0 4px rgba(96, 165, 250, 0.1);
+}
+
+.actionGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.miniCard {
+    padding: 2.5rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.miniIcon {
+    margin-bottom: 1.5rem;
+}
+
+.miniTitle {
+    font-size: 1.25rem;
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+    color: white;
+}
+
+.miniDesc {
+    font-size: 0.95rem;
+    color: #94a3b8;
+    margin-bottom: 2rem;
+    line-height: 1.5;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+    .supportContainer {
+        padding: 6rem 1.5rem 4rem;
+    }
+
+    .title {
+        font-size: 2.5rem;
+    }
+
+    .glassCard {
+        padding: 2rem;
+    }
+
+    .cardHeader {
+        gap: 1rem;
+    }
+
+    .iconWrapper {
+        width: 48px;
+        height: 48px;
+        border-radius: 0.85rem;
+    }
+
+    .cardTitle {
+        font-size: 1.4rem;
+    }
+
+    .actionGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .miniCard {
+        padding: 2rem;
+    }
+}
