@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import type { Plant, Vendor } from '../types';
 import { fetchPlants, fetchVendors } from '../services/api';
-import { Search, ShoppingBag, MapPin } from 'lucide-react';
+import { Search, ShoppingBag } from 'lucide-react';
 import { PlantVendorsModal } from '../components/features/market/PlantVendorsModal';
 import styles from './Shops.module.css';
 

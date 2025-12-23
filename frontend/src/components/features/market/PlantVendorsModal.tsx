@@ -15,6 +15,7 @@ export const PlantVendorsModal = ({ plant, onClose }: PlantVendorsModalProps) =>
     const { addToCart } = useCart();
     const [vendors, setVendors] = useState<Vendor[]>([]);
     const [loading, setLoading] = useState(true);
+    const [isLocating, setIsLocating] = useState(false);
     const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
     const [gpsError, setGpsError] = useState<string | null>(null);
 
@@ -33,18 +34,28 @@ export const PlantVendorsModal = ({ plant, onClose }: PlantVendorsModalProps) =>
             setGpsError("Geolocation not supported by this browser.");
             return;
         }
+
+        setIsLocating(true);
+        setGpsError(null);
+
         navigator.geolocation.getCurrentPosition(
             (position) => {
                 setUserLocation({
                     lat: position.coords.latitude,
                     lng: position.coords.longitude
                 });
-                setGpsError(null);
+                setIsLocating(false);
             },
             (error) => {
                 console.warn(error);
-                setGpsError("Location access denied. Showing all online vendors.");
-            }
+                let msg = "Location lookup failed.";
+                if (error.code === 1) msg = "Location permission denied.";
+                else if (error.code === 2) msg = "Position unavailable.";
+                else if (error.code === 3) msg = "Location timed out.";
+                setGpsError(msg);
+                setIsLocating(false);
+            },
+            { enableHighAccuracy: true, timeout: 10000 }
         );
     };
 
@@ -131,8 +142,17 @@ export const PlantVendorsModal = ({ plant, onClose }: PlantVendorsModalProps) =>
                         <p className="mb-3 text-center text-sm text-slate-300">
                             Find verified shops within 50km of your location.
                         </p>
-                        <button onClick={enableGPS} className={styles.gpsBtn}>
-                            <Navigation size={16} /> Enable GPS
+                        <button onClick={enableGPS} className={styles.gpsBtn} disabled={isLocating}>
+                            {isLocating ? (
+                                <>
+                                    <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full mr-2"></div>
+                                    Locating...
+                                </>
+                            ) : (
+                                <>
+                                    <Navigation size={16} /> Enable GPS
+                                </>
+                            )}
                         </button>
                         {gpsError && <p className="text-xs text-red-400 mt-2">{gpsError}</p>}
                     </div>
