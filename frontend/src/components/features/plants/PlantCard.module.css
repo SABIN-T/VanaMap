@@ -22,6 +22,12 @@
     z-index: 10;
 }
 
+@media (min-width: 1024px) {
+    .card {
+        border-radius: 2rem;
+    }
+}
+
 .imageContainer {
     position: relative;
     padding-top: 100%;
@@ -115,6 +121,13 @@
     flex: 1;
 }
 
+@media (min-width: 1024px) {
+    .content {
+        padding: 2rem;
+        gap: 1.25rem;
+    }
+}
+
 .title {
     font-size: 1.15rem;
     font-weight: 700;
@@ -122,6 +135,12 @@
     margin: 0;
     line-height: 1.2;
     letter-spacing: -0.01em;
+}
+
+@media (min-width: 1024px) {
+    .title {
+        font-size: 1.5rem;
+    }
 }
 
 .scientific {
@@ -166,6 +185,14 @@
     color: white;
     cursor: pointer;
     transition: all 0.3s;
+}
+
+@media (min-width: 1024px) {
+    .actionBtn {
+        padding: 1rem;
+        font-size: 1.1rem;
+        border-radius: 1.25rem;
+    }
 }
 
 .actionBtn:hover {
