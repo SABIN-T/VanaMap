@@ -4,6 +4,10 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const { Plant, Vendor, User, Notification, Chat, PlantSuggestion, SearchLog } = require('./models');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
+const mongoSanitize = require('express-mongo-sanitize');
+const xss = require('xss-clean');
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
@@ -71,8 +75,28 @@ const app = express();
 const JWT_SECRET = process.env.JWT_SECRET || 'vanamap_super_secret_key_2025';
 
 app.use(cors());
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ limit: '50mb', extended: true }));
+app.use(helmet()); // Set security HTTP headers
+app.use(express.json({ limit: '10mb' })); // Body parser
+app.use(mongoSanitize()); // Data sanitization against NoSQL query injection
+app.use(xss()); // Data sanitization against XSS
+app.use(express.urlencoded({ limit: '10mb', extended: true }));
+
+// --- RATE LIMITING ---
+const authLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 20, // Limit each IP to 20 requests per window
+    message: { error: "Too many attempts from this IP, please try again after 15 minutes" }
+});
+
+const generalLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000, // 1 hour
+    max: 500, // Limit each IP to 500 requests per window
+    message: { error: "System under heavy load. Please try again later." }
+});
+
+app.use('/api/', generalLimiter);
+app.use('/api/auth/login', authLimiter);
+app.use('/api/auth/signup', authLimiter);
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI)
