@@ -34,7 +34,7 @@ export const Shops = () => {
     const getPrice = (plant: Plant) => {
         if (plant.price) return plant.price;
         const hash = plant.name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-        return 15 + (hash % 65);
+        return (15 + (hash % 65)) * 50; // Convert to approx INR
     };
 
     return (
@@ -121,7 +121,7 @@ export const Shops = () => {
                                 {/* Price and Action */}
                                 <div className={styles.footer}>
                                     <div className={styles.price}>
-                                        ${getPrice(plant)}
+                                        Rs. {getPrice(plant)}
                                     </div>
                                     <button className={styles.btn} disabled title="Integration In Progress">
                                         Soon

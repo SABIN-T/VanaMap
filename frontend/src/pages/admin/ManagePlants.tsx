@@ -144,7 +144,7 @@ export const ManagePlants = () => {
                                     <div className={styles.footer}>
                                         <div>
                                             <span className={styles.priceLabel}>Price</span>
-                                            <span className={styles.price}>₹{plant.price}</span>
+                                            <span className={styles.price}>Rs. {plant.price}</span>
                                         </div>
                                         <span className={`${styles.badge} ${getBadgeClass(plant.type || '')}`}>
                                             {plant.type}

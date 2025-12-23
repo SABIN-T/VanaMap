@@ -208,7 +208,7 @@ export const EditPlant = () => {
                         <div className="mb-8">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div className={styles.inputGroup}>
-                                    <label className={styles.label}>Base Price (₹)</label>
+                                    <label className={styles.label}>Base Price (Rs)</label>
                                     <input
                                         type="number"
                                         className={styles.glassInput}

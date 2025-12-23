@@ -324,7 +324,7 @@ export const AddPlant = () => {
                                         </select>
                                     </div>
                                     <div className={styles.inputGroup}>
-                                        <label className={styles.label}>Base Price (₹)</label>
+                                        <label className={styles.label}>Base Price (Rs)</label>
                                         <input
                                             type="number"
                                             value={newPlant.price}
