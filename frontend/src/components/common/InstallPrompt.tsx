@@ -23,8 +23,10 @@ export const InstallPrompt = () => {
             return () => clearTimeout(timer);
         }
 
-        // Check for standard PWA install support (Android/Desktop)
+        // Check for standard PWA install support (Android)
+        // Disable on Desktop (width > 1024) to keep UI clean
         const handler = (e: Event) => {
+            if (window.innerWidth > 1024) return;
             e.preventDefault();
             setDeferredPrompt(e as BeforeInstallPromptEvent);
             // Delay showing the prompt so it feels like a 'smart suggestion' after partial usage

@@ -816,52 +816,81 @@
 
     /* Reduce Hero Action Sizes for Desktop to ensure visibility above fold */
     .hero {
-        padding-top: 3rem !important;
-        min-height: 60vh !important;
-        /* Significantly reduced height */
+        padding-top: 5rem !important;
+        min-height: 70vh !important;
         padding-bottom: 2rem !important;
+        text-align: left !important;
+        justify-content: center !important;
     }
 
-    .gpsBtn {
-        max-width: 220px !important;
-        padding: 0.6rem 1rem !important;
-        font-size: 0.85rem !important;
+    .heroContent {
+        display: grid !important;
+        grid-template-columns: 1.2fr 1fr !important;
+        align-items: center !important;
+        gap: 4rem !important;
+        max-width: 1200px !important;
+        text-align: left !important;
     }
 
-    .searchBox {
-        max-width: 350px !important;
-        padding: 0.4rem 0.6rem !important;
-        min-height: auto !important;
-    }
-
-    .searchInput {
-        font-size: 0.85rem !important;
-        padding: 0 0.5rem !important;
-    }
-
-    .divider {
-        font-size: 0.65rem !important;
-        gap: 0.5rem !important;
-        margin: 1.5rem 0 !important;
-        transform: scale(0.85);
-    }
-
-    .hero {
-        padding-top: 4rem !important;
-        min-height: 80vh !important;
+    .heroTitle {
+        font-size: 3.5rem !important;
+        margin-bottom: 1rem !important;
+        letter-spacing: -2px !important;
+        text-align: left !important;
+        line-height: 1.1 !important;
     }
 
     .heroSubtitle {
-        margin-bottom: 1.5rem !important;
+        font-size: 1rem !important;
+        max-width: 500px !important;
+        margin-bottom: 0 !important;
+        margin-left: 0 !important;
+        text-align: left !important;
     }
 
+    .heroBadge {
+        margin-left: 0 !important;
+        align-self: flex-start !important;
+    }
+
+    /* Actions: Move to Right Column */
     .actionContainer {
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: flex-start !important;
         gap: 1.5rem !important;
+        background: rgba(255, 255, 255, 0.03);
+        padding: 2rem !important;
+        border-radius: 2rem !important;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
     }
 
-    .nearbyBtnContainer button {
-        font-size: 0.75rem !important;
-        padding: 0.3rem 0.8rem !important;
+    .buttonGroup {
+        width: 100% !important;
+        justify-content: flex-start !important;
+    }
+
+    .gpsBtn {
+        max-width: 100% !important;
+        width: 100% !important;
+        font-size: 1rem !important;
+        padding: 1rem !important;
+    }
+
+    .divider {
+        width: 100% !important;
+        justify-content: center !important;
+    }
+
+    .searchBox {
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+
+    .nearbyBtnContainer {
+        justify-content: flex-start !important;
+        margin-top: 0.5rem !important;
     }
 }
 
