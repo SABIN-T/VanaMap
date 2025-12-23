@@ -850,7 +850,6 @@
         gap: 0.5rem;
         /* Minimal gap when closed */
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        active-behavior: scale(0.98);
     }
 
     .onboardingCard:active,

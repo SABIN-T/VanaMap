@@ -51,7 +51,7 @@ export const DoctorAIModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
         setTimeout(() => {
             localStorage.setItem('premium_unlocked', 'true');
             setLimitReached(false);
-            setMessages(prev => [...prev, { sender: 'ai', text: "Premium Unlocked! Thanks for the ₹20. I'm ready to help forever." }]);
+            setMessages(prev => [...prev, { sender: 'ai', text: "Premium Unlocked! Thanks for the Rs. 20. I'm ready to help forever." }]);
         }, 1000);
     };
 
@@ -132,7 +132,7 @@ export const DoctorAIModal = ({ isOpen, onClose }: { isOpen: boolean; onClose: (
                                 You've used your 5 free chats. Subscribe to continue your botanical journey.
                             </p>
                             <Button onClick={handlePayment} style={{ width: '100%', background: '#ef4444', border: 'none', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
-                                <CreditCard size={18} /> Pay ₹20 / Month
+                                <CreditCard size={18} /> Pay Rs. 20 / Month
                             </Button>
                         </div>
                     )}

@@ -70,7 +70,7 @@ export const Notifications = () => {
                         id: p._id || `p-${i}`,
                         type: 'plant' as const,
                         title: `Plant: ${p.name}`,
-                        description: `${p.price ? `$${p.price}` : 'Price unset'} • ${p.category || 'General'}`,
+                        description: `${p.price ? `Rs. ${p.price}` : 'Price unset'} • ${p.category || 'General'}`,
                         timestamp: ts,
                         status: (p.stock < 5 ? 'alert' : 'new') as 'alert' | 'new',
                         isNewToAdmin: (now.getTime() - ts.getTime()) < oneDay
