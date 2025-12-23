@@ -37,10 +37,11 @@
     margin-bottom: 1.5rem;
     color: var(--color-text-main);
     letter-spacing: -2px;
-    background: linear-gradient(180deg, var(--color-text-main) 0%, var(--color-text-dim) 100%);
+    background: linear-gradient(135deg, var(--color-text-main) 40%, var(--color-primary) 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 20px rgba(16, 185, 129, 0.2));
 }
 
 .subtitleMain {
