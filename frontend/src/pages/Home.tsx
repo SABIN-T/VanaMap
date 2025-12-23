@@ -242,11 +242,10 @@ export const Home = () => {
 
             <section className={styles.hero}>
                 <div className={styles.heroContent}>
-                    <div className={styles.heroBadge}>
-                        <Sparkles size={16} /> Home Ecosystem Intelligence
-                    </div>
-
                     <div className={styles.heroMainStack}>
+                        <div className={styles.heroBadge}>
+                            <Sparkles size={16} /> Home Ecosystem Intelligence
+                        </div>
                         <h1 className={styles.heroTitle}>BRING NATURE<br />HOME</h1>
                         <p className={styles.heroSubtitle}>
                             Transform your living space into a high-performance sanctuary.

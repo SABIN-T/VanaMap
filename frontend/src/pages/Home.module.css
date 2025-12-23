@@ -108,6 +108,14 @@
     text-transform: uppercase;
     letter-spacing: 1.5px;
     backdrop-filter: blur(8px);
+    transition: all 0.3s ease;
+}
+
+@media (min-width: 1024px) {
+    .heroBadge {
+        margin-bottom: 1.5rem;
+        align-self: flex-start;
+    }
 }
 
 .heroTitle {
@@ -123,6 +131,13 @@
     -webkit-text-fill-color: transparent;
 }
 
+@media (min-width: 1024px) {
+    .heroTitle {
+        margin-bottom: 1.5rem;
+        line-height: 0.95;
+    }
+}
+
 .heroSubtitle {
     font-size: 1.25rem;
     color: var(--color-text-muted);
@@ -135,6 +150,9 @@
 @media (min-width: 1024px) {
     .heroSubtitle {
         margin-inline: 0;
+        text-align: left;
+        max-width: 600px;
+        font-size: 1.35rem;
     }
 }
 
