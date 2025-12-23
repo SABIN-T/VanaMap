@@ -765,11 +765,16 @@
 /* Desktop Font Size Reductions */
 @media (min-width: 1024px) {
     .heroTitle {
-        font-size: clamp(2rem, 4vw, 2.8rem) !important;
+        font-size: 2.2rem !important;
+        /* Smaller, sharper title */
+        margin-bottom: 0.75rem !important;
+        letter-spacing: -1.5px !important;
     }
 
     .heroSubtitle {
-        font-size: 0.95rem !important;
+        font-size: 0.85rem !important;
+        max-width: 400px !important;
+        margin-bottom: 2rem !important;
     }
 
     .heroBadge {
@@ -810,6 +815,13 @@
     }
 
     /* Reduce Hero Action Sizes for Desktop to ensure visibility above fold */
+    .hero {
+        padding-top: 3rem !important;
+        min-height: 60vh !important;
+        /* Significantly reduced height */
+        padding-bottom: 2rem !important;
+    }
+
     .gpsBtn {
         max-width: 220px !important;
         padding: 0.6rem 1rem !important;
