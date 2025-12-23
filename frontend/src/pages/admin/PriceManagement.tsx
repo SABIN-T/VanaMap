@@ -4,7 +4,7 @@ import { fetchPlants, fetchVendors, updateVendor } from '../../services/api';
 import type { Plant, Vendor } from '../../types';
 import { Search, Edit2, Trash2, Save, X, Store } from 'lucide-react';
 import toast from 'react-hot-toast';
-import styles from './ManagePlants.module.css'; // Reusing similar styles
+import styles from './PriceManagement.module.css';
 
 export const PriceManagement = () => {
     const [plants, setPlants] = useState<Plant[]>([]);
@@ -105,118 +105,162 @@ export const PriceManagement = () => {
         }
     };
 
-    return (
-        <AdminLayout title="Vendor Price Management">
-            <div className={styles.controls}>
-                <div className={styles.searchBox}>
-                    <Search size={20} className="text-slate-400" />
-                    <input
-                        type="text"
-                        placeholder="Search vendor or plant..."
-                        value={searchTerm}
-                        onChange={e => setSearchTerm(e.target.value)}
-                        className={styles.searchInput}
-                    />
-                </div>
-            </div>
+    // Calculate Stats
+    const totalListings = filteredItems.length;
+    const activeVendors = new Set(filteredItems.map(i => i.vendor.id)).size;
+    const avgPrice = totalListings > 0
+        ? Math.round(filteredItems.reduce((acc, curr) => acc + curr.price, 0) / totalListings)
+        : 0;
 
-            <div className={styles.tableContainer}>
-                <table className={styles.table}>
-                    <thead>
-                        <tr>
-                            <th>Vendor / Shop</th>
-                            <th>Plant Details</th>
-                            <th>Current Price</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {filteredItems.map(item => (
-                            <tr key={item.uniqueKey}>
-                                <td>
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-10 h-10 rounded-full bg-slate-700 flex items-center justify-center text-emerald-400">
-                                            <Store size={18} />
-                                        </div>
-                                        <div>
-                                            <div className="font-bold text-white">{item.vendor.name}</div>
-                                            <div className="text-xs text-slate-400">{item.vendor.address}</div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div className="flex items-center gap-3">
-                                        {item.plantImage && (
-                                            <img src={item.plantImage} className="w-10 h-10 rounded-lg object-cover" alt="" />
-                                        )}
-                                        <span className="text-slate-200 font-medium">{item.plantName}</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    {editingItem?.vendorId === item.vendor.id && editingItem?.plantId === item.plantId ? ( // Corrected check
-                                        <div className="flex items-center gap-2">
-                                            <span className="text-emerald-500">Rs.</span>
-                                            <input
-                                                type="number"
-                                                value={editingItem.price}
-                                                onChange={e => setEditingItem({ ...editingItem, price: Number(e.target.value) })}
-                                                className="bg-slate-800 border border-slate-600 rounded px-2 py-1 text-white w-24"
-                                            />
-                                        </div>
-                                    ) : (
-                                        <span className="text-emerald-400 font-mono font-bold">Rs. {item.price}</span>
-                                    )}
-                                </td>
-                                <td>
-                                    <div className="flex gap-2">
-                                        {editingItem?.vendorId === item.vendor.id && editingItem?.plantId === item.plantId ? (
-                                            <>
-                                                <button
-                                                    onClick={handleSave}
-                                                    className="p-2 bg-emerald-500/20 text-emerald-400 rounded hover:bg-emerald-500/30"
-                                                    title="Save"
-                                                >
-                                                    <Save size={16} />
-                                                </button>
-                                                <button
-                                                    onClick={() => setEditingItem(null)}
-                                                    className="p-2 bg-slate-700 text-slate-300 rounded hover:bg-slate-600"
-                                                    title="Cancel"
-                                                >
-                                                    <X size={16} />
-                                                </button>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <button
-                                                    onClick={() => setEditingItem({ vendorId: item.vendor.id, plantId: item.plantId, price: item.price })}
-                                                    className="p-2 bg-indigo-500/20 text-indigo-400 rounded hover:bg-indigo-500/30"
-                                                    title="Edit Price"
-                                                >
-                                                    <Edit2 size={16} />
-                                                </button>
-                                                <button
-                                                    onClick={() => handleRemove(item.vendor.id, item.plantId)}
-                                                    className="p-2 bg-red-500/20 text-red-400 rounded hover:bg-red-500/30"
-                                                    title="Remove Listing"
-                                                >
-                                                    <Trash2 size={16} />
-                                                </button>
-                                            </>
-                                        )}
-                                    </div>
-                                </td>
-                            </tr>
-                        ))}
-                        {filteredItems.length === 0 && (
+    return (
+        <AdminLayout title="Capital Control">
+            <div className={styles.container}>
+
+                {/* Header & Stats */}
+                <div className={styles.headerGroup}>
+                    <div>
+                        <h1 className={styles.title}>Price Management</h1>
+                        <p className={styles.subtitle}>Monitor and regulate market rates across the vendor network.</p>
+                    </div>
+                </div>
+
+                <div className={styles.statsGrid}>
+                    <div className={styles.statCard}>
+                        <div className={styles.statIconWrapper}><Store size={48} /></div>
+                        <div className={styles.statValue}>{activeVendors}</div>
+                        <div className={styles.statLabel}>Active Vendors</div>
+                    </div>
+                    <div className={styles.statCard}>
+                        <div className={styles.statIconWrapper}><Edit2 size={48} /></div>
+                        <div className={styles.statValue}>{totalListings}</div>
+                        <div className={styles.statLabel}>Price Listings</div>
+                    </div>
+                    <div className={styles.statCard}>
+                        <div className={styles.statIconWrapper}><Save size={48} /></div>
+                        <div className={styles.statValue}>₹{avgPrice}</div>
+                        <div className={styles.statLabel}>Avg. Market Rate</div>
+                    </div>
+                </div>
+
+                {/* Controls */}
+                <div className={styles.controlsBar}>
+                    <div className={styles.searchWrapper}>
+                        <Search size={20} className={styles.searchIcon} />
+                        <input
+                            type="text"
+                            placeholder="Search by vendor, plant, or ID..."
+                            value={searchTerm}
+                            onChange={e => setSearchTerm(e.target.value)}
+                            className={styles.searchInput}
+                        />
+                    </div>
+                </div>
+
+                {/* Table */}
+                <div className={styles.tableContainer}>
+                    <table className={styles.table}>
+                        <thead>
                             <tr>
-                                <td colSpan={4} className="text-center py-8 text-slate-500">
-                                    No price listings found matching your search.
-                                </td>
+                                <th>Vendor / Shop</th>
+                                <th>Plant Details</th>
+                                <th>Market Price</th>
+                                <th>Actions</th>
                             </tr>
-                        )}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {filteredItems.map(item => (
+                                <tr key={item.uniqueKey}>
+                                    <td>
+                                        <div className={styles.vendorCell}>
+                                            <div className={styles.vendorAvatar}>
+                                                {item.vendor.name.charAt(0)}
+                                            </div>
+                                            <div className={styles.vendorInfo}>
+                                                <h4>{item.vendor.name}</h4>
+                                                <p>{item.vendor.address || 'Online Vendor'}</p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div className={styles.plantCell}>
+                                            <img
+                                                src={item.plantImage || 'https://via.placeholder.com/48'}
+                                                className={styles.plantImg}
+                                                alt=""
+                                            />
+                                            <span className={styles.plantName}>{item.plantName}</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        {editingItem?.vendorId === item.vendor.id && editingItem?.plantId === item.plantId ? (
+                                            <div className={styles.editWrapper}>
+                                                <span className={styles.currency}>₹</span>
+                                                <input
+                                                    type="number"
+                                                    value={editingItem.price}
+                                                    onChange={e => setEditingItem({ ...editingItem, price: Number(e.target.value) })}
+                                                    className={styles.editInput}
+                                                    autoFocus
+                                                />
+                                            </div>
+                                        ) : (
+                                            <div className={styles.priceDisplay}>
+                                                ₹ {item.price}
+                                            </div>
+                                        )}
+                                    </td>
+                                    <td>
+                                        <div className={styles.actionGroup}>
+                                            {editingItem?.vendorId === item.vendor.id && editingItem?.plantId === item.plantId ? (
+                                                <>
+                                                    <button
+                                                        onClick={handleSave}
+                                                        className={`${styles.iconBtn} ${styles.btnSave}`}
+                                                        title="Save Changes"
+                                                    >
+                                                        <Save size={18} />
+                                                    </button>
+                                                    <button
+                                                        onClick={() => setEditingItem(null)}
+                                                        className={`${styles.iconBtn} ${styles.btnCancel}`}
+                                                        title="Cancel"
+                                                    >
+                                                        <X size={18} />
+                                                    </button>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <button
+                                                        onClick={() => setEditingItem({ vendorId: item.vendor.id, plantId: item.plantId, price: item.price })}
+                                                        className={`${styles.iconBtn} ${styles.btnEdit}`}
+                                                        title="Edit Price"
+                                                    >
+                                                        <Edit2 size={18} />
+                                                    </button>
+                                                    <button
+                                                        onClick={() => handleRemove(item.vendor.id, item.plantId)}
+                                                        className={`${styles.iconBtn} ${styles.btnDelete}`}
+                                                        title="Remove Listing"
+                                                    >
+                                                        <Trash2 size={18} />
+                                                    </button>
+                                                </>
+                                            )}
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                            {filteredItems.length === 0 && (
+                                <tr>
+                                    <td colSpan={4} className={styles.emptyState}>
+                                        <Store size={48} style={{ margin: '0 auto 1rem', opacity: 0.2 }} />
+                                        <p>No price listings found matching "{searchTerm}"</p>
+                                    </td>
+                                </tr>
+                            )}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </AdminLayout>
     );

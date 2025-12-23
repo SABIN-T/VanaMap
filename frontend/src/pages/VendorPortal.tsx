@@ -2,8 +2,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { Button } from '../components/common/Button';
-import { Store, Phone, MessageCircle, Navigation, Info, Locate, Bell, User, AlertTriangle, BadgeCheck } from 'lucide-react';
-import { registerVendor, fetchVendors, updateVendor, fetchVendorNotifications } from '../services/api';
+import { Store, Phone, MessageCircle, Navigation, Info, Locate, AlertTriangle, BadgeCheck } from 'lucide-react';
+import { registerVendor, fetchVendors, updateVendor } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 
@@ -66,7 +66,6 @@ export const VendorPortal = () => {
     const [existingVendorId, setExistingVendorId] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [isLocating, setIsLocating] = useState(false);
-    const [notifications, setNotifications] = useState<any[]>([]);
     const [currentVendor, setCurrentVendor] = useState<Vendor | null>(null);
 
     const [formData, setFormData] = useState({
@@ -81,17 +80,6 @@ export const VendorPortal = () => {
             loadVendorData();
         }
     }, [user]);
-
-    useEffect(() => {
-        if (isEditing) {
-            loadNotifications();
-        }
-    }, [isEditing]);
-
-    const loadNotifications = async () => {
-        const notifs = await fetchVendorNotifications();
-        setNotifications(notifs);
-    };
 
     const loadVendorData = async () => {
         const vendors = await fetchVendors();
@@ -401,49 +389,7 @@ export const VendorPortal = () => {
                         </MapContainer>
                     </div>
 
-                    {/* Notifications Panel - Only visible when editing (registered) */}
-                    {isEditing && (
-                        <div className="glass-panel" style={{ padding: '2rem', border: 'var(--glass-border)' }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.5rem' }}>
-                                <Bell size={20} color="#facc15" />
-                                <h3 style={{ fontSize: '1.25rem', margin: 0 }}>Recent Customer Activity</h3>
-                            </div>
 
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxHeight: '300px', overflowY: 'auto' }}>
-                                {notifications.length === 0 ? (
-                                    <div style={{ color: 'var(--color-text-muted)', textAlign: 'center', padding: '2rem', border: '1px dashed var(--color-border)', borderRadius: '1rem' }}>
-                                        No recent activity. Interaction logs will appear here.
-                                    </div>
-                                ) : (
-                                    notifications.map((note, i) => (
-                                        <div key={i} style={{
-                                            background: 'var(--color-bg-alt)',
-                                            padding: '1rem',
-                                            borderRadius: '0.75rem',
-                                            borderLeft: '3px solid var(--color-primary)',
-                                            display: 'flex',
-                                            justifyContent: 'space-between',
-                                            alignItems: 'start'
-                                        }}>
-                                            <div>
-                                                <div style={{ fontWeight: 'bold', fontSize: '0.9rem', marginBottom: '0.25rem' }}>
-                                                    {note.message}
-                                                </div>
-                                                <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
-                                                    {new Date(note.date).toLocaleString()}
-                                                </div>
-                                            </div>
-                                            {note.details?.userEmail && (
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', color: 'var(--color-text-dim)' }}>
-                                                    <User size={12} /> {note.details.userEmail}
-                                                </div>
-                                            )}
-                                        </div>
-                                    ))
-                                )}
-                            </div>
-                        </div>
-                    )}
                 </div>
             </div>
 
