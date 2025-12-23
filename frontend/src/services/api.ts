@@ -38,14 +38,11 @@ export const fetchUsers = async (): Promise<any[]> => {
     }
 };
 
-let vendorCache: Vendor[] | null = null;
 export const fetchVendors = async (): Promise<Vendor[]> => {
-    if (vendorCache) return vendorCache;
     try {
         const response = await fetch(`${API_URL}/vendors`);
         if (!response.ok) throw new Error('Failed to fetch vendors');
         const data = await response.json();
-        vendorCache = data;
         return data;
     } catch (error) {
         console.error("Error fetching vendors:", error);
