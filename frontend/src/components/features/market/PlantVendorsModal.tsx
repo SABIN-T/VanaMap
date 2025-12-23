@@ -67,7 +67,7 @@ export const PlantVendorsModal = ({ plant, onClose }: PlantVendorsModalProps) =>
     const availableVendors = vendors
         .map(v => {
             // Find inventory item for this plant
-            const invItem = v.inventory?.find(i => i.plantId === plant.id && i.status === 'approved' && i.inStock);
+            const invItem = v.inventory?.find(i => i.plantId === plant.id && i.inStock);
             // Fallback for legacy data (simple inventoryIds check)
             const legacyMatch = v.inventoryIds?.includes(plant.id);
 
