@@ -8,6 +8,8 @@ import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 
 import type { LatLng } from 'leaflet';
+import type { Vendor } from '../types';
+import { VendorInventory } from '../components/features/vendor/VendorInventory';
 
 // Fix Leaflet's default icon path issues
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -65,6 +67,7 @@ export const VendorPortal = () => {
     const [loading, setLoading] = useState(false);
     const [isLocating, setIsLocating] = useState(false);
     const [notifications, setNotifications] = useState<any[]>([]);
+    const [currentVendor, setCurrentVendor] = useState<Vendor | null>(null);
 
     const [formData, setFormData] = useState({
         shopName: '',
@@ -97,6 +100,7 @@ export const VendorPortal = () => {
         const myVendor = vendors.find(v => v.id === user.id || v.id === (user as any)._id);
 
         if (myVendor) {
+            setCurrentVendor(myVendor);
             setIsEditing(true);
             setExistingVendorId(myVendor.id);
             setFormData({
@@ -442,6 +446,14 @@ export const VendorPortal = () => {
                     )}
                 </div>
             </div>
+
+            {/* Inventory Section */}
+            {isEditing && currentVendor && (
+                <VendorInventory
+                    vendor={currentVendor}
+                    onUpdate={loadVendorData}
+                />
+            )}
 
             <style>{`
                 input:focus, textarea:focus {
