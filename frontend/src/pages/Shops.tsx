@@ -20,7 +20,7 @@ export const Shops = () => {
                     fetchVendors()
                 ]);
                 setPlants(plantsData);
-                setVendors(vendorsData);
+                setVendors(vendorsData.filter(v => v.verified));
             } catch (error) {
                 console.error("Failed to load shop items", error);
             } finally {

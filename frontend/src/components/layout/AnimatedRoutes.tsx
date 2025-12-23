@@ -24,6 +24,7 @@ const Notifications = lazy(() => import('../../pages/admin/Notifications').then(
 const EditPlant = lazy(() => import('../../pages/admin/EditPlant').then(m => ({ default: m.EditPlant })));
 const AdminLogin = lazy(() => import('../../pages/admin/AdminLogin').then(m => ({ default: m.AdminLogin })));
 const ManageSuggestions = lazy(() => import('../../pages/admin/ManageSuggestions').then(m => ({ default: m.ManageSuggestions })));
+const PriceManagement = lazy(() => import('../../pages/admin/PriceManagement').then(m => ({ default: m.PriceManagement })));
 
 
 const LoadingScreen = () => (
@@ -78,6 +79,7 @@ export const AnimatedRoutes = () => {
                         <Route path="/admin/diag" element={<SystemDiagnostics />} />
                         <Route path="/admin/settings" element={<Settings />} />
                         <Route path="/admin/notifications" element={<Notifications />} />
+                        <Route path="/admin/price-management" element={<PriceManagement />} />
                         <Route path="/admin/suggestions" element={<ManageSuggestions />} />
 
                         <Route path="/admin/edit-plant/:id" element={<EditPlant />} />

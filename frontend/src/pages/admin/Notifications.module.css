@@ -1,53 +1,18 @@
 .pageContainer {
-    padding: 2rem;
-    color: #e2e8f0;
     max-width: 1400px;
     margin: 0 auto;
-    animation: fadeIn 0.4s ease-out;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
 }
 
 .header {
-    margin-bottom: 2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 2rem;
+    margin-bottom: 2rem;
 }
 
 .searchContainer {
     position: relative;
-    flex: 1;
-    max-width: 500px;
-}
-
-.searchInput {
-    width: 100%;
-    padding: 0.75rem 1rem 0.75rem 2.8rem;
-    background: rgba(30, 41, 59, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    color: #f1f5f9;
-    font-size: 0.95rem;
-    transition: all 0.2s;
-    outline: none;
-}
-
-.searchInput:focus {
-    border-color: #818cf8;
-    background: rgba(30, 41, 59, 0.8);
-    box-shadow: 0 0 0 4px rgba(129, 140, 248, 0.1);
+    width: 300px;
 }
 
 .searchIcon {
@@ -55,223 +20,203 @@
     left: 1rem;
     top: 50%;
     transform: translateY(-50%);
-    color: #94a3b8;
+    color: #64748b;
 }
 
-.title {
-    font-size: 2rem;
-    font-weight: 700;
-    background: linear-gradient(135deg, #fff 0%, #cbd5e1 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+.searchInput {
+    width: 100%;
+    padding: 0.75rem 1rem 0.75rem 2.75rem;
+    background: #1e293b;
+    border: 1px solid #334155;
+    border-radius: 0.75rem;
+    color: white;
+    font-size: 0.9rem;
+    outline: none;
+    transition: all 0.2s;
+}
+
+.searchInput:focus {
+    background: #253347;
+    border-color: #10b981;
+    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+}
+
+.markAllBtn {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #cbd5e1;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
 }
 
-.grid {
+.markAllBtn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.grid4 {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
     gap: 1.5rem;
 }
 
-@media (max-width: 1100px) {
-    .grid {
-        grid-template-columns: 1fr;
-    }
-
-    .card {
-        height: 450px !important;
-    }
-}
-
 .card {
-    background: rgba(30, 41, 59, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(12px);
-    border-radius: 16px;
-    padding: 1.5rem;
+    background: #1e293b;
+    border-radius: 1rem;
+    border: 1px solid #334155;
     display: flex;
     flex-direction: column;
-    height: 600px;
-    /* Fixed height for scrolling */
+    height: 70vh;
+    overflow: hidden;
 }
 
 .cardHeader {
+    padding: 1rem;
+    border-bottom: 1px solid #334155;
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    margin-bottom: 1.5rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    background: rgba(0, 0, 0, 0.1);
+}
+
+.iconBox {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.userIcon {
+    background: rgba(59, 130, 246, 0.1);
+    color: #60a5fa;
+}
+
+.vendorIcon {
+    background: rgba(251, 191, 36, 0.1);
+    color: #fbbf24;
+}
+
+.plantIcon {
+    background: rgba(16, 185, 129, 0.1);
+    color: #34d399;
+}
+
+.priceIcon {
+    background: rgba(239, 68, 68, 0.1);
+    color: #f87171;
 }
 
 .sectionTitle {
-    font-size: 1.25rem;
-    font-weight: 600;
-    color: #f8fafc;
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #f1f5f9;
 }
 
 .scrollArea {
     flex: 1;
     overflow-y: auto;
-    padding-right: 0.5rem;
-}
-
-.scrollArea::-webkit-scrollbar {
-    width: 6px;
-}
-
-.scrollArea::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: 4px;
-}
-
-.scrollArea::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 4px;
-}
-
-.scrollArea::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.2);
+    padding: 0.5rem;
 }
 
 .item {
-    display: flex;
-    align-items: flex-start;
-    gap: 1rem;
-    padding: 1rem;
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: 12px;
-    margin-bottom: 0.75rem;
-    border: 1px solid rgba(255, 255, 255, 0.03);
-    transition: all 0.2s;
     width: 100%;
     text-align: left;
+    background: transparent;
+    border: none;
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+    margin-bottom: 0.5rem;
     cursor: pointer;
+    transition: all 0.2s;
+    border: 1px solid transparent;
 }
 
 .item:hover {
-    background: rgba(255, 255, 255, 0.07);
-    border-color: rgba(255, 255, 255, 0.15);
-    transform: translateX(4px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.03);
 }
 
-.newItem {
-    background: rgba(99, 102, 241, 0.08);
-    border-left: 3px solid #818cf8;
+/* Unread State */
+.unread {
+    background: rgba(30, 41, 59, 0.8);
+    border-left: 3px solid #60a5fa;
+    /* Default blue */
 }
 
-.newItem:hover {
-    background: rgba(99, 102, 241, 0.12);
+/* Specific Unread Colors based on column context might be tricky in pure CSS unless we add class. 
+   But user asked for "different colour". 
+   Let's make unread items clearly distinct with internal highlights. */
+
+.unread .mainText {
+    font-weight: 700;
+    color: white;
 }
 
-.newBadgePulse {
-    position: relative;
-    display: flex;
+.card:nth-child(1) .unread {
+    border-left-color: #60a5fa;
+    background: rgba(59, 130, 246, 0.1);
 }
 
-.newBadgePulse::after {
-    content: '';
-    position: absolute;
-    top: -2px;
-    right: -2px;
-    width: 8px;
-    height: 8px;
-    background: #818cf8;
-    border-radius: 50%;
-    animation: pulse 1.5s infinite;
+.card:nth-child(2) .unread {
+    border-left-color: #fbbf24;
+    background: rgba(251, 191, 36, 0.1);
 }
 
-@keyframes pulse {
-    0% {
-        transform: scale(0.95);
-        box-shadow: 0 0 0 0 rgba(129, 140, 248, 0.7);
-    }
-
-    70% {
-        transform: scale(1);
-        box-shadow: 0 0 0 6px rgba(129, 140, 248, 0);
-    }
-
-    100% {
-        transform: scale(0.95);
-        box-shadow: 0 0 0 0 rgba(129, 140, 248, 0);
-    }
+.card:nth-child(3) .unread {
+    border-left-color: #34d399;
+    background: rgba(16, 185, 129, 0.1);
 }
 
-.iconBox {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-}
-
-.userIcon {
-    background: rgba(99, 102, 241, 0.2);
-    color: #818cf8;
-}
-
-.vendorIcon {
-    background: rgba(245, 158, 11, 0.2);
-    color: #fbbf24;
-}
-
-.plantIcon {
-    background: rgba(16, 185, 129, 0.2);
-    color: #34d399;
+.card:nth-child(4) .unread {
+    border-left-color: #f87171;
+    background: rgba(239, 68, 68, 0.1);
 }
 
 .content {
-    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
 }
 
 .mainText {
-    font-size: 0.95rem;
-    font-weight: 500;
-    color: #f1f5f9;
-    margin-bottom: 0.25rem;
-}
-
-.subText {
-    font-size: 0.85rem;
-    color: #94a3b8;
-}
-
-.time {
-    font-size: 0.72rem;
-    color: #64748b;
-    margin-top: 0.5rem;
-    display: block;
+    font-size: 0.9rem;
+    color: #cbd5e1;
     line-height: 1.4;
 }
 
-.fullDate {
-    display: block;
-    color: #475569;
-    font-weight: 500;
+.subText {
+    font-size: 0.8rem;
+    color: #64748b;
 }
 
-.badge {
-    display: inline-block;
-    padding: 0.2rem 0.5rem;
-    border-radius: 6px;
+.time {
     font-size: 0.7rem;
-    font-weight: 600;
-    margin-left: 0.5rem;
-    text-transform: uppercase;
+    color: #475569;
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
 }
 
-.badgeNew {
-    background: rgba(16, 185, 129, 0.2);
-    color: #34d399;
+@media (max-width: 1280px) {
+    .grid4 {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
-.badgeUpdate {
-    background: rgba(59, 130, 246, 0.2);
-    color: #60a5fa;
+@media (max-width: 768px) {
+    .grid4 {
+        grid-template-columns: 1fr;
+    }
+
+    .card {
+        height: auto;
+        min-height: 400px;
+    }
 }

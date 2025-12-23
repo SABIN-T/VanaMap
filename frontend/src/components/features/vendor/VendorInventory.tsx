@@ -159,6 +159,22 @@ export const VendorInventory = ({ vendor, onUpdate }: VendorInventoryProps) => {
         return vendor.inventory?.find(i => i.plantId === plantId);
     };
 
+    if (!vendor.verified) {
+        return (
+            <div className={styles.container} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '400px', textAlign: 'center' }}>
+                <div style={{ background: 'rgba(234, 179, 8, 0.1)', padding: '3rem', borderRadius: '1rem', border: '1px dashed rgba(234, 179, 8, 0.3)' }}>
+                    <AlertCircle size={48} color="#facc15" style={{ margin: '0 auto 1.5rem' }} />
+                    <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: '#facc15', marginBottom: '1rem' }}>Account Verification Pending</h2>
+                    <p style={{ color: '#94a3b8', maxWidth: '400px', lineHeight: '1.6' }}>
+                        Your partner account is currently being reviewed by our administration team.
+                        <br /><br />
+                        Pricing and inventory controls will be unlocked as soon as your profile is verified by an admin.
+                    </p>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className={styles.container}>
             <div className={styles.header}>

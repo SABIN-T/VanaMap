@@ -3,9 +3,10 @@ import { useLocation, Link } from 'react-router-dom';
 import {
     LayoutDashboard, Sprout, Store,
     Users, Activity, Bell, Settings,
-    Menu, X, LogOut, ChevronRight, MessageSquare
+    Menu, X, LogOut, ChevronRight, MessageSquare, DollarSign
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { fetchAdminStats } from '../../services/api';
 import styles from './AdminLayout.module.css';
 
 
@@ -19,15 +20,31 @@ export const AdminLayout = ({ title, children }: AdminLayoutProps) => {
     const location = useLocation();
     const { logout, user } = useAuth();
     const [isSidebarOpen, setSidebarOpen] = useState(true);
+    const [stats, setStats] = useState<any>({ unread: {} });
+
+    React.useEffect(() => {
+        if (user?.role === 'admin') {
+            const loadStats = async () => {
+                try {
+                    const data = await fetchAdminStats();
+                    if (data.unread) setStats(data);
+                } catch (e) { console.error("Stats error", e); }
+            };
+            loadStats();
+            const interval = setInterval(loadStats, 30000); // Poll every 30s
+            return () => clearInterval(interval);
+        }
+    }, [user]);
 
     const navItems = [
         { path: '/admin', icon: LayoutDashboard, label: 'Dashboard' },
-        { path: '/admin/manage-plants', icon: Sprout, label: 'Manage Plants' },
+        { path: '/admin/manage-plants', icon: Sprout, label: 'Manage Plants', badge: stats.unread?.plants },
         { path: '/admin/add-plant', icon: Activity, label: 'Add New Plant', sub: true },
-        { path: '/admin/manage-vendors', icon: Store, label: 'Manage Vendors' },
-        { path: '/admin/manage-users', icon: Users, label: 'User Directory' },
-        { path: '/admin/suggestions', icon: MessageSquare, label: 'User Suggestions' },
-        { path: '/admin/notifications', icon: Bell, label: 'Notifications' },
+        { path: '/admin/manage-vendors', icon: Store, label: 'Manage Vendors', badge: stats.unread?.vendors },
+        { path: '/admin/price-management', icon: DollarSign, label: 'Price Management', badge: stats.unread?.prices },
+        { path: '/admin/manage-users', icon: Users, label: 'User Directory', badge: stats.unread?.users },
+        { path: '/admin/suggestions', icon: MessageSquare, label: 'User Suggestions' }, // Could add badge if API supported
+        { path: '/admin/notifications', icon: Bell, label: 'Notifications', badge: stats.unread?.total },
         { path: '/admin/diag', icon: Activity, label: 'System Health' },
         { path: '/admin/settings', icon: Settings, label: 'Settings' },
     ];
@@ -60,6 +77,19 @@ export const AdminLayout = ({ title, children }: AdminLayoutProps) => {
                         >
                             <item.icon size={20} className={styles.navIcon} />
                             <span className={styles.navLabel}>{item.label}</span>
+                            {item.badge > 0 && (
+                                <span style={{
+                                    background: '#ef4444',
+                                    color: 'white',
+                                    fontSize: '0.7rem',
+                                    fontWeight: 'bold',
+                                    padding: '2px 6px',
+                                    borderRadius: '99px',
+                                    marginLeft: 'auto'
+                                }}>
+                                    {item.badge}
+                                </span>
+                            )}
 
                             {isActive(item.path) && <div className={styles.activeIndicator} />}
                         </Link>

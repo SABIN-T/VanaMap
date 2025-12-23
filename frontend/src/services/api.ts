@@ -224,6 +224,35 @@ export const deleteNotification = async (id: string) => {
     return res.json();
 };
 
+// Notification Aliases & Methods
+export const fetchAdminNotifications = fetchNotifications;
+
+export const markNotificationRead = async (id: string) => {
+    const res = await fetch(`${API_URL}/notifications/${id}/read`, {
+        method: 'PATCH',
+        headers: getHeaders()
+    });
+    if (!res.ok) throw new Error("Failed to mark read");
+    return res.json();
+};
+
+export const markAllNotificationsRead = async () => {
+    const res = await fetch(`${API_URL}/notifications/mark-all-read`, {
+        method: 'PATCH',
+        headers: getHeaders()
+    });
+    if (!res.ok) throw new Error("Failed to mark all read");
+    return res.json();
+};
+
+export const fetchAdminStats = async () => {
+    const res = await fetch(`${API_URL}/admin/stats`, {
+        headers: getHeaders()
+    });
+    if (!res.ok) throw new Error("Failed to fetch stats");
+    return res.json();
+};
+
 export const fetchVendorNotifications = async () => {
     try {
         const res = await fetch(`${API_URL}/vendor/notifications`, { headers: getHeaders() });

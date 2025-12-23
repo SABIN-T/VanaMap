@@ -1,17 +1,17 @@
 import type { Plant } from '../../../types';
-import { ShoppingCart, Heart, Sun, Wind } from 'lucide-react';
+import { Heart, Sun, Wind } from 'lucide-react';
 import styles from './PlantCard.module.css';
 import { useAuth } from '../../../context/AuthContext';
 import toast from 'react-hot-toast';
 
 interface PlantCardProps {
     plant: Plant;
-    onAdd: (plant: Plant) => void;
+    onAdd?: (plant: Plant) => void; // Made optional
     score?: number;
     isTopMatch?: boolean;
 }
 
-export const PlantCard = ({ plant, onAdd, score, isTopMatch }: PlantCardProps) => {
+export const PlantCard = ({ plant, score, isTopMatch }: PlantCardProps) => {
     const { user, toggleFavorite } = useAuth();
     const isFavorite = user?.favorites.includes(plant.id);
     const isPetFriendly = (plant as any).petFriendly;
@@ -103,15 +103,7 @@ export const PlantCard = ({ plant, onAdd, score, isTopMatch }: PlantCardProps) =
                     </div>
                 </div>
 
-                <button
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        onAdd(plant);
-                    }}
-                    className={styles.actionBtn}
-                >
-                    <ShoppingCart size={18} style={{ marginRight: '0.5rem' }} /> Add to Cart
-                </button>
+
             </div>
         </div>
     );

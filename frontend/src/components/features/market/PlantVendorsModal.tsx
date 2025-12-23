@@ -25,7 +25,7 @@ export const PlantVendorsModal = ({ plant, onClose }: PlantVendorsModalProps) =>
 
     const loadVendors = async () => {
         const allVendors = await fetchVendors();
-        setVendors(allVendors);
+        setVendors(allVendors.filter(v => v.verified));
         setLoading(false);
     };
 
