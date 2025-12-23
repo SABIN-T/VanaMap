@@ -168,7 +168,20 @@ export const PriceApproval = () => {
                                                 </div>
                                                 <div className={`${styles.priceBlock} ${styles.proposed}`}>
                                                     <span className="label">Vendor Price</span>
-                                                    <span className="value">{formatCurrency(selectedItem.item.price)}</span>
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="text-emerald-400 font-mono text-sm">Now: </span>
+                                                        <input
+                                                            type="number"
+                                                            className="bg-slate-800 text-white border border-slate-600 rounded px-2 py-1 w-24 focus:border-emerald-500 focus:outline-none"
+                                                            defaultValue={selectedItem.item.price}
+                                                            onChange={(e) => {
+                                                                const val = parseFloat(e.target.value);
+                                                                // Mutate directly for now as simpler state management, 
+                                                                // or ideally use local state. Let's use local mutability for the modal scope.
+                                                                selectedItem.item.price = val;
+                                                            }}
+                                                        />
+                                                    </div>
                                                 </div>
                                             </div>
 
