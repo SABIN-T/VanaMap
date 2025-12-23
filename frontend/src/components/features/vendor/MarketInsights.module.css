@@ -1,0 +1,226 @@
+.container {
+    margin-top: 4rem;
+    padding: 2.5rem;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(20px);
+    border-radius: 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    animation: slideUp 0.6s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.titleGroup {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.iconBox {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #10b981 0%, #064e3b 100%);
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2);
+}
+
+.title {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: white;
+    margin: 0;
+}
+
+.subtitle {
+    color: #64748b;
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+}
+
+.card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 1.5rem;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+}
+
+.cardHeader {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    color: #10b981;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+}
+
+/* LIST STYLES */
+.listItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.listItem:last-child {
+    border-bottom: none;
+}
+
+.indicator {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.rank {
+    width: 24px;
+    height: 24px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #94a3b8;
+}
+
+.label {
+    font-weight: 600;
+    color: white;
+}
+
+.valueGroup {
+    text-align: right;
+}
+
+.count {
+    color: #10b981;
+    font-weight: 800;
+    font-size: 1.1rem;
+    display: block;
+}
+
+.growth {
+    font-size: 0.7rem;
+    color: #64748b;
+}
+
+/* BAR CHART SIMULATION */
+.barContainer {
+    margin-top: 1rem;
+}
+
+.barWrapper {
+    margin-bottom: 1.25rem;
+}
+
+.barLabel {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+}
+
+.barName {
+    color: #cbd5e1;
+    font-weight: 500;
+}
+
+.barValue {
+    color: #94a3b8;
+}
+
+.track {
+    height: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 99px;
+    overflow: hidden;
+}
+
+.fill {
+    height: 100%;
+    background: linear-gradient(90deg, #10b981, #3b82f6);
+    border-radius: 99px;
+    transition: width 1s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* INSIGHT BANNER */
+.insightBanner {
+    grid-column: 1 / -1;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(59, 130, 246, 0.1) 100%);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    padding: 1.5rem 2rem;
+    border-radius: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.insightIcon {
+    color: #10b981;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.insightText {
+    font-size: 0.95rem;
+    color: #e2e8f0;
+    line-height: 1.5;
+}
+
+@media (max-width: 900px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}

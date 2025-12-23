@@ -3,7 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
-const { Plant, Vendor, User, Notification, Chat, PlantSuggestion } = require('./models');
+const { Plant, Vendor, User, Notification, Chat, PlantSuggestion, SearchLog } = require('./models');
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
@@ -128,6 +128,67 @@ const sendWhatsApp = async (msg, type, details = {}) => {
 };
 
 // --- ROUTES ---
+
+// --- GAMIFICATION & ANALYTICS ---
+
+app.get('/api/gamification/leaderboard', async (req, res) => {
+    try {
+        const topUsers = await User.find({ role: 'user' })
+            .sort({ points: -1 })
+            .limit(10)
+            .select('name points city state');
+
+        const cityRankings = await User.aggregate([
+            { $match: { role: 'user' } },
+            {
+                $group: {
+                    _id: { city: '$city', state: '$state' },
+                    totalPoints: { $sum: '$points' },
+                    userCount: { $sum: 1 }
+                }
+            },
+            { $sort: { totalPoints: -1 } },
+            { $limit: 10 }
+        ]);
+
+        res.json({ users: topUsers, cities: cityRankings });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.post('/api/tracking/search', async (req, res) => {
+    try {
+        const { query, plantId, location } = req.body;
+        const log = new SearchLog({ query, plantId, location });
+        await log.save();
+        res.json({ success: true });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.get('/api/analytics/vendor/:vendorId', auth, async (req, res) => {
+    try {
+        // Simple search analytics for vendors
+        // In a real app we'd filter by vendor's service area
+        const topSearches = await SearchLog.aggregate([
+            { $group: { _id: '$query', count: { $sum: 1 } } },
+            { $sort: { count: -1 } },
+            { $limit: 5 }
+        ]);
+
+        const demandByLocation = await SearchLog.aggregate([
+            { $group: { _id: '$location.city', count: { $sum: 1 } } },
+            { $sort: { count: -1 } },
+            { $limit: 5 }
+        ]);
+
+        res.json({ topSearches, demandByLocation });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
 
 app.get('/api/admin/notifications', auth, admin, async (req, res) => {
     try {
@@ -571,8 +632,13 @@ app.post('/api/user/favorites', auth, async (req, res) => {
         const { plantId } = req.body;
         const user = await User.findById(req.user.id);
         const index = user.favorites.indexOf(plantId);
-        if (index === -1) user.favorites.push(plantId);
-        else user.favorites.splice(index, 1);
+        if (index === -1) {
+            user.favorites.push(plantId);
+            user.points = (user.points || 0) + 10;
+        } else {
+            user.favorites.splice(index, 1);
+            user.points = Math.max(0, (user.points || 0) - 10);
+        }
         await user.save();
         res.json({ favorites: user.favorites });
     } catch (err) {
@@ -583,12 +649,19 @@ app.post('/api/user/favorites', auth, async (req, res) => {
 app.post('/api/user/cart', auth, async (req, res) => {
     try {
         const user = await User.findById(req.user.id);
+        const currentCartCount = user.cart.length;
         user.cart = req.body.cart.map(item => ({
             plantId: item.plantId || item.plant?.id,
             quantity: item.quantity,
             vendorId: item.vendorId,
             vendorPrice: item.vendorPrice
         }));
+
+        // Award points if cart size increased (new plants added)
+        if (user.cart.length > currentCartCount) {
+            user.points = (user.points || 0) + (user.cart.length - currentCartCount) * 50;
+        }
+
         await user.save();
         res.json({ success: true, cart: user.cart });
     } catch (err) {

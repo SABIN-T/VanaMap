@@ -49,12 +49,27 @@ const UserSchema = new mongoose.Schema({
     role: { type: String, enum: ['user', 'vendor', 'admin'], default: 'user' },
     favorites: [String],
     cart: [{ plantId: String, quantity: Number, vendorId: String, vendorPrice: Number }],
+    points: { type: Number, default: 0 },
+    city: String,
+    state: String,
     resetRequest: {
         requested: { type: Boolean, default: false },
         approved: { type: Boolean, default: false },
         requestDate: { type: Date }
     }
 }, { timestamps: true });
+
+const SearchLogSchema = new mongoose.Schema({
+    query: String,
+    plantId: String, // If they clicked a specific plant
+    location: {
+        city: String,
+        state: String,
+        lat: Number,
+        lng: Number
+    },
+    timestamp: { type: Date, default: Date.now }
+});
 
 // Hash password before saving
 UserSchema.pre('save', async function () {
@@ -98,5 +113,6 @@ module.exports = {
     User: mongoose.model('User', UserSchema),
     Notification: mongoose.model('Notification', NotificationSchema),
     Chat: mongoose.model('Chat', ChatSchema),
-    PlantSuggestion: mongoose.model('PlantSuggestion', PlantSuggestionSchema)
+    PlantSuggestion: mongoose.model('PlantSuggestion', PlantSuggestionSchema),
+    SearchLog: mongoose.model('SearchLog', SearchLogSchema)
 };

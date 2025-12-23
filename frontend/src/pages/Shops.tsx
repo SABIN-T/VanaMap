@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import type { Plant, Vendor } from '../types';
-import { fetchPlants, fetchVendors } from '../services/api';
+import { fetchPlants, fetchVendors, logSearch } from '../services/api';
 import { Search, ShoppingBag } from 'lucide-react';
 import { PlantVendorsModal } from '../components/features/market/PlantVendorsModal';
 import { useNavigate } from 'react-router-dom';
@@ -31,6 +31,15 @@ export const Shops = () => {
         };
         loadData();
     }, []);
+
+    // Log search with debounce
+    useEffect(() => {
+        if (!searchQuery.trim()) return;
+        const timer = setTimeout(() => {
+            logSearch(searchQuery);
+        }, 1500);
+        return () => clearTimeout(timer);
+    }, [searchQuery]);
 
     const filteredPlants = plants.filter(p => {
         const matchesCategory = activeCategory === 'all' ? true : p.type === activeCategory;

@@ -12,6 +12,8 @@ interface SignupData {
     password: string;
     name: string;
     role?: string;
+    city?: string;
+    state?: string;
 }
 
 interface AuthContextType {

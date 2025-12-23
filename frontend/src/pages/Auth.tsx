@@ -30,6 +30,7 @@ export const Auth = () => {
     // Vendor Specific
     const [country, setCountry] = useState('India');
     const [state, setState] = useState('');
+    const [city, setCity] = useState('');
     const [phoneCode, setPhoneCode] = useState('+91');
 
     // Sync phone code with country
@@ -80,7 +81,7 @@ export const Auth = () => {
             }
         } else if (view === 'signup') {
             const tid = toast.loading("Creating Account...");
-            const result = await signup({ email, password, name, role });
+            const result = await signup({ email, password, name, role, city, state });
             if (result.success) {
                 toast.success("Account Created Successfully!", { id: tid });
             } else {
@@ -186,7 +187,46 @@ export const Auth = () => {
                         </div>
                     )}
 
-                    {/* Vendor Location */}
+                    {/* Location Collection for Rankings */}
+                    {view === 'signup' && (
+                        <>
+                            <div className={styles.formGroup}>
+                                <label className={styles.label}>{role === 'vendor' ? 'Business Neighborhood' : 'Your City / Neighborhood'}</label>
+                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                                    <input
+                                        className={styles.input}
+                                        type="text"
+                                        value={city}
+                                        onChange={(e) => setCity(e.target.value)}
+                                        placeholder="City (e.g. Kathmandu)"
+                                        required
+                                    />
+                                    {countryStates[country] ? (
+                                        <select
+                                            className={styles.select}
+                                            value={state}
+                                            onChange={(e) => setState(e.target.value)}
+                                            required
+                                        >
+                                            <option value="">Select State</option>
+                                            {countryStates[country].map(s => <option key={s} value={s}>{s}</option>)}
+                                        </select>
+                                    ) : (
+                                        <input
+                                            className={styles.input}
+                                            type="text"
+                                            value={state}
+                                            onChange={(e) => setState(e.target.value)}
+                                            placeholder="Province/State"
+                                            required
+                                        />
+                                    )}
+                                </div>
+                            </div>
+                        </>
+                    )}
+
+                    {/* Vendor Location (redundant parts removed/merged) */}
                     {view === 'signup' && role === 'vendor' && (
                         <>
                             <div className={styles.formGroup}>

@@ -352,3 +352,29 @@ export const deleteSuggestion = async (id: string) => {
     if (!res.ok) throw new Error("Failed to delete suggestion");
     return res.json();
 };
+
+export const fetchLeaderboard = async () => {
+    const res = await fetch(`${API_URL}/gamification/leaderboard`);
+    if (!res.ok) throw new Error("Failed to fetch leaderboard");
+    return res.json();
+};
+
+export const logSearch = async (query: string, plantId?: string, location?: any) => {
+    try {
+        await fetch(`${API_URL}/tracking/search`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ query, plantId, location })
+        });
+    } catch (e) {
+        console.error("Search logging failed", e);
+    }
+};
+
+export const fetchVendorAnalytics = async (vendorId: string) => {
+    const res = await fetch(`${API_URL}/analytics/vendor/${vendorId}`, {
+        headers: getHeaders()
+    });
+    if (!res.ok) throw new Error("Failed to fetch analytics");
+    return res.json();
+};

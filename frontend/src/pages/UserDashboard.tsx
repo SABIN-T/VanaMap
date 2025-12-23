@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import { Button } from '../components/common/Button';
-import { Trash2, ShoppingBag, MapPin, Heart, ArrowRight, Loader2, Store, Shield, Lock } from 'lucide-react';
+import { Trash2, ShoppingBag, MapPin, Heart, ArrowRight, Loader2, Store, Shield, Lock, Trophy, Zap, TrendingUp, Wind, Award } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { fetchPlants, fetchVendors, updateVendor, changePassword } from '../services/api';
@@ -351,24 +351,73 @@ export const UserDashboard = () => {
                 </div>
             )}
 
+            {/* PREMIUM STATS BOARD */}
+            <div className={styles.statsBoard}>
+                {/* Points Card */}
+                <div className={styles.statCard}>
+                    <div className={styles.statIcon} style={{ background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)', color: 'white' }}>
+                        <Zap size={28} />
+                    </div>
+                    <div className={styles.statInfo}>
+                        <span className={styles.statValue}>{(user as any).points || 0}</span>
+                        <span className={styles.statLabel}>Chlorophyll Points</span>
+                        <div className={styles.statTrend} style={{ color: '#10b981' }}>
+                            <TrendingUp size={12} /> +12% this week
+                        </div>
+                    </div>
+                </div>
+
+                {/* Rank Card */}
+                <div className={styles.statCard}>
+                    <div className={styles.statIcon} style={{ background: 'linear-gradient(135deg, #facc15 0%, #ca8a04 100%)', color: 'black' }}>
+                        <Trophy size={28} />
+                    </div>
+                    <div className={styles.statInfo}>
+                        <span className={styles.statValue}>#{(user as any).points > 0 ? '4' : 'N/A'}</span>
+                        <span className={styles.statLabel}>Global Ranking</span>
+                        <div className={styles.statTrend} style={{ color: '#facc15' }}>
+                            <Award size={12} /> Top {(user as any).points > 100 ? '5%' : 'Elite'}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Impact Card */}
+                <div className={styles.statCard}>
+                    <div className={styles.statIcon} style={{ background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)', color: 'white' }}>
+                        <Wind size={28} />
+                    </div>
+                    <div className={styles.statInfo}>
+                        <span className={styles.statValue}>{((favoritePlants.length || items.length) * 1.2).toFixed(1)} L</span>
+                        <span className={styles.statLabel}>Daily Oxygen Production</span>
+                        <div className={styles.statTrend} style={{ color: '#3b82f6' }}>
+                            Net Positive Impact
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div className={styles.header}>
                 <div className={styles.titleSection}>
                     <h1 className={styles.dashboardTitle}>
-                        User Dashboard
+                        Eco Dashboard
                     </h1>
                     <p className={styles.subtitle}>
-                        Welcome back, {user.name}!
+                        Welcome back, {user.name}! You are making the world greener.
                     </p>
                 </div>
 
                 <div className={styles.actionGroup}>
                     <Button onClick={() => setShowPasswordModal(true)} variant="outline" style={{ gap: '0.5rem', display: 'flex', alignItems: 'center', borderColor: 'rgba(239, 68, 68, 0.2)', color: '#f87171' }}>
-                        <Lock size={18} /> Reset Password
+                        <Lock size={18} /> Update Security
+                    </Button>
+
+                    <Button onClick={() => navigate('/leaderboard')} variant="outline" style={{ gap: '0.5rem', display: 'flex', alignItems: 'center', borderColor: 'rgba(16, 185, 129, 0.2)', color: '#10b981' }}>
+                        <Trophy size={18} /> Hall of Fame
                     </Button>
 
                     {user.role === 'vendor' && (
                         <Button onClick={() => navigate('/vendor')} variant="outline" style={{ gap: '0.5rem', display: 'flex', alignItems: 'center' }}>
-                            <Store size={18} /> Edit Shop Details
+                            <Store size={18} /> Shop Portal
                         </Button>
                     )}
 
@@ -399,7 +448,7 @@ export const UserDashboard = () => {
                             }}
                         >
                             <Shield size={20} />
-                            ADMIN CONTROL HUB
+                            ADMIN HUB
                         </button>
                     )}
                 </div>

@@ -10,6 +10,7 @@ import toast from 'react-hot-toast';
 import type { LatLng } from 'leaflet';
 import type { Vendor } from '../types';
 import { VendorInventory } from '../components/features/vendor/VendorInventory';
+import { MarketInsights } from '../components/features/vendor/MarketInsights';
 
 // Fix Leaflet's default icon path issues
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -395,10 +396,13 @@ export const VendorPortal = () => {
 
             {/* Inventory Section */}
             {isEditing && currentVendor && (
-                <VendorInventory
-                    vendor={currentVendor}
-                    onUpdate={loadVendorData}
-                />
+                <>
+                    <MarketInsights vendorId={currentVendor.id} />
+                    <VendorInventory
+                        vendor={currentVendor}
+                        onUpdate={loadVendorData}
+                    />
+                </>
             )}
 
             <style>{`
