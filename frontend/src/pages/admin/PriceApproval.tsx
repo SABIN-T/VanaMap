@@ -55,28 +55,24 @@ export const PriceApproval = () => {
         const newInventory = [...(vendor.inventory || [])];
         const item = newInventory[inventoryIndex];
 
+        let updates: Partial<Vendor> = {};
+
         if (action === 'approve') {
             item.status = 'approved';
+            updates = { inventory: newInventory };
         } else if (action === 'reject') {
-            // Remove item or set to rejected? Removing for now as per usual flow
             newInventory.splice(inventoryIndex, 1);
+            updates = { inventory: newInventory };
         } else if (action === 'recommend') {
-            // Toggle recommended on the vendor card level OR inventory specific? 
-            // The prompt says "highly recommended will be above the list", implying vendor-level or item-level.
-            // Let's assume item-level logic ideally, but Vendor type has global highlyRecommended.
-            // Let's make the VENDOR highly recommended for this plant? 
-            // Given Types: Vendor has highlyRecommended. Let's toggle that for the VENDOR.
-            // Or maybe just item approval. The prompt says "highly recommended" button.
-            // For now, let's just make the item 'approved' and flag the vendor as highlyRecommended.
             item.status = 'approved';
-
-            // Note: highlyRecommended is currently a top-level Vendor property
-            // We'll update the vendor property.
-            await updateVendor(vendor.id, { highlyRecommended: true });
+            updates = {
+                inventory: newInventory,
+                highlyRecommended: true
+            };
         }
 
         try {
-            await updateVendor(vendor.id, { inventory: newInventory });
+            await updateVendor(vendor.id, updates);
             toast.success(`Action ${action} successful`);
             setSelectedItem(null);
             loadData(); // resync
