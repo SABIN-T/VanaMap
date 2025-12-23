@@ -3,9 +3,10 @@
     justify-content: space-between;
     align-items: center;
     padding: 1rem 2rem;
-    background: rgba(10, 10, 10, 0.8);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--glass-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: var(--glass-border);
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -55,12 +56,13 @@
     letter-spacing: -0.5px;
     background: var(--gradient-primary);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
 .tagline {
     font-size: 0.7rem;
-    color: #666;
+    color: var(--color-text-dim);
     font-weight: bold;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -120,14 +122,14 @@
     font-weight: bold;
     padding: 2px 6px;
     border-radius: 10px;
-    border: 2px solid #000;
+    border: 2px solid var(--color-bg);
 }
 
 .themeToggle {
     padding: 0.5rem;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -136,7 +138,8 @@
 }
 
 .themeToggle:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--color-bg-card);
+    transform: rotate(15deg);
 }
 
 .authDesktop {
@@ -161,8 +164,7 @@
     left: 0;
     width: 100%;
     height: 100vh;
-    background: radial-gradient(circle at top right, rgba(0, 255, 157, 0.08), transparent 40%),
-        rgba(10, 10, 10, 0.98);
+    background: var(--color-bg);
     display: flex;
     flex-direction: column;
     padding: 7rem 2rem 2rem;
@@ -189,14 +191,14 @@
 .mobileNavLink {
     font-size: 1.2rem;
     font-weight: 700;
-    color: white;
+    color: var(--color-text-main);
     text-decoration: none;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
     border-radius: 1.25rem;
     padding: 1.25rem 1.5rem;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -248,7 +250,7 @@
 .divider {
     border: 0;
     height: 1px;
-    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.1), transparent);
+    background: var(--color-border);
     margin: 1.5rem 0;
 }
 
@@ -263,9 +265,9 @@
     .menuBtn {
         display: block;
         padding: 0.5rem;
-        background: rgba(255, 255, 255, 0.05);
+        background: var(--color-bg-alt);
         border-radius: 0.75rem;
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid var(--color-border);
     }
 
     .navbar {

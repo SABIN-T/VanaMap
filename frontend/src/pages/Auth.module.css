@@ -10,12 +10,12 @@
 .authCard {
     width: 100%;
     max-width: 480px;
-    background: rgba(15, 23, 42, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: var(--glass-bg);
+    border: var(--glass-border);
     backdrop-filter: blur(20px);
     border-radius: 2rem;
     padding: 3rem;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    box-shadow: var(--glass-shadow);
     animation: slideUp 0.5s ease-out;
 }
 
@@ -27,7 +27,7 @@
 .authTitle {
     font-size: 2rem;
     font-weight: 900;
-    color: white;
+    color: var(--color-text-main);
     margin-bottom: 0.5rem;
 }
 
@@ -41,9 +41,10 @@
     grid-template-columns: 1fr 1fr;
     gap: 1rem;
     margin-bottom: 2.5rem;
-    background: rgba(0, 0, 0, 0.2);
+    background: var(--color-bg-alt);
     padding: 0.5rem;
     border-radius: 1rem;
+    border: 1px solid var(--color-border);
 }
 
 .roleBtn {
@@ -92,9 +93,9 @@
     width: 100%;
     padding: 1rem 1rem 1rem 1rem;
     border-radius: 1rem;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    color: white;
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-main);
     font-size: 1rem;
     outline: none;
     transition: 0.3s;
@@ -102,17 +103,17 @@
 
 .input:focus {
     border-color: var(--color-primary);
-    background: rgba(255, 255, 255, 0.05);
-    box-shadow: 0 0 0 4px rgba(0, 255, 157, 0.1);
+    background: var(--color-bg-card);
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
 }
 
 .select {
     width: 100%;
     padding: 1rem;
     border-radius: 1rem;
-    background: rgba(15, 23, 42, 0.8);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    color: white;
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-main);
     font-size: 1rem;
     outline: none;
     cursor: pointer;
@@ -121,8 +122,8 @@
 .phonePrefix {
     padding: 1rem;
     border-radius: 1rem;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
     color: var(--color-primary);
     font-weight: 800;
     min-width: 70px;
@@ -227,19 +228,20 @@
 .adminDivider::after {
     content: '';
     flex: 1;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid var(--color-border);
 }
 
 .adminDivider span {
     padding: 0 1rem;
+    color: var(--color-text-dim);
 }
 
 .adminLoginBtn {
     width: 100%;
     padding: 1.1rem;
     border-radius: 1.25rem;
-    background: rgba(250, 204, 21, 0.05);
-    border: 1px solid rgba(250, 204, 21, 0.1);
+    background: var(--color-bg-alt);
+    border: 1px solid rgba(250, 204, 21, 0.2);
     color: #facc15;
     font-size: 0.9rem;
     font-weight: 800;

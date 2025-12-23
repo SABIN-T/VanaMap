@@ -1,20 +1,22 @@
 .container {
     display: flex;
     min-height: 100vh;
-    background: #020617;
-    color: #f8fafc;
+    background: var(--color-bg);
+    color: var(--color-text-main);
     font-family: 'Outfit', sans-serif;
+    transition: background 0.3s ease;
 }
 
 /* --- SIDEBAR --- */
 .sidebar {
     width: 280px;
-    background: rgba(15, 23, 42, 0.4);
-    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--glass-bg);
+    border-right: var(--glass-border);
     display: flex;
     flex-direction: column;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     z-index: 1000;
 }
 
@@ -27,7 +29,7 @@
 
 .sidebarHeader {
     padding: 2rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: var(--glass-border);
 }
 
 .brand {
@@ -51,7 +53,7 @@
     font-size: 1.25rem;
     font-weight: 800;
     letter-spacing: 0.1em;
-    background: linear-gradient(to right, #fff, #94a3b8);
+    background: linear-gradient(to right, var(--color-text-main), var(--color-text-muted));
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -71,7 +73,7 @@
     gap: 1rem;
     padding: 0.875rem 1.25rem;
     border-radius: 12px;
-    color: #94a3b8;
+    color: var(--color-text-muted);
     text-decoration: none;
     transition: all 0.2s;
     position: relative;
@@ -79,8 +81,8 @@
 }
 
 .navItem:hover {
-    background: rgba(255, 255, 255, 0.03);
-    color: #fff;
+    background: var(--color-bg-alt);
+    color: var(--color-text-main);
 }
 
 .navSub {
@@ -115,7 +117,7 @@
 
 .sidebarFooter {
     padding: 1.5rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-top: var(--glass-border);
 }
 
 .logoutBtn {
@@ -149,9 +151,10 @@
 
 .topBar {
     height: 72px;
-    background: rgba(15, 23, 42, 0.2);
+    background: var(--glass-bg);
     backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: var(--glass-border);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -165,9 +168,9 @@
 }
 
 .toggleBtn {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    color: #94a3b8;
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-muted);
     width: 40px;
     height: 40px;
     border-radius: 10px;
@@ -179,8 +182,8 @@
 }
 
 .toggleBtn:hover {
-    background: rgba(255, 255, 255, 0.08);
-    color: #fff;
+    background: var(--color-bg-card);
+    color: var(--color-text-main);
 }
 
 .breadcrumbs {
@@ -190,7 +193,7 @@
 }
 
 .rootCrumb {
-    color: #64748b;
+    color: var(--color-text-dim);
     font-weight: 600;
     text-transform: uppercase;
     font-size: 0.75rem;
@@ -204,7 +207,7 @@
 .activeCrumb {
     font-size: 0.85rem;
     font-weight: 500;
-    color: #94a3b8;
+    color: var(--color-text-muted);
 }
 
 .topBarRight {
@@ -218,8 +221,8 @@
     align-items: center;
     gap: 0.75rem;
     padding: 0.5rem;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
     border-radius: 30px;
 }
 
@@ -243,7 +246,7 @@
 .adminName {
     font-size: 0.8rem;
     font-weight: 600;
-    color: #f1f5f9;
+    color: var(--color-text-main);
 }
 
 .adminRole {
@@ -267,7 +270,7 @@
     font-size: 2rem;
     font-weight: 800;
     letter-spacing: -0.02em;
-    background: linear-gradient(to right, #fff, #94a3b8);
+    background: linear-gradient(to right, var(--color-text-main), var(--color-text-muted));
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;

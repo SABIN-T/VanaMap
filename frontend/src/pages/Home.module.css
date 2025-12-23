@@ -2,10 +2,10 @@
     max-width: 100vw;
     margin: 0 auto;
     overflow-x: hidden;
-    background: #020617;
-    /* Deepest blue/black */
-    color: #f8fafc;
+    background: var(--color-bg);
+    color: var(--color-text-main);
     font-family: 'Outfit', 'Inter', sans-serif;
+    transition: background 0.4s ease, color 0.4s ease;
 }
 
 /* --- HERO SECTION --- */
@@ -19,9 +19,9 @@
     position: relative;
     overflow: hidden;
     background:
-        radial-gradient(circle at 0% 0%, rgba(16, 185, 129, 0.1) 0%, transparent 40%),
-        radial-gradient(circle at 100% 100%, rgba(56, 189, 248, 0.1) 0%, transparent 40%),
-        #020617;
+        radial-gradient(circle at 0% 0%, rgba(16, 185, 129, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 100% 100%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
+        var(--color-bg);
 }
 
 /* Hero animated glow backdrop */
@@ -71,9 +71,9 @@
     font-weight: 900;
     line-height: 1.1;
     margin-bottom: 1.5rem;
-    color: white;
+    color: var(--color-text-main);
     letter-spacing: -2px;
-    background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
+    background: linear-gradient(135deg, var(--color-text-main) 0%, var(--color-text-muted) 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -132,13 +132,13 @@
     content: '';
     flex: 1;
     height: 1px;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--color-border);
 }
 
 .searchBox {
     width: 100%;
-    background: rgba(30, 41, 59, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: var(--glass-bg);
+    border: var(--glass-border);
     border-radius: 1.25rem;
     padding: 0.35rem 0.75rem;
     display: flex;
@@ -153,7 +153,7 @@
 .searchBox:focus-within {
     border-color: rgba(16, 185, 129, 0.4);
     box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.05);
-    background: rgba(30, 41, 59, 0.7);
+    background: var(--color-bg-card);
 }
 
 .searchIcon {
@@ -164,7 +164,7 @@
     flex: 1;
     background: transparent;
     border: none;
-    color: white;
+    color: var(--color-text-main);
     font-size: 1rem;
     padding: 0.6rem 0;
     outline: none;
@@ -177,7 +177,7 @@
 /* --- WEATHER DASHBOARD --- */
 .intelligenceSection {
     padding: 4rem 2rem;
-    background: #020617;
+    background: var(--color-bg);
 }
 
 .sectionHeader {
@@ -202,7 +202,7 @@
 .sectionTitle {
     font-size: 1.5rem;
     font-weight: 900;
-    color: white;
+    color: var(--color-text-main);
     letter-spacing: -0.5px;
 }
 
@@ -222,8 +222,8 @@
 }
 
 .weatherCard {
-    background: rgba(30, 41, 59, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--glass-bg);
+    border: var(--glass-border);
     border-radius: 2rem;
     padding: 1.5rem 1.25rem;
     text-align: center;
@@ -236,12 +236,13 @@
     min-height: 160px;
     position: relative;
     width: 100%;
+    box-shadow: var(--card-shadow);
 }
 
 .weatherCard:hover {
     transform: translateY(-8px);
-    background: rgba(30, 41, 59, 0.4);
-    border-color: rgba(255, 255, 255, 0.1);
+    background: var(--color-bg-card);
+    border-color: var(--color-primary);
 }
 
 .statIcon {
@@ -264,7 +265,7 @@
 .statValue {
     font-size: 1.25rem;
     font-weight: 900;
-    color: white;
+    color: var(--color-text-main);
 }
 
 .statInfo {
@@ -294,7 +295,7 @@
 /* --- DISCOVERY HUB --- */
 .discoverySection {
     padding: 4rem 2rem;
-    background: linear-gradient(to bottom, #020617, #0f172a);
+    background: linear-gradient(to bottom, var(--color-bg), var(--color-bg-alt));
 }
 
 .filterWrapper {
@@ -310,8 +311,8 @@
 }
 
 .categoryCard {
-    background: rgba(15, 23, 42, 0.5);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--glass-bg);
+    border: var(--glass-border);
     border-radius: 2rem;
     padding: 1.5rem;
     cursor: pointer;
@@ -319,12 +320,13 @@
     display: flex;
     align-items: center;
     gap: 1.5rem;
+    box-shadow: var(--card-shadow);
 }
 
 .categoryCard:hover {
     transform: scale(1.02);
-    border-color: rgba(255, 255, 255, 0.1);
-    background: rgba(15, 23, 42, 0.7);
+    border-color: var(--color-primary);
+    background: var(--color-bg-card);
 }
 
 .categoryCardActive {
@@ -340,7 +342,7 @@
 .categoryName {
     font-size: 1.1rem;
     font-weight: 800;
-    color: white;
+    color: var(--color-text-main);
     margin-bottom: 0.35rem;
 }
 
@@ -373,13 +375,14 @@
 .sponsorCTA {
     margin: 8rem 2rem 0;
     padding: 4rem;
-    background: rgba(15, 23, 42, 0.6);
-    border: 1px solid rgba(250, 204, 21, 0.2);
+    background: var(--glass-bg);
+    border: 1px solid rgba(250, 204, 21, 0.3);
     border-radius: 3rem;
     backdrop-filter: blur(20px);
     text-align: center;
     position: relative;
     overflow: hidden;
+    box-shadow: var(--glass-shadow);
 }
 
 .sponsorContent {
@@ -404,7 +407,7 @@
 .sponsorText h3 {
     font-size: 2rem;
     font-weight: 900;
-    color: white;
+    color: var(--color-text-main);
     margin-bottom: 1rem;
 }
 
@@ -433,8 +436,9 @@
 }
 
 .suggestionBtn:hover {
-    background: rgba(255, 255, 255, 0.1) !important;
-    color: white !important;
+    background: var(--color-primary) !important;
+    color: black !important;
+    border-color: transparent !important;
 }
 
 /* --- RESPONSIVE ADJUSTMENTS --- */
@@ -555,18 +559,19 @@
     top: 105%;
     left: 0;
     right: 0;
-    background: #1e293b;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--color-bg-card);
+    border: var(--glass-border);
     border-radius: 1rem;
     overflow: hidden;
     z-index: 100;
+    box-shadow: var(--glass-shadow);
 }
 
 .suggestionItem {
     padding: 1rem;
     cursor: pointer;
     transition: 0.2s;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid var(--color-border);
 }
 
 .suggestionItem:hover {
@@ -576,7 +581,7 @@
 /* --- Onboarding Hub --- */
 .onboardingSection {
     padding: 4rem 2rem;
-    background: linear-gradient(to bottom, #020617, #0f172a);
+    background: linear-gradient(to bottom, var(--color-bg), var(--color-bg-alt));
 }
 
 .onboardingGrid {
@@ -588,8 +593,8 @@
 }
 
 .onboardingCard {
-    background: rgba(30, 41, 59, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--glass-bg);
+    border: var(--glass-border);
     border-radius: 1.5rem;
     padding: 1.25rem;
     backdrop-filter: blur(20px);
@@ -600,13 +605,14 @@
     text-align: left;
     position: relative;
     overflow: hidden;
+    box-shadow: var(--card-shadow);
 }
 
 .onboardingCard:hover {
     transform: translateY(-8px);
-    background: rgba(30, 41, 59, 0.5);
-    border-color: rgba(255, 255, 255, 0.1);
-    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
+    background: var(--color-bg-card);
+    border-color: var(--color-accent);
+    box-shadow: var(--glass-shadow);
 }
 
 .onboardingIcon {
@@ -627,7 +633,7 @@
 .onboardingCard h3 {
     font-size: 1.1rem;
     font-weight: 800;
-    color: #fff;
+    color: var(--color-text-main);
     margin-bottom: 0.5rem;
 }
 
@@ -645,7 +651,7 @@
     text-transform: uppercase;
     letter-spacing: 2px;
     padding-top: 1.5rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-top: 1px solid var(--color-border);
     width: 100%;
 }
 
