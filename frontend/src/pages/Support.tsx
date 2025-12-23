@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ArrowLeft, Send, Sparkles, MessageCircle, AlertTriangle, CheckCircle, Store, HeartHandshake } from 'lucide-react';
+import { ArrowLeft, Send, Sparkles, AlertTriangle, Store, HeartHandshake } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/common/Button';
 import { useAuth } from '../context/AuthContext';

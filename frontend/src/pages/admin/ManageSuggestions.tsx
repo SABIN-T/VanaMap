@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import { AdminLayout } from './AdminLayout';
-import { Search, MapPin, Check, X, Clock, User, Filter, MessageSquare, Sparkles } from 'lucide-react';
+import { Clock, User, Sparkles } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { useAuth } from '../../context/AuthContext';
 
 export const ManageSuggestions = () => {
-    const { token } = useAuth();
+    const { user } = useAuth();
+    const token = (user as any)?.token; // Temporary cast to access token
     const [suggestions, setSuggestions] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
 

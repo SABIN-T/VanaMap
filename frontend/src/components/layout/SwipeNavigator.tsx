@@ -10,9 +10,9 @@ export const SwipeNavigator = () => {
     const touchEndX = useRef<number | null>(null);
     const touchEndY = useRef<number | null>(null);
 
-    // Navigation Order
-    const tabs = ['/', '/nearby', '/doctor-ai', '/guide', '/cart'];
-    const minSwipeDistance = 75; // px
+    // Navigation Order (Matches MobileTabBar)
+    const tabs = ['/', '/nearby', '/shops', '/contact', '/cart'];
+    const minSwipeDistance = 70; // px
 
     useEffect(() => {
         const handleTouchStart = (e: TouchEvent) => {
