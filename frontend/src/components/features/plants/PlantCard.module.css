@@ -123,8 +123,8 @@
 
 @media (min-width: 1024px) {
     .content {
-        padding: 2rem;
-        gap: 1.25rem;
+        padding: 1.5rem;
+        gap: 1rem;
     }
 }
 
