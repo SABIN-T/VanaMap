@@ -35,16 +35,16 @@
     font-weight: 900;
     line-height: 1;
     margin-bottom: 1.5rem;
-    color: white;
+    color: var(--color-text-main);
     letter-spacing: -2px;
-    background: linear-gradient(180deg, #fff 0%, #94a3b8 100%);
+    background: linear-gradient(180deg, var(--color-text-main) 0%, var(--color-text-dim) 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
 .subtitleMain {
-    color: #94a3b8;
+    color: var(--color-text-muted);
     font-size: 1.1rem;
     max-width: 500px;
     margin-bottom: 3rem;
@@ -69,9 +69,9 @@
     width: 100%;
     padding: 1.25rem 1.25rem 1.25rem 3.5rem;
     border-radius: 1.5rem;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    background: rgba(15, 23, 42, 0.6);
-    color: white;
+    border: var(--glass-border);
+    background: var(--glass-bg);
+    color: var(--color-text-main);
     font-size: 1.05rem;
     outline: none;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -79,9 +79,9 @@
 }
 
 .searchInput:focus {
-    border-color: #10b981;
+    border-color: var(--color-primary);
     box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
-    background: rgba(15, 23, 42, 0.8);
+    background: var(--color-bg-card);
     transform: translateY(-2px);
 }
 
@@ -95,8 +95,8 @@
 
 .filterCard {
     flex: 1;
-    background: rgba(30, 41, 59, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--glass-bg);
+    border: var(--glass-border);
     border-radius: 1.5rem;
     padding: 1rem;
     display: flex;
@@ -109,9 +109,9 @@
 }
 
 .filterCard:hover {
-    background: rgba(30, 41, 59, 0.6);
+    background: var(--color-bg-card);
     transform: translateY(-4px);
-    border-color: rgba(255, 255, 255, 0.1);
+    border-color: var(--color-primary);
 }
 
 .filterCard.active {
@@ -144,7 +144,7 @@
 
 .filterName {
     font-weight: 800;
-    color: white;
+    color: var(--color-text-main);
     font-size: 1rem;
 }
 
@@ -170,10 +170,10 @@
 }
 
 .card {
-    background: rgba(30, 41, 59, 0.4);
+    background: var(--glass-bg);
     border-radius: 2rem;
     overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: var(--glass-border);
     display: flex;
     flex-direction: column;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -183,9 +183,9 @@
 
 .card:hover {
     transform: translateY(-12px) scale(1.02);
-    background: rgba(30, 41, 59, 0.6);
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-    border-color: rgba(16, 185, 129, 0.2);
+    background: var(--color-bg-card);
+    box-shadow: var(--glass-shadow);
+    border-color: var(--color-primary);
 }
 
 .imageContainer {
@@ -232,7 +232,7 @@
     font-size: 1.35rem;
     font-weight: 800;
     margin-bottom: 0.35rem;
-    color: #fff;
+    color: var(--color-text-main);
     letter-spacing: -0.02em;
 }
 
@@ -262,7 +262,7 @@
 .price {
     font-size: 1.75rem;
     font-weight: 900;
-    color: #fff;
+    color: var(--color-primary);
 }
 
 .btn {

@@ -81,7 +81,7 @@
 
 .heroSubtitle {
     font-size: 1rem;
-    color: #94a3b8;
+    color: var(--color-text-muted);
     line-height: 1.6;
     margin-bottom: 2.5rem;
     max-width: 580px;
@@ -121,7 +121,7 @@
     align-items: center;
     gap: 1.5rem;
     width: 100%;
-    color: #475569;
+    color: var(--color-text-dim);
     font-size: 0.7rem;
     font-weight: 800;
     letter-spacing: 2.5px;
@@ -157,7 +157,7 @@
 }
 
 .searchIcon {
-    color: #64748b;
+    color: var(--color-text-dim);
 }
 
 .searchInput {
@@ -171,7 +171,7 @@
 }
 
 .searchInput::placeholder {
-    color: #475569;
+    color: var(--color-text-dim);
 }
 
 /* --- WEATHER DASHBOARD --- */
@@ -207,7 +207,7 @@
 }
 
 .sectionSubtitle {
-    color: #64748b;
+    color: var(--color-text-muted);
     font-size: 0.85rem;
     max-width: 600px;
 }
@@ -255,7 +255,7 @@
 }
 
 .statLabel {
-    color: #64748b;
+    color: var(--color-text-dim);
     font-size: 0.7rem;
     font-weight: 800;
     text-transform: uppercase;
@@ -300,7 +300,63 @@
 
 .filterWrapper {
     max-width: 1200px;
-    margin: 4rem auto;
+    margin: 2rem auto;
+}
+
+.filterDiscoverySection {
+    margin-bottom: 3rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    width: 100%;
+}
+
+.searchBarWrapper {
+    width: 100%;
+    max-width: 700px;
+    position: relative;
+    background: var(--glass-bg);
+    border: var(--glass-border);
+    border-radius: 1.5rem;
+    padding: 0.5rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: var(--card-shadow);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(12px);
+}
+
+.searchBarWrapper:focus-within {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 40px -10px rgba(16, 185, 129, 0.2);
+    transform: translateY(-2px);
+    background: var(--color-bg-card);
+}
+
+.searchSpeciesInput {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--color-text-main);
+    font-size: 1.1rem;
+    font-weight: 500;
+    padding: 0.75rem 0;
+    outline: none;
+}
+
+.searchSpeciesInput::placeholder {
+    color: var(--color-text-dim);
+    opacity: 0.6;
+}
+
+.filterQuestion {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-text-main);
+    margin-bottom: 1.5rem;
+    text-align: center;
 }
 
 .categorySelectionList {
@@ -348,7 +404,7 @@
 
 .categoryDesc {
     font-size: 0.85rem;
-    color: #64748b;
+    color: var(--color-text-muted);
     line-height: 1.4;
 }
 
@@ -427,9 +483,9 @@
 }
 
 .suggestionBtn {
-    background: rgba(255, 255, 255, 0.05) !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
-    color: #94a3b8 !important;
+    background: var(--color-bg-alt) !important;
+    border: 1px solid var(--color-border) !important;
+    color: var(--color-text-muted) !important;
     border-radius: 0.75rem !important;
     padding: 0.75rem 1.5rem !important;
     font-size: 0.85rem !important;
@@ -638,7 +694,7 @@
 }
 
 .onboardingCard p {
-    color: #64748b;
+    color: var(--color-text-muted);
     font-size: 0.85rem;
     line-height: 1.4;
     margin-bottom: 1.25rem;
@@ -647,7 +703,7 @@
 .onboardingMeta {
     font-size: 0.7rem;
     font-weight: 800;
-    color: #64748b;
+    color: var(--color-text-dim);
     text-transform: uppercase;
     letter-spacing: 2px;
     padding-top: 1.5rem;

@@ -34,8 +34,8 @@
 }
 
 [data-theme='light'] {
-  --color-bg: #f8fafc;
-  --color-bg-alt: #f1f5f9;
+  --color-bg: #ffffff;
+  --color-bg-alt: #f8fafc;
   --color-bg-card: #ffffff;
   --color-bg-card-hover: #f1f5f9;
   --color-text-main: #0f172a;

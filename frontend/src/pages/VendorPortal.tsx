@@ -177,9 +177,9 @@ export const VendorPortal = () => {
         width: '100%',
         padding: '0.85rem',
         borderRadius: '0.75rem',
-        border: '1px solid rgba(255,255,255,0.1)',
-        background: 'rgba(255,255,255,0.03)',
-        color: 'white',
+        border: '1px solid var(--color-border)',
+        background: 'var(--color-bg-alt)',
+        color: 'var(--color-text-main)',
         outline: 'none',
         transition: 'border-color 0.3s ease'
     };
@@ -227,15 +227,15 @@ export const VendorPortal = () => {
                     </div>
                     <div style={{ flex: 1 }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
-                            <BadgeCheck size={24} color="#facc15" fill="#facc15" className="text-black" />
+                            <BadgeCheck size={24} color="#facc15" fill="#facc15" />
                             <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#facc15', margin: 0 }}>
                                 Become a Verified Partner
                             </h2>
                         </div>
-                        <p style={{ margin: 0, color: 'rgba(255,255,255,0.9)', lineHeight: '1.6', fontSize: '1rem' }}>
+                        <p style={{ margin: 0, color: 'var(--color-text-main)', opacity: 0.9, lineHeight: '1.6', fontSize: '1rem' }}>
                             <strong>Get Verified Status properly!</strong> Partners receive the "Verified Badge" on VanaMap, ranking higher in search results and gaining customer trust.
                             <br />
-                            <span style={{ fontSize: '0.9rem', color: 'rgba(255,255,255,0.6)' }}>Your shop will be marked as "Verified Partner" across the platform.</span>
+                            <span style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>Your shop will be marked as "Verified Partner" across the platform.</span>
                         </p>
                     </div>
                     <Button
@@ -271,7 +271,7 @@ export const VendorPortal = () => {
                     </div>
 
                     <div style={{ marginBottom: '1.5rem' }}>
-                        <label style={{ display: 'block', marginBottom: '0.6rem', fontSize: '0.9rem', fontWeight: 'bold', color: 'rgba(255,255,255,0.7)' }}>Shop Name</label>
+                        <label style={{ display: 'block', marginBottom: '0.6rem', fontSize: '0.9rem', fontWeight: 'bold', color: 'var(--color-text-muted)' }}>Shop Name</label>
                         <input
                             type="text"
                             required
@@ -285,7 +285,7 @@ export const VendorPortal = () => {
 
                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
                         <div>
-                            <label style={{ display: 'block', marginBottom: '0.6rem', fontSize: '0.9rem', fontWeight: 'bold', color: 'rgba(255,255,255,0.7)' }}>
+                            <label style={{ display: 'block', marginBottom: '0.6rem', fontSize: '0.9rem', fontWeight: 'bold', color: 'var(--color-text-muted)' }}>
                                 <Phone size={14} /> Phone
                             </label>
                             <input
@@ -297,7 +297,7 @@ export const VendorPortal = () => {
                             />
                         </div>
                         <div>
-                            <label style={{ display: 'block', marginBottom: '0.6rem', fontSize: '0.9rem', fontWeight: 'bold', color: 'rgba(255,255,255,0.7)' }}>
+                            <label style={{ display: 'block', marginBottom: '0.6rem', fontSize: '0.9rem', fontWeight: 'bold', color: 'var(--color-text-muted)' }}>
                                 <MessageCircle size={14} /> WhatsApp
                             </label>
                             <input
@@ -311,7 +311,7 @@ export const VendorPortal = () => {
                     </div>
 
                     <div style={{ marginBottom: '2rem' }}>
-                        <label style={{ display: 'block', marginBottom: '0.6rem', fontSize: '0.9rem', fontWeight: 'bold', color: 'rgba(255,255,255,0.7)' }}>Physical Address</label>
+                        <label style={{ display: 'block', marginBottom: '0.6rem', fontSize: '0.9rem', fontWeight: 'bold', color: 'var(--color-text-muted)' }}>Physical Address</label>
                         <textarea
                             rows={3}
                             required
@@ -323,7 +323,7 @@ export const VendorPortal = () => {
                     </div>
 
                     <div style={{
-                        background: 'rgba(255,165,0,0.05)',
+                        background: 'var(--color-bg-alt)',
                         padding: '1rem',
                         borderRadius: '1rem',
                         display: 'flex',
@@ -332,13 +332,13 @@ export const VendorPortal = () => {
                         gap: '0.75rem',
                         marginBottom: '2rem',
                         fontSize: '0.85rem',
-                        border: '1px solid rgba(255,165,0,0.1)'
+                        border: '1px solid var(--color-border)'
                     }}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                             <Navigation size={18} color="var(--color-primary)" />
                             <div>
-                                <div style={{ fontWeight: 'bold', color: 'white' }}>Coordinates</div>
-                                <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>{markerPos.lat.toFixed(5)}, {markerPos.lng.toFixed(5)}</div>
+                                <div style={{ fontWeight: 'bold', color: 'var(--color-text-main)' }}>Coordinates</div>
+                                <div style={{ fontSize: '0.75rem', color: 'var(--color-text-dim)' }}>{markerPos.lat.toFixed(5)}, {markerPos.lng.toFixed(5)}</div>
                             </div>
                         </div>
                         <button
@@ -407,13 +407,13 @@ export const VendorPortal = () => {
 
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxHeight: '300px', overflowY: 'auto' }}>
                                 {notifications.length === 0 ? (
-                                    <div style={{ color: 'var(--color-text-muted)', textAlign: 'center', padding: '2rem', border: '1px dashed rgba(255,255,255,0.1)', borderRadius: '1rem' }}>
+                                    <div style={{ color: 'var(--color-text-muted)', textAlign: 'center', padding: '2rem', border: '1px dashed var(--color-border)', borderRadius: '1rem' }}>
                                         No recent activity. Interaction logs will appear here.
                                     </div>
                                 ) : (
                                     notifications.map((note, i) => (
                                         <div key={i} style={{
-                                            background: 'rgba(255,255,255,0.03)',
+                                            background: 'var(--color-bg-alt)',
                                             padding: '1rem',
                                             borderRadius: '0.75rem',
                                             borderLeft: '3px solid var(--color-primary)',
@@ -430,7 +430,7 @@ export const VendorPortal = () => {
                                                 </div>
                                             </div>
                                             {note.details?.userEmail && (
-                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)' }}>
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', fontSize: '0.75rem', color: 'var(--color-text-dim)' }}>
                                                     <User size={12} /> {note.details.userEmail}
                                                 </div>
                                             )}

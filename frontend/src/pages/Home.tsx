@@ -565,29 +565,29 @@ export const Home = () => {
                 <footer style={{
                     marginTop: '6rem',
                     padding: '4rem 2rem 2rem',
-                    borderTop: '1px solid rgba(255,255,255,0.05)',
-                    background: 'linear-gradient(to bottom, transparent, rgba(0,0,0,0.4))',
+                    borderTop: '1px solid var(--color-border)',
+                    background: 'var(--color-bg-alt)',
                     textAlign: 'center'
                 }}>
                     <div style={{ display: 'flex', gap: '4rem', flexWrap: 'wrap', justifyContent: 'center', marginBottom: '4rem' }}>
                         <div>
-                            <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '1rem' }}>Get it on Mobile</p>
-                            <div style={{ padding: '0.75rem', background: 'white', borderRadius: '1rem', display: 'inline-block' }}>
+                            <p style={{ color: 'var(--color-text-dim)', fontSize: '0.9rem', marginBottom: '1rem' }}>Get it on Mobile</p>
+                            <div style={{ padding: '0.75rem', background: 'white', border: '1px solid var(--color-border)', borderRadius: '1rem', display: 'inline-block' }}>
                                 <QRCodeSVG value="https://www.vanamap.online" size={120} />
                             </div>
                         </div>
 
                         <div style={{ textAlign: 'left' }}>
-                            <h4 style={{ color: 'white', marginBottom: '1.5rem' }}>Ecosystem</h4>
+                            <h4 style={{ color: 'var(--color-text-main)', marginBottom: '1.5rem' }}>Ecosystem</h4>
                             <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                                <li><a href="/support" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '0.9rem' }}>Suggestions</a></li>
-                                <li><a href="/sponsor" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '0.9rem' }}>Sponsorship</a></li>
-                                <li><a href="/vendor" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '0.9rem' }}>For Vendors</a></li>
-                                <li><a href="/about" style={{ color: '#94a3b8', textDecoration: 'none', fontSize: '0.9rem' }}>About Us</a></li>
+                                <li><a href="/support" style={{ color: 'var(--color-text-muted)', textDecoration: 'none', fontSize: '0.9rem' }}>Suggestions</a></li>
+                                <li><a href="/sponsor" style={{ color: 'var(--color-text-muted)', textDecoration: 'none', fontSize: '0.9rem' }}>Sponsorship</a></li>
+                                <li><a href="/vendor" style={{ color: 'var(--color-text-muted)', textDecoration: 'none', fontSize: '0.9rem' }}>For Vendors</a></li>
+                                <li><a href="/about" style={{ color: 'var(--color-text-muted)', textDecoration: 'none', fontSize: '0.9rem' }}>About Us</a></li>
                             </ul>
                         </div>
                     </div>
-                    <p style={{ color: '#475569', fontSize: '0.8rem' }}>© 2025 VanaMap - Earth's Digital Botanical Archive</p>
+                    <p style={{ color: 'var(--color-text-dim)', fontSize: '0.8rem' }}>© 2025 VanaMap - Earth's Digital Botanical Archive</p>
                 </footer>
             </div>
         </div>
