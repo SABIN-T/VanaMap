@@ -63,7 +63,7 @@
     left: 1.25rem;
     top: 50%;
     transform: translateY(-50%);
-    color: #64748b;
+    color: var(--color-text-dim);
     pointer-events: none;
     transition: color 0.3s;
 }
@@ -193,13 +193,13 @@
 }
 
 .roleUser {
-    background: rgba(99, 102, 241, 0.15);
-    color: #a5b4fc;
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--color-primary);
 }
 
 .roleAdmin {
-    background: rgba(245, 158, 11, 0.15);
-    color: #fcd34d;
+    background: rgba(245, 158, 11, 0.1);
+    color: #d97706;
 }
 
 .actionBtn {
@@ -433,7 +433,7 @@
     display: flex;
     align-items: center;
     gap: 1rem;
-    color: #fca5a5;
+    color: #b91c1c;
     font-size: 0.9rem;
     font-weight: 500;
 }

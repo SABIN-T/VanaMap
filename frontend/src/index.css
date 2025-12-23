@@ -38,10 +38,10 @@
   --color-bg-alt: #f8fafc;
   --color-bg-card: #ffffff;
   --color-bg-card-hover: #f1f5f9;
-  --color-text-main: #0f172a;
-  --color-text-muted: #475569;
-  --color-text-dim: #94a3b8;
-  --color-border: rgba(0, 0, 0, 0.06);
+  --color-text-main: #020617;
+  --color-text-muted: #334155;
+  --color-text-dim: #64748b;
+  --color-border: rgba(0, 0, 0, 0.08);
   --glass-bg: rgba(255, 255, 255, 0.7);
   --glass-border: 1px solid rgba(0, 0, 0, 0.05);
   --glass-shadow: 0 20px 50px -12px rgba(15, 23, 42, 0.1);
