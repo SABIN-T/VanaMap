@@ -1,28 +1,33 @@
 import { useState, useEffect } from 'react';
-import type { Plant } from '../types';
-import { fetchPlants } from '../services/api';
-import { Search, ShoppingBag } from 'lucide-react';
+import type { Plant, Vendor } from '../types';
+import { fetchPlants, fetchVendors } from '../services/api';
+import { Search, ShoppingBag, MapPin } from 'lucide-react';
 import { PlantVendorsModal } from '../components/features/market/PlantVendorsModal';
 import styles from './Shops.module.css';
 
 export const Shops = () => {
     const [plants, setPlants] = useState<Plant[]>([]);
+    const [vendors, setVendors] = useState<Vendor[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [activeCategory, setActiveCategory] = useState<'all' | 'indoor' | 'outdoor'>('all');
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const loadPlants = async () => {
+        const loadData = async () => {
             try {
-                const data = await fetchPlants();
-                setPlants(data);
+                const [plantsData, vendorsData] = await Promise.all([
+                    fetchPlants(),
+                    fetchVendors()
+                ]);
+                setPlants(plantsData);
+                setVendors(vendorsData);
             } catch (error) {
                 console.error("Failed to load shop items", error);
             } finally {
                 setLoading(false);
             }
         };
-        loadPlants();
+        loadData();
     }, []);
 
     const filteredPlants = plants.filter(p => {
@@ -32,10 +37,35 @@ export const Shops = () => {
         return matchesCategory && matchesSearch;
     });
 
-    const getPrice = (plant: Plant) => {
-        if (plant.price) return plant.price;
-        const hash = plant.name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-        return (15 + (hash % 65)) * 50; // Convert to approx INR
+    const getPriceInfo = (plant: Plant) => {
+        // Collect all potential prices
+        const potentialPrices: number[] = [];
+
+        vendors.forEach(v => {
+            const invItem = v.inventory?.find(i => i.plantId === plant.id && i.inStock);
+            if (invItem) {
+                potentialPrices.push(invItem.price);
+            }
+        });
+
+        if (potentialPrices.length > 0) {
+            const minPrice = Math.min(...potentialPrices);
+            return {
+                display: `From Rs. ${minPrice}`,
+                value: minPrice,
+                hasVendors: true,
+                count: potentialPrices.length
+            };
+        }
+
+        // Fallback to base price
+        const base = plant.price || ((plant.name.charCodeAt(0) % 5 + 1) * 150);
+        return {
+            display: `Approx Rs. ${base}`,
+            value: base,
+            hasVendors: false,
+            count: 0
+        };
     };
 
     const [selectedPlant, setSelectedPlant] = useState<Plant | null>(null);
@@ -124,10 +154,22 @@ export const Shops = () => {
                                 {/* Price and Action */}
                                 <div className={styles.footer}>
                                     <div className={styles.price}>
-                                        Rs. {getPrice(plant)}
+                                        {(() => {
+                                            const info = getPriceInfo(plant);
+                                            return (
+                                                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                                    <span style={{ fontSize: '1.1rem', fontWeight: 700 }}>{info.display}</span>
+                                                    {info.hasVendors && (
+                                                        <span style={{ fontSize: '0.7rem', color: '#10b981' }}>
+                                                            {info.count} local seller{info.count !== 1 ? 's' : ''}
+                                                        </span>
+                                                    )}
+                                                </div>
+                                            );
+                                        })()}
                                     </div>
                                     <button className={styles.btn}>
-                                        Compare
+                                        View Options
                                     </button>
                                 </div>
                             </div>
