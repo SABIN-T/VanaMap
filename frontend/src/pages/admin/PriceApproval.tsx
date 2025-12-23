@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
-import { Check, X, Star, AlertCircle, IndianRupee } from 'lucide-react';
+import { Check, X, Star, AlertCircle } from 'lucide-react';
 import { AdminLayout } from './AdminLayout';
 import { fetchVendors, updateVendor, fetchPlants } from '../../services/api';
 import { formatCurrency } from '../../utils/currency';
@@ -109,7 +109,7 @@ export const PriceApproval = () => {
                             </div>
                         ) : (
                             <div className={styles.grid}>
-                                {pendingItems.map((entry, i) => (
+                                {pendingItems.map((entry) => (
                                     <div
                                         key={`${entry.vendor.id}-${entry.item.plantId}`}
                                         className={`${styles.card} ${styles.cardPending}`}

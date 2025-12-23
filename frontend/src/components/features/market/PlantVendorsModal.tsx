@@ -42,6 +42,7 @@ export const PlantVendorsModal = ({ plant, onClose }: PlantVendorsModalProps) =>
                 setGpsError(null);
             },
             (error) => {
+                console.warn(error);
                 setGpsError("Location access denied. Showing all online vendors.");
             }
         );

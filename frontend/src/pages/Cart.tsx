@@ -13,7 +13,7 @@ export const Cart = () => {
     const { user } = useAuth();
     const navigate = useNavigate();
     const [vendors, setVendors] = useState<Record<string, Vendor>>({});
-    const [loading, setLoading] = useState(true);
+
 
     useEffect(() => {
         const loadVendors = async () => {
@@ -21,7 +21,6 @@ export const Cart = () => {
             const map: Record<string, Vendor> = {};
             list.forEach(v => map[v.id] = v);
             setVendors(map);
-            setLoading(false);
         };
         loadVendors();
     }, []);
