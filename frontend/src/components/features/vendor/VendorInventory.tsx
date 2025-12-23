@@ -21,6 +21,21 @@ export const VendorInventory = ({ vendor, onUpdate }: VendorInventoryProps) => {
         loadPlants();
     }, []);
 
+    // Auto-refresh: Sync local state when vendor data updates (e.g. after save)
+    useEffect(() => {
+        if (vendor.inventory && plants.length > 0) {
+            const serverState: Record<string, { price: string, inStock: boolean }> = {};
+            vendor.inventory.forEach(item => {
+                serverState[item.plantId] = {
+                    price: item.price.toString(),
+                    inStock: item.inStock
+                };
+            });
+            // Merge with existing to keep unsaved input, but overwrite saved ones
+            setEditValues(prev => ({ ...prev, ...serverState }));
+        }
+    }, [vendor, plants]);
+
     const loadPlants = async () => {
         try {
             const data = await fetchPlants();
