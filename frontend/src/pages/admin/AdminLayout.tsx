@@ -8,6 +8,8 @@ import {
 import { useAuth } from '../../context/AuthContext';
 import styles from './AdminLayout.module.css';
 
+import { fetchVendors } from '../../services/api';
+
 interface AdminLayoutProps {
     title: string;
     children: React.ReactNode;
@@ -17,13 +19,31 @@ export const AdminLayout = ({ title, children }: AdminLayoutProps) => {
     const location = useLocation();
     const { logout, user } = useAuth();
     const [isSidebarOpen, setSidebarOpen] = useState(true);
+    const [pendingCount, setPendingCount] = useState(0);
+
+    // Fetch pending count periodically or once
+    React.useEffect(() => {
+        const checkPending = async () => {
+            const vendors = await fetchVendors();
+            let count = 0;
+            vendors.forEach(v => {
+                if (v.inventory) {
+                    count += v.inventory.filter(i => i.status === 'pending').length;
+                }
+            });
+            setPendingCount(count);
+        };
+        checkPending();
+        const interval = setInterval(checkPending, 30000); // Poll every 30s
+        return () => clearInterval(interval);
+    }, []);
 
     const navItems = [
         { path: '/admin', icon: LayoutDashboard, label: 'Dashboard' },
         { path: '/admin/manage-plants', icon: Sprout, label: 'Manage Plants' },
         { path: '/admin/add-plant', icon: Activity, label: 'Add New Plant', sub: true },
         { path: '/admin/manage-vendors', icon: Store, label: 'Manage Vendors' },
-        { path: '/admin/price-approval', icon: Store, label: 'Price Approvals' },
+        { path: '/admin/price-approval', icon: Store, label: 'Price Approvals', badge: pendingCount },
         { path: '/admin/manage-users', icon: Users, label: 'User Directory' },
         { path: '/admin/suggestions', icon: MessageSquare, label: 'User Suggestions' },
         { path: '/admin/notifications', icon: Bell, label: 'Notifications' },
@@ -31,49 +51,36 @@ export const AdminLayout = ({ title, children }: AdminLayoutProps) => {
         { path: '/admin/settings', icon: Settings, label: 'Settings' },
     ];
 
-    const isActive = (path: string) => location.pathname === path;
+    // ... in nav map
+    {
+        navItems.map((item) => (
+            <Link
+                key={item.path}
+                to={item.path}
+                onClick={() => window.innerWidth < 1024 && setSidebarOpen(false)}
+                className={`${styles.navItem} ${isActive(item.path) ? styles.navActive : ''} ${item.sub ? styles.navSub : ''}`}
+            >
+                <item.icon size={20} className={styles.navIcon} />
+                <span className={styles.navLabel}>{item.label}</span>
+                {/* Notification Badge */}
+                {(item.badge && item.badge > 0) ? (
+                    <span className={styles.notifBadge}>{item.badge}</span>
+                ) : null}
+                {isActive(item.path) && <div className={styles.activeIndicator} />}
+            </Link>
+        ))
+    }
 
-    return (
-        <div className={styles.container}>
-            {/* BACKDROP FOR MOBILE */}
-            {isSidebarOpen && <div className={styles.backdrop} onClick={() => setSidebarOpen(false)} />}
+    <div className={styles.sidebarFooter}>
+        <button onClick={logout} className={styles.logoutBtn}>
+            <LogOut size={20} />
+            <span>Logout Session</span>
+        </button>
+    </div>
+            </aside >
 
-            {/* SIDEBAR */}
-            <aside className={`${styles.sidebar} ${isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed}`}>
-                <div className={styles.sidebarHeader}>
-                    <div className={styles.brand}>
-                        <div className={styles.logoBox}>
-                            <img src="/logo.png?v=2" alt="VanaMap" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
-                        </div>
-                        <span className={styles.brandName}>VANAMAP</span>
-                    </div>
-                </div>
-
-                <nav className={styles.nav}>
-                    {navItems.map((item) => (
-                        <Link
-                            key={item.path}
-                            to={item.path}
-                            onClick={() => window.innerWidth < 1024 && setSidebarOpen(false)}
-                            className={`${styles.navItem} ${isActive(item.path) ? styles.navActive : ''} ${item.sub ? styles.navSub : ''}`}
-                        >
-                            <item.icon size={20} className={styles.navIcon} />
-                            <span className={styles.navLabel}>{item.label}</span>
-                            {isActive(item.path) && <div className={styles.activeIndicator} />}
-                        </Link>
-                    ))}
-                </nav>
-
-                <div className={styles.sidebarFooter}>
-                    <button onClick={logout} className={styles.logoutBtn}>
-                        <LogOut size={20} />
-                        <span>Logout Session</span>
-                    </button>
-                </div>
-            </aside>
-
-            {/* MAIN CONTENT */}
-            <main className={styles.main}>
+    {/* MAIN CONTENT */ }
+    < main className = { styles.main } >
                 <header className={styles.topBar}>
                     <div className={styles.topBarLeft}>
                         <button onClick={() => setSidebarOpen(!isSidebarOpen)} className={styles.toggleBtn}>
@@ -107,7 +114,7 @@ export const AdminLayout = ({ title, children }: AdminLayoutProps) => {
                         {children}
                     </div>
                 </section>
-            </main>
-        </div>
+            </main >
+        </div >
     );
 };
