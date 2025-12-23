@@ -164,83 +164,116 @@
     flex-direction: column;
     gap: 2.5rem;
     background: var(--glass-bg);
-    padding: 3.5rem;
-    border-radius: 3rem;
-    border: var(--glass-border);
-    backdrop-filter: blur(25px);
-    box-shadow: var(--glass-shadow);
+    padding: 2rem;
+    border-radius: 2.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(40px);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
+.heroMainStack {
+    margin-bottom: 2rem;
+}
+
+/* HIGH END PREMIUM BUTTONS */
 .gpsBtn {
     width: 100%;
-    padding: 0.75rem 1.25rem !important;
-    border-radius: 1rem !important;
-    font-weight: 700 !important;
-    font-size: 0.9rem !important;
+    height: 56px;
+    padding: 0 1.5rem !important;
+    border-radius: 0.85rem !important;
+    font-weight: 800 !important;
+    font-size: 0.85rem !important;
     text-transform: uppercase;
-    letter-spacing: 1.5px;
+    letter-spacing: 1.2px;
     background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
-    border: none !important;
-    box-shadow: 0 0 20px rgba(16, 185, 129, 0.4) !important;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
-    animation: glowBtn 2.5s infinite alternate ease-in-out;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: white !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3) !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
-@keyframes glowBtn {
+.gpsBtn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    animation: shine 3s infinite;
+}
+
+@keyframes shine {
     0% {
-        box-shadow: 0 0 10px rgba(16, 185, 129, 0.3), 0 0 5px rgba(16, 185, 129, 0.2);
+        left: -100%;
+    }
+
+    20% {
+        left: 100%;
     }
 
     100% {
-        box-shadow: 0 0 25px rgba(16, 185, 129, 0.6), 0 0 15px rgba(16, 185, 129, 0.4);
-        transform: scale(1.02);
+        left: 100%;
     }
 }
 
 .gpsBtn:hover {
-    transform: translateY(-4px) scale(1.05);
-    box-shadow: 0 20px 40px -10px rgba(16, 185, 129, 0.5) !important;
-    animation-play-state: paused;
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px rgba(16, 185, 129, 0.4) !important;
+    filter: brightness(1.1);
 }
 
-.divider {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    width: 100%;
-    color: var(--color-text-dim);
-    font-size: 0.7rem;
-    font-weight: 800;
-    letter-spacing: 2.5px;
-}
-
-.divider::before,
-.divider::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--color-border);
+.gpsBtn:active {
+    transform: translateY(0) scale(0.98);
 }
 
 .searchBox {
     width: 100%;
-    background: var(--glass-bg);
-    border: var(--glass-border);
-    border-radius: 1.25rem;
-    padding: 0.35rem 0.75rem;
+    height: 52px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.85rem;
+    padding: 0 1.25rem;
     display: flex;
     align-items: center;
-    gap: 1rem;
-    backdrop-filter: blur(12px);
+    gap: 12px;
+    backdrop-filter: blur(10px);
     transition: all 0.3s ease;
-    position: relative;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .searchBox:focus-within {
-    border-color: rgba(16, 185, 129, 0.4);
-    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.05);
-    background: var(--color-bg-card);
+    border-color: rgba(16, 185, 129, 0.5);
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+}
+
+.ghostBtn {
+    width: 100%;
+    height: 48px;
+    background: transparent !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    color: #94a3b8 !important;
+    border-radius: 0.85rem !important;
+    font-size: 0.8rem !important;
+    font-weight: 700 !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s ease !important;
+}
+
+.ghostBtn:hover {
+    background: rgba(255, 255, 255, 0.03) !important;
+    color: #10b981 !important;
+    border-color: rgba(16, 185, 129, 0.3) !important;
 }
 
 .searchIcon {

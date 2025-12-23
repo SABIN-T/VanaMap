@@ -318,7 +318,7 @@ export const Home = () => {
                                     )}
                                 </div>
 
-                                <Button variant="ghost" size="sm" onClick={() => navigate('/nearby')} style={{ color: '#64748b', marginTop: '1rem' }}>
+                                <Button variant="ghost" size="sm" onClick={() => navigate('/nearby')} className={styles.ghostBtn}>
                                     <Sprout size={16} style={{ marginRight: '8px' }} /> Find Nearby Shop Instead
                                 </Button>
                             </div>

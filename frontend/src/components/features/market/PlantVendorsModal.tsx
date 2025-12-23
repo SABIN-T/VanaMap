@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { MapPin, Phone, Star, ShieldCheck, ShoppingCart, X, Navigation } from 'lucide-react';
+import { MapPin, Phone, Star, ShieldCheck, ShoppingCart, X, TrendingUp } from 'lucide-react';
 import type { Plant, Vendor } from '../../../types';
 import { fetchVendors } from '../../../services/api';
 import { formatCurrency } from '../../../utils/currency';
@@ -24,189 +24,144 @@ export const PlantVendorsModal = ({ plant, onClose }: PlantVendorsModalProps) =>
     }, []);
 
     const loadVendors = async () => {
-        const allVendors = await fetchVendors();
-        setVendors(allVendors.filter(v => v.verified));
-        setLoading(false);
+        try {
+            const allVendors = await fetchVendors();
+            setVendors(allVendors.filter(v => v.verified));
+        } catch (e) {
+            console.error("Failed to load vendors", e);
+        } finally {
+            setLoading(false);
+        }
     };
 
     const enableGPS = () => {
         if (!navigator.geolocation) {
-            setGpsError("Geolocation not supported by this browser.");
+            setGpsError("Geolocation not supported.");
             return;
         }
-
         setIsLocating(true);
-        setGpsError(null);
-
         navigator.geolocation.getCurrentPosition(
             (position) => {
-                setUserLocation({
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude
-                });
+                setUserLocation({ lat: position.coords.latitude, lng: position.coords.longitude });
                 setIsLocating(false);
             },
-            (error) => {
-                console.warn(error);
-                let msg = "Location lookup failed.";
-                if (error.code === 1) msg = "Location permission denied.";
-                else if (error.code === 2) msg = "Position unavailable.";
-                else if (error.code === 3) msg = "Location timed out.";
-                setGpsError(msg);
+            () => {
+                setGpsError("Permission denied.");
                 setIsLocating(false);
             },
-            { enableHighAccuracy: true, timeout: 10000 }
+            { enableHighAccuracy: true }
         );
     };
 
-    // Calculate distance in km (Haversine)
     const getDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
-        const R = 6371; // Radius of the earth in km
-        const dLat = deg2rad(lat2 - lat1);
-        const dLon = deg2rad(lon2 - lon1);
-        const a =
-            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+        const R = 6371;
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
             Math.sin(dLon / 2) * Math.sin(dLon / 2);
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return R * c; // Distance in km
+        return R * c;
     };
 
-    const deg2rad = (deg: number) => deg * (Math.PI / 180);
-
-    // FILTER & SORT LOGIC
     const availableVendors = vendors
         .map(v => {
-            // Find inventory item for this plant
             const invItem = v.inventory?.find(i => i.plantId === plant.id && i.inStock);
-            // Fallback for legacy data (simple inventoryIds check)
             const legacyMatch = v.inventoryIds?.includes(plant.id);
-
-            // If we have detailed inventory, use that price. If only legacy, use plant base price or estimate.
-            // Requirement says "vendors... can add their price". If no specific price, maybe skip or show base?
-            // Let's support both for robustness.
             let price = plant.price || 0;
-            if (invItem) {
-                price = invItem.price;
-            } else if (legacyMatch) {
-                price = plant.price || 0; // Fallback
-            } else {
-                return null; // Not sold here
-            }
+            if (invItem) price = invItem.price;
+            else if (legacyMatch) price = plant.price || 0;
+            else return null;
 
-            // Distance
             let distance = 9999;
-            if (userLocation) {
-                distance = getDistance(userLocation.lat, userLocation.lng, v.latitude, v.longitude);
-            } else {
-                // If no GPS, maybe fallback to v.distance default or just high number
-                distance = v.distance || 9999;
-            }
+            if (userLocation) distance = getDistance(userLocation.lat, userLocation.lng, v.latitude, v.longitude);
+            else distance = v.distance || 9999;
 
             return { ...v, currentPrice: price, realDistance: distance };
         })
         .filter((v): v is (Vendor & { currentPrice: number, realDistance: number }) => v !== null)
-        .filter(v => {
-            if (!userLocation) return true; // Show all if no GPS
-            return v.realDistance <= 50; // 50km Radius
-        })
         .sort((a, b) => {
-            // 1. Highly Recommended First
             if (a.highlyRecommended && !b.highlyRecommended) return -1;
             if (!a.highlyRecommended && b.highlyRecommended) return 1;
-
-            // 2. Verified Second
-            if (a.verified && !b.verified) return -1;
-            if (!a.verified && b.verified) return 1;
-
-            // 3. Price Low to High
             return a.currentPrice - b.currentPrice;
         });
 
     return (
-        <div className={styles.overlay} onClick={onClose}>
+        <div className={`${styles.overlay} no-swipe`} onClick={onClose}>
             <div className={styles.modal} onClick={e => e.stopPropagation()}>
                 <button className={styles.closeBtn} onClick={onClose}><X size={20} /></button>
 
                 <div className={styles.header}>
                     <img src={plant.imageUrl} alt={plant.name} className={styles.plantThumb} />
                     <div>
-                        <h2 className={styles.title}>Buying Options</h2>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#10b981', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                            <TrendingUp size={12} /> Best Options Found
+                        </div>
+                        <h2 className={styles.title}>Purchase Options</h2>
                         <p className={styles.subtitle}>{plant.name}</p>
                     </div>
                 </div>
 
                 {!userLocation && (
                     <div className={styles.gpsPrompt}>
-                        <MapPin size={24} className="text-emerald-400 mb-2" />
-                        <p className="mb-3 text-center text-sm text-slate-300">
-                            Find verified shops within 50km of your location.
+                        <MapPin size={24} color="#10b981" style={{ marginBottom: '0.5rem' }} />
+                        <p style={{ color: '#94a3b8', fontSize: '0.85rem', maxWidth: '300px', margin: '0 auto 1rem' }}>
+                            We found {availableVendors.length} sellers. Enable GPS to find the closest one to you.
                         </p>
                         <button onClick={enableGPS} className={styles.gpsBtn} disabled={isLocating}>
-                            {isLocating ? (
-                                <>
-                                    <div className="animate-spin h-4 w-4 border-2 border-white border-t-transparent rounded-full mr-2"></div>
-                                    Locating...
-                                </>
-                            ) : (
-                                <>
-                                    <Navigation size={16} /> Enable GPS
-                                </>
-                            )}
+                            {isLocating ? 'Locating...' : 'Search Nearby'}
                         </button>
-                        {gpsError && <p className="text-xs text-red-400 mt-2">{gpsError}</p>}
-
-                        <div className={styles.desktopWarning}>
-                            ⚠️ Desktop GPS accuracy varies. Use mobile for best results. All shops shown are within 50km radius.
-                        </div>
+                        {gpsError && <p style={{ color: '#ef4444', fontSize: '0.7rem', marginTop: '0.5rem' }}>{gpsError}</p>}
                     </div>
                 )}
 
-                <div className={styles.listContainer}>
+                <div className={styles.vendorList}>
                     {loading ? (
-                        <div className="p-8 text-center text-slate-500">Finding best rates...</div>
+                        <div style={{ padding: '3rem', textAlign: 'center', color: '#475569' }}>Scanning marketplace...</div>
                     ) : availableVendors.length === 0 ? (
-                        <div className="p-8 text-center text-slate-400">
-                            No vendors found nearby with this plant in stock.
-                            {!userLocation && <br />}{!userLocation && "Try enabling GPS to filter by location."}
+                        <div style={{ padding: '3rem', textAlign: 'center', color: '#64748b' }}>
+                            This specimen is currently unavailable in local nurseries.
                         </div>
                     ) : (
-                        <div className={styles.vendorList}>
-                            {availableVendors.map(vendor => (
-                                <div key={vendor.id} className={`${styles.vendorCard} ${vendor.highlyRecommended ? styles.recommended : ''}`}>
-                                    {vendor.highlyRecommended && (
-                                        <div className={styles.badgeRecommended}><Star size={10} fill="currentColor" /> Highly Recommended</div>
-                                    )}
+                        availableVendors.map(vendor => (
+                            <div key={vendor.id} className={`${styles.vendorCard} ${vendor.highlyRecommended ? styles.recommended : ''}`}>
+                                {vendor.highlyRecommended && (
+                                    <div className={styles.badgeRecommended}>
+                                        <Star size={10} fill="currentColor" /> Premier Partner
+                                    </div>
+                                )}
 
-                                    <div className={styles.cardContent}>
-                                        <div className="flex-1">
-                                            <div className="flex items-center gap-2 mb-1">
-                                                <h3 className={styles.vendorName}>{vendor.name}</h3>
-                                                {vendor.verified && <ShieldCheck size={14} className="text-blue-400" />}
-                                            </div>
-                                            <div className={styles.metaRow}>
-                                                <span className={styles.distance}>
-                                                    <MapPin size={12} /> {vendor.realDistance < 1000 ? `${vendor.realDistance.toFixed(1)} km` : 'Online'}
-                                                </span>
-                                                <span className={styles.phone}>
-                                                    <Phone size={12} /> {vendor.phone}
-                                                </span>
-                                            </div>
+                                <div className={styles.cardContent}>
+                                    <div style={{ flex: 1 }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
+                                            <h3 className={styles.vendorName}>{vendor.name}</h3>
+                                            {vendor.verified && <ShieldCheck size={14} color="#3b82f6" />}
                                         </div>
-
-                                        <div className="text-right">
-                                            <div className={styles.price}>{formatCurrency(vendor.currentPrice)}</div>
-                                            <button
-                                                className={styles.addToCartBtn}
-                                                onClick={() => addToCart(plant, vendor.id, vendor.currentPrice)}
-                                            >
-                                                <ShoppingCart size={16} /> Add
-                                            </button>
+                                        <div className={styles.metaRow}>
+                                            <span>
+                                                <MapPin size={12} /> {vendor.realDistance < 999 ? `${vendor.realDistance.toFixed(1)} km` : 'Regional'}
+                                            </span>
+                                            <span>
+                                                <Phone size={12} /> Contact Info
+                                            </span>
                                         </div>
                                     </div>
+
+                                    <div style={{ textAlign: 'right' }}>
+                                        <div className={styles.price}>{formatCurrency(vendor.currentPrice)}</div>
+                                        <button
+                                            className={styles.addToCartBtn}
+                                            onClick={() => {
+                                                addToCart(plant, vendor.id, vendor.currentPrice);
+                                                onClose();
+                                            }}
+                                        >
+                                            <ShoppingCart size={16} /> Purchase
+                                        </button>
+                                    </div>
                                 </div>
-                            ))}
-                        </div>
+                            </div>
+                        ))
                     )}
                 </div>
             </div>
