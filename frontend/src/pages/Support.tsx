@@ -50,8 +50,8 @@ export const Support = () => {
                 <div className={styles.badge}>
                     COMMUNITY POWERED
                 </div>
-                <h1 className={styles.title}>VANAMAP<br />SUPPORT</h1>
-                <p className={styles.subtitle}>Help us expand the digital garden and bridge nature with technology.</p>
+                <h1 className={styles.title}>How can we<br />help you?</h1>
+                <p className={styles.subtitle}>Join our mission to bridge nature with technology. Whether you want to contribute, partner, or fix an issue, we're here.</p>
             </header>
 
             <div className={styles.sectionGrid}>
@@ -61,11 +61,11 @@ export const Support = () => {
                         <div className={`${styles.iconWrapper} ${styles.sponsorIcon}`}>
                             <Heart size={32} fill="#facc15" color="#facc15" />
                         </div>
-                        <h2 className={styles.cardTitle} style={{ color: '#facc15' }}>Become a Sponsor</h2>
+                        <h2 className={styles.cardTitle} style={{ color: '#facc15' }}>Partner with VanaMap</h2>
                     </div>
                     <p className={styles.cardDesc}>
-                        We are looking for visionary partners to scale the VanaMap infrastructure.
-                        Your support directly funds real-world reforestation and advanced oxygen simulation research.
+                        We're looking for visionary partners to help us scale.
+                        Your support directly funds reforestation projects and advanced research.
                     </p>
                     <Button
                         onClick={() => navigate('/sponsor')}
@@ -94,13 +94,13 @@ export const Support = () => {
                         </div>
                         <div>
                             <h2 className={styles.cardTitle}>Suggest a Plant</h2>
-                            <span className={styles.cardSubtitle}>Help us map more oxygen-rich species.</span>
+                            <span className={styles.cardSubtitle}>Help us grow our database of oxygen-rich species.</span>
                         </div>
                     </div>
 
                     <form onSubmit={handleSubmitSuggestion} className={styles.formGrid}>
                         <div className={styles.inputGroup}>
-                            <label className={styles.label}>Species Identity</label>
+                            <label className={styles.label}>Plant Name</label>
                             <input
                                 type="text"
                                 placeholder="e.g. Rare Monstera Adansonii"
@@ -110,9 +110,9 @@ export const Support = () => {
                             />
                         </div>
                         <div className={styles.inputGroup}>
-                            <label className={styles.label}>Ecological Significance</label>
+                            <label className={styles.label}>Why should we add this?</label>
                             <textarea
-                                placeholder="Why should this be added? Oxygen levels, ease of care, or aesthetic value..."
+                                placeholder="Tell us about its benefits, where it grows, or why you love it..."
                                 value={reason}
                                 onChange={e => setReason(e.target.value)}
                                 rows={4}
@@ -141,9 +141,9 @@ export const Support = () => {
 
                     <div className={`${styles.glassCard} ${styles.miniCard}`}>
                         <AlertTriangle size={32} color="#f43f5e" className={styles.miniIcon} />
-                        <h3 className={styles.miniTitle}>Report Bias</h3>
-                        <p className={styles.miniDesc}>Spotted an error in our database? Help us stay accurate.</p>
-                        <Button variant="outline" style={{ width: '100%' }} onClick={() => window.location.href = 'mailto:support@vanamap.com'}>MAIL SUPPORT</Button>
+                        <h3 className={styles.miniTitle}>Report Data Issue</h3>
+                        <p className={styles.miniDesc}>Spotted an error? Help us keep our plant data accurate.</p>
+                        <Button variant="outline" style={{ width: '100%' }} onClick={() => window.location.href = 'mailto:support@vanamap.com'}>REPORT AN ISSUE</Button>
                     </div>
                 </div>
             </div>
