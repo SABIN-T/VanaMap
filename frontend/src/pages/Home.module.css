@@ -727,6 +727,30 @@
     .footerMsg {
         font-size: 0.85rem !important;
     }
+
+    /* Reduce Hero Action Sizes for Desktop */
+    .gpsBtn {
+        max-width: 250px !important;
+        /* Reduced from 300px default */
+        padding: 0.8rem 1.2rem !important;
+        font-size: 0.95rem !important;
+    }
+
+    .searchBox {
+        max-width: 400px !important;
+        /* Reduced from 500px */
+        padding: 0.5rem 0.75rem !important;
+    }
+
+    .searchInput {
+        font-size: 0.9rem !important;
+    }
+
+    .divider {
+        font-size: 0.7rem !important;
+        gap: 0.75rem !important;
+        transform: scale(0.9);
+    }
 }
 
 .aptnessLegend {

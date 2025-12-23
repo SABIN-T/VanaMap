@@ -223,20 +223,20 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                     </div>
 
                     <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-                        <div>
+                        <div className={styles.overviewContainer}>
                             <h3 style={{ fontSize: '1.2rem', color: 'white', marginBottom: '0.5rem' }}>Overview</h3>
-                            <p style={{ color: '#94a3b8', lineHeight: 1.6, fontSize: '0.95rem' }}>{plant.description}</p>
+                            <p className={styles.descriptionText}>{plant.description}</p>
 
                             {/* Mobile Advantages & Medicine */}
-                            <div className="space-y-4 mt-4">
+                            <div className={styles.infoGrid}>
                                 {plant.advantages && plant.advantages.length > 0 && (
-                                    <div className="bg-slate-800/50 rounded-xl p-3 border border-slate-700">
-                                        <h4 className="flex items-center gap-2 text-emerald-400 text-sm font-bold mb-2 uppercase tracking-wide">
-                                            <Sparkles size={14} /> Key Advantages
-                                        </h4>
-                                        <div className="flex flex-wrap gap-2">
+                                    <div className={`${styles.infoCard} ${styles.cardGreen}`}>
+                                        <div className={`${styles.cardHeader} ${styles.textGreen}`}>
+                                            <Sparkles size={16} /> Key Advantages
+                                        </div>
+                                        <div className={styles.chipsContainer}>
                                             {plant.advantages.map((adv, i) => (
-                                                <span key={i} className="text-xs bg-emerald-500/10 text-emerald-300 px-2 py-1 rounded-md border border-emerald-500/20">
+                                                <span key={i} className={`${styles.chip} ${styles.chipGreen}`}>
                                                     {adv}
                                                 </span>
                                             ))}
@@ -245,13 +245,13 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                                 )}
 
                                 {plant.medicinalValues && plant.medicinalValues.length > 0 && (
-                                    <div className="bg-slate-800/50 rounded-xl p-3 border border-slate-700">
-                                        <h4 className="flex items-center gap-2 text-rose-400 text-sm font-bold mb-2 uppercase tracking-wide">
-                                            <Stethoscope size={14} /> Medicinal Uses
-                                        </h4>
-                                        <div className="flex flex-wrap gap-2">
+                                    <div className={`${styles.infoCard} ${styles.cardRose}`}>
+                                        <div className={`${styles.cardHeader} ${styles.textRose}`}>
+                                            <Stethoscope size={16} /> Medicinal Uses
+                                        </div>
+                                        <div className={styles.chipsContainer}>
                                             {plant.medicinalValues.map((med, i) => (
-                                                <span key={i} className="text-xs bg-rose-500/10 text-rose-300 px-2 py-1 rounded-md border border-rose-500/20">
+                                                <span key={i} className={`${styles.chip} ${styles.chipRose}`}>
                                                     {med}
                                                 </span>
                                             ))}
@@ -348,19 +348,19 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
 
                         <div style={{ flex: 1, overflowY: 'auto', padding: '3rem' }}>
                             {activeTab === 'overview' ? (
-                                <div className="animate-fade-in">
-                                    <p style={{ lineHeight: '1.8', color: '#cbd5e1', marginBottom: '2rem', fontSize: '1.1rem' }}>{plant.description}</p>
+                                <div className={`${styles.overviewContainer} animate-fade-in`}>
+                                    <p className={styles.descriptionText}>{plant.description}</p>
 
                                     {/* Desktop Advantages & Medicine */}
-                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem', marginBottom: '2rem' }}>
+                                    <div className={styles.infoGrid}>
                                         {plant.advantages && plant.advantages.length > 0 && (
-                                            <div style={{ background: 'rgba(16, 185, 129, 0.05)', borderRadius: '16px', padding: '1.5rem', border: '1px solid rgba(16, 185, 129, 0.1)' }}>
-                                                <h4 style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#34d399', fontSize: '0.9rem', fontWeight: 700, marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                                            <div className={`${styles.infoCard} ${styles.cardGreen}`}>
+                                                <div className={`${styles.cardHeader} ${styles.textGreen}`}>
                                                     <Sparkles size={16} /> Key Advantages
-                                                </h4>
-                                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                                                </div>
+                                                <div className={styles.chipsContainer}>
                                                     {plant.advantages.map((adv, i) => (
-                                                        <span key={i} style={{ fontSize: '0.85rem', background: 'rgba(16, 185, 129, 0.1)', color: '#6ee7b7', padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(16, 185, 129, 0.2)' }}>
+                                                        <span key={i} className={`${styles.chip} ${styles.chipGreen}`}>
                                                             {adv}
                                                         </span>
                                                     ))}
@@ -369,13 +369,13 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                                         )}
 
                                         {plant.medicinalValues && plant.medicinalValues.length > 0 && (
-                                            <div style={{ background: 'rgba(244, 63, 94, 0.05)', borderRadius: '16px', padding: '1.5rem', border: '1px solid rgba(244, 63, 94, 0.1)' }}>
-                                                <h4 style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#fb7185', fontSize: '0.9rem', fontWeight: 700, marginBottom: '1rem', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                                            <div className={`${styles.infoCard} ${styles.cardRose}`}>
+                                                <div className={`${styles.cardHeader} ${styles.textRose}`}>
                                                     <Stethoscope size={16} /> Medicinal Uses
-                                                </h4>
-                                                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                                                </div>
+                                                <div className={styles.chipsContainer}>
                                                     {plant.medicinalValues.map((med, i) => (
-                                                        <span key={i} style={{ fontSize: '0.85rem', background: 'rgba(244, 63, 94, 0.1)', color: '#fda4af', padding: '4px 10px', borderRadius: '6px', border: '1px solid rgba(244, 63, 94, 0.2)' }}>
+                                                        <span key={i} className={`${styles.chip} ${styles.chipRose}`}>
                                                             {med}
                                                         </span>
                                                     ))}
@@ -384,9 +384,21 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                                         )}
                                     </div>
 
-                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
-                                        <div style={statCardStyle}><Sun className="text-yellow-400" /> <div><div className="text-xs text-slate-400">Sunlight</div><div className="font-bold">{plant.sunlight}</div></div></div>
-                                        <div style={statCardStyle}><Droplet className="text-blue-400" /> <div><div className="text-xs text-slate-400">Water</div><div className="font-bold">Weekly</div></div></div>
+                                    <div className={styles.statsRow}>
+                                        <div className={styles.statItem}>
+                                            <div className={styles.statIcon}><Sun className="text-yellow-400" /></div>
+                                            <div className={styles.statText}>
+                                                <span className={styles.statLabel}>Sunlight</span>
+                                                <span className={styles.statValue}>{plant.sunlight}</span>
+                                            </div>
+                                        </div>
+                                        <div className={styles.statItem}>
+                                            <div className={styles.statIcon}><Droplet className="text-blue-400" /></div>
+                                            <div className={styles.statText}>
+                                                <span className={styles.statLabel}>Water</span>
+                                                <span className={styles.statValue}>Weekly</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             ) : (
@@ -432,6 +444,4 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
     );
 };
 
-const statCardStyle = {
-    background: 'rgba(255,255,255,0.03)', borderRadius: '12px', padding: '1.5rem', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', gap: '1rem'
-};
+
