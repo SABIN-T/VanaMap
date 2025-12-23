@@ -80,7 +80,7 @@ export const VendorInventory = ({ vendor, onUpdate }: VendorInventoryProps) => {
         const newItem = {
             plantId: plant.id,
             price: newPrice,
-            status: 'pending' as const, // Always 'pending' on update/create
+            status: 'approved' as const,
             inStock: edits.inStock
         };
 
@@ -90,11 +90,11 @@ export const VendorInventory = ({ vendor, onUpdate }: VendorInventoryProps) => {
             newInventory.push(newItem);
         }
 
-        const tid = toast.loading("Submitting for price approval...");
+        const tid = toast.loading("Updating inventory...");
         try {
             const success = await updateVendor(vendor.id, { inventory: newInventory });
             if (success) {
-                toast.success("Submitted! Info pending admin review.", { id: tid });
+                toast.success("Inventory updated successfully!", { id: tid });
                 onUpdate(); // Refresh parent to get latest backend state
             } else {
                 throw new Error("Update failed");
@@ -121,7 +121,7 @@ export const VendorInventory = ({ vendor, onUpdate }: VendorInventoryProps) => {
                         <Package className="text-emerald-400" /> Inventory & Pricing
                     </h2>
                     <p className={styles.subtitle}>
-                        Manage your catalog. Price changes require Admin approval.
+                        Manage your catalog and pricing.
                     </p>
                 </div>
                 <div className={styles.searchWrapper}>

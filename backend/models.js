@@ -31,6 +31,12 @@ const VendorSchema = new mongoose.Schema({
     state: String,
     district: String,
     inventoryIds: [String],
+    inventory: [{
+        plantId: String,
+        price: Number,
+        status: { type: String, default: 'approved' },
+        inStock: { type: Boolean, default: true }
+    }],
     verified: { type: Boolean, default: false },
     highlyRecommended: { type: Boolean, default: false },
     category: { type: String, default: 'Plant Shop' }
