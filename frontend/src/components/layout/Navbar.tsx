@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingCart, User as UserIcon, LogOut, Leaf, Sun, Moon, Menu, X, ChevronRight, Download, Shield, ShoppingBag, MessageCircle } from 'lucide-react';
+import { ShoppingCart, User as UserIcon, LogOut, Leaf, Sun, Moon, Menu, X, ChevronRight, Download, Shield, ShoppingBag, MessageCircle, BookOpen, HelpCircle } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
 import { useTheme } from '../../context/ThemeContext';
@@ -37,6 +37,10 @@ export const Navbar = () => {
             <div className={styles.desktopLinks}>
                 <Link id="nav-home" to="/" className={styles.navLink}>Home</Link>
                 <Link id="nav-nearby" to="/nearby" className={styles.navLink}>Nearby Shops</Link>
+
+                <Link id="nav-guide" to="#" onClick={(e) => { e.preventDefault(); window.dispatchEvent(new CustomEvent('vanamap-restart-tour')); }} className={styles.navLink}>
+                    <HelpCircle size={18} /> Guide
+                </Link>
 
                 {/* Doctor AI Button - Desktop Only */}
                 <Link
@@ -151,6 +155,15 @@ export const Navbar = () => {
                             <ChevronRight size={18} />
                         </Link>
                     )}
+
+                    <div className={styles.divider} />
+                    <button className={styles.mobileNavLink} onClick={() => {
+                        setIsMenuOpen(false);
+                        window.dispatchEvent(new CustomEvent('vanamap-restart-tour'));
+                    }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><BookOpen size={20} /> App Tour</div>
+                        <ChevronRight size={18} />
+                    </button>
                 </div>
             </div>
 

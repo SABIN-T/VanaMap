@@ -95,7 +95,18 @@ export const TourGuide = () => {
 
         const handleResize = () => setIsMobile(window.innerWidth < 768);
         window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
+
+        // Listen for manual restart
+        const handleRestart = () => {
+            setCurrentStep(0);
+            setIsVisible(true);
+        };
+        window.addEventListener('vanamap-restart-tour', handleRestart);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+            window.removeEventListener('vanamap-restart-tour', handleRestart);
+        };
     }, []);
 
     // Update rect
