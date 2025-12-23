@@ -1,11 +1,8 @@
-import { useState, useMemo, useEffect } from 'react';
-import type { MouseEvent, TouchEvent } from 'react';
-import { X, Sun, Wind, Droplet, ShoppingBag, Leaf, Lightbulb, Fan, AlertTriangle, CheckCircle2, Trash2, Sparkles, Stethoscope, BookOpen, GraduationCap } from 'lucide-react';
-import { Button } from '../../common/Button';
+import { X, Sun, Wind, Droplet, Leaf, Lightbulb, Fan, AlertTriangle, Sparkles, Stethoscope, BookOpen, GraduationCap } from 'lucide-react';
 import type { Plant } from '../../../types';
 import styles from './PlantDetailsModal.module.css';
-import { useCart } from '../../../context/CartContext';
-import toast from 'react-hot-toast';
+import { useState, useMemo, useEffect } from 'react';
+import type { MouseEvent, TouchEvent } from 'react';
 
 interface PlantDetailsModalProps {
     plant: Plant;
@@ -18,7 +15,6 @@ interface PlantDetailsModalProps {
 }
 
 export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModalProps) => {
-    const { addToCart, removeFromCart, items } = useCart();
     const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
 
     useEffect(() => {
@@ -40,8 +36,6 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
     const currentTemp = isACMode ? targetTemp : (weather?.avgTemp30Days || 25);
     const currentHumidity = weather?.avgHumidity30Days || 50;
 
-    // Cart State
-    const cartQty = items.find(item => item.plant.id === plant.id)?.quantity || 0;
 
     // ==========================================
     // SCIENTIFIC LOGIC
@@ -80,15 +74,6 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
 
     const plantsNeeded = Math.max(1, Math.ceil((550 * numPeople) / (parseFloat(PLANT_O2_OUTPUT) || 50)));
 
-    const handleAddToCart = () => {
-        addToCart(plant);
-        toast.success(`Added ${plant.name} to Sanctuary`);
-    };
-
-    const handleRemoveFromCart = () => {
-        removeFromCart(plant.id);
-        toast.success(`Removed ${plant.name} from Sanctuary`);
-    };
 
     // Stop Propagation Helper
     const stopProp = (e: TouchEvent | MouseEvent) => e.stopPropagation();
@@ -274,32 +259,6 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                             </div>
                         </div>
 
-                        {/* Mobile Footer */}
-                        <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                            {cartQty > 0 && (
-                                <button
-                                    onClick={handleRemoveFromCart}
-                                    style={{
-                                        padding: '12px', borderRadius: '14px', background: 'rgba(239, 68, 68, 0.15)',
-                                        border: '1px solid rgba(239, 68, 68, 0.4)', color: '#f87171', cursor: 'pointer',
-                                        display: 'flex', alignItems: 'center', justifyContent: 'center'
-                                    }}
-                                >
-                                    <Trash2 size={22} />
-                                </button>
-                            )}
-                            <Button onClick={handleAddToCart} size="lg" style={{ flex: 1, borderRadius: '16px' }}>
-                                {cartQty > 0 ? (
-                                    <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                                        <CheckCircle2 size={18} /> {cartQty} In Cart • Add More
-                                    </span>
-                                ) : (
-                                    <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                                        <ShoppingBag size={20} /> Add to Cart
-                                    </span>
-                                )}
-                            </Button>
-                        </div>
                     </div>
                 </div>
                 <style>{`
@@ -429,33 +388,7 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                             )}
                         </div>
 
-                        {/* Desktop Footer */}
-                        <div style={{ padding: '2rem 3rem', borderTop: '1px solid rgba(255,255,255,0.05)', background: 'rgba(15,23,42,0.5)', display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                            {cartQty > 0 && (
-                                <button
-                                    onClick={handleRemoveFromCart}
-                                    style={{
-                                        padding: '12px', borderRadius: '12px', background: 'rgba(239, 68, 68, 0.1)',
-                                        border: '1px solid rgba(239, 68, 68, 0.3)', color: '#f87171', cursor: 'pointer',
-                                        display: 'flex', alignItems: 'center', justifyContent: 'center'
-                                    }}
-                                    title="Remove from Cart"
-                                >
-                                    <Trash2 size={20} />
-                                </button>
-                            )}
-                            <Button onClick={handleAddToCart} size="lg" style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
-                                {cartQty > 0 ? (
-                                    <>
-                                        <CheckCircle2 size={18} /> {cartQty} In Cart • Add Another
-                                    </>
-                                ) : (
-                                    <>
-                                        <ShoppingBag size={20} /> Add to Sanctuary
-                                    </>
-                                )}
-                            </Button>
-                        </div>
+                        {/* Desktop Footer Removed */}
                     </div>
                 </div>
             </div>
