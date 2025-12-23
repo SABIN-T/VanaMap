@@ -39,8 +39,21 @@ export const Cart = () => {
             return;
         }
 
-        const vendor = vendors[vendorId];
+        let vendor = vendors[vendorId];
         const vItems = groupedItems[vendorId];
+
+        // Handle VanaMap Official Case
+        if (vendorId === 'vanamap') {
+            vendor = {
+                id: 'vanamap',
+                name: 'VanaMap Official',
+                whatsapp: '9188773534', // System Admin / Official support
+                address: 'Headquarters',
+                latitude: 0, longitude: 0,
+                phone: '9188773534'
+            } as Vendor;
+        }
+
         if (!vendor || !vItems) return;
 
         // Construct Message
@@ -125,22 +138,20 @@ export const Cart = () => {
                                         </div>
 
                                         {/* Vendor Action */}
-                                        {!isVanaMap && (
-                                            <div>
-                                                {user ? (
-                                                    <button
-                                                        className={styles.whatsappBtn}
-                                                        onClick={() => handleWhatsAppCheckout(vendorId)}
-                                                    >
-                                                        <MessageCircle size={18} /> Proceed to Order
-                                                    </button>
-                                                ) : (
-                                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#fbbf24', fontSize: '0.85rem', fontWeight: 700, background: 'rgba(251, 191, 36, 0.1)', padding: '6px 12px', borderRadius: '8px' }}>
-                                                        <Lock size={14} /> Login to Order
-                                                    </div>
-                                                )}
-                                            </div>
-                                        )}
+                                        <div style={{ marginTop: '0.5rem' }}>
+                                            {user ? (
+                                                <button
+                                                    className={styles.whatsappBtn}
+                                                    onClick={() => handleWhatsAppCheckout(vendorId)}
+                                                >
+                                                    <MessageCircle size={18} /> Proceed to Order
+                                                </button>
+                                            ) : (
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#fbbf24', fontSize: '0.85rem', fontWeight: 700, background: 'rgba(251, 191, 36, 0.1)', padding: '6px 12px', borderRadius: '8px' }}>
+                                                    <Lock size={14} /> Login to Order
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
 
                                     {/* Items */}
