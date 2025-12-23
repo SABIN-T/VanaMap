@@ -27,6 +27,8 @@ export const Home = () => {
     const [isSlowLoading, setIsSlowLoading] = useState(false);
     const [selectedPlant, setSelectedPlant] = useState<Plant | null>(null);
     const [citySearch, setCitySearch] = useState('');
+    const [suggestions, setSuggestions] = useState<any[]>([]);
+    const [showSuggestions, setShowSuggestions] = useState(false);
     const [visibleLimit, setVisibleLimit] = useState(() => window.innerWidth < 768 ? 4 : 10);
 
     const plantsSectionRef = useRef<HTMLDivElement>(null);
@@ -110,16 +112,37 @@ export const Home = () => {
         }, 100);
     };
 
-    const handleCitySearch = async () => {
-        if (!citySearch) return;
+    // Debounced Search for Suggestions
+    useEffect(() => {
+        const timer = setTimeout(async () => {
+            if (citySearch.length > 2 && !weather && showSuggestions) {
+                try {
+                    const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(citySearch)}&limit=5`);
+                    const data = await response.json();
+                    setSuggestions(data);
+                } catch (e) {
+                    console.error("Suggestion fetch failed", e);
+                }
+            } else {
+                setSuggestions([]);
+            }
+        }, 500);
+
+        return () => clearTimeout(timer);
+    }, [citySearch, weather, showSuggestions]);
+
+    const handleCitySearch = async (overrideCity?: string) => {
+        const query = overrideCity || citySearch;
+        if (!query) return;
         setLocationLoading(true);
-        const result = await geocodeCity(citySearch);
+        const result = await geocodeCity(query);
         if (result) {
             const weatherData = await getWeather(result.lat, result.lng);
             if (weatherData) {
                 setWeather(weatherData);
-                toast.success(`Synced location: ${citySearch}`);
+                toast.success(`Synced location: ${query.charAt(0).toUpperCase() + query.slice(1)}`);
                 scrollToFilters();
+                setSuggestions([]);
             } else {
                 toast.error("Data unavailable.");
             }
@@ -266,18 +289,39 @@ export const Home = () => {
                                 <span>OR ENTER MANUALLY</span>
                             </div>
 
-                            <div className={styles.searchBox}>
+                            <div className={styles.searchBox} style={{ position: 'relative' }}>
                                 <input
                                     type="text"
                                     placeholder="Enter City (e.g. Kathmandu)"
                                     value={citySearch}
-                                    onChange={e => setCitySearch(e.target.value)}
+                                    onChange={e => {
+                                        setCitySearch(e.target.value);
+                                        setShowSuggestions(true);
+                                    }}
+                                    onFocus={() => setShowSuggestions(true)}
+                                    onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
                                     onKeyDown={e => e.key === 'Enter' && handleCitySearch()}
                                     className={styles.searchInput}
                                 />
-                                <Button onClick={handleCitySearch} disabled={locationLoading} variant="outline">
+                                <Button onClick={() => handleCitySearch()} disabled={locationLoading} variant="outline">
                                     {locationLoading ? '...' : 'Search'}
                                 </Button>
+
+                                {showSuggestions && suggestions.length > 0 && (
+                                    <ul className={styles.suggestionsList}>
+                                        {suggestions.map((place: any, i) => (
+                                            <li key={i} className={styles.suggestionItem} onClick={() => {
+                                                const cityName = place.display_name.split(',')[0];
+                                                setCitySearch(cityName);
+                                                setShowSuggestions(false);
+                                                handleCitySearch(cityName);
+                                            }}>
+                                                <MapPin size={16} />
+                                                <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{place.display_name}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
                             </div>
 
                             <div className={styles.nearbyBtnContainer}>
