@@ -3,7 +3,7 @@ import { useLocation, Link } from 'react-router-dom';
 import {
     LayoutDashboard, Sprout, Store,
     Users, Activity, Bell, Settings,
-    Menu, X, LogOut, ChevronRight
+    Menu, X, LogOut, ChevronRight, MessageSquare
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import styles from './AdminLayout.module.css';
@@ -24,6 +24,7 @@ export const AdminLayout = ({ title, children }: AdminLayoutProps) => {
         { path: '/admin/add-plant', icon: Activity, label: 'Add New Plant', sub: true },
         { path: '/admin/manage-vendors', icon: Store, label: 'Manage Vendors' },
         { path: '/admin/manage-users', icon: Users, label: 'User Directory' },
+        { path: '/admin/suggestions', icon: MessageSquare, label: 'User Suggestions' },
         { path: '/admin/notifications', icon: Bell, label: 'Notifications' },
         { path: '/admin/diag', icon: Activity, label: 'System Health' },
         { path: '/admin/settings', icon: Settings, label: 'Settings' },

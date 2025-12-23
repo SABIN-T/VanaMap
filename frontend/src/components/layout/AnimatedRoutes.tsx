@@ -11,6 +11,8 @@ const Cart = lazy(() => import('../../pages/Cart').then(m => ({ default: m.Cart 
 const Admin = lazy(() => import('../../pages/Admin').then(m => ({ default: m.Admin })));
 const Contact = lazy(() => import('../../pages/Contact').then(m => ({ default: m.Contact })));
 const Shops = lazy(() => import('../../pages/Shops').then(m => ({ default: m.Shops })));
+const Support = lazy(() => import('../../pages/Support').then(m => ({ default: m.Support })));
+const Sponsor = lazy(() => import('../../pages/Sponsor').then(m => ({ default: m.Sponsor })));
 const AddPlant = lazy(() => import('../../pages/admin/AddPlant').then(m => ({ default: m.AddPlant })));
 const AddVendor = lazy(() => import('../../pages/admin/AddVendor').then(m => ({ default: m.AddVendor })));
 const ManagePlants = lazy(() => import('../../pages/admin/ManagePlants').then(m => ({ default: m.ManagePlants })));
@@ -21,6 +23,7 @@ const Settings = lazy(() => import('../../pages/admin/Settings').then(m => ({ de
 const Notifications = lazy(() => import('../../pages/admin/Notifications').then(m => ({ default: m.Notifications })));
 const EditPlant = lazy(() => import('../../pages/admin/EditPlant').then(m => ({ default: m.EditPlant })));
 const AdminLogin = lazy(() => import('../../pages/admin/AdminLogin').then(m => ({ default: m.AdminLogin })));
+const ManageSuggestions = lazy(() => import('../../pages/admin/ManageSuggestions').then(m => ({ default: m.ManageSuggestions })));
 
 const LoadingScreen = () => (
     <div style={{
@@ -74,9 +77,12 @@ export const AnimatedRoutes = () => {
                         <Route path="/admin/diag" element={<SystemDiagnostics />} />
                         <Route path="/admin/settings" element={<Settings />} />
                         <Route path="/admin/notifications" element={<Notifications />} />
+                        <Route path="/admin/suggestions" element={<ManageSuggestions />} />
                         <Route path="/admin/edit-plant/:id" element={<EditPlant />} />
 
                         <Route path="/contact" element={<Contact />} />
+                        <Route path="/support" element={<Support />} />
+                        <Route path="/sponsor" element={<Sponsor />} />
                         <Route path="/shops" element={<Shops />} />
                     </Routes>
                 </div>

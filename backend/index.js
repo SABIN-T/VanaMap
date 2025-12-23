@@ -3,7 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
-const { Plant, Vendor, User, Notification, Chat } = require('./models');
+const { Plant, Vendor, User, Notification, Chat, PlantSuggestion } = require('./models');
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
@@ -254,6 +254,44 @@ app.post('/api/ai/chat', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
+
+// --- SUGGESTION ROUTES ---
+
+app.post('/api/suggestions', async (req, res) => {
+    try {
+        const { userId, plantName, description, userName } = req.body;
+        const suggestion = new PlantSuggestion({
+            userId,
+            userName: userName || 'Anonymous',
+            plantName,
+            description
+        });
+        await suggestion.save();
+
+        // Notify Admin
+        await sendWhatsApp(`New Plant Suggestion: ${plantName} by ${userName}`, 'suggestion_add', { suggestionId: suggestion._id });
+        const notif = new Notification({
+            type: 'suggestion',
+            message: `User ${userName} suggested a new plant: ${plantName}`,
+            details: { suggestionId: suggestion._id }
+        });
+        await notif.save();
+
+        res.status(201).json({ success: true, message: "Suggestion submitted" });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.get('/api/suggestions', auth, admin, async (req, res) => {
+    try {
+        const suggestions = await PlantSuggestion.find().sort({ submittedAt: -1 });
+        res.json(suggestions);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 
 // --- PLANT ROUTES ---
 

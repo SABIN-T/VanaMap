@@ -77,10 +77,20 @@ const ChatSchema = new mongoose.Schema({
     timestamp: { type: Date, default: Date.now }
 });
 
+const PlantSuggestionSchema = new mongoose.Schema({
+    userId: { type: String }, // Optional, linking to user if logged in
+    userName: { type: String, default: 'Anonymous' },
+    plantName: { type: String, required: true },
+    description: { type: String, required: true },
+    status: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'pending' },
+    submittedAt: { type: Date, default: Date.now }
+});
+
 module.exports = {
     Plant: mongoose.model('Plant', PlantSchema),
     Vendor: mongoose.model('Vendor', VendorSchema),
     User: mongoose.model('User', UserSchema),
     Notification: mongoose.model('Notification', NotificationSchema),
-    Chat: mongoose.model('Chat', ChatSchema)
+    Chat: mongoose.model('Chat', ChatSchema),
+    PlantSuggestion: mongoose.model('PlantSuggestion', PlantSuggestionSchema)
 };
