@@ -23,7 +23,10 @@ export const Navbar = () => {
 
     return (
         <nav className={styles.navbar}>
-            <Link to="/" className={styles.logo} onClick={() => setIsMenuOpen(false)}>
+            <Link to="/" className={styles.logo} onClick={() => {
+                setIsMenuOpen(false);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}>
                 <div className={styles.logoIcon}>
                     <img src="/logo.png?v=2" alt="VanaMap Logo" className={styles.logoImage} />
                 </div>
