@@ -216,6 +216,13 @@
     opacity: 0.3;
 }
 
+.nearbyBtnContainer {
+    margin-top: 1rem;
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
 .searchBox {
     display: flex;
     gap: 0.5rem;
@@ -375,6 +382,21 @@
     display: flex;
     flex-direction: column;
     gap: 3.5rem;
+}
+
+.filterQuestion {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: white;
+    margin-bottom: -1.5rem;
+    /* Pull cards closer */
+    position: relative;
+    display: inline-block;
+    background: linear-gradient(to right, #fff, #94a3b8);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
 }
 
 .categorySelectionList {
@@ -728,28 +750,47 @@
         font-size: 0.85rem !important;
     }
 
-    /* Reduce Hero Action Sizes for Desktop */
+    /* Reduce Hero Action Sizes for Desktop to ensure visibility above fold */
     .gpsBtn {
-        max-width: 250px !important;
-        /* Reduced from 300px default */
-        padding: 0.8rem 1.2rem !important;
-        font-size: 0.95rem !important;
+        max-width: 220px !important;
+        padding: 0.6rem 1rem !important;
+        font-size: 0.85rem !important;
     }
 
     .searchBox {
-        max-width: 400px !important;
-        /* Reduced from 500px */
-        padding: 0.5rem 0.75rem !important;
+        max-width: 350px !important;
+        padding: 0.4rem 0.6rem !important;
+        min-height: auto !important;
     }
 
     .searchInput {
-        font-size: 0.9rem !important;
+        font-size: 0.85rem !important;
+        padding: 0 0.5rem !important;
     }
 
     .divider {
-        font-size: 0.7rem !important;
-        gap: 0.75rem !important;
-        transform: scale(0.9);
+        font-size: 0.65rem !important;
+        gap: 0.5rem !important;
+        margin: 1.5rem 0 !important;
+        transform: scale(0.85);
+    }
+
+    .hero {
+        padding-top: 4rem !important;
+        min-height: 80vh !important;
+    }
+
+    .heroSubtitle {
+        margin-bottom: 1.5rem !important;
+    }
+
+    .actionContainer {
+        gap: 1.5rem !important;
+    }
+
+    .nearbyBtnContainer button {
+        font-size: 0.75rem !important;
+        padding: 0.3rem 0.8rem !important;
     }
 }
 

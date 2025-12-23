@@ -280,7 +280,7 @@ export const Home = () => {
                                 </Button>
                             </div>
 
-                            <div style={{ marginTop: '1rem', display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+                            <div className={styles.nearbyBtnContainer}>
                                 <Button variant="ghost" size="sm" onClick={() => navigate('/nearby')} style={{ color: '#94a3b8' }}>
                                     Find Nearby Shop Instead
                                 </Button>
@@ -367,6 +367,7 @@ export const Home = () => {
 
                     <div className={styles.filterWrapper}>
                         {/* 1. Category Selection - High Prominence */}
+                        <h3 className={styles.filterQuestion}>Which plant are you looking for?</h3>
                         <div className={styles.categorySelectionList}>
                             <div
                                 className={`${styles.categoryCard} ${filter === 'indoor' ? styles.indoorActive : ''}`}
