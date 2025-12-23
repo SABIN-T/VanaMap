@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ArrowLeft, Send, Sparkles, AlertTriangle, Store, HeartHandshake } from 'lucide-react';
+import { ArrowLeft, Send, Sparkles, AlertTriangle, Store, MoveRight, Heart } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/common/Button';
 import { useAuth } from '../context/AuthContext';
@@ -66,7 +66,7 @@ export const Support = () => {
                 <div className={`${styles.glassCard} ${styles.sponsorCard}`}>
                     <div className={styles.cardHeader}>
                         <div className={`${styles.iconWrapper} ${styles.sponsorIcon}`}>
-                            <HeartHandshake size={32} />
+                            <Heart size={32} fill="#facc15" color="#facc15" />
                         </div>
                         <h2 className={styles.cardTitle} style={{ color: '#facc15' }}>Become a Sponsor</h2>
                     </div>
@@ -76,16 +76,20 @@ export const Support = () => {
                     </p>
                     <Button
                         onClick={() => navigate('/sponsor')}
+                        className={styles.sponsorActionBtn}
                         style={{
                             width: '100%',
-                            background: '#facc15',
+                            background: 'linear-gradient(135deg, #facc15 0%, #ca8a04 100%)',
                             color: '#000',
-                            fontWeight: '800',
-                            borderRadius: '1rem',
-                            padding: '1.25rem'
+                            fontWeight: '900',
+                            borderRadius: '1.25rem',
+                            padding: '1.5rem',
+                            fontSize: '1.1rem',
+                            border: 'none',
+                            boxShadow: '0 15px 30px -10px rgba(250, 204, 21, 0.4)'
                         }}
                     >
-                        EXPLORE PARTNERSHIPS <ArrowLeft size={18} style={{ transform: 'rotate(180deg)' }} />
+                        BECOME A SPONSOR <MoveRight size={22} style={{ marginLeft: '12px' }} />
                     </Button>
                 </div>
 
