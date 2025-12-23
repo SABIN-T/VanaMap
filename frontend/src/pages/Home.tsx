@@ -7,7 +7,10 @@ import { fetchPlants } from '../services/api';
 import { getWeather, geocodeCity } from '../services/weather';
 import { calculateAptness } from '../utils/logic';
 import type { Plant } from '../types';
-import { Sprout, MapPin, Thermometer, Wind, ArrowDown, Sparkles, Search, AlertCircle, Heart, Sun, Activity } from 'lucide-react';
+import {
+    Search, MapPin, Wind, Thermometer, ArrowDown,
+    Sparkles, Sprout, Droplets, Heart, Sun, Activity, AlertCircle
+} from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
 // Lazy load modal for performance
@@ -264,6 +267,7 @@ export const Home = () => {
             )}
 
             <section className={styles.hero}>
+                <div className={styles.heroOverlay} />
                 <div className={styles.heroContent}>
                     <div className={styles.heroTextContent}>
                         <div className={styles.heroBadge}>
@@ -272,27 +276,29 @@ export const Home = () => {
 
                         <h1 className={styles.heroTitle}>BRING NATURE<br />HOME</h1>
                         <p className={styles.heroSubtitle}>
-                            Transform your living space. <strong>Start by setting your location below</strong> to see what grows best in your ecosystem.
+                            Transform your living space. Start by setting your location below to see what grows best in your ecosystem.
                         </p>
+
+                        <div onClick={() => navigate('/sponsor')} className={styles.sponsorLink}>
+                            <Heart size={16} fill="#facc15" /> <span>BECOME A SPONSOR</span>
+                        </div>
                     </div>
 
                     {!weather ? (
                         <div id="location-action-area" className={styles.actionContainer}>
-                            <div className={styles.buttonGroup} style={{ width: '100%', justifyContent: 'center' }}>
-                                <Button
-                                    variant="primary"
-                                    size="lg"
-                                    onClick={handleGetLocation}
-                                    className={styles.gpsBtn}
-                                    style={{
-                                        width: '100%',
-                                        maxWidth: '300px',
-                                        padding: '1rem'
-                                    }}
-                                >
-                                    <MapPin size={22} className="animate-bounce" style={{ marginRight: '8px' }} /> Auto-Detect Location
-                                </Button>
-                            </div>
+                            <Button
+                                variant="primary"
+                                size="lg"
+                                onClick={handleGetLocation}
+                                className={styles.gpsBtn}
+                                style={{
+                                    width: '100%',
+                                    maxWidth: '300px',
+                                    padding: '1rem'
+                                }}
+                            >
+                                <MapPin size={22} className="animate-bounce" style={{ marginRight: '8px' }} /> Auto-Detect Location
+                            </Button>
 
                             <div className={styles.divider}>
                                 <span>OR ENTER MANUALLY</span>
@@ -339,46 +345,53 @@ export const Home = () => {
                                 </Button>
                             </div>
                         </div>
-                    ) : (
-                        <div className={styles.weatherDisplay}>
-                            <div className={styles.weatherCard}>
-                                <div className={styles.weatherMain}>
-                                    <div className={styles.locationInfo}>
-                                        <span className={styles.label}>YOUR ZONE</span>
-                                        <h3 className={styles.h3}>
-                                            {weather.locationName || weather.city || 'Live Environment'}
-                                        </h3>
-                                        <button onClick={() => setWeather(null)} className={styles.changeBtn}>Change Location</button>
+                    ) : null}
+
+                    {weather && (
+                        <section className={styles.intelligenceSection}>
+                            <div className={styles.sectionHeader}>
+                                <span className={styles.sectionBadge}>ENVIRONMENTAL INTELLIGENCE</span>
+                                <h2 className={styles.sectionTitle}>Specimen Aptness Dashboard</h2>
+                                <p className={styles.sectionSubtitle}>
+                                    Real-time analysis of atmospheric conditions in <strong>{weather.locationName || weather.city}</strong>.
+                                    Our AI calculates biological compatibility based on these parameters.
+                                </p>
+                            </div>
+
+                            <div className={styles.weatherDashboard}>
+                                <div className={styles.weatherCard}>
+                                    <div className={styles.statIcon} style={{ background: 'rgba(250, 204, 21, 0.1)', color: '#facc15' }}>
+                                        <Thermometer size={32} />
                                     </div>
-                                    <div className={styles.vDivider}></div>
-                                    <div className={styles.statGroup}>
-                                        <div className={styles.iconCircle}><Thermometer size={20} color="#facc15" /></div>
-                                        <div>
-                                            <div className={styles.statVal}>{weather.avgTemp30Days.toFixed(1)}°C</div>
-                                            <div className={styles.statSub}>Avg Temp</div>
-                                        </div>
-                                    </div>
-                                    <div className={styles.statGroup}>
-                                        <div className={styles.iconCircle} style={{ background: `${getPollutionStatus(weather.air_quality?.aqi).color}15`, border: `1px solid ${getPollutionStatus(weather.air_quality?.aqi).color}30` }}>
-                                            <Wind size={20} color={getPollutionStatus(weather.air_quality?.aqi).color} />
-                                        </div>
-                                        <div>
-                                            <div className={styles.statVal}>AQI {weather.air_quality?.aqi || 'N/A'}</div>
-                                            <div className={styles.statSub} style={{ color: getPollutionStatus(weather.air_quality?.aqi).color }}>{getPollutionStatus(weather.air_quality?.aqi).label}</div>
-                                        </div>
-                                    </div>
+                                    <div className={styles.statLabel}>Thermodynamics</div>
+                                    <div className={styles.statValue}>{weather.avgTemp30Days.toFixed(1)}°C</div>
+                                    <p style={{ color: '#64748b', fontSize: '0.8rem', marginTop: '1rem' }}>30-day average equilibrium</p>
                                 </div>
-                                <div className={styles.weatherFooter}>
-                                    <div className={styles.footerMsg}>
-                                        <span className={styles.liveTag}>LIVE UPDATE</span>
-                                        <p>{getPollutionStatus(weather.air_quality?.aqi).desc}</p>
+
+                                <div className={styles.weatherCard}>
+                                    <div className={styles.statIcon} style={{
+                                        background: `${getPollutionStatus(weather.air_quality?.aqi).color}15`,
+                                        color: getPollutionStatus(weather.air_quality?.aqi).color
+                                    }}>
+                                        <Wind size={32} />
                                     </div>
-                                    <Button onClick={scrollToPlants} variant="primary" size="sm" className={styles.pulseBtn}>
-                                        See Recommendations <ArrowDown size={14} />
-                                    </Button>
+                                    <div className={styles.statLabel}>Atmospheric Purity</div>
+                                    <div className={styles.statValue}>AQI {weather.air_quality?.aqi || '---'}</div>
+                                    <p style={{ color: getPollutionStatus(weather.air_quality?.aqi).color, fontSize: '0.8rem', fontWeight: '800', marginTop: '1rem' }}>
+                                        {getPollutionStatus(weather.air_quality?.aqi).label.toUpperCase()}
+                                    </p>
+                                </div>
+
+                                <div className={styles.weatherCard}>
+                                    <div className={styles.statIcon} style={{ background: 'rgba(56, 189, 248, 0.1)', color: '#38bdf8' }}>
+                                        <Droplets size={32} />
+                                    </div>
+                                    <div className={styles.statLabel}>Hydration Index</div>
+                                    <div className={styles.statValue}>{weather.avgHumidity30Days}%</div>
+                                    <p style={{ color: '#64748b', fontSize: '0.8rem', marginTop: '1rem' }}>Ambient humidity levels</p>
                                 </div>
                             </div>
-                        </div>
+                        </section>
                     )}
 
                     <div className={styles.featuresGrid}>
@@ -401,10 +414,15 @@ export const Home = () => {
                 </div>
             </section>
 
-            <div className="container" id="plant-grid" style={{ scrollMarginTop: '2rem' }}>
+            <div className={styles.discoverySection} id="plant-grid" style={{ scrollMarginTop: '2rem' }}>
                 <div className={styles.sectionHeader}>
-                    <h2 style={{ fontSize: '2.5rem', fontWeight: 900 }}>{weather ? 'BEST MATCHES FOR YOU' : 'EXPLORE PLANTS'}</h2>
-                    <p style={{ color: 'var(--color-text-muted)' }}>{weather ? 'These plants grow best in your area.' : 'Browse our collection of air-purifying plants.'}</p>
+                    <span className={styles.sectionBadge}>DISCOVER SPECIMENS</span>
+                    <h2 className={styles.sectionTitle}>{weather ? 'Curated Compatibility' : 'Ecosystem Archive'}</h2>
+                    <p className={styles.sectionSubtitle}>
+                        {weather
+                            ? 'Optimized biological selection for your current atmospheric zone.'
+                            : 'Explore our database of laboratory-grade air purifying species.'}
+                    </p>
                 </div>
 
                 {/* Integrated Search and Filtering */}
@@ -425,27 +443,27 @@ export const Home = () => {
                         <h3 className={styles.filterQuestion}>Which plant are you looking for?</h3>
                         <div className={styles.categorySelectionList}>
                             <div
-                                className={`${styles.categoryCard} ${filter === 'indoor' ? styles.indoorActive : ''}`}
+                                className={`${styles.categoryCard} ${filter === 'indoor' ? styles.categoryCardActive : ''}`}
                                 onClick={() => {
                                     setFilter(filter === 'indoor' ? 'all' : 'indoor');
                                     scrollToPlants();
                                 }}
                             >
-                                <div className={styles.categoryIcon}><Wind size={32} /></div>
+                                <span className={styles.categoryIcon}>🏠</span>
                                 <div className={styles.categoryText}>
-                                    <h3 className={styles.categoryName}>Indoor Collection</h3>
+                                    <h3 className={styles.categoryName}>Indoor Collections</h3>
                                     <p className={styles.categoryDesc}>Air-purifying laboratory-grade specimens for your room.</p>
                                 </div>
                             </div>
 
                             <div
-                                className={`${styles.categoryCard} ${filter === 'outdoor' ? styles.outdoorActive : ''}`}
+                                className={`${styles.categoryCard} ${filter === 'outdoor' ? styles.categoryCardActive : ''}`}
                                 onClick={() => {
                                     setFilter(filter === 'outdoor' ? 'all' : 'outdoor');
                                     scrollToPlants();
                                 }}
                             >
-                                <div className={styles.categoryIcon}><Sprout size={32} /></div>
+                                <span className={styles.categoryIcon}>🌲</span>
                                 <div className={styles.categoryText}>
                                     <h3 className={styles.categoryName}>Outdoor Nature</h3>
                                     <p className={styles.categoryDesc}>Resilient natural varieties for your garden and balcony.</p>
