@@ -136,7 +136,7 @@ export const Support = () => {
                         <Store size={32} color="#10b981" className={styles.miniIcon} />
                         <h3 className={styles.miniTitle}>Vendor Hub</h3>
                         <p className={styles.miniDesc}>Scale your nursery business by joining our verified network.</p>
-                        <Button variant="outline" style={{ width: '100%' }} onClick={() => navigate('/auth')}>JOIN NETWORK</Button>
+                        <Button variant="outline" style={{ width: '100%' }} onClick={() => navigate('/auth?role=vendor&view=signup')}>JOIN NETWORK</Button>
                     </div>
 
                     <div className={`${styles.glassCard} ${styles.miniCard}`}>

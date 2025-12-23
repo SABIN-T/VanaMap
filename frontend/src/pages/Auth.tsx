@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '../components/common/Button';
 import { User, ArrowLeft, Store } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
@@ -10,13 +10,19 @@ import styles from './Auth.module.css';
 
 export const Auth = () => {
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
     const { login, signup, user } = useAuth();
 
     type AuthView = 'login' | 'signup' | 'forgot' | 'reset';
-    const [view, setView] = useState<AuthView>('login');
+
+    // Parse URL params
+    const initialView = searchParams.get('view') as AuthView || 'login';
+    const initialRole = searchParams.get('role') as 'user' | 'vendor' || 'user';
+
+    const [view, setView] = useState<AuthView>(initialView);
 
     // Form States
-    const [role, setRole] = useState<'user' | 'vendor'>('user');
+    const [role, setRole] = useState<'user' | 'vendor'>(initialRole);
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');

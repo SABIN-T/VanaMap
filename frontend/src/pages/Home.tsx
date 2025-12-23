@@ -421,6 +421,18 @@ export const Home = () => {
                             </div>
                             <h3>{p.title}</h3>
                             <p>{p.desc}</p>
+                            {expandedCards[p.id] && p.id === 'role-vendor' && (
+                                <Button
+                                    size="sm"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        navigate('/auth?role=vendor&view=signup');
+                                    }}
+                                    style={{ marginTop: '1rem', width: '100%', background: p.color, color: 'black', fontWeight: 800 }}
+                                >
+                                    JOIN AS VENDOR
+                                </Button>
+                            )}
                             <span className={styles.onboardingMeta}>{p.meta}</span>
                         </div>
                     ))}

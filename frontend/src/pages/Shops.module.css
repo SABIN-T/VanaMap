@@ -390,3 +390,47 @@
         font-size: 0.65rem;
     }
 }
+
+.vendorCTA {
+    margin: 4rem auto;
+    max-width: 800px;
+    background: linear-gradient(135deg, rgba(250, 204, 21, 0.1) 0%, rgba(16, 185, 129, 0.05) 100%);
+    border: 1px solid rgba(250, 204, 21, 0.2);
+    border-radius: 2rem;
+    padding: 3rem;
+    text-align: center;
+    backdrop-filter: blur(10px);
+}
+
+.vendorCTATitle {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    color: var(--color-text-main);
+}
+
+.vendorCTADesc {
+    color: var(--color-text-muted);
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+    .vendorCTA {
+        padding: 2rem 1.5rem;
+        margin: 2rem 1rem;
+        border-radius: 1.5rem;
+    }
+
+    .vendorCTATitle {
+        font-size: 1.5rem;
+    }
+
+    .vendorCTADesc {
+        font-size: 0.95rem;
+    }
+}

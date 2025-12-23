@@ -3,9 +3,11 @@ import type { Plant, Vendor } from '../types';
 import { fetchPlants, fetchVendors } from '../services/api';
 import { Search, ShoppingBag } from 'lucide-react';
 import { PlantVendorsModal } from '../components/features/market/PlantVendorsModal';
+import { useNavigate } from 'react-router-dom';
 import styles from './Shops.module.css';
 
 export const Shops = () => {
+    const navigate = useNavigate();
     const [plants, setPlants] = useState<Plant[]>([]);
     const [vendors, setVendors] = useState<Vendor[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
@@ -177,6 +179,42 @@ export const Shops = () => {
                     ))}
                 </div>
             )}
+
+            {/* Vendor CTA Section */}
+            <div className={styles.vendorCTA}>
+                <div style={{ display: 'inline-flex', padding: '1rem', background: 'rgba(250, 204, 21, 0.1)', borderRadius: '1rem', marginBottom: '1.5rem' }}>
+                    <ShoppingBag size={32} color="#facc15" />
+                </div>
+                <h2 className={styles.vendorCTATitle}>Own a Plant Shop?</h2>
+                <p className={styles.vendorCTADesc}>
+                    Join our verified network of nurseries and start connecting with thousands of plant lovers in your area.
+                </p>
+                <button
+                    onClick={() => navigate('/auth?role=vendor&view=signup')}
+                    style={{
+                        padding: '1.25rem 2.5rem',
+                        fontSize: '1.1rem',
+                        fontWeight: '800',
+                        background: 'linear-gradient(135deg, #facc15 0%, #ca8a04 100%)',
+                        color: '#000',
+                        border: 'none',
+                        borderRadius: '1.25rem',
+                        cursor: 'pointer',
+                        boxShadow: '0 10px 30px rgba(250, 204, 21, 0.3)',
+                        transition: 'all 0.3s ease'
+                    }}
+                    onMouseOver={(e) => {
+                        e.currentTarget.style.transform = 'translateY(-4px)';
+                        e.currentTarget.style.boxShadow = '0 15px 40px rgba(250, 204, 21, 0.4)';
+                    }}
+                    onMouseOut={(e) => {
+                        e.currentTarget.style.transform = 'translateY(0)';
+                        e.currentTarget.style.boxShadow = '0 10px 30px rgba(250, 204, 21, 0.3)';
+                    }}
+                >
+                    REGISTER AS VENDOR
+                </button>
+            </div>
 
             {selectedPlant && (
                 <PlantVendorsModal
