@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Search, Save, AlertCircle, CheckCircle, Package, DollarSign } from 'lucide-react';
+import { Search, Save, AlertCircle, CheckCircle, Package, DollarSign, Trash2 } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { fetchPlants, updateVendor } from '../../../services/api';
 import { formatCurrency } from '../../../utils/currency';
@@ -104,6 +104,37 @@ export const VendorInventory = ({ vendor, onUpdate }: VendorInventoryProps) => {
         }
     };
 
+    const handleRemoveItem = async (plantId: string) => {
+        if (!confirm("Remove this plant from your inventory?")) return;
+
+        const currentInventory = vendor.inventory || [];
+        const newInventory = currentInventory.filter(i => i.plantId !== plantId);
+
+        const tid = toast.loading("Removing from inventory...");
+        try {
+            const success = await updateVendor(vendor.id, { inventory: newInventory });
+            if (success) {
+                toast.success("Removed successfully", { id: tid });
+
+                // Clear local edit state for this item
+                setEditValues(prev => {
+                    const next = { ...prev };
+                    if (next[plantId]) {
+                        // Reset to empty/default if we want, or just delete the key
+                        next[plantId] = { price: '', inStock: true };
+                    }
+                    return next;
+                });
+                onUpdate();
+            } else {
+                throw new Error("Update failed");
+            }
+        } catch (err) {
+            toast.error("Failed to remove item", { id: tid });
+        }
+    };
+
+
     const filteredPlants = plants.filter(p =>
         p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         p.scientificName.toLowerCase().includes(searchQuery.toLowerCase())
@@ -185,6 +216,16 @@ export const VendorInventory = ({ vendor, onUpdate }: VendorInventoryProps) => {
                                             >
                                                 <Save size={18} />
                                             </button>
+                                            {invItem && (
+                                                <button
+                                                    onClick={() => handleRemoveItem(plant.id)}
+                                                    className={styles.deleteBtn}
+                                                    title="Remove from Inventory"
+                                                    style={{ marginLeft: '0.5rem', padding: '0.5rem', borderRadius: '8px', background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', border: 'none', cursor: 'pointer' }}
+                                                >
+                                                    <Trash2 size={18} />
+                                                </button>
+                                            )}
                                         </div>
 
                                         {invItem && (
