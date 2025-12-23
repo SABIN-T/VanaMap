@@ -316,9 +316,32 @@
 }
 
 @media (min-width: 1024px) {
-    .heroActionArea .weatherDashboard {
-        grid-template-columns: 1fr;
-        max-width: 450px;
+    .weatherDashboard {
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+        max-width: 420px;
+        width: 100%;
+        margin: 0;
+        margin-left: auto;
+        /* Push to right */
+    }
+
+    .weatherCard {
+        flex-direction: row;
+        align-items: center;
+        text-align: left;
+        padding: 1.25rem;
+        gap: 1.5rem;
+        min-height: auto;
+    }
+
+    .statInfo {
+        align-items: flex-start;
+    }
+
+    .changeLocationBtn {
+        align-self: flex-start;
     }
 }
 
