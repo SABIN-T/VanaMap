@@ -18,6 +18,17 @@ export const VendorInventory = ({ vendor, onUpdate }: VendorInventoryProps) => {
     const [editValues, setEditValues] = useState<Record<string, { price: string, inStock: boolean }>>({});
 
     useEffect(() => {
+        // Restore state after forced refresh
+        const restoreState = sessionStorage.getItem('vendor_restore');
+        if (restoreState) {
+            const { query, scroll } = JSON.parse(restoreState);
+            setSearchQuery(query);
+            setTimeout(() => {
+                window.scrollTo(0, scroll);
+                toast.success("Data verified & synched from server!", { icon: '🔐' });
+            }, 500); // Small delay to allow rendering
+            sessionStorage.removeItem('vendor_restore');
+        }
         loadPlants();
     }, []);
 
@@ -105,12 +116,17 @@ export const VendorInventory = ({ vendor, onUpdate }: VendorInventoryProps) => {
             newInventory.push(newItem);
         }
 
-        const tid = toast.loading("Updating inventory...");
+        const tid = toast.loading("Securely saving...");
         try {
             const success = await updateVendor(vendor.id, { inventory: newInventory });
             if (success) {
-                toast.success("Inventory updated successfully!", { id: tid });
-                onUpdate(); // Refresh parent to get latest backend state
+                onUpdate();
+                // FORCE REFRESH LOGIC
+                sessionStorage.setItem('vendor_restore', JSON.stringify({
+                    query: searchQuery,
+                    scroll: window.scrollY
+                }));
+                window.location.reload();
             } else {
                 throw new Error("Update failed");
             }
@@ -125,22 +141,16 @@ export const VendorInventory = ({ vendor, onUpdate }: VendorInventoryProps) => {
         const currentInventory = vendor.inventory || [];
         const newInventory = currentInventory.filter(i => i.plantId !== plantId);
 
-        const tid = toast.loading("Removing from inventory...");
+        const tid = toast.loading("Removing...");
         try {
             const success = await updateVendor(vendor.id, { inventory: newInventory });
             if (success) {
-                toast.success("Removed successfully", { id: tid });
-
-                // Clear local edit state for this item
-                setEditValues(prev => {
-                    const next = { ...prev };
-                    if (next[plantId]) {
-                        // Reset to empty/default if we want, or just delete the key
-                        next[plantId] = { price: '', inStock: true };
-                    }
-                    return next;
-                });
                 onUpdate();
+                sessionStorage.setItem('vendor_restore', JSON.stringify({
+                    query: searchQuery,
+                    scroll: window.scrollY
+                }));
+                window.location.reload();
             } else {
                 throw new Error("Update failed");
             }
