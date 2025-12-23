@@ -507,14 +507,7 @@ app.get('/api/users', auth, admin, async (req, res) => {
     }
 });
 
-app.get('/api/admin/notifications', auth, admin, async (req, res) => {
-    try {
-        const notifs = await Notification.find({}).sort({ date: -1 }).limit(20);
-        res.json(notifs);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});
+
 
 // --- AUTH ---
 
@@ -640,12 +633,7 @@ app.get('/api/admin/requests', auth, admin, async (req, res) => {
     res.json(users);
 });
 
-app.get('/api/admin/notifications', auth, admin, async (req, res) => {
-    try {
-        const notifs = await Notification.find().sort({ createdAt: -1 }).limit(100);
-        res.json(notifs);
-    } catch (e) { res.status(500).json({ error: e.message }); }
-});
+
 
 app.delete('/api/users/:id', auth, admin, async (req, res) => {
     try {

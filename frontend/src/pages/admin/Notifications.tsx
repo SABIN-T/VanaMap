@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { AdminLayout } from './AdminLayout';
 import {
-    User, Store, Sprout, Clock, Search, DollarSign, CheckCheck
+    User, Store, Sprout, Clock, Search, DollarSign, CheckCheck, AlertTriangle
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import styles from './Notifications.module.css';
@@ -9,7 +9,7 @@ import { fetchAdminNotifications, markNotificationRead, markAllNotificationsRead
 
 interface Notification {
     _id: string;
-    type: 'user' | 'vendor' | 'plant' | 'price' | 'suggestion';
+    type: 'user' | 'vendor' | 'plant' | 'price' | 'suggestion' | 'security' | 'help' | 'vendor_contact';
     message: string;
     details: any;
     date: string;
@@ -70,6 +70,8 @@ export const Notifications = () => {
     const vendorNotifs = filteredNotifs.filter(n => n.type === 'vendor');
     const plantNotifs = filteredNotifs.filter(n => n.type === 'plant');
     const priceNotifs = filteredNotifs.filter(n => n.type === 'price');
+    const suggestionNotifs = filteredNotifs.filter(n => n.type === 'suggestion');
+    const systemNotifs = filteredNotifs.filter(n => ['security', 'help', 'vendor_contact'].includes(n.type));
 
     const formatTime = (dateStr: string) => {
         const date = new Date(dateStr);
@@ -147,6 +149,8 @@ export const Notifications = () => {
                     {renderCard("Vendor Joins", <Store size={20} />, vendorNotifs, styles.vendorIcon)}
                     {renderCard("Plant Updates", <Sprout size={20} />, plantNotifs, styles.plantIcon)}
                     {renderCard("Price Alerts", <DollarSign size={20} />, priceNotifs, styles.priceIcon)}
+                    {renderCard("Suggestions", <CheckCheck size={20} />, suggestionNotifs, styles.plantIcon)}
+                    {renderCard("Security & System", <AlertTriangle size={20} />, systemNotifs, styles.priceIcon)}
                 </div>
             </div>
         </AdminLayout>
