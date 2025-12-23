@@ -155,6 +155,10 @@ export const PlantVendorsModal = ({ plant, onClose }: PlantVendorsModalProps) =>
                             )}
                         </button>
                         {gpsError && <p className="text-xs text-red-400 mt-2">{gpsError}</p>}
+
+                        <div className={styles.desktopWarning}>
+                            ⚠️ Desktop GPS accuracy varies. Use mobile for best results. All shops shown are within 50km radius.
+                        </div>
                     </div>
                 )}
 
