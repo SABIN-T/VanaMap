@@ -14,7 +14,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    text-align: center;
     padding: 6rem 2rem 4rem;
     position: relative;
     overflow: hidden;
@@ -22,6 +21,14 @@
         radial-gradient(circle at 0% 0%, rgba(16, 185, 129, 0.08) 0%, transparent 40%),
         radial-gradient(circle at 100% 100%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
         var(--color-bg);
+}
+
+@media (min-width: 1024px) {
+    .hero {
+        padding: 5rem 10vw;
+        align-items: center;
+        text-align: left;
+    }
 }
 
 /* Hero animated glow backdrop */
@@ -40,13 +47,50 @@
 }
 
 .heroContent {
-    max-width: 900px;
+    max-width: 1400px;
     width: 100%;
     position: relative;
     z-index: 10;
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+@media (min-width: 1024px) {
+    .heroContent {
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 6rem;
+        align-items: center;
+    }
+}
+
+.heroMainStack {
+    flex: 1.2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+@media (min-width: 1024px) {
+    .heroMainStack {
+        align-items: flex-start;
+        text-align: left;
+    }
+}
+
+.heroActionArea {
+    flex: 0.8;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+@media (min-width: 1024px) {
+    .heroActionArea {
+        justify-content: flex-end;
+    }
 }
 
 .heroBadge {
@@ -88,6 +132,12 @@
     margin-inline: auto;
 }
 
+@media (min-width: 1024px) {
+    .heroSubtitle {
+        margin-inline: 0;
+    }
+}
+
 /* --- LOCATION ACTIONS --- */
 .actionContainer {
     width: 100%;
@@ -95,6 +145,12 @@
     display: flex;
     flex-direction: column;
     gap: 2.5rem;
+    background: var(--glass-bg);
+    padding: 3.5rem;
+    border-radius: 3rem;
+    border: var(--glass-border);
+    backdrop-filter: blur(25px);
+    box-shadow: var(--glass-shadow);
 }
 
 .gpsBtn {
@@ -200,25 +256,39 @@
 }
 
 .sectionTitle {
-    font-size: 1.5rem;
+    font-size: 2.5rem;
     font-weight: 900;
     color: var(--color-text-main);
-    letter-spacing: -0.5px;
+    letter-spacing: -1.5px;
+    margin-bottom: 0.5rem;
+}
+
+@media (min-width: 1024px) {
+    .sectionTitle {
+        font-size: 3.5rem;
+    }
 }
 
 .sectionSubtitle {
     color: var(--color-text-muted);
-    font-size: 0.85rem;
+    font-size: 1.1rem;
     max-width: 600px;
 }
 
 .weatherDashboard {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
-    max-width: 1200px;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 2.5rem;
+    max-width: 1400px;
     margin: 0 auto;
     width: 100%;
+}
+
+@media (min-width: 1024px) {
+    .heroActionArea .weatherDashboard {
+        grid-template-columns: 1fr;
+        max-width: 450px;
+    }
 }
 
 .weatherCard {
@@ -304,12 +374,18 @@
 }
 
 .filterDiscoverySection {
-    margin-bottom: 3rem;
+    margin-bottom: 5rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2rem;
+    gap: 3rem;
     width: 100%;
+}
+
+@media (min-width: 1024px) {
+    .filterDiscoverySection {
+        gap: 4rem;
+    }
 }
 
 .searchBarWrapper {
@@ -361,9 +437,16 @@
 
 .categorySelectionList {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    margin-bottom: 4rem;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 3rem;
+    margin-bottom: 5rem;
+}
+
+@media (min-width: 1024px) {
+    .categorySelectionList {
+        max-width: 1000px;
+        margin-inline: auto;
+    }
 }
 
 .categoryCard {
@@ -539,41 +622,158 @@
         gap: 1rem;
     }
 
-    /* Weather Dashboard Mobile Optimization: Stack everything below one another */
+    /* Weather Dashboard Mobile Optimization */
     .weatherDashboard {
         display: flex;
         flex-direction: column;
         gap: 1.5rem;
         padding: 0 1rem;
-        width: 100%;
     }
 
     .weatherCard {
         padding: 2rem;
         min-height: auto;
         border-radius: 1.5rem;
-        flex-direction: column;
-        /* Stack icon and text vertically */
         text-align: center;
         align-items: center;
-        width: 100%;
-        gap: 1.25rem;
+    }
+}
+
+/* --- Premium Layouts & Modules --- */
+.capabilityCard {
+    background: var(--glass-bg);
+    border: var(--glass-border);
+    border-radius: 2rem;
+    padding: 2.5rem;
+    backdrop-filter: blur(20px);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    gap: 1.5rem;
+    box-shadow: var(--card-shadow);
+}
+
+.capabilityCard:hover {
+    transform: translateY(-8px);
+    background: var(--color-bg-card);
+    border-color: var(--color-primary);
+    box-shadow: var(--glass-shadow);
+}
+
+.capabilityCard h3 {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--color-text-main);
+}
+
+.capabilityCard p {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    line-height: 1.6;
+}
+
+@media (min-width: 1024px) {
+    .capabilityCard {
+        padding: 3.5rem;
+        gap: 2rem;
     }
 
-    .statIcon {
-        width: 56px;
-        height: 56px;
-        border-radius: 1rem;
-        flex-shrink: 0;
+    .capabilityCard h3 {
+        font-size: 1.75rem;
     }
 
-    .statValue {
-        font-size: 1.5rem;
+    .capabilityCard p {
+        font-size: 1.1rem;
+    }
+}
+
+/* Onboarding Hub Updates */
+.onboardingSection {
+    padding: 6rem 2rem;
+    background: linear-gradient(to bottom, var(--color-bg), var(--color-bg-alt));
+}
+
+.onboardingGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 3rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.onboardingCard {
+    background: var(--glass-bg);
+    border: var(--glass-border);
+    border-radius: 2.5rem;
+    padding: 3rem;
+    backdrop-filter: blur(20px);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--card-shadow);
+}
+
+.onboardingCard:hover {
+    transform: translateY(-8px);
+    background: var(--color-bg-card);
+    border-color: var(--color-accent);
+    box-shadow: var(--glass-shadow);
+}
+
+.onboardingIcon {
+    width: 64px;
+    height: 64px;
+    border-radius: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    transition: transform 0.3s ease;
+}
+
+.onboardingCard:hover .onboardingIcon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.onboardingCard h3 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--color-text-main);
+    margin-bottom: 0.75rem;
+}
+
+.onboardingCard p {
+    color: var(--color-text-muted);
+    font-size: 1.05rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.onboardingMeta {
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: var(--color-text-dim);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-border);
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .onboardingSection {
+        padding: 4rem 1rem;
     }
 
-    .statLabel {
-        font-size: 0.7rem;
-        margin-bottom: 4px;
+    .onboardingCard {
+        padding: 2.5rem;
+        border-radius: 2rem;
     }
 }
 
@@ -634,92 +834,4 @@
 
 .suggestionItem:hover {
     background: rgba(16, 185, 129, 0.1);
-}
-
-/* --- Onboarding Hub --- */
-.onboardingSection {
-    padding: 4rem 2rem;
-    background: linear-gradient(to bottom, var(--color-bg), var(--color-bg-alt));
-}
-
-.onboardingGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.onboardingCard {
-    background: var(--glass-bg);
-    border: var(--glass-border);
-    border-radius: 2.5rem;
-    padding: 3rem;
-    backdrop-filter: blur(20px);
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-    box-shadow: var(--card-shadow);
-}
-
-.onboardingCard:hover {
-    transform: translateY(-8px);
-    background: var(--color-bg-card);
-    border-color: var(--color-accent);
-    box-shadow: var(--glass-shadow);
-}
-
-.onboardingIcon {
-    width: 48px;
-    height: 48px;
-    border-radius: 0.85rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 1rem;
-    transition: transform 0.3s ease;
-}
-
-.onboardingCard:hover .onboardingIcon {
-    transform: scale(1.1) rotate(5deg);
-}
-
-.onboardingCard h3 {
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: var(--color-text-main);
-    margin-bottom: 0.75rem;
-}
-
-.onboardingCard p {
-    color: var(--color-text-muted);
-    font-size: 1.05rem;
-    line-height: 1.6;
-    margin-bottom: 1.5rem;
-}
-
-.onboardingMeta {
-    font-size: 0.7rem;
-    font-weight: 800;
-    color: var(--color-text-dim);
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--color-border);
-    width: 100%;
-}
-
-@media (max-width: 768px) {
-    .onboardingSection {
-        padding: 4rem 1rem;
-    }
-
-    .onboardingCard {
-        padding: 2.5rem;
-        border-radius: 2rem;
-    }
 }

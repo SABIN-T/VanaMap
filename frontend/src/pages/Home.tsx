@@ -246,60 +246,64 @@ export const Home = () => {
                         <Sparkles size={16} /> Home Ecosystem Intelligence
                     </div>
 
-                    <h1 className={styles.heroTitle}>BRING NATURE<br />HOME</h1>
-                    <p className={styles.heroSubtitle}>
-                        Transform your living space into a high-performance sanctuary.
-                        <strong> Start by detecting your location</strong> to see what grows best in your ecosystem.
-                    </p>
+                    <div className={styles.heroMainStack}>
+                        <h1 className={styles.heroTitle}>BRING NATURE<br />HOME</h1>
+                        <p className={styles.heroSubtitle}>
+                            Transform your living space into a high-performance sanctuary.
+                            <strong> Start by detecting your location</strong> to see what grows best in your ecosystem.
+                        </p>
+                    </div>
 
                     {!weather ? (
-                        <div id="location-action-area" className={styles.actionContainer}>
-                            <Button
-                                variant="primary"
-                                onClick={handleGetLocation}
-                                className={styles.gpsBtn}
-                                disabled={locationLoading}
-                            >
-                                <MapPin size={22} className={locationLoading ? "animate-spin" : "animate-bounce"} style={{ marginRight: '12px' }} />
-                                {locationLoading ? "DETERMINING CLIMATE..." : "Auto-Detect Local Climate"}
-                            </Button>
+                        <div id="location-action-area" className={styles.heroActionArea}>
+                            <div className={styles.actionContainer}>
+                                <Button
+                                    variant="primary"
+                                    onClick={handleGetLocation}
+                                    className={styles.gpsBtn}
+                                    disabled={locationLoading}
+                                >
+                                    <MapPin size={22} className={locationLoading ? "animate-spin" : "animate-bounce"} style={{ marginRight: '12px' }} />
+                                    {locationLoading ? "DETERMINING CLIMATE..." : "Auto-Detect Local Climate"}
+                                </Button>
 
-                            <div className={styles.divider}>
-                                <span>OR SEARCH MANUALLY</span>
+                                <div className={styles.divider}>
+                                    <span>OR SEARCH MANUALLY</span>
+                                </div>
+
+                                <div className={styles.searchBox}>
+                                    <Search size={22} className={styles.searchIcon} />
+                                    <input
+                                        type="text"
+                                        placeholder="Enter your city..."
+                                        value={citySearch}
+                                        onChange={(e) => setCitySearch(e.target.value)}
+                                        onFocus={() => setShowSuggestions(true)}
+                                        onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+                                        onKeyDown={(e) => e.key === 'Enter' && handleCitySearch()}
+                                        className={styles.searchInput}
+                                    />
+                                    {showSuggestions && suggestions.length > 0 && (
+                                        <ul className={styles.suggestionsList}>
+                                            {suggestions.map((place: any, i) => (
+                                                <li key={i} className={styles.suggestionItem} onClick={() => {
+                                                    const cityName = place.display_name.split(',')[0];
+                                                    setCitySearch(cityName);
+                                                    setShowSuggestions(false);
+                                                    handleCitySearch(cityName);
+                                                }}>
+                                                    <MapPin size={16} style={{ marginRight: '12px', color: '#10b981' }} />
+                                                    <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{place.display_name}</span>
+                                                </li>
+                                            ))}
+                                        </ul>
+                                    )}
+                                </div>
+
+                                <Button variant="ghost" size="sm" onClick={() => navigate('/nearby')} style={{ color: '#64748b', marginTop: '1rem' }}>
+                                    <Sprout size={16} style={{ marginRight: '8px' }} /> Find Nearby Shop Instead
+                                </Button>
                             </div>
-
-                            <div className={styles.searchBox}>
-                                <Search size={22} className={styles.searchIcon} />
-                                <input
-                                    type="text"
-                                    placeholder="Enter your city..."
-                                    value={citySearch}
-                                    onChange={(e) => setCitySearch(e.target.value)}
-                                    onFocus={() => setShowSuggestions(true)}
-                                    onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
-                                    onKeyDown={(e) => e.key === 'Enter' && handleCitySearch()}
-                                    className={styles.searchInput}
-                                />
-                                {showSuggestions && suggestions.length > 0 && (
-                                    <ul className={styles.suggestionsList}>
-                                        {suggestions.map((place: any, i) => (
-                                            <li key={i} className={styles.suggestionItem} onClick={() => {
-                                                const cityName = place.display_name.split(',')[0];
-                                                setCitySearch(cityName);
-                                                setShowSuggestions(false);
-                                                handleCitySearch(cityName);
-                                            }}>
-                                                <MapPin size={16} style={{ marginRight: '12px', color: '#10b981' }} />
-                                                <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{place.display_name}</span>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                )}
-                            </div>
-
-                            <Button variant="ghost" size="sm" onClick={() => navigate('/nearby')} style={{ color: '#64748b', marginTop: '1rem' }}>
-                                <Sprout size={16} style={{ marginRight: '8px' }} /> Find Nearby Shop Instead
-                            </Button>
                         </div>
                     ) : (
                         <div className={styles.weatherDashboard}>
@@ -359,27 +363,27 @@ export const Home = () => {
                     <h2 className={styles.sectionTitle}>Built for Deep Biological Insights</h2>
                     <p className={styles.sectionSubtitle}>VanaMap bridges the gap between atmospheric science and interior design.</p>
                 </div>
-                <div className={styles.weatherDashboard} style={{ marginTop: '4rem' }}>
-                    <div className={styles.weatherCard}>
-                        <div className={styles.statIcon} style={{ background: 'rgba(52, 211, 153, 0.1)', color: '#34d399' }}>
+                <div className={styles.onboardingGrid} style={{ marginTop: '4rem' }}>
+                    <div className={styles.capabilityCard}>
+                        <div className={styles.onboardingIcon} style={{ background: 'rgba(52, 211, 153, 0.1)', color: '#34d399' }}>
                             <Sparkles size={32} />
                         </div>
                         <h3>Smart Match</h3>
-                        <p style={{ color: '#64748b' }}>Precision scoring system based on local thermo-regulatory data.</p>
+                        <p>Precision scoring system based on local thermo-regulatory data from multiple sensors.</p>
                     </div>
-                    <div className={styles.weatherCard}>
-                        <div className={styles.statIcon} style={{ background: 'rgba(56, 189, 248, 0.1)', color: '#38bdf8' }}>
+                    <div className={styles.capabilityCard}>
+                        <div className={styles.onboardingIcon} style={{ background: 'rgba(56, 189, 248, 0.1)', color: '#38bdf8' }}>
                             <Wind size={32} />
                         </div>
                         <h3>Oxygen Analytics</h3>
-                        <p style={{ color: '#64748b' }}>Calculate O2 output per specimen for optimized sanctuary respiration.</p>
+                        <p>Calculate O2 output per specimen for optimized sanctuary respiration and sleep quality.</p>
                     </div>
-                    <div className={styles.weatherCard}>
-                        <div className={styles.statIcon} style={{ background: 'rgba(168, 85, 247, 0.1)', color: '#a855f7' }}>
+                    <div className={styles.capabilityCard}>
+                        <div className={styles.onboardingIcon} style={{ background: 'rgba(168, 85, 247, 0.1)', color: '#a855f7' }}>
                             <Sprout size={32} />
                         </div>
                         <h3>Specimen Care</h3>
-                        <p style={{ color: '#64748b' }}>Curated survival guides for rare and common tropical species.</p>
+                        <p>Curated survival guides for rare and common tropical species adapted to your home.</p>
                     </div>
                 </div>
             </div>
