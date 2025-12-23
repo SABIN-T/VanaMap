@@ -570,6 +570,24 @@ export const Home = () => {
                         </Button>
                     </div>
                 )}
+                {/* Sponsor CTA */}
+                <div className={styles.sponsorCTA}>
+                    <div className={styles.sponsorContent}>
+                        <div className={styles.sponsorIcon}>
+                            <Heart size={32} fill="#facc15" color="#facc15" />
+                        </div>
+                        <div className={styles.sponsorText}>
+                            <h3>Support the Green Future</h3>
+                            <p>Partner with VanaMap to help us grow our ecosystem database and bring more nature into every home.</p>
+                        </div>
+                        <Button
+                            onClick={() => navigate('/sponsor')}
+                            className={styles.sponsorButton}
+                        >
+                            Become a Sponsor
+                        </Button>
+                    </div>
+                </div>
 
                 {/* --- FOOTER SECTION --- */}
                 <footer style={{

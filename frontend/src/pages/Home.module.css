@@ -1001,3 +1001,98 @@
         margin-bottom: 3rem;
     }
 }
+
+/* --- Sponsor CTA --- */
+.sponsorCTA {
+    margin: 6rem 1rem 0;
+    padding: 3rem;
+    background: rgba(30, 41, 59, 0.4);
+    border: 1px solid rgba(250, 204, 21, 0.2);
+    border-radius: 2.5rem;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 20px 50px -10px rgba(0, 0, 0, 0.5);
+    position: relative;
+    overflow: hidden;
+}
+
+.sponsorCTA::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(250, 204, 21, 0.3), transparent);
+}
+
+.sponsorContent {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 3rem;
+}
+
+.sponsorIcon {
+    flex-shrink: 0;
+    width: 64px;
+    height: 64px;
+    background: rgba(250, 204, 21, 0.1);
+    border-radius: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 20px rgba(250, 204, 21, 0.1);
+}
+
+.sponsorText {
+    flex: 1;
+    text-align: left;
+}
+
+.sponsorText h3 {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 0.5rem;
+}
+
+.sponsorText p {
+    color: #94a3b8;
+    font-size: 1.05rem;
+    line-height: 1.6;
+}
+
+.sponsorButton {
+    background: linear-gradient(135deg, #facc15 0%, #ca8a04 100%) !important;
+    color: #000 !important;
+    border: none !important;
+    font-weight: 800 !important;
+    font-size: 1rem !important;
+    padding: 1rem 2rem !important;
+    border-radius: 1rem !important;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    white-space: nowrap;
+}
+
+.sponsorButton:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 10px 30px rgba(250, 204, 21, 0.4);
+}
+
+@media (max-width: 768px) {
+    .sponsorContent {
+        flex-direction: column;
+        text-align: center;
+        gap: 1.5rem;
+    }
+
+    .sponsorText {
+        text-align: center;
+    }
+
+    .sponsorButton {
+        width: 100%;
+    }
+}
