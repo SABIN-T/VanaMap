@@ -28,7 +28,7 @@ export const Navbar = () => {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }}>
                 <div className={styles.logoIcon}>
-                    <img src="/logo.png?v=2" alt="VanaMap Logo" className={styles.logoImage} />
+                    <img src="/logo.png?v=3" alt="VanaMap Logo" className={styles.logoImage} />
                 </div>
                 <div className={styles.logoText}>
                     <span className={styles.brandName}>VanaMap</span>
