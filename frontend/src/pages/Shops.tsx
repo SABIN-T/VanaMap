@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import type { Plant } from '../types';
 import { fetchPlants } from '../services/api';
 import { Search, ShoppingBag } from 'lucide-react';
-import { Button } from '../components/common/Button';
+
 
 export const Shops = () => {
     const [plants, setPlants] = useState<Plant[]>([]);
@@ -85,87 +85,200 @@ export const Shops = () => {
             {loading ? (
                 <div style={{ textAlign: 'center', padding: '4rem', color: '#94a3b8' }}>Loading Shop...</div>
             ) : (
-                <div style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
-                    gap: '2rem'
-                }}>
+                <div className="shops-grid">
                     {filteredPlants.map(plant => (
-                        <div key={plant.id} style={{
-                            background: 'rgba(30, 41, 59, 0.7)',
-                            borderRadius: '1.5rem',
-                            overflow: 'hidden',
-                            border: '1px solid rgba(255,255,255,0.05)',
-                            transition: 'transform 0.2s',
-                            display: 'flex',
-                            flexDirection: 'column'
-                        }}>
+                        <div key={plant.id} className="shop-card">
                             {/* Image Area */}
-                            <div style={{ height: '250px', position: 'relative', background: '#0f172a' }}>
+                            <div className="shop-image-container">
                                 <img
                                     src={plant.imageUrl}
                                     alt={plant.name}
                                     style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                                     loading="lazy"
                                 />
-                                <div style={{
-                                    position: 'absolute',
-                                    top: '1rem',
-                                    left: '1rem',
-                                    background: 'rgba(0,0,0,0.6)',
-                                    backdropFilter: 'blur(4px)',
-                                    color: '#fff',
-                                    padding: '0.25rem 0.75rem',
-                                    borderRadius: '99px',
-                                    fontSize: '0.75rem',
-                                    fontWeight: 600
-                                }}>
+                                <div className="shop-badge">
                                     {plant.type === 'indoor' ? 'Indoor' : 'Outdoor'}
                                 </div>
                             </div>
 
                             {/* Content Area */}
-                            <div style={{ padding: '1.5rem', flex: 1, display: 'flex', flexDirection: 'column' }}>
+                            <div className="shop-content">
                                 <div style={{ marginBottom: 'auto' }}>
-                                    <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.25rem', color: '#fff' }}>{plant.name}</h3>
-                                    <p style={{ color: '#94a3b8', fontSize: '0.9rem', fontStyle: 'italic', marginBottom: '1rem' }}>{plant.scientificName}</p>
+                                    <h3 className="shop-title">{plant.name}</h3>
+                                    <p className="shop-scientific">{plant.scientificName}</p>
 
-                                    <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '1.5rem' }}>
-                                        <span style={{ fontSize: '0.8rem', padding: '0.2rem 0.6rem', background: 'rgba(16, 185, 129, 0.1)', color: '#10b981', borderRadius: '4px' }}>
+                                    <div className="shop-tags">
+                                        <span style={{ fontSize: '0.75rem', padding: '0.2rem 0.5rem', background: 'rgba(16, 185, 129, 0.1)', color: '#10b981', borderRadius: '4px', whiteSpace: 'nowrap' }}>
                                             Air Purifying
-                                        </span>
-                                        <span style={{ fontSize: '0.8rem', padding: '0.2rem 0.6rem', background: 'rgba(56, 189, 248, 0.1)', color: '#38bdf8', borderRadius: '4px' }}>
-                                            {plant.sunlight} Light
                                         </span>
                                     </div>
                                 </div>
 
                                 {/* Price and Action */}
-                                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '1rem', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '1rem' }}>
-                                    <div style={{ fontSize: '1.5rem', fontWeight: 800, color: '#fff' }}>
+                                <div className="shop-footer">
+                                    <div className="shop-price">
                                         ${getPrice(plant)}
                                     </div>
-                                    <Button
-                                        disabled
-                                        variant="outline"
-                                        style={{
-                                            opacity: 0.7,
-                                            cursor: 'not-allowed',
-                                            padding: '0.5rem 1rem',
-                                            fontSize: '0.9rem',
-                                            background: 'rgba(255,255,255,0.1)',
-                                            color: 'white',
-                                            border: 'none'
-                                        }}
-                                    >
-                                        Coming Soon
-                                    </Button>
+                                    <button className="shop-btn" disabled>
+                                        Soon
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     ))}
                 </div>
             )}
+
+            <style>{`
+                .shops-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+                    gap: 2rem;
+                }
+                
+                .shop-card {
+                    background: rgba(30, 41, 59, 0.7);
+                    border-radius: 1.5rem;
+                    overflow: hidden;
+                    border: 1px solid rgba(255,255,255,0.05);
+                    display: flex;
+                    flex-direction: column;
+                    transition: transform 0.2s;
+                    backdrop-filter: blur(10px);
+                }
+
+                .shop-image-container {
+                    height: 250px;
+                    position: relative;
+                    background: #0f172a;
+                }
+
+                .shop-badge {
+                    position: absolute;
+                    top: 1rem;
+                    left: 1rem;
+                    background: rgba(0,0,0,0.6);
+                    backdrop-filter: blur(4px);
+                    color: #fff;
+                    padding: 0.25rem 0.75rem;
+                    border-radius: 99px;
+                    font-size: 0.75rem;
+                    fontWeight: 600;
+                }
+
+                .shop-content {
+                    padding: 1.5rem;
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                }
+
+                .shop-title {
+                    font-size: 1.25rem;
+                    font-weight: 700;
+                    margin-bottom: 0.25rem;
+                    color: #fff;
+                }
+
+                .shop-scientific {
+                    color: #94a3b8;
+                    font-size: 0.9rem;
+                    font-style: italic;
+                    margin-bottom: 1rem;
+                }
+
+                .shop-tags {
+                    display: flex;
+                    gap: 0.5rem;
+                    flex-wrap: wrap;
+                    margin-bottom: 1.5rem;
+                }
+
+                .shop-footer {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                    margin-top: 1rem;
+                    border-top: 1px solid rgba(255,255,255,0.05);
+                    padding-top: 1rem;
+                }
+
+                .shop-price {
+                    font-size: 1.5rem;
+                    font-weight: 800;
+                    color: #fff;
+                }
+
+                .shop-btn {
+                    padding: 0.5rem 1rem;
+                    font-size: 0.9rem;
+                    background: rgba(255,255,255,0.1);
+                    color: white;
+                    border: none;
+                    border-radius: 0.5rem;
+                    cursor: not-allowed;
+                    opacity: 0.7;
+                }
+
+                /* Mobile Optimizations */
+                @media (max-width: 640px) {
+                    .shops-grid {
+                        grid-template-columns: repeat(2, 1fr);
+                        gap: 0.75rem;
+                    }
+
+                    .shop-card {
+                        border-radius: 1rem;
+                    }
+
+                    .shop-image-container {
+                        height: 160px; /* Shorter image on mobile */
+                    }
+
+                    .shop-badge {
+                        top: 0.5rem;
+                        left: 0.5rem;
+                        padding: 0.2rem 0.5rem;
+                        font-size: 0.6rem;
+                    }
+
+                    .shop-content {
+                        padding: 0.75rem;
+                    }
+
+                    .shop-title {
+                        font-size: 0.95rem;
+                        margin-bottom: 0.1rem;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+
+                    .shop-scientific {
+                        font-size: 0.7rem;
+                        margin-bottom: 0.5rem;
+                    }
+
+                    .shop-tags {
+                        margin-bottom: 0.75rem;
+                        display: none; /* Hide tags to save space on mobile? Or keep minimal. Let's hide for clean look */
+                    }
+
+                    .shop-footer {
+                        margin-top: 0.5rem;
+                        padding-top: 0.5rem;
+                    }
+
+                    .shop-price {
+                        font-size: 1.1rem;
+                    }
+
+                    .shop-btn {
+                        padding: 0.3rem 0.6rem;
+                        font-size: 0.75rem;
+                    }
+                }
+            `}</style>
         </div>
     );
 };
