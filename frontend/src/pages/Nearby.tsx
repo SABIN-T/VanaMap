@@ -251,7 +251,7 @@ out skel qt;
                         </>
                     ) : (
                         <>
-                            <span>GPS Active:</span> We are locating the best nurseries around you.
+                            <span>GPS Active:</span> Finding the best plant shops around you.
                         </>
                     )}
                 </div>
@@ -261,9 +261,9 @@ out skel qt;
             </div>
 
             <div className={styles.headerSection} style={{ textAlign: 'center', marginBottom: '3rem' }}>
-                <h1 className={styles.title} style={{ fontSize: '2.5rem', fontWeight: 900, marginBottom: '0.5rem' }}>Find Local Nurseries</h1>
+                <h1 className={styles.title} style={{ fontSize: '2.5rem', fontWeight: 900, marginBottom: '0.5rem' }}>Plant Shops Near You</h1>
                 <p className={styles.subtitle} style={{ fontSize: '1.1rem', color: '#94a3b8', maxWidth: '600px', margin: '0 auto' }}>
-                    Connect with sustainable plant shops and botanical gardens in your area.
+                    Find trusted local nurseries and garden centers in your neighborhood.
                 </p>
             </div>
 
@@ -466,10 +466,10 @@ out skel qt;
                                 textAlign: 'center'
                             }}>
                                 <h4 style={{ margin: '0 0 0.5rem 0', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem' }}>
-                                    <Sparkles size={18} color="#facc15" /> Nursery Partnership Program
+                                    <Sparkles size={18} color="#facc15" /> Join VanaMap as a Seller
                                 </h4>
                                 <p style={{ color: '#94a3b8', fontSize: '0.9rem', marginBottom: '1.5rem', maxWidth: '600px', marginInline: 'auto' }}>
-                                    Own a nursery or garden center? Join our verified network to showcase your sustainable inventory to thousands of local eco-enthusiasts.
+                                    Own a nursery or plant shop? List your business here to reach more local customers.
                                 </p>
                                 <Button variant="primary" size="sm" onClick={() => {
                                     import('react-hot-toast').then(({ default: toast }) => toast.success("Opening WhatsApp contact..."));

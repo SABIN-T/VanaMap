@@ -246,10 +246,10 @@ export const Home = () => {
                         <div className={styles.heroBadge}>
                             <Sparkles size={16} /> Home Ecosystem Intelligence
                         </div>
-                        <h1 className={styles.heroTitle}>BRING NATURE<br />HOME</h1>
+                        <h1 className={styles.heroTitle}>Bring Nature<br />Home</h1>
                         <p className={styles.heroSubtitle}>
-                            Transform your living space into a high-performance sanctuary.
-                            <strong> Start by detecting your location</strong> to see what grows best in your ecosystem.
+                            Turn your home into a green sanctuary.
+                            <strong> Detect your location</strong> to find plants that thrive in your space.
                         </p>
                     </div>
 
@@ -368,21 +368,21 @@ export const Home = () => {
                             <Sparkles size={32} />
                         </div>
                         <h3>Smart Match</h3>
-                        <p>Precision scoring system based on local thermo-regulatory data from multiple sensors.</p>
+                        <p>We score plants based on your local temperature and air quality to ensure they survive.</p>
                     </div>
                     <div className={styles.capabilityCard}>
                         <div className={styles.onboardingIcon} style={{ background: 'rgba(56, 189, 248, 0.1)', color: '#38bdf8' }}>
                             <Wind size={32} />
                         </div>
-                        <h3>Oxygen Analytics</h3>
-                        <p>Calculate O2 output per specimen for optimized sanctuary respiration and sleep quality.</p>
+                        <h3>Oxygen Boost</h3>
+                        <p>See how much oxygen each plant produces to help you breathe better and sleep deeper.</p>
                     </div>
                     <div className={styles.capabilityCard}>
                         <div className={styles.onboardingIcon} style={{ background: 'rgba(168, 85, 247, 0.1)', color: '#a855f7' }}>
                             <Sprout size={32} />
                         </div>
-                        <h3>Specimen Care</h3>
-                        <p>Curated survival guides for rare and common tropical species adapted to your home.</p>
+                        <h3>Care Guides</h3>
+                        <p>Simple tips for watering, sunlight, and care for every plant in your home.</p>
                     </div>
                 </div>
             </div>

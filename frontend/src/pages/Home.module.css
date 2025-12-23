@@ -173,10 +173,10 @@
 
 .gpsBtn {
     width: 100%;
-    padding: 0.85rem 1.5rem !important;
-    border-radius: 1.25rem !important;
-    font-weight: 800 !important;
-    font-size: 1rem !important;
+    padding: 0.75rem 1.25rem !important;
+    border-radius: 1rem !important;
+    font-weight: 700 !important;
+    font-size: 0.9rem !important;
     text-transform: uppercase;
     letter-spacing: 1.5px;
     background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
