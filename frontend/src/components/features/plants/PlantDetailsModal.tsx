@@ -1,6 +1,6 @@
 import { useState, useMemo, useEffect } from 'react';
 import type { MouseEvent, TouchEvent } from 'react';
-import { X, Sun, Wind, Droplet, ShoppingBag, Leaf, Lightbulb, Fan, AlertTriangle, CheckCircle2, Trash2, Sparkles, Stethoscope } from 'lucide-react';
+import { X, Sun, Wind, Droplet, ShoppingBag, Leaf, Lightbulb, Fan, AlertTriangle, CheckCircle2, Trash2, Sparkles, Stethoscope, BookOpen, GraduationCap } from 'lucide-react';
 import { Button } from '../../common/Button';
 import type { Plant } from '../../../types';
 import styles from './PlantDetailsModal.module.css';
@@ -397,6 +397,26 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                                             <div className={styles.statText}>
                                                 <span className={styles.statLabel}>Water</span>
                                                 <span className={styles.statValue}>Weekly</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* 🎓 Educational Deep Dive */}
+                                    <div className={styles.educationalSection}>
+                                        <div className={styles.eduHeader}>
+                                            <GraduationCap size={20} color="#38bdf8" />
+                                            <h3>Botanical Deep Dive</h3>
+                                        </div>
+                                        <div className={styles.eduGrid}>
+                                            <div className={styles.eduCard}>
+                                                <BookOpen size={16} />
+                                                <h4>Scientific Trivia</h4>
+                                                <p>Did you know? The {plant.name} uses CAM photosynthesis to purify air even during the nocturnal cycle.</p>
+                                            </div>
+                                            <div className={styles.eduCard}>
+                                                <Sparkles size={16} />
+                                                <h4>Beginner Friendly</h4>
+                                                <p>Top tip: Avoid overwatering. This species thrives when the top 2 inches of soil are dry.</p>
                                             </div>
                                         </div>
                                     </div>

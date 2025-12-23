@@ -7,7 +7,7 @@ import { fetchPlants } from '../services/api';
 import { getWeather, geocodeCity } from '../services/weather';
 import { calculateAptness } from '../utils/logic';
 import type { Plant } from '../types';
-import { Sprout, MapPin, Thermometer, Wind, ArrowDown, Sparkles, Search, AlertCircle, Heart, Sun, Activity } from 'lucide-react';
+import { Sprout, MapPin, Thermometer, Wind, ArrowDown, Sparkles, Search, AlertCircle, Heart, Sun, Activity, GraduationCap, ShoppingBag } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
 // Lazy load modal for performance
@@ -401,10 +401,49 @@ export const Home = () => {
                 </div>
             </section>
 
+            {/* 🎯 Community Onboarding Hub */}
+            <section className={styles.onboardingSection}>
+                <div className={styles.sectionHeader}>
+                    <span className={styles.sectionBadge}>WHO ARE YOU?</span>
+                    <h2 className={styles.sectionTitle}>Designed for our Community</h2>
+                    <p className={styles.sectionSubtitle}>Discover how VanaMap empowers different roles in our green ecosystem.</p>
+                </div>
+
+                <div className={styles.onboardingGrid}>
+                    <div className={styles.onboardingCard}>
+                        <div className={styles.onboardingIcon} style={{ background: 'rgba(56, 189, 248, 0.1)', color: '#38bdf8' }}>
+                            <GraduationCap size={32} />
+                        </div>
+                        <h3>For Students</h3>
+                        <p>Learn plant biology, analyze local weather effects, and use our oxygen simulation for your research projects.</p>
+                        <span className={styles.onboardingMeta}>Educational Mode</span>
+                    </div>
+
+                    <div className={styles.onboardingCard}>
+                        <div className={styles.onboardingIcon} style={{ background: 'rgba(250, 204, 21, 0.1)', color: '#facc15' }}>
+                            <ShoppingBag size={32} />
+                        </div>
+                        <h3>For Vendors</h3>
+                        <p>Register your nursery, list rare specimens, and connect with local plant lovers in your area instantly.</p>
+                        <span className={styles.onboardingMeta}>Business Portal</span>
+                    </div>
+
+                    <div className={styles.onboardingCard}>
+                        <div className={styles.onboardingIcon} style={{ background: 'rgba(16, 185, 129, 0.1)', color: '#10b981' }}>
+                            <Heart size={32} />
+                        </div>
+                        <h3>For Plant Lovers</h3>
+                        <p>Find the perfect match for your home, track your collection, and learn how to care for your green companions.</p>
+                        <span className={styles.onboardingMeta}>Social Collector</span>
+                    </div>
+                </div>
+            </section>
+
             <div className="container" id="plant-grid" style={{ scrollMarginTop: '2rem' }}>
                 <div className={styles.sectionHeader}>
-                    <h2 style={{ fontSize: '2.5rem', fontWeight: 900 }}>{weather ? 'BEST MATCHES FOR YOU' : 'EXPLORE PLANTS'}</h2>
-                    <p style={{ color: 'var(--color-text-muted)' }}>{weather ? 'These plants grow best in your area.' : 'Browse our collection of air-purifying plants.'}</p>
+                    <span className={styles.sectionBadge}>PLANT DISCOVERY</span>
+                    <h2 style={{ fontSize: '2.5rem', fontWeight: 900 }}>{weather ? 'SMART MATCHES FOR YOU' : 'GLOBAL SPECIES ARCHIVE'}</h2>
+                    <p style={{ color: 'var(--color-text-muted)' }}>{weather ? 'Biologically optimized for your current atmospheric zone.' : 'Browse our scientific collection of air-purifying plants.'}</p>
                 </div>
 
                 {/* Integrated Search and Filtering */}

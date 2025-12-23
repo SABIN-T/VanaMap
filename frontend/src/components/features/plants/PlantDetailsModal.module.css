@@ -1753,3 +1753,77 @@
     font-family: 'Outfit', sans-serif;
     font-size: 1.1rem;
 }
+
+/* --- Educational Section --- */
+.educationalSection {
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.eduHeader {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+}
+
+.eduHeader h3 {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #fff;
+    margin: 0;
+}
+
+.eduGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+}
+
+.eduCard {
+    background: rgba(15, 23, 42, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    border-radius: 1.25rem;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    transition: all 0.3s ease;
+}
+
+.eduCard:hover {
+    background: rgba(15, 23, 42, 0.6);
+    border-color: rgba(56, 189, 248, 0.2);
+    transform: translateY(-5px);
+}
+
+.eduCard svg {
+    color: #38bdf8;
+    margin-bottom: 0.5rem;
+}
+
+.eduCard h4 {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+}
+
+.eduCard p {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    line-height: 1.6;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .educationalSection {
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+    }
+
+    .eduCard {
+        padding: 1.25rem;
+    }
+}
