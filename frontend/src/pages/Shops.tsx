@@ -7,6 +7,7 @@ import styles from './Shops.module.css';
 export const Shops = () => {
     const [plants, setPlants] = useState<Plant[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
+    const [activeCategory, setActiveCategory] = useState<'all' | 'indoor' | 'outdoor'>('all');
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -23,10 +24,12 @@ export const Shops = () => {
         loadPlants();
     }, []);
 
-    const filteredPlants = plants.filter(p =>
-        p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        p.scientificName.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const filteredPlants = plants.filter(p => {
+        const matchesCategory = activeCategory === 'all' ? true : p.type === activeCategory;
+        const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            p.scientificName.toLowerCase().includes(searchQuery.toLowerCase());
+        return matchesCategory && matchesSearch;
+    });
 
     const getPrice = (plant: Plant) => {
         if (plant.price) return plant.price;
@@ -54,6 +57,31 @@ export const Shops = () => {
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className={styles.searchInput}
                     />
+                </div>
+
+                {/* New Premium Filter Section */}
+                <div className={styles.filterContainer}>
+                    <div
+                        className={`${styles.filterCard} ${activeCategory === 'indoor' ? styles.active : ''}`}
+                        onClick={() => setActiveCategory(activeCategory === 'indoor' ? 'all' : 'indoor')}
+                    >
+                        <div className={styles.filterIcon}>🏠</div>
+                        <div className={styles.filterInfo}>
+                            <span className={styles.filterName}>Indoor</span>
+                            <span className={styles.filterDesc}>Interior Species</span>
+                        </div>
+                    </div>
+
+                    <div
+                        className={`${styles.filterCard} ${activeCategory === 'outdoor' ? styles.active : ''}`}
+                        onClick={() => setActiveCategory(activeCategory === 'outdoor' ? 'all' : 'outdoor')}
+                    >
+                        <div className={styles.filterIcon}>🌲</div>
+                        <div className={styles.filterInfo}>
+                            <span className={styles.filterName}>Outdoor</span>
+                            <span className={styles.filterDesc}>Natural Resilience</span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
