@@ -165,14 +165,14 @@
 
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 2.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 2rem;
     padding-bottom: 6rem;
 }
 
 .card {
     background: var(--glass-bg);
-    border-radius: 2rem;
+    border-radius: 1.5rem;
     overflow: hidden;
     border: var(--glass-border);
     display: flex;
@@ -183,14 +183,14 @@
 }
 
 .card:hover {
-    transform: translateY(-12px) scale(1.02);
+    transform: translateY(-8px) scale(1.02);
     background: var(--color-bg-card);
     box-shadow: var(--glass-shadow);
     border-color: var(--color-primary);
 }
 
 .imageContainer {
-    height: 300px;
+    height: 240px;
     position: relative;
     background: #0f172a;
     overflow: hidden;
@@ -223,7 +223,7 @@
 }
 
 .content {
-    padding: 2rem;
+    padding: 1.25rem;
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -239,9 +239,9 @@
 
 .scientific {
     color: var(--color-text-dim);
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     font-style: italic;
-    margin-bottom: 1.25rem;
+    margin-bottom: 1rem;
 }
 
 .tags {
@@ -257,7 +257,7 @@
     justify-content: space-between;
     margin-top: auto;
     border-top: 1px solid rgba(255, 255, 255, 0.05);
-    padding-top: 1.5rem;
+    padding-top: 1rem;
 }
 
 .price {
