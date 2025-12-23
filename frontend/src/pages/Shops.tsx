@@ -43,8 +43,9 @@ export const Shops = () => {
 
     const filteredPlants = plants.filter(p => {
         const matchesCategory = activeCategory === 'all' ? true : p.type === activeCategory;
-        const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            p.scientificName.toLowerCase().includes(searchQuery.toLowerCase());
+        const q = searchQuery.toLowerCase();
+        const matchesSearch = p.name.toLowerCase().includes(q) ||
+            (p.scientificName?.toLowerCase().includes(q) ?? false);
         return matchesCategory && matchesSearch;
     });
 

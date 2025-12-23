@@ -75,7 +75,10 @@ const app = express();
 const JWT_SECRET = process.env.JWT_SECRET || 'vanamap_super_secret_key_2025';
 
 app.use(cors());
-app.use(helmet()); // Set security HTTP headers
+app.use(helmet({
+    contentSecurityPolicy: false,
+    crossOriginEmbedderPolicy: false
+})); // Set security HTTP headers
 app.use(express.json({ limit: '10mb' })); // Body parser
 app.use(mongoSanitize()); // Data sanitization against NoSQL query injection
 app.use(xss()); // Data sanitization against XSS
