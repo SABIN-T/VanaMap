@@ -43,18 +43,23 @@ export const Cart = () => {
         const vItems = groupedItems[vendorId];
         if (!vendor || !vItems) return;
 
-        let msg = `Hello ${vendor.name}, I would like to order the following from VanaMap:\n\n`;
+        // Construct Message
+        let msg = `Hi, I am ${user.name}. I am happy to connect with you to buy plants.\n\nI would like to order the following:\n`;
         let total = 0;
         vItems.forEach(i => {
             const price = i.vendorPrice || i.plant.price || 0;
-            msg += `🌱 ${i.plant.name} x${i.quantity} @ ${formatCurrency(price)}\n`;
+            msg += `- ${i.plant.name} (Qty: ${i.quantity}) @ ${formatCurrency(price)}\n`;
             total += price * i.quantity;
         });
-        msg += `\n💰 Total Estimate: ${formatCurrency(total)}\n`;
-        msg += `\nPlease confirm availability. My User ID: ${user.name}`;
+        msg += `\nTotal Value: ${formatCurrency(total)}\n`;
+        msg += `\nPlease confirm availability and delivery details.`;
 
+        // Open WhatsApp
         const url = `https://wa.me/${vendor.whatsapp.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(msg)}`;
         window.open(url, '_blank');
+
+        // Remove items from cart
+        vItems.forEach(i => removeFromCart(i.plant.id, vendorId === 'vanamap' ? undefined : vendorId));
     };
 
     return (
@@ -126,8 +131,9 @@ export const Cart = () => {
                                                     <button
                                                         className={styles.whatsappBtn}
                                                         onClick={() => handleWhatsAppCheckout(vendorId)}
+                                                        style={{ background: '#10b981', color: 'white', border: 'none', padding: '0.6rem 1.2rem', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s' }}
                                                     >
-                                                        <MessageCircle size={18} /> Send Order via WhatsApp
+                                                        <MessageCircle size={18} /> Proceed to Order
                                                     </button>
                                                 ) : (
                                                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#fbbf24', fontSize: '0.85rem', fontWeight: 700, background: 'rgba(251, 191, 36, 0.1)', padding: '6px 12px', borderRadius: '8px' }}>
