@@ -51,36 +51,53 @@ export const AdminLayout = ({ title, children }: AdminLayoutProps) => {
         { path: '/admin/settings', icon: Settings, label: 'Settings' },
     ];
 
-    // ... in nav map
-    {
-        navItems.map((item) => (
-            <Link
-                key={item.path}
-                to={item.path}
-                onClick={() => window.innerWidth < 1024 && setSidebarOpen(false)}
-                className={`${styles.navItem} ${isActive(item.path) ? styles.navActive : ''} ${item.sub ? styles.navSub : ''}`}
-            >
-                <item.icon size={20} className={styles.navIcon} />
-                <span className={styles.navLabel}>{item.label}</span>
-                {/* Notification Badge */}
-                {(item.badge && item.badge > 0) ? (
-                    <span className={styles.notifBadge}>{item.badge}</span>
-                ) : null}
-                {isActive(item.path) && <div className={styles.activeIndicator} />}
-            </Link>
-        ))
-    }
+    const isActive = (path: string) => location.pathname === path;
 
-    <div className={styles.sidebarFooter}>
-        <button onClick={logout} className={styles.logoutBtn}>
-            <LogOut size={20} />
-            <span>Logout Session</span>
-        </button>
-    </div>
-            </aside >
+    return (
+        <div className={styles.container}>
+            {/* BACKDROP FOR MOBILE */}
+            {isSidebarOpen && <div className={styles.backdrop} onClick={() => setSidebarOpen(false)} />}
 
-    {/* MAIN CONTENT */ }
-    < main className = { styles.main } >
+            {/* SIDEBAR */}
+            <aside className={`${styles.sidebar} ${isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed}`}>
+                <div className={styles.sidebarHeader}>
+                    <div className={styles.brand}>
+                        <div className={styles.logoBox}>
+                            <img src="/logo.png?v=2" alt="VanaMap" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
+                        </div>
+                        <span className={styles.brandName}>VANAMAP</span>
+                    </div>
+                </div>
+
+                <nav className={styles.nav}>
+                    {navItems.map((item) => (
+                        <Link
+                            key={item.path}
+                            to={item.path}
+                            onClick={() => window.innerWidth < 1024 && setSidebarOpen(false)}
+                            className={`${styles.navItem} ${isActive(item.path) ? styles.navActive : ''} ${item.sub ? styles.navSub : ''}`}
+                        >
+                            <item.icon size={20} className={styles.navIcon} />
+                            <span className={styles.navLabel}>{item.label}</span>
+                            {/* Notification Badge */}
+                            {(item.badge && item.badge > 0) ? (
+                                <span className={styles.notifBadge}>{item.badge}</span>
+                            ) : null}
+                            {isActive(item.path) && <div className={styles.activeIndicator} />}
+                        </Link>
+                    ))}
+                </nav>
+
+                <div className={styles.sidebarFooter}>
+                    <button onClick={logout} className={styles.logoutBtn}>
+                        <LogOut size={20} />
+                        <span>Logout Session</span>
+                    </button>
+                </div>
+            </aside>
+
+            {/* MAIN CONTENT */}
+            < main className={styles.main} >
                 <header className={styles.topBar}>
                     <div className={styles.topBarLeft}>
                         <button onClick={() => setSidebarOpen(!isSidebarOpen)} className={styles.toggleBtn}>
@@ -114,7 +131,8 @@ export const AdminLayout = ({ title, children }: AdminLayoutProps) => {
                         {children}
                     </div>
                 </section>
-            </main >
+
+            </main>
         </div >
     );
 };
