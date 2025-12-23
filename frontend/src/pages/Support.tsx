@@ -115,7 +115,7 @@ export const Support = () => {
                                 placeholder="Tell us about its benefits, where it grows, or why you love it..."
                                 value={reason}
                                 onChange={e => setReason(e.target.value)}
-                                rows={4}
+                                rows={3}
                                 className={styles.textarea}
                             />
                         </div>
