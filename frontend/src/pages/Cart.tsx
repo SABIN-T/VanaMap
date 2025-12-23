@@ -131,7 +131,6 @@ export const Cart = () => {
                                                     <button
                                                         className={styles.whatsappBtn}
                                                         onClick={() => handleWhatsAppCheckout(vendorId)}
-                                                        style={{ background: '#10b981', color: 'white', border: 'none', padding: '0.6rem 1.2rem', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 600, cursor: 'pointer', transition: 'all 0.2s' }}
                                                     >
                                                         <MessageCircle size={18} /> Proceed to Order
                                                     </button>
