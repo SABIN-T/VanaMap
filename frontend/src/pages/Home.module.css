@@ -99,14 +99,15 @@
 
 .gpsBtn {
     width: 100%;
-    padding: 1.25rem !important;
-    border-radius: 1.25rem !important;
-    font-weight: 900 !important;
+    padding: 0.85rem !important;
+    border-radius: 1rem !important;
+    font-weight: 800 !important;
+    font-size: 0.9rem !important;
     text-transform: uppercase;
     letter-spacing: 1px;
     background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
     border: none !important;
-    box-shadow: 0 15px 30px -10px rgba(16, 185, 129, 0.4) !important;
+    box-shadow: 0 10px 20px -5px rgba(16, 185, 129, 0.4) !important;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
 }
 
@@ -139,7 +140,7 @@
     background: rgba(30, 41, 59, 0.5);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 1.25rem;
-    padding: 0.5rem 1rem;
+    padding: 0.35rem 0.75rem;
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -165,7 +166,7 @@
     border: none;
     color: white;
     font-size: 1rem;
-    padding: 0.75rem 0;
+    padding: 0.6rem 0;
     outline: none;
 }
 
@@ -207,7 +208,7 @@
 
 .sectionSubtitle {
     color: #64748b;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     max-width: 600px;
 }
 
@@ -224,7 +225,7 @@
     background: rgba(30, 41, 59, 0.3);
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 2rem;
-    padding: 1.75rem 1.5rem;
+    padding: 1.5rem 1.25rem;
     text-align: center;
     backdrop-filter: blur(20px);
     transition: all 0.4s ease;
@@ -232,7 +233,7 @@
     flex-direction: column;
     align-items: center;
     gap: 1.25rem;
-    min-height: 200px;
+    min-height: 160px;
     position: relative;
     width: 100%;
 }
@@ -244,9 +245,9 @@
 }
 
 .statIcon {
-    width: 64px;
-    height: 64px;
-    border-radius: 1.25rem;
+    width: 48px;
+    height: 48px;
+    border-radius: 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -254,14 +255,14 @@
 
 .statLabel {
     color: #64748b;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 1.5px;
+    letter-spacing: 1.2px;
 }
 
 .statValue {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     font-weight: 900;
     color: white;
 }
@@ -281,7 +282,7 @@
     text-decoration: underline;
     align-self: flex-start;
     padding: 0;
-    margin-top: 4px;
+    margin-top: 2px;
 }
 
 @media (max-width: 640px) {
@@ -312,12 +313,12 @@
     background: rgba(15, 23, 42, 0.5);
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 2rem;
-    padding: 2rem;
+    padding: 1.5rem;
     cursor: pointer;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     display: flex;
     align-items: center;
-    gap: 2rem;
+    gap: 1.5rem;
 }
 
 .categoryCard:hover {
@@ -333,20 +334,20 @@
 }
 
 .categoryIcon {
-    font-size: 3rem;
+    font-size: 2.25rem;
 }
 
 .categoryName {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     font-weight: 800;
     color: white;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.35rem;
 }
 
 .categoryDesc {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     color: #64748b;
-    line-height: 1.5;
+    line-height: 1.4;
 }
 
 /* --- PLANT GRID --- */
@@ -391,10 +392,10 @@
 }
 
 .sponsorIcon {
-    width: 80px;
-    height: 80px;
+    width: 64px;
+    height: 64px;
     background: rgba(250, 204, 21, 0.1);
-    border-radius: 2rem;
+    border-radius: 1.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -411,9 +412,9 @@
     background: linear-gradient(135deg, #facc15 0%, #ca8a04 100%) !important;
     color: #000 !important;
     font-weight: 900 !important;
-    border-radius: 1.25rem !important;
-    padding: 1.25rem 3rem !important;
-    font-size: 1.1rem !important;
+    border-radius: 1rem !important;
+    padding: 0.85rem 2rem !important;
+    font-size: 0.95rem !important;
 }
 
 .suggestionButtonSection {
@@ -426,8 +427,9 @@
     background: rgba(255, 255, 255, 0.05) !important;
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
     color: #94a3b8 !important;
-    border-radius: 1rem !important;
-    padding: 1rem 2rem !important;
+    border-radius: 0.75rem !important;
+    padding: 0.75rem 1.5rem !important;
+    font-size: 0.85rem !important;
 }
 
 .suggestionBtn:hover {
@@ -589,7 +591,7 @@
     background: rgba(30, 41, 59, 0.3);
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 1.5rem;
-    padding: 1.5rem;
+    padding: 1.25rem;
     backdrop-filter: blur(20px);
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     display: flex;
@@ -608,13 +610,13 @@
 }
 
 .onboardingIcon {
-    width: 56px;
-    height: 56px;
-    border-radius: 1rem;
+    width: 48px;
+    height: 48px;
+    border-radius: 0.85rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 1.25rem;
+    margin-bottom: 1rem;
     transition: transform 0.3s ease;
 }
 
@@ -623,17 +625,17 @@
 }
 
 .onboardingCard h3 {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     font-weight: 800;
     color: #fff;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
 }
 
 .onboardingCard p {
     color: #64748b;
-    font-size: 0.9rem;
-    line-height: 1.5;
-    margin-bottom: 1.5rem;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    margin-bottom: 1.25rem;
 }
 
 .onboardingMeta {
