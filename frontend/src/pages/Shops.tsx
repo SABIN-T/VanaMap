@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import type { Plant } from '../types';
 import { fetchPlants } from '../services/api';
 import { Search, ShoppingBag } from 'lucide-react';
+import { PlantVendorsModal } from '../components/features/market/PlantVendorsModal';
 import styles from './Shops.module.css';
 
 export const Shops = () => {
@@ -36,6 +37,8 @@ export const Shops = () => {
         const hash = plant.name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
         return (15 + (hash % 65)) * 50; // Convert to approx INR
     };
+
+    const [selectedPlant, setSelectedPlant] = useState<Plant | null>(null);
 
     return (
         <div className={styles.shopContainer}>
@@ -91,7 +94,7 @@ export const Shops = () => {
             ) : (
                 <div className={styles.grid}>
                     {filteredPlants.map(plant => (
-                        <div key={plant.id} className={styles.card}>
+                        <div key={plant.id} className={styles.card} onClick={() => setSelectedPlant(plant)}>
                             {/* Image Area */}
                             <div className={styles.imageContainer}>
                                 <img
@@ -123,14 +126,21 @@ export const Shops = () => {
                                     <div className={styles.price}>
                                         Rs. {getPrice(plant)}
                                     </div>
-                                    <button className={styles.btn} disabled title="Integration In Progress">
-                                        Soon
+                                    <button className={styles.btn}>
+                                        Compare
                                     </button>
                                 </div>
                             </div>
                         </div>
                     ))}
                 </div>
+            )}
+
+            {selectedPlant && (
+                <PlantVendorsModal
+                    plant={selectedPlant}
+                    onClose={() => setSelectedPlant(null)}
+                />
             )}
         </div>
     );

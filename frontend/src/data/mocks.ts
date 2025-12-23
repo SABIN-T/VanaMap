@@ -629,7 +629,12 @@ export const VENDORS: Vendor[] = [
         website: 'https://greenthumb.com',
         inventoryIds: ['1', '2', '3', '6', '30'],
         verified: true,
-        highlyRecommended: true
+        highlyRecommended: true,
+        inventory: [
+            { plantId: '1', price: 200, status: 'approved', inStock: true }, // Cheaper than base
+            { plantId: '2', price: 150, status: 'approved', inStock: true },
+            { plantId: '3', price: 400, status: 'pending', inStock: true }   // Pending item
+        ]
     },
     {
         id: 'v2',
@@ -640,7 +645,11 @@ export const VENDORS: Vendor[] = [
         phone: '9123456780',
         whatsapp: '9123456780',
         inventoryIds: ['8', '9', '32', '15'],
-        verified: true
+        verified: true,
+        inventory: [
+            { plantId: '8', price: 180, status: 'approved', inStock: true },
+            { plantId: '9', price: 300, status: 'pending', inStock: true }
+        ]
     },
     {
         id: 'v3',
@@ -651,7 +660,10 @@ export const VENDORS: Vendor[] = [
         phone: '9988776655',
         whatsapp: '9988776655',
         inventoryIds: ['5', '12', '45', '41'],
-        verified: false
+        verified: false,
+        inventory: [
+            { plantId: '5', price: 250, status: 'pending', inStock: true }
+        ]
     }
 ];
 

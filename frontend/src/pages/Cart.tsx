@@ -1,33 +1,71 @@
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
-import { Trash2, ArrowLeft, Minus, Plus, ShoppingCart, Info, MapPin } from 'lucide-react';
+import { Trash2, ArrowLeft, Minus, Plus, ShoppingCart, MessageCircle, MapPin, Store, Lock } from 'lucide-react';
 import { Button } from '../components/common/Button';
+import { fetchVendors } from '../services/api';
+import { formatCurrency } from '../utils/currency';
+import type { Vendor, CartItem } from '../types';
 
 export const Cart = () => {
     const { items, removeFromCart, updateQuantity } = useCart();
     const { user } = useAuth();
     const navigate = useNavigate();
+    const [vendors, setVendors] = useState<Record<string, Vendor>>({});
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const loadVendors = async () => {
+            const list = await fetchVendors();
+            const map: Record<string, Vendor> = {};
+            list.forEach(v => map[v.id] = v);
+            setVendors(map);
+            setLoading(false);
+        };
+        loadVendors();
+    }, []);
+
+    // Helper: Group items by vendor
+    const groupedItems = items.reduce((acc, item) => {
+        const vId = item.vendorId || 'vanamap';
+        if (!acc[vId]) acc[vId] = [];
+        acc[vId].push(item);
+        return acc;
+    }, {} as Record<string, CartItem[]>);
+
+    const handleWhatsAppCheckout = (vendorId: string) => {
+        if (!user) {
+            navigate('/auth');
+            return;
+        }
+
+        const vendor = vendors[vendorId];
+        const vItems = groupedItems[vendorId];
+        if (!vendor || !vItems) return;
+
+        let msg = `Hello ${vendor.name}, I would like to order the following from VanaMap:\n\n`;
+        let total = 0;
+        vItems.forEach(i => {
+            const price = i.vendorPrice || i.plant.price || 0;
+            msg += `🌱 ${i.plant.name} x${i.quantity} @ ${formatCurrency(price)}\n`;
+            total += price * i.quantity;
+        });
+        msg += `\n💰 Total Estimate: ${formatCurrency(total)}\n`;
+        msg += `\nPlease confirm availability. My User ID: ${user.name}`;
+
+        const url = `https://wa.me/${vendor.whatsapp.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(msg)}`;
+        window.open(url, '_blank');
+    };
 
     return (
         <div className="container" style={{ padding: '8rem 1rem 4rem' }}>
-            <div className="glass-panel" style={{ padding: '2.5rem', maxWidth: '900px', margin: '0 auto', background: 'rgba(15, 23, 42, 0.8)', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
+            <div className="glass-panel" style={{ padding: '2.5rem', maxWidth: '900px', margin: '0 auto', background: 'rgba(15, 23, 42, 0.9)', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2.5rem' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
                         <button
                             onClick={() => navigate(-1)}
-                            style={{
-                                background: 'rgba(255,255,255,0.05)',
-                                border: '1px solid rgba(255,255,255,0.1)',
-                                color: 'white',
-                                cursor: 'pointer',
-                                padding: '0.75rem',
-                                borderRadius: '12px',
-                                display: 'flex',
-                                transition: 'all 0.2s'
-                            }}
-                            onMouseOver={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'}
-                            onMouseOut={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}
+                            className="bg-white/5 hover:bg-white/10 text-white p-3 rounded-xl transition-all border border-white/10"
                         >
                             <ArrowLeft size={20} />
                         </button>
@@ -39,140 +77,139 @@ export const Cart = () => {
                 </div>
 
                 {items.length === 0 ? (
-                    <div style={{ textAlign: 'center', padding: '6rem 2rem', background: 'rgba(255,255,255,0.02)', borderRadius: '24px', border: '1px dashed rgba(255,255,255,0.1)' }}>
-                        <div style={{
-                            width: '100px', height: '100px', background: 'rgba(16, 185, 129, 0.1)', borderRadius: '50%',
-                            display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 2rem'
-                        }}>
-                            <ShoppingCart size={48} color="#10b981" />
+                    <div className="text-center py-24 bg-white/5 rounded-3xl border border-dashed border-white/10">
+                        <div className="w-24 h-24 bg-emerald-500/10 rounded-full flex items-center justify-center mx-auto mb-8">
+                            <ShoppingCart size={48} className="text-emerald-500" />
                         </div>
-                        <h2 style={{ color: 'white', fontSize: '1.5rem', marginBottom: '1rem' }}>Your cart is empty</h2>
-                        <p style={{ color: '#94a3b8', maxWidth: '400px', margin: '0 auto 2rem', lineHeight: '1.6' }}>
-                            Looks like you haven't discovered your perfect plant match yet. Explore our collection of air-purifying plants.
+                        <h2 className="text-2xl text-white font-bold mb-4">Your cart is empty</h2>
+                        <p className="text-slate-400 max-w-sm mx-auto mb-8 leading-relaxed">
+                            Discover rare specimens and verified sellers in your area.
                         </p>
-                        <Button onClick={() => navigate('/')} variant="primary" size="lg">
-                            Start Exploring
-                        </Button>
+                        <div className="flex justify-center gap-4">
+                            <Button onClick={() => navigate('/shops')} variant="primary" size="lg">
+                                Browse Market
+                            </Button>
+                        </div>
                     </div>
                 ) : (
-                    <>
-                        <div style={{ display: 'grid', gap: '1.5rem', marginBottom: '3rem' }}>
-                            {items.map((item) => (
-                                <div key={item.plant.id} style={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '1.5rem',
-                                    padding: '1.5rem',
-                                    background: 'rgba(30, 41, 59, 0.5)',
-                                    borderRadius: '1.5rem',
-                                    border: '1px solid rgba(255,255,255,0.05)',
-                                    transition: 'all 0.3s ease'
-                                }}>
-                                    <img
-                                        src={item.plant.imageUrl}
-                                        alt={item.plant.name}
-                                        style={{ width: '100px', height: '100px', objectFit: 'cover', borderRadius: '1rem', border: '1px solid rgba(255,255,255,0.1)' }}
-                                    />
+                    <div className="space-y-8">
+                        {/* Iterating Groups */}
+                        {Object.entries(groupedItems).map(([vendorId, cartItems]) => {
+                            const isVanaMap = vendorId === 'vanamap';
+                            const vendor = vendors[vendorId];
+                            const totalPrice = cartItems.reduce((sum, i) => sum + ((i.vendorPrice || i.plant.price || 0) * i.quantity), 0);
 
-                                    <div style={{ flex: 1 }}>
-                                        <h3 style={{ color: 'white', marginBottom: '0.5rem', fontSize: '1.25rem', fontWeight: 700 }}>{item.plant.name}</h3>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                            <div style={{
-                                                display: 'inline-flex', alignItems: 'center', gap: '8px',
-                                                background: 'rgba(15, 23, 42, 0.6)', padding: '6px 8px', borderRadius: '12px',
-                                                border: '1px solid rgba(255,255,255,0.1)'
-                                            }}>
-                                                <button
-                                                    onClick={() => updateQuantity(item.plant.id, item.quantity - 1)}
-                                                    style={{
-                                                        width: '28px', height: '28px', borderRadius: '8px', border: 'none',
-                                                        background: 'rgba(255,255,255,0.1)', color: 'white', cursor: 'pointer',
-                                                        display: 'flex', alignItems: 'center', justifyContent: 'center', transition: '0.2s'
-                                                    }}
-                                                    className="hover:bg-white/20"
-                                                >
-                                                    <Minus size={14} />
-                                                </button>
-                                                <span style={{ fontWeight: 700, minWidth: '24px', textAlign: 'center', fontSize: '1rem', color: 'white' }}>
-                                                    {item.quantity}
-                                                </span>
-                                                <button
-                                                    onClick={() => updateQuantity(item.plant.id, item.quantity + 1)}
-                                                    style={{
-                                                        width: '28px', height: '28px', borderRadius: '8px', border: 'none',
-                                                        background: '#10b981', color: 'black', cursor: 'pointer',
-                                                        display: 'flex', alignItems: 'center', justifyContent: 'center', transition: '0.2s'
-                                                    }}
-                                                >
-                                                    <Plus size={14} />
-                                                </button>
+                            return (
+                                <div key={vendorId} className="bg-slate-800/50 rounded-2xl border border-white/5 overflow-hidden">
+                                    {/* Group Header */}
+                                    <div className="p-4 bg-white/5 border-b border-white/5 flex items-center justify-between">
+                                        <div className="flex items-center gap-2">
+                                            {isVanaMap ? (
+                                                <Store size={20} className="text-emerald-400" />
+                                            ) : (
+                                                <Store size={20} className="text-amber-400" />
+                                            )}
+                                            <span className="font-bold text-white text-lg">
+                                                {isVanaMap ? 'VanaMap Official' : (vendor?.name || 'Unknown Vendor')}
+                                            </span>
+                                            {!isVanaMap && vendor && (
+                                                <div className="flex items-center gap-1 text-xs text-slate-400 ml-2">
+                                                    <MapPin size={12} /> {vendor.address}
+                                                </div>
+                                            )}
+                                        </div>
+                                        {/* Vendor Action */}
+                                        {!isVanaMap && (
+                                            <div>
+                                                {user ? (
+                                                    <Button
+                                                        size="sm"
+                                                        className="bg-[#25D366] hover:bg-[#128C7E] text-white border-none flex items-center gap-2"
+                                                        onClick={() => handleWhatsAppCheckout(vendorId)}
+                                                    >
+                                                        <MessageCircle size={16} /> Send Order via WhatsApp
+                                                    </Button>
+                                                ) : (
+                                                    <div className="flex items-center gap-2 text-amber-500 text-sm font-bold bg-amber-500/10 px-3 py-1 rounded-lg">
+                                                        <Lock size={14} /> Login to Order
+                                                    </div>
+                                                )}
                                             </div>
-                                        </div>
+                                        )}
                                     </div>
 
-                                    <button
-                                        onClick={() => removeFromCart(item.plant.id)}
-                                        style={{
-                                            background: 'rgba(239, 68, 68, 0.1)',
-                                            color: '#ef4444',
-                                            border: '1px solid rgba(239, 68, 68, 0.2)',
-                                            padding: '1rem',
-                                            borderRadius: '1rem',
-                                            cursor: 'pointer',
-                                            transition: '0.2s',
-                                            display: 'flex', alignItems: 'center', justifyContent: 'center'
-                                        }}
-                                        title="Remove Item"
-                                    >
-                                        <Trash2 size={20} />
-                                    </button>
-                                </div>
-                            ))}
-                        </div>
+                                    {/* Items */}
+                                    <div className="p-4 space-y-4">
+                                        {cartItems.map((item) => (
+                                            <div key={`${item.plant.id}-${vendorId}`} className="flex items-center gap-4 p-4 bg-slate-900/50 rounded-xl border border-white/5 transition-all hover:border-white/10">
+                                                <img
+                                                    src={item.plant.imageUrl}
+                                                    className="w-20 h-20 rounded-lg object-cover border border-white/10 shadow-lg"
+                                                    alt={item.plant.name}
+                                                />
+                                                <div className="flex-1">
+                                                    <div className="flex justify-between items-start">
+                                                        <div>
+                                                            <h3 className="text-lg font-bold text-white">{item.plant.name}</h3>
+                                                            <p className="text-sm text-slate-400 italic">{item.plant.scientificName}</p>
+                                                        </div>
+                                                        <div className="text-right">
+                                                            <div className="text-emerald-400 font-bold mb-1">
+                                                                {formatCurrency(item.vendorPrice || item.plant.price || 0)}
+                                                            </div>
+                                                        </div>
+                                                    </div>
 
-                        <div style={{
-                            borderTop: '1px solid rgba(255,255,255,0.1)',
-                            paddingTop: '2.5rem',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: '2rem',
-                            alignItems: 'center'
-                        }}>
-                            {!user && (
-                                <div style={{
-                                    background: 'rgba(56, 189, 248, 0.1)',
-                                    border: '1px solid rgba(56, 189, 248, 0.2)',
-                                    padding: '1.5rem',
-                                    borderRadius: '1.5rem',
-                                    width: '100%',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'space-between',
-                                    gap: '1rem',
-                                    flexWrap: 'wrap'
-                                }}>
-                                    <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                                        <div style={{ padding: '10px', background: '#38bdf8', borderRadius: '50%', color: 'black' }}><Info size={20} /></div>
-                                        <div>
-                                            <h4 style={{ color: 'white', margin: '0 0 4px 0', fontSize: '1rem' }}>Save your cart?</h4>
-                                            <p style={{ margin: 0, color: '#94a3b8', fontSize: '0.85rem' }}>Sign in to sync these items across your devices.</p>
+                                                    <div className="flex justify-between items-end mt-4">
+                                                        <div className="flex items-center gap-2 bg-white/5 p-1 rounded-lg border border-white/5">
+                                                            <button
+                                                                onClick={() => updateQuantity(item.plant.id, item.quantity - 1, vendorId === 'vanamap' ? undefined : vendorId)}
+                                                                className="w-8 h-8 flex items-center justify-center text-white hover:bg-white/10 rounded-md transition-colors"
+                                                            >
+                                                                <Minus size={14} />
+                                                            </button>
+                                                            <span className="w-8 text-center text-white font-bold">{item.quantity}</span>
+                                                            <button
+                                                                onClick={() => updateQuantity(item.plant.id, item.quantity + 1, vendorId === 'vanamap' ? undefined : vendorId)}
+                                                                className="w-8 h-8 flex items-center justify-center bg-emerald-500 text-black rounded-md hover:bg-emerald-400 transition-colors shadow-lg shadow-emerald-500/20"
+                                                            >
+                                                                <Plus size={14} />
+                                                            </button>
+                                                        </div>
+                                                        <button
+                                                            onClick={() => removeFromCart(item.plant.id, vendorId === 'vanamap' ? undefined : vendorId)}
+                                                            className="text-red-400 hover:text-red-300 p-2 hover:bg-red-500/10 rounded-lg transition-colors"
+                                                            title="Remove"
+                                                        >
+                                                            <Trash2 size={18} />
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+
+                                        {/* Subtotal */}
+                                        <div className="pt-4 border-t border-white/10 flex justify-between items-center text-white">
+                                            <span className="text-slate-400 text-sm font-medium">Subtotal ({cartItems.length} items)</span>
+                                            <span className="text-xl font-bold">{formatCurrency(totalPrice)}</span>
                                         </div>
                                     </div>
-                                    <Button variant="outline" size="sm" onClick={() => navigate('/auth')}>
-                                        Login Account
-                                    </Button>
                                 </div>
-                            )}
+                            );
+                        })}
+                    </div>
+                )}
 
-                            <div style={{ width: '100%', background: 'rgba(16, 185, 129, 0.05)', padding: '2rem', borderRadius: '1.5rem', border: '1px solid rgba(16, 185, 129, 0.15)', textAlign: 'center' }}>
-                                <h3 style={{ color: '#10b981', marginBottom: '1rem', fontSize: '1.2rem' }}>Ready to grow?</h3>
-                                <p style={{ color: '#94a3b8', marginBottom: '1.5rem' }}>Find local partner nurseries that have these plants in stock.</p>
-                                <Button size="lg" onClick={() => navigate('/nearby', { state: { tab: 'all' } })} style={{ width: '100%', maxWidth: '400px', margin: '0 auto', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '10px' }}>
-                                    <MapPin size={20} /> Find Nearby Shops
-                                </Button>
-                            </div>
-                        </div>
-                    </>
+                {/* Footer Note */}
+                {items.length > 0 && (
+                    <div className="mt-8 text-center text-slate-500 text-sm">
+                        <p>Prices are set by individual vendors. Delivery terms may vary.</p>
+                        {!user && (
+                            <Button variant="outline" className="mt-4" onClick={() => navigate('/auth')}>
+                                Sign In / Register Account
+                            </Button>
+                        )}
+                    </div>
                 )}
             </div>
         </div>

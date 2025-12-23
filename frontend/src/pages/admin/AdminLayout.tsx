@@ -23,6 +23,7 @@ export const AdminLayout = ({ title, children }: AdminLayoutProps) => {
         { path: '/admin/manage-plants', icon: Sprout, label: 'Manage Plants' },
         { path: '/admin/add-plant', icon: Activity, label: 'Add New Plant', sub: true },
         { path: '/admin/manage-vendors', icon: Store, label: 'Manage Vendors' },
+        { path: '/admin/price-approval', icon: Store, label: 'Price Approvals' },
         { path: '/admin/manage-users', icon: Users, label: 'User Directory' },
         { path: '/admin/suggestions', icon: MessageSquare, label: 'User Suggestions' },
         { path: '/admin/notifications', icon: Bell, label: 'Notifications' },

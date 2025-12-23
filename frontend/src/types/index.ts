@@ -12,6 +12,7 @@ export interface Plant {
     medicinalValues: string[];
     advantages: string[];
     price?: number;
+    // Base price, vendors may override
     type: 'indoor' | 'outdoor';
     isNocturnal?: boolean; // For CAM plants (Snake Plant, Aloe) that produce O2 at night
     ecosystem?: string;
@@ -29,10 +30,24 @@ export interface Vendor {
     whatsapp: string;
     website?: string;
     inventoryIds: string[]; // List of plant IDs they sell
+    // Detailed inventory for price management
+    inventory?: {
+        plantId: string;
+        price: number;
+        status: 'pending' | 'approved';
+        inStock: boolean;
+    }[];
     verified?: boolean;
     highlyRecommended?: boolean;
     distance?: number;
     category?: string;
+}
+
+export interface CartItem {
+    plant: Plant;
+    quantity: number;
+    vendorId?: string; // Optional: If buying from specific vendor
+    vendorPrice?: number; // Snapshot of price at time of add
 }
 
 export interface WeatherData {
@@ -49,7 +64,7 @@ export interface User {
     email: string;
     role: UserRole;
     favorites: string[]; // Plant IDs
-    cart: { plantId: string; quantity: number }[];
+    cart: { plantId: string; quantity: number; vendorId?: string; vendorPrice?: number; }[];
     token?: string; // JWT Session Token
     resetRequest?: {
         requested: boolean;
