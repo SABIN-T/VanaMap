@@ -23,10 +23,17 @@ class ErrorBoundary extends Component<Props, State> {
 
     public componentDidCatch(error: Error, errorInfo: ErrorInfo) {
         console.error("Uncaught error:", error, errorInfo);
+
+        // Auto-fix for common deployment chunk mismatch errors
+        if (error.name === 'ChunkLoadError' || error.message?.includes('Failed to fetch dynamically imported module')) {
+            console.warn("System mismatch detected after update. Synchronizing assets...");
+            window.location.reload();
+        }
     }
 
     private handleRefresh = () => {
-        localStorage.clear(); // Clear storage on crash recovery
+        localStorage.clear();
+        sessionStorage.clear(); // Clear all session data too
         window.location.reload();
     };
 

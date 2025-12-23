@@ -19,6 +19,15 @@ if ('serviceWorker' in navigator) {
   });
 }
 
+// Global handler for Vite dynamic import errors (Mismatch after new deployment)
+window.addEventListener('unhandledrejection', (event) => {
+  if (event.reason?.name === 'ChunkLoadError' ||
+    (event.reason?.message && event.reason.message.includes('Failed to fetch dynamically imported module'))) {
+    console.warn("Chunk load failed, forcing reload for latest system assets...");
+    window.location.reload();
+  }
+});
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <ThemeProvider>
