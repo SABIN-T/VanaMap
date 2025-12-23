@@ -10,7 +10,7 @@ import type { Vendor, CartItem } from '../types';
 import styles from './Cart.module.css';
 
 export const Cart = () => {
-    const { items, removeFromCart, removeItems, updateQuantity } = useCart();
+    const { items, removeFromCart, updateQuantity } = useCart();
     const { user } = useAuth();
     const navigate = useNavigate();
     const [vendors, setVendors] = useState<Record<string, Vendor>>({});
@@ -57,22 +57,24 @@ export const Cart = () => {
         if (!vendor || !vItems) return;
 
         // Construct Message
-        let msg = `Hi, I am ${user.name}. I am happy to connect with you to buy plants.\n\nI would like to order the following:\n`;
+        let msg = `Hi, I am ${user.name}. I found your shop on VanaMap and would like to place an order.\n\n*Order Details:*\n`;
         let total = 0;
         vItems.forEach(i => {
             const price = i.vendorPrice || i.plant.price || 0;
             msg += `- ${i.plant.name} (Qty: ${i.quantity}) @ ${formatCurrency(price)}\n`;
             total += price * i.quantity;
         });
-        msg += `\nTotal Value: ${formatCurrency(total)}\n`;
-        msg += `\nPlease confirm availability and delivery details.`;
+        msg += `\n*Total Estimated Value: ${formatCurrency(total)}*\n`;
+        msg += `\nPlease confirm stock availability and delivery timeline.`;
 
         // Open WhatsApp
-        const url = `https://wa.me/${vendor.whatsapp.replace(/[^0-9]/g, '')}?text=${encodeURIComponent(msg)}`;
+        const waNumber = vendor.whatsapp || vendor.phone;
+        const cleanNumber = waNumber.replace(/[^0-9]/g, '');
+        const url = `https://wa.me/${cleanNumber.length < 10 ? '91' + cleanNumber : cleanNumber}?text=${encodeURIComponent(msg)}`;
         window.open(url, '_blank');
 
-        // Remove items from cart
-        removeItems(vItems.map(i => ({ plantId: i.plant.id, vendorId: i.vendorId })));
+        // Note: We don't automatically remove items to allow user to retry if WA fails, 
+        // or we could prompt "Did you complete the order?". For now, keep them.
     };
 
     return (
@@ -111,7 +113,7 @@ export const Cart = () => {
                             Looks like you haven't discovered your perfect plant match yet. Explore our collection of air-purifying plants.
                         </p>
                         <Button onClick={() => navigate('/shops')} variant="primary" size="lg">
-                            Brows Market
+                            Browse Market
                         </Button>
                     </div>
                 ) : (
@@ -122,6 +124,9 @@ export const Cart = () => {
                             const vendor = vendors[vendorId];
                             const totalPrice = cartItems.reduce((sum, i) => sum + ((i.vendorPrice || i.plant.price || 0) * i.quantity), 0);
 
+                            // If vendor data is missing (async load), show skeleton or placeholder
+                            const vendorName = isVanaMap ? 'VanaMap Official' : (vendor?.name || 'Loading Vendor...');
+
                             return (
                                 <div key={vendorId} className={styles.vendorGroup}>
                                     {/* Group Header */}
@@ -130,7 +135,7 @@ export const Cart = () => {
                                             <div className={styles.vendorTitleRow}>
                                                 <Store size={22} className={isVanaMap ? "text-emerald-400" : "text-amber-400"} />
                                                 <div className={styles.vendorName}>
-                                                    {isVanaMap ? 'VanaMap Official' : (vendor?.name || 'Unknown Vendor')}
+                                                    {vendorName}
                                                 </div>
                                                 {isVanaMap ? (
                                                     <span className={styles.officialBadge}><ShieldCheck size={12} /> Official</span>
@@ -161,7 +166,7 @@ export const Cart = () => {
                                                     className={styles.whatsappBtn}
                                                     onClick={() => handleWhatsAppCheckout(vendorId)}
                                                 >
-                                                    <MessageCircle size={18} /> Checkout from {isVanaMap ? 'VanaMap' : vendor.name}
+                                                    <MessageCircle size={18} /> Checkout via WhatsApp
                                                 </button>
                                             ) : (
                                                 <div className={styles.loginPrompt}>
@@ -235,7 +240,7 @@ export const Cart = () => {
                 {/* Footer Note */}
                 {items.length > 0 && (
                     <div className={styles.footerNote}>
-                        <p>Prices are set by individual vendors. Delivery terms and final availability are confirmed upon order.</p>
+                        <p>Prices are set by individual vendors. Delivery terms and final availability are confirmed upon order via WhatsApp.</p>
                         {!user && (
                             <Button variant="outline" className="mt-4" onClick={() => navigate('/auth')}>
                                 Sign In / Register Account
