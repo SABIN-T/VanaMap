@@ -305,26 +305,30 @@ export const Home = () => {
                         <div className={styles.weatherDashboard}>
                             <div className={styles.weatherCard}>
                                 <div className={styles.statIcon} style={{ background: 'rgba(56, 189, 248, 0.1)', color: '#38bdf8' }}>
-                                    <MapPin size={32} />
+                                    <MapPin size={24} />
                                 </div>
-                                <span className={styles.statLabel}>LOCATION</span>
-                                <div className={styles.statValue} style={{ fontSize: '1.2rem' }}>
-                                    {weather.locationName || weather.city || 'Local Zone'}
+                                <div className={styles.statInfo}>
+                                    <span className={styles.statLabel}>LOCATION</span>
+                                    <div className={styles.statValue} style={{ fontSize: '1.1rem' }}>
+                                        {weather.locationName || weather.city || 'Local Zone'}
+                                    </div>
+                                    <button onClick={() => setWeather(null)} className={styles.changeLocationBtn}>
+                                        Change Location
+                                    </button>
                                 </div>
-                                <button onClick={() => setWeather(null)} style={{ background: 'transparent', border: 'none', color: '#38bdf8', fontSize: '0.8rem', cursor: 'pointer', textDecoration: 'underline', marginTop: 'auto' }}>
-                                    Change Location
-                                </button>
                             </div>
 
                             <div className={styles.weatherCard}>
                                 <div className={styles.statIcon} style={{ background: 'rgba(250, 204, 21, 0.1)', color: '#facc15' }}>
-                                    <Thermometer size={32} />
+                                    <Thermometer size={24} />
                                 </div>
-                                <span className={styles.statLabel}>AVG TEMPERATURE</span>
-                                <div className={styles.statValue}>
-                                    {weather.avgTemp30Days.toFixed(1)}°C
+                                <div className={styles.statInfo}>
+                                    <span className={styles.statLabel}>AVG TEMPERATURE</span>
+                                    <div className={styles.statValue}>
+                                        {weather.avgTemp30Days.toFixed(1)}°C
+                                    </div>
+                                    <span style={{ color: '#94a3b8', fontSize: '0.7rem' }}>30-Day Mean</span>
                                 </div>
-                                <span style={{ color: '#94a3b8', fontSize: '0.75rem', marginTop: 'auto' }}>30-Day Mean</span>
                             </div>
 
                             <div className={styles.weatherCard}>
@@ -332,15 +336,17 @@ export const Home = () => {
                                     background: `${getPollutionStatus(weather.air_quality?.aqi).color}15`,
                                     color: getPollutionStatus(weather.air_quality?.aqi).color
                                 }}>
-                                    <Activity size={32} />
+                                    <Activity size={24} />
                                 </div>
-                                <span className={styles.statLabel}>AIR QUALITY (AQI)</span>
-                                <div className={styles.statValue}>
-                                    {weather.air_quality?.aqi || 'N/A'}
+                                <div className={styles.statInfo}>
+                                    <span className={styles.statLabel}>AIR QUALITY (AQI)</span>
+                                    <div className={styles.statValue}>
+                                        {weather.air_quality?.aqi || 'N/A'}
+                                    </div>
+                                    <span style={{ color: getPollutionStatus(weather.air_quality?.aqi).color, fontSize: '0.7rem', fontWeight: 800 }}>
+                                        {getPollutionStatus(weather.air_quality?.aqi).label.toUpperCase()}
+                                    </span>
                                 </div>
-                                <span style={{ color: getPollutionStatus(weather.air_quality?.aqi).color, fontSize: '0.75rem', fontWeight: 800, marginTop: 'auto' }}>
-                                    {getPollutionStatus(weather.air_quality?.aqi).label.toUpperCase()}
-                                </span>
                             </div>
                         </div>
                     )}

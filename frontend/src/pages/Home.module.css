@@ -217,20 +217,24 @@
     gap: 2rem;
     max-width: 1200px;
     margin: 0 auto;
+    width: 100%;
 }
 
 .weatherCard {
     background: rgba(30, 41, 59, 0.3);
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 2rem;
-    padding: 3rem;
+    padding: 2.5rem 2rem;
     text-align: center;
     backdrop-filter: blur(20px);
     transition: all 0.4s ease;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1.5rem;
+    gap: 1.25rem;
+    min-height: 200px;
+    position: relative;
+    width: 100%;
 }
 
 .weatherCard:hover {
@@ -240,9 +244,9 @@
 }
 
 .statIcon {
-    width: 72px;
-    height: 72px;
-    border-radius: 1.5rem;
+    width: 64px;
+    height: 64px;
+    border-radius: 1.25rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -250,16 +254,40 @@
 
 .statLabel {
     color: #64748b;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 1.5px;
 }
 
 .statValue {
-    font-size: 2.5rem;
+    font-size: 2rem;
     font-weight: 900;
     color: white;
+}
+
+.statInfo {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.changeLocationBtn {
+    background: transparent;
+    border: none;
+    color: #38bdf8;
+    font-size: 0.8rem;
+    cursor: pointer;
+    text-decoration: underline;
+    align-self: flex-start;
+    padding: 0;
+    margin-top: 4px;
+}
+
+@media (max-width: 640px) {
+    .changeLocationBtn {
+        align-self: center;
+    }
 }
 
 /* --- DISCOVERY HUB --- */
@@ -424,7 +452,12 @@
 
 @media (max-width: 640px) {
     .heroTitle {
-        font-size: 2.75rem;
+        font-size: 2.5rem;
+    }
+
+    .heroSubtitle {
+        font-size: 0.9rem;
+        margin-bottom: 2rem;
     }
 
     .sponsorCTA {
@@ -440,6 +473,43 @@
         flex-direction: column;
         text-align: center;
         gap: 1rem;
+    }
+
+    /* Weather Dashboard Mobile Optimization: Stack everything below one another */
+    .weatherDashboard {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        padding: 0 1rem;
+        width: 100%;
+    }
+
+    .weatherCard {
+        padding: 2rem;
+        min-height: auto;
+        border-radius: 1.5rem;
+        flex-direction: column;
+        /* Stack icon and text vertically */
+        text-align: center;
+        align-items: center;
+        width: 100%;
+        gap: 1.25rem;
+    }
+
+    .statIcon {
+        width: 56px;
+        height: 56px;
+        border-radius: 1rem;
+        flex-shrink: 0;
+    }
+
+    .statValue {
+        font-size: 1.5rem;
+    }
+
+    .statLabel {
+        font-size: 0.7rem;
+        margin-bottom: 4px;
     }
 }
 
