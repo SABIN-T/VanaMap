@@ -60,8 +60,10 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
                             if (fullPlant) {
                                 return {
                                     plant: fullPlant,
-                                    quantity: item.quantity || 1
-                                };
+                                    quantity: item.quantity || 1,
+                                    vendorId: item.vendorId,
+                                    vendorPrice: item.vendorPrice
+                                } as CartItem;
                             }
                             return null;
                         }).filter((i): i is CartItem => i !== null);

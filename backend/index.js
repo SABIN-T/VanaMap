@@ -585,7 +585,9 @@ app.post('/api/user/cart', auth, async (req, res) => {
         const user = await User.findById(req.user.id);
         user.cart = req.body.cart.map(item => ({
             plantId: item.plantId || item.plant?.id,
-            quantity: item.quantity
+            quantity: item.quantity,
+            vendorId: item.vendorId,
+            vendorPrice: item.vendorPrice
         }));
         await user.save();
         res.json({ success: true, cart: user.cart });

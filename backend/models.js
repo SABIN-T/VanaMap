@@ -48,7 +48,7 @@ const UserSchema = new mongoose.Schema({
     name: { type: String, required: true },
     role: { type: String, enum: ['user', 'vendor', 'admin'], default: 'user' },
     favorites: [String],
-    cart: [{ plantId: String, quantity: Number }],
+    cart: [{ plantId: String, quantity: Number, vendorId: String, vendorPrice: Number }],
     resetRequest: {
         requested: { type: Boolean, default: false },
         approved: { type: Boolean, default: false },
