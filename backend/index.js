@@ -485,10 +485,13 @@ app.delete('/api/suggestions/:id', auth, admin, async (req, res) => {
 
 app.get('/api/plants', async (req, res) => {
     try {
+        console.log("GET /api/plants - Fetching all plants...");
         const plants = await Plant.find().lean();
+        console.log(`GET /api/plants - Found ${plants.length} plants`);
         res.json(plants);
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        console.error("GET /api/plants ERROR:", err);
+        res.status(500).json({ error: "DB Error: " + err.message, stack: process.env.NODE_ENV === 'development' ? err.stack : undefined });
     }
 });
 

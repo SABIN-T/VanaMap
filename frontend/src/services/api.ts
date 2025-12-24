@@ -19,7 +19,11 @@ const getHeaders = () => {
 export const fetchPlants = async (): Promise<Plant[]> => {
     try {
         const response = await fetch(`${API_URL}/plants`);
-        if (!response.ok) throw new Error('Failed to fetch plants');
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error(`Failed to fetch plants: ${response.status} ${response.statusText}`, errorText);
+            throw new Error(`Failed to fetch plants: ${response.status}`);
+        }
         return await response.json();
     } catch (error) {
         console.error("Error fetching plants:", error);
