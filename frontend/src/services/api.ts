@@ -410,16 +410,17 @@ export const fetchSeedData = async () => {
     return res.json();
 };
 
-const res = await fetch(`${API_URL}/admin/seed-single`, {
-    method: 'POST',
-    headers: getHeaders(),
-    body: JSON.stringify({ plantId })
-});
-if (!res.ok) {
-    const errorData = await res.json().catch(() => ({}));
-    throw new Error(errorData.error || "Failed to deploy plant");
-}
-return res.json();
+export const seedSinglePlant = async (plantId: string) => {
+    const res = await fetch(`${API_URL}/admin/seed-single`, {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify({ plantId })
+    });
+    if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.error || "Failed to deploy plant");
+    }
+    return res.json();
 };
 export const deployAllPlants = async () => {
     const res = await fetch(`${API_URL}/admin/seed-plants`, {
