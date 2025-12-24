@@ -553,14 +553,17 @@ export const Home = () => {
                 </div>
 
                 {!plantsLoading && displayedPlants.length > visibleLimit && (
-                    <div style={{ textAlign: 'center', marginTop: '3rem' }}>
+                    <div style={{ textAlign: 'center', marginTop: '3rem', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
+                        <p style={{ color: 'var(--color-text-dim)', fontSize: '0.9rem', fontWeight: 500 }}>
+                            Showing {visibleLimit} of {displayedPlants.length} specimens
+                        </p>
                         <Button
-                            onClick={() => setVisibleLimit(displayedPlants.length)}
+                            onClick={() => setVisibleLimit(prev => prev + 12)}
                             variant="primary"
                             size="lg"
                             className={styles.pulseBtn}
                         >
-                            View More Plants <ArrowDown size={18} />
+                            Load More <ArrowDown size={18} />
                         </Button>
                     </div>
                 )}

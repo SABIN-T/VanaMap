@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import styles from './SeedDashboard.module.css';
-import { fetchSeedData, seedSinglePlant, deployAllPlants, fetchPlants } from '../../services/api';
-import { Database, CloudUpload, Check, Rocket, ShieldCheck, Sprout, Search } from 'lucide-react';
+import { fetchSeedData, seedSinglePlant, deployAllPlants, fetchPlants, deletePlant } from '../../services/api';
+import { Database, CloudUpload, Check, Rocket, ShieldCheck, Sprout, Search, Trash2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export const SeedDashboard = () => {
@@ -42,6 +42,21 @@ export const SeedDashboard = () => {
         }
     };
 
+    const handleRemove = async (plant: any) => {
+        if (!confirm(`Are you sure you want to REMOVE ${plant.name} from the live database?`)) return;
+        try {
+            await deletePlant(plant.id);
+            setDeployedIds(prev => {
+                const newSet = new Set(prev);
+                newSet.delete(plant.id);
+                return newSet;
+            });
+            toast.success(`${plant.name} removed from Live Database.`);
+        } catch (error: any) {
+            toast.error(error.message || "Removal failed");
+        }
+    };
+
     const handleDeployAll = async () => {
         if (!confirm("Are you sure you want to DEPLOY ALL plants to production?")) return;
         setLoading(true);
@@ -71,7 +86,7 @@ export const SeedDashboard = () => {
             <div key={plant.id} className={`${styles.card} ${isDeployed ? styles.isLive : ''}`}>
                 {isDeployed && (
                     <div className={styles.deployedBadge}>
-                        <Check size={12} /> INVENTORY
+                        <Check size={12} /> LIVE
                     </div>
                 )}
                 <img src={plant.imageUrl} alt={plant.name} className={styles.cardImage} loading="lazy" />
@@ -87,20 +102,27 @@ export const SeedDashboard = () => {
                         </div>
                     </div>
 
-                    <button
-                        className={styles.pushButton}
-                        onClick={() => handlePush(plant)}
-                        disabled={isDeployed || isProcessing || loading}
-                        style={isDeployed ? { opacity: 0.5, background: 'transparent', border: '1px dashed #334155' } : {}}
-                    >
-                        {isProcessing ? (
-                            <span className="animate-spin">⌛</span>
-                        ) : isDeployed ? (
-                            <>ALREADY LIVE</>
-                        ) : (
-                            <><Rocket size={14} /> PUSH TO LIVE</>
-                        )}
-                    </button>
+                    {isDeployed ? (
+                        <button
+                            className={styles.removeButton}
+                            onClick={() => handleRemove(plant)}
+                            disabled={isProcessing || loading}
+                        >
+                            <Trash2 size={14} /> REMOVE
+                        </button>
+                    ) : (
+                        <button
+                            className={styles.pushButton}
+                            onClick={() => handlePush(plant)}
+                            disabled={isProcessing || loading}
+                        >
+                            {isProcessing ? (
+                                <span className="animate-spin">⌛</span>
+                            ) : (
+                                <><Rocket size={14} /> PUSH TO LIVE</>
+                            )}
+                        </button>
+                    )}
                 </div>
             </div>
         );
