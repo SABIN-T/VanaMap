@@ -29,6 +29,7 @@ const VendorSchema = new mongoose.Schema({
     website: String,
     countryCode: String,
     state: String,
+    country: String,
     district: String,
     inventoryIds: [String],
     inventory: [{
@@ -52,6 +53,7 @@ const UserSchema = new mongoose.Schema({
     points: { type: Number, default: 0 },
     city: String,
     state: String,
+    country: String,
     resetRequest: {
         requested: { type: Boolean, default: false },
         approved: { type: Boolean, default: false },

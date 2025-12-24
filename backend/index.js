@@ -642,11 +642,11 @@ app.get('/api/users', auth, admin, async (req, res) => {
 
 app.post('/api/auth/signup', async (req, res) => {
     try {
-        const { email, password, name, role } = req.body;
+        const { email, password, name, role, country, city, state } = req.body;
         const existing = await User.findOne({ email });
         if (existing) return res.status(400).json({ error: "User exists" });
 
-        const user = new User({ email, password, name, role });
+        const user = new User({ email, password, name, role, country, city, state });
         await user.save();
 
         await Notification.create({

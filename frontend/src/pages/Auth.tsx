@@ -81,7 +81,7 @@ export const Auth = () => {
             }
         } else if (view === 'signup') {
             const tid = toast.loading("Creating Account...");
-            const result = await signup({ email, password, name, role, city, state });
+            const result = await signup({ email, password, name, role, city, state, country });
             if (result.success) {
                 toast.success("Account Created Successfully!", { id: tid });
             } else {
@@ -187,94 +187,68 @@ export const Auth = () => {
                         </div>
                     )}
 
-                    {/* Location Collection for Rankings */}
+                    {/* Unified Location Collection */}
                     {view === 'signup' && (
                         <>
                             <div className={styles.formGroup}>
-                                <label className={styles.label}>{role === 'vendor' ? 'Business Neighborhood' : 'Your City / Neighborhood'}</label>
-                                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                                <label className={styles.label}>{role === 'vendor' ? 'Business Location' : 'Your Location'}</label>
+                                <div style={{ display: 'grid', gap: '1rem' }}>
+                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                                        <select
+                                            className={styles.select}
+                                            value={country}
+                                            onChange={(e) => setCountry(e.target.value)}
+                                            required
+                                        >
+                                            {countryCodes.map(c => <option key={c.name} value={c.name}>{c.name}</option>)}
+                                        </select>
+                                        {countryStates[country] ? (
+                                            <select
+                                                className={styles.select}
+                                                value={state}
+                                                onChange={(e) => setState(e.target.value)}
+                                                required
+                                            >
+                                                <option value="">Select State</option>
+                                                {countryStates[country].map(s => <option key={s} value={s}>{s}</option>)}
+                                            </select>
+                                        ) : (
+                                            <input
+                                                className={styles.input}
+                                                type="text"
+                                                value={state}
+                                                onChange={(e) => setState(e.target.value)}
+                                                placeholder="Province/State"
+                                                required
+                                            />
+                                        )}
+                                    </div>
                                     <input
                                         className={styles.input}
                                         type="text"
                                         value={city}
                                         onChange={(e) => setCity(e.target.value)}
-                                        placeholder="City (e.g. Kathmandu)"
-                                        required
-                                    />
-                                    {countryStates[country] ? (
-                                        <select
-                                            className={styles.select}
-                                            value={state}
-                                            onChange={(e) => setState(e.target.value)}
-                                            required
-                                        >
-                                            <option value="">Select State</option>
-                                            {countryStates[country].map(s => <option key={s} value={s}>{s}</option>)}
-                                        </select>
-                                    ) : (
-                                        <input
-                                            className={styles.input}
-                                            type="text"
-                                            value={state}
-                                            onChange={(e) => setState(e.target.value)}
-                                            placeholder="Province/State"
-                                            required
-                                        />
-                                    )}
-                                </div>
-                            </div>
-                        </>
-                    )}
-
-                    {/* Vendor Location (redundant parts removed/merged) */}
-                    {view === 'signup' && role === 'vendor' && (
-                        <>
-                            <div className={styles.formGroup}>
-                                <label className={styles.label}>Business Location</label>
-                                <div style={{ display: 'grid', gap: '1rem' }}>
-                                    <select
-                                        className={styles.select}
-                                        value={country}
-                                        onChange={(e) => setCountry(e.target.value)}
-                                    >
-                                        {countryCodes.map(c => <option key={c.name} value={c.name}>{c.name}</option>)}
-                                    </select>
-
-                                    {countryStates[country] ? (
-                                        <select
-                                            className={styles.select}
-                                            value={state}
-                                            onChange={(e) => setState(e.target.value)}
-                                            required
-                                        >
-                                            <option value="">Select State</option>
-                                            {countryStates[country].map(s => <option key={s} value={s}>{s}</option>)}
-                                        </select>
-                                    ) : (
-                                        <input
-                                            className={styles.input}
-                                            type="text"
-                                            value={state}
-                                            onChange={(e) => setState(e.target.value)}
-                                            placeholder="State / Province"
-                                            required
-                                        />
-                                    )}
-                                </div>
-                            </div>
-
-                            <div className={styles.formGroup}>
-                                <label className={styles.label}>Contact Number</label>
-                                <div className={styles.inputWrapper}>
-                                    <div className={styles.phonePrefix}>{phoneCode}</div>
-                                    <input
-                                        type="tel"
-                                        className={styles.input}
-                                        placeholder="Mobile Number"
+                                        placeholder={role === 'vendor' ? "City / District" : "City (e.g. Kathmandu)"}
                                         required
                                     />
                                 </div>
                             </div>
+
+                            {/* Vendor Specific Phone (Only for Vendor) */}
+                            {role === 'vendor' && (
+                                <div className={styles.formGroup}>
+                                    <label className={styles.label}>Contact Number</label>
+                                    <div className={styles.inputWrapper}>
+                                        <div className={styles.phonePrefix}>{phoneCode}</div>
+                                        <input
+                                            type="tel"
+                                            className={styles.input}
+                                            placeholder="Mobile Number"
+                                            required
+                                        />
+                                    </div>
+                                </div>
+                            )}
                         </>
                     )}
 
