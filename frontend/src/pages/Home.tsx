@@ -280,6 +280,7 @@ export const Home = () => {
                                     onClick={handleGetLocation}
                                     className={styles.gpsBtn}
                                     disabled={locationLoading}
+                                    aria-label="Detect current location for plant recommendations"
                                 >
                                     <MapPin size={22} className={locationLoading ? "animate-spin" : "animate-bounce"} style={{ marginRight: '12px' }} />
                                     {locationLoading ? "DETERMINING CLIMATE..." : "Auto-Detect Local Climate"}
@@ -300,6 +301,7 @@ export const Home = () => {
                                         onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
                                         onKeyDown={(e) => e.key === 'Enter' && handleCitySearch()}
                                         className={styles.searchInput}
+                                        aria-label="Search for a city manually"
                                     />
                                     {showSuggestions && Array.isArray(suggestions) && suggestions.length > 0 && (
                                         <ul className={styles.suggestionsList}>

@@ -33,9 +33,12 @@ export const PlantCard = ({ plant, score, isTopMatch }: PlantCardProps) => {
             <div className={styles.imageContainer}>
                 <img
                     src={plant.imageUrl}
-                    alt={plant.name}
+                    alt={`${plant.name} - ${plant.scientificName} plant`}
                     className={styles.image}
                     loading="lazy"
+                    decoding="async"
+                    width="300"
+                    height="300"
                 />
 
                 <div className={styles.overlayTop}>
