@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import styles from './SeedDashboard.module.css';
 import { fetchSeedData, seedSinglePlant, deployAllPlants, fetchPlants } from '../../services/api';
-import { Database, CloudUpload, Check, Rocket, ShieldCheck, Sprout } from 'lucide-react';
+import { Database, CloudUpload, Check, Rocket, ShieldCheck, Sprout, Search } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export const SeedDashboard = () => {
@@ -9,6 +9,7 @@ export const SeedDashboard = () => {
     const [seedData, setSeedData] = useState<{ indoor: any[], outdoor: any[] }>({ indoor: [], outdoor: [] });
     const [deployedIds, setDeployedIds] = useState<Set<string>>(new Set());
     const [deploying, setDeploying] = useState<string | null>(null);
+    const [searchTerm, setSearchTerm] = useState('');
 
     useEffect(() => {
         loadData();
@@ -18,6 +19,7 @@ export const SeedDashboard = () => {
         try {
             const [seeds, livePlants] = await Promise.all([fetchSeedData(), fetchPlants()]);
             setSeedData(seeds);
+            // Store IDs of plants that are already in the DB
             setDeployedIds(new Set(livePlants.map((p: any) => p.id)));
         } catch (error) {
             toast.error("Failed to load databank");
@@ -54,15 +56,22 @@ export const SeedDashboard = () => {
         }
     };
 
+    const filterPlants = (plants: any[]) => {
+        return plants.filter(p =>
+            p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            p.scientificName?.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+    };
+
     const renderCard = (plant: any) => {
         const isDeployed = deployedIds.has(plant.id);
         const isProcessing = deploying === plant.id;
 
         return (
-            <div key={plant.id} className={styles.card}>
+            <div key={plant.id} className={`${styles.card} ${isDeployed ? styles.isLive : ''}`}>
                 {isDeployed && (
                     <div className={styles.deployedBadge}>
-                        <Check size={10} /> LIVE
+                        <Check size={12} /> INVENTORY
                     </div>
                 )}
                 <img src={plant.imageUrl} alt={plant.name} className={styles.cardImage} loading="lazy" />
@@ -82,11 +91,12 @@ export const SeedDashboard = () => {
                         className={styles.pushButton}
                         onClick={() => handlePush(plant)}
                         disabled={isDeployed || isProcessing || loading}
+                        style={isDeployed ? { opacity: 0.5, background: 'transparent', border: '1px dashed #334155' } : {}}
                     >
                         {isProcessing ? (
                             <span className="animate-spin">⌛</span>
                         ) : isDeployed ? (
-                            <>SYNCED</>
+                            <>ALREADY LIVE</>
                         ) : (
                             <><Rocket size={14} /> PUSH TO LIVE</>
                         )}
@@ -95,6 +105,9 @@ export const SeedDashboard = () => {
             </div>
         );
     };
+
+    const filteredIndoor = filterPlants(seedData.indoor);
+    const filteredOutdoor = filterPlants(seedData.outdoor);
 
     return (
         <div className={styles.container}>
@@ -109,14 +122,25 @@ export const SeedDashboard = () => {
                 </button>
             </div>
 
+            <div className={styles.searchContainer}>
+                <Search className={styles.searchIcon} size={20} />
+                <input
+                    type="text"
+                    className={styles.searchInput}
+                    placeholder="Search by name, species or type..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                />
+            </div>
+
             <div className={styles.section}>
                 <div className={styles.sectionTitle}>
                     <ShieldCheck size={24} className="text-emerald-400" />
                     Indoor Specimens
-                    <span className={styles.sectionBadge}>{seedData.indoor.length} Units</span>
+                    <span className={styles.sectionBadge}>{filteredIndoor.length} Available</span>
                 </div>
                 <div className={styles.grid}>
-                    {seedData.indoor.map(renderCard)}
+                    {filteredIndoor.map(renderCard)}
                 </div>
             </div>
 
@@ -124,10 +148,10 @@ export const SeedDashboard = () => {
                 <div className={styles.sectionTitle}>
                     <Sprout size={24} className="text-amber-400" />
                     Outdoor Ecosystems
-                    <span className={styles.sectionBadge}>{seedData.outdoor.length} Units</span>
+                    <span className={styles.sectionBadge}>{filteredOutdoor.length} Available</span>
                 </div>
                 <div className={styles.grid}>
-                    {seedData.outdoor.map(renderCard)}
+                    {filteredOutdoor.map(renderCard)}
                 </div>
             </div>
         </div>
