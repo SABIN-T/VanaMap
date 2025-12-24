@@ -895,4 +895,25 @@ app.post('/api/auth/reset-password-request', async (req, res) => {
 app.get('/', (req, res) => res.send('VanaMap API v3.0 - Secure & Fast'));
 
 const PORT = process.env.PORT || 5000;
+
+// Global Error Handlers to prevent crash
+process.on('uncaughtException', (err) => {
+    console.error('UNCAUGHT EXCEPTION! 💥', err);
+    // Keep alive if possible, or exit cleanly
+});
+process.on('unhandledRejection', (err) => {
+    console.error('UNHANDLED REJECTION! 💥', err);
+});
+
+app.get('/debug-env', (req, res) => {
+    // SECURITY: Do not expose full values in prod, just presence
+    res.json({
+        MONGO_URI_SET: !!process.env.MONGO_URI,
+        JWT_SECRET_SET: !!process.env.JWT_SECRET,
+        PORT: process.env.PORT,
+        NODE_ENV: process.env.NODE_ENV,
+        MONGO_STATUS: mongoose.connection.readyState // 0: disconnected, 1: connected, 2: connecting, 3: disconnecting
+    });
+});
+
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
