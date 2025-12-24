@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import styles from './SeedDashboard.module.css';
-import { fetchSeedData, seedSinglePlant, seedDatabase, fetchPlants } from '../../services/api';
-import { Database, CloudUpload, Check, Rocket, Leaf, ShieldCheck, Sprout } from 'lucide-react';
+import { fetchSeedData, seedSinglePlant, deployAllPlants, fetchPlants } from '../../services/api';
+import { Database, CloudUpload, Check, Rocket, ShieldCheck, Sprout } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export const SeedDashboard = () => {
@@ -44,13 +44,7 @@ export const SeedDashboard = () => {
         if (!confirm("Are you sure you want to DEPLOY ALL plants to production?")) return;
         setLoading(true);
         try {
-            await import('../../services/api').then(m => m.fetch(`${m.API_URL || 'https://plantoxy.onrender.com/api'}/admin/seed-plants`, {
-                method: 'POST',
-                headers: {
-                    'Authorization': `Bearer ${JSON.parse(localStorage.getItem('user') || '{}').token}`,
-                    'Content-Type': 'application/json'
-                }
-            }));
+            await deployAllPlants();
             await loadData();
             toast.success("SYSTEM OVERHAUL COMPLETE: All plants deployed.");
         } catch (e) {

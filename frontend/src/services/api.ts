@@ -419,3 +419,11 @@ export const seedSinglePlant = async (plantId: string) => {
     if (!res.ok) throw new Error("Failed to deploy plant");
     return res.json();
 };
+export const deployAllPlants = async () => {
+    const res = await fetch(`${API_URL}/admin/seed-plants`, {
+        method: 'POST',
+        headers: getHeaders()
+    });
+    if (!res.ok) throw new Error("Failed to deploy all plants");
+    return res.json();
+};
