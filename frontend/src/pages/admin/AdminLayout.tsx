@@ -3,7 +3,7 @@ import { useLocation, Link } from 'react-router-dom';
 import {
     LayoutDashboard, Sprout, Store,
     Users, Activity, Bell, Settings,
-    Menu, X, LogOut, ChevronRight, MessageSquare, DollarSign, Trophy
+    Menu, X, LogOut, ChevronRight, MessageSquare, DollarSign, Trophy, Database
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { fetchAdminStats } from '../../services/api';
@@ -43,6 +43,7 @@ export const AdminLayout = ({ title, children }: AdminLayoutProps) => {
         { path: '/admin/manage-vendors', icon: Store, label: 'Manage Vendors', badge: stats.unread?.vendors },
         { path: '/admin/price-management', icon: DollarSign, label: 'Price Management', badge: stats.unread?.prices },
         { path: '/admin/manage-points', icon: Trophy, label: 'Leaderboard Points' },
+        { path: '/admin/seed-bank', icon: Database, label: 'Seed Data Bank' },
         { path: '/admin/manage-users', icon: Users, label: 'User Directory', badge: stats.unread?.users },
         { path: '/admin/suggestions', icon: MessageSquare, label: 'User Suggestions' }, // Could add badge if API supported
         { path: '/admin/notifications', icon: Bell, label: 'Notifications', badge: stats.unread?.total },

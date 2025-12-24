@@ -402,3 +402,20 @@ export const updateUserPoints = async (userId: string, points: number) => {
     if (!res.ok) throw new Error("Failed to update user points");
     return res.json();
 };
+export const fetchSeedData = async () => {
+    const res = await fetch(`${API_URL}/admin/seed-data`, {
+        headers: getHeaders()
+    });
+    if (!res.ok) throw new Error("Failed to fetch seed data");
+    return res.json();
+};
+
+export const seedSinglePlant = async (plantId: string) => {
+    const res = await fetch(`${API_URL}/admin/seed-single`, {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify({ plantId })
+    });
+    if (!res.ok) throw new Error("Failed to deploy plant");
+    return res.json();
+};

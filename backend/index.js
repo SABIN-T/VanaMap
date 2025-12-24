@@ -497,6 +497,42 @@ app.delete('/api/suggestions/:id', auth, admin, async (req, res) => {
 // --- PLANT DATA SEEDING ---
 const { indoorPlants, outdoorPlants } = require('./plant-data');
 
+app.get('/api/admin/seed-data', auth, admin, (req, res) => {
+    // Return the static seed data so frontend can list it
+    try {
+        const { indoorPlants, outdoorPlants } = require('./plant-data');
+        res.json({ indoor: indoorPlants, outdoor: outdoorPlants });
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
+app.post('/api/admin/seed-single', auth, admin, async (req, res) => {
+    try {
+        const { plantId } = req.body;
+        const { indoorPlants, outdoorPlants } = require('./plant-data');
+        const allPlants = [...indoorPlants, ...outdoorPlants];
+        const plant = allPlants.find(p => p.id === plantId);
+
+        if (!plant) return res.status(404).json({ error: "Plant not found in seed bank" });
+
+        await Plant.updateOne({ id: plant.id }, { $set: plant }, { upsert: true });
+
+        // Notify
+        await Notification.create({
+            type: 'system',
+            message: `Admin manually deployed seed plant: ${plant.name}`,
+            details: { plantId: plant.id },
+            read: false
+        });
+
+        res.json({ success: true, plant });
+    } catch (e) {
+        console.error("SEED SINGLE ERROR:", e);
+        res.status(500).json({ error: e.message });
+    }
+});
+
 app.post('/api/admin/seed-plants', auth, admin, async (req, res) => {
     try {
         console.log("SEED: Starting plant population...");
