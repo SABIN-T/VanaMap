@@ -305,15 +305,6 @@ const indoorPlants = [
         price: 20,
         type: "indoor"
     },
-const indoorPlants = [
-    // ... Existing 1-20 (Assume kept by replace tool intelligent context matching or explicit rewrite if needed)
-    // Actually, to be safe and avoiding editing the middle of file blindly, I will rewrite the EXPORT at the end to include NEW arrays called `extraIndoor` and `extraOutdoor` then concat them? 
-    // No, I must modify the existing array definitions. 
-    // Since the file is small enough to be fully rewritten or largely replaced, I will append to the existing arrays.
-    // However, replace_file_content is best with unique context. 
-    // I will use a large replacement block to replace the end of the arrays.
-
-    // ... [Previous Indoor Plants 1-19] ... 
 
     {
         id: "p_in_20",
