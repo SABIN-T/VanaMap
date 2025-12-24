@@ -55,7 +55,7 @@ export const InstallPrompt = () => {
     return (
         <div style={{
             position: 'fixed',
-            bottom: '20px',
+            top: '20px',
             left: '50%',
             transform: 'translateX(-50%)',
             width: '90%',
@@ -71,12 +71,12 @@ export const InstallPrompt = () => {
             alignItems: 'center',
             gap: '12px',
             color: 'white',
-            animation: 'fadeInUp 0.5s ease-out'
+            animation: 'fadeInDown 0.5s ease-out'
         }}>
             <style>
                 {`
-                    @keyframes fadeInUp {
-                        from { opacity: 0; transform: translate(-50%, 20px); }
+                    @keyframes fadeInDown {
+                        from { opacity: 0; transform: translate(-50%, -20px); }
                         to { opacity: 1; transform: translate(-50%, 0); }
                     }
                 `}
