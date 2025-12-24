@@ -101,7 +101,7 @@ export const InstallPrompt = () => {
             </div>
 
             {isIOS ? (
-                <button onClick={() => setIsVisible(false)} style={{ background: 'transparent', border: 'none', color: '#94a3b8' }}>
+                <button onClick={() => setIsVisible(false)} style={{ background: 'transparent', border: 'none', color: '#94a3b8' }} aria-label="Close install prompt">
                     <X size={20} />
                 </button>
             ) : (
@@ -120,11 +120,12 @@ export const InstallPrompt = () => {
                         alignItems: 'center',
                         gap: '6px'
                     }}
+                    aria-label="Install VanaMap App"
                 >
                     <Download size={14} /> Install
                 </button>
             )}
-            {!isIOS && <button onClick={() => setIsVisible(false)} style={{ background: 'transparent', border: 'none', color: '#64748b', marginLeft: '-4px' }}><X size={18} /></button>}
+            {!isIOS && <button onClick={() => setIsVisible(false)} style={{ background: 'transparent', border: 'none', color: '#64748b', marginLeft: '-4px' }} aria-label="Close install prompt"><X size={18} /></button>}
         </div>
     );
 };

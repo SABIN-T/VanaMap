@@ -52,7 +52,7 @@ export const PlantCard = ({ plant, score, isTopMatch }: PlantCardProps) => {
                             {score}% APTNESS
                         </div>
                     )}
-                    <button onClick={handleHeartClick} className={styles.favBtn}>
+                    <button onClick={handleHeartClick} className={styles.favBtn} aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}>
                         <Heart size={20} fill={isFavorite ? "#ef4444" : "rgba(0,0,0,0.2)"} color={isFavorite ? "#ef4444" : "white"} />
                     </button>
                 </div>
