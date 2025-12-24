@@ -494,6 +494,33 @@ app.delete('/api/suggestions/:id', auth, admin, async (req, res) => {
 });
 
 
+// --- PLANT DATA SEEDING ---
+const { indoorPlants, outdoorPlants } = require('./plant-data');
+
+app.post('/api/admin/seed-plants', auth, admin, async (req, res) => {
+    try {
+        console.log("SEED: Starting plant population...");
+        const allPlants = [...indoorPlants, ...outdoorPlants];
+        let stats = { added: 0, updated: 0 };
+
+        for (const plant of allPlants) {
+            const result = await Plant.updateOne(
+                { id: plant.id },
+                { $set: plant },
+                { upsert: true }
+            );
+            if (result.upsertedCount > 0) stats.added++;
+            else if (result.modifiedCount > 0) stats.updated++;
+        }
+
+        console.log(`SEED: Complete. Added ${stats.added}, Updated ${stats.updated}`);
+        res.json({ success: true, ...stats, total: allPlants.length });
+    } catch (err) {
+        console.error("SEED ERROR:", err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // --- PLANT ROUTES ---
 
 app.get('/api/plants', async (req, res) => {
