@@ -107,6 +107,18 @@ const PlantSuggestionSchema = new mongoose.Schema({
     submittedAt: { type: Date, default: Date.now }
 });
 
+// --- INDEXES FOR PERFORMANCE ---
+// Speed up plant searches by name, type, and medical values
+PlantSchema.index({ name: 'text', description: 'text', type: 1 });
+PlantSchema.index({ oxygenLevel: 1 });
+
+// Speed up vendor lookups by location
+VendorSchema.index({ city: 1, state: 1 });
+VendorSchema.index({ verified: 1 });
+
+// Speed up login and auth checks
+UserSchema.index({ email: 1 });
+
 module.exports = {
     Plant: mongoose.model('Plant', PlantSchema),
     Vendor: mongoose.model('Vendor', VendorSchema),

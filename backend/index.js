@@ -5,6 +5,7 @@ const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const { Plant, Vendor, User, Notification, Chat, PlantSuggestion, SearchLog } = require('./models');
 const helmet = require('helmet');
+const compression = require('compression'); // Performance: Gzip/Brotli
 const rateLimit = require('express-rate-limit');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
@@ -74,6 +75,9 @@ const sendResetEmail = async (email, tempPass) => {
 const app = express();
 const JWT_SECRET = process.env.JWT_SECRET || 'vanamap_super_secret_key_2025';
 
+// Security & Performance
+app.enable('trust proxy'); // Required for Render/Heroku to get real client IP
+app.use(compression()); // Compress all responses
 app.use(cors());
 app.use(helmet({
     contentSecurityPolicy: false,
