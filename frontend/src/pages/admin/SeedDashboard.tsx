@@ -35,8 +35,8 @@ export const SeedDashboard = () => {
             await seedSinglePlant(plant.id);
             setDeployedIds(prev => new Set(prev).add(plant.id));
             toast.success(`${plant.name} deployed to VanaMap Live!`);
-        } catch (error) {
-            toast.error("Deployment failed");
+        } catch (error: any) {
+            toast.error(error.message || "Deployment failed");
         } finally {
             setDeploying(null);
         }

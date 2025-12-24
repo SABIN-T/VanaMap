@@ -516,6 +516,15 @@ app.post('/api/admin/seed-single', auth, admin, async (req, res) => {
 
         if (!plant) return res.status(404).json({ error: "Plant not found in seed bank" });
 
+        // Check for duplicate by scientific name
+        const existingPlant = await Plant.findOne({ scientificName: plant.scientificName });
+        if (existingPlant) {
+            return res.status(409).json({
+                error: `Plant with scientific name "${plant.scientificName}" already exists in the live database!`,
+                existingId: existingPlant.id
+            });
+        }
+
         await Plant.updateOne({ id: plant.id }, { $set: plant }, { upsert: true });
 
         // Notify
