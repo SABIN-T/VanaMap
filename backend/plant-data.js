@@ -15,7 +15,12 @@ const indoorPlants = [
         medicinalValues: ["Air purification", "Stress reduction"],
         advantages: ["Releases oxygen at night", "Tolerates neglect"],
         price: 25,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_02",
@@ -31,7 +36,12 @@ const indoorPlants = [
         medicinalValues: ["Removes formaldehyde"],
         advantages: ["Fast growing", "Pet friendly"],
         price: 15,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_03",
@@ -47,7 +57,12 @@ const indoorPlants = [
         medicinalValues: ["Removes mold spores"],
         advantages: ["Visual indicator for watering", "Flowering"],
         price: 30,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_04",
@@ -63,7 +78,12 @@ const indoorPlants = [
         medicinalValues: ["Treats burns", "Skin care"],
         advantages: ["Medicinal gel", "Drought tolerant"],
         price: 20,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_05",
@@ -79,7 +99,12 @@ const indoorPlants = [
         medicinalValues: ["Air toxin removal"],
         advantages: ["Statement piece", "Robust structure"],
         price: 45,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_06",
@@ -95,7 +120,12 @@ const indoorPlants = [
         medicinalValues: ["Air purification"],
         advantages: ["Indestructible", "Modern look"],
         price: 35,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_07",
@@ -111,7 +141,12 @@ const indoorPlants = [
         medicinalValues: ["Reduces airborne mold"],
         advantages: ["Trailing growth", "Classic aesthetic"],
         price: 18,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_08",
@@ -127,7 +162,12 @@ const indoorPlants = [
         medicinalValues: ["Removes VOCs"],
         advantages: ["Easy propagation", "Trailing beauty"],
         price: 12,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_09",
@@ -143,7 +183,12 @@ const indoorPlants = [
         medicinalValues: ["Humidifies air"],
         advantages: ["Non-toxic", "Lush greenery"],
         price: 22,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_10",
@@ -159,7 +204,12 @@ const indoorPlants = [
         medicinalValues: ["Removes xylene/toluene"],
         advantages: ["Pet safe", "Large plant impact"],
         price: 55,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_11",
@@ -175,7 +225,12 @@ const indoorPlants = [
         medicinalValues: ["Mood booster"],
         advantages: ["Iconic aesthetic", "Fast growth"],
         price: 45,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_12",
@@ -191,7 +246,12 @@ const indoorPlants = [
         medicinalValues: ["Air purifying"],
         advantages: ["Architectural shape", "Tree-like"],
         price: 60,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_13",
@@ -207,7 +267,12 @@ const indoorPlants = [
         medicinalValues: ["Removes benzene"],
         advantages: ["Colorful foliage", "Low light tolerant"],
         price: 28,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_14",
@@ -223,7 +288,12 @@ const indoorPlants = [
         medicinalValues: ["None specific"],
         advantages: ["Decorative foliage", "Pet safe"],
         price: 32,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_15",
@@ -239,7 +309,12 @@ const indoorPlants = [
         medicinalValues: ["Air cleaning"],
         advantages: ["Fast grower", "Easy care"],
         price: 15,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_16",
@@ -255,7 +330,12 @@ const indoorPlants = [
         medicinalValues: ["Traditional remedy"],
         advantages: ["Long lived", "Easy to prune"],
         price: 20,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_17",
@@ -271,7 +351,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Virtually unkillable", "Broad leaves"],
         price: 40,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_18",
@@ -287,7 +372,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Dramatic statement", "Very tall"],
         price: 75,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_19",
@@ -303,7 +393,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Unique texture", "Conversation starter"],
         price: 20,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
 
     {
@@ -320,7 +415,12 @@ const indoorPlants = [
         medicinalValues: ["Removes ammonia"],
         advantages: ["Blooms for months", "Colorful"],
         price: 35,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_21",
@@ -336,7 +436,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Pet safe", "Unique shape"],
         price: 25,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_22",
@@ -352,7 +457,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Drought tolerant", "Slow growing"],
         price: 45,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_23",
@@ -368,7 +478,12 @@ const indoorPlants = [
         medicinalValues: ["Air purification"],
         advantages: ["Fast growing", "Lush look"],
         price: 22,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_24",
@@ -384,7 +499,12 @@ const indoorPlants = [
         medicinalValues: ["Removes benzene"],
         advantages: ["Pet safe", "Adapts to low light"],
         price: 20,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_25",
@@ -400,7 +520,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Easy care", "Diverse colors"],
         price: 15,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_26",
@@ -416,7 +541,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Pet safe", "Desk plant"],
         price: 12,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_27",
@@ -432,7 +562,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Non-toxic", "Active movement"],
         price: 25,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_28",
@@ -448,7 +583,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Drought tolerant", "Vertical accent"],
         price: 55,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_29",
@@ -464,7 +604,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Pet safe", "Good luck gift"],
         price: 45,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_30",
@@ -480,7 +625,12 @@ const indoorPlants = [
         medicinalValues: ["Removes xylene"],
         advantages: ["Modern look", "Easy care"],
         price: 30,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_31",
@@ -496,7 +646,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Romantic gift", "Succulent"],
         price: 15,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_32",
@@ -512,7 +667,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Striking foliage", "Unique"],
         price: 35,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_33",
@@ -528,7 +688,12 @@ const indoorPlants = [
         medicinalValues: ["Detoxifies air"],
         advantages: ["Fast grower", "Easy to shape"],
         price: 40,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_34",
@@ -544,7 +709,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Vibrant color", "Tropical feel"],
         price: 25,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_35",
@@ -560,7 +730,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Pet safe", "Constant blooms"],
         price: 10,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_36",
@@ -576,7 +751,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["No dirt", "Creative display"],
         price: 8,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_37",
@@ -592,7 +772,12 @@ const indoorPlants = [
         medicinalValues: ["Wound healing"],
         advantages: ["Long bloom", "Low water"],
         price: 12,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_38",
@@ -608,7 +793,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Delicate texture", "Fast growing"],
         price: 15,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_39",
@@ -624,7 +814,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Huge size", "Statement"],
         price: 50,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_40",
@@ -640,7 +835,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Tree form", "Elegant"],
         price: 45,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_41",
@@ -656,7 +856,12 @@ const indoorPlants = [
         medicinalValues: ["Air purification"],
         advantages: ["Vibrant color", "Low maintenance"],
         price: 350,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_42",
@@ -672,7 +877,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Lush tropical look", "Fast growth"],
         price: 250,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_43",
@@ -688,7 +898,12 @@ const indoorPlants = [
         medicinalValues: ["Air purifying", "Removes Xylene"],
         advantages: ["Hardy", "Slow growing beauty"],
         price: 300,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_44",
@@ -704,7 +919,12 @@ const indoorPlants = [
         medicinalValues: ["Air cleaning"],
         advantages: ["Bright foliage", "Climber"],
         price: 150,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_45",
@@ -720,7 +940,12 @@ const indoorPlants = [
         medicinalValues: ["Pollutant removal"],
         advantages: ["Good luck", "Cannot look bad"],
         price: 120,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_46",
@@ -736,7 +961,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Pink aesthetic", "Bushy growth"],
         price: 180,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_47",
@@ -752,7 +982,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Showy", "Tuberous"],
         price: 200,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_48",
@@ -768,7 +1003,12 @@ const indoorPlants = [
         medicinalValues: ["Top air purifier (NASA)"],
         advantages: ["Privacy screen", "Pet safe"],
         price: 450,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_49",
@@ -784,7 +1024,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Unique leaf shape", "Tall"],
         price: 400,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_50",
@@ -800,7 +1045,12 @@ const indoorPlants = [
         medicinalValues: ["Anti-inflammatory (Leaf tonic)"],
         advantages: ["Asian aesthetic", "Slow growing"],
         price: 350,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_51",
@@ -816,7 +1066,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Color explosion", "Hedge potential"],
         price: 150,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_52",
@@ -832,7 +1087,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Structural color", "Upright"],
         price: 200,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_53",
@@ -848,7 +1108,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Soft texture", "Terrarium suited"],
         price: 250,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_54",
@@ -864,7 +1129,12 @@ const indoorPlants = [
         medicinalValues: ["Air cleaning"],
         advantages: ["Curled leaves", "Hangable"],
         price: 150,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_55",
@@ -880,7 +1150,12 @@ const indoorPlants = [
         medicinalValues: ["Night oxygen"],
         advantages: ["Indestructible", "Modern"],
         price: 200,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_56",
@@ -896,7 +1171,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Fast filler", "Textural contrast"],
         price: 150,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_57",
@@ -912,7 +1192,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Black foliage", "Trendy"],
         price: 800,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_58",
@@ -928,7 +1213,12 @@ const indoorPlants = [
         medicinalValues: ["Positive energy"],
         advantages: ["Hydroponic", "Giftable"],
         price: 150,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_59",
@@ -944,7 +1234,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Flowers indoors", "Air cleaner"],
         price: 450,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_60",
@@ -960,7 +1255,12 @@ const indoorPlants = [
         medicinalValues: ["Mold spore removal"],
         advantages: ["Huge size", "Statement"],
         price: 600,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_61",
@@ -976,7 +1276,12 @@ const indoorPlants = [
         medicinalValues: ["Air scrubbing"],
         advantages: ["Bold look", "Easy care"],
         price: 350,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_62",
@@ -992,7 +1297,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Architectural", "Impactive"],
         price: 800,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_63",
@@ -1008,7 +1318,12 @@ const indoorPlants = [
         medicinalValues: ["Air purity"],
         advantages: ["Trendy", "Tree-like"],
         price: 900,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_64",
@@ -1024,7 +1339,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Compact", "Distinctive"],
         price: 180,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_65",
@@ -1040,7 +1360,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Unique form", "Hanging"],
         price: 250,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_66",
@@ -1056,7 +1381,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Lucky", "Long-lived"],
         price: 200,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_67",
@@ -1072,7 +1402,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Graphic foliage", "Yellow bracts"],
         price: 350,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_68",
@@ -1088,7 +1423,12 @@ const indoorPlants = [
         medicinalValues: ["Formaldehyde removal"],
         advantages: ["Lush", "Air cleaner"],
         price: 250,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_69",
@@ -1104,7 +1444,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Hard to kill", "Pretty"],
         price: 300,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_70",
@@ -1120,7 +1465,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Whimsical", "Drought tolerant"],
         price: 450,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_71",
@@ -1136,7 +1486,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Indestructible", "Simple"],
         price: 350,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_72",
@@ -1152,7 +1507,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Pet safe", "Classic"],
         price: 250,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_73",
@@ -1168,7 +1528,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Bushy", "Fast"],
         price: 150,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_74",
@@ -1184,7 +1549,12 @@ const indoorPlants = [
         medicinalValues: ["Removes Benzene"],
         advantages: ["Modern", "Tall"],
         price: 400,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_75",
@@ -1200,7 +1570,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Romantic gift", "Easy"],
         price: 200,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_76",
@@ -1216,7 +1591,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Colorful", "Terrarium plant"],
         price: 120,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_77",
@@ -1232,7 +1612,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Trendy", "Propagates easily"],
         price: 350,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_78",
@@ -1248,7 +1633,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Dramatic if dry", "Patterned"],
         price: 150,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_79",
@@ -1264,7 +1654,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Trailing beauty", "Fast"],
         price: 300,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_80",
@@ -1280,7 +1675,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Fun foliage", "Compact"],
         price: 250,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_81",
@@ -1296,7 +1696,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Striking", "Exotic"],
         price: 450,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_82",
@@ -1312,7 +1717,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Pinstripes", "Self-heading"],
         price: 400,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_83",
@@ -1328,7 +1738,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Rugged", "Vertical"],
         price: 500,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_84",
@@ -1344,7 +1759,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Fiery color", "Compact"],
         price: 200,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_85",
@@ -1360,7 +1780,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Purple texture", "Fast"],
         price: 180,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_86",
@@ -1376,7 +1801,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Living art", "Unique"],
         price: 600,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_87",
@@ -1392,7 +1822,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Stunning foliage", "Statement"],
         price: 550,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_88",
@@ -1408,7 +1843,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Holey leaves", "Climber"],
         price: 350,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_89",
@@ -1424,7 +1864,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Soil-free", "Decor friendly"],
         price: 100,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_90",
@@ -1440,7 +1885,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Crispy texture", "Pet safe"],
         price: 300,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_91",
@@ -1456,7 +1906,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Cute", "Trailer"],
         price: 200,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_92",
@@ -1472,7 +1927,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Pop of color", "Easy"],
         price: 350,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_93",
@@ -1488,7 +1948,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Silver leaves", "Vining"],
         price: 250,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_94",
@@ -1504,7 +1969,12 @@ const indoorPlants = [
         medicinalValues: ["Air cleaning"],
         advantages: ["Fast", "Full"],
         price: 300,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_95",
@@ -1520,7 +1990,12 @@ const indoorPlants = [
         medicinalValues: ["Clean air"],
         advantages: ["Tall", "Low light"],
         price: 450,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_96",
@@ -1536,7 +2011,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Living watercolor", "Movement"],
         price: 400,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_97",
@@ -1552,7 +2032,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Flowers", "Hanging"],
         price: 300,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_98",
@@ -1568,7 +2053,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Purple foliage", "Movement"],
         price: 150,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_99",
@@ -1584,7 +2074,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Unique texture", "Hanging"],
         price: 250,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     },
     {
         id: "p_in_100",
@@ -1600,7 +2095,12 @@ const indoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Glossy", "Hardy"],
         price: 300,
-        type: "indoor"
+        type: "indoor",
+        foliageTexture: "Glossy/Smooth",
+        leafShape: "Ovate-Elliptical",
+        stemStructure: "Herbaceous",
+        overallHabit: "Upright/Bushy",
+        biometricFeatures: ["Interior Adapted", "Smooth Edges"]
     }
 ];
 
@@ -1621,7 +2121,12 @@ const outdoorPlants = [
         medicinalValues: ["Antiseptic", "Respiratory aid"],
         advantages: ["Culinary", "Ground cover"],
         price: 6,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_21",
@@ -1637,7 +2142,12 @@ const outdoorPlants = [
         medicinalValues: ["Immune boost"],
         advantages: ["Attracts butterflies", "Drought resistant"],
         price: 10,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_22",
@@ -1653,7 +2163,12 @@ const outdoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Unique flower shape", "Shade lover"],
         price: 18,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_23",
@@ -1669,7 +2184,12 @@ const outdoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Showstopper blooms", "Cut flowers"],
         price: 12,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_24",
@@ -1685,7 +2205,12 @@ const outdoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Fast climber", "Colorful"],
         price: 5,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_25",
@@ -1701,7 +2226,12 @@ const outdoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Romantic aesthetic", "Fragrant"],
         price: 45,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_26",
@@ -1717,7 +2247,12 @@ const outdoorPlants = [
         medicinalValues: ["Anti-inflammatory"],
         advantages: ["Long lived", "Fragrance"],
         price: 35,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_27",
@@ -1733,7 +2268,12 @@ const outdoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Cool season color", "Children love them"],
         price: 6,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_28",
@@ -1749,7 +2289,12 @@ const outdoorPlants = [
         medicinalValues: ["Edible"],
         advantages: ["Winter color", "Edible"],
         price: 4,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_29",
@@ -1765,7 +2310,12 @@ const outdoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Heat tolerant", "Butterfly magnet"],
         price: 5,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_30",
@@ -1781,7 +2331,12 @@ const outdoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Shade tolerance", "Continuous bloom"],
         price: 8,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_31",
@@ -1797,7 +2352,12 @@ const outdoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Attracts hummingbirds", "Heat tolerant"],
         price: 8,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_32",
@@ -1813,7 +2373,12 @@ const outdoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Brightens shade", "Easy"],
         price: 5,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_33",
@@ -1829,7 +2394,12 @@ const outdoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Amazing patterns", "Good for pots"],
         price: 12,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_34",
@@ -1845,7 +2415,12 @@ const outdoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Height", "Structural"],
         price: 18,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_35",
@@ -1861,7 +2436,12 @@ const outdoorPlants = [
         medicinalValues: ["Edible flowers"],
         advantages: ["Tough", "Reliable"],
         price: 15,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_36",
@@ -1877,7 +2457,12 @@ const outdoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Wildlife friendly", "Fragrant"],
         price: 25,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_37",
@@ -1893,7 +2478,12 @@ const outdoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Nostalgic scent", "Cut flowers"],
         price: 30,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_38",
@@ -1909,7 +2499,12 @@ const outdoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Structure", "Formal look"],
         price: 35,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_39",
@@ -1925,7 +2520,12 @@ const outdoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Hanging baskets", "Unique"],
         price: 15,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_40",
@@ -1941,7 +2541,12 @@ const outdoorPlants = [
         medicinalValues: ["Capsaicin"],
         advantages: ["Spice", "Ornamental fruit"],
         price: 8,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_41",
@@ -1957,7 +2562,12 @@ const outdoorPlants = [
         medicinalValues: ["Ayurvedic panacea", "Immunity boost"],
         advantages: ["Sacred", "Medicinal"],
         price: 50,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_42",
@@ -1973,7 +2583,12 @@ const outdoorPlants = [
         medicinalValues: ["Digestion", "Hair growth"],
         advantages: ["Culinary staple", "Self-seeding"],
         price: 80,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_43",
@@ -1989,7 +2604,12 @@ const outdoorPlants = [
         medicinalValues: ["Stress relief"],
         advantages: ["Divine scent", "Cultural icon"],
         price: 150,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_44",
@@ -2005,7 +2625,12 @@ const outdoorPlants = [
         medicinalValues: ["Hair care", "Cooling"],
         advantages: ["Daily blooms", "Vibrant"],
         price: 120,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_45",
@@ -2021,7 +2646,12 @@ const outdoorPlants = [
         medicinalValues: ["None (Toxic)"],
         advantages: ["Drought proof", "Heavy bloomer"],
         price: 100,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_46",
@@ -2037,7 +2667,12 @@ const outdoorPlants = [
         medicinalValues: ["Eye care (Traditional)"],
         advantages: ["Moon garden", "White blooms"],
         price: 120,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_47",
@@ -2053,7 +2688,12 @@ const outdoorPlants = [
         medicinalValues: ["Antiseptic roots"],
         advantages: ["Dense hedge", "Attracts butterflies"],
         price: 150,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_48",
@@ -2069,7 +2709,12 @@ const outdoorPlants = [
         medicinalValues: ["Cough remedy"],
         advantages: ["Everlasting flower", "Cute"],
         price: 80,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_49",
@@ -2085,7 +2730,12 @@ const outdoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Unique color", "Traditional"],
         price: 100,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_50",
@@ -2101,7 +2751,12 @@ const outdoorPlants = [
         medicinalValues: ["Skin toner", "Cooling"],
         advantages: ["Edible", "Fragrance"],
         price: 200,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_51",
@@ -2117,7 +2772,12 @@ const outdoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Evening scent", "Vine"],
         price: 150,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_52",
@@ -2133,7 +2793,12 @@ const outdoorPlants = [
         medicinalValues: ["Fever reducer"],
         advantages: ["Perfume", "Sacred"],
         price: 500,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_53",
@@ -2149,7 +2814,12 @@ const outdoorPlants = [
         medicinalValues: ["Sciatica treatment"],
         advantages: ["Night scent", "Divine story"],
         price: 350,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_54",
@@ -2165,7 +2835,12 @@ const outdoorPlants = [
         medicinalValues: ["Aromatherapy"],
         advantages: ["Exotic scent", "Strong climber"],
         price: 400,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_55",
@@ -2181,7 +2856,12 @@ const outdoorPlants = [
         medicinalValues: ["Leaves for diabetes"],
         advantages: ["King of fruits", "Dwarf"],
         price: 600,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_56",
@@ -2197,7 +2877,12 @@ const outdoorPlants = [
         medicinalValues: ["Leaves for toothache"],
         advantages: ["Vitamin C power", "Easy fruit"],
         price: 300,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_57",
@@ -2213,7 +2898,12 @@ const outdoorPlants = [
         medicinalValues: ["Antioxidant rich"],
         advantages: ["Decorative", "Healthy fruit"],
         price: 450,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_58",
@@ -2229,7 +2919,12 @@ const outdoorPlants = [
         medicinalValues: ["Immunity"],
         advantages: ["Daily need", "Fragrant leaf"],
         price: 350,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_59",
@@ -2245,7 +2940,12 @@ const outdoorPlants = [
         medicinalValues: ["Antiviral", "Skin cure"],
         advantages: ["Air purifier", "Sacred"],
         price: 250,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_60",
@@ -2261,7 +2961,12 @@ const outdoorPlants = [
         medicinalValues: ["Digestion"],
         advantages: ["Cultural necessity", "Lush climber"],
         price: 150,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_61",
@@ -2277,7 +2982,12 @@ const outdoorPlants = [
         medicinalValues: ["Cough remedy"],
         advantages: ["Explosive color", "Drought proof"],
         price: 150,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_62",
@@ -2293,7 +3003,12 @@ const outdoorPlants = [
         medicinalValues: ["Skin treatments"],
         advantages: ["Heavenly scent", "Sculptural"],
         price: 350,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_63",
@@ -2309,7 +3024,12 @@ const outdoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Color mass", "Hanging baskets"],
         price: 20,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_64",
@@ -2325,7 +3045,12 @@ const outdoorPlants = [
         medicinalValues: ["Oil for skin"],
         advantages: ["Continuous bloom", "Hardy"],
         price: 100,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_65",
@@ -2341,7 +3066,12 @@ const outdoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Self-seeding", "Pollinator friendly"],
         price: 30,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_66",
@@ -2357,7 +3087,12 @@ const outdoorPlants = [
         medicinalValues: ["Seeds are nutritious"],
         advantages: ["Happy vibes", "Edible"],
         price: 40,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_67",
@@ -2373,7 +3108,12 @@ const outdoorPlants = [
         medicinalValues: ["Traditional med"],
         advantages: ["Covers fences", "Fragrant"],
         price: 250,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_68",
@@ -2389,7 +3129,12 @@ const outdoorPlants = [
         medicinalValues: ["Ayurveda"],
         advantages: ["Spectacular bloom", "Tree"],
         price: 300,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_69",
@@ -2405,7 +3150,12 @@ const outdoorPlants = [
         medicinalValues: ["None"],
         advantages: ["Butterfly magnet", "Constant color"],
         price: 50,
-        type: "outdoor"
+        type: "outdoor",
+        foliageTexture: "Matte/Textured",
+        leafShape: "Lanceolateish/Compound",
+        stemStructure: "Woody/Semi-Woody",
+        overallHabit: "Spreading/Climbing",
+        biometricFeatures: ["Sun Hardy", "Outdoor Adapted"]
     },
     {
         id: "p_out_70",

@@ -117,29 +117,33 @@ export const PlantIdentifier = () => {
             setIsAnalyzing(false);
 
             // Mock logic: Try to match with DB or suggest new
-            const randomMatch = Math.random() > 0.5 ? dbPlants[0] : null; // 50% chance to match
+            // Biometric Feature Detection Simulation
+            // We simulate the extraction of distinctive morphological features.
+            const detectedFeaturesCount = Math.floor(Math.random() * 6); // Randomly find 0 to 5 features
 
-            if (randomMatch) {
+            if (detectedFeaturesCount >= 3 && dbPlants.length > 0) {
+                // Sufficient data: Match found
+                const randomMatch = dbPlants[Math.floor(Math.random() * dbPlants.length)];
                 setResult({
                     type: 'found',
                     data: randomMatch,
-                    confidence: 94.2
+                    confidence: 88 + Math.floor(Math.random() * 12)
                 });
             } else {
+                // Insufficient data or No Match
                 setResult({
                     type: 'unknown',
                     data: {
-                        name: 'Unknown Species',
-                        scientificName: 'Plantae Incognita',
-                        description: 'No plant identified with this characteristic structure in the database. The observed morphology differs significantly from known records.',
-                        leafShape: 'Observed: Ovate/Broad',
-                        stemStructure: 'Observed: Semi-Woody',
-                        overallHabit: 'Observed: Upright',
-                        biometricFeatures: ['Slightly Serrated', 'Dark Green Hue'],
-                        likelyMatches: [
-                            { name: 'Rubber Fig', confidence: 88 },
-                            { name: 'Magnolia', confidence: 65 }
-                        ]
+                        name: 'No Plant Identified',
+                        scientificName: 'Analysis Inconclusive',
+                        description: detectedFeaturesCount < 3
+                            ? `Biometric scan failed. Only ${detectedFeaturesCount} valid characteristic(s) detected. A minimum of 3 unique features (e.g., Venation, Leaf Margin, Phyllotaxy) is required for identification.`
+                            : `Biometric profile complete (${detectedFeaturesCount} features), but no matching specimen found in the current database.`,
+                        leafShape: 'Undetermined',
+                        stemStructure: 'Undetermined',
+                        overallHabit: 'Undetermined',
+                        biometricFeatures: [],
+                        likelyMatches: []
                     }
                 });
             }
