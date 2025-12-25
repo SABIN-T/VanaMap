@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Smartphone, X, Download, Share, PlusSquare } from 'lucide-react';
 import toast from 'react-hot-toast';
 
-const PUBLIC_VAPID_KEY = 'BL4HAO7t3qISck5JPsQO9sLFeTHIT2QFdwjkme-3lJvEo34mEu1FWn0MygqfUfyDu_wn8i1hBhZP4ezRlgIJoOE';
+const PUBLIC_VAPID_KEY = import.meta.env.VITE_PUBLIC_VAPID_KEY;
 
 const urlBase64ToUint8Array = (base64String: string) => {
     const padding = '='.repeat((4 - base64String.length % 4) % 4);

@@ -74,8 +74,8 @@ const sendResetEmail = async (email, tempPass) => {
 };
 
 // --- WEB PUSH SETUP ---
-const publicVapidKey = 'BL4HAO7t3qISck5JPsQO9sLFeTHIT2QFdwjkme-3lJvEo34mEu1FWn0MygqfUfyDu_wn8i1hBhZP4ezRlgIJoOE';
-const privateVapidKey = 'n4TaFAaTWVNikVjUGLOdBu8mAxZPK6fPRhM2afE55m0'; // In prod use ENV
+const publicVapidKey = process.env.PUBLIC_VAPID_KEY;
+const privateVapidKey = process.env.PRIVATE_VAPID_KEY;
 webpush.setVapidDetails('mailto:support@vanamap.online', publicVapidKey, privateVapidKey);
 
 const sendPushNotification = async (payload) => {
