@@ -119,7 +119,7 @@ VendorSchema.index({ city: 1, state: 1 });
 VendorSchema.index({ verified: 1 });
 
 // Speed up login and auth checks
-UserSchema.index({ email: 1 });
+// UserSchema.index({ email: 1 }); // Already defined in schema with unique: true
 
 module.exports = {
     Plant: mongoose.model('Plant', PlantSchema),
