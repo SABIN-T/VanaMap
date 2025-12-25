@@ -316,6 +316,52 @@ export const AddPlant = () => {
                                 </div>
                             </div>
 
+
+                            {/* Biometric Profile */}
+                            <div className="mb-10">
+                                <div className={styles.sectionTitle}>
+                                    <ScanLine size={18} /> Biometric Profile
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div className={styles.inputGroup}>
+                                        <label className={styles.label}>Leaf Shape</label>
+                                        <input
+                                            value={newPlant.leafShape}
+                                            onChange={(e) => setNewPlant({ ...newPlant, leafShape: e.target.value })}
+                                            className={styles.glassInput}
+                                            placeholder="e.g. Ovate, Lanceolate"
+                                        />
+                                    </div>
+                                    <div className={styles.inputGroup}>
+                                        <label className={styles.label}>Stem Structure</label>
+                                        <input
+                                            value={newPlant.stemStructure}
+                                            onChange={(e) => setNewPlant({ ...newPlant, stemStructure: e.target.value })}
+                                            className={styles.glassInput}
+                                            placeholder="e.g. Woody, Succulent"
+                                        />
+                                    </div>
+                                    <div className={styles.inputGroup}>
+                                        <label className={styles.label}>Growth Habit</label>
+                                        <input
+                                            value={newPlant.overallHabit}
+                                            onChange={(e) => setNewPlant({ ...newPlant, overallHabit: e.target.value })}
+                                            className={styles.glassInput}
+                                            placeholder="e.g. Climbing, Bushy"
+                                        />
+                                    </div>
+                                    <div className={styles.inputGroup}>
+                                        <label className={styles.label}>Distinctive Features</label>
+                                        <input
+                                            value={newPlant.biometricFeatures?.join(', ')}
+                                            onChange={(e) => setNewPlant({ ...newPlant, biometricFeatures: e.target.value.split(',').map(s => s.trim()) })}
+                                            className={styles.glassInput}
+                                            placeholder="Comma separated e.g. Serrated edges"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
                             {/* 3. Vital Metrics */}
                             <div className="mb-10">
                                 <div className={styles.sectionTitle}>
@@ -411,7 +457,7 @@ export const AddPlant = () => {
                     </div>
 
                 </div>
-            </div>
-        </AdminLayout>
+            </div >
+        </AdminLayout >
     );
 };
