@@ -4,7 +4,7 @@ import { QRCodeSVG } from 'qrcode.react';
 import { PlantCard } from '../components/features/plants/PlantCard';
 import { Button } from '../components/common/Button';
 import { fetchPlants, fetchVendors } from '../services/api';
-import { getWeather, geocodeCity } from '../services/weather';
+import { getWeather, geocodeCity, reverseGeocode } from '../services/weather';
 import { calculateAptness } from '../utils/logic';
 import type { Plant, Vendor } from '../types';
 import { Sprout, MapPin, Thermometer, Wind, ArrowDown, Sparkles, Search, AlertCircle, Heart, Sun, Activity, GraduationCap, ShoppingBag, PlusCircle, MoveRight } from 'lucide-react';
@@ -174,17 +174,21 @@ export const Home = () => {
         setLocationLoading(true);
         if (navigator.geolocation) {
             const toastId = toast.loading("Finding your location...");
-            const options = { enableHighAccuracy: false, timeout: 8000, maximumAge: 60000 };
+            const options = { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 };
             navigator.geolocation.getCurrentPosition(async (position) => {
                 const { latitude, longitude } = position.coords;
                 try {
-                    const weatherData = await getWeather(latitude, longitude);
+                    const [weatherData, locationName] = await Promise.all([
+                        getWeather(latitude, longitude),
+                        reverseGeocode(latitude, longitude)
+                    ]);
+
                     if (weatherData) {
-                        setWeather({ ...weatherData, locationName: "Detected Location" });
-                        toast.success("Location set!", { id: toastId });
+                        setWeather({ ...weatherData, locationName: locationName });
+                        toast.success(`Located: ${locationName}`, { id: toastId });
                         scrollToFilters();
                     } else {
-                        toast.error("Sync failed.", { id: toastId });
+                        toast.error("Weather data unavailable.", { id: toastId });
                     }
                 } catch (e) {
                     console.error(e);
@@ -195,7 +199,10 @@ export const Home = () => {
             }, (err) => {
                 console.error(err);
                 setLocationLoading(false);
-                toast.error("GPS access denied.", { id: toastId });
+                let msg = "GPS access denied.";
+                if (err.code === 3) msg = "Location timeout.";
+                if (err.code === 2) msg = "Location unavailable.";
+                toast.error(msg, { id: toastId });
             }, options);
         } else {
             toast.error("GPS not supported.");

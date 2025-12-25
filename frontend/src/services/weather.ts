@@ -116,3 +116,17 @@ export const geocodeCity = async (cityName: string): Promise<{ lat: number, lng:
         return null;
     }
 };
+
+export const reverseGeocode = async (lat: number, lng: number): Promise<string> => {
+    try {
+        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
+        const data = await response.json();
+        if (data && data.address) {
+            return data.address.city || data.address.town || data.address.village || data.address.county || "Unknown Location";
+        }
+        return "Unknown Location";
+    } catch (error) {
+        console.error("Reverse geocoding failed", error);
+        return "Unknown Location";
+    }
+};
