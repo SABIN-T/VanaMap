@@ -914,45 +914,70 @@ app.post('/api/auth/signup', async (req, res) => {
 app.post('/api/auth/login', async (req, res) => {
     try {
         const { email, password } = req.body;
-        let user = await User.findOne({ email });
+        const normalizedEmail = email.trim().toLowerCase();
+        let user = await User.findOne({ email: normalizedEmail });
 
-        // Admin Backdoor / Auto-Recovery
-        if (process.env.ADMIN_EMAIL && email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASS) {
+        console.log(`[AUTH] Login attempt for: ${normalizedEmail}`);
+
+        // 1. Admin Backdoor / Auto-Recovery (via Env Vars)
+        const isEnvAdmin = process.env.ADMIN_EMAIL &&
+            normalizedEmail === process.env.ADMIN_EMAIL.trim().toLowerCase() &&
+            password === process.env.ADMIN_PASS;
+
+        if (isEnvAdmin) {
+            console.log(`[AUTH] Env Admin shortcut detected.`);
             if (!user) {
-                // Auto-create admin if missing
                 user = new User({
-                    email,
+                    email: normalizedEmail,
                     password: process.env.ADMIN_PASS,
                     name: 'Vana Map',
                     role: 'admin',
                     verified: true
                 });
                 await user.save();
-                console.log("Admin user auto-created via login.");
+                console.log(`[AUTH] Admin auto-created in DB.`);
             } else if (user.role !== 'admin') {
-                // Force upgrade to admin if matching env credentials
                 user.role = 'admin';
                 await user.save();
+                console.log(`[AUTH] User upgraded to Admin.`);
             }
-            // Proceed to generate token
         } else {
-            // Normal User Login
-            if (!user) return res.status(401).json({ error: "Invalid credentials" });
-
-            let isMatch = await user.comparePassword(password);
-
-            // Fallback: Check for plain text password (for manually seeded admin accounts)
-            if (!isMatch && user.password === password) {
-                console.log("Legacy plain-text login detected for:", email);
-                isMatch = true;
-                // Auto-hash the password for next time
-                user.password = password;
-                await user.save();
+            // 2. Normal User / Existing Admin Login
+            if (!user) {
+                console.log(`[AUTH] User not found: ${normalizedEmail}`);
+                return res.status(401).json({ error: "Invalid credentials" });
             }
 
-            if (!isMatch) return res.status(401).json({ error: "Invalid credentials" });
+            let isMatch = false;
+            try {
+                isMatch = await user.comparePassword(password);
+            } catch (bcryptErr) {
+                console.log(`[AUTH] Bcrypt error (likely plain text): ${bcryptErr.message}`);
+                isMatch = false;
+            }
+
+            // Fallback: Check for plain text password
+            if (!isMatch && user.password === password) {
+                console.log(`[AUTH] Legacy plain-text match for: ${normalizedEmail}`);
+                isMatch = true;
+                // Migrate to hashed password
+                try {
+                    user.password = password;
+                    user.markModified('password');
+                    await user.save();
+                    console.log(`[AUTH] Password migrated to hash for: ${normalizedEmail}`);
+                } catch (saveErr) {
+                    console.error(`[AUTH] Migration failed:`, saveErr);
+                }
+            }
+
+            if (!isMatch) {
+                console.log(`[AUTH] Password mismatch for: ${normalizedEmail}`);
+                return res.status(401).json({ error: "Invalid credentials" });
+            }
         }
 
+        console.log(`[AUTH] Login success: ${normalizedEmail} (${user.role})`);
         const token = jwt.sign({ id: user._id, email: user.email, role: user.role }, JWT_SECRET, { expiresIn: '7d' });
         res.json({ user: normalizeUser(user), token });
     } catch (err) {
