@@ -74,16 +74,17 @@ export const InstallPrompt = () => {
 
                 // 2. Geolocation (GPS)
                 if (navigator.geolocation) {
-                    navigator.permissions.query({ name: 'geolocation' }).then((result) => {
-                        if (result.state === 'prompt') {
-                            // Trigger a quick position check to show the browser prompt
-                            navigator.geolocation.getCurrentPosition(
-                                () => { toast.success("Location access granted! 🌍"); },
-                                () => { console.log("Location access deferred"); },
-                                { timeout: 1000, maximumAge: 0 }
-                            );
-                        }
-                    });
+                    // Directly request position to trigger the browser permission prompt
+                    // This works universally (Chrome, Safari, Firefox) whereas permissions.query is spotty
+                    navigator.geolocation.getCurrentPosition(
+                        () => {
+                            toast.success("Location access granted! 🌍");
+                        },
+                        (err) => {
+                            console.log("Location access deferred/denied", err);
+                        },
+                        { timeout: 5000, maximumAge: 0 }
+                    );
                 }
             };
 
