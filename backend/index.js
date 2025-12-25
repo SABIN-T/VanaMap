@@ -73,11 +73,17 @@ const sendResetEmail = async (email, tempPass) => {
     }
 };
 
-const sendWelcomeEmail = async (email, name) => {
+const sendWelcomeEmail = async (email, name, role = 'user') => {
+    const isVendor = role === 'vendor';
+    const welcomeTitle = isVendor ? `Welcome Partner, ${name}! 🏪` : `Welcome, ${name}! 🌿`;
+    const specificMessage = isVendor
+        ? `You are now a registered <strong>Vendor</strong> on VanaMap. Get ready to showcase your nursery to thousands of plant lovers!`
+        : `You are now part of VanaMap with user name <strong style="color: #10b981;">Explore the nature</strong>.`;
+
     const mailOptions = {
         from: `"Vana Map" <${process.env.EMAIL_USER}>`,
         to: email,
-        subject: 'Welcome to VanaMap - Explore the nature',
+        subject: isVendor ? 'Welcome to VanaMap Content Partner! 🚀' : 'Welcome to VanaMap - Explore the nature',
         html: `
             <div style="font-family: 'Outfit', sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px; color: #1e293b; background-color: #f0fdf4; border-radius: 24px;">
                 <div style="text-align: center; margin-bottom: 40px;">
@@ -86,23 +92,22 @@ const sendWelcomeEmail = async (email, name) => {
                 </div>
                 
                 <div style="background: white; padding: 40px; border-radius: 20px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);">
-                    <h2 style="color: #0f172a; margin-top: 0; font-size: 24px;">Welcome, ${name}! 🌿</h2>
+                    <h2 style="color: #0f172a; margin-top: 0; font-size: 24px;">${welcomeTitle}</h2>
                     <p style="font-size: 16px; line-height: 1.6; color: #475569;">
-                        You are now part of VanaMap with user name <strong style="color: #10b981;">Explore the nature</strong>.
+                        ${specificMessage}
                     </p>
                     <p style="font-size: 16px; line-height: 1.6; color: #475569;">
                         We are thrilled to have you join our mission to build a greener future. With VanaMap, you can:
                     </p>
                     <ul style="color: #475569; font-size: 15px; line-height: 1.8; padding-left: 20px;">
-                        <li>🌱 Discover plants perfect for your home</li>
-                        <li>🏡 Find nearby nurseries and vendors</li>
+                        ${isVendor ? '<li>🏪 Manage your digital shop inventory</li><li>📈 Reach local customers instantly</li>' : '<li>🌱 Discover plants perfect for your home</li><li>🏡 Find nearby nurseries and vendors</li>'}
                         <li>🤖 Diagnose plant diseases with AI</li>
                         <li>💨 Simulate air quality improvements</li>
                     </ul>
                     
                     <div style="margin-top: 35px; text-align: center;">
                         <a href="https://www.vanamap.online/dashboard" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; text-decoration: none; padding: 14px 32px; border-radius: 99px; font-weight: bold; font-size: 16px; display: inline-block; box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3);">
-                            Start Exploring
+                            ${isVendor ? 'Go to Vendor Portal' : 'Start Exploring'}
                         </a>
                     </div>
                 </div>
@@ -117,7 +122,7 @@ const sendWelcomeEmail = async (email, name) => {
 
     try {
         await transporter.sendMail(mailOptions);
-        console.log(`Welcome email sent to: ${email}`);
+        console.log(`Welcome email sent to: ${email} (${role})`);
     } catch (e) {
         console.error("Welcome Mail Error:", e.message);
     }
@@ -862,7 +867,7 @@ app.post('/api/auth/signup', async (req, res) => {
         });
 
         // Send Welcome Email
-        sendWelcomeEmail(email, name);
+        sendWelcomeEmail(email, name, role);
 
         const token = jwt.sign({ id: user._id, email: user.email, role: user.role }, JWT_SECRET, { expiresIn: '7d' });
         res.status(201).json({ user: normalizeUser(user), token });
