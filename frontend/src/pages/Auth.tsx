@@ -172,7 +172,8 @@ export const Auth = () => {
             }
         } else if (view === 'signup') {
             const tid = toast.loading("Sending Verification Code...");
-            const result = await signup({ email, phone, password, name, role, city, state, country });
+            const fullPhone = phone ? `+${phoneCode}${phone.replace(/\D/g, '')}` : undefined;
+            const result = await signup({ email, phone: fullPhone, password, name, role, city, state, country });
             if (result.success) {
                 toast.success("Code sent to your Gmail & WhatsApp!", { id: tid });
                 setView('verify');
@@ -340,21 +341,7 @@ export const Auth = () => {
                                 </div>
                             </div>
 
-                            {/* Vendor Specific Phone (Only for Vendor) */}
-                            {role === 'vendor' && (
-                                <div className={styles.formGroup}>
-                                    <label className={styles.label}>Contact Number</label>
-                                    <div className={styles.inputWrapper}>
-                                        <div className={styles.phonePrefix}>+{phoneCode}</div>
-                                        <input
-                                            type="tel"
-                                            className={styles.input}
-                                            placeholder="Mobile Number"
-                                            required
-                                        />
-                                    </div>
-                                </div>
-                            )}
+                            {/* Vendor Specific Phone (Only for Vendor) - REMOVED redundant here, handled below */}
                         </>
                     )}
 
@@ -384,14 +371,21 @@ export const Auth = () => {
                     {view === 'signup' && (
                         <div className={styles.formGroup}>
                             <label className={styles.label}>WhatsApp / Mobile Number</label>
-                            <input
-                                className={styles.input}
-                                type="tel"
-                                value={phone}
-                                onChange={(e) => setPhone(e.target.value)}
-                                required
-                                placeholder="+91 XXXXX XXXXX"
-                            />
+                            <div className={styles.inputWrapper}>
+                                <div className={styles.phonePrefix}>+{phoneCode}</div>
+                                <input
+                                    className={styles.input}
+                                    type="tel"
+                                    value={phone}
+                                    onChange={(e) => setPhone(e.target.value)}
+                                    required
+                                    placeholder="XXXXX XXXXX"
+                                    style={{ paddingLeft: '4.5rem' }}
+                                />
+                            </div>
+                            <p className={styles.hintText} style={{ marginTop: '0.25rem', fontSize: '0.75rem' }}>
+                                OTP will be sent to +{phoneCode} {phone}
+                            </p>
                         </div>
                     )}
 
