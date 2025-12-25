@@ -1,5 +1,5 @@
 
-import React, { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Camera, RefreshCw, Check, Search, Plus, ScanLine, Leaf, Image as ImageIcon, Activity } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { AdminLayout } from './AdminLayout';
