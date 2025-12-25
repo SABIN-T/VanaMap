@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '../components/common/Button';
-import { User, ArrowLeft, Store } from 'lucide-react';
+import { User, ArrowLeft, Store, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { Country, State, type ICountry, type IState } from 'country-state-city';
 import { toast } from 'react-hot-toast';
@@ -10,9 +10,9 @@ import styles from './Auth.module.css';
 export const Auth = () => {
     const navigate = useNavigate();
     const [searchParams] = useSearchParams();
-    const { login, signup, user } = useAuth();
+    const { login, signup, user, verify } = useAuth();
 
-    type AuthView = 'login' | 'signup' | 'forgot' | 'reset';
+    type AuthView = 'login' | 'signup' | 'forgot' | 'reset' | 'verify';
 
     // Parse URL params
     const initialView = searchParams.get('view') as AuthView || 'login';
@@ -87,38 +87,103 @@ export const Auth = () => {
         if (!email) { toast.error("Please enter your email address first"); return; }
         const tid = toast.loading("Signaling Admin...");
         try {
-            await import('../services/api').then(api => api.nudgeAdmin(email));
+            const api = await import('../services/api');
+            await api.nudgeAdmin(email);
             toast.success("Admin will change the password to 123456 for this email shortly. Please try after 1hr.", { id: tid, duration: 6000 });
         } catch (e) { toast.error("Failed to signal admin", { id: tid }); }
     };
 
+    const [showPassword, setShowPassword] = useState(false);
+    const [isEmailChecked, setIsEmailChecked] = useState(false);
+    const [emailLoading, setEmailLoading] = useState(false);
+    const [emailVerifiedResult, setEmailVerifiedResult] = useState<{ name: string, role: string } | null>(null);
+
+    // Password Validation
+    const validatePassword = (pass: string) => {
+        const minLen = 4;
+        const maxLen = 18;
+        const hasUpper = /[A-Z]/.test(pass);
+        const hasNumber = /[0-9]/.test(pass);
+        const hasSpecial = /[@#$%]/.test(pass);
+
+        if (pass.length < minLen || pass.length > maxLen) return "Password must be 4-18 characters.";
+        if (!hasUpper) return "At least one capital letter required.";
+        if (!hasNumber) return "At least one number required.";
+        if (!hasSpecial) return "At least one special character (@,#,$,%) required.";
+        return null; // OK
+    };
+
+    const handleEmailCheck = async () => {
+        if (!email) { toast.error("Please enter email first"); return; }
+        setEmailLoading(true);
+        try {
+            const api = await import('../services/api');
+            const res = await api.checkEmail(email);
+            if (res.success && res.verified) {
+                toast.success(`Verified account found: ${res.name}`);
+                setEmailVerifiedResult({ name: res.name, role: res.role });
+                setIsEmailChecked(true);
+            }
+        } catch (err: any) {
+            toast.error(err.message || "Account not found or not verified.");
+            // If account found but not verified, we can offer to resent OTP?
+            if (err.message && err.message.includes("not yet verified")) {
+                toast("Please sign up again to resend OTP or check your Gmail.", { icon: '📧' });
+            }
+        } finally {
+            setEmailLoading(false);
+        }
+    };
+
+    const [otp, setOtp] = useState('');
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        // Validate password for signup and reset
+        if (view === 'signup' || view === 'reset') {
+            const error = validatePassword(password);
+            if (error) { toast.error(error); return; }
+        }
+
         if (view === 'login') {
+            if (!isEmailChecked) {
+                handleEmailCheck();
+                return;
+            }
             const tid = toast.loading("Authenticating...");
             const result = await login({ email, password });
             if (result.success) {
                 toast.success("Login Successful! Welcome back.", { id: tid });
             } else {
-                // User requested specific error phrasing
                 toast.error(
                     result.message || "Something is wrong. Please type it correctly or change your password.",
                     { id: tid, duration: 4000 }
                 );
             }
         } else if (view === 'signup') {
-            const tid = toast.loading("Creating Account...");
+            const tid = toast.loading("Sending Verification Code...");
             const result = await signup({ email, password, name, role, city, state, country });
             if (result.success) {
-                toast.success("Account Created Successfully!", { id: tid });
+                toast.success("Code sent to your Gmail!", { id: tid });
+                setView('verify');
             } else {
-                toast.error(`Signup Failed: ${result.message} `, { id: tid });
+                toast.error(result.message || "Signup failed", { id: tid });
+            }
+        } else if (view === 'verify') {
+            const tid = toast.loading("Verifying Gmail...");
+            const result = await verify(email, otp);
+            if (result.success) {
+                toast.success("Email Verified! Welcome.", { id: tid });
+                // navigation is handled by useEffect on user state
+            } else {
+                toast.error(result.message || "Invalid Code", { id: tid });
             }
         } else if (view === 'forgot') {
             const tid = toast.loading("Verifying Identity...");
             try {
-                await import('../services/api').then(api => api.resetPasswordVerify(email, name, password));
+                const api = await import('../services/api');
+                await api.resetPasswordVerify(email, name, password);
                 toast.success("Password Reset Successful! Login with new credentials.", { id: tid });
                 setView('login');
             } catch (err: any) {
@@ -142,30 +207,28 @@ export const Auth = () => {
 
                 {/* Unified Login Notice */}
                 {view === 'login' && (
-                    <div style={{
-                        textAlign: 'center',
-                        marginBottom: '1.5rem',
-                        fontSize: '0.9rem',
-                        color: 'white',
-                        background: 'rgba(255, 255, 255, 0.05)',
-                        padding: '1rem',
-                        borderRadius: '1rem',
-                        border: '1px solid rgba(255, 255, 255, 0.1)'
-                    }}>
-                        Note: <strong>Users and Vendors</strong> can login here.
+                    <div className={styles.noticeBox} style={{ borderColor: isEmailChecked ? '#10b981' : undefined }}>
+                        <div className={styles.noticeDot} style={{ background: isEmailChecked ? '#10b981' : undefined }}></div>
+                        <span>
+                            {isEmailChecked
+                                ? <strong>Gmail Verified: {emailVerifiedResult?.name}</strong>
+                                : <><strong>Users and Vendors</strong> can login here.</>}
+                        </span>
                     </div>
                 )}
 
                 <div className={styles.authHeader}>
                     <h2 className={styles.authTitle}>
-                        {view === 'login' && 'Welcome Back'}
+                        {view === 'login' && (isEmailChecked ? 'Enter Password' : 'Welcome Back')}
                         {view === 'signup' && 'Create Account'}
+                        {view === 'verify' && 'Verify Gmail'}
                         {view === 'forgot' && 'Reset Password'}
                         {view === 'reset' && 'New Password'}
                     </h2>
                     <p className={styles.authSubtitle}>
-                        {view === 'login' && 'Enter your details to access your account'}
+                        {view === 'login' && (isEmailChecked ? `Hi ${emailVerifiedResult?.name.split(' ')[0]}, please type your key.` : 'Enter your email to verify your status')}
                         {view === 'signup' && 'Join the VanaMap community today'}
+                        {view === 'verify' && `We've sent a 4-digit code to ${email}`}
                         {view === 'forgot' && 'We’ll help you get back in'}
                     </p>
                 </div>
@@ -179,8 +242,8 @@ export const Auth = () => {
                             className={`${styles.roleBtn} ${role === 'user' ? styles.active : ''} `}
                             onClick={() => setRole('user')}
                         >
-                            <div style={{ background: role === 'user' ? 'white' : 'rgba(255,255,255,0.1)', padding: '8px', borderRadius: '50%', color: role === 'user' ? 'black' : 'white' }}>
-                                <User size={20} />
+                            <div className={styles.roleIcon}>
+                                <User size={18} />
                             </div>
                             <span>Plant Lover</span>
                         </button>
@@ -189,8 +252,8 @@ export const Auth = () => {
                             className={`${styles.roleBtn} ${role === 'vendor' ? styles.active : ''} `}
                             onClick={() => setRole('vendor')}
                         >
-                            <div style={{ background: role === 'vendor' ? 'white' : 'rgba(255,255,255,0.1)', padding: '8px', borderRadius: '50%', color: role === 'vendor' ? 'black' : 'white' }}>
-                                <Store size={20} />
+                            <div className={styles.roleIcon}>
+                                <Store size={18} />
                             </div>
                             <span>Shop Owner</span>
                         </button>
@@ -220,8 +283,8 @@ export const Auth = () => {
                         <>
                             <div className={styles.formGroup}>
                                 <label className={styles.label}>{role === 'vendor' ? 'Business Location' : 'Your Location'}</label>
-                                <div style={{ display: 'grid', gap: '1rem' }}>
-                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                                <div style={{ display: 'grid', gap: '0.75rem' }}>
+                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
                                         <select
                                             className={styles.select}
                                             value={selectedCountry?.isoCode || ''}
@@ -274,18 +337,45 @@ export const Auth = () => {
                         </>
                     )}
 
-                    {/* Common Fields */}
-                    <div className={styles.formGroup}>
+                    {/* Email Field - Step 1 for Login */}
+                    <div className={styles.formGroup} style={{ opacity: (isEmailChecked && view === 'login') ? 0.6 : 1, transition: '0.3s' }}>
                         <label className={styles.label}>Email Address</label>
                         <input
                             className={styles.input}
                             type="email"
                             value={email}
-                            onChange={(e) => setEmail(e.target.value)}
+                            onChange={(e) => { setEmail(e.target.value); setIsEmailChecked(false); }}
                             required
+                            disabled={(isEmailChecked && view === 'login') || view === 'verify'}
                             placeholder="name@example.com"
                         />
+                        {isEmailChecked && view === 'login' && (
+                            <button
+                                type="button"
+                                className={styles.changeEmailBtn}
+                                onClick={() => { setIsEmailChecked(false); setPassword(''); }}
+                            >
+                                Change Email
+                            </button>
+                        )}
                     </div>
+
+                    {view === 'verify' && (
+                        <div className={`${styles.formGroup} ${styles.revealAnimation}`}>
+                            <label className={styles.label}>Verification Code</label>
+                            <input
+                                className={styles.input}
+                                type="text"
+                                maxLength={4}
+                                value={otp}
+                                onChange={(e) => setOtp(e.target.value)}
+                                required
+                                placeholder="4-Digit Code"
+                                autoFocus
+                                style={{ textAlign: 'center', fontSize: '1.5rem', letterSpacing: '8px' }}
+                            />
+                        </div>
+                    )}
 
                     {view === 'forgot' && (
                         <div className={styles.formGroup}>
@@ -301,40 +391,80 @@ export const Auth = () => {
                         </div>
                     )}
 
-                    {(view === 'login' || view === 'signup' || view === 'reset' || view === 'forgot') && (
-                        <div className={styles.formGroup}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                    {/* Step 2: Password Field */}
+                    {((view === 'signup' || view === 'reset' || view === 'forgot') || (view === 'login' && isEmailChecked)) && (
+                        <div className={`${styles.formGroup} ${styles.revealAnimation}`}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem', alignItems: 'center' }}>
                                 <label className={styles.label} style={{ marginBottom: 0 }}>
                                     {(view === 'reset' || view === 'forgot') ? 'New Password' : 'Password'}
                                 </label>
-                                {view === 'login' && (
-                                    <button
-                                        type="button"
-                                        onClick={() => setView('forgot')}
-                                        className={styles.linkBtn}
-                                        style={{ fontSize: '0.8rem' }}
-                                    >
-                                        Forgot Password?
-                                    </button>
+                                {(view === 'signup' || view === 'reset') && (
+                                    <span className={styles.hintText} style={{ color: password.length > 0 && validatePassword(password) ? '#ef4444' : '#10b981' }}>
+                                        {password.length === 0 ? '' : (validatePassword(password) || 'Strong Key')}
+                                    </span>
                                 )}
                             </div>
-                            <input
-                                className={styles.input}
-                                type="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                                placeholder="••••••••"
-                            />
+                            <div className={styles.passwordWrapper}>
+                                <input
+                                    className={styles.input}
+                                    type={showPassword ? "text" : "password"}
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
+                                    required
+                                    autoFocus
+                                    placeholder="••••••••"
+                                />
+                                <button
+                                    type="button"
+                                    className={styles.passwordToggle}
+                                    onClick={() => setShowPassword(!showPassword)}
+                                >
+                                    {showPassword ? (
+                                        <EyeOff size={18} className={styles.eyeIcon} />
+                                    ) : (
+                                        <Eye size={18} className={styles.eyeIcon} />
+                                    )}
+                                </button>
+                            </div>
+                            {view === 'signup' && (
+                                <p className={styles.passwordRules}>
+                                    4-18 chars, 1 Upper, 1 Number, 1 Special (@#$%)
+                                </p>
+                            )}
                         </div>
                     )}
 
-                    <Button type="submit" variant="primary" className={styles.submitBtn}>
-                        {view === 'login' && 'Log In'}
-                        {view === 'signup' && 'Create Account'}
-                        {view === 'forgot' && 'Reset Password'}
-                        {view === 'reset' && 'Update Password'}
-                    </Button>
+                    {!isEmailChecked && view === 'login' ? (
+                        <Button
+                            type="button"
+                            onClick={handleEmailCheck}
+                            disabled={emailLoading}
+                            variant="primary"
+                            className={styles.submitBtn}
+                        >
+                            {emailLoading ? 'Verifying...' : 'Next'}
+                        </Button>
+                    ) : (
+                        <Button type="submit" variant="primary" className={styles.submitBtn}>
+                            {view === 'login' && 'Log In'}
+                            {view === 'signup' && 'Send Code'}
+                            {view === 'verify' && 'Verify & Enter'}
+                            {view === 'forgot' && 'Reset Password'}
+                            {view === 'reset' && 'Update Password'}
+                        </Button>
+                    )}
+
+                    {view === 'login' && !isEmailChecked && (
+                        <div style={{ textAlign: 'center', marginTop: '1rem' }}>
+                            <button
+                                type="button"
+                                onClick={() => setView('forgot')}
+                                className={styles.forgotLink}
+                            >
+                                Forgot Password?
+                            </button>
+                        </div>
+                    )}
 
                     {view === 'forgot' && (
                         <div style={{ marginTop: '1.5rem', textAlign: 'center', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '1rem' }}>
@@ -357,15 +487,18 @@ export const Auth = () => {
                     {view === 'login' && (
                         <>
                             <p style={{ marginBottom: '1rem', color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>
-                                New to VanaMap? <button onClick={() => setView('signup')} style={{ color: '#10b981', fontWeight: 600 }}>Create Account</button>
+                                New to VanaMap? <button onClick={() => { setView('signup'); setIsEmailChecked(false); }} style={{ color: '#10b981', fontWeight: 600 }}>Create Account</button>
                             </p>
                         </>
                     )}
                     {view === 'signup' && (
-                        <>Already have an account? <button onClick={() => setView('login')} style={{ color: '#10b981', fontWeight: 600 }}>Log In</button></>
+                        <>Already have an account? <button onClick={() => { setView('login'); setIsEmailChecked(false); }} style={{ color: '#10b981', fontWeight: 600 }}>Log In</button></>
+                    )}
+                    {view === 'verify' && (
+                        <>Didn't get the code? <button onClick={() => setView('signup')} style={{ color: '#10b981', fontWeight: 600 }}>Try Again</button></>
                     )}
                     {(view === 'forgot' || view === 'reset') && (
-                        <><button onClick={() => setView('login')} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', margin: '0 auto', color: '#cbd5e1' }}>
+                        <><button onClick={() => { setView('login'); setIsEmailChecked(false); }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', margin: '0 auto', color: '#cbd5e1' }}>
                             <ArrowLeft size={16} /> Return to Login
                         </button></>
                     )}
@@ -374,3 +507,4 @@ export const Auth = () => {
         </div>
     );
 };
+

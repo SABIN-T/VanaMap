@@ -1,86 +1,103 @@
 .authContainer {
-    min-height: 90vh;
+    min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 2rem;
-    background: radial-gradient(circle at center, rgba(0, 255, 157, 0.03) 0%, transparent 60%);
+    padding: 1.5rem;
+    background: radial-gradient(circle at 0% 0%, rgba(16, 185, 129, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 100% 100%, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
 }
 
 .authCard {
     width: 100%;
-    max-width: 480px;
-    background: var(--glass-bg);
-    border: var(--glass-border);
-    backdrop-filter: blur(20px);
-    border-radius: 2rem;
-    padding: 3rem;
-    box-shadow: var(--glass-shadow);
-    animation: slideUp 0.5s ease-out;
+    max-width: 440px;
+    background: rgba(30, 41, 59, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(40px);
+    border-radius: 2.5rem;
+    padding: 2.5rem;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .authHeader {
     text-align: center;
-    margin-bottom: 2.5rem;
+    margin-bottom: 2rem;
 }
 
 .authTitle {
-    font-size: 2rem;
-    font-weight: 900;
-    color: var(--color-text-main);
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: #fff;
     margin-bottom: 0.5rem;
+    letter-spacing: -0.5px;
 }
 
 .authSubtitle {
     color: var(--color-text-muted);
-    font-size: 0.95rem;
+    font-size: 0.9rem;
+    opacity: 0.8;
 }
 
 .roleToggle {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
-    margin-bottom: 2.5rem;
-    background: var(--color-bg-alt);
-    padding: 0.5rem;
-    border-radius: 1rem;
-    border: 1px solid var(--color-border);
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 0.4rem;
+    border-radius: 1.25rem;
 }
 
 .roleBtn {
-    padding: 1rem;
-    border-radius: 0.75rem;
-    border: 1px solid transparent;
+    flex: 1;
+    padding: 0.75rem;
+    border-radius: 1rem;
+    border: none;
     background: transparent;
     color: var(--color-text-muted);
     cursor: pointer;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    gap: 0.5rem;
-    transition: 0.3s;
+    justify-content: center;
+    gap: 0.6rem;
+    transition: all 0.3s ease;
+    font-size: 0.85rem;
     font-weight: 600;
 }
 
+.roleIcon {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    transition: 0.3s;
+}
+
 .roleBtn.active {
-    background: rgba(0, 255, 157, 0.1);
-    border-color: rgba(0, 255, 157, 0.2);
-    color: var(--color-primary);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    background: #fff;
+    color: #000;
+}
+
+.roleBtn.active .roleIcon {
+    background: #000;
+    color: #fff;
 }
 
 .formGroup {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.25rem;
 }
 
 .label {
     display: block;
     margin-bottom: 0.5rem;
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     font-weight: 700;
-    color: var(--color-text-muted);
+    color: rgba(255, 255, 255, 0.4);
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
 }
 
 .inputWrapper {
@@ -93,26 +110,21 @@
 .input,
 .select {
     width: 100%;
-    padding: 1.15rem;
+    padding: 0.9rem 1rem;
     border-radius: 1rem;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    /* More subtle border */
-    color: var(--color-text-main);
-    font-size: 1rem;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: #fff;
+    font-size: 0.95rem;
     outline: none;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    backdrop-filter: blur(10px);
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-    /* Inner shadow for depth */
+    transition: all 0.3s ease;
 }
 
 .input:focus,
 .select:focus {
-    border-color: var(--color-primary);
-    background: rgba(255, 255, 255, 0.08);
-    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15), inset 0 1px 2px rgba(0, 0, 0, 0.1);
-    transform: translateY(-1px);
+    border-color: #10b981;
+    background: rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
 }
 
 .input::placeholder {
@@ -120,20 +132,35 @@
     opacity: 0.7;
 }
 
-.phonePrefix {
-    padding: 1rem;
-    border-radius: 1rem;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: var(--color-primary);
-    font-weight: 800;
-    min-width: 70px;
-    text-align: center;
-    margin-right: 0.75rem;
-    backdrop-filter: blur(10px);
+.passwordWrapper {
+    position: relative;
     display: flex;
     align-items: center;
-    justify-content: center;
+}
+
+.passwordToggle {
+    position: absolute;
+    right: 1rem;
+    background: transparent;
+    border: none;
+    color: #10b981;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 0.5rem;
+}
+
+.phonePrefix {
+    padding: 0.9rem;
+    border-radius: 1rem;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    color: #10b981;
+    font-weight: 700;
+    margin-right: 0.5rem;
+    font-size: 0.9rem;
 }
 
 .helperText {
@@ -151,41 +178,38 @@
     margin-bottom: 2rem;
 }
 
-.linkBtn {
+.forgotLink {
     background: transparent;
     border: none;
-    color: var(--color-text-muted);
-    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.75rem;
+    font-weight: 600;
     cursor: pointer;
-    transition: 0.2s;
-    font-weight: 500;
+    transition: 0.3s;
 }
 
-.linkBtn:hover {
-    color: var(--color-primary);
-    text-decoration: underline;
+.forgotLink:hover {
+    color: #10b981;
 }
 
 .submitBtn {
     width: 100%;
-    padding: 1.25rem;
-    font-size: 1.1rem;
+    padding: 1rem;
+    font-size: 1rem;
     margin-top: 1rem;
-    font-weight: 800;
-    letter-spacing: 0.5px;
+    font-weight: 700;
     background: var(--gradient-primary);
     border: none;
-    border-radius: 1rem;
+    border-radius: 1.25rem;
     color: #000;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 10px 20px -5px rgba(16, 185, 129, 0.4);
+    box-shadow: 0 10px 20px -5px rgba(16, 185, 129, 0.3);
 }
 
 .submitBtn:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 20px 30px -10px rgba(16, 185, 129, 0.5);
-    filter: brightness(1.1);
+    transform: translateY(-2px);
+    box-shadow: 0 15px 25px -5px rgba(16, 185, 129, 0.4);
 }
 
 .submitBtn:active {
@@ -195,36 +219,57 @@
 .footer {
     margin-top: 2rem;
     text-align: center;
-    font-size: 0.95rem;
-    color: var(--color-text-muted);
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.4);
 }
 
 .footer button {
     background: none;
     border: none;
-    color: var(--color-primary);
+    color: #10b981;
     font-weight: 700;
     cursor: pointer;
-    margin-left: 0.5rem;
+    margin-left: 0.25rem;
 }
 
 .noticeBox {
-    background: rgba(250, 204, 21, 0.1);
-    border: 1px solid rgba(250, 204, 21, 0.3);
-    padding: 1rem;
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(16, 185, 129, 0.15);
+    padding: 0.75rem 1rem;
     border-radius: 1rem;
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
     display: flex;
+    align-items: center;
     gap: 0.75rem;
-    color: #b45309;
     font-size: 0.85rem;
-    line-height: 1.5;
+    color: #10b981;
+}
+
+.noticeDot {
+    width: 6px;
+    height: 6px;
+    background: #10b981;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #10b981;
+    animation: blink 2s infinite;
+}
+
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.4;
+    }
 }
 
 @keyframes slideUp {
     from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(10px);
     }
 
     to {
@@ -301,4 +346,56 @@
     .authCard {
         padding: 2rem;
     }
+}
+
+.changeEmailBtn {
+    background: none;
+    border: none;
+    color: #10b981;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-top: 0.5rem;
+    cursor: pointer;
+    padding: 0;
+}
+
+.revealAnimation {
+    animation: revealIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes revealIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.hintText {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #10b981;
+    text-transform: uppercase;
+    opacity: 0.8;
+}
+
+.passwordRules {
+    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.3);
+    margin-top: 0.5rem;
+    line-height: 1.4;
+}
+
+.eyeIcon {
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+.eyeIcon:hover {
+    opacity: 1;
 }

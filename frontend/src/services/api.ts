@@ -432,6 +432,30 @@ export const deployAllPlants = async () => {
 };
 
 
+export const verifyOTP = async (email: string, otp: string) => {
+    const res = await fetch(`${API_URL}/auth/verify-otp`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, otp })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "Verification failed");
+    return data;
+};
+
+export const checkEmail = async (email: string) => {
+    const res = await fetch(`${API_URL}/auth/check-email`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+    });
+    if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.error || "Verification failed");
+    }
+    return res.json();
+};
+
 export const sendInquiry = async (data: { name: string, email: string, message: string }) => {
     const res = await fetch(`${API_URL}/support/inquiry`, {
         method: 'POST',

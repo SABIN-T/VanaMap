@@ -356,67 +356,65 @@ export const UserDashboard = () => {
                 {/* Points Card */}
                 <div className={styles.statCard}>
                     <div className={styles.statIcon} style={{ background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)', color: 'white' }}>
-                        <Zap size={28} />
+                        <Zap size={20} />
                     </div>
                     <div className={styles.statInfo}>
-                        <span className={styles.statValue}>{(user as any).points || 0}</span>
-                        <span className={styles.statLabel}>Chlorophyll Points</span>
-                        <div className={styles.statTrend} style={{ color: '#10b981' }}>
-                            <TrendingUp size={12} /> +12% this week
-                        </div>
+                        <div className={styles.statValue}>{(user as any).points || 0}</div>
+                        <div className={styles.statLabel}>Points</div>
+                    </div>
+                    <div className={styles.statTrend} style={{ color: '#10b981' }}>
+                        <TrendingUp size={12} /> +12%
                     </div>
                 </div>
 
                 {/* Rank Card */}
                 <div className={styles.statCard}>
                     <div className={styles.statIcon} style={{ background: 'linear-gradient(135deg, #facc15 0%, #ca8a04 100%)', color: 'black' }}>
-                        <Trophy size={28} />
+                        <Trophy size={20} />
                     </div>
                     <div className={styles.statInfo}>
-                        <span className={styles.statValue}>#{(user as any).points > 0 ? '4' : 'N/A'}</span>
-                        <span className={styles.statLabel}>Global Ranking</span>
-                        <div className={styles.statTrend} style={{ color: '#facc15' }}>
-                            <Award size={12} /> Top {(user as any).points > 100 ? '5%' : 'Elite'}
-                        </div>
+                        <div className={styles.statValue}>#{(user as any).points > 0 ? '4' : 'N/A'}</div>
+                        <div className={styles.statLabel}>Ranking</div>
+                    </div>
+                    <div className={styles.statTrend} style={{ color: '#facc15' }}>
+                        <Award size={12} /> Elite
                     </div>
                 </div>
 
                 {/* Impact Card */}
                 <div className={styles.statCard}>
                     <div className={styles.statIcon} style={{ background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)', color: 'white' }}>
-                        <Wind size={28} />
+                        <Wind size={20} />
                     </div>
                     <div className={styles.statInfo}>
-                        <span className={styles.statValue}>{((favoritePlants.length || items.length) * 1.2).toFixed(1)} L</span>
-                        <span className={styles.statLabel}>Daily Oxygen Production</span>
-                        <div className={styles.statTrend} style={{ color: '#3b82f6' }}>
-                            Net Positive Impact
-                        </div>
+                        <div className={styles.statValue}>{((favoritePlants.length || items.length) * 1.2).toFixed(1)}L</div>
+                        <div className={styles.statLabel}>Oxygen</div>
+                    </div>
+                    <div className={styles.statTrend} style={{ color: '#3b82f6' }}>
+                        Positive
                     </div>
                 </div>
             </div>
 
             <div className={styles.header}>
                 <div className={styles.titleSection}>
+                    <div className={styles.welcomeTag}>VANAMAP ECOSYSTEM</div>
                     <h1 className={styles.dashboardTitle}>
-                        Eco Dashboard
+                        Hello, {user.name.split(' ')[0]}!
                     </h1>
-                    <p className={styles.subtitle}>
-                        Welcome back, {user.name}! You are making the world greener.
-                    </p>
                 </div>
 
                 <div className={styles.actionGroup}>
-                    <Button onClick={() => setShowPasswordModal(true)} variant="outline" style={{ gap: '0.5rem', display: 'flex', alignItems: 'center', borderColor: 'rgba(239, 68, 68, 0.2)', color: '#f87171' }}>
-                        <Lock size={18} /> Update Security
-                    </Button>
+                    <button onClick={() => setShowPasswordModal(true)} className={styles.iconActionBtn} title="Security Settings">
+                        <Lock size={18} />
+                    </button>
 
-                    <Button onClick={() => navigate('/leaderboard')} variant="outline" style={{ gap: '0.5rem', display: 'flex', alignItems: 'center', borderColor: 'rgba(16, 185, 129, 0.2)', color: '#10b981' }}>
-                        <Trophy size={18} /> Hall of Fame
-                    </Button>
+                    <button onClick={() => navigate('/leaderboard')} className={styles.iconActionBtn} title="Leaderboard">
+                        <Trophy size={18} />
+                    </button>
 
                     {user.role === 'vendor' && (
-                        <Button onClick={() => navigate('/vendor')} variant="outline" style={{ gap: '0.5rem', display: 'flex', alignItems: 'center' }}>
+                        <Button onClick={() => navigate('/vendor')} variant="primary" size="sm" style={{ padding: '0.6rem 1.2rem', borderRadius: '0.75rem' }}>
                             <Store size={18} /> Shop Portal
                         </Button>
                     )}
@@ -424,140 +422,60 @@ export const UserDashboard = () => {
                     {user.role === 'admin' && (
                         <button
                             onClick={() => navigate('/admin')}
-                            style={{
-                                background: 'linear-gradient(135deg, #facc15 0%, #ca8a04 100%)',
-                                color: 'black',
-                                border: 'none',
-                                padding: '0.8rem 1.5rem',
-                                borderRadius: '14px',
-                                fontWeight: '800',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '0.75rem',
-                                cursor: 'pointer',
-                                boxShadow: '0 10px 20px rgba(234, 179, 8, 0.2)',
-                                transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)'
-                            }}
-                            onMouseOver={(e) => {
-                                e.currentTarget.style.transform = 'translateY(-2px)';
-                                e.currentTarget.style.boxShadow = '0 15px 30px rgba(234, 179, 8, 0.3)';
-                            }}
-                            onMouseOut={(e) => {
-                                e.currentTarget.style.transform = 'translateY(0)';
-                                e.currentTarget.style.boxShadow = '0 10px 20px rgba(234, 179, 8, 0.2)';
-                            }}
+                            className={styles.adminHubBtn}
                         >
-                            <Shield size={20} />
-                            ADMIN HUB
+                            <Shield size={18} />
+                            ADMIN
                         </button>
                     )}
                 </div>
             </div>
 
             {user.role === 'admin' && (
-                <div style={{
-                    marginBottom: '3rem',
-                    padding: '2rem',
-                    background: 'rgba(250, 204, 21, 0.05)',
-                    border: '1px solid rgba(250, 204, 21, 0.2)',
-                    borderRadius: '24px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '1.5rem',
-                    animation: 'fadeInSlide 0.6s ease-out'
-                }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
-                        <div>
-                            <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#facc15', margin: 0 }}>System Management Active</h2>
-                            <p style={{ color: '#94a3b8', marginTop: '0.5rem' }}>You are currently authenticated as a global administrator.</p>
-                        </div>
-                        <div style={{ padding: '0.5rem 1rem', background: 'rgba(34, 197, 94, 0.1)', color: '#22c55e', borderRadius: '10px', fontSize: '0.8rem', fontWeight: 700, border: '1px solid rgba(34, 197, 94, 0.2)' }}>
-                            ONLINE
-                        </div>
-                    </div>
-                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
-                        <Button
-                            onClick={() => navigate('/admin')}
-                            variant="primary"
-                            style={{
-                                background: '#facc15',
-                                color: 'black',
-                                fontWeight: 800,
-                                height: '60px',
-                                fontSize: '1rem'
-                            }}
-                        >
-                            <Shield size={20} style={{ marginRight: '8px' }} /> Enter Admin Panel
-                        </Button>
-                        <Button
-                            onClick={() => navigate('/admin/manage-plants')}
-                            variant="outline"
-                            style={{ height: '60px', borderColor: 'rgba(255,255,255,0.1)' }}
-                        >
-                            Manage Catalog
+                <div className={styles.adminMiniPanel}>
+                    <div className={styles.adminMiniHeader}>
+                        <div className={styles.adminStatus}>• System Root Active</div>
+                        <Button onClick={() => navigate('/admin')} variant="outline" size="sm" style={{ fontSize: '0.7rem', height: '30px', padding: '0 12px' }}>
+                            Open Panel
                         </Button>
                     </div>
                 </div>
             )}
 
-            <div className={styles.section}>
+            <div className={styles.mainGrid}>
                 {/* FAVORITES SECTION */}
-                <section>
+                <section className={styles.dashboardSection}>
                     <div className={styles.sectionHeader}>
-                        <div className={styles.sectionIcon} style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444' }}>
-                            <Heart size={24} fill="#ef4444" />
-                        </div>
-                        <h2 className={styles.sectionTitle}>My Favorites</h2>
-                        <span className={styles.badge} style={{ color: '#ef4444' }}>
-                            {user.favorites?.length || 0}
-                        </span>
+                        <h2 className={styles.sectionTitle}>Collection</h2>
+                        <span className={styles.sectionCount}>{user.favorites?.length || 0}</span>
                     </div>
 
                     {loadingFavs ? (
-                        <div style={{ display: 'flex', gap: '1rem', color: 'var(--color-text-muted)', background: 'rgba(255,255,255,0.02)', padding: '2rem', borderRadius: '1rem' }}>
-                            <Loader2 className="animate-spin" /> Loading favorites...
+                        <div className={styles.loadingBox}>
+                            <Loader2 className="animate-spin" />
                         </div>
                     ) : favoritePlants.length === 0 ? (
-                        <div className="glass-panel" style={{ padding: '3rem', textAlign: 'center', borderRadius: '1.5rem', borderStyle: 'dashed', borderColor: 'rgba(255,255,255,0.1)' }}>
-                            <Heart size={48} color="#cbd5e1" style={{ marginBottom: '1rem', opacity: 0.5 }} />
-                            <h3 style={{ marginBottom: '0.5rem', color: 'var(--color-text-muted)' }}>No favorites yet</h3>
-                            <p style={{ marginBottom: '1.5rem', color: '#64748b' }}>Heart plants as you browse to save them here.</p>
-                            <Link to="/"><Button variant="outline">Browse Plants</Button></Link>
+                        <div className={styles.emptyState}>
+                            <Heart size={32} />
+                            <p>No favorites yet</p>
+                            <Link to="/"><Button variant="outline" size="sm">Explore</Button></Link>
                         </div>
                     ) : (
-                        <div className={styles.grid}>
+                        <div className={styles.compactGrid}>
                             {favoritePlants.map(plant => (
-                                <div key={plant.id} className={styles.card}>
-                                    <div className={styles.cardImage}>
+                                <div key={plant.id} className={styles.compactCard}>
+                                    <div className={styles.compactCardImage}>
                                         <img src={plant.imageUrl} alt={plant.name} />
                                         <button
                                             onClick={() => handleRemoveFavorite(plant.id)}
-                                            title="Remove from favorites"
-                                            style={{
-                                                position: 'absolute',
-                                                top: '10px',
-                                                right: '10px',
-                                                background: 'white',
-                                                borderRadius: '50%',
-                                                width: '32px',
-                                                height: '32px',
-                                                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                                border: 'none',
-                                                cursor: 'pointer',
-                                                boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
-                                            }}
+                                            className={styles.removeFavBtn}
                                         >
-                                            <Heart size={16} fill="#ef4444" color="#ef4444" />
+                                            <Heart size={14} fill="#ef4444" color="#ef4444" />
                                         </button>
                                     </div>
-                                    <div className={styles.cardContent}>
-                                        <h3 className={styles.cardTitle}>{plant.name}</h3>
-                                        <p className={styles.cardSubtitle}>{plant.scientificName}</p>
-                                        <div style={{ marginTop: '1rem', display: 'flex', gap: '0.5rem' }}>
-                                            <span style={{ fontSize: '0.75rem', padding: '0.2rem 0.6rem', borderRadius: '4px', background: 'rgba(56, 189, 248, 0.1)', color: '#38bdf8' }}>
-                                                {(plant as any).waterNeeds || "Moderate"} Water
-                                            </span>
-                                        </div>
+                                    <div className={styles.compactCardContent}>
+                                        <h3>{plant.name}</h3>
+                                        <p>{plant.scientificName}</p>
                                     </div>
                                 </div>
                             ))}
@@ -565,73 +483,58 @@ export const UserDashboard = () => {
                     )}
                 </section>
 
-                <div className={styles.sideGrid}>
+                <aside className={styles.dashboardSidebar}>
                     {/* WISHLIST / CART SECTION */}
-                    <section>
+                    <section className={styles.dashboardSection} style={{ marginBottom: '2rem' }}>
                         <div className={styles.sectionHeader}>
-                            <div className={styles.sectionIcon} style={{ background: 'rgba(56, 189, 248, 0.1)', color: '#38bdf8' }}>
-                                <ShoppingBag size={24} />
-                            </div>
-                            <h2 className={styles.sectionTitle}>Shopping List</h2>
-                            <span className={styles.badge} style={{ color: '#38bdf8' }}>
-                                {items.length}
-                            </span>
+                            <h2 className={styles.sectionTitle}>Cart Items</h2>
+                            <span className={styles.sectionCount} style={{ background: 'rgba(56, 189, 248, 0.1)', color: '#38bdf8' }}>{items.length}</span>
                         </div>
 
                         {items.length === 0 ? (
-                            <div className="glass-panel" style={{ padding: '2.5rem', textAlign: 'center', borderRadius: '1.5rem' }}>
-                                <p style={{ color: 'var(--color-text-muted)' }}>Your cart is empty.</p>
-                                <Link to="/" style={{ display: 'inline-block', marginTop: '1rem' }}><Button variant="outline" size="sm">Add Items</Button></Link>
+                            <div className={styles.emptySidebarState}>
+                                <ShoppingBag size={24} />
+                                <p>Cart is empty</p>
                             </div>
                         ) : (
-                            <div className={styles.cartScrollBox} style={{ display: 'grid', gap: '1rem' }}>
-                                {items.map(({ plant, quantity }) => (
-                                    <div key={plant.id} className="glass-panel" style={{
-                                        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-                                        padding: '1rem', borderRadius: '1rem'
-                                    }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-                                            <img src={plant.imageUrl} alt={plant.name} style={{ width: '60px', height: '60px', borderRadius: '0.75rem', objectFit: 'cover' }} />
-                                            <div>
-                                                <h4 style={{ margin: 0, fontSize: '1rem' }}>{plant.name}</h4>
-                                                <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>Qty: {quantity}</p>
-                                            </div>
+                            <div className={styles.cartList}>
+                                {items.slice(0, 3).map(({ plant }) => (
+                                    <div key={plant.id} className={styles.cartItemMini}>
+                                        <img src={plant.imageUrl} alt={plant.name} />
+                                        <div className={styles.cartItemInfo}>
+                                            <h4>{plant.name}</h4>
                                         </div>
-                                        <Button size="sm" style={{ background: '#ef4444', border: 'none', color: 'white' }} onClick={() => removeFromCart(plant.id)}>
-                                            <Trash2 size={16} />
-                                        </Button>
+                                        <button onClick={() => removeFromCart(plant.id)} className={styles.cartRemoveBtn}>
+                                            <Trash2 size={14} />
+                                        </button>
                                     </div>
                                 ))}
-                                <div style={{ marginTop: '1rem', textAlign: 'right' }}>
-                                    <Link to="/cart"><Button variant="primary">Go to Cart <ArrowRight size={16} /></Button></Link>
-                                </div>
+                                {items.length > 3 && <p className={styles.moreItems}>+{items.length - 3} more items</p>}
+                                <Link to="/cart" className={styles.sidebarActionLink}>
+                                    View Full Cart <ArrowRight size={14} />
+                                </Link>
                             </div>
                         )}
                     </section>
 
                     {/* Nearby Shops Section */}
-                    <section>
+                    <section className={styles.dashboardSection}>
                         <div className={styles.sectionHeader}>
-                            <div className={styles.sectionIcon} style={{ background: 'rgba(250, 204, 21, 0.1)', color: '#facc15' }}>
-                                <MapPin size={24} />
-                            </div>
                             <h2 className={styles.sectionTitle}>Nearby Shops</h2>
                         </div>
-                        <div className="glass-panel" style={{ padding: '2rem', borderRadius: '1.5rem' }}>
-                            <div style={{ background: 'url(https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?auto=format&fit=crop&q=80)', height: '150px', borderRadius: '1rem', backgroundSize: 'cover', backgroundPosition: 'center', marginBottom: '1.5rem', position: 'relative' }}>
-                                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.8), transparent)', borderRadius: '1rem', display: 'flex', alignItems: 'end', padding: '1rem' }}>
-                                    <p style={{ margin: 0, fontWeight: 700 }}>Find Verified Nurseries</p>
+                        <div className={styles.shopPreviewCard}>
+                            <div className={styles.shopPreviewImage}>
+                                <div className={styles.shopPreviewOverlay}>
+                                    <MapPin size={24} />
+                                    <span>Find Nurseries</span>
                                 </div>
                             </div>
-                            <p style={{ color: 'var(--color-text-muted)', marginBottom: '1.5rem' }}>
-                                Locate the best plant shops in your area with our interactive map integration.
-                            </p>
                             <Link to="/nearby">
-                                <Button variant="outline" style={{ width: '100%' }}>Open Map</Button>
+                                <Button variant="primary" style={{ width: '100%', borderRadius: '0.75rem' }}>Open interactive Map</Button>
                             </Link>
                         </div>
                     </section>
-                </div>
+                </aside>
             </div>
         </div>
     );

@@ -2,8 +2,6 @@ import { useState, useEffect } from 'react';
 import { Smartphone, X, Download, Share, PlusSquare } from 'lucide-react';
 import toast from 'react-hot-toast';
 
-const PUBLIC_VAPID_KEY = import.meta.env.VITE_PUBLIC_VAPID_KEY;
-
 const urlBase64ToUint8Array = (base64String: string) => {
     const padding = '='.repeat((4 - base64String.length % 4) % 4);
     const base64 = (base64String + padding)
@@ -17,20 +15,41 @@ const urlBase64ToUint8Array = (base64String: string) => {
     return outputArray;
 };
 
+const getVapidKey = async () => {
+    try {
+        const API_URL = import.meta.env.VITE_API_URL || 'https://plantoxy.onrender.com/api';
+        const res = await fetch(`${API_URL}/notifications/vapid-key`);
+        const data = await res.json();
+        return data.publicKey;
+    } catch (e) {
+        console.error("Failed to fetch VAPID key", e);
+        return null;
+    }
+};
+
 const subscribeUser = async () => {
     if (!('serviceWorker' in navigator) || !('PushManager' in window)) return;
     try {
         const registration = await navigator.serviceWorker.ready;
+
+        // Fetch key dynamically
+        const publicKey = await getVapidKey();
+        if (!publicKey) return;
+
         // Check existing
         const existingSub = await registration.pushManager.getSubscription();
-        if (existingSub) return; // Already subscribed
+        if (existingSub) {
+            console.log("Already subscribed to push.");
+            return;
+        }
 
         const subscription = await registration.pushManager.subscribe({
             userVisibleOnly: true,
-            applicationServerKey: urlBase64ToUint8Array(PUBLIC_VAPID_KEY)
+            applicationServerKey: urlBase64ToUint8Array(publicKey)
         });
 
-        await fetch('/api/notifications/subscribe', {
+        const API_URL = import.meta.env.VITE_API_URL || 'https://plantoxy.onrender.com/api';
+        await fetch(`${API_URL}/notifications/subscribe`, {
             method: 'POST',
             body: JSON.stringify(subscription),
             headers: { 'Content-Type': 'application/json' }
@@ -38,6 +57,7 @@ const subscribeUser = async () => {
         toast.success("Notifications enabled! 🌿");
     } catch (e) {
         console.error("Failed to subscribe push", e);
+        // Do not alert user on background failures
     }
 };
 

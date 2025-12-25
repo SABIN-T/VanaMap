@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { Button } from '../components/common/Button';
-import { Store, Phone, MessageCircle, Navigation, Info, Locate, AlertTriangle, BadgeCheck } from 'lucide-react';
+import { Store, Phone, MessageCircle, Info, Locate, AlertTriangle, BadgeCheck } from 'lucide-react';
 import { registerVendor, fetchVendors, updateVendor } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
@@ -11,6 +11,7 @@ import type { LatLng } from 'leaflet';
 import type { Vendor } from '../types';
 import { VendorInventory } from '../components/features/vendor/VendorInventory';
 import { MarketInsights } from '../components/features/vendor/MarketInsights';
+import styles from './VendorPortal.module.css';
 
 // Fix Leaflet's default icon path issues
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -51,9 +52,9 @@ function DraggableMarker({ pos, setPos }: { pos: L.LatLng, setPos: (pos: L.LatLn
             }}
             position={pos}>
             <Popup>
-                <div style={{ textAlign: 'center' }}>
-                    <strong>Your Shop Location</strong><br />
-                    Drag me to correct position
+                <div style={{ textAlign: 'center', padding: '0.5rem' }}>
+                    <strong style={{ display: 'block', marginBottom: '4px' }}>Shop Marker</strong>
+                    <span style={{ fontSize: '0.75rem', color: '#64748b' }}>Move to exact warehouse/shop spot</span>
                 </div>
             </Popup>
         </Marker>
@@ -166,220 +167,130 @@ export const VendorPortal = () => {
         }
     };
 
-    const inputStyle = {
-        width: '100%',
-        padding: '0.85rem',
-        borderRadius: '0.75rem',
-        border: '1px solid var(--color-border)',
-        background: 'var(--color-bg-alt)',
-        color: 'var(--color-text-main)',
-        outline: 'none',
-        transition: 'border-color 0.3s ease'
-    };
-
     return (
-        <div className="container" style={{ padding: '3rem 1.5rem' }}>
-            <div style={{ marginBottom: '3rem' }}>
-                <h1 style={{
-                    fontSize: '2.5rem',
-                    fontWeight: '800',
-                    margin: 0,
-                    background: 'var(--gradient-primary)',
-                    WebkitBackgroundClip: 'text',
-                    WebkitTextFillColor: 'transparent'
-                }}>
-                    {isEditing ? 'Vendor Dashboard' : 'Vendor Registration'}
+        <div className={styles.portalContainer}>
+            <div className={styles.header}>
+                <h1 className={styles.portalTitle}>
+                    {isEditing ? 'Shop Manager' : 'Register Shop'}
                 </h1>
-                <p style={{ color: 'var(--color-text-muted)', marginTop: '0.5rem' }}>
+                <p className={styles.portalSubtitle}>
                     {isEditing ? `Managing: ${formData.shopName}` : 'Join our network of verified plant suppliers.'}
                 </p>
             </div>
 
             {/* Verified Partner Banner */}
             {isEditing && (
-                <div className="glass-panel" style={{
-                    marginBottom: '2.5rem',
-                    padding: '2rem',
-                    background: 'linear-gradient(135deg, rgba(234, 179, 8, 0.15) 0%, rgba(202, 138, 4, 0.05) 100%)',
-                    border: '1px solid rgba(234, 179, 8, 0.4)',
-                    borderRadius: '1.5rem',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '2rem',
-                    flexWrap: 'wrap',
-                    animation: 'fadeIn 0.5s ease-out'
-                }}>
-                    <div style={{
-                        background: 'rgba(234, 179, 8, 0.2)',
-                        padding: '1.25rem',
-                        borderRadius: '50%',
-                        boxShadow: '0 0 30px rgba(234, 179, 8, 0.2)',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center'
-                    }}>
-                        <AlertTriangle size={48} color="#facc15" fill="rgba(250, 204, 21, 0.2)" />
+                <div className={styles.verifiedBanner}>
+                    <div className={styles.verifiedIconBox}>
+                        <AlertTriangle size={24} />
                     </div>
-                    <div style={{ flex: 1 }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
-                            <BadgeCheck size={24} color="#facc15" fill="#facc15" />
-                            <h2 style={{ fontSize: '1.5rem', fontWeight: 800, color: '#facc15', margin: 0 }}>
-                                Become a Verified Partner
-                            </h2>
+                    <div className={styles.verifiedContent}>
+                        <div className={styles.verifiedTitle}>
+                            <BadgeCheck size={18} />
+                            Verified Partner Status
                         </div>
-                        <p style={{ margin: 0, color: 'var(--color-text-main)', opacity: 0.9, lineHeight: '1.6', fontSize: '1rem' }}>
-                            <strong>Get Verified Status properly!</strong> Partners receive the "Verified Badge" on VanaMap, ranking higher in search results and gaining customer trust.
-                            <br />
-                            <span style={{ fontSize: '0.9rem', color: 'var(--color-text-muted)' }}>Your shop will be marked as "Verified Partner" across the platform.</span>
+                        <p className={styles.verifiedText}>
+                            Get Verified to rank higher in search results and gain customer trust. Your shop will be marked as "Verified Partner" across the platform.
                         </p>
                     </div>
-                    <Button
+                    <button
                         onClick={() => window.open('https://wa.me/9188773534', '_blank')}
-                        style={{
-                            background: '#25D366',
-                            color: 'white',
-                            border: 'none',
-                            fontWeight: 700,
-                            padding: '1rem 2rem',
-                            borderRadius: '1rem',
-                            minWidth: '220px',
-                            boxShadow: '0 4px 15px rgba(37, 211, 102, 0.3)'
-                        }}
+                        className={styles.whatsappBtn}
                     >
-                        <MessageCircle size={20} style={{ marginRight: '0.75rem' }} />
-                        WhatsApp Admin
-                        <div style={{ fontSize: '0.7rem', fontWeight: 400, opacity: 0.9, marginTop: '2px' }}>+91 88773534</div>
-                    </Button>
+                        <MessageCircle size={18} />
+                        WhatsApp Support
+                        <span>Contact Admin</span>
+                    </button>
                 </div>
             )}
 
-            <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-                gap: '2.5rem'
-            }}>
+            <div className={styles.portalGrid}>
                 {/* Form Section */}
-                <form onSubmit={handleSubmit} className="glass-panel" style={{ padding: '2rem', border: 'var(--glass-border)' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '2rem', color: 'var(--color-primary)' }}>
-                        <Store size={24} />
-                        <h2 style={{ fontSize: '1.5rem', margin: 0 }}>Shop Details</h2>
+                <form onSubmit={handleSubmit} className={styles.formCard}>
+                    <div className={styles.formSectionHeader}>
+                        <Store size={20} />
+                        <h2>Profile Settings</h2>
                     </div>
 
-                    <div style={{ marginBottom: '1.5rem' }}>
-                        <label style={{ display: 'block', marginBottom: '0.6rem', fontSize: '0.9rem', fontWeight: 'bold', color: 'var(--color-text-muted)' }}>Shop Name</label>
+                    <div className={styles.formGroup}>
+                        <label className={styles.label}>Official Shop Name</label>
                         <input
                             type="text"
                             required
                             placeholder="e.g. Green Valley Nursery"
-                            style={inputStyle}
-                            className="focus-primary"
+                            className={styles.input}
                             value={formData.shopName}
                             onChange={e => setFormData({ ...formData, shopName: e.target.value })}
                         />
                     </div>
 
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1.5rem' }}>
-                        <div>
-                            <label style={{ display: 'block', marginBottom: '0.6rem', fontSize: '0.9rem', fontWeight: 'bold', color: 'var(--color-text-muted)' }}>
-                                <Phone size={14} /> Phone
-                            </label>
+                    <div className={styles.inputGrid}>
+                        <div className={styles.formGroup}>
+                            <label className={styles.label}><Phone size={12} /> Phone Number</label>
                             <input
                                 type="tel"
                                 required
-                                style={inputStyle}
+                                className={styles.input}
                                 value={formData.phone}
                                 onChange={e => setFormData({ ...formData, phone: e.target.value })}
                             />
                         </div>
-                        <div>
-                            <label style={{ display: 'block', marginBottom: '0.6rem', fontSize: '0.9rem', fontWeight: 'bold', color: 'var(--color-text-muted)' }}>
-                                <MessageCircle size={14} /> WhatsApp
-                            </label>
+                        <div className={styles.formGroup}>
+                            <label className={styles.label}><MessageCircle size={12} /> WhatsApp</label>
                             <input
                                 type="tel"
                                 required
-                                style={inputStyle}
+                                className={styles.input}
                                 value={formData.whatsapp}
                                 onChange={e => setFormData({ ...formData, whatsapp: e.target.value })}
                             />
                         </div>
                     </div>
 
-                    <div style={{ marginBottom: '2rem' }}>
-                        <label style={{ display: 'block', marginBottom: '0.6rem', fontSize: '0.9rem', fontWeight: 'bold', color: 'var(--color-text-muted)' }}>Physical Address</label>
+                    <div className={styles.formGroup}>
+                        <label className={styles.label}>Physical Address</label>
                         <textarea
                             rows={3}
                             required
                             placeholder="Unit #, Street Name, City, Pincode"
-                            style={{ ...inputStyle, fontFamily: 'inherit' }}
+                            className={styles.textarea}
                             value={formData.address}
                             onChange={e => setFormData({ ...formData, address: e.target.value })}
                         />
                     </div>
 
-                    <div style={{
-                        background: 'var(--color-bg-alt)',
-                        padding: '1rem',
-                        borderRadius: '1rem',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        gap: '0.75rem',
-                        marginBottom: '2rem',
-                        fontSize: '0.85rem',
-                        border: '1px solid var(--color-border)'
-                    }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                            <Navigation size={18} color="var(--color-primary)" />
-                            <div>
-                                <div style={{ fontWeight: 'bold', color: 'var(--color-text-main)' }}>Coordinates</div>
-                                <div style={{ fontSize: '0.75rem', color: 'var(--color-text-dim)' }}>{markerPos.lat.toFixed(5)}, {markerPos.lng.toFixed(5)}</div>
+                    <div className={styles.coordsBox}>
+                        <div className={styles.coordsInfo}>
+                            <h4>Global Pin</h4>
+                            <div className={styles.coordsValue}>
+                                {markerPos.lat.toFixed(6)}, {markerPos.lng.toFixed(6)}
                             </div>
                         </div>
                         <button
                             type="button"
                             onClick={handleAutoLocate}
                             disabled={isLocating}
-                            style={{
-                                background: 'var(--color-primary)',
-                                color: 'black',
-                                border: 'none',
-                                padding: '0.5rem 0.8rem',
-                                borderRadius: '0.5rem',
-                                cursor: 'pointer',
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '0.4rem',
-                                fontWeight: '700',
-                                fontSize: '0.8rem'
-                            }}
+                            className={styles.gpsBtn}
                         >
-                            <Locate size={14} /> {isLocating ? 'Locating...' : 'Use GPS'}
+                            <Locate size={14} /> {isLocating ? 'Capturing...' : 'Use GPS'}
                         </button>
                     </div>
 
-                    <Button type="submit" disabled={loading} style={{ width: '100%', padding: '1rem' }}>
-                        {loading ? 'Processing...' : (isEditing ? 'Update Shop Profile' : 'Complete Registration')}
+                    <Button type="submit" disabled={loading} style={{ width: '100%', borderRadius: '0.75rem', padding: '1rem', fontWeight: 800 }}>
+                        {loading ? 'Propagating Changes...' : (isEditing ? 'Save Profile' : 'Register Now')}
                     </Button>
                 </form>
 
                 {/* Map & Notifications Section */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-                    <div className="glass-panel" style={{ padding: '1.5rem', background: 'rgba(0, 255, 157, 0.05)', border: '1px dashed var(--color-primary)' }}>
-                        <h3 style={{ margin: 0, fontSize: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                            <Info size={16} /> Pin Your Location
-                        </h3>
-                        <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', margin: '0.5rem 0 0' }}>
-                            Click on the map or drag the marker to your shop's exact location. You can also use the **Use GPS** button for auto-detection.
+                <div className={styles.mapWrapper}>
+                    <div className={styles.mapHint}>
+                        <h3><Info size={14} /> Precise Location Required</h3>
+                        <p>
+                            Nearby search results use your shop's coordinate. Move the marker to your entrance.
                         </p>
                     </div>
 
-                    <div style={{
-                        flex: 1,
-                        minHeight: '400px',
-                        borderRadius: '1.5rem',
-                        overflow: 'hidden',
-                        border: 'var(--glass-border)',
-                        boxShadow: 'var(--glass-shadow)'
-                    }}>
+                    <div className={styles.mapContainer}>
                         <MapContainer center={markerPos} zoom={13} style={{ height: '100%', width: '100%' }}>
                             <TileLayer
                                 attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
@@ -389,28 +300,19 @@ export const VendorPortal = () => {
                             <RecenterMap center={markerPos} />
                         </MapContainer>
                     </div>
-
-
                 </div>
             </div>
 
             {/* Inventory Section */}
             {isEditing && currentVendor && (
-                <>
+                <div style={{ marginTop: '4rem' }}>
                     <MarketInsights vendorId={currentVendor.id} />
                     <VendorInventory
                         vendor={currentVendor}
                         onUpdate={loadVendorData}
                     />
-                </>
+                </div>
             )}
-
-            <style>{`
-                input:focus, textarea:focus {
-                    border-color: var(--color-primary) !important;
-                    background: rgba(0, 255, 157, 0.02) !important;
-                }
-            `}</style>
         </div>
     );
 };

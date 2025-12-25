@@ -16,13 +16,25 @@ const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
     port: 465,
     secure: true, // Use SSL
+    pool: true, // Performance: Reuse connections
+    maxConnections: 5, // Performance: Maintain up to 5 connections
+    maxMessages: 100, // Performance: Send up to 100 messages per connection
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
     },
-    connectionTimeout: 60000, // 1 minute
-    greetingTimeout: 30000, // 30 seconds
-    socketTimeout: 60000 // 1 minute
+    connectionTimeout: 10000, // 10 seconds (faster failover)
+    greetingTimeout: 5000, // 5 seconds
+    socketTimeout: 30000 // 30 seconds
+});
+
+// Verify connection configuration
+transporter.verify((error, success) => {
+    if (error) {
+        console.error("SMTP Connection Error:", error.message);
+    } else {
+        console.log("SMTP Server is ready to take our messages");
+    }
 });
 
 const sendResetEmail = async (email, tempPass) => {
@@ -70,6 +82,33 @@ const sendResetEmail = async (email, tempPass) => {
     } catch (e) {
         console.error("CRITICAL MAIL ERROR:", e.message);
         console.error("Transporter Auth:", { user: process.env.EMAIL_USER, pass: '****' });
+    }
+};
+
+const sendVerificationOTP = async (email, name, otp) => {
+    const mailOptions = {
+        from: `"VanaMap Secure" <${process.env.EMAIL_USER}>`,
+        to: email,
+        subject: `${otp} is your VanaMap Verification Code`,
+        html: `
+            <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 500px; margin: auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 16px;">
+                <h2 style="color: #10b981; text-align: center;">Verify Your Identity</h2>
+                <p>Hi ${name},</p>
+                <p>Welcome to VanaMap! To complete your registration and secure your account, please use the following verification code:</p>
+                <div style="background: #f1f5f9; padding: 20px; border-radius: 12px; text-align: center; font-size: 32px; font-weight: 800; letter-spacing: 10px; color: #0f172a; margin: 20px 0;">
+                    ${otp}
+                </div>
+                <p style="font-size: 14px; color: #64748b;">This code is valid for 10 minutes. If you didn't request this, please ignore this email.</p>
+                <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;">
+                <p style="text-align: center; color: #94a3b8; font-size: 12px;">© 2025 VanaMap Ecosystem</p>
+            </div>
+        `
+    };
+    try {
+        await transporter.sendMail(mailOptions);
+        console.log(`[AUTH] OTP sent to ${email}`);
+    } catch (err) {
+        console.error(`[AUTH] Failed to send OTP:`, err);
     }
 };
 
@@ -129,11 +168,24 @@ const sendWelcomeEmail = async (email, name, role = 'user') => {
 };
 
 // --- WEB PUSH SETUP ---
-const publicVapidKey = process.env.PUBLIC_VAPID_KEY;
-const privateVapidKey = process.env.PRIVATE_VAPID_KEY;
+let publicVapidKey = process.env.PUBLIC_VAPID_KEY;
+let privateVapidKey = process.env.PRIVATE_VAPID_KEY;
 
 let pushEnabled = false;
-if (publicVapidKey && privateVapidKey) {
+
+const initializePush = () => {
+    if (!publicVapidKey || !privateVapidKey) {
+        console.warn("VAPID Keys not found. Generating temporary keys...");
+        const keys = webpush.generateVAPIDKeys();
+        publicVapidKey = keys.publicKey;
+        privateVapidKey = keys.privateKey;
+        console.log("-----------------------------------------");
+        console.log("NEW VAPID KEYS GENERATED (Save to .env):");
+        console.log("PUBLIC_VAPID_KEY=" + publicVapidKey);
+        console.log("PRIVATE_VAPID_KEY=" + privateVapidKey);
+        console.log("-----------------------------------------");
+    }
+
     try {
         webpush.setVapidDetails('mailto:support@vanamap.online', publicVapidKey, privateVapidKey);
         pushEnabled = true;
@@ -141,9 +193,9 @@ if (publicVapidKey && privateVapidKey) {
     } catch (err) {
         console.error("Web Push init failed:", err.message);
     }
-} else {
-    console.warn("WARNING: VAPID Keys not found in environment variables. Push notifications disabled.");
-}
+};
+
+initializePush();
 
 const sendPushNotification = async (payload) => {
     if (!pushEnabled) {
@@ -152,28 +204,38 @@ const sendPushNotification = async (payload) => {
     }
 
     try {
-        const subscriptions = await PushSubscription.find();
+        const subscriptions = await PushSubscription.find().lean();
         if (subscriptions.length === 0) return;
 
-        console.log(`[PUSH] Sending to ${subscriptions.length} devices...`);
+        console.log(`[PUSH] Dispatched to ${subscriptions.length} devices...`);
         const notificationPayload = JSON.stringify(payload);
 
+        // Process in batches of 50 to avoid memory/rate limit issues
+        const batchSize = 50;
         let sentCount = 0;
-        const promises = subscriptions.map(sub =>
-            webpush.sendNotification(sub, notificationPayload)
-                .then(() => sentCount++)
-                .catch(err => {
-                    // 410 Gone / 404 means expired
+        let deadCount = 0;
+
+        for (let i = 0; i < subscriptions.length; i += batchSize) {
+            const batch = subscriptions.slice(i, i + batchSize);
+            await Promise.all(batch.map(async (sub) => {
+                try {
+                    await webpush.sendNotification(sub, notificationPayload);
+                    sentCount++;
+                } catch (err) {
                     if (err.statusCode === 410 || err.statusCode === 404) {
-                        return PushSubscription.deleteOne({ _id: sub._id });
+                        deadCount++;
+                        await PushSubscription.deleteOne({ _id: sub._id }).catch(() => { });
+                    } else {
+                        console.error(`[PUSH] Delivery error (${err.statusCode}): ${err.message}`);
                     }
-                    console.error(`[PUSH] Error: ${err.statusCode}`);
-                })
-        );
-        await Promise.all(promises);
-        console.log(`[PUSH] Sent to ${sentCount} devices.`);
+                }
+            }));
+        }
+
+        if (deadCount > 0) console.log(`[PUSH] Cleaned up ${deadCount} expired subscriptions.`);
+        console.log(`[PUSH] Successfully reached ${sentCount} devices.`);
     } catch (e) {
-        console.error("[PUSH] Critical error:", e.message);
+        console.error("[PUSH] Critical processing error:", e.message);
     }
 };
 
@@ -255,36 +317,62 @@ const normalizeUser = (user) => {
     };
 };
 
-// --- HELPER: Mock WhatsApp Notification ---
-const sendWhatsApp = async (msg, type, details = {}) => {
-    const adminPhone = "9188773534";
-    console.log(`[WHATSAPP MOCK] To ${adminPhone}: ${msg}`);
-
+// --- HELPER: Unified Alert System ---
+const broadcastAlert = async (type, message, details = {}, url = '/') => {
     try {
-        const notification = new Notification({
-            type,
-            message: msg,
-            details
-        });
-        await notification.save();
+        // 1. Create DB Notification for Dashboard Tracking
+        await Notification.create({ type, message, details, read: false });
+
+        // 2. Dispatch Web Push to all active subscribers
+        const pushPayload = {
+            title: details.title || `VanaMap ${type.charAt(0).toUpperCase() + type.slice(1)}`,
+            body: message,
+            url,
+            icon: '/logo.png'
+        };
+        await sendPushNotification(pushPayload);
+
+        console.log(`[ALERT] Unified alert dispatched: ${type}`);
     } catch (err) {
-        console.error("Failed to save notification:", err);
+        console.error(`[ALERT] Failed to broadcast ${type}:`, err.message);
     }
 };
+
+const sendWhatsApp = async (msg, type, details = {}) => {
+    console.log(`[PUSH REPLACED WHATSAPP] ${type}: ${msg}`);
+    await broadcastAlert(type, msg, details);
+};
+
+app.get('/api/notifications/vapid-key', (req, res) => {
+    if (!publicVapidKey) return res.status(404).json({ error: "Push keys not configured" });
+    res.json({ publicKey: publicVapidKey });
+});
 
 app.post('/api/notifications/subscribe', async (req, res) => {
     try {
         const subscription = req.body;
+        if (!subscription || !subscription.endpoint) {
+            return res.status(400).json({ error: "Invalid subscription" });
+        }
         // Simple upsert based on endpoint
         await PushSubscription.findOneAndUpdate(
             { endpoint: subscription.endpoint },
             subscription,
             { upsert: true, new: true }
         );
-        res.status(201).json({});
-    } catch (e) {
-        console.error("Sub error", e);
-        res.status(500).json({ error: "Failed to subscribe" });
+
+        // Immediate confirmation push
+        await sendPushNotification({
+            title: 'Cloud Alerts Enabled! ☁️',
+            body: 'You will now receive real-time updates from VanaMap.',
+            url: '/',
+            icon: '/logo.png'
+        });
+
+        res.status(201).json({ success: true });
+    } catch (err) {
+        console.error("Subscription Error:", err);
+        res.status(500).json({ error: err.message });
     }
 });
 
@@ -331,11 +419,7 @@ app.post('/api/user/complete-purchase', auth, async (req, res) => {
         await user.save();
 
         // Create log
-        await Notification.create({
-            type: 'system',
-            message: `User ${user.name} earned ${pointsToAward} points for starting a purchase.`,
-            details: { userId: user._id, points: pointsToAward }
-        });
+        await broadcastAlert('system', `User ${user.name} earned ${pointsToAward} points for starting a purchase.`, { userId: user._id, points: pointsToAward });
 
         res.json({ success: true, newPoints: user.points });
     } catch (err) {
@@ -414,7 +498,7 @@ app.post('/api/tracking/vendor-contact', async (req, res) => {
     try {
         const { vendorId, vendorName, userEmail, contactType } = req.body;
         const msg = `User ${userEmail} contacted Vendor ${vendorName} via ${contactType}`;
-        await sendWhatsApp(msg, 'vendor_contact', { vendorId, userEmail, contactType });
+        await broadcastAlert('vendor_contact', msg, { vendorId, userEmail, contactType });
         res.json({ success: true });
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -496,6 +580,7 @@ app.post('/api/ai/chat', async (req, res) => {
         const response = await getAIResponse(message);
         const chat = new Chat({ userId, message, response });
         await chat.save();
+        await broadcastAlert('ai_chat', `AI responded to user ${userId}'s query.`, { userId, message, response: response.substring(0, 50) + '...' });
         res.json({ response, count: count + 1, limitReached: (count + 1) > 10 });
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -515,14 +600,7 @@ app.post('/api/suggestions', async (req, res) => {
         });
         await suggestion.save();
 
-        // Notify Admin
-        await sendWhatsApp(`New Plant Suggestion: ${plantName} by ${userName}`, 'suggestion_add', { suggestionId: suggestion._id });
-        const notif = new Notification({
-            type: 'suggestion',
-            message: `User ${userName} suggested a new plant: ${plantName}`,
-            details: { suggestionId: suggestion._id }
-        });
-        await notif.save();
+        await broadcastAlert('suggestion', `New plant suggestion: ${plantName} by ${userName}`, { plantName, userId });
 
         res.status(201).json({ success: true, message: "Suggestion submitted" });
     } catch (err) {
@@ -648,21 +726,7 @@ app.post('/api/admin/seed-single', auth, admin, async (req, res) => {
 
         await Plant.updateOne({ id: plant.id }, { $set: plant }, { upsert: true });
 
-        // Notify
-        await Notification.create({
-            type: 'system',
-            message: `Admin manually deployed seed plant: ${plant.name}`,
-            details: { plantId: plant.id },
-            read: false
-        });
-
-        // Push Notification
-        sendPushNotification({
-            title: 'New Plant Discovered! 🌿',
-            body: `${plant.name} has been added to our global database. Check it out!`,
-            url: '/#plant-grid',
-            icon: '/logo.png'
-        });
+        await broadcastAlert('discovery', `${plant.name} has been added to our global database. Check it out!`, { plantId: plant.id, title: 'New Plant Discovered! 🌿' }, '/#plant-grid');
 
         res.json({ success: true, plant });
     } catch (e) {
@@ -714,14 +778,7 @@ app.post('/api/plants', auth, admin, async (req, res) => {
         const plant = new Plant(req.body);
         await plant.save();
 
-        await Notification.create({
-            type: 'plant',
-            message: `New plant added: ${plant.name}`,
-            details: { plantId: plant.id },
-            read: false
-        });
-
-        await sendWhatsApp(`New Plant: ${plant.name}`, 'plant_add', { plantId: plant.id });
+        await broadcastAlert('plant', `New plant added: ${plant.name}`, { plantId: plant.id }, `/#plant-${plant.id}`);
         res.status(201).json(plant);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -764,13 +821,7 @@ app.post('/api/vendors', auth, async (req, res) => {
         const newVendor = new Vendor(itemData);
         await newVendor.save();
 
-        await Notification.create({
-            type: 'vendor',
-            message: `New vendor joined: ${newVendor.name}`,
-            details: { vendorId: newVendor.id },
-            read: false
-        });
-
+        await broadcastAlert('vendor', `New vendor joined: ${newVendor.name}`, { vendorId: newVendor.id, title: 'New Store Opening! 🏪' }, '/nearby');
         res.status(201).json(newVendor);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -806,14 +857,8 @@ app.patch('/api/vendors/:id', auth, async (req, res) => {
             // User wants "every price saved should be alerted".
             // We'll assume the update implies activity.
 
-            await Notification.create({
-                type: 'price',
-                message: `Price/Inventory updated for ${vendor.name}`,
-                details: { vendorId: vendor.id, location: vendor.address },
-                read: false
-            });
+            await broadcastAlert('price', `Price/Inventory updated for ${vendor.name}`, { vendorId: vendor.id, location: vendor.address, title: 'Price Hack! 📉' });
         }
-
         res.json(vendor);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -875,7 +920,7 @@ app.post('/api/support/inquiry', async (req, res) => {
         };
 
         await transporter.sendMail(mailOptions);
-        console.log(`Inquiry received from ${email}`);
+        await broadcastAlert('support', `New Inquiry from ${name}`, { email, title: 'Inquiry Received 📩' });
         res.json({ success: true, message: 'Inquiry sent successfully' });
     } catch (err) {
         console.error("Inquiry Mail Error:", err);
@@ -891,21 +936,73 @@ app.post('/api/auth/signup', async (req, res) => {
         const existing = await User.findOne({ email });
         if (existing) return res.status(400).json({ error: "User exists" });
 
-        const user = new User({ email, password, name, role, country, city, state });
+        const otp = Math.floor(1000 + Math.random() * 9000).toString();
+        const user = new User({
+            email,
+            password,
+            name,
+            role,
+            country,
+            city,
+            state,
+            verified: false,
+            verificationOTP: otp,
+            otpExpires: new Date(Date.now() + 10 * 60 * 1000) // 10 mins
+        });
         await user.save();
 
-        await Notification.create({
-            type: 'user',
-            message: `New user registered: ${name} (${role})`,
-            details: { email, role },
-            read: false
-        });
+        await sendVerificationOTP(email, name, otp);
 
-        // Send Welcome Email
-        sendWelcomeEmail(email, name, role);
+        res.status(201).json({
+            message: "OTP sent to your Gmail. Please verify to continue.",
+            email: user.email
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.post('/api/auth/verify-otp', async (req, res) => {
+    try {
+        const { email, otp } = req.body;
+        const user = await User.findOne({ email: email.trim().toLowerCase() });
+
+        if (!user) return res.status(404).json({ error: "User not found" });
+        if (user.verified) return res.status(400).json({ error: "Account already verified" });
+
+        if (user.verificationOTP !== otp || user.otpExpires < new Date()) {
+            return res.status(400).json({ error: "Invalid or expired OTP" });
+        }
+
+        user.verified = true;
+        user.verificationOTP = undefined;
+        user.otpExpires = undefined;
+        await user.save();
+
+        // Broadcast push alert for community
+        await broadcastAlert('user', `${user.name} joined VanaMap! Welcome to the forest!`, { email: user.email, role: user.role, title: 'New Explorer Joined 🌿' });
+
+        // Final Welcome Email
+        sendWelcomeEmail(user.email, user.name, user.role);
 
         const token = jwt.sign({ id: user._id, email: user.email, role: user.role }, JWT_SECRET, { expiresIn: '7d' });
-        res.status(201).json({ user: normalizeUser(user), token });
+        res.json({ user: normalizeUser(user), token, message: "Email Verified Successfully!" });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.post('/api/auth/check-email', async (req, res) => {
+    try {
+        const { email } = req.body;
+        const user = await User.findOne({ email: email.trim().toLowerCase() });
+        if (!user) {
+            return res.status(404).json({ error: "Access Denied: Account not found." });
+        }
+        if (!user.verified) {
+            return res.status(403).json({ error: "Found: Gmail not yet verified. Check your inbox." });
+        }
+        res.json({ success: true, verified: true, role: user.role, name: user.name });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -1090,10 +1187,19 @@ app.post('/api/admin/reset-user-password', auth, admin, async (req, res) => {
         const { userId, newPassword } = req.body;
         const user = await User.findById(userId);
         if (!user) return res.status(404).json({ error: "User not found" });
-        user.password = newPassword || '123456';
+
+        const resetPass = newPassword || Math.random().toString(36).slice(-8).toUpperCase();
+        user.password = resetPass;
         await user.save();
-        res.json({ success: true });
-    } catch (e) { res.status(500).json({ error: e.message }); }
+
+        // Fix: Actually send the email to the user
+        sendResetEmail(user.email, resetPass);
+
+        res.json({ success: true, message: `Password reset and sent to ${user.email}` });
+    } catch (e) {
+        console.error("Admin Password Reset Error:", e);
+        res.status(500).json({ error: e.message });
+    }
 });
 
 app.patch('/api/admin/users/:id/points', auth, admin, async (req, res) => {
@@ -1151,13 +1257,8 @@ app.post('/api/auth/reset-password-verify', async (req, res) => {
         user.resetRequest = { requested: false, approved: true, requestDate: new Date() };
         await user.save();
 
-        // Notify Admin via Notification system
-        const notif = new Notification({
-            type: 'security',
-            message: `User ${user.name} (${user.email}) changed password via verified reset.`,
-            details: { userId: user._id, email: user.email }
-        });
-        await notif.save();
+        // Notify Admin via Unified system
+        await broadcastAlert('security', `User ${user.name} (${user.email}) changed password via verified reset.`, { userId: user._id, email: user.email, title: 'Security Update 🛡️' });
 
         res.json({ success: true, message: "Password updated successfully." });
     } catch (err) {
@@ -1171,12 +1272,7 @@ app.post('/api/auth/nudge-admin', async (req, res) => {
         const user = await User.findOne({ email });
         // No automatic reset here, admin will do it manually.
 
-        const notif = new Notification({
-            type: 'help',
-            message: `User with email ${email || 'Anonymous'} is requesting help (Forgot Username or Access). Manual password reset requested.`,
-            details: { email, userId: user ? user._id : null }
-        });
-        await notif.save();
+        await broadcastAlert('help', `User with email ${email || 'Anonymous'} is requesting help (Forgot Username or Access). Manual password reset requested.`, { email, userId: user ? user._id : null, title: 'Support Request 🆘' });
         res.json({ success: true });
     } catch (e) { res.status(500).json({ error: e.message }); }
 });

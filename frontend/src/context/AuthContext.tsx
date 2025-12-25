@@ -23,6 +23,7 @@ interface AuthContextType {
     login: (credentials: LoginCredentials) => Promise<{ success: boolean; message?: string }>;
     googleLogin: (credentialResponse: any) => Promise<boolean>;
     logout: () => void;
+    verify: (email: string, otp: string) => Promise<{ success: boolean; message?: string }>;
     toggleFavorite: (plantId: string) => void;
     updateUser: (updates: Partial<User>) => void;
     loading: boolean;
@@ -106,6 +107,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             const data = await res.json();
             if (!res.ok) throw new Error(data.error || 'Signup failed');
 
+            // No longer logging in automatically here
+            return { success: true, message: data.message };
+        } catch (err: any) {
+            console.error(err);
+            return { success: false, message: err.message };
+        }
+    };
+
+    const verify = async (email: string, otp: string) => {
+        try {
+            const res = await fetch(`${API_URL}/auth/verify-otp`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, otp })
+            });
+
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || 'Verification failed');
+
             const fullUser = { ...data.user, token: data.token };
             setUser(fullUser);
             localStorage.setItem('user', JSON.stringify(fullUser));
@@ -186,7 +206,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, signup, googleLogin, logout, toggleFavorite, updateUser, loading }}>
+        <AuthContext.Provider value={{ user, login, signup, googleLogin, logout, verify, toggleFavorite, updateUser, loading }}>
             {children}
         </AuthContext.Provider>
     );

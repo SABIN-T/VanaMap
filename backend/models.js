@@ -58,7 +58,10 @@ const UserSchema = new mongoose.Schema({
         requested: { type: Boolean, default: false },
         approved: { type: Boolean, default: false },
         requestDate: { type: Date }
-    }
+    },
+    verified: { type: Boolean, default: false },
+    verificationOTP: String,
+    otpExpires: Date
 }, { timestamps: true });
 
 const SearchLogSchema = new mongoose.Schema({
