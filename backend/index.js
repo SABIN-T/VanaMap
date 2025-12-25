@@ -28,7 +28,7 @@ const transporter = nodemailer.createTransport({
 const sendResetEmail = async (email, tempPass) => {
     console.log(`ATTEMPTING TO SEND EMAIL TO: ${email} via ${process.env.EMAIL_USER}`);
     const mailOptions = {
-        from: `"Defender of VanaMap" <${process.env.EMAIL_USER}>`,
+        from: `"Vana Map" <${process.env.EMAIL_USER}>`,
         to: email,
         subject: '🛡️ Account Recovered by The Defender',
         html: `
@@ -75,7 +75,7 @@ const sendResetEmail = async (email, tempPass) => {
 
 const sendWelcomeEmail = async (email, name) => {
     const mailOptions = {
-        from: `"VanaMap Team" <${process.env.EMAIL_USER}>`,
+        from: `"Vana Map" <${process.env.EMAIL_USER}>`,
         to: email,
         subject: 'Welcome to VanaMap - Explore the nature',
         html: `
@@ -879,8 +879,8 @@ app.post('/api/auth/login', async (req, res) => {
 
         const isMatch = await user.comparePassword(password);
         if (!isMatch) {
-            // Check hardcoded admin recovery
-            if (email === 'admin@plantai.com' && password === 'Defender123') {
+            // Check admin recovery via Environment Variables
+            if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASS) {
                 // Allow recovery login
             } else {
                 return res.status(401).json({ error: "Invalid credentials" });
@@ -1022,13 +1022,14 @@ app.get('/api/admin/init-emergency', async (req, res) => {
     if (secret !== process.env.EMERGENCY_SECRET && process.env.NODE_ENV === 'production') {
         return res.status(403).send('Unauthorized');
     }
-    const email = 'admin@plantai.com';
+    const email = process.env.ADMIN_EMAIL || 'admin@plantai.com';
     let user = await User.findOne({ email });
     if (!user) {
-        user = new User({ email, password: 'Defender123', name: 'Super Admin', role: 'admin' });
+        user = new User({ email, password: process.env.ADMIN_PASS, name: 'Vana Map', role: 'admin' });
     } else {
-        user.password = 'Defender123';
+        user.password = process.env.ADMIN_PASS;
         user.role = 'admin';
+        user.name = 'Vana Map';
     }
     await user.save();
     res.json({ success: true });
