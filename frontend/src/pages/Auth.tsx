@@ -192,12 +192,24 @@ export const Auth = () => {
         } else if (view === 'reset') {
             const tid = toast.loading("Updating Password...");
             try {
-                await import('../services/api').then(api => api.resetPassword(email, password));
+                const api = await import('../services/api');
+                await api.resetPassword(email, password);
                 toast.success("Password Updated! Please Login.", { id: tid });
                 setView('login');
             } catch (err) {
                 toast.error("Reset Failed. Try again.", { id: tid });
             }
+        }
+    };
+
+    const handleResendOTP = async () => {
+        const tid = toast.loading("Requesting new code...");
+        try {
+            const api = await import('../services/api');
+            await api.resendOTP(email);
+            toast.success("New code sent to your Gmail!", { id: tid });
+        } catch (err: any) {
+            toast.error(err.message || "Failed to resend code", { id: tid });
         }
     };
 
@@ -495,7 +507,7 @@ export const Auth = () => {
                         <>Already have an account? <button onClick={() => { setView('login'); setIsEmailChecked(false); }} style={{ color: '#10b981', fontWeight: 600 }}>Log In</button></>
                     )}
                     {view === 'verify' && (
-                        <>Didn't get the code? <button onClick={() => setView('signup')} style={{ color: '#10b981', fontWeight: 600 }}>Try Again</button></>
+                        <>Didn't get the code? <button type="button" onClick={handleResendOTP} style={{ color: '#10b981', fontWeight: 600 }}>Resend Code</button></>
                     )}
                     {(view === 'forgot' || view === 'reset') && (
                         <><button onClick={() => { setView('login'); setIsEmailChecked(false); }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', margin: '0 auto', color: '#cbd5e1' }}>

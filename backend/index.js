@@ -108,7 +108,10 @@ const sendVerificationOTP = async (email, name, otp) => {
         await transporter.sendMail(mailOptions);
         console.log(`[AUTH] OTP sent to ${email}`);
     } catch (err) {
-        console.error(`[AUTH] Failed to send OTP:`, err);
+        console.error(`[AUTH] Failed to send OTP to ${email}:`, err.message);
+        // Fallback for development:
+        console.log(`[AUTH] DEVELOPMENT FALLBACK - VERIFICATION CODE FOR ${email} IS: ${otp}`);
+        throw new Error("Could not send verification email. Please check your connection or contact support.");
     }
 };
 
@@ -957,6 +960,25 @@ app.post('/api/auth/signup', async (req, res) => {
             message: "OTP sent to your Gmail. Please verify to continue.",
             email: user.email
         });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.post('/api/auth/resend-otp', async (req, res) => {
+    try {
+        const { email } = req.body;
+        const user = await User.findOne({ email: email.trim().toLowerCase() });
+        if (!user) return res.status(404).json({ error: "User not found" });
+        if (user.verified) return res.status(400).json({ error: "Already verified" });
+
+        const otp = Math.floor(1000 + Math.random() * 9000).toString();
+        user.verificationOTP = otp;
+        user.otpExpires = new Date(Date.now() + 10 * 60 * 1000);
+        await user.save();
+
+        await sendVerificationOTP(user.email, user.name, otp);
+        res.json({ success: true, message: "New code sent to your Gmail!" });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
