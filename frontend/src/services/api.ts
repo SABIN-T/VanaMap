@@ -432,22 +432,22 @@ export const deployAllPlants = async () => {
 };
 
 
-export const resendOTP = async (email: string) => {
+export const resendOTP = async (identifier: string) => {
     const res = await fetch(`${API_URL}/auth/resend-otp`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email })
+        body: JSON.stringify({ identifier })
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || "Failed to resend");
     return data;
 };
 
-export const verifyOTP = async (email: string, otp: string) => {
+export const verifyOTP = async (identifier: string, otp: string) => {
     const res = await fetch(`${API_URL}/auth/verify-otp`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, otp })
+        body: JSON.stringify({ identifier, otp })
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.error || "Verification failed");

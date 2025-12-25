@@ -23,6 +23,7 @@ export const Auth = () => {
     // Form States
     const [role, setRole] = useState<'user' | 'vendor'>(initialRole);
     const [email, setEmail] = useState('');
+    const [phone, setPhone] = useState('');
     const [password, setPassword] = useState('');
     const [name, setName] = useState('');
 
@@ -114,7 +115,7 @@ export const Auth = () => {
     };
 
     const handleEmailCheck = async () => {
-        if (!email) { toast.error("Please enter email first"); return; }
+        if (!email) { toast.error("Please enter email or phone first"); return; }
 
         // Immediate bypass for Master Admin
         if (email.trim().toLowerCase() === 'admin@plantai.com') {
@@ -136,7 +137,7 @@ export const Auth = () => {
             toast.error(err.message || "Account not found or not verified.");
             // If account found but not verified, we can offer to resent OTP?
             if (err.message && err.message.includes("not yet verified")) {
-                toast("Please sign up again to resend OTP or check your Gmail.", { icon: '📧' });
+                toast("Please sign up again to resend OTP or check your inbox/WhatsApp.", { icon: '📧' });
             }
         } finally {
             setEmailLoading(false);
@@ -171,18 +172,18 @@ export const Auth = () => {
             }
         } else if (view === 'signup') {
             const tid = toast.loading("Sending Verification Code...");
-            const result = await signup({ email, password, name, role, city, state, country });
+            const result = await signup({ email, phone, password, name, role, city, state, country });
             if (result.success) {
-                toast.success("Code sent to your Gmail!", { id: tid });
+                toast.success("Code sent to your Gmail & WhatsApp!", { id: tid });
                 setView('verify');
             } else {
                 toast.error(result.message || "Signup failed", { id: tid });
             }
         } else if (view === 'verify') {
-            const tid = toast.loading("Verifying Gmail...");
-            const result = await verify(email, otp);
+            const tid = toast.loading("Verifying Identity...");
+            const result = await verify(email || phone, otp);
             if (result.success) {
-                toast.success("Email Verified! Welcome.", { id: tid });
+                toast.success("Identity Verified! Welcome.", { id: tid });
                 // navigation is handled by useEffect on user state
             } else {
                 toast.error(result.message || "Invalid Code", { id: tid });
@@ -214,8 +215,8 @@ export const Auth = () => {
         const tid = toast.loading("Requesting new code...");
         try {
             const api = await import('../services/api');
-            await api.resendOTP(email);
-            toast.success("New code sent to your Gmail!", { id: tid });
+            await api.resendOTP(email || phone);
+            toast.success("New code sent to your Gmail & WhatsApp!", { id: tid });
         } catch (err: any) {
             toast.error(err.message || "Failed to resend code", { id: tid });
         }
@@ -231,7 +232,7 @@ export const Auth = () => {
                         <div className={styles.noticeDot} style={{ background: isEmailChecked ? '#10b981' : undefined }}></div>
                         <span>
                             {isEmailChecked
-                                ? <strong>Gmail Verified: {emailVerifiedResult?.name}</strong>
+                                ? <strong>VanaMap Verified: {emailVerifiedResult?.name}</strong>
                                 : <><strong>Users and Vendors</strong> can login here.</>}
                         </span>
                     </div>
@@ -241,14 +242,14 @@ export const Auth = () => {
                     <h2 className={styles.authTitle}>
                         {view === 'login' && (isEmailChecked ? 'Enter Password' : 'Welcome Back')}
                         {view === 'signup' && 'Create Account'}
-                        {view === 'verify' && 'Verify Gmail'}
+                        {view === 'verify' && 'Identity Verification'}
                         {view === 'forgot' && 'Reset Password'}
                         {view === 'reset' && 'New Password'}
                     </h2>
                     <p className={styles.authSubtitle}>
-                        {view === 'login' && (isEmailChecked ? `Hi ${emailVerifiedResult?.name.split(' ')[0]}, please type your key.` : 'Enter your email to verify your status')}
+                        {view === 'login' && (isEmailChecked ? `Hi ${emailVerifiedResult?.name.split(' ')[0]}, please type your key.` : 'Enter email or phone to verify status')}
                         {view === 'signup' && 'Join the VanaMap community today'}
-                        {view === 'verify' && `We've sent a 4-digit code to ${email}`}
+                        {view === 'verify' && `We've sent a 4-digit code to ${email || phone}`}
                         {view === 'forgot' && 'We’ll help you get back in'}
                     </p>
                 </div>
@@ -357,17 +358,17 @@ export const Auth = () => {
                         </>
                     )}
 
-                    {/* Email Field - Step 1 for Login */}
+                    {/* email/Phone Field - Step 1 for Login */}
                     <div className={styles.formGroup} style={{ opacity: (isEmailChecked && view === 'login') ? 0.6 : 1, transition: '0.3s' }}>
-                        <label className={styles.label}>Email Address</label>
+                        <label className={styles.label}>{view === 'login' ? 'Email or Phone Number' : 'Email Address'}</label>
                         <input
                             className={styles.input}
-                            type="email"
+                            type={view === 'login' ? "text" : "email"}
                             value={email}
                             onChange={(e) => { setEmail(e.target.value); setIsEmailChecked(false); }}
                             required
                             disabled={(isEmailChecked && view === 'login') || view === 'verify'}
-                            placeholder="name@example.com"
+                            placeholder={view === 'login' ? "Email or Mobile Number" : "name@example.com"}
                         />
                         {isEmailChecked && view === 'login' && (
                             <button
@@ -375,10 +376,24 @@ export const Auth = () => {
                                 className={styles.changeEmailBtn}
                                 onClick={() => { setIsEmailChecked(false); setPassword(''); }}
                             >
-                                Change Email
+                                Change
                             </button>
                         )}
                     </div>
+
+                    {view === 'signup' && (
+                        <div className={styles.formGroup}>
+                            <label className={styles.label}>WhatsApp / Mobile Number</label>
+                            <input
+                                className={styles.input}
+                                type="tel"
+                                value={phone}
+                                onChange={(e) => setPhone(e.target.value)}
+                                required
+                                placeholder="+91 XXXXX XXXXX"
+                            />
+                        </div>
+                    )}
 
                     {view === 'verify' && (
                         <div className={`${styles.formGroup} ${styles.revealAnimation}`}>

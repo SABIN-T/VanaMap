@@ -45,6 +45,7 @@ const VendorSchema = new mongoose.Schema({
 
 const UserSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
+    phone: { type: String, unique: true, sparse: true },
     password: { type: String, required: true },
     name: { type: String, required: true },
     role: { type: String, enum: ['user', 'vendor', 'admin'], default: 'user' },

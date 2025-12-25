@@ -9,6 +9,7 @@ interface LoginCredentials {
 
 interface SignupData {
     email: string;
+    phone?: string;
     password: string;
     name: string;
     role?: string;
@@ -23,7 +24,7 @@ interface AuthContextType {
     login: (credentials: LoginCredentials) => Promise<{ success: boolean; message?: string }>;
     googleLogin: (credentialResponse: any) => Promise<boolean>;
     logout: () => void;
-    verify: (email: string, otp: string) => Promise<{ success: boolean; message?: string }>;
+    verify: (identifier: string, otp: string) => Promise<{ success: boolean; message?: string }>;
     toggleFavorite: (plantId: string) => void;
     updateUser: (updates: Partial<User>) => void;
     loading: boolean;
@@ -115,12 +116,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
-    const verify = async (email: string, otp: string) => {
+    const verify = async (identifier: string, otp: string) => {
         try {
             const res = await fetch(`${API_URL}/auth/verify-otp`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, otp })
+                body: JSON.stringify({ identifier, otp })
             });
 
             const data = await res.json();
