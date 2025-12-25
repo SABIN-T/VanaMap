@@ -14,18 +14,19 @@ const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
-    port: 465,
-    secure: true, // Use SSL
-    pool: true, // Performance: Reuse connections
-    maxConnections: 5, // Performance: Maintain up to 5 connections
-    maxMessages: 100, // Performance: Send up to 100 messages per connection
+    port: 587,
+    secure: false, // Use STARTTLS
+    requireTLS: true,
+    pool: true,
+    maxConnections: 5,
+    maxMessages: 100,
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
     },
-    connectionTimeout: 10000, // 10 seconds (faster failover)
-    greetingTimeout: 5000, // 5 seconds
-    socketTimeout: 30000 // 30 seconds
+    connectionTimeout: 20000, // Increased to 20 seconds
+    greetingTimeout: 10000,   // Increased to 10 seconds
+    socketTimeout: 60000      // Increased to 60 seconds
 });
 
 // Verify connection configuration
