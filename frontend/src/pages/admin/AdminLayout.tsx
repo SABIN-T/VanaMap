@@ -3,7 +3,7 @@ import { useLocation, Link } from 'react-router-dom';
 import {
     LayoutDashboard, Sprout, Store,
     Users, Activity, Bell, Settings,
-    Menu, X, LogOut, ChevronRight, MessageSquare, DollarSign, Trophy, Database
+    Menu, X, LogOut, ChevronRight, MessageSquare, DollarSign, Trophy, Database, ScanLine
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { fetchAdminStats } from '../../services/api';
@@ -39,6 +39,7 @@ export const AdminLayout = ({ title, children }: AdminLayoutProps) => {
     const navItems = [
         { path: '/admin', icon: LayoutDashboard, label: 'Dashboard' },
         { path: '/admin/manage-plants', icon: Sprout, label: 'Manage Plants', badge: stats.unread?.plants },
+        { path: '/admin/identify', icon: ScanLine, label: 'Biometric Scanner', sub: true },
         { path: '/admin/add-plant', icon: Activity, label: 'Add New Plant', sub: true },
         { path: '/admin/manage-vendors', icon: Store, label: 'Manage Vendors', badge: stats.unread?.vendors },
         { path: '/admin/price-management', icon: DollarSign, label: 'Price Management', badge: stats.unread?.prices },
