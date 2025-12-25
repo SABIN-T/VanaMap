@@ -3,16 +3,18 @@ import type { Plant, Vendor } from '../types';
 import { fetchPlants, fetchVendors, logSearch } from '../services/api';
 import { Search, ShoppingBag } from 'lucide-react';
 import { PlantVendorsModal } from '../components/features/market/PlantVendorsModal';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import styles from './Shops.module.css';
 
 export const Shops = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const [plants, setPlants] = useState<Plant[]>([]);
     const [vendors, setVendors] = useState<Vendor[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [activeCategory, setActiveCategory] = useState<'all' | 'indoor' | 'outdoor'>('all');
     const [loading, setLoading] = useState(true);
+    const [selectedPlant, setSelectedPlant] = useState<Plant | null>(null);
 
     useEffect(() => {
         const loadData = async () => {
@@ -23,6 +25,18 @@ export const Shops = () => {
                 ]);
                 setPlants(plantsData);
                 setVendors(vendorsData.filter(v => v.verified));
+
+                // Check for auto-open request from navigation
+                if (location.state && (location.state as any).openPlantId) {
+                    const targetId = (location.state as any).openPlantId;
+                    const found = plantsData.find(p => p.id === targetId);
+                    if (found) {
+                        setSelectedPlant(found);
+                        // Optional: Scroll to it? Or just showing the modal is enough.
+                        // Modal covers screen so no scroll needed.
+                        window.history.replaceState({}, document.title); // Clear state so refresh doesn't reopen
+                    }
+                }
             } catch (error) {
                 console.error("Failed to load shop items", error);
             } finally {
@@ -79,8 +93,6 @@ export const Shops = () => {
             count: 0
         };
     };
-
-    const [selectedPlant, setSelectedPlant] = useState<Plant | null>(null);
 
     return (
         <div className={styles.shopContainer}>

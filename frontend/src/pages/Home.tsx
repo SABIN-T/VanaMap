@@ -8,7 +8,6 @@ import { getWeather, geocodeCity } from '../services/weather';
 import { calculateAptness } from '../utils/logic';
 import type { Plant } from '../types';
 import { Sprout, MapPin, Thermometer, Wind, ArrowDown, Sparkles, Search, AlertCircle, Heart, Sun, Activity, GraduationCap, ShoppingBag, PlusCircle, MoveRight } from 'lucide-react';
-import { useCart } from '../context/CartContext';
 import { useNavigate } from 'react-router-dom';
 // Lazy load modal for performance
 const PlantDetailsModal = lazy(() => import('../components/features/plants/PlantDetailsModal').then(module => ({ default: module.PlantDetailsModal })));
@@ -34,7 +33,6 @@ export const Home = () => {
     const plantsSectionRef = useRef<HTMLDivElement>(null);
     const filterSectionRef = useRef<HTMLDivElement>(null);
 
-    const { addToCart } = useCart();
     const navigate = useNavigate();
 
     // Mobile Card Logic
@@ -199,7 +197,8 @@ export const Home = () => {
     };
 
     const handleAddToCart = (plant: Plant) => {
-        addToCart(plant);
+        // Navigate to Shops page with the selected plant ID to open it immediately
+        navigate('/shops', { state: { openPlantId: plant.id } });
     };
 
     const openDetails = (plant: Plant) => {
