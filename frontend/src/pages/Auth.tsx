@@ -3,8 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '../components/common/Button';
 import { User, ArrowLeft, Store } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import { countryCodes } from '../data/countryCodes';
-import { countryStates } from '../data/states';
+import { Country, State, type ICountry, type IState } from 'country-state-city';
 import { toast } from 'react-hot-toast';
 import styles from './Auth.module.css';
 
@@ -28,18 +27,47 @@ export const Auth = () => {
     const [name, setName] = useState('');
 
     // Vendor Specific
-    const [country, setCountry] = useState('India');
+    const [selectedCountry, setSelectedCountry] = useState<ICountry | null>(null);
+    const [selectedState, setSelectedState] = useState<IState | null>(null);
+
+    // Derived values for API
+    const [country, setCountry] = useState('India'); // defaulting to India if needed, but updated by selection
     const [state, setState] = useState('');
     const [city, setCity] = useState('');
-    const [phoneCode, setPhoneCode] = useState('+91');
+    const [phoneCode, setPhoneCode] = useState('91');
 
-    // Sync phone code with country
+    // Load initial country (India) if desired
     useEffect(() => {
-        const found = countryCodes.find(c => c.name === country);
-        if (found) {
-            setPhoneCode(found.code);
+        const india = Country.getCountryByCode('IN');
+        if (india && !selectedCountry) {
+            setSelectedCountry(india);
+            setCountry(india.name);
+            setPhoneCode(india.phonecode);
         }
-    }, [country]);
+    }, []);
+
+    // Handle country change
+    const handleCountryChange = (isoCode: string) => {
+        const c = Country.getCountryByCode(isoCode);
+        if (c) {
+            setSelectedCountry(c);
+            setCountry(c.name);
+            setPhoneCode(c.phonecode);
+            setSelectedState(null);
+            setState('');
+        }
+    };
+
+    // Handle state change
+    const handleStateChange = (isoCode: string) => {
+        if (!selectedCountry) return;
+        const s = State.getStateByCodeAndCountry(isoCode, selectedCountry.isoCode);
+        if (s) {
+            setSelectedState(s);
+            setState(s.name);
+        }
+    };
+
 
     useEffect(() => {
         if (user) {
@@ -196,32 +224,26 @@ export const Auth = () => {
                                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                                         <select
                                             className={styles.select}
-                                            value={country}
-                                            onChange={(e) => setCountry(e.target.value)}
+                                            value={selectedCountry?.isoCode || ''}
+                                            onChange={(e) => handleCountryChange(e.target.value)}
                                             required
                                         >
-                                            {countryCodes.map(c => <option key={c.name} value={c.name}>{c.name}</option>)}
+                                            {Country.getAllCountries().map(c => (
+                                                <option key={c.isoCode} value={c.isoCode}>{c.name}</option>
+                                            ))}
                                         </select>
-                                        {countryStates[country] ? (
-                                            <select
-                                                className={styles.select}
-                                                value={state}
-                                                onChange={(e) => setState(e.target.value)}
-                                                required
-                                            >
-                                                <option value="">Select State</option>
-                                                {countryStates[country].map(s => <option key={s} value={s}>{s}</option>)}
-                                            </select>
-                                        ) : (
-                                            <input
-                                                className={styles.input}
-                                                type="text"
-                                                value={state}
-                                                onChange={(e) => setState(e.target.value)}
-                                                placeholder="Province/State"
-                                                required
-                                            />
-                                        )}
+
+                                        <select
+                                            className={styles.select}
+                                            value={selectedState?.isoCode || ''}
+                                            onChange={(e) => handleStateChange(e.target.value)}
+                                            required
+                                        >
+                                            <option value="">Select State</option>
+                                            {selectedCountry && State.getStatesOfCountry(selectedCountry.isoCode).map(s => (
+                                                <option key={s.isoCode} value={s.isoCode}>{s.name}</option>
+                                            ))}
+                                        </select>
                                     </div>
                                     <input
                                         className={styles.input}
@@ -239,7 +261,7 @@ export const Auth = () => {
                                 <div className={styles.formGroup}>
                                     <label className={styles.label}>Contact Number</label>
                                     <div className={styles.inputWrapper}>
-                                        <div className={styles.phonePrefix}>{phoneCode}</div>
+                                        <div className={styles.phonePrefix}>+{phoneCode}</div>
                                         <input
                                             type="tel"
                                             className={styles.input}
