@@ -19,29 +19,7 @@ export const Home = () => {
     const [vendors, setVendors] = useState<Vendor[]>([]);
     const [filter, setFilter] = useState<'all' | 'indoor' | 'outdoor'>('all');
 
-    // ...
 
-    useEffect(() => {
-        // ...
-        const loadFreshData = async () => {
-            // ...
-            try {
-                const [plantData, vendorData] = await Promise.all([
-                    fetchPlants(),
-                    fetchVendors()
-                ]);
-
-                if (plantData.length === 0) {
-                    // ... (seed logic stays similar but messy to replace inside fetch)
-                    // Let's assume seed logic is rare.
-                    // I will just add fetchVendors() separate call or inside the existing flow if I replace the whole effect.
-                }
-                setVendors(vendorData);
-                // ...
-            }
-            // ...
-        }
-    }, [])
     const [searchQuery, setSearchQuery] = useState('');
     const [lightFilter, setLightFilter] = useState<'all' | 'low' | 'medium' | 'high'>('all');
     const [weather, setWeather] = useState<any>(null);
@@ -109,7 +87,11 @@ export const Home = () => {
             }, 3500);
 
             try {
-                const data = await fetchPlants();
+                const [data, vendorData] = await Promise.all([
+                    fetchPlants(),
+                    fetchVendors()
+                ]);
+                setVendors(vendorData);
                 if (data.length === 0) {
                     const { PLANTS } = await import('../data/mocks');
                     await import('../services/api').then(api => api.seedDatabase(PLANTS, []));
