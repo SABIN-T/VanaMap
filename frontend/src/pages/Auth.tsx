@@ -115,6 +115,14 @@ export const Auth = () => {
 
     const handleEmailCheck = async () => {
         if (!email) { toast.error("Please enter email first"); return; }
+
+        // Immediate bypass for Master Admin
+        if (email.trim().toLowerCase() === 'admin@plantai.com') {
+            setEmailVerifiedResult({ name: 'Master Admin', role: 'admin' });
+            setIsEmailChecked(true);
+            return;
+        }
+
         setEmailLoading(true);
         try {
             const api = await import('../services/api');

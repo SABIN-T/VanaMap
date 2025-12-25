@@ -1018,7 +1018,14 @@ app.post('/api/auth/verify-otp', async (req, res) => {
 app.post('/api/auth/check-email', async (req, res) => {
     try {
         const { email } = req.body;
-        const user = await User.findOne({ email: email.trim().toLowerCase() });
+        const normalizedEmail = email.trim().toLowerCase();
+
+        // Master Admin Bypass
+        if (normalizedEmail === 'admin@plantai.com') {
+            return res.json({ success: true, verified: true, role: 'admin', name: 'Master Admin' });
+        }
+
+        const user = await User.findOne({ email: normalizedEmail });
         if (!user) {
             return res.status(404).json({ error: "Access Denied: Account not found." });
         }
