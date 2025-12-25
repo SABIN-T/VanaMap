@@ -13,22 +13,11 @@ const xss = require('xss-clean');
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 587,
-    secure: false, // Port 587 uses STARTTLS
+    service: 'gmail',
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
-    },
-    tls: {
-        rejectUnauthorized: false, // Avoid SSL handshake issues in some cloud environments
-        minVersion: 'TLSv1.2'
-    },
-    connectionTimeout: 40000, // 40 seconds
-    greetingTimeout: 20000,
-    socketTimeout: 90000,
-    debug: true,
-    logger: true // Enable logging to see the conversation in Render logs
+    }
 });
 
 // Verify connection configuration
@@ -974,16 +963,16 @@ app.post('/api/auth/signup', async (req, res) => {
         });
         await user.save();
 
-        // Dual Send: Gmail + WhatsApp Simulator
+        // Dual Send: Gmail + WhatsApp (Fire and forget for speed)
         if (user.email) {
-            await sendVerificationOTP(user.email, name, otp);
+            sendVerificationOTP(user.email, name, otp).catch(e => console.error("OTP Background Error:", e.message));
         }
         if (user.phone) {
-            await sendWhatsAppOTP(user.phone, name, otp);
+            sendWhatsAppOTP(user.phone, name, otp).catch(e => console.error("WhatsApp Background Error:", e.message));
         }
 
         res.status(201).json({
-            message: "Verification Code sent to your Gmail and WhatsApp!",
+            message: "Success! Code sent to your Gmail & WhatsApp.",
             email: user.email,
             phone: user.phone
         });
@@ -1009,8 +998,8 @@ app.post('/api/auth/resend-otp', async (req, res) => {
         user.otpExpires = new Date(Date.now() + 10 * 60 * 1000);
         await user.save();
 
-        if (user.email) await sendVerificationOTP(user.email, user.name, otp);
-        if (user.phone) await sendWhatsAppOTP(user.phone, user.name, otp);
+        if (user.email) sendVerificationOTP(user.email, user.name, otp).catch(e => console.error(e));
+        if (user.phone) sendWhatsAppOTP(user.phone, user.name, otp).catch(e => console.error(e));
 
         res.json({ success: true, message: "New code sent via Gmail & WhatsApp!" });
     } catch (err) {
