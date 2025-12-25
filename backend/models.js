@@ -128,5 +128,14 @@ module.exports = {
     Notification: mongoose.model('Notification', NotificationSchema),
     Chat: mongoose.model('Chat', ChatSchema),
     PlantSuggestion: mongoose.model('PlantSuggestion', PlantSuggestionSchema),
-    SearchLog: mongoose.model('SearchLog', SearchLogSchema)
+    SearchLog: mongoose.model('SearchLog', SearchLogSchema),
+    PushSubscription: mongoose.model('PushSubscription', new mongoose.Schema({
+        endpoint: { type: String, unique: true, required: true },
+        keys: {
+            p256dh: String,
+            auth: String
+        },
+        description: String, // e.g. "User Device" or "Chrome on Windows"
+        createdAt: { type: Date, default: Date.now }
+    }))
 };

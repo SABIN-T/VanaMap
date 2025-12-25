@@ -1,5 +1,45 @@
 import { useState, useEffect } from 'react';
 import { Smartphone, X, Download, Share, PlusSquare } from 'lucide-react';
+import toast from 'react-hot-toast';
+
+const PUBLIC_VAPID_KEY = 'BL4HAO7t3qISck5JPsQO9sLFeTHIT2QFdwjkme-3lJvEo34mEu1FWn0MygqfUfyDu_wn8i1hBhZP4ezRlgIJoOE';
+
+const urlBase64ToUint8Array = (base64String: string) => {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding)
+        .replace(/\-/g, '+')
+        .replace(/_/g, '/');
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+    for (let i = 0; i < rawData.length; ++i) {
+        outputArray[i] = rawData.charCodeAt(i);
+    }
+    return outputArray;
+};
+
+const subscribeUser = async () => {
+    if (!('serviceWorker' in navigator) || !('PushManager' in window)) return;
+    try {
+        const registration = await navigator.serviceWorker.ready;
+        // Check existing
+        const existingSub = await registration.pushManager.getSubscription();
+        if (existingSub) return; // Already subscribed
+
+        const subscription = await registration.pushManager.subscribe({
+            userVisibleOnly: true,
+            applicationServerKey: urlBase64ToUint8Array(PUBLIC_VAPID_KEY)
+        });
+
+        await fetch('/api/notifications/subscribe', {
+            method: 'POST',
+            body: JSON.stringify(subscription),
+            headers: { 'Content-Type': 'application/json' }
+        });
+        toast.success("Notifications enabled! 🌿");
+    } catch (e) {
+        console.error("Failed to subscribe push", e);
+    }
+};
 
 interface BeforeInstallPromptEvent extends Event {
     prompt: () => Promise<void>;
@@ -21,6 +61,19 @@ export const InstallPrompt = () => {
             // Show iOS prompt after a delay to respect Onboarding flow
             const timer = setTimeout(() => setIsVisible(true), 8000);
             return () => clearTimeout(timer);
+        }
+
+        // If installed (Standalone), ask for Notifications
+        if (isInStandaloneMode || window.matchMedia('(display-mode: standalone)').matches) {
+            if (Notification.permission === 'default') {
+                setTimeout(() => {
+                    Notification.requestPermission().then(permission => {
+                        if (permission === 'granted') subscribeUser();
+                    });
+                }, 5000);
+            } else if (Notification.permission === 'granted') {
+                subscribeUser(); // Ensure server has sub
+            }
         }
 
         // Check for standard PWA install support (Android)

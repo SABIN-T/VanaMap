@@ -3,7 +3,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
-const { Plant, Vendor, User, Notification, Chat, PlantSuggestion, SearchLog } = require('./models');
+const { Plant, Vendor, User, Notification, Chat, PlantSuggestion, SearchLog, PushSubscription } = require('./models');
+const webpush = require('web-push');
 const helmet = require('helmet');
 const compression = require('compression'); // Performance: Gzip/Brotli
 const rateLimit = require('express-rate-limit');
@@ -69,6 +70,36 @@ const sendResetEmail = async (email, tempPass) => {
     } catch (e) {
         console.error("CRITICAL MAIL ERROR:", e.message);
         console.error("Transporter Auth:", { user: process.env.EMAIL_USER, pass: '****' });
+    }
+};
+
+// --- WEB PUSH SETUP ---
+const publicVapidKey = 'BL4HAO7t3qISck5JPsQO9sLFeTHIT2QFdwjkme-3lJvEo34mEu1FWn0MygqfUfyDu_wn8i1hBhZP4ezRlgIJoOE';
+const privateVapidKey = 'n4TaFAaTWVNikVjUGLOdBu8mAxZPK6fPRhM2afE55m0'; // In prod use ENV
+webpush.setVapidDetails('mailto:support@vanamap.online', publicVapidKey, privateVapidKey);
+
+const sendPushNotification = async (payload) => {
+    try {
+        const subscriptions = await PushSubscription.find();
+        console.log(`[PUSH] Sending to ${subscriptions.length} devices found.`);
+        const notificationPayload = JSON.stringify(payload);
+
+        let sentCount = 0;
+        const promises = subscriptions.map(sub =>
+            webpush.sendNotification(sub, notificationPayload)
+                .then(() => sentCount++)
+                .catch(err => {
+                    console.error("[PUSH] Error sending to one device", err.statusCode);
+                    // 410 Gone / 404 means expired
+                    if (err.statusCode === 410 || err.statusCode === 404) {
+                        return PushSubscription.deleteOne({ _id: sub._id });
+                    }
+                })
+        );
+        await Promise.all(promises);
+        console.log(`[PUSH] Successfully sent to ${sentCount} devices.`);
+    } catch (e) {
+        console.error("[PUSH] Critical error:", e);
     }
 };
 
@@ -166,6 +197,22 @@ const sendWhatsApp = async (msg, type, details = {}) => {
         console.error("Failed to save notification:", err);
     }
 };
+
+app.post('/api/notifications/subscribe', async (req, res) => {
+    try {
+        const subscription = req.body;
+        // Simple upsert based on endpoint
+        await PushSubscription.findOneAndUpdate(
+            { endpoint: subscription.endpoint },
+            subscription,
+            { upsert: true, new: true }
+        );
+        res.status(201).json({});
+    } catch (e) {
+        console.error("Sub error", e);
+        res.status(500).json({ error: "Failed to subscribe" });
+    }
+});
 
 // --- ROUTES ---
 
@@ -535,6 +582,14 @@ app.post('/api/admin/seed-single', auth, admin, async (req, res) => {
             read: false
         });
 
+        // Push Notification
+        sendPushNotification({
+            title: 'New Plant Discovered! 🌿',
+            body: `${plant.name} has been added to our global database. Check it out!`,
+            url: '/#plant-grid',
+            icon: '/logo.png'
+        });
+
         res.json({ success: true, plant });
     } catch (e) {
         console.error("SEED SINGLE ERROR:", e);
@@ -653,6 +708,15 @@ app.patch('/api/vendors/:id', auth, async (req, res) => {
         // Only admin or the vendor themselves should update, but for now we protect with auth
         const oldVendor = await Vendor.findOne({ id: req.params.id });
         const vendor = await Vendor.findOneAndUpdate({ id: req.params.id }, req.body, { new: true });
+
+        if (req.body.verified === true && !oldVendor.verified) {
+            sendPushNotification({
+                title: 'New Verified Nursery! 🏠',
+                body: `${vendor.name} is now a Verified VanaMap Partner in ${vendor.city || 'your area'}. Visit them today!`,
+                url: '/nearby',
+                icon: '/logo.png'
+            });
+        }
 
         // Detect Inventory/Price Updates
         if (req.body.inventory && oldVendor) {

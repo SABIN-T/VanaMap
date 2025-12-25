@@ -78,3 +78,38 @@ self.addEventListener('fetch', (event) => {
     // 3. Default: Network Only
     event.respondWith(fetch(event.request));
 });
+
+// --- PUSH NOTIFICATIONS ---
+self.addEventListener('push', (event) => {
+    const data = event.data.json();
+    console.log('[SW] Push Received:', data);
+
+    const options = {
+        body: data.body,
+        icon: data.icon || '/logo.png',
+        badge: '/logo.png',
+        data: { url: data.url || '/' },
+        vibrate: [100, 50, 100],
+        actions: [
+            { action: 'explore', title: 'View Details' }
+        ]
+    };
+
+    event.waitUntil(
+        self.registration.showNotification(data.title || 'VanaMap Update', options)
+    );
+});
+
+self.addEventListener('notificationclick', (event) => {
+    event.notification.close();
+    event.waitUntil(
+        clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
+            const url = event.notification.data.url;
+            // Focus existing window if open
+            for (const client of clientList) {
+                if (client.url === url && 'focus' in client) return client.focus();
+            }
+            if (clients.openWindow) return clients.openWindow(url);
+        })
+    );
+});
