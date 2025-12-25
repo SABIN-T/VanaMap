@@ -9,7 +9,14 @@ export const Contact = () => {
 
     const handleSendMessage = (e: React.FormEvent) => {
         e.preventDefault();
-        toast.success("Message received! We'll get back to you soon.", {
+        const form = e.target as HTMLFormElement;
+        const name = (form.elements[0] as HTMLInputElement).value;
+        const manifesto = (form.elements[2] as HTMLTextAreaElement).value;
+
+        // Open default mail client
+        window.location.href = `mailto:jiibruh86@gmail.com?subject=Inquiry from ${name}: VanaMap&body=${manifesto}`;
+
+        toast.success("Opening your mail client...", {
             icon: '✉️',
             style: {
                 borderRadius: '1rem',
@@ -42,7 +49,7 @@ export const Contact = () => {
                         </div>
                         <div>
                             <h3 className={styles.cardTitle}>Email Support</h3>
-                            <p className={styles.cardValue}>support@vanamap.online</p>
+                            <p className={styles.cardValue}>jiibruh86@gmail.com</p>
                             <p style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.25rem' }}>Average response: 2h</p>
                         </div>
                     </div>
@@ -53,8 +60,8 @@ export const Contact = () => {
                         </div>
                         <div>
                             <h3 className={styles.cardTitle}>Botanist Hotline</h3>
-                            <p className={styles.cardValue}>+1 (555) VANA-MAP</p>
-                            <p style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.25rem' }}>Mon-Fri, 9am - 6pm</p>
+                            <p className={styles.cardValue}>+91 9188773534</p>
+                            <p style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.25rem' }}>WhatsApp Available</p>
                         </div>
                     </div>
 
@@ -64,7 +71,7 @@ export const Contact = () => {
                         </div>
                         <div>
                             <h3 className={styles.cardTitle}>Global HQ</h3>
-                            <p className={styles.cardValue}>123 Biosphere Way,<br />Green Valley, EC 90210</p>
+                            <p className={styles.cardValue}>Calicut, Kerala<br />India</p>
                         </div>
                     </div>
                 </div>
