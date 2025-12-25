@@ -140,158 +140,104 @@
 @media (min-width: 1024px) {
     .title {
         font-size: 1.35rem;
-        line-height: 1.3;
     }
 }
 
 .scientific {
-    font-size: 0.9rem;
-    color: #94a3b8;
-    /* Explicit light gray */
+    font-size: 0.85rem;
+    color: var(--color-text-dim);
     font-style: italic;
-    margin-top: 0.35rem;
-    margin-bottom: 0;
-    opacity: 1;
-    /* Was potentially dimmed */
+    margin: 0.25rem 0 0 0;
+    font-family: 'Playfair Display', serif;
+    opacity: 0.8;
 }
 
 .specs {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
     gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-top: auto;
+    /* Push specs to bottom if needed, or shop button will */
+    font-size: 0.85rem;
 }
 
 .specItem {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    font-size: 0.75rem;
+    gap: 0.4rem;
+    background: var(--color-bg-secondary);
+    padding: 0.35rem 0.75rem;
+    border-radius: 0.5rem;
+    border: 1px solid var(--color-border);
     color: var(--color-text-muted);
-    background: var(--color-bg-alt);
-    padding: 0.5rem 0.75rem;
-    border-radius: 0.75rem;
-    font-weight: 600;
 }
 
-.actionBtn {
+/* Shop Button - PREMIUM High End Overhaul */
+.shopBtn {
+    margin-top: 1rem;
     width: 100%;
-    margin-top: auto;
-    border-radius: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 0.95rem;
-    font-weight: 700;
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    padding: 0.85rem;
+    border-radius: 12px;
     border: none;
-    box-shadow: 0 4px 6px rgba(16, 185, 129, 0.25);
-    padding: 0.75rem;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
     color: white;
+    font-size: 0.95rem;
     cursor: pointer;
-    transition: all 0.3s;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-@media (min-width: 1024px) {
-    .actionBtn {
-        padding: 1rem;
-        font-size: 1.1rem;
-        border-radius: 1.25rem;
-    }
-}
-
-.actionBtn:hover {
+.shopBtn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.4);
+    box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+    background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
 }
 
-.actionBtn:active {
-    transform: translateY(0);
+.shopBtn:active {
+    transform: translateY(1px);
+    box-shadow: 0 2px 5px rgba(16, 185, 129, 0.3);
 }
 
-/* Mobile Optimizations - High-End Premium Logic */
+.shopBtn .hover-sheen {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.3) 50%, rgba(255, 255, 255, 0) 100%);
+    transform: rotate(45deg);
+    transition: all 0.5s;
+    opacity: 0;
+}
+
+.shopBtn:hover .hover-sheen {
+    opacity: 1;
+    left: 100%;
+    transition: 0.7s;
+}
+
+/* Mobile Adjustments for Density */
 @media (max-width: 640px) {
-    .card {
-        border-radius: 1rem;
-        background: rgba(30, 41, 59, 0.7);
-        /* Slightly more opaque on mobile for readability */
-        backdrop-filter: blur(16px);
-    }
-
-    .imageContainer {
-        padding-top: 100%;
-        /* Keep it square or slightly taller (110%) for impact, but 100% is safe */
-    }
-
     .content {
-        padding: 0.75rem;
-        gap: 0.5rem;
+        padding: 1rem;
+        gap: 0.75rem;
     }
 
     .title {
-        font-size: 0.95rem;
-        font-weight: 700;
+        font-size: 1.1rem;
         line-height: 1.25;
-        /* Allow 2 lines max */
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        white-space: normal;
-        /* Override previous nowrap if any */
-        min-height: 2.4em;
-        /* Reserve space for 2 lines to align cards */
     }
 
     .scientific {
-        display: none;
-        /* Hide on mobile to declutter */
-    }
-
-    .specs {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 0.4rem;
-        margin-top: 0.25rem;
-        /* margin-bottom to push button down? handled by auto margin-top on button */
-    }
-
-    .specItem {
-        padding: 0.25rem 0.5rem;
-        font-size: 0.65rem;
-        background: rgba(255, 255, 255, 0.05);
-        /* Softer pill */
-        border: 1px solid rgba(255, 255, 255, 0.05);
-        border-radius: 0.5rem;
-    }
-
-    .actionBtn {
-        padding: 0.65rem;
         font-size: 0.8rem;
-        border-radius: 0.75rem;
+    }
+
+    .shopBtn {
+        padding: 0.75rem;
+        font-size: 0.9rem;
         margin-top: 0.75rem;
-        font-weight: 800;
-        letter-spacing: 0.5px;
-        text-transform: uppercase;
-    }
-
-    .favBtn {
-        width: 32px;
-        height: 32px;
-        top: 8px;
-        /* Assuming absolute positioning logic might be in component, but typically overlay handles it */
-        margin: 0;
-    }
-
-    .overlayTop {
-        padding: 0.5rem;
-    }
-
-    .overlayBottom {
-        padding: 0.5rem;
-    }
-
-    .matchBadge {
-        font-size: 0.6rem;
-        padding: 0.2rem 0.5rem;
     }
 }

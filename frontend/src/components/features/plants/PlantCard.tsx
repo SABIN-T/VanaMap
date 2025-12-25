@@ -1,5 +1,5 @@
 import type { Plant } from '../../../types';
-import { Heart, Sun, Wind } from 'lucide-react';
+import { Heart, Sun, Wind, ShoppingBag } from 'lucide-react';
 import styles from './PlantCard.module.css';
 import { useAuth } from '../../../context/AuthContext';
 import toast from 'react-hot-toast';
@@ -12,7 +12,7 @@ interface PlantCardProps {
     priority?: boolean;
 }
 
-export const PlantCard = ({ plant, score, isTopMatch, priority = false }: PlantCardProps) => {
+export const PlantCard = ({ plant, score, isTopMatch, priority = false, onAdd }: PlantCardProps) => {
     const { user, toggleFavorite } = useAuth();
     const isFavorite = user?.favorites.includes(plant.id);
     const isPetFriendly = (plant as any).petFriendly;
@@ -108,7 +108,31 @@ export const PlantCard = ({ plant, score, isTopMatch, priority = false }: PlantC
                     </div>
                 </div>
 
-
+                {/* Shop Action - Premium UI */}
+                <button
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        // If onAdd exists, use it (Add to Cart logic)
+                        if (onAdd) {
+                            onAdd(plant);
+                            toast.success(`added ${plant.name} to cart`);
+                        }
+                    }}
+                    className={styles.shopBtn}
+                    aria-label={`Buy ${plant.name}`}
+                >
+                    <span style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 700, letterSpacing: '0.5px' }}>
+                        <ShoppingBag size={16} /> ${plant.price} • BUY
+                    </span>
+                    {/* Glossy sheen effect overlay via CSS is best, but inline simpler for now */}
+                    <div style={{
+                        position: 'absolute', inset: 0,
+                        background: 'linear-gradient(45deg, rgba(255,255,255,0) 40%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 60%)',
+                        transform: 'skewX(-20deg)',
+                        opacity: 0,
+                        transition: 'opacity 0.3s'
+                    }} className="hover-sheen"></div>
+                </button>
             </div>
         </div>
     );
