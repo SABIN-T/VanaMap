@@ -41,6 +41,7 @@ const VendorSchema = new mongoose.Schema({
     inventory: [{
         plantId: String,
         price: Number,
+        quantity: { type: Number, default: 0 },
         status: { type: String, default: 'approved' },
         inStock: { type: Boolean, default: true }
     }],

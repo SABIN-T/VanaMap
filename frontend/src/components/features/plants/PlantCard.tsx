@@ -1,5 +1,5 @@
 import type { Plant } from '../../../types';
-import { Heart, Sun, Wind, ShoppingBag } from 'lucide-react';
+import { Heart, Sun, Wind, ShoppingBag, AlertCircle } from 'lucide-react';
 import styles from './PlantCard.module.css';
 import { useAuth } from '../../../context/AuthContext';
 import toast from 'react-hot-toast';
@@ -10,12 +10,22 @@ interface PlantCardProps {
     score?: number;
     isTopMatch?: boolean;
     priority?: boolean;
+    stockStatus?: {
+        totalStock: number;
+        minPrice: number | null;
+        hasStock: boolean;
+    };
 }
 
-export const PlantCard = ({ plant, score, isTopMatch, priority = false, onAdd }: PlantCardProps) => {
+export const PlantCard = ({ plant, score, isTopMatch, priority = false, onAdd, stockStatus }: PlantCardProps) => {
     const { user, toggleFavorite } = useAuth();
     const isFavorite = user?.favorites.includes(plant.id);
     const isPetFriendly = (plant as any).petFriendly;
+
+    // Determine Price & Stock
+    const displayPrice = stockStatus?.minPrice || plant.price || ((plant.name.charCodeAt(0) % 5 + 1) * 150);
+    const inStock = stockStatus ? stockStatus.hasStock : true; // Default to true if no stats (mock)
+    const stockCount = stockStatus?.totalStock || 0;
 
     const handleHeartClick = (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -42,6 +52,39 @@ export const PlantCard = ({ plant, score, isTopMatch, priority = false, onAdd }:
                     height="300"
                     {...(priority ? { fetchPriority: "high" } : {})}
                 />
+
+                {/* Stock Badge Overlay */}
+                {stockStatus && (
+                    <div style={{
+                        position: 'absolute',
+                        top: '12px',
+                        left: '12px',
+                        zIndex: 10,
+                        background: inStock ? 'rgba(16, 185, 129, 0.95)' : 'rgba(239, 68, 68, 0.95)',
+                        color: 'white',
+                        padding: '6px 10px',
+                        borderRadius: '8px',
+                        fontSize: '0.7rem',
+                        fontWeight: '800',
+                        letterSpacing: '0.5px',
+                        backdropFilter: 'blur(4px)',
+                        boxShadow: '0 4px 6px rgba(0,0,0,0.15)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '4px'
+                    }}>
+                        {inStock ? (
+                            <>
+                                <span style={{ width: '6px', height: '6px', background: 'white', borderRadius: '50%' }}></span>
+                                IN STOCK ({stockCount})
+                            </>
+                        ) : (
+                            <>
+                                <AlertCircle size={12} /> OUT OF STOCK
+                            </>
+                        )}
+                    </div>
+                )}
 
                 <div className={styles.overlayTop}>
                     {score !== undefined && (
@@ -115,14 +158,17 @@ export const PlantCard = ({ plant, score, isTopMatch, priority = false, onAdd }:
                         // If onAdd exists, use it (Add to Cart logic)
                         if (onAdd) {
                             onAdd(plant);
-                            toast.success(`added ${plant.name} to cart`);
+                            // Toast handled in parent or here?
+                            // toast.success(`Viewing ${plant.name} in shops`);
                         }
                     }}
                     className={styles.shopBtn}
                     aria-label={`Buy ${plant.name}`}
+                    disabled={!inStock}
+                    style={!inStock ? { opacity: 0.6, cursor: 'not-allowed', background: '#334155' } : {}}
                 >
                     <span style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 700, letterSpacing: '0.5px' }}>
-                        <ShoppingBag size={16} /> ${plant.price} • BUY
+                        <ShoppingBag size={16} /> Rs. {displayPrice} • {inStock ? 'BUY' : 'SOLD OUT'}
                     </span>
                     {/* Glossy sheen effect overlay via CSS is best, but inline simpler for now */}
                     <div style={{

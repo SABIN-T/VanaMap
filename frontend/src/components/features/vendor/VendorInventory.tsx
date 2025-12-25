@@ -15,7 +15,7 @@ export const VendorInventory = ({ vendor, onUpdate }: VendorInventoryProps) => {
     const [plants, setPlants] = useState<Plant[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
-    const [editValues, setEditValues] = useState<Record<string, { price: string, inStock: boolean }>>({});
+    const [editValues, setEditValues] = useState<Record<string, { price: string, quantity: string, inStock: boolean }>>({});
 
     useEffect(() => {
         // Restore state after forced refresh
@@ -35,10 +35,11 @@ export const VendorInventory = ({ vendor, onUpdate }: VendorInventoryProps) => {
     // Auto-refresh: Sync local state when vendor data updates (e.g. after save)
     useEffect(() => {
         if (vendor.inventory && plants.length > 0) {
-            const serverState: Record<string, { price: string, inStock: boolean }> = {};
+            const serverState: Record<string, { price: string, quantity: string, inStock: boolean }> = {};
             vendor.inventory.forEach(item => {
                 serverState[item.plantId] = {
                     price: item.price.toString(),
+                    quantity: ((item as any).quantity || 0).toString(),
                     inStock: item.inStock
                 };
             });
@@ -53,11 +54,12 @@ export const VendorInventory = ({ vendor, onUpdate }: VendorInventoryProps) => {
             setPlants(data);
 
             // Initialize edit values from existing inventory
-            const initialEdits: Record<string, { price: string, inStock: boolean }> = {};
+            const initialEdits: Record<string, { price: string, quantity: string, inStock: boolean }> = {};
             if (vendor.inventory) {
                 vendor.inventory.forEach(item => {
                     initialEdits[item.plantId] = {
                         price: item.price.toString(),
+                        quantity: ((item as any).quantity || 0).toString(),
                         inStock: item.inStock
                     };
                 });
@@ -71,10 +73,14 @@ export const VendorInventory = ({ vendor, onUpdate }: VendorInventoryProps) => {
         }
     };
 
-    const handlePriceChange = (plantId: string, val: string) => {
+    const handleFieldChange = (plantId: string, field: 'price' | 'quantity', val: string) => {
         setEditValues(prev => ({
             ...prev,
-            [plantId]: { ...prev[plantId], price: val, inStock: prev[plantId]?.inStock ?? true }
+            [plantId]: {
+                ...prev[plantId],
+                [field]: val,
+                inStock: prev[plantId]?.inStock ?? true
+            }
         }));
     };
 
@@ -93,6 +99,8 @@ export const VendorInventory = ({ vendor, onUpdate }: VendorInventoryProps) => {
         }
 
         const newPrice = parseFloat(edits.price);
+        const newQty = parseInt(edits.quantity || '0');
+
         if (isNaN(newPrice) || newPrice <= 0) {
             toast.error("Invalid price entered");
             return;
@@ -106,6 +114,7 @@ export const VendorInventory = ({ vendor, onUpdate }: VendorInventoryProps) => {
         const newItem = {
             plantId: plant.id,
             price: newPrice,
+            quantity: newQty,
             status: 'approved' as const,
             inStock: edits.inStock
         };
@@ -244,10 +253,21 @@ export const VendorInventory = ({ vendor, onUpdate }: VendorInventoryProps) => {
                                                 <DollarSign size={14} className={styles.currencySymbol} />
                                                 <input
                                                     type="number"
-                                                    placeholder="Your Price"
+                                                    placeholder="Price"
                                                     value={editState.price}
-                                                    onChange={e => handlePriceChange(plant.id, e.target.value)}
+                                                    onChange={e => handleFieldChange(plant.id, 'price', e.target.value)}
                                                     className={styles.priceInput}
+                                                />
+                                            </div>
+                                            <div className={styles.priceInputWrapper} style={{ width: '80px', marginLeft: '0.5rem' }}>
+                                                <span style={{ fontSize: '0.7rem', color: '#64748b', paddingLeft: '8px' }}>Qty:</span>
+                                                <input
+                                                    type="number"
+                                                    placeholder="Qty"
+                                                    value={editState.quantity}
+                                                    onChange={e => handleFieldChange(plant.id, 'quantity', e.target.value)}
+                                                    className={styles.priceInput}
+                                                    style={{ paddingLeft: '4px' }}
                                                 />
                                             </div>
                                             <button

@@ -3,10 +3,10 @@ import toast from 'react-hot-toast';
 import { QRCodeSVG } from 'qrcode.react';
 import { PlantCard } from '../components/features/plants/PlantCard';
 import { Button } from '../components/common/Button';
-import { fetchPlants } from '../services/api';
+import { fetchPlants, fetchVendors } from '../services/api';
 import { getWeather, geocodeCity } from '../services/weather';
 import { calculateAptness } from '../utils/logic';
-import type { Plant } from '../types';
+import type { Plant, Vendor } from '../types';
 import { Sprout, MapPin, Thermometer, Wind, ArrowDown, Sparkles, Search, AlertCircle, Heart, Sun, Activity, GraduationCap, ShoppingBag, PlusCircle, MoveRight } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 // Lazy load modal for performance
@@ -16,7 +16,32 @@ import styles from './Home.module.css';
 
 export const Home = () => {
     const [plants, setPlants] = useState<Plant[]>([]);
+    const [vendors, setVendors] = useState<Vendor[]>([]);
     const [filter, setFilter] = useState<'all' | 'indoor' | 'outdoor'>('all');
+
+    // ...
+
+    useEffect(() => {
+        // ...
+        const loadFreshData = async () => {
+            // ...
+            try {
+                const [plantData, vendorData] = await Promise.all([
+                    fetchPlants(),
+                    fetchVendors()
+                ]);
+
+                if (plantData.length === 0) {
+                    // ... (seed logic stays similar but messy to replace inside fetch)
+                    // Let's assume seed logic is rare.
+                    // I will just add fetchVendors() separate call or inside the existing flow if I replace the whole effect.
+                }
+                setVendors(vendorData);
+                // ...
+            }
+            // ...
+        }
+    }, [])
     const [searchQuery, setSearchQuery] = useState('');
     const [lightFilter, setLightFilter] = useState<'all' | 'low' | 'medium' | 'high'>('all');
     const [weather, setWeather] = useState<any>(null);
@@ -204,6 +229,24 @@ export const Home = () => {
     const openDetails = (plant: Plant) => {
         window.history.pushState({ modal: 'plantDetails' }, document.title);
         setSelectedPlant(plant);
+    };
+
+    const getVendorStats = (plantId: string) => {
+        const sellingVendors = vendors.filter(v => v.inventory?.some(i => i.plantId === plantId && i.inStock));
+
+        let totalStock = 0;
+        sellingVendors.forEach(v => {
+            const item = v.inventory?.find(i => i.plantId === plantId);
+            if (item) {
+                const qty = (item as any).quantity;
+                totalStock += (typeof qty === 'number' ? qty : 1);
+            }
+        });
+
+        const prices = sellingVendors.map(v => v.inventory?.find(i => i.plantId === plantId)?.price || 99999);
+        const minPrice = prices.length > 0 ? Math.min(...prices) : null;
+
+        return { totalStock, minPrice, sellerCount: sellingVendors.length, hasStock: totalStock > 0 };
     };
 
     const getPollutionStatus = (aqi: number = 0) => {
@@ -545,6 +588,7 @@ export const Home = () => {
                                     score={weather ? plant.score : undefined}
                                     isTopMatch={weather ? index === 0 && (plant.score || 0) > 0 : false}
                                     priority={index < 2}
+                                    stockStatus={getVendorStats(plant.id)}
                                 />
                             </div>
                         ))

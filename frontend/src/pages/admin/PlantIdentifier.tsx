@@ -104,6 +104,32 @@ export const PlantIdentifier = () => {
         canvasRef.current.height = videoRef.current.videoHeight;
         context.drawImage(videoRef.current, 0, 0);
 
+        // Simple Detection Simulation: Check for "Blank" or "Dark" image
+        const frame = context.getImageData(0, 0, canvasRef.current.width, canvasRef.current.height);
+        const data = frame.data;
+        let r, g, b, avg;
+        let colorSum = 0;
+        let brightnessSum = 0;
+
+        // Sample every 100th pixel for speed
+        for (let x = 0; x < data.length; x += 400) {
+            r = data[x];
+            g = data[x + 1];
+            b = data[x + 2];
+            avg = (r + g + b) / 3;
+            colorSum += avg;
+            brightnessSum += avg;
+        }
+
+        const totalPixels = data.length / 400;
+        const avgBrightness = brightnessSum / totalPixels;
+
+        // Thresholds: Too dark or effectively blank
+        if (avgBrightness < 20) {
+            toast.error("❌ No Biological Subject Detected!\n\nImage is too dark or empty. Please ensure the plant is well-lit and in frame.", { duration: 5000, icon: '🌑' });
+            return;
+        }
+
         const dataUrl = canvasRef.current.toDataURL('image/jpeg', 0.8);
         setCapturedImages(prev => ({ ...prev, [type]: dataUrl }));
 
