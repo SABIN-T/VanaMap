@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import type { Plant, Vendor } from '../types';
 import { fetchPlants, fetchVendors, logSearch } from '../services/api';
-import { Search, ShoppingBag } from 'lucide-react';
+import { Search, ShoppingBag, AlertCircle } from 'lucide-react';
 import { PlantVendorsModal } from '../components/features/market/PlantVendorsModal';
 import { useNavigate, useLocation } from 'react-router-dom';
 import styles from './Shops.module.css';
@@ -62,6 +62,17 @@ export const Shops = () => {
             (p.scientificName?.toLowerCase().includes(q) ?? false);
         return matchesCategory && matchesSearch;
     });
+
+    const getStockStatus = (plant: Plant) => {
+        const selling = vendors.filter(v => v.inventory?.some(i => i.plantId === plant.id && i.inStock));
+        let count = 0;
+        selling.forEach(v => {
+            const item = v.inventory?.find(i => i.plantId === plant.id);
+            const qty = (item as any).quantity;
+            count += (typeof qty === 'number' ? qty : 1);
+        });
+        return { inStock: count > 0, count };
+    };
 
     const getPriceInfo = (plant: Plant) => {
         // Collect all potential prices
@@ -157,6 +168,43 @@ export const Shops = () => {
                                     className={styles.image}
                                     loading="lazy"
                                 />
+
+                                {(() => {
+                                    const { inStock, count } = getStockStatus(plant);
+                                    return (
+                                        <div style={{
+                                            position: 'absolute',
+                                            bottom: '36px',
+                                            left: '12px',
+                                            zIndex: 10,
+                                            background: inStock ? 'rgba(16, 185, 129, 0.95)' : 'rgba(239, 68, 68, 0.95)',
+                                            color: 'white',
+                                            padding: '4px 8px',
+                                            borderRadius: '6px',
+                                            fontSize: '0.65rem',
+                                            fontWeight: '800',
+                                            letterSpacing: '0.5px',
+                                            backdropFilter: 'blur(4px)',
+                                            boxShadow: '0 4px 6px rgba(0,0,0,0.15)',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '4px',
+                                            border: '1px solid rgba(255,255,255,0.2)'
+                                        }}>
+                                            {inStock ? (
+                                                <>
+                                                    <span style={{ width: '6px', height: '6px', background: 'white', borderRadius: '50%' }}></span>
+                                                    IN STOCK ({count})
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <AlertCircle size={10} /> OUT OF STOCK
+                                                </>
+                                            )}
+                                        </div>
+                                    );
+                                })()}
+
                                 <div className={styles.badge}>
                                     {plant.type === 'indoor' ? 'Indoor' : 'Outdoor'}
                                 </div>

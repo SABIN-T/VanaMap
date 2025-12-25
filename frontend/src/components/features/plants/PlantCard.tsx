@@ -53,39 +53,6 @@ export const PlantCard = ({ plant, score, isTopMatch, priority = false, onAdd, s
                     {...(priority ? { fetchPriority: "high" } : {})}
                 />
 
-                {/* Stock Badge Overlay */}
-                {stockStatus && (
-                    <div style={{
-                        position: 'absolute',
-                        top: '12px',
-                        left: '12px',
-                        zIndex: 10,
-                        background: inStock ? 'rgba(16, 185, 129, 0.95)' : 'rgba(239, 68, 68, 0.95)',
-                        color: 'white',
-                        padding: '6px 10px',
-                        borderRadius: '8px',
-                        fontSize: '0.7rem',
-                        fontWeight: '800',
-                        letterSpacing: '0.5px',
-                        backdropFilter: 'blur(4px)',
-                        boxShadow: '0 4px 6px rgba(0,0,0,0.15)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '4px'
-                    }}>
-                        {inStock ? (
-                            <>
-                                <span style={{ width: '6px', height: '6px', background: 'white', borderRadius: '50%' }}></span>
-                                IN STOCK ({stockCount})
-                            </>
-                        ) : (
-                            <>
-                                <AlertCircle size={12} /> OUT OF STOCK
-                            </>
-                        )}
-                    </div>
-                )}
-
                 <div className={styles.overlayTop}>
                     {score !== undefined && (
                         <div className={styles.matchBadge} style={{
@@ -101,6 +68,40 @@ export const PlantCard = ({ plant, score, isTopMatch, priority = false, onAdd, s
                         <Heart size={20} fill={isFavorite ? "#ef4444" : "rgba(0,0,0,0.2)"} color={isFavorite ? "#ef4444" : "white"} />
                     </button>
                 </div>
+
+                {/* Stock Badge - Stacked above Type Badge */}
+                {stockStatus && (
+                    <div style={{
+                        position: 'absolute',
+                        bottom: '36px',
+                        left: '12px',
+                        zIndex: 10,
+                        background: inStock ? 'rgba(16, 185, 129, 0.95)' : 'rgba(239, 68, 68, 0.95)',
+                        color: 'white',
+                        padding: '4px 8px',
+                        borderRadius: '6px',
+                        fontSize: '0.65rem',
+                        fontWeight: '800',
+                        letterSpacing: '0.5px',
+                        backdropFilter: 'blur(4px)',
+                        boxShadow: '0 4px 6px rgba(0,0,0,0.15)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '4px',
+                        border: '1px solid rgba(255,255,255,0.2)'
+                    }}>
+                        {inStock ? (
+                            <>
+                                <span style={{ width: '6px', height: '6px', background: 'white', borderRadius: '50%' }}></span>
+                                IN STOCK ({stockCount})
+                            </>
+                        ) : (
+                            <>
+                                <AlertCircle size={10} /> OUT OF STOCK
+                            </>
+                        )}
+                    </div>
+                )}
 
                 <div className={styles.overlayBottom}>
                     <div style={{
