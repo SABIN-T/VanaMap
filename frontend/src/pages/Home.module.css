@@ -618,7 +618,8 @@
 /* --- PLANT GRID --- */
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    /* Smart auto-fill for all screen sizes */
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     gap: 2rem;
     max-width: 1400px;
     margin: 4rem auto;
@@ -627,18 +628,27 @@
 
 @media (min-width: 1024px) {
     .grid {
-        grid-template-columns: repeat(4, 1fr);
-        gap: 1.5rem;
-        max-width: 1200px;
+        gap: 2.5rem;
     }
 }
 
-/* Mobile: Force 2-columns as requested */
-@media (max-width: 768px) {
+/* Mobile: Optimized Grid System */
+@media (max-width: 640px) {
     .grid {
+        /* Reduce min-width to fit 2 columns on most phones (~360px+) */
         grid-template-columns: repeat(2, 1fr);
         gap: 0.75rem;
-        padding: 0.5rem;
+        padding: 0 1rem;
+        margin: 2rem auto;
+    }
+}
+
+/* Tiny Screens (e.g. Galaxy Fold, iPhone SE) */
+@media (max-width: 360px) {
+    .grid {
+        grid-template-columns: 1fr;
+        /* Force single column for tiny screens to prevent overflow */
+        padding: 0 1.5rem;
     }
 }
 

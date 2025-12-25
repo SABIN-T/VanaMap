@@ -208,75 +208,90 @@
     transform: translateY(0);
 }
 
-/* Mobile Optimizations - Optimized for 2-Column Grid */
+/* Mobile Optimizations - High-End Premium Logic */
 @media (max-width: 640px) {
     .card {
-        border-radius: 1.25rem;
+        border-radius: 1rem;
+        background: rgba(30, 41, 59, 0.7);
+        /* Slightly more opaque on mobile for readability */
+        backdrop-filter: blur(16px);
     }
 
     .imageContainer {
-        padding-top: 90%;
-        /* Almost square */
+        padding-top: 100%;
+        /* Keep it square or slightly taller (110%) for impact, but 100% is safe */
     }
 
     .content {
-        padding: 0.85rem;
+        padding: 0.75rem;
         gap: 0.5rem;
     }
 
     .title {
-        font-size: 1rem;
+        font-size: 0.95rem;
         font-weight: 700;
-        line-height: 1.2;
-        white-space: nowrap;
+        line-height: 1.25;
+        /* Allow 2 lines max */
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
         overflow: hidden;
-        text-overflow: ellipsis;
+        white-space: normal;
+        /* Override previous nowrap if any */
+        min-height: 2.4em;
+        /* Reserve space for 2 lines to align cards */
     }
 
     .scientific {
-        display: block;
-        font-size: 0.7rem;
-        margin-top: 0.1rem;
-        opacity: 0.8;
+        display: none;
+        /* Hide on mobile to declutter */
     }
 
     .specs {
-        display: grid;
+        display: flex;
+        flex-wrap: wrap;
         gap: 0.4rem;
-        margin-top: 0.2rem;
+        margin-top: 0.25rem;
+        /* margin-bottom to push button down? handled by auto margin-top on button */
     }
 
     .specItem {
-        padding: 0.35rem 0.5rem;
-        font-size: 0.7rem;
+        padding: 0.25rem 0.5rem;
+        font-size: 0.65rem;
+        background: rgba(255, 255, 255, 0.05);
+        /* Softer pill */
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 0.5rem;
     }
 
     .actionBtn {
-        padding: 0.6rem;
-        font-size: 0.85rem;
+        padding: 0.65rem;
+        font-size: 0.8rem;
         border-radius: 0.75rem;
-        min-height: 32px;
+        margin-top: 0.75rem;
+        font-weight: 800;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
     }
 
     .favBtn {
         width: 32px;
         height: 32px;
-        margin: 6px;
+        top: 8px;
+        /* Assuming absolute positioning logic might be in component, but typically overlay handles it */
+        margin: 0;
     }
 
     .overlayTop {
-        padding: 6px;
+        padding: 0.5rem;
+    }
+
+    .overlayBottom {
+        padding: 0.5rem;
     }
 
     .matchBadge {
         font-size: 0.6rem;
-        padding: 0.25rem 0.6rem;
-        margin: 4px;
-    }
-
-    .overlayBottom>div {
-        font-size: 0.6rem !important;
-        padding: 3px 8px !important;
-        border-radius: 6px !important;
+        padding: 0.2rem 0.5rem;
     }
 }
