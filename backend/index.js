@@ -90,47 +90,6 @@ const sendResetEmail = async (email, tempPass) => {
     }
 };
 
-const sendVerificationOTP = async (email, name, otp) => {
-    const mailOptions = {
-        from: `"VanaMap Secure" <${process.env.EMAIL_USER}>`,
-        to: email,
-        subject: `${otp} is your VanaMap Verification Code`,
-        html: `
-            <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 500px; margin: auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 16px;">
-                <h2 style="color: #10b981; text-align: center;">Verify Your Identity</h2>
-                <p>Hi ${name},</p>
-                <p>Welcome to VanaMap! To complete your registration and secure your account, please use the following verification code:</p>
-                <div style="background: #f1f5f9; padding: 20px; border-radius: 12px; text-align: center; font-size: 32px; font-weight: 800; letter-spacing: 10px; color: #0f172a; margin: 20px 0;">
-                    ${otp}
-                </div>
-                <p style="font-size: 14px; color: #64748b;">This code is valid for 10 minutes. If you didn't request this, please ignore this email.</p>
-                <hr style="border: 0; border-top: 1px solid #e2e8f0; margin: 20px 0;">
-                <p style="text-align: center; color: #94a3b8; font-size: 12px;">© 2025 VanaMap Ecosystem</p>
-            </div>
-        `
-    };
-    try {
-        await transporter.sendMail(mailOptions);
-        console.log(`[AUTH] OTP sent to ${email}`);
-    } catch (err) {
-        console.error(`[AUTH] Failed to send OTP to ${email}:`, err.message);
-        // Fallback for development:
-        console.log(`[AUTH] DEVELOPMENT FALLBACK - VERIFICATION CODE FOR ${email} IS: ${otp}`);
-        throw new Error("Could not send verification email. Please check your connection or contact support.");
-    }
-};
-
-const sendWhatsAppOTP = async (phone, name, otp) => {
-    // Simulator for WhatsApp OTP
-    console.log(`[WHATSAPP-OTP] To: ${phone} (${name}) | Message: Your VanaMap Verification Code is: ${otp}. Do not share this key. Valid for 10 mins.`);
-    // Integration Hook: You can add Twilio or UltraMsg here
-    /* 
-    try {
-        await ultraMsg.sendWhatsAppMessage(phone, `Your VanaMap Code: ${otp}`);
-    } catch(e) { console.error("WhatsApp Send Error", e.message); }
-    */
-};
-
 const sendWelcomeEmail = async (email, name, role = 'user') => {
     const isVendor = role === 'vendor';
     const welcomeTitle = isVendor ? `Welcome Partner, ${name}! 🏪` : `Welcome, ${name}! 🌿`;
@@ -961,10 +920,11 @@ app.post('/api/auth/signup', async (req, res) => {
         if (existing) return res.status(400).json({ error: "Email or Phone already registered" });
 
         const captcha = svgCaptcha.create({
-            size: 4,
-            noise: 3,
+            size: 6,
+            noise: 4,
             color: true,
-            background: '#f8fafc'
+            background: '#ffffff',
+            charPreset: '0123456789' // Numbers only to avoid capital/small confusion
         });
 
         const user = new User({
@@ -977,15 +937,15 @@ app.post('/api/auth/signup', async (req, res) => {
             city,
             state,
             verified: false,
-            verificationOTP: captcha.text.toLowerCase(),
+            verificationOTP: captcha.text,
             otpExpires: new Date(Date.now() + 15 * 60 * 1000) // 15 mins for captcha
         });
         await user.save();
 
-        console.log(`[AUTH] CAPTCHA generated for ${user.email || user.phone}: ${captcha.text}`);
+        console.log(`[AUTH] Numeric Captcha generated for ${user.email || user.phone}: ${captcha.text}`);
 
         res.status(201).json({
-            message: "Account created! Please verify the captcha to continue.",
+            message: "Account created! Enter the code from the image below.",
             email: user.email,
             phone: user.phone,
             captchaSvg: captcha.data
@@ -1006,19 +966,20 @@ app.post('/api/auth/resend-otp', async (req, res) => {
         if (!user) return res.status(404).json({ error: "User not found" });
 
         const captcha = svgCaptcha.create({
-            size: 4,
-            noise: 3,
+            size: 6,
+            noise: 4,
             color: true,
-            background: '#f8fafc'
+            background: '#ffffff',
+            charPreset: '0123456789'
         });
 
-        user.verificationOTP = captcha.text.toLowerCase();
+        user.verificationOTP = captcha.text;
         user.otpExpires = new Date(Date.now() + 15 * 60 * 1000);
         await user.save();
 
         res.json({
             success: true,
-            message: "New Captcha generated!",
+            message: "Brand new code generated!",
             captchaSvg: captcha.data
         });
     } catch (err) {
@@ -1039,8 +1000,8 @@ app.post('/api/auth/verify-otp', async (req, res) => {
         if (!user) return res.status(404).json({ error: "User not found" });
         if (user.verified) return res.status(400).json({ error: "Account already verified" });
 
-        if (user.verificationOTP !== otp.toLowerCase() || user.otpExpires < new Date()) {
-            return res.status(400).json({ error: "Invalid or expired Captcha" });
+        if (user.verificationOTP !== otp || user.otpExpires < new Date()) {
+            return res.status(400).json({ error: "Invalid or expired characters" });
         }
 
         user.verified = true;
