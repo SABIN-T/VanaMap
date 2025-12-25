@@ -409,7 +409,8 @@ export const PlantIdentifier = () => {
                     </div>
 
                     <canvas ref={canvasRef} style={{ display: 'none' }} />
-                </div >
+                </div>
+            </div>
         </AdminLayout >
     );
 };
