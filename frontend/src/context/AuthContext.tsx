@@ -20,11 +20,11 @@ interface SignupData {
 
 interface AuthContextType {
     user: User | null;
-    signup: (data: SignupData) => Promise<{ success: boolean; message?: string }>;
+    signup: (data: SignupData) => Promise<{ success: boolean; message?: string; registrationToken?: string; captchaSvg?: string }>;
     login: (credentials: LoginCredentials) => Promise<{ success: boolean; message?: string }>;
     googleLogin: (credentialResponse: any) => Promise<boolean>;
     logout: () => void;
-    verify: (identifier: string, otp: string) => Promise<{ success: boolean; message?: string }>;
+    verify: (registrationToken: string, otp: string) => Promise<{ success: boolean; message?: string }>;
     toggleFavorite: (plantId: string) => void;
     updateUser: (updates: Partial<User>) => void;
     loading: boolean;
@@ -108,20 +108,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             const data = await res.json();
             if (!res.ok) throw new Error(data.error || 'Signup failed');
 
-            // No longer logging in automatically here
-            return { success: true, message: data.message, whatsappUrl: data.whatsappUrl, captchaSvg: data.captchaSvg };
+            // Returning the session token and captcha
+            return {
+                success: true,
+                message: data.message,
+                registrationToken: data.registrationToken,
+                captchaSvg: data.captchaSvg
+            };
         } catch (err: any) {
             console.error(err);
             return { success: false, message: err.message };
         }
     };
 
-    const verify = async (identifier: string, otp: string) => {
+    const verify = async (registrationToken: string, otp: string) => {
         try {
             const res = await fetch(`${API_URL}/auth/verify-otp`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ identifier, otp })
+                body: JSON.stringify({ registrationToken, otp })
             });
 
             const data = await res.json();

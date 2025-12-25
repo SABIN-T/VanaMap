@@ -146,6 +146,7 @@ export const Auth = () => {
 
     const [otp, setOtp] = useState('');
     const [captchaSvg, setCaptchaSvg] = useState<string | null>(null);
+    const [registrationToken, setRegistrationToken] = useState<string | null>(null);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -172,24 +173,26 @@ export const Auth = () => {
                 );
             }
         } else if (view === 'signup') {
-            const tid = toast.loading("Sending Verification Code...");
             const fullPhone = phone ? `+${phoneCode}${phone.replace(/\D/g, '')}` : undefined;
             const result = await signup({ email, phone: fullPhone, password, name, role, city, state, country });
             if (result.success) {
-                toast.success("Account created! Please verify captcha.");
-                if ((result as any).captchaSvg) {
-                    setCaptchaSvg((result as any).captchaSvg);
-                }
+                toast.success("Account ready! Please verify captcha.");
+                if (result.captchaSvg) setCaptchaSvg(result.captchaSvg);
+                if (result.registrationToken) setRegistrationToken(result.registrationToken);
                 setView('verify');
             } else {
-                toast.error(result.message || "Signup failed", { id: tid });
+                toast.error(result.message || "Signup failed");
             }
         } else if (view === 'verify') {
+            if (!registrationToken) {
+                toast.error("Session expired. Please sign up again.");
+                setView('signup');
+                return;
+            }
             const tid = toast.loading("Verifying Captcha...");
-            const result = await verify(email || phone, otp.toLowerCase());
+            const result = await verify(registrationToken, otp);
             if (result.success) {
                 toast.success("Identity Verified! Welcome.", { id: tid });
-                // navigation is handled by useEffect on user state
             } else {
                 toast.error(result.message || "Invalid Captcha", { id: tid });
             }
@@ -217,12 +220,18 @@ export const Auth = () => {
     };
 
     const handleResendOTP = async () => {
+        if (!registrationToken) return;
         const tid = toast.loading("Refreshing captcha...");
         try {
-            const api = await import('../services/api');
-            const data = await api.resendOTP(email || phone);
+            const res = await fetch(`${import.meta.env.VITE_API_URL || 'https://plantoxy.onrender.com/api'}/auth/resend-otp`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ registrationToken })
+            });
+            const data = await res.json();
             if (data.captchaSvg) setCaptchaSvg(data.captchaSvg);
-            toast.success("New captcha generated!", { id: tid });
+            if (data.registrationToken) setRegistrationToken(data.registrationToken);
+            toast.success("New code generated!", { id: tid });
         } catch (err: any) {
             toast.error(err.message || "Failed to refresh captcha", { id: tid });
         }
@@ -388,9 +397,6 @@ export const Auth = () => {
                                     style={{ paddingLeft: '4.5rem' }}
                                 />
                             </div>
-                            <p className={styles.hintText} style={{ marginTop: '0.25rem', fontSize: '0.75rem' }}>
-                                OTP will be sent to +{phoneCode} {phone}
-                            </p>
                         </div>
                     )}
 
@@ -558,8 +564,8 @@ export const Auth = () => {
                         </button></>
                     )}
                 </div>
-            </div>
-        </div>
+            </div >
+        </div >
     );
 };
 

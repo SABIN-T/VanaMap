@@ -920,14 +920,15 @@ app.post('/api/auth/signup', async (req, res) => {
         if (existing) return res.status(400).json({ error: "Email or Phone already registered" });
 
         const captcha = svgCaptcha.create({
-            size: 6,
+            size: 4,
             noise: 4,
             color: true,
             background: '#ffffff',
-            charPreset: '0123456789' // Numbers only to avoid capital/small confusion
+            charPreset: '0123456789'
         });
 
-        const user = new User({
+        // Store registration data in a temporary token (valid for 15m)
+        const registrationData = {
             email: email ? email.trim().toLowerCase() : undefined,
             phone: phone ? phone.trim() : undefined,
             password,
@@ -936,18 +937,16 @@ app.post('/api/auth/signup', async (req, res) => {
             country,
             city,
             state,
-            verified: false,
-            verificationOTP: captcha.text,
-            otpExpires: new Date(Date.now() + 15 * 60 * 1000) // 15 mins for captcha
-        });
-        await user.save();
+            captchaText: captcha.text
+        };
 
-        console.log(`[AUTH] Numeric Captcha generated for ${user.email || user.phone}: ${captcha.text}`);
+        const registrationToken = jwt.sign(registrationData, process.env.JWT_SECRET || 'secret', { expiresIn: '15m' });
 
-        res.status(201).json({
-            message: "Account created! Enter the code from the image below.",
-            email: user.email,
-            phone: user.phone,
+        console.log(`[AUTH] Numeric Captcha (4-digit) generated: ${captcha.text}`);
+
+        res.status(200).json({
+            message: "Verify captcha to complete registration.",
+            registrationToken,
             captchaSvg: captcha.data
         });
     } catch (err) {
@@ -957,57 +956,59 @@ app.post('/api/auth/signup', async (req, res) => {
 
 app.post('/api/auth/resend-otp', async (req, res) => {
     try {
-        const { identifier } = req.body;
-        const iden = identifier.trim().toLowerCase();
-        const user = await User.findOne({
-            $or: [{ email: iden }, { phone: iden }]
-        });
+        const { registrationToken } = req.body;
+        if (!registrationToken) return res.status(400).json({ error: "Missing registration session" });
 
-        if (!user) return res.status(404).json({ error: "User not found" });
+        const decoded = jwt.verify(registrationToken, process.env.JWT_SECRET || 'secret');
 
         const captcha = svgCaptcha.create({
-            size: 6,
+            size: 4,
             noise: 4,
             color: true,
             background: '#ffffff',
             charPreset: '0123456789'
         });
 
-        user.verificationOTP = captcha.text;
-        user.otpExpires = new Date(Date.now() + 15 * 60 * 1000);
-        await user.save();
+        const newRegistrationData = { ...decoded, captchaText: captcha.text };
+        const newToken = jwt.sign(newRegistrationData, process.env.JWT_SECRET || 'secret', { expiresIn: '15m' });
 
         res.json({
             success: true,
-            message: "Brand new code generated!",
-            captchaSvg: captcha.data
+            message: "New code generated!",
+            captchaSvg: captcha.data,
+            registrationToken: newToken
         });
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(401).json({ error: "Verification session expired. Please sign up again." });
     }
 });
 
 app.post('/api/auth/verify-otp', async (req, res) => {
     try {
-        const { identifier, otp } = req.body;
-        const user = await User.findOne({
-            $or: [
-                { email: identifier.trim().toLowerCase() },
-                { phone: identifier.trim() }
-            ]
-        });
+        const { registrationToken, otp } = req.body;
+        if (!registrationToken) return res.status(400).json({ error: "Missing registration session" });
 
-        if (!user) return res.status(404).json({ error: "User not found" });
-        if (user.verified) return res.status(400).json({ error: "Account already verified" });
+        const data = jwt.verify(registrationToken, process.env.JWT_SECRET || 'secret');
 
-        if (user.verificationOTP !== otp || user.otpExpires < new Date()) {
-            return res.status(400).json({ error: "Invalid or expired characters" });
+        if (data.captchaText !== otp) {
+            return res.status(400).json({ error: "Invalid characters typed. Try again." });
         }
 
-        user.verified = true;
-        user.verificationOTP = undefined;
-        user.otpExpires = undefined;
+        // Now save the user to database
+        const user = new User({
+            email: data.email,
+            phone: data.phone,
+            password: data.password, // Schema hook will hash it if configured
+            name: data.name,
+            role: data.role,
+            country: data.country,
+            city: data.city,
+            state: data.state,
+            verified: true
+        });
         await user.save();
+
+        console.log(`[AUTH] User created AFTER verification: ${user.email || user.phone}`);
 
         await broadcastAlert('user', `${user.name} joined VanaMap! Welcome!`, { email: user.email, role: user.role, title: 'New Explorer Joined 🌿' });
         sendWelcomeEmail(user.email, user.name, user.role);
@@ -1015,7 +1016,7 @@ app.post('/api/auth/verify-otp', async (req, res) => {
         const token = jwt.sign({ id: user._id, email: user.email, role: user.role }, JWT_SECRET, { expiresIn: '7d' });
         res.json({ user: normalizeUser(user), token, message: "Verification Successful!" });
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(401).json({ error: "Session expired or invalid. Please sign up again." });
     }
 });
 
