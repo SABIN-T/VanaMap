@@ -6,12 +6,13 @@ import toast from 'react-hot-toast';
 
 interface PlantCardProps {
     plant: Plant;
-    onAdd?: (plant: Plant) => void; // Made optional
+    onAdd?: (plant: Plant) => void;
     score?: number;
     isTopMatch?: boolean;
+    priority?: boolean;
 }
 
-export const PlantCard = ({ plant, score, isTopMatch }: PlantCardProps) => {
+export const PlantCard = ({ plant, score, isTopMatch, priority = false }: PlantCardProps) => {
     const { user, toggleFavorite } = useAuth();
     const isFavorite = user?.favorites.includes(plant.id);
     const isPetFriendly = (plant as any).petFriendly;
@@ -35,10 +36,11 @@ export const PlantCard = ({ plant, score, isTopMatch }: PlantCardProps) => {
                     src={plant.imageUrl}
                     alt={`${plant.name} - ${plant.scientificName} plant`}
                     className={styles.image}
-                    loading="lazy"
+                    loading={priority ? "eager" : "lazy"}
                     decoding="async"
                     width="300"
                     height="300"
+                    {...(priority ? { fetchPriority: "high" } : {})}
                 />
 
                 <div className={styles.overlayTop}>

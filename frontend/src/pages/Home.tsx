@@ -545,6 +545,7 @@ export const Home = () => {
                                     onAdd={handleAddToCart}
                                     score={weather ? plant.score : undefined}
                                     isTopMatch={weather ? index === 0 && (plant.score || 0) > 0 : false}
+                                    priority={index < 2}
                                 />
                             </div>
                         ))

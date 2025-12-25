@@ -9,6 +9,7 @@
 }
 
 /* --- HERO SECTION --- */
+/* --- HERO SECTION --- */
 .hero {
     min-height: 85vh;
     display: flex;
@@ -17,10 +18,11 @@
     padding: 6rem 2rem 4rem;
     position: relative;
     overflow: hidden;
-    background:
-        radial-gradient(circle at 0% 0%, rgba(16, 185, 129, 0.08) 0%, transparent 40%),
-        radial-gradient(circle at 100% 100%, rgba(56, 189, 248, 0.08) 0%, transparent 40%),
-        var(--color-bg);
+    background: var(--color-bg);
+    /* Simplified background for performance */
+    background-image: radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
+    contain: layout paint;
+    /* Optimization */
 }
 
 @media (min-width: 1024px) {
@@ -31,23 +33,24 @@
     }
 }
 
-/* Hero animated glow backdrop */
+/* Hero animated glow backdrop - Optimized */
 @media (min-width: 1024px) {
-
-    /* Only show expensive blur effect on desktop */
     .hero::after {
         content: '';
         position: absolute;
-        width: 600px;
-        height: 600px;
-        background: radial-gradient(circle, rgba(16, 185, 129, 0.08) 0%, transparent 70%);
+        width: 400px;
+        /* Reduced size */
+        height: 400px;
+        background: radial-gradient(circle, rgba(16, 185, 129, 0.06) 0%, transparent 70%);
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
         z-index: 1;
-        filter: blur(80px);
+        filter: blur(40px);
+        /* Reduced blur radius from 80px */
         pointer-events: none;
         will-change: transform;
+        /* Hint for compositor */
     }
 }
 
@@ -59,6 +62,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    /* Composite layer optimization */
+    transform: translateZ(0);
 }
 
 @media (min-width: 1024px) {
@@ -618,6 +623,10 @@
     max-width: 1400px;
     margin: 4rem auto;
     padding: 0 2rem;
+    /* Performance: Skip rendering off-screen content */
+    content-visibility: auto;
+    contain-intrinsic-size: 1000px;
+    /* Approximate height of content */
 }
 
 @media (min-width: 1024px) {
