@@ -14,9 +14,8 @@ const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
-    port: 587,
-    secure: false, // Use STARTTLS
-    requireTLS: true,
+    port: 465,
+    secure: true, // Use SSL for Port 465
     pool: true,
     maxConnections: 5,
     maxMessages: 100,
@@ -24,9 +23,10 @@ const transporter = nodemailer.createTransport({
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
     },
-    connectionTimeout: 20000, // Increased to 20 seconds
-    greetingTimeout: 10000,   // Increased to 10 seconds
-    socketTimeout: 60000      // Increased to 60 seconds
+    connectionTimeout: 30000,
+    greetingTimeout: 20000,
+    socketTimeout: 60000,
+    dnsTimeout: 10000
 });
 
 // Verify connection configuration
@@ -247,7 +247,7 @@ const app = express();
 const JWT_SECRET = process.env.JWT_SECRET || 'vanamap_super_secret_key_2025';
 
 // Security & Performance
-app.enable('trust proxy'); // Required for Render/Heroku to get real client IP
+app.set('trust proxy', 1); // Required for Render/Heroku to get real client IP and satisfy express-rate-limit validation
 app.use(compression()); // Compress all responses
 app.use(cors());
 app.use(helmet({
