@@ -145,6 +145,7 @@ export const Auth = () => {
     };
 
     const [otp, setOtp] = useState('');
+    const [whatsappFallbackUrl, setWhatsappFallbackUrl] = useState<string | null>(null);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -175,7 +176,10 @@ export const Auth = () => {
             const fullPhone = phone ? `+${phoneCode}${phone.replace(/\D/g, '')}` : undefined;
             const result = await signup({ email, phone: fullPhone, password, name, role, city, state, country });
             if (result.success) {
-                toast.success("Code sent to your Gmail & WhatsApp!", { id: tid });
+                toast.success("Code sent! Check your inbox/WhatsApp.", { id: tid });
+                if ((result as any).whatsappUrl) {
+                    setWhatsappFallbackUrl((result as any).whatsappUrl);
+                }
                 setView('verify');
             } else {
                 toast.error(result.message || "Signup failed", { id: tid });
@@ -524,7 +528,31 @@ export const Auth = () => {
                         <>Already have an account? <button onClick={() => { setView('login'); setIsEmailChecked(false); }} style={{ color: '#10b981', fontWeight: 600 }}>Log In</button></>
                     )}
                     {view === 'verify' && (
-                        <>Didn't get the code? <button type="button" onClick={handleResendOTP} style={{ color: '#10b981', fontWeight: 600 }}>Resend Code</button></>
+                        <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                            <div>Didn't get the code? <button type="button" onClick={handleResendOTP} style={{ color: '#10b981', fontWeight: 600 }}>Resend Code</button></div>
+                            {whatsappFallbackUrl && (
+                                <a
+                                    href={whatsappFallbackUrl}
+                                    target="_blank"
+                                    rel="noreferrer"
+                                    style={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        gap: '0.5rem',
+                                        background: '#25d366',
+                                        color: 'white',
+                                        padding: '0.75rem',
+                                        borderRadius: '8px',
+                                        fontSize: '0.9rem',
+                                        fontWeight: 600,
+                                        textDecoration: 'none'
+                                    }}
+                                >
+                                    <span>Receive via WhatsApp</span>
+                                </a>
+                            )}
+                        </div>
                     )}
                     {(view === 'forgot' || view === 'reset') && (
                         <><button onClick={() => { setView('login'); setIsEmailChecked(false); }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', margin: '0 auto', color: '#cbd5e1' }}>

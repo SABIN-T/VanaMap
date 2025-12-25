@@ -109,7 +109,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             if (!res.ok) throw new Error(data.error || 'Signup failed');
 
             // No longer logging in automatically here
-            return { success: true, message: data.message };
+            return { success: true, message: data.message, whatsappUrl: data.whatsappUrl };
         } catch (err: any) {
             console.error(err);
             return { success: false, message: err.message };

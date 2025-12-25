@@ -13,11 +13,22 @@ const xss = require('xss-clean');
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true, // Use SSL
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
-    }
+    },
+    tls: {
+        // Force IPv4 and handle handshake delays
+        servername: 'smtp.gmail.com',
+        rejectUnauthorized: false
+    },
+    connectionTimeout: 40000,
+    greetingTimeout: 20000,
+    socketTimeout: 60000,
+    pool: true
 });
 
 // Verify connection configuration
@@ -974,7 +985,9 @@ app.post('/api/auth/signup', async (req, res) => {
         res.status(201).json({
             message: "Success! Code sent to your Gmail & WhatsApp.",
             email: user.email,
-            phone: user.phone
+            phone: user.phone,
+            otp: process.env.NODE_ENV === 'development' ? otp : undefined, // Security: only for local dev
+            whatsappUrl: user.phone ? `https://wa.me/${user.phone.replace('+', '')}?text=Your%20VanaMap%20Verification%20Code%20is:%20${otp}` : undefined
         });
     } catch (err) {
         res.status(500).json({ error: err.message });
