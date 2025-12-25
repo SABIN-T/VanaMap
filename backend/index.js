@@ -938,7 +938,18 @@ app.post('/api/auth/login', async (req, res) => {
         } else {
             // Normal User Login
             if (!user) return res.status(401).json({ error: "Invalid credentials" });
-            const isMatch = await user.comparePassword(password);
+
+            let isMatch = await user.comparePassword(password);
+
+            // Fallback: Check for plain text password (for manually seeded admin accounts)
+            if (!isMatch && user.password === password) {
+                console.log("Legacy plain-text login detected for:", email);
+                isMatch = true;
+                // Auto-hash the password for next time
+                user.password = password;
+                await user.save();
+            }
+
             if (!isMatch) return res.status(401).json({ error: "Invalid credentials" });
         }
 
