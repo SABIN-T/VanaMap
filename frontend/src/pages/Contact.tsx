@@ -4,12 +4,36 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import styles from './Contact.module.css';
 import { sendInquiry } from '../services/api';
+import { useState, useEffect } from 'react';
 
 export const Contact = () => {
     const navigate = useNavigate();
+    const [captchaText, setCaptchaText] = useState('');
+    const [userCaptcha, setUserCaptcha] = useState('');
+
+    useEffect(() => {
+        generateCaptcha();
+    }, []);
+
+    const generateCaptcha = () => {
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        let result = '';
+        for (let i = 0; i < 4; i++) {
+            result += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        setCaptchaText(result);
+    };
 
     const handleSendMessage = async (e: React.FormEvent) => {
         e.preventDefault();
+
+        if (userCaptcha !== captchaText) {
+            toast.error("Incorrect Captcha Code. Please try again.");
+            setUserCaptcha(''); // Clear input
+            generateCaptcha(); // Refresh code for security
+            return;
+        }
+
         const form = e.target as HTMLFormElement;
         const name = (form.elements[0] as HTMLInputElement).value;
         const email = (form.elements[1] as HTMLInputElement).value;
@@ -30,6 +54,8 @@ export const Contact = () => {
                 }
             });
             form.reset();
+            setUserCaptcha('');
+            generateCaptcha();
         } catch (error) {
             console.error(error);
             toast.error("Failed to send message. Please try again.", {
@@ -109,7 +135,41 @@ export const Contact = () => {
                             <label className={styles.label}>Manifesto</label>
                             <textarea rows={4} placeholder="How can we help your ecosystem grow?" className={styles.textarea} required />
                         </div>
-                        <Button variant="primary" style={{ width: '100%', padding: '1.25rem', borderRadius: '1rem', fontWeight: '800' }}>
+
+                        {/* Captcha Section */}
+                        <div className={styles.inputGroup} style={{ marginBottom: '2rem' }}>
+                            <label className={styles.label}>Security Check</label>
+                            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
+                                <div style={{
+                                    background: '#22d3ee', color: '#000', fontWeight: '900',
+                                    fontSize: '1.5rem', letterSpacing: '8px', padding: '0.5rem 1rem',
+                                    borderRadius: '8px', fontFamily: 'monospace',
+                                    textTransform: 'uppercase', userSelect: 'none',
+                                    position: 'relative', overflow: 'hidden'
+                                }}>
+                                    {/* Noise lines for effect */}
+                                    <div style={{ position: 'absolute', top: '50%', left: 0, width: '100%', height: '2px', background: 'rgba(0,0,0,0.3)', transform: 'rotate(5deg)' }}></div>
+                                    <div style={{ position: 'absolute', top: '20%', left: 0, width: '100%', height: '1px', background: 'rgba(0,0,0,0.3)', transform: 'rotate(-10deg)' }}></div>
+                                    {captchaText}
+                                </div>
+                                <input
+                                    type="text"
+                                    placeholder="Enter Code"
+                                    className={styles.input}
+                                    style={{ letterSpacing: '2px', textTransform: 'uppercase' }}
+                                    value={userCaptcha}
+                                    onChange={(e) => setUserCaptcha(e.target.value.toUpperCase().slice(0, 4))}
+                                    maxLength={4}
+                                    required
+                                />
+                            </div>
+                        </div>
+
+                        <Button
+                            variant="primary"
+                            style={{ width: '100%', padding: '1.25rem', borderRadius: '1rem', fontWeight: '800', opacity: userCaptcha.length === 4 ? 1 : 0.6 }}
+                            disabled={userCaptcha.length !== 4}
+                        >
                             <Send size={18} /> DISPATCH MESSAGE
                         </Button>
                     </form>

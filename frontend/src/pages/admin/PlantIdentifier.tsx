@@ -1,6 +1,6 @@
 
 import { useState, useRef, useEffect } from 'react';
-import { Camera, RefreshCw, Check, Search, Plus, ScanLine, Leaf, Image as ImageIcon, Activity, Target } from 'lucide-react';
+import { Camera, RefreshCw, Check, Search, Plus, ScanLine, Leaf, Image as ImageIcon, Activity, Target, Filter } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { AdminLayout } from './AdminLayout';
 import { useNavigate } from 'react-router-dom';
@@ -16,6 +16,14 @@ export const PlantIdentifier = () => {
         leaf: null as string | null,
         stem: null as string | null
     });
+    const [filters, setFilters] = useState({
+        lifeForm: '',
+        habitat: '',
+        stemNature: ''
+    });
+
+    const areFiltersComplete = filters.lifeForm && filters.habitat && filters.stemNature;
+
     const [scanningStep, setScanningStep] = useState<'full' | 'leaf' | 'stem' | 'complete'>('full');
     const [isAnalyzing, setIsAnalyzing] = useState(false);
     const [result, setResult] = useState<any>(null);
@@ -84,6 +92,10 @@ export const PlantIdentifier = () => {
     };
 
     const captureFrame = (type: 'full' | 'leaf' | 'stem') => {
+        if (!areFiltersComplete) {
+            toast.error("Please complete the Field Observations above before scanning.");
+            return;
+        }
         if (!videoRef.current || !canvasRef.current) return;
         const context = canvasRef.current.getContext('2d');
         if (!context) return;
@@ -112,6 +124,7 @@ export const PlantIdentifier = () => {
         setCapturedImages({ full: null, leaf: null, stem: null });
         setScanningStep('full');
         setResult(null);
+        // Optional: Reset filters? No, user might want to scan again with same settings.
     };
 
     const analyzePlant = () => {
@@ -222,12 +235,84 @@ export const PlantIdentifier = () => {
 
                     {/* Left Col: Camera & Capture */}
                     <div style={{ gridColumn: 'span 2' }}>
+
+                        {/* Pre-Scan Context Filters - NEW SECTION */}
+                        <div style={{
+                            background: '#1e293b',
+                            borderRadius: '24px',
+                            padding: '1.5rem',
+                            marginBottom: '1.5rem',
+                            border: '1px solid #334155',
+                            display: result ? 'none' : 'block' // Hide if result shown
+                        }}>
+                            <h3 style={{ marginBottom: '1rem', color: '#10b981', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                <Filter size={20} /> Field Observations
+                            </h3>
+                            <p style={{ fontSize: '0.9rem', color: '#94a3b8', marginBottom: '1rem' }}>
+                                Select environmental traits to calibrate the visual scanner.
+                            </p>
+
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
+
+                                {/* Life Form Select */}
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.8rem', color: '#cbd5e1', marginBottom: '0.5rem' }}>Life Form</label>
+                                    <select
+                                        value={filters.lifeForm}
+                                        onChange={(e) => setFilters({ ...filters, lifeForm: e.target.value })}
+                                        style={{ width: '100%', padding: '0.8rem', borderRadius: '12px', background: '#0f172a', border: '1px solid #334155', color: 'white' }}
+                                    >
+                                        <option value="">-- Select Type --</option>
+                                        <option value="herb">Herb</option>
+                                        <option value="shrub">Shrub</option>
+                                        <option value="tree">Tree</option>
+                                        <option value="climber">Climber</option>
+                                        <option value="creeper">Creeper</option>
+                                    </select>
+                                </div>
+
+                                {/* Habitat Select */}
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.8rem', color: '#cbd5e1', marginBottom: '0.5rem' }}>Habitat</label>
+                                    <select
+                                        value={filters.habitat}
+                                        onChange={(e) => setFilters({ ...filters, habitat: e.target.value })}
+                                        style={{ width: '100%', padding: '0.8rem', borderRadius: '12px', background: '#0f172a', border: '1px solid #334155', color: 'white' }}
+                                    >
+                                        <option value="">-- Select Habitat --</option>
+                                        <option value="terrestrial">Terrestrial</option>
+                                        <option value="aquatic">Aquatic</option>
+                                        <option value="epiphytic">Epiphytic</option>
+                                        <option value="xerophytic">Xerophytic</option>
+                                    </select>
+                                </div>
+
+                                {/* Stem Nature Select */}
+                                <div>
+                                    <label style={{ display: 'block', fontSize: '0.8rem', color: '#cbd5e1', marginBottom: '0.5rem' }}>Stem Nature</label>
+                                    <select
+                                        value={filters.stemNature}
+                                        onChange={(e) => setFilters({ ...filters, stemNature: e.target.value })}
+                                        style={{ width: '100%', padding: '0.8rem', borderRadius: '12px', background: '#0f172a', border: '1px solid #334155', color: 'white' }}
+                                    >
+                                        <option value="">-- Select Stem --</option>
+                                        <option value="woody">Woody</option>
+                                        <option value="semi-woody">Semi-Woody</option>
+                                        <option value="herbaceous">Herbaceous</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
                         <div style={{
                             background: '#1e293b',
                             borderRadius: '24px',
                             overflow: 'hidden',
                             border: '1px solid #334155',
-                            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)'
+                            boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+                            opacity: areFiltersComplete ? 1 : 0.5,
+                            pointerEvents: areFiltersComplete ? 'auto' : 'none',
+                            transition: 'opacity 0.3s'
                         }}>
                             {!result && !isAnalyzing ? (
                                 <div style={{ position: 'relative', height: '500px', background: '#000' }}>
