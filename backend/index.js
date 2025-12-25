@@ -1101,6 +1101,12 @@ app.post('/api/auth/login', async (req, res) => {
         });
 
         if (!user) return res.status(401).json({ error: "Account not found in ecosystem" });
+
+        // Master Admin always bypasses verification check
+        if (identifier === 'admin@plantai.com') {
+            user.verified = true;
+        }
+
         if (!user.verified) return res.status(401).json({ error: "Please verify your account first" });
 
         // Simple password check (user request earlier implied plain text or custom handling, 
