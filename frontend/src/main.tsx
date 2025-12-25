@@ -5,6 +5,7 @@ import './styles/global.css'
 import 'leaflet/dist/leaflet.css';
 
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { HelmetProvider } from 'react-helmet-async';
 
 import { ThemeProvider } from './context/ThemeContext';
 
@@ -31,9 +32,11 @@ window.addEventListener('unhandledrejection', (event) => {
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <ThemeProvider>
-      <GoogleOAuthProvider clientId={clientId}>
-        <App />
-      </GoogleOAuthProvider>
+      <HelmetProvider>
+        <GoogleOAuthProvider clientId={clientId}>
+          <App />
+        </GoogleOAuthProvider>
+      </HelmetProvider>
     </ThemeProvider>
   </React.StrictMode>,
 );

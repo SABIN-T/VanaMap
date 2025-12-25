@@ -72,7 +72,7 @@ export const Auth = () => {
 
     useEffect(() => {
         if (user) {
-            console.log("Auth redirecting user with role:", user.role);
+
             if (user.role === 'admin') {
                 localStorage.setItem('adminAuthenticated', 'true');
                 navigate('/admin', { replace: true });
