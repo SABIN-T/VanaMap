@@ -73,6 +73,56 @@ const sendResetEmail = async (email, tempPass) => {
     }
 };
 
+const sendWelcomeEmail = async (email, name) => {
+    const mailOptions = {
+        from: `"VanaMap Team" <${process.env.EMAIL_USER}>`,
+        to: email,
+        subject: 'Welcome to VanaMap - Explore the nature',
+        html: `
+            <div style="font-family: 'Outfit', sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px; color: #1e293b; background-color: #f0fdf4; border-radius: 24px;">
+                <div style="text-align: center; margin-bottom: 40px;">
+                    <h1 style="color: #10b981; margin: 0; font-size: 32px; letter-spacing: -1px;">VanaMap</h1>
+                    <p style="color: #059669; font-size: 16px; margin-top: 8px; font-weight: 600;">The Forest Land for Future</p>
+                </div>
+                
+                <div style="background: white; padding: 40px; border-radius: 20px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);">
+                    <h2 style="color: #0f172a; margin-top: 0; font-size: 24px;">Welcome, ${name}! 🌿</h2>
+                    <p style="font-size: 16px; line-height: 1.6; color: #475569;">
+                        You are now part of VanaMap with user name <strong style="color: #10b981;">Explore the nature</strong>.
+                    </p>
+                    <p style="font-size: 16px; line-height: 1.6; color: #475569;">
+                        We are thrilled to have you join our mission to build a greener future. With VanaMap, you can:
+                    </p>
+                    <ul style="color: #475569; font-size: 15px; line-height: 1.8; padding-left: 20px;">
+                        <li>🌱 Discover plants perfect for your home</li>
+                        <li>🏡 Find nearby nurseries and vendors</li>
+                        <li>🤖 Diagnose plant diseases with AI</li>
+                        <li>💨 Simulate air quality improvements</li>
+                    </ul>
+                    
+                    <div style="margin-top: 35px; text-align: center;">
+                        <a href="https://www.vanamap.online/dashboard" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; text-decoration: none; padding: 14px 32px; border-radius: 99px; font-weight: bold; font-size: 16px; display: inline-block; box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3);">
+                            Start Exploring
+                        </a>
+                    </div>
+                </div>
+
+                <div style="margin-top: 40px; text-align: center; color: #64748b; font-size: 13px;">
+                    <p>&copy; 2025 VanaMap. All rights reserved.</p>
+                    <p>Let's breathe fresh air together.</p>
+                </div>
+            </div>
+        `
+    };
+
+    try {
+        await transporter.sendMail(mailOptions);
+        console.log(`Welcome email sent to: ${email}`);
+    } catch (e) {
+        console.error("Welcome Mail Error:", e.message);
+    }
+};
+
 // --- WEB PUSH SETUP ---
 const publicVapidKey = process.env.PUBLIC_VAPID_KEY;
 const privateVapidKey = process.env.PRIVATE_VAPID_KEY;
@@ -811,6 +861,9 @@ app.post('/api/auth/signup', async (req, res) => {
             read: false
         });
 
+        // Send Welcome Email
+        sendWelcomeEmail(email, name);
+
         const token = jwt.sign({ id: user._id, email: user.email, role: user.role }, JWT_SECRET, { expiresIn: '7d' });
         res.status(201).json({ user: normalizeUser(user), token });
     } catch (err) {
@@ -916,6 +969,7 @@ app.post('/api/auth/google-sync', async (req, res) => {
         if (!user) {
             user = new User({ email, name, password: Math.random().toString(36), role: 'user' });
             await user.save();
+            sendWelcomeEmail(email, name);
         }
         const token = jwt.sign({ id: user._id, email: user.email, role: user.role }, JWT_SECRET, { expiresIn: '7d' });
         res.json({ user: normalizeUser(user), token });
