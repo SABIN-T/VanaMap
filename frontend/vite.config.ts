@@ -10,7 +10,8 @@ export default defineConfig({
         manualChunks: {
           'vendor-react': ['react', 'react-dom', 'react-router-dom'],
           'vendor-ui': ['lucide-react', 'react-hot-toast'],
-          'vendor-leaflet': ['leaflet', 'react-leaflet']
+          'vendor-leaflet': ['leaflet', 'react-leaflet'],
+          'country-data': ['country-state-city']
         }
       }
     },
