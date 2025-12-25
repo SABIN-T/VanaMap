@@ -3,28 +3,45 @@ import { Button } from '../components/common/Button';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import styles from './Contact.module.css';
+import { sendInquiry } from '../services/api';
 
 export const Contact = () => {
     const navigate = useNavigate();
 
-    const handleSendMessage = (e: React.FormEvent) => {
+    const handleSendMessage = async (e: React.FormEvent) => {
         e.preventDefault();
         const form = e.target as HTMLFormElement;
         const name = (form.elements[0] as HTMLInputElement).value;
-        const manifesto = (form.elements[2] as HTMLTextAreaElement).value;
+        const email = (form.elements[1] as HTMLInputElement).value;
+        const message = (form.elements[2] as HTMLTextAreaElement).value;
 
-        // Open default mail client
-        window.location.href = `mailto:jiibruh86@gmail.com?subject=Inquiry from ${name}: VanaMap&body=${manifesto}`;
+        const toastId = toast.loading("Sending your message...");
 
-        toast.success("Opening your mail client...", {
-            icon: '✉️',
-            style: {
-                borderRadius: '1rem',
-                background: '#0f172a',
-                color: '#fff',
-                border: '1px solid rgba(56, 189, 248, 0.2)'
-            }
-        });
+        try {
+            await sendInquiry({ name, email, message });
+            toast.success("Message sent successfully! We'll reply via email.", {
+                id: toastId,
+                icon: '🚀',
+                style: {
+                    borderRadius: '1rem',
+                    background: '#0f172a',
+                    color: '#fff',
+                    border: '1px solid rgba(16, 185, 129, 0.2)'
+                }
+            });
+            form.reset();
+        } catch (error) {
+            console.error(error);
+            toast.error("Failed to send message. Please try again.", {
+                id: toastId,
+                style: {
+                    borderRadius: '1rem',
+                    background: '#0f172a',
+                    color: '#fff',
+                    border: '1px solid rgba(244, 63, 94, 0.2)'
+                }
+            });
+        }
     };
 
     return (

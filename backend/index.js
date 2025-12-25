@@ -848,6 +848,41 @@ app.get('/api/users', auth, admin, async (req, res) => {
 
 
 
+// --- SUPPORT ---
+app.post('/api/support/inquiry', async (req, res) => {
+    try {
+        const { name, email, message } = req.body;
+        const targetEmail = process.env.ADMIN_EMAIL || process.env.EMAIL_USER; // Send to admin
+
+        const mailOptions = {
+            from: `"VanaMap Contact" <${process.env.EMAIL_USER}>`,
+            to: targetEmail,
+            replyTo: email,
+            subject: `New Inquiry from ${name}: VanaMap`,
+            html: `
+                <div style="font-family: 'Segoe UI', sans-serif; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px;">
+                    <h2 style="color: #10b981;">New Inquiry Received</h2>
+                    <p><strong>From:</strong> ${name} (<a href="mailto:${email}">${email}</a>)</p>
+                    <p><strong>Message:</strong></p>
+                    <div style="background: #f8fafc; padding: 15px; border-left: 4px solid #10b981; border-radius: 4px; color: #334155;">
+                        ${message.replace(/\n/g, '<br>')}
+                    </div>
+                    <p style="margin-top:20px; font-size: 12px; color: #94a3b8;">
+                        Reply directly to this email to respond to the user.
+                    </p>
+                </div>
+            `
+        };
+
+        await transporter.sendMail(mailOptions);
+        console.log(`Inquiry received from ${email}`);
+        res.json({ success: true, message: 'Inquiry sent successfully' });
+    } catch (err) {
+        console.error("Inquiry Mail Error:", err);
+        res.status(500).json({ error: 'Failed to send inquiry' });
+    }
+});
+
 // --- AUTH ---
 
 app.post('/api/auth/signup', async (req, res) => {

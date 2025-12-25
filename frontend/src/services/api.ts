@@ -432,3 +432,12 @@ export const deployAllPlants = async () => {
 };
 
 
+export const sendInquiry = async (data: { name: string, email: string, message: string }) => {
+    const res = await fetch(`${API_URL}/support/inquiry`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    });
+    if (!res.ok) throw new Error("Failed to send inquiry");
+    return res.json();
+};
