@@ -1,6 +1,6 @@
 
 import { useState, useMemo } from 'react';
-import { Search, Flower, Leaf, Activity, Database, Cpu, ChevronRight } from 'lucide-react';
+import { Search, Flower, Leaf, Activity, Database, Cpu } from 'lucide-react';
 import { AdminLayout } from './AdminLayout';
 import { worldFlora } from '../../data/worldFlora';
 
@@ -117,7 +117,7 @@ export const SimulationData = () => {
 
                     {/* Scanlines Effect Overlay (Optional, distinct look) */}
                     <div style={{ position: 'relative', maxHeight: '600px', overflowY: 'auto' }}>
-                        {filteredData.slice(0, 100).map((plant, idx) => (
+                        {filteredData.slice(0, 100).map((plant) => (
                             <div key={plant.id} style={{
                                 display: 'grid',
                                 gridTemplateColumns: '2fr 1.5fr 1.5fr 1.5fr 1fr 1fr',

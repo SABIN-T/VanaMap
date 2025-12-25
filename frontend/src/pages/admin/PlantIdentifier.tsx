@@ -133,7 +133,6 @@ export const PlantIdentifier = () => {
                 const randomMatch = sourceData[Math.floor(Math.random() * sourceData.length)];
 
                 // Map worldFlora format to Plant result format if needed
-                const isSimulationData = !!(randomMatch as any).scientificName;
 
                 setResult({
                     type: 'found',
