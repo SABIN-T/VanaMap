@@ -190,7 +190,8 @@
     width: 100%;
     height: 56px;
     padding: 0 1.5rem !important;
-    border-radius: 0.85rem !important;
+    border-radius: 999px !important;
+    /* Full pill shape */
     font-weight: 800 !important;
     font-size: 0.85rem !important;
     text-transform: uppercase;
@@ -240,7 +241,7 @@
 }
 
 .gpsBtn:active {
-    transform: translateY(0) scale(0.98);
+    transform: scale(0.96);
 }
 
 .divider {
@@ -270,33 +271,37 @@
 
 .searchBox {
     width: 100%;
-    height: 52px;
+    height: 56px;
+    /* Taller touch target */
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 0.85rem;
-    padding: 0 1.25rem;
+    /* Subtle glass border */
+    border-radius: 999px;
+    /* Pill shape */
+    padding: 0 1.5rem;
     display: flex;
     align-items: center;
     gap: 12px;
-    backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(12px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .searchBox:focus-within {
     border-color: rgba(16, 185, 129, 0.5);
-    background: rgba(255, 255, 255, 0.05);
+    background: rgba(255, 255, 255, 0.08);
     box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+    transform: translateY(-1px);
 }
 
 .ghostBtn {
     width: 100%;
     height: 48px;
     background: transparent !important;
-    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
     color: #94a3b8 !important;
-    border-radius: 0.85rem !important;
-    font-size: 0.8rem !important;
+    border-radius: 1rem !important;
+    font-size: 0.85rem !important;
     font-weight: 700 !important;
     display: flex;
     align-items: center;
@@ -307,8 +312,8 @@
 
 .ghostBtn:hover {
     background: rgba(255, 255, 255, 0.03) !important;
-    color: #10b981 !important;
-    border-color: rgba(16, 185, 129, 0.3) !important;
+    color: var(--color-primary) !important;
+    border-color: rgba(16, 185, 129, 0.2) !important;
 }
 
 .searchIcon {
@@ -318,6 +323,7 @@
 .searchInput {
     flex: 1;
     background: transparent;
+
     border: none;
     color: var(--color-text-main);
     font-size: 1rem;
