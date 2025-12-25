@@ -15,7 +15,13 @@ const PlantSchema = new mongoose.Schema({
     medicinalValues: [String],
     advantages: [String],
     price: Number,
-    type: { type: String, enum: ['indoor', 'outdoor'], required: true }
+    type: { type: String, enum: ['indoor', 'outdoor'], required: true },
+    // Biometric Data for AI Scanning
+    foliageTexture: String, // e.g. "Glossy", "Matte", "Pubescent"
+    leafShape: String, // e.g. "Ovate", "Lanceolate", "Cordate"
+    stemStructure: String, // e.g. "Woody", "Herbaceous", "Succulent"
+    overallHabit: String, // e.g. "Climbing", "Bushy", "Tree-like"
+    biometricFeatures: [String] // e.g. ["Serrated Edges", "Variegated Patterns"]
 }, { timestamps: true });
 
 const VendorSchema = new mongoose.Schema({
