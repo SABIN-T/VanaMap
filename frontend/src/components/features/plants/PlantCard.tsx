@@ -73,7 +73,7 @@ export const PlantCard = ({ plant, score, isTopMatch, priority = false, onAdd, s
                 {stockStatus && (
                     <div style={{
                         position: 'absolute',
-                        bottom: '36px',
+                        bottom: '54px',
                         left: '12px',
                         zIndex: 10,
                         background: inStock ? 'rgba(16, 185, 129, 0.95)' : 'rgba(239, 68, 68, 0.95)',
