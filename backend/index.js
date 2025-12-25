@@ -1098,10 +1098,8 @@ app.post('/api/auth/login', async (req, res) => {
 
         if (!user.verified) return res.status(401).json({ error: "Please verify your account first" });
 
-        // Simple password check (user request earlier implied plain text or custom handling, 
-        // current schema in models.js doesn't have bcrypt hooks shown yet, 
-        // and user uses plain text in .env/login requests often)
-        const isMatch = password === user.password;
+        // Secure password check using bcrypt
+        const isMatch = await user.comparePassword(password);
         if (!isMatch) return res.status(401).json({ error: "Invalid Credentials" });
 
         console.log(`[AUTH] Login success: ${identifier} (${user.role})`);
