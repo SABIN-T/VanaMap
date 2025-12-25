@@ -63,17 +63,31 @@ export const InstallPrompt = () => {
             return () => clearTimeout(timer);
         }
 
-        // If installed (Standalone), ask for Notifications
+        // If installed (Standalone), ask for Permissions (Notify + GPS)
         if (isInStandaloneMode || window.matchMedia('(display-mode: standalone)').matches) {
-            if (Notification.permission === 'default') {
-                setTimeout(() => {
-                    Notification.requestPermission().then(permission => {
-                        if (permission === 'granted') subscribeUser();
+            const askPermissions = async () => {
+                // 1. Notifications
+                if (Notification.permission === 'default') {
+                    await Notification.requestPermission();
+                }
+                if (Notification.permission === 'granted') subscribeUser();
+
+                // 2. Geolocation (GPS)
+                if (navigator.geolocation) {
+                    navigator.permissions.query({ name: 'geolocation' }).then((result) => {
+                        if (result.state === 'prompt') {
+                            // Trigger a quick position check to show the browser prompt
+                            navigator.geolocation.getCurrentPosition(
+                                () => { toast.success("Location access granted! 🌍"); },
+                                () => { console.log("Location access deferred"); },
+                                { timeout: 1000, maximumAge: 0 }
+                            );
+                        }
                     });
-                }, 5000);
-            } else if (Notification.permission === 'granted') {
-                subscribeUser(); // Ensure server has sub
-            }
+                }
+            };
+
+            setTimeout(askPermissions, 3000);
         }
 
         // Check for standard PWA install support (Android)
