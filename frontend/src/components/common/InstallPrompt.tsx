@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Smartphone, X, Download } from 'lucide-react';
+import { Smartphone, X, Download, Share, PlusSquare } from 'lucide-react';
 
 interface BeforeInstallPromptEvent extends Event {
     prompt: () => Promise<void>;
@@ -55,77 +55,112 @@ export const InstallPrompt = () => {
     return (
         <div style={{
             position: 'fixed',
-            top: '20px',
+            bottom: isIOS ? '40px' : 'auto', // Bottom for iOS to be nearer to nav
+            top: isIOS ? 'auto' : '20px', // Top for Android
             left: '50%',
             transform: 'translateX(-50%)',
             width: '90%',
             maxWidth: '400px',
-            background: 'rgba(15, 23, 42, 0.9)',
-            backdropFilter: 'blur(12px)',
+            background: 'rgba(15, 23, 42, 0.95)',
+            backdropFilter: 'blur(16px)',
             border: '1px solid rgba(255, 255, 255, 0.1)',
-            borderRadius: '16px',
-            padding: '16px',
-            boxShadow: '0 10px 40px rgba(0, 0, 0, 0.5)',
+            borderRadius: '20px',
+            padding: '20px',
+            boxShadow: '0 20px 50px rgba(0, 0, 0, 0.5)',
             zIndex: 9999,
             display: 'flex',
-            alignItems: 'center',
-            gap: '12px',
+            flexDirection: isIOS ? 'column' : 'row',
+            alignItems: isIOS ? 'flex-start' : 'center',
+            gap: '16px',
             color: 'white',
-            animation: 'fadeInDown 0.5s ease-out'
+            animation: 'fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1)'
         }}>
             <style>
                 {`
-                    @keyframes fadeInDown {
-                        from { opacity: 0; transform: translate(-50%, -20px); }
+                    @keyframes fadeInUp {
+                        from { opacity: 0; transform: translate(-50%, 20px); }
                         to { opacity: 1; transform: translate(-50%, 0); }
                     }
                 `}
             </style>
 
-            <div style={{
-                background: '#10b981',
-                padding: '10px',
-                borderRadius: '12px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center'
-            }}>
-                <Smartphone size={24} color="white" />
-            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', width: '100%' }}>
+                <div style={{
+                    background: isIOS ? 'linear-gradient(135deg, #007AFF, #0056b3)' : '#10b981',
+                    padding: '12px',
+                    borderRadius: '14px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.2)'
+                }}>
+                    <Smartphone size={24} color="white" />
+                </div>
 
-            <div style={{ flex: 1 }}>
-                <h4 style={{ margin: 0, fontSize: '0.95rem', fontWeight: 600 }}>Get the VanaMap App</h4>
-                <p style={{ margin: '4px 0 0', fontSize: '0.8rem', color: '#94a3b8' }}>
-                    {isIOS ? 'Tap "Share" → "Add to Home Screen"' : 'Browse 2x Faster with the native app!'}
-                </p>
+                <div style={{ flex: 1 }}>
+                    <h4 style={{ margin: 0, fontSize: '1rem', fontWeight: 700 }}>
+                        {isIOS ? 'Install VanaMap App' : 'Get the VanaMap App'}
+                    </h4>
+                    {!isIOS && (
+                        <p style={{ margin: '4px 0 0', fontSize: '0.8rem', color: '#94a3b8' }}>
+                            Browse 2x Faster with the native app!
+                        </p>
+                    )}
+                </div>
+
+                <button
+                    onClick={() => setIsVisible(false)}
+                    style={{ background: 'transparent', border: 'none', color: '#64748b', padding: '4px' }}
+                    aria-label="Close install prompt"
+                >
+                    <X size={20} />
+                </button>
             </div>
 
             {isIOS ? (
-                <button onClick={() => setIsVisible(false)} style={{ background: 'transparent', border: 'none', color: '#94a3b8' }} aria-label="Close install prompt">
-                    <X size={20} />
-                </button>
+                <div style={{ width: '100%', background: 'rgba(255,255,255,0.05)', borderRadius: '12px', padding: '12px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px', fontSize: '0.9rem' }}>
+                        <span style={{ background: '#334155', borderRadius: '6px', padding: '4px' }}><Share size={14} /></span>
+                        <span>1. Tap the <strong style={{ color: '#38bdf8' }}>Share</strong> button</span>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.9rem' }}>
+                        <span style={{ background: '#334155', borderRadius: '6px', padding: '4px' }}><PlusSquare size={14} /></span>
+                        <span>2. Select <strong style={{ color: '#38bdf8' }}>Add to Home Screen</strong></span>
+                    </div>
+                    <div style={{
+                        marginTop: '12px',
+                        width: '0',
+                        height: '0',
+                        borderLeft: '10px solid transparent',
+                        borderRight: '10px solid transparent',
+                        borderTop: '10px solid rgba(255,255,255,0.05)',
+                        margin: '12px auto 0'
+                    }} />
+                </div>
             ) : (
                 <button
                     onClick={handleInstallClick}
                     style={{
+                        width: '100%',
                         background: '#38bdf8',
                         color: 'white',
                         border: 'none',
-                        borderRadius: '8px',
-                        padding: '8px 12px',
-                        fontSize: '0.85rem',
-                        fontWeight: 600,
+                        borderRadius: '12px',
+                        padding: '12px',
+                        fontSize: '0.95rem',
+                        fontWeight: 700,
                         cursor: 'pointer',
                         display: 'flex',
                         alignItems: 'center',
-                        gap: '6px'
+                        justifyContent: 'center',
+                        gap: '8px',
+                        marginTop: '0'
                     }}
                     aria-label="Install VanaMap App"
                 >
-                    <Download size={14} /> Install
+                    <Download size={16} /> Install Now
                 </button>
             )}
-            {!isIOS && <button onClick={() => setIsVisible(false)} style={{ background: 'transparent', border: 'none', color: '#64748b', marginLeft: '-4px' }} aria-label="Close install prompt"><X size={18} /></button>}
         </div>
     );
 };
