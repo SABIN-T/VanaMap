@@ -76,12 +76,31 @@ const sendResetEmail = async (email, tempPass) => {
 // --- WEB PUSH SETUP ---
 const publicVapidKey = process.env.PUBLIC_VAPID_KEY;
 const privateVapidKey = process.env.PRIVATE_VAPID_KEY;
-webpush.setVapidDetails('mailto:support@vanamap.online', publicVapidKey, privateVapidKey);
+
+let pushEnabled = false;
+if (publicVapidKey && privateVapidKey) {
+    try {
+        webpush.setVapidDetails('mailto:support@vanamap.online', publicVapidKey, privateVapidKey);
+        pushEnabled = true;
+        console.log("Web Push initialized successfully.");
+    } catch (err) {
+        console.error("Web Push init failed:", err.message);
+    }
+} else {
+    console.warn("WARNING: VAPID Keys not found in environment variables. Push notifications disabled.");
+}
 
 const sendPushNotification = async (payload) => {
+    if (!pushEnabled) {
+        console.log("Skipping push notification (Push Disabled/No Keys)");
+        return;
+    }
+
     try {
         const subscriptions = await PushSubscription.find();
-        console.log(`[PUSH] Sending to ${subscriptions.length} devices found.`);
+        if (subscriptions.length === 0) return;
+
+        console.log(`[PUSH] Sending to ${subscriptions.length} devices...`);
         const notificationPayload = JSON.stringify(payload);
 
         let sentCount = 0;
@@ -89,17 +108,17 @@ const sendPushNotification = async (payload) => {
             webpush.sendNotification(sub, notificationPayload)
                 .then(() => sentCount++)
                 .catch(err => {
-                    console.error("[PUSH] Error sending to one device", err.statusCode);
                     // 410 Gone / 404 means expired
                     if (err.statusCode === 410 || err.statusCode === 404) {
                         return PushSubscription.deleteOne({ _id: sub._id });
                     }
+                    console.error(`[PUSH] Error: ${err.statusCode}`);
                 })
         );
         await Promise.all(promises);
-        console.log(`[PUSH] Successfully sent to ${sentCount} devices.`);
+        console.log(`[PUSH] Sent to ${sentCount} devices.`);
     } catch (e) {
-        console.error("[PUSH] Critical error:", e);
+        console.error("[PUSH] Critical error:", e.message);
     }
 };
 
