@@ -19,7 +19,7 @@ export const SimulationData = () => {
 
     return (
         <AdminLayout title="Global Biometric Database">
-            <div style={{ maxWidth: '1400px', margin: '0 auto', color: '#e2e8f0' }}>
+            <div style={{ maxWidth: '1100px', margin: '0 auto', color: '#e2e8f0' }}>
 
                 {/* Header / HUD */}
                 <div style={{
