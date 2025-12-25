@@ -2,7 +2,7 @@ import { useState, useRef } from 'react';
 import { Button } from '../../components/common/Button';
 import { addPlant, fetchPlants } from '../../services/api';
 import { AdminLayout } from './AdminLayout';
-import { Search, Upload, Thermometer, Wind, Droplets, Leaf, ArrowRight, Sparkles } from 'lucide-react';
+import { Search, Upload, Thermometer, Wind, Droplets, Leaf, ArrowRight, Sparkles, ScanLine } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { INDIAN_PLANT_DB } from '../../data/indianPlants';
 import type { Plant } from '../../types';
@@ -80,7 +80,12 @@ export const AddPlant = () => {
         minHumidity: 40,
         oxygenLevel: 'high',
         medicinalValues: [],
-        advantages: []
+        advantages: [],
+        foliageTexture: '',
+        leafShape: '',
+        stemStructure: '',
+        overallHabit: '',
+        biometricFeatures: []
     });
 
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -152,7 +157,12 @@ export const AddPlant = () => {
                 oxygenLevel: newPlant.oxygenLevel as any || 'moderate',
                 medicinalValues: newPlant.medicinalValues || [],
                 advantages: newPlant.advantages || [],
-                isNocturnal: false
+                isNocturnal: false,
+                foliageTexture: newPlant.foliageTexture,
+                leafShape: newPlant.leafShape,
+                stemStructure: newPlant.stemStructure,
+                overallHabit: newPlant.overallHabit,
+                biometricFeatures: newPlant.biometricFeatures || []
             };
             await addPlant(plantData);
             toast.success("Specimen Registered", { id: tid });
@@ -162,7 +172,8 @@ export const AddPlant = () => {
                 name: '', scientificName: '', imageUrl: '', price: 0,
                 type: 'indoor', sunlight: 'medium', description: '',
                 idealTempMin: 18, idealTempMax: 30, minHumidity: 40,
-                oxygenLevel: 'high', medicinalValues: [], advantages: []
+                oxygenLevel: 'high', medicinalValues: [], advantages: [],
+                foliageTexture: '', leafShape: '', stemStructure: '', overallHabit: '', biometricFeatures: []
             });
             setScientificNameSearch('');
         } catch (err) {

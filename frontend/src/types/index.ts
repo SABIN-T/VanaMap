@@ -16,6 +16,12 @@ export interface Plant {
     type: 'indoor' | 'outdoor';
     isNocturnal?: boolean; // For CAM plants (Snake Plant, Aloe) that produce O2 at night
     ecosystem?: string;
+    // Biometric Data
+    foliageTexture?: string;
+    leafShape?: string;
+    stemStructure?: string;
+    overallHabit?: string;
+    biometricFeatures?: string[];
     ecosystemDescription?: string;
     score?: number; // Calculated aptness based on local environment
 }
