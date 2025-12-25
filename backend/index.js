@@ -11,6 +11,7 @@ const rateLimit = require('express-rate-limit');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const nodemailer = require('nodemailer');
+const svgCaptcha = require('svg-captcha');
 
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
@@ -959,7 +960,13 @@ app.post('/api/auth/signup', async (req, res) => {
         });
         if (existing) return res.status(400).json({ error: "Email or Phone already registered" });
 
-        const otp = Math.floor(1000 + Math.random() * 9000).toString();
+        const captcha = svgCaptcha.create({
+            size: 4,
+            noise: 3,
+            color: true,
+            background: '#f8fafc'
+        });
+
         const user = new User({
             email: email ? email.trim().toLowerCase() : undefined,
             phone: phone ? phone.trim() : undefined,
@@ -970,25 +977,18 @@ app.post('/api/auth/signup', async (req, res) => {
             city,
             state,
             verified: false,
-            verificationOTP: otp,
-            otpExpires: new Date(Date.now() + 10 * 60 * 1000) // 10 mins
+            verificationOTP: captcha.text.toLowerCase(),
+            otpExpires: new Date(Date.now() + 15 * 60 * 1000) // 15 mins for captcha
         });
         await user.save();
 
-        // Dual Send: Gmail + WhatsApp (Fire and forget for speed)
-        if (user.email) {
-            sendVerificationOTP(user.email, name, otp).catch(e => console.error("OTP Background Error:", e.message));
-        }
-        if (user.phone) {
-            sendWhatsAppOTP(user.phone, name, otp).catch(e => console.error("WhatsApp Background Error:", e.message));
-        }
+        console.log(`[AUTH] CAPTCHA generated for ${user.email || user.phone}: ${captcha.text}`);
 
         res.status(201).json({
-            message: "Success! Code sent to your Gmail & WhatsApp.",
+            message: "Account created! Please verify the captcha to continue.",
             email: user.email,
             phone: user.phone,
-            otp: process.env.NODE_ENV === 'development' ? otp : undefined, // Security: only for local dev
-            whatsappUrl: user.phone ? `https://wa.me/${user.phone.replace('+', '')}?text=Your%20VanaMap%20Verification%20Code%20is:%20${otp}` : undefined
+            captchaSvg: captcha.data
         });
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -998,24 +998,29 @@ app.post('/api/auth/signup', async (req, res) => {
 app.post('/api/auth/resend-otp', async (req, res) => {
     try {
         const { identifier } = req.body;
+        const iden = identifier.trim().toLowerCase();
         const user = await User.findOne({
-            $or: [
-                { email: identifier.trim().toLowerCase() },
-                { phone: identifier.trim() }
-            ]
+            $or: [{ email: iden }, { phone: iden }]
         });
-        if (!user) return res.status(404).json({ error: "User not found" });
-        if (user.verified) return res.status(400).json({ error: "Already verified" });
 
-        const otp = Math.floor(1000 + Math.random() * 9000).toString();
-        user.verificationOTP = otp;
-        user.otpExpires = new Date(Date.now() + 10 * 60 * 1000);
+        if (!user) return res.status(404).json({ error: "User not found" });
+
+        const captcha = svgCaptcha.create({
+            size: 4,
+            noise: 3,
+            color: true,
+            background: '#f8fafc'
+        });
+
+        user.verificationOTP = captcha.text.toLowerCase();
+        user.otpExpires = new Date(Date.now() + 15 * 60 * 1000);
         await user.save();
 
-        if (user.email) sendVerificationOTP(user.email, user.name, otp).catch(e => console.error(e));
-        if (user.phone) sendWhatsAppOTP(user.phone, user.name, otp).catch(e => console.error(e));
-
-        res.json({ success: true, message: "New code sent via Gmail & WhatsApp!" });
+        res.json({
+            success: true,
+            message: "New Captcha generated!",
+            captchaSvg: captcha.data
+        });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -1034,8 +1039,8 @@ app.post('/api/auth/verify-otp', async (req, res) => {
         if (!user) return res.status(404).json({ error: "User not found" });
         if (user.verified) return res.status(400).json({ error: "Account already verified" });
 
-        if (user.verificationOTP !== otp || user.otpExpires < new Date()) {
-            return res.status(400).json({ error: "Invalid or expired OTP" });
+        if (user.verificationOTP !== otp.toLowerCase() || user.otpExpires < new Date()) {
+            return res.status(400).json({ error: "Invalid or expired Captcha" });
         }
 
         user.verified = true;
@@ -1110,7 +1115,7 @@ app.post('/api/auth/login', async (req, res) => {
             user.verified = true;
         }
 
-        if (!user.verified) return res.status(401).json({ error: "Please verify your account first" });
+        if (!user.verified) return res.status(401).json({ error: "Please verify captcha first" });
 
         // Secure password check using bcrypt
         const isMatch = await user.comparePassword(password);

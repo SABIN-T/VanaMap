@@ -137,7 +137,7 @@ export const Auth = () => {
             toast.error(err.message || "Account not found or not verified.");
             // If account found but not verified, we can offer to resent OTP?
             if (err.message && err.message.includes("not yet verified")) {
-                toast("Please sign up again to resend OTP or check your inbox/WhatsApp.", { icon: '📧' });
+                toast("Please sign up again or verify your account using the captcha.", { icon: '🛡️' });
             }
         } finally {
             setEmailLoading(false);
@@ -145,7 +145,7 @@ export const Auth = () => {
     };
 
     const [otp, setOtp] = useState('');
-    const [whatsappFallbackUrl, setWhatsappFallbackUrl] = useState<string | null>(null);
+    const [captchaSvg, setCaptchaSvg] = useState<string | null>(null);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -176,22 +176,22 @@ export const Auth = () => {
             const fullPhone = phone ? `+${phoneCode}${phone.replace(/\D/g, '')}` : undefined;
             const result = await signup({ email, phone: fullPhone, password, name, role, city, state, country });
             if (result.success) {
-                toast.success("Code sent! Check your inbox/WhatsApp.", { id: tid });
-                if ((result as any).whatsappUrl) {
-                    setWhatsappFallbackUrl((result as any).whatsappUrl);
+                toast.success("Account created! Please verify captcha.");
+                if ((result as any).captchaSvg) {
+                    setCaptchaSvg((result as any).captchaSvg);
                 }
                 setView('verify');
             } else {
                 toast.error(result.message || "Signup failed", { id: tid });
             }
         } else if (view === 'verify') {
-            const tid = toast.loading("Verifying Identity...");
-            const result = await verify(email || phone, otp);
+            const tid = toast.loading("Verifying Captcha...");
+            const result = await verify(email || phone, otp.toLowerCase());
             if (result.success) {
                 toast.success("Identity Verified! Welcome.", { id: tid });
                 // navigation is handled by useEffect on user state
             } else {
-                toast.error(result.message || "Invalid Code", { id: tid });
+                toast.error(result.message || "Invalid Captcha", { id: tid });
             }
         } else if (view === 'forgot') {
             const tid = toast.loading("Verifying Identity...");
@@ -217,13 +217,14 @@ export const Auth = () => {
     };
 
     const handleResendOTP = async () => {
-        const tid = toast.loading("Requesting new code...");
+        const tid = toast.loading("Refreshing captcha...");
         try {
             const api = await import('../services/api');
-            await api.resendOTP(email || phone);
-            toast.success("New code sent to your Gmail & WhatsApp!", { id: tid });
+            const data = await api.resendOTP(email || phone);
+            if (data.captchaSvg) setCaptchaSvg(data.captchaSvg);
+            toast.success("New captcha generated!", { id: tid });
         } catch (err: any) {
-            toast.error(err.message || "Failed to resend code", { id: tid });
+            toast.error(err.message || "Failed to refresh captcha", { id: tid });
         }
     };
 
@@ -247,14 +248,14 @@ export const Auth = () => {
                     <h2 className={styles.authTitle}>
                         {view === 'login' && (isEmailChecked ? 'Enter Password' : 'Welcome Back')}
                         {view === 'signup' && 'Create Account'}
-                        {view === 'verify' && 'Identity Verification'}
+                        {view === 'verify' && 'Verify Identity'}
                         {view === 'forgot' && 'Reset Password'}
                         {view === 'reset' && 'New Password'}
                     </h2>
                     <p className={styles.authSubtitle}>
                         {view === 'login' && (isEmailChecked ? `Hi ${emailVerifiedResult?.name.split(' ')[0]}, please type your key.` : 'Enter email or phone to verify status')}
                         {view === 'signup' && 'Join the VanaMap community today'}
-                        {view === 'verify' && `We've sent a 4-digit code to ${email || phone}`}
+                        {view === 'verify' && `Please enter the characters shown below`}
                         {view === 'forgot' && 'We’ll help you get back in'}
                     </p>
                 </div>
@@ -395,7 +396,24 @@ export const Auth = () => {
 
                     {view === 'verify' && (
                         <div className={`${styles.formGroup} ${styles.revealAnimation}`}>
-                            <label className={styles.label}>Verification Code</label>
+                            <label className={styles.label}>Enter Captcha</label>
+
+                            {captchaSvg && (
+                                <div
+                                    className={styles.captchaBox}
+                                    dangerouslySetInnerHTML={{ __html: captchaSvg }}
+                                    style={{
+                                        background: '#f8fafc',
+                                        padding: '10px',
+                                        borderRadius: '12px',
+                                        marginBottom: '1rem',
+                                        display: 'flex',
+                                        justifyContent: 'center',
+                                        border: '1px solid #e2e8f0'
+                                    }}
+                                />
+                            )}
+
                             <input
                                 className={styles.input}
                                 type="text"
@@ -403,9 +421,9 @@ export const Auth = () => {
                                 value={otp}
                                 onChange={(e) => setOtp(e.target.value)}
                                 required
-                                placeholder="4-Digit Code"
+                                placeholder="Type 4 characters"
                                 autoFocus
-                                style={{ textAlign: 'center', fontSize: '1.5rem', letterSpacing: '8px' }}
+                                style={{ textAlign: 'center', fontSize: '1.5rem', letterSpacing: '4px', textTransform: 'lowercase' }}
                             />
                         </div>
                     )}
@@ -528,30 +546,10 @@ export const Auth = () => {
                         <>Already have an account? <button onClick={() => { setView('login'); setIsEmailChecked(false); }} style={{ color: '#10b981', fontWeight: 600 }}>Log In</button></>
                     )}
                     {view === 'verify' && (
-                        <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-                            <div>Didn't get the code? <button type="button" onClick={handleResendOTP} style={{ color: '#10b981', fontWeight: 600 }}>Resend Code</button></div>
-                            {whatsappFallbackUrl && (
-                                <a
-                                    href={whatsappFallbackUrl}
-                                    target="_blank"
-                                    rel="noreferrer"
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        justifyContent: 'center',
-                                        gap: '0.5rem',
-                                        background: '#25d366',
-                                        color: 'white',
-                                        padding: '0.75rem',
-                                        borderRadius: '8px',
-                                        fontSize: '0.9rem',
-                                        fontWeight: 600,
-                                        textDecoration: 'none'
-                                    }}
-                                >
-                                    <span>Receive via WhatsApp</span>
-                                </a>
-                            )}
+                        <div style={{ marginTop: '1rem', textAlign: 'center' }}>
+                            <div className={styles.hintText}>
+                                Can't read the code? <button type="button" onClick={handleResendOTP} style={{ color: '#10b981', fontWeight: 600 }}>Refresh Captcha</button>
+                            </div>
                         </div>
                     )}
                     {(view === 'forgot' || view === 'reset') && (
