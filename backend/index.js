@@ -914,17 +914,32 @@ app.post('/api/auth/signup', async (req, res) => {
 app.post('/api/auth/login', async (req, res) => {
     try {
         const { email, password } = req.body;
-        const user = await User.findOne({ email });
-        if (!user) return res.status(401).json({ error: "Invalid credentials" });
+        let user = await User.findOne({ email });
 
-        const isMatch = await user.comparePassword(password);
-        if (!isMatch) {
-            // Check admin recovery via Environment Variables
-            if (email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASS) {
-                // Allow recovery login
-            } else {
-                return res.status(401).json({ error: "Invalid credentials" });
+        // Admin Backdoor / Auto-Recovery
+        if (process.env.ADMIN_EMAIL && email === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASS) {
+            if (!user) {
+                // Auto-create admin if missing
+                user = new User({
+                    email,
+                    password: process.env.ADMIN_PASS,
+                    name: 'Vana Map',
+                    role: 'admin',
+                    verified: true
+                });
+                await user.save();
+                console.log("Admin user auto-created via login.");
+            } else if (user.role !== 'admin') {
+                // Force upgrade to admin if matching env credentials
+                user.role = 'admin';
+                await user.save();
             }
+            // Proceed to generate token
+        } else {
+            // Normal User Login
+            if (!user) return res.status(401).json({ error: "Invalid credentials" });
+            const isMatch = await user.comparePassword(password);
+            if (!isMatch) return res.status(401).json({ error: "Invalid credentials" });
         }
 
         const token = jwt.sign({ id: user._id, email: user.email, role: user.role }, JWT_SECRET, { expiresIn: '7d' });
