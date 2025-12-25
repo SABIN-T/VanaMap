@@ -34,13 +34,14 @@ const transporter = nodemailer.createTransport({
 });
 
 // Verify connection configuration
-transporter.verify((error, success) => {
-    if (error) {
-        console.error("SMTP Connection Error:", error.message);
-    } else {
-        console.log("SMTP Server is ready to take our messages");
-    }
-});
+// Verify connection configuration - DISABLED to prevent startup hang/crash on timeout
+// transporter.verify((error, success) => {
+//     if (error) {
+//         console.error("SMTP Connection Error:", error.message);
+//     } else {
+//         console.log("SMTP Server is ready to take our messages");
+//     }
+// });
 
 const sendResetEmail = async (email, tempPass) => {
     console.log(`ATTEMPTING TO SEND EMAIL TO: ${email} via ${process.env.EMAIL_USER}`);
