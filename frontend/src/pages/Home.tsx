@@ -46,8 +46,7 @@ export const Home = () => {
 
     const capabilities = [
         { id: 'cap-smart', title: 'Smart Match', icon: <Sparkles size={32} />, color: '#34d399', bg: 'rgba(52, 211, 153, 0.1)', desc: 'We score plants based on your local temperature and air quality to ensure they survive.' },
-        { id: 'cap-oxygen', title: 'Oxygen Boost', icon: <Wind size={32} />, color: '#38bdf8', bg: 'rgba(56, 189, 248, 0.1)', desc: 'See how much oxygen each plant produces to help you breathe better and sleep deeper.' },
-        { id: 'cap-care', title: 'Care Guides', icon: <Sprout size={32} />, color: '#a855f7', bg: 'rgba(168, 85, 247, 0.1)', desc: 'Simple tips for watering, sunlight, and care for every plant in your home.' }
+        { id: 'cap-oxygen', title: 'Oxygen Boost', icon: <Wind size={32} />, color: '#38bdf8', bg: 'rgba(56, 189, 248, 0.1)', desc: 'See how much oxygen each plant produces to help you breathe better and sleep deeper.' }
     ];
 
     const personas = [
