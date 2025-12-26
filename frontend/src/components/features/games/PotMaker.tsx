@@ -62,11 +62,30 @@ const PotModel = ({ textureUrl }: { textureUrl: string | null }) => {
             <mesh castShadow receiveShadow position={[0, 0.5, 0]}>
                 {/* Cylinder: TopRadius, BottomRadius, Height, Segments */}
                 <cylinderGeometry args={[1.2, 1, 2.2, 64]} />
+
+                {/* Material Index 0: Side (Body) - Apply Texture */}
                 <meshStandardMaterial
+                    attach="material-0"
                     color="#ffffff"
                     roughness={0.3}
                     metalness={0.1}
-                    map={texture} // Apply user design as texture
+                    map={texture}
+                />
+
+                {/* Material Index 1: Top Cap - Plain White */}
+                <meshStandardMaterial
+                    attach="material-1"
+                    color="#ffffff"
+                    roughness={0.3}
+                    metalness={0.1}
+                />
+
+                {/* Material Index 2: Bottom Cap - Plain White */}
+                <meshStandardMaterial
+                    attach="material-2"
+                    color="#ffffff"
+                    roughness={0.3}
+                    metalness={0.1}
                 />
             </mesh>
             {/* Inner Dark Soil Area (Visual trick) */}
