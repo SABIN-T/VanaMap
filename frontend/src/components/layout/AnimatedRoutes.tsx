@@ -13,6 +13,7 @@ const Contact = lazy(() => import('../../pages/Contact').then(m => ({ default: m
 const Shops = lazy(() => import('../../pages/Shops').then(m => ({ default: m.Shops })));
 const Support = lazy(() => import('../../pages/Support').then(m => ({ default: m.Support })));
 const Sponsor = lazy(() => import('../../pages/Sponsor').then(m => ({ default: m.Sponsor })));
+const ChildrenZone = lazy(() => import('../../pages/ChildrenZone').then(m => ({ default: m.ChildrenZone })));
 const AddPlant = lazy(() => import('../../pages/admin/AddPlant').then(m => ({ default: m.AddPlant })));
 const AddVendor = lazy(() => import('../../pages/admin/AddVendor').then(m => ({ default: m.AddVendor })));
 const ManagePlants = lazy(() => import('../../pages/admin/ManagePlants').then(m => ({ default: m.ManagePlants })));
@@ -98,6 +99,7 @@ export const AnimatedRoutes = () => {
                         <Route path="/sponsor" element={<Sponsor />} />
                         <Route path="/shops" element={<Shops />} />
                         <Route path="/leaderboard" element={<Leaderboard />} />
+                        <Route path="/children-zone" element={<ChildrenZone />} />
                     </Routes>
                 </div>
             </Suspense>

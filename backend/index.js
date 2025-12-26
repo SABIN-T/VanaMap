@@ -731,6 +731,11 @@ app.post('/api/admin/seed-plants', auth, admin, async (req, res) => {
         }
 
         console.log(`SEED: Complete. Added ${stats.added}, Updated ${stats.updated}`);
+
+        if (stats.added > 0) {
+            await broadcastAlert('plant', `${stats.added} new plants have been added to our collection!`, { count: stats.added, title: 'Library Update 📚' }, '/#plant-grid');
+        }
+
         res.json({ success: true, ...stats, total: allPlants.length });
     } catch (err) {
         console.error("SEED ERROR:", err);
@@ -1011,7 +1016,6 @@ app.post('/api/auth/verify-otp', async (req, res) => {
 
         console.log(`[AUTH] User created AFTER verification: ${user.email || user.phone}`);
 
-        await broadcastAlert('user', `${user.name} joined VanaMap! Welcome!`, { email: user.email, role: user.role, title: 'New Explorer Joined 🌿' });
         sendWelcomeEmail(user.email, user.name, user.role);
 
         const token = jwt.sign({ id: user._id, email: user.email, role: user.role }, JWT_SECRET, { expiresIn: '7d' });

@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Home, MapPin, ShoppingBag, ShoppingCart, MessageCircle } from 'lucide-react';
+import { Home, MapPin, ShoppingBag, ShoppingCart, Gamepad2 } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
 import { useEffect, useState } from 'react';
 
@@ -20,7 +20,7 @@ export const MobileTabBar = () => {
         { path: '/', icon: Home, label: 'Home' },
         { path: '/nearby', icon: MapPin, label: 'Nearby' },
         { path: '/shops', icon: ShoppingBag, label: 'Shops' },
-        { path: '/contact', icon: MessageCircle, label: 'Support' },
+        { path: '/children-zone', icon: Gamepad2, label: 'Kids' },
         { path: '/cart', icon: ShoppingCart, label: 'Cart', badge: items.length },
     ];
 

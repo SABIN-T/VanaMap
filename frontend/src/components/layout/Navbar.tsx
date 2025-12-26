@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingCart, User as UserIcon, LogOut, Leaf, Sun, Moon, Menu, X, ChevronRight, Download, Shield, ShoppingBag, Trophy } from 'lucide-react';
+import { ShoppingCart, User as UserIcon, LogOut, Leaf, Sun, Moon, Menu, X, ChevronRight, Download, Shield, ShoppingBag, Trophy, Gamepad2 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
 import { useTheme } from '../../context/ThemeContext';
@@ -46,6 +46,9 @@ export const Navbar = () => {
 
                 <Link id="nav-shops" to="/shops" className={styles.navLink}>
                     <ShoppingBag size={18} /> Shops
+                </Link>
+                <Link to="/children-zone" className={styles.navLink}>
+                    <Gamepad2 size={18} /> Kids Zone
                 </Link>
                 <Link id="nav-leaderboard" to="/leaderboard" className={styles.navLink}>
                     <Trophy size={18} /> Ranking
