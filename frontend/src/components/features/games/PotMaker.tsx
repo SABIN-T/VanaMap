@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback } from 'react';
-import { Upload, Camera, Save, ShoppingCart, Layers, RotateCcw, X, Check, Box, Circle, Scaling } from 'lucide-react';
+import { Upload, Camera, Save, ShoppingCart, Layers, RotateCcw, X, Check } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Cropper from 'react-easy-crop';
 import { Canvas, useLoader } from '@react-three/fiber';
