@@ -31,6 +31,7 @@ const Leaderboard = lazy(() => import('../../pages/Leaderboard').then(m => ({ de
 const SeedDashboard = lazy(() => import('../../pages/admin/SeedDashboard').then(m => ({ default: m.SeedDashboard })));
 const PlantIdentifier = lazy(() => import('../../pages/admin/PlantIdentifier').then(m => ({ default: m.PlantIdentifier })));
 const SimulationData = lazy(() => import('../../pages/admin/SimulationData').then(m => ({ default: m.SimulationData })));
+const PotDesigns = lazy(() => import('../../pages/admin/PotDesigns').then(m => ({ default: m.default })));
 
 
 const LoadingScreen = () => (
@@ -91,6 +92,7 @@ export const AnimatedRoutes = () => {
                         <Route path="/admin/identify" element={<PlantIdentifier />} />
                         <Route path="/admin/simulation-data" element={<SimulationData />} />
                         <Route path="/admin/suggestions" element={<ManageSuggestions />} />
+                        <Route path="/admin/pot-designs" element={<PotDesigns />} />
 
                         <Route path="/admin/edit-plant/:id" element={<EditPlant />} />
 

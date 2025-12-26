@@ -64,6 +64,12 @@ const PotModel = ({
         texture.wrapS = THREE.ClampToEdgeWrapping;
         texture.wrapT = THREE.ClampToEdgeWrapping;
 
+        // Quality improvements for "High End" look
+        texture.anisotropy = 16;
+        texture.minFilter = THREE.LinearMipmapLinearFilter;
+        texture.magFilter = THREE.LinearFilter;
+        texture.generateMipmaps = true;
+
         // Inverse logic: Higher "Scale" slider value usually means "Zoom In", 
         // which for repeats means SMALLER repeat count.
         // So we invert the slider value: 1 / scale
@@ -95,19 +101,20 @@ const PotModel = ({
                 <meshStandardMaterial
                     attach="material-0"
                     color="#ffffff"
-                    roughness={0.3}
+                    roughness={0.4}
+                    metalness={0.05}
                     map={texture}
                 />
                 {/* Material 1: Top - White */}
-                <meshStandardMaterial attach="material-1" color="#ffffff" roughness={0.3} />
+                <meshStandardMaterial attach="material-1" color="#ffffff" roughness={0.5} />
                 {/* Material 2: Bottom - White */}
-                <meshStandardMaterial attach="material-2" color="#ffffff" roughness={0.3} />
+                <meshStandardMaterial attach="material-2" color="#ffffff" roughness={0.5} />
             </mesh>
 
             {/* Soil */}
             <mesh position={[0, shape === 'wide' ? 1.3 : 1.59, 0]} rotation={[-Math.PI / 2, 0, 0]}>
                 <circleGeometry args={[shape === 'wide' ? 1.3 : 1.1, 32]} />
-                <meshStandardMaterial color="#3f2e26" />
+                <meshStandardMaterial color="#2d1e18" roughness={1} />
             </mesh>
         </group>
     );
@@ -120,8 +127,13 @@ const CaptureRelay = ({ captureRef }: { captureRef: React.MutableRefObject<any> 
 
     useEffect(() => {
         captureRef.current = () => {
+            // Force a high-quality render for the snapshot
+            const originalRatio = gl.getPixelRatio();
+            gl.setPixelRatio(2); // High resolution snapshot
             gl.render(scene, camera);
-            return gl.domElement.toDataURL('image/png', 1.0);
+            const dataUrl = gl.domElement.toDataURL('image/png', 1.0);
+            gl.setPixelRatio(originalRatio); // Restore
+            return dataUrl;
         };
     }, [gl, scene, camera, captureRef]);
 

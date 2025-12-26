@@ -229,10 +229,10 @@ app.use(helmet({
     contentSecurityPolicy: false,
     crossOriginEmbedderPolicy: false
 })); // Set security HTTP headers
-app.use(express.json({ limit: '10mb' })); // Body parser
+app.use(express.json({ limit: '50mb' })); // Body parser
 app.use(mongoSanitize()); // Data sanitization against NoSQL query injection
 app.use(xss()); // Data sanitization against XSS
-app.use(express.urlencoded({ limit: '10mb', extended: true }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 // --- RATE LIMITING ---
 const authLimiter = rateLimit({
@@ -1221,9 +1221,23 @@ app.patch('/api/user/game-progress', auth, async (req, res) => {
     }
 });
 
+app.get('/api/admin/designs', auth, async (req, res) => {
+    try {
+        if (req.user.role !== 'admin') return res.status(403).json({ error: "Access denied" });
+
+        const usersWithDesigns = await User.find({ "designs.0": { $exists: true } })
+            .select('name email designs')
+            .lean();
+
+        res.json(usersWithDesigns);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 app.post('/api/user/designs', auth, async (req, res) => {
     try {
-        const { imageUrl } = req.body;
+        const { imageUrl, shape, size } = req.body;
         const user = await User.findById(req.user.id);
         if (!user) return res.status(404).json({ error: "User not found" });
 
@@ -1232,6 +1246,8 @@ app.post('/api/user/designs', auth, async (req, res) => {
         user.designs.push({
             id: 'pot_' + Date.now(),
             imageUrl,
+            shape,
+            size,
             createdAt: new Date()
         });
 
