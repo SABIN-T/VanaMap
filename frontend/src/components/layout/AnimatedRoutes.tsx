@@ -31,14 +31,14 @@ const Leaderboard = lazy(() => import('../../pages/Leaderboard').then(m => ({ de
 const SeedDashboard = lazy(() => import('../../pages/admin/SeedDashboard').then(m => ({ default: m.SeedDashboard })));
 const PlantIdentifier = lazy(() => import('../../pages/admin/PlantIdentifier').then(m => ({ default: m.PlantIdentifier })));
 const SimulationData = lazy(() => import('../../pages/admin/SimulationData').then(m => ({ default: m.SimulationData })));
-const PotDesigns = lazy(() => import('../../pages/admin/PotDesigns'));
+const PotDesigns = lazy(() => import('../../pages/admin/PotDesigns').then(m => ({ default: m.default })));
 
 
 const LoadingScreen = () => (
     <div style={{
         height: '100vh', width: '100vw', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0f172a'
     }}>
-        <div className="pre-loader-pulse"></div>
+        <div className="pulse"></div>
     </div>
 );
 
@@ -57,6 +57,18 @@ export const AnimatedRoutes = () => {
                 @keyframes pageFadeIn {
                     from { opacity: 0; transform: translateY(8px); }
                     to { opacity: 1; transform: translateY(0); }
+                }
+                .pulse {
+                    width: 60px;
+                    height: 60px;
+                    background-color: #10b981;
+                    border-radius: 100%;
+                    animation: pulse-scale 1.0s infinite ease-in-out;
+                    box-shadow: 0 0 30px rgba(16, 185, 129, 0.4);
+                }
+                @keyframes pulse-scale {
+                    0% { transform: scale(0); opacity: 1; }
+                    100% { transform: scale(1.0); opacity: 0; }
                 }
             `}</style>
             <Suspense fallback={<LoadingScreen />}>

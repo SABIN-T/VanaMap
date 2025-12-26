@@ -1,5 +1,5 @@
 // Advanced Service Worker for VanaMap v2.0
-const CACHE_NAME = 'vanamap-v5-mobile-fix';
+const CACHE_NAME = 'vanamap-v6-desktop-fix';
 const ASSETS_TO_CACHE = [
     '/',
     '/index.html',
@@ -53,8 +53,11 @@ self.addEventListener('fetch', (event) => {
         event.respondWith(
             fetch(event.request)
                 .then((response) => {
-                    const clonedRes = response.clone();
-                    caches.open(CACHE_NAME).then(cache => cache.put(event.request, clonedRes));
+                    // Only cache successful responses
+                    if (response && response.status === 200) {
+                        const clonedRes = response.clone();
+                        caches.open(CACHE_NAME).then(cache => cache.put(event.request, clonedRes));
+                    }
                     return response;
                 })
                 .catch(() => caches.match(event.request))
