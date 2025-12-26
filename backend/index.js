@@ -1147,6 +1147,42 @@ app.post('/api/user/cart', auth, async (req, res) => {
     }
 });
 
+app.patch('/api/user/game-progress', auth, async (req, res) => {
+    try {
+        const { level, points } = req.body;
+        const user = await User.findById(req.user.id);
+        if (!user) return res.status(404).json({ error: "User not found" });
+
+        if (level && level > (user.gameLevel || 1)) user.gameLevel = level;
+        if (points && points > (user.gamePoints || 0)) user.gamePoints = points;
+
+        await user.save();
+        res.json({ success: true, level: user.gameLevel, gamePoints: user.gamePoints });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.get('/api/gamification/leaderboard', async (req, res) => {
+    try {
+        const users = await User.find({ role: 'user' })
+            .sort({ points: -1 })
+            .limit(50)
+            .select('name city points gameLevel gamePoints');
+
+        const cities = await User.aggregate([
+            { $match: { city: { $exists: true, $ne: null } } },
+            { $group: { _id: { city: "$city" }, totalPoints: { $sum: "$points" }, userCount: { $sum: 1 } } },
+            { $sort: { totalPoints: -1 } },
+            { $limit: 10 }
+        ]);
+
+        res.json({ users, cities });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 app.post('/api/user/change-password', auth, async (req, res) => {
     try {
         const { oldPassword, newPassword } = req.body;

@@ -402,6 +402,16 @@ export const updateUserPoints = async (userId: string, points: number) => {
     if (!res.ok) throw new Error("Failed to update user points");
     return res.json();
 };
+
+export const updateGameProgress = async (level: number, points: number) => {
+    const res = await fetch(`${API_URL}/user/game-progress`, {
+        method: 'PATCH',
+        headers: getHeaders(),
+        body: JSON.stringify({ level, points })
+    });
+    if (!res.ok) throw new Error("Failed to update game progress");
+    return res.json();
+};
 export const fetchSeedData = async () => {
     const res = await fetch(`${API_URL}/admin/seed-data`, {
         headers: getHeaders()

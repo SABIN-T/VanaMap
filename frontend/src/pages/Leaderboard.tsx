@@ -100,6 +100,9 @@ export const Leaderboard = () => {
                             <span className={styles.name}>{user.name}</span>
                         </div>
                         <span className={styles.rowLocation}>{user.city || 'Global'}</span>
+                        <div className={styles.levelBadge} style={{ marginRight: '1rem', display: 'flex', alignItems: 'center', gap: '4px', background: '#334155', padding: '4px 8px', borderRadius: '8px', fontSize: '0.8rem', color: '#fbbf24' }}>
+                            <Sprout size={12} /> Lvl {user.gameLevel || 1}
+                        </div>
                         <div className={styles.rowPoints}>{user.points.toLocaleString()} CP</div>
                     </div>
                 ))}

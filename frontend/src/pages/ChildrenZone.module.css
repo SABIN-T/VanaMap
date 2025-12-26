@@ -1,158 +1,295 @@
-.container {
-    padding: 2rem;
+.pageWrapper {
     min-height: 100vh;
-    background: linear-gradient(180deg, #dcfce7 0%, #f0fdf4 100%);
-    color: #1e293b;
+    background: linear-gradient(135deg, #a5f3fc 0%, #7dd3fc 100%);
     font-family: 'Outfit', sans-serif;
-    text-align: center;
-    overflow-x: hidden;
-}
-
-.gameArea {
-    max-width: 800px;
-    margin: 0 auto;
-    background: white;
-    border-radius: 2rem;
-    box-shadow: 0 20px 50px -10px rgba(16, 185, 129, 0.2);
-    padding: 2rem;
     position: relative;
     overflow: hidden;
-    min-height: 600px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+}
+
+.sky {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.cloud {
+    position: absolute;
+    color: rgba(255, 255, 255, 0.8);
+    animation: floatCloud 20s linear infinite;
+}
+
+.gameContainer {
+    position: relative;
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(20px);
+    border-radius: 40px;
+    padding: 2rem;
+    box-shadow:
+        0 20px 50px rgba(0, 0, 0, 0.1),
+        inset 0 2px 0 rgba(255, 255, 255, 0.5);
+    width: 100%;
+    max-width: 600px;
+    border: 2px solid rgba(255, 255, 255, 0.6);
 }
 
 .header {
+    text-align: center;
     margin-bottom: 2rem;
 }
 
 .title {
     font-size: 2.5rem;
-    color: #15803d;
     font-weight: 800;
-    margin-bottom: 0.5rem;
-    text-shadow: 2px 2px 0px #bbf7d0;
+    color: #0f172a;
+    margin: 0;
+    letter-spacing: -1px;
 }
 
 .subtitle {
+    font-size: 1rem;
     color: #64748b;
-    font-size: 1.1rem;
+    margin-top: 0.5rem;
+    font-weight: 600;
 }
 
 .statsBar {
     display: flex;
-    justify-content: space-around;
-    background: #f1f5f9;
-    padding: 1rem;
-    border-radius: 1rem;
+    justify-content: space-between;
+    background: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 20px;
     margin-bottom: 2rem;
-    font-weight: 700;
-    font-size: 1.2rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
-.statItem {
+.stat {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    font-weight: 700;
+    font-size: 1.1rem;
 }
 
 .gardenGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 1.5rem;
+    margin-bottom: 2rem;
     padding: 1rem;
-    min-height: 300px;
+    perspective: 1000px;
 }
 
 .plot {
+    position: relative;
     aspect-ratio: 1;
     background: #e2e8f0;
-    border-radius: 1rem;
-    border: 3px dashed #cbd5e1;
+    border-radius: 24px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow:
+        0 8px 0 #cbd5e1,
+        0 8px 10px rgba(0, 0, 0, 0.1);
+    transform-style: preserve-3d;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-    position: relative;
-    user-select: none;
 }
 
-.plot:hover {
-    transform: scale(1.05);
-    border-color: #86efac;
-    background: #f0fdf4;
+.plot:active {
+    transform: translateY(4px);
+    box-shadow:
+        0 4px 0 #cbd5e1,
+        0 4px 5px rgba(0, 0, 0, 0.1);
 }
 
-.plotActive {
-    border-style: solid;
-    border-color: #4ade80;
-    background: #dcfce7;
+.plotLocked {
+    background: #f1f5f9;
+    opacity: 0.7;
+    cursor: not-allowed;
 }
 
-.plantEmoji {
-    font-size: 3rem;
-    filter: drop-shadow(0 4px 4px rgba(0, 0, 0, 0.1));
-    transition: transform 0.3s;
+/* Soil Texture Effect */
+.plot::before {
+    content: '';
+    position: absolute;
+    inset: 6px;
+    border: 2px dashed rgba(0, 0, 0, 0.1);
+    border-radius: 18px;
+    pointer-events: none;
+}
+
+.plantContent {
+    font-size: 3.5rem;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+    z-index: 2;
+    transition: transform 0.4s;
 }
 
 .plantGrowing {
-    animation: bounce 1s infinite;
+    animation: growPulse 2s infinite ease-in-out;
 }
 
-.actionBar {
-    margin-top: 2rem;
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-
-.actionBtn {
-    border: none;
-    padding: 1rem 2rem;
-    border-radius: 99px;
-    font-size: 1.1rem;
-    font-weight: 800;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    transition: transform 0.1s, box-shadow 0.1s;
-    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
-}
-
-.actionBtn:active {
-    transform: translateY(2px);
-    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
-}
-
-.btnWater {
-    background: #38bdf8;
-    color: white;
-}
-
-.btnPlant {
-    background: #22c55e;
-    color: white;
-}
-
-.btnHarvest {
-    background: #facc15;
-    color: #854d0e;
-}
-
-.tutorialOverlay {
+.waterMeter {
     position: absolute;
-    inset: 0;
-    background: rgba(255, 255, 255, 0.9);
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 8px;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 2px solid white;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    z-index: 5;
+}
+
+.waterFill {
+    height: 100%;
+    background: #38bdf8;
+    transition: width 0.3s;
+}
+
+.controls {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    background: white;
+    padding: 1rem;
+    border-radius: 24px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.toolBtn {
+    width: 64px;
+    height: 64px;
+    border-radius: 20px;
+    border: none;
+    background: #f8fafc;
+    color: #64748b;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    z-index: 10;
+    gap: 4px;
+    position: relative;
+    box-shadow: 0 4px 0 #e2e8f0;
 }
 
-@keyframes bounce {
+.toolBtn span {
+    font-size: 0.6rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.toolBtn:hover {
+    transform: translateY(-2px);
+    background: #fff;
+    color: #0f172a;
+}
+
+.toolBtnActive {
+    background: #dbeafe;
+    color: #2563eb;
+    transform: translateY(-4px);
+    box-shadow: 0 8px 0 #bfdbfe;
+}
+
+.toolBtnActive.seed {
+    background: #dcfce7;
+    color: #16a34a;
+    box-shadow: 0 8px 0 #bbf7d0;
+}
+
+.toolBtnActive.water {
+    background: #e0f2fe;
+    color: #0284c7;
+    box-shadow: 0 8px 0 #bae6fd;
+}
+
+.toolBtnActive.harvest {
+    background: #fef9c3;
+    color: #ca8a04;
+    box-shadow: 0 8px 0 #fde047;
+}
+
+/* Tutorial Modal */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(5px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 2rem;
+}
+
+.modal {
+    background: white;
+    padding: 3rem;
+    border-radius: 32px;
+    max-width: 500px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+    animation: popIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.ctaBtn {
+    margin-top: 2rem;
+    padding: 1rem 3rem;
+    background: #10b981;
+    color: white;
+    font-weight: 800;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    box-shadow: 0 8px 0 #059669;
+    transition: transform 0.1s;
+}
+
+.ctaBtn:active {
+    transform: translateY(4px);
+    box-shadow: 0 4px 0 #059669;
+}
+
+@keyframes floatCloud {
+    from {
+        transform: translateX(-100%);
+    }
+
+    to {
+        transform: translateX(100vw);
+    }
+}
+
+@keyframes popIn {
+    from {
+        opacity: 0;
+        transform: scale(0.8) translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+@keyframes growPulse {
 
     0%,
     100% {
@@ -161,30 +298,5 @@
 
     50% {
         transform: scale(1.1);
-    }
-}
-
-.confetti {
-    position: absolute;
-    pointer-events: none;
-    animation: fall linear forwards;
-}
-
-@media (max-width: 600px) {
-    .container {
-        padding: 1rem;
-    }
-
-    .gameArea {
-        padding: 1rem;
-        min-height: 80vh;
-    }
-
-    .title {
-        font-size: 2rem;
-    }
-
-    .grid {
-        gap: 0.5rem;
     }
 }
