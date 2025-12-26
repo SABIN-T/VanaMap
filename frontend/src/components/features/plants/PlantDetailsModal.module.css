@@ -23,6 +23,8 @@
     border-radius: 2.5rem;
     background: rgba(15, 23, 42, 0.98);
     color: white;
+    padding-bottom: 120px;
+    /* Ensure content clears mobile tab bar */
     box-shadow:
         0 40px 100px -20px rgba(0, 0, 0, 0.8),
         0 0 40px rgba(16, 185, 129, 0.1);
