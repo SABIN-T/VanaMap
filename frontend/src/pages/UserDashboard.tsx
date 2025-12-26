@@ -639,7 +639,7 @@ export const UserDashboard = () => {
                         </button>
                     </div>
 
-                    <div style={{ flex: 1, overflowY: 'auto', padding: '1.5rem' }}>
+                    <div style={{ flex: 1, overflowY: 'auto', padding: '1.5rem', paddingBottom: '150px' }}>
                         {loadingFavs ? (
                             <div className={styles.loadingBox}><Loader2 className="animate-spin" /></div>
                         ) : favoritePlants.length === 0 ? (
