@@ -120,7 +120,7 @@ export const InstallPrompt = () => {
     return (
         <div style={{
             position: 'fixed',
-            bottom: isMobile ? '20px' : '40px',
+            bottom: isMobile ? '90px' : '40px', // Sit above the 75px MobileTabBar
             left: isMobile ? '50%' : 'auto',
             right: isMobile ? 'auto' : '40px',
             transform: isMobile ? 'translateX(-50%)' : 'none',
