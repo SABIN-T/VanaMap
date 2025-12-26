@@ -406,3 +406,40 @@
         align-items: flex-start;
     }
 }
+
+/* ACTION GRID for Quick Access Buttons */
+.actionGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.actionCard {
+    /* Base styles, specific colors can be overridden inline or via modifiers */
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1.5rem;
+    border-radius: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.actionCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    filter: brightness(1.2);
+    /* Brightens the inline background color */
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.actionCard:active {
+    transform: scale(0.98);
+}

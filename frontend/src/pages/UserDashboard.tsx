@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import { Button } from '../components/common/Button';
-import { Trash2, ShoppingBag, MapPin, Heart, ArrowRight, Loader2, Store, Shield, Lock, Trophy, Zap, TrendingUp, Wind, Award, HelpCircle } from 'lucide-react';
+import { ShoppingBag, MapPin, Heart, ArrowRight, Loader2, Store, Shield, Lock, Trophy, Zap, TrendingUp, Wind, Award, HelpCircle } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { fetchPlants, fetchVendors, updateVendor, changePassword } from '../services/api';
@@ -10,29 +10,26 @@ import toast from 'react-hot-toast';
 import styles from './UserDashboard.module.css';
 
 export const UserDashboard = () => {
-    const { items, removeFromCart } = useCart();
-    const { user, loading, toggleFavorite } = useAuth();
+    const { user, changePassword, registerVendor } = useAuth();
+    const { items, favorites: favoritePlants, toggleFavorite } = useCart();
     const navigate = useNavigate();
 
-    // Favorites State
-    const [allPlants, setAllPlants] = useState<Plant[]>([]);
-    const [loadingFavs, setLoadingFavs] = useState(true);
+    const [pwdForm, setPwdForm] = useState({ old: '', new: '', confirm: '' });
+    const [showPasswordModal, setShowPasswordModal] = useState(false);
     const [showGuide, setShowGuide] = useState(false);
+    const [loadingFavs, setLoadingFavs] = useState(false);
 
     // Vendor Onboarding State
     const [showVendorModal, setShowVendorModal] = useState(false);
-    const [detectingLoc, setDetectingLoc] = useState(false);
-    const [myVendor, setMyVendor] = useState<Vendor | null>(null);
-    const [vendorForm, setVendorForm] = useState({
-        name: '',
-        address: '',
-        phone: '',
-        latitude: 0,
-        longitude: 0
+    const [vendorForm, setVendorForm] = useState<{ name: string, phone: string, address: string, latitude: number | null, longitude: number | null }>({
+        name: '', phone: '', address: '', latitude: null, longitude: null
     });
+    const [detectingLoc, setDetectingLoc] = useState(false);
 
-    const [showPasswordModal, setShowPasswordModal] = useState(false);
-    const [pwdForm, setPwdForm] = useState({ old: '', new: '', confirm: '' });
+    if (!user) {
+        navigate('/login');
+        return null;
+    }
 
     useEffect(() => {
         const loadVendorData = async () => {
@@ -191,6 +188,9 @@ export const UserDashboard = () => {
         return null;
     }
 
+    // Layout State
+    const [showCollectionModal, setShowCollectionModal] = useState(false);
+
     return (
         <div className={styles.container}>
             {/* GAMIFICATION NOTICE BANNER */}
@@ -239,6 +239,7 @@ export const UserDashboard = () => {
                     </Button>
                 </div>
             )}
+
             {/* VENDOR ONBOARDING MODAL */}
             {showVendorModal && (
                 <div style={{
@@ -471,10 +472,6 @@ export const UserDashboard = () => {
                         <Lock size={18} />
                     </button>
 
-                    <button onClick={() => navigate('/leaderboard')} className={styles.iconActionBtn} title="Leaderboard">
-                        <Trophy size={18} />
-                    </button>
-
                     {user.role === 'vendor' && (
                         <Button onClick={() => navigate('/vendor')} variant="primary" size="sm" style={{ padding: '0.6rem 1.2rem', borderRadius: '0.75rem' }}>
                             <Store size={18} /> Shop Portal
@@ -567,100 +564,122 @@ export const UserDashboard = () => {
                 </div>
             )}
 
-            <div className={styles.mainGrid}>
-                {/* FAVORITES SECTION */}
-                <section className={styles.dashboardSection}>
-                    <div className={styles.sectionHeader}>
-                        <h2 className={styles.sectionTitle}>Collection</h2>
-                        <span className={styles.sectionCount}>{user.favorites?.length || 0}</span>
+            {/* MAIN ACTION GRID (Cleaned up from lists) */}
+            <div className={styles.actionGrid} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
+
+                {/* 1. HALL OF FAME BUTTON */}
+                <div onClick={() => navigate('/leaderboard')} className={styles.actionCard} style={{
+                    background: 'linear-gradient(145deg, rgba(250, 204, 21, 0.1), rgba(0,0,0,0.2))',
+                    border: '1px solid rgba(250, 204, 21, 0.2)',
+                    padding: '1.5rem', borderRadius: '1.5rem',
+                    display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.75rem',
+                    cursor: 'pointer', transition: 'all 0.2s'
+                }}>
+                    <div style={{ background: 'rgba(250, 204, 21, 0.2)', padding: '1rem', borderRadius: '50%', color: '#facc15' }}>
+                        <Trophy size={28} />
+                    </div>
+                    <div style={{ textAlign: 'center' }}>
+                        <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700, color: 'white' }}>Hall of Fame</h3>
+                        <p style={{ margin: '4px 0 0', fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)' }}>View Top Rankers</p>
+                    </div>
+                </div>
+
+                {/* 2. COLLECTION BUTTON */}
+                <div onClick={() => setShowCollectionModal(true)} className={styles.actionCard} style={{
+                    background: 'linear-gradient(145deg, rgba(244, 63, 94, 0.1), rgba(0,0,0,0.2))',
+                    border: '1px solid rgba(244, 63, 94, 0.2)',
+                    padding: '1.5rem', borderRadius: '1.5rem',
+                    display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.75rem',
+                    cursor: 'pointer', transition: 'all 0.2s'
+                }}>
+                    <div style={{ background: 'rgba(244, 63, 94, 0.2)', padding: '1rem', borderRadius: '50%', color: '#f43f5e' }}>
+                        <Heart size={28} />
+                    </div>
+                    <div style={{ textAlign: 'center' }}>
+                        <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700, color: 'white' }}>Collection</h3>
+                        <p style={{ margin: '4px 0 0', fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)' }}>{user.favorites?.length || 0} Saved Items</p>
+                    </div>
+                </div>
+
+                {/* 3. CART BUTTON */}
+                <div onClick={() => navigate('/cart')} className={styles.actionCard} style={{
+                    background: 'linear-gradient(145deg, rgba(56, 189, 248, 0.1), rgba(0,0,0,0.2))',
+                    border: '1px solid rgba(56, 189, 248, 0.2)',
+                    padding: '1.5rem', borderRadius: '1.5rem',
+                    display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '0.75rem',
+                    cursor: 'pointer', transition: 'all 0.2s'
+                }}>
+                    <div style={{ background: 'rgba(56, 189, 248, 0.2)', padding: '1rem', borderRadius: '50%', color: '#38bdf8' }}>
+                        <ShoppingBag size={28} />
+                    </div>
+                    <div style={{ textAlign: 'center' }}>
+                        <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700, color: 'white' }}>My Cart</h3>
+                        <p style={{ margin: '4px 0 0', fontSize: '0.75rem', color: 'rgba(255,255,255,0.5)' }}>{items.length} Items Pending</p>
+                    </div>
+                </div>
+            </div>
+
+            {/* NEARBY SHOPS PREVIEW - PRESERVED BUT FULL WIDTH */}
+            <div className={styles.shopPreviewCard}>
+                <div className={styles.shopPreviewImage}>
+                    <div className={styles.shopPreviewOverlay}>
+                        <MapPin size={24} />
+                        <span>Find Nurseries</span>
+                    </div>
+                </div>
+                <Link to="/nearby">
+                    <Button variant="primary" style={{ width: '100%', borderRadius: '0.75rem' }}>Open interactive Map</Button>
+                </Link>
+            </div>
+
+            {/* COLLECTION MODAL (WINDOW) */}
+            {showCollectionModal && (
+                <div style={{
+                    position: 'fixed', inset: 0, zIndex: 1005,
+                    background: 'rgba(0,0,0,0.9)', backdropFilter: 'blur(5px)',
+                    display: 'flex', flexDirection: 'column',
+                    animation: 'fadeIn 0.2s'
+                }}>
+                    <div style={{ padding: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                        <h2 style={{ margin: 0, fontSize: '1.4rem', fontWeight: 700, color: 'white', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                            <Heart fill="#f43f5e" stroke="none" /> My Collection
+                        </h2>
+                        <button onClick={() => setShowCollectionModal(false)} style={{ background: 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '50%', width: '36px', height: '36px', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            <ArrowRight size={20} />
+                        </button>
                     </div>
 
-                    {loadingFavs ? (
-                        <div className={styles.loadingBox}>
-                            <Loader2 className="animate-spin" />
-                        </div>
-                    ) : favoritePlants.length === 0 ? (
-                        <div className={styles.emptyState}>
-                            <Heart size={32} />
-                            <p>No favorites yet</p>
-                            <Link to="/"><Button variant="outline" size="sm">Explore</Button></Link>
-                        </div>
-                    ) : (
-                        <div className={styles.compactGrid}>
-                            {favoritePlants.map(plant => (
-                                <div key={plant.id} className={styles.compactCard}>
-                                    <div className={styles.compactCardImage}>
-                                        <img src={plant.imageUrl} alt={plant.name} />
-                                        <button
-                                            onClick={() => handleRemoveFavorite(plant.id)}
-                                            className={styles.removeFavBtn}
-                                        >
-                                            <Heart size={14} fill="#ef4444" color="#ef4444" />
-                                        </button>
-                                    </div>
-                                    <div className={styles.compactCardContent}>
-                                        <h3>{plant.name}</h3>
-                                        <p>{plant.scientificName}</p>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    )}
-                </section>
-
-                <aside className={styles.dashboardSidebar}>
-                    {/* WISHLIST / CART SECTION */}
-                    <section className={styles.dashboardSection} style={{ marginBottom: '2rem' }}>
-                        <div className={styles.sectionHeader}>
-                            <h2 className={styles.sectionTitle}>Cart Items</h2>
-                            <span className={styles.sectionCount} style={{ background: 'rgba(56, 189, 248, 0.1)', color: '#38bdf8' }}>{items.length}</span>
-                        </div>
-
-                        {items.length === 0 ? (
-                            <div className={styles.emptySidebarState}>
-                                <ShoppingBag size={24} />
-                                <p>Cart is empty</p>
+                    <div style={{ flex: 1, overflowY: 'auto', padding: '1.5rem' }}>
+                        {loadingFavs ? (
+                            <div className={styles.loadingBox}><Loader2 className="animate-spin" /></div>
+                        ) : favoritePlants.length === 0 ? (
+                            <div className={styles.emptyState} style={{ height: '50vh' }}>
+                                <Heart size={48} style={{ opacity: 0.5 }} />
+                                <p style={{ fontSize: '1.1rem' }}>Your collection is empty.</p>
+                                <Button variant="primary" onClick={() => { setShowCollectionModal(false); navigate('/'); }}>Start Exploring</Button>
                             </div>
                         ) : (
-                            <div className={styles.cartList}>
-                                {items.slice(0, 3).map(({ plant }) => (
-                                    <div key={plant.id} className={styles.cartItemMini}>
-                                        <img src={plant.imageUrl} alt={plant.name} />
-                                        <div className={styles.cartItemInfo}>
-                                            <h4>{plant.name}</h4>
+                            <div className={styles.compactGrid}>
+                                {favoritePlants.map(plant => (
+                                    <div key={plant.id} className={styles.compactCard}>
+                                        <div className={styles.compactCardImage}>
+                                            <img src={plant.imageUrl} alt={plant.name} />
+                                            <button onClick={() => handleRemoveFavorite(plant.id)} className={styles.removeFavBtn}>
+                                                <Heart size={14} fill="#ef4444" color="#ef4444" />
+                                            </button>
                                         </div>
-                                        <button onClick={() => removeFromCart(plant.id)} className={styles.cartRemoveBtn}>
-                                            <Trash2 size={14} />
-                                        </button>
+                                        <div className={styles.compactCardContent}>
+                                            <h3>{plant.name}</h3>
+                                            <p>{plant.scientificName}</p>
+                                        </div>
                                     </div>
                                 ))}
-                                {items.length > 3 && <p className={styles.moreItems}>+{items.length - 3} more items</p>}
-                                <Link to="/cart" className={styles.sidebarActionLink}>
-                                    View Full Cart <ArrowRight size={14} />
-                                </Link>
                             </div>
                         )}
-                    </section>
+                    </div>
+                </div>
+            )}
 
-                    {/* Nearby Shops Section */}
-                    <section className={styles.dashboardSection}>
-                        <div className={styles.sectionHeader}>
-                            <h2 className={styles.sectionTitle}>Nearby Shops</h2>
-                        </div>
-                        <div className={styles.shopPreviewCard}>
-                            <div className={styles.shopPreviewImage}>
-                                <div className={styles.shopPreviewOverlay}>
-                                    <MapPin size={24} />
-                                    <span>Find Nurseries</span>
-                                </div>
-                            </div>
-                            <Link to="/nearby">
-                                <Button variant="primary" style={{ width: '100%', borderRadius: '0.75rem' }}>Open interactive Map</Button>
-                            </Link>
-                        </div>
-                    </section>
-                </aside>
-            </div>
         </div>
     );
 };
