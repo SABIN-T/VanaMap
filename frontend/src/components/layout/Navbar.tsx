@@ -47,8 +47,8 @@ export const Navbar = () => {
                 <Link id="nav-shops" to="/shops" className={styles.navLink}>
                     <ShoppingBag size={18} /> Shops
                 </Link>
-                <Link to="/children-zone" className={styles.navLink}>
-                    <Gamepad2 size={18} /> Kids Zone
+                <Link to="/heaven" className={styles.navLink}>
+                    <Gamepad2 size={18} /> Heaven
                 </Link>
                 <Link id="nav-leaderboard" to="/leaderboard" className={styles.navLink}>
                     <Trophy size={18} /> Ranking

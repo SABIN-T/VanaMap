@@ -20,7 +20,7 @@ export const MobileTabBar = () => {
         { path: '/', icon: Home, label: 'Home' },
         { path: '/nearby', icon: MapPin, label: 'Nearby' },
         { path: '/shops', icon: ShoppingBag, label: 'Shops' },
-        { path: '/children-zone', icon: Gamepad2, label: 'Kids' },
+        { path: '/heaven', icon: Gamepad2, label: 'Heaven' },
         { path: '/cart', icon: ShoppingCart, label: 'Cart', badge: items.length },
     ];
 

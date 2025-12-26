@@ -1,0 +1,284 @@
+import { useState, useEffect, type MouseEvent } from 'react';
+import { Sprout, CloudRain, Coins, Volume2, VolumeX, Sparkles, Heart, Trophy, Info, Newspaper, Recycle, ArrowLeft } from 'lucide-react';
+import styles from './Heaven.module.css';
+import confetti from 'canvas-confetti';
+import { updateGameProgress } from '../services/api';
+import toast from 'react-hot-toast';
+
+interface PlantState {
+    id: number;
+    stage: number;
+    type: string;
+    water: number;
+    timeToNextStage: number;
+}
+
+const PLANT_TYPES = [
+    { name: 'Sunflower', stages: ['🕳️', '🌰', '🌱', '🌿', '🌻'], reward: 50 },
+    { name: 'Rose', stages: ['🕳️', '🌰', '🌱', '🌿', '🌹'], reward: 60 },
+    { name: 'Tree', stages: ['🕳️', '🌰', '🌱', '🌳', '🍎'], reward: 100 },
+    { name: 'Cactus', stages: ['🕳️', '🌰', '🌵', '🌵', '🌸'], reward: 80 }
+];
+
+export const Heaven = () => {
+    // Hub State
+    const [view, setView] = useState<'menu' | 'game' | 'lifecycle' | 'news'>('menu');
+
+    // Game Logic State
+    const [coins, setCoins] = useState(100);
+    const [level, setLevel] = useState(1);
+    const [xp, setXp] = useState(0);
+    const xpToNextLevel = level * 200;
+    const [plots, setPlots] = useState<PlantState[]>(Array(6).fill(null).map((_, i) => ({
+        id: i, stage: 0, type: 'Sunflower', water: 100, timeToNextStage: 0
+    })));
+    const [selectedTool, setSelectedTool] = useState<'plant' | 'water' | 'harvest' | null>(null);
+    const [isSoundOn, setIsSoundOn] = useState(true);
+    const [showTutorial, setShowTutorial] = useState(true);
+    const [news, setNews] = useState<any[]>([]);
+
+    const playSound = (_type: 'pop' | 'success' | 'water' | 'level') => {
+        if (!isSoundOn) return;
+        // In a real app, use new Audio('/sounds/' + type + '.mp3').play();
+    };
+
+    // --- GAME EFFECTS ---
+    useEffect(() => {
+        if (view !== 'game') return;
+        const timer = setInterval(() => {
+            setPlots(current => current.map(plot => {
+                if (plot.stage > 0 && plot.stage < 4) {
+                    let newWater = Math.max(0, plot.water - 2);
+                    if (newWater > 0) {
+                        const newTime = plot.timeToNextStage - 1;
+                        if (newTime <= 0) return { ...plot, stage: plot.stage + 1, timeToNextStage: 8, water: newWater - 10 };
+                        return { ...plot, timeToNextStage: newTime, water: newWater };
+                    }
+                    return { ...plot, water: newWater };
+                }
+                return plot;
+            }));
+        }, 1000);
+        return () => clearInterval(timer);
+    }, [view]);
+
+    useEffect(() => {
+        if (level > 1 || xp > 0) updateGameProgress(level, Math.floor(xp)).catch(err => console.error(err));
+    }, [level, xp]);
+
+    // --- GAME HANDLERS ---
+    const handlePlotClick = (index: number, e: MouseEvent<HTMLDivElement>) => {
+        const plot = plots[index];
+        const rect = e.currentTarget.getBoundingClientRect();
+        const x = (rect.left + rect.width / 2) / window.innerWidth;
+        const y = (rect.top + rect.height / 2) / window.innerHeight;
+
+        if (selectedTool === 'plant') {
+            if (plot.stage !== 0) { toast.error("Already planted here!", { icon: '🌱' }); return; }
+            if (coins < 10) { toast.error("Need 10 coins!", { icon: '🪙' }); return; }
+            setCoins(c => c - 10);
+            playSound('pop');
+            updatePlot(index, { stage: 1, type: PLANT_TYPES[Math.floor(Math.random() * PLANT_TYPES.length)].name, timeToNextStage: 5, water: 100 });
+            confetti({ particleCount: 15, spread: 40, origin: { x, y } });
+        } else if (selectedTool === 'water') {
+            if (plot.stage === 0) return;
+            playSound('water');
+            updatePlot(index, { water: 100 });
+            confetti({ particleCount: 5, colors: ['#38bdf8'], spread: 20, origin: { x, y }, ticks: 50 });
+        } else if (selectedTool === 'harvest') {
+            if (plot.stage !== 4) return;
+            const plantType = PLANT_TYPES.find(p => p.name === plot.type) || PLANT_TYPES[0];
+            setCoins(c => c + plantType.reward);
+            addXp(plantType.reward);
+            playSound('success');
+            updatePlot(index, { stage: 0 });
+            confetti({ particleCount: 60, spread: 80, origin: { x, y } });
+        }
+    };
+
+    const addXp = (amount: number) => {
+        setXp(curr => {
+            const next = curr + amount;
+            if (next >= xpToNextLevel) {
+                setLevel(l => l + 1);
+                playSound('level');
+                toast.success(`Level Up! You are now Level ${level + 1}!`);
+                return next - xpToNextLevel;
+            }
+            return next;
+        });
+    };
+
+    const updatePlot = (index: number, updates: Partial<PlantState>) => {
+        setPlots(curr => { const n = [...curr]; n[index] = { ...n[index], ...updates }; return n; });
+    };
+
+    const getPlantEmoji = (plot: PlantState) => {
+        const plantDef = PLANT_TYPES.find(p => p.name === plot.type) || PLANT_TYPES[0];
+        return plantDef.stages[plot.stage];
+    };
+
+    // --- LIFE CYCLE COMPONENT ---
+    const LifecycleView = () => (
+        <div className={styles.subPage}>
+            <h2 className={styles.sectionTitle}>The Eternal Cycle</h2>
+            <div className={styles.lifecycleContainer}>
+                <div className={styles.cycleStage}>
+                    <div className={styles.stageIcon}>🌰</div>
+                    <h3>Birth</h3>
+                    <p>Every giant tree begins as a tiny dream wrapped in a seed shell.</p>
+                </div>
+                <div className={styles.cycleArrow}>➡️</div>
+                <div className={styles.cycleStage}>
+                    <div className={styles.stageIcon}>🌳</div>
+                    <h3>Life</h3>
+                    <p>Providing oxygen, shelter, and beauty to the world.</p>
+                </div>
+                <div className={styles.cycleArrow}>➡️</div>
+                <div className={styles.cycleStage}>
+                    <div className={styles.stageIcon}>🍂</div>
+                    <h3>Return</h3>
+                    <p>Returning to the earth to nourish the next generation.</p>
+                </div>
+            </div>
+            <p className={styles.cycleQuote}>"Nature does not hurry, yet everything is accomplished."</p>
+        </div>
+    );
+
+    // --- NEWS COMPONENT ---
+    const NewsView = () => {
+        useEffect(() => {
+            // Mock fetching news -> in real app use an API
+            const curatedNews = [
+                { title: 'Global Forest Cover Increases by 2% this Year', source: 'Earth Watch', time: '2h ago' },
+                { title: 'New Species of Orchid Discovered in Amazon', source: 'Botany Today', time: '5h ago' },
+                { title: 'Community Gardening Reduces Urban Stress', source: 'Health Nature', time: '8h ago' },
+                { title: 'Ancient Tree Found to be 5,000 Years Old', source: 'History Roots', time: '1d ago' },
+                { title: 'How to Build a Pollinator Garden', source: 'Eco Tips', time: '1d ago' }
+            ];
+            setNews(curatedNews);
+        }, []);
+
+        return (
+            <div className={styles.subPage}>
+                <h2 className={styles.sectionTitle}>Global Nature Pulse</h2>
+                <div className={styles.newsGrid}>
+                    {news.map((item, i) => (
+                        <div key={i} className={styles.newsCard}>
+                            <div className={styles.newsSource}>{item.source} • {item.time}</div>
+                            <h3 className={styles.newsTitle}>{item.title}</h3>
+                            <button className={styles.readMoreBtn}>Read Story</button>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        );
+    };
+
+    // --- RENDER ---
+    return (
+        <div className={styles.pageWrapper}>
+            {/* Background Atmosphere */}
+            <div className={styles.sky}>
+                <CloudRain size={120} className={styles.cloud} style={{ top: '10%', left: '-10%', opacity: 0.4 }} />
+                <CloudRain size={80} className={styles.cloud} style={{ top: '20%', animationDelay: '5s', opacity: 0.3 }} />
+            </div>
+
+            {/* HEADER / NAV */}
+            <div className={styles.topNav}>
+                {view !== 'menu' && (
+                    <button onClick={() => setView('menu')} className={styles.backBtn}>
+                        <ArrowLeft /> Back to Heaven
+                    </button>
+                )}
+                <h1 className={styles.mainLogo}>HEAVEN 🌿</h1>
+            </div>
+
+            {/* MAIN MENU VIEW */}
+            {view === 'menu' && (
+                <div className={styles.menuContainer}>
+                    <div className={styles.menuCard} onClick={() => setView('game')}>
+                        <div className={styles.cardIcon} style={{ background: '#dcfce7', color: '#16a34a' }}><Sprout size={48} /></div>
+                        <h2>Tiny Gardeners</h2>
+                        <p>Grow your own magical virtual garden. Plant, water, and harvest!</p>
+                    </div>
+
+                    <div className={styles.menuCard} onClick={() => setView('lifecycle')}>
+                        <div className={styles.cardIcon} style={{ background: '#fef9c3', color: '#ca8a04' }}><Recycle size={48} /></div>
+                        <h2>Life Cycle</h2>
+                        <p>Witness the beautiful journey of birth, life, and renewal.</p>
+                    </div>
+
+                    <div className={styles.menuCard} onClick={() => setView('news')}>
+                        <div className={styles.cardIcon} style={{ background: '#e0f2fe', color: '#0284c7' }}><Newspaper size={48} /></div>
+                        <h2>Nature News</h2>
+                        <p>Real-time updates on our planet's breathing ecosystems.</p>
+                    </div>
+                </div>
+            )}
+
+            {/* GAME VIEW */}
+            {view === 'game' && (
+                <div className={styles.gameContainer}>
+                    {showTutorial && (
+                        <div className={styles.overlay}>
+                            <div className={styles.modal}>
+                                <h1>🌱 Magic Garden</h1>
+                                <p>Build your pocket ecosystem! Plants grow in real-time.</p>
+                                <button className={styles.ctaBtn} onClick={() => setShowTutorial(false)}>Let's Grow!</button>
+                            </div>
+                        </div>
+                    )}
+
+                    <div className={styles.header}>
+                        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
+                            <h1 className={styles.title}>Tiny Gardeners</h1>
+                            <button onClick={() => setShowTutorial(true)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#94a3b8' }}><Info size={20} /></button>
+                        </div>
+                        <p className={styles.subtitle}>Level {level}</p>
+                        <div style={{ width: '200px', height: '8px', background: '#e2e8f0', borderRadius: '4px', margin: '10px auto', overflow: 'hidden' }}>
+                            <div style={{ height: '100%', width: `${(xp / xpToNextLevel) * 100}%`, background: '#22c55e', transition: 'width 0.5s' }} />
+                        </div>
+                    </div>
+
+                    <div className={styles.statsBar}>
+                        <div className={styles.stat} style={{ color: '#eab308' }}><Coins size={24} fill="#eab308" /> {coins}</div>
+                        <div className={styles.stat} style={{ color: '#ef4444' }}><Heart size={24} fill="#ef4444" /> {plots.filter(p => p.stage > 0).length} Alive</div>
+                        <button onClick={() => setIsSoundOn(!isSoundOn)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748b' }}>
+                            {isSoundOn ? <Volume2 /> : <VolumeX />}
+                        </button>
+                    </div>
+
+                    <div className={styles.gardenGrid}>
+                        {plots.map((plot, i) => (
+                            <div key={i} className={`${styles.plot} ${plot.stage === 0 ? styles.plotLocked : ''}`} onClick={(e) => handlePlotClick(i, e)}>
+                                <div className={`${styles.plantContent} ${plot.stage > 0 && plot.stage < 4 ? styles.plantGrowing : ''}`}>{getPlantEmoji(plot)}</div>
+                                {plot.stage > 0 && plot.stage < 4 && (
+                                    <div className={styles.waterMeter}>
+                                        <div className={styles.waterFill} style={{ width: `${plot.water}%`, background: plot.water < 30 ? '#ef4444' : '#38bdf8' }} />
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+
+                    <div className={styles.controls}>
+                        <button className={`${styles.toolBtn} ${selectedTool === 'plant' ? styles.seed + ' ' + styles.toolBtnActive : ''}`} onClick={() => setSelectedTool('plant')}>
+                            <Sprout size={28} /><span>Seed</span>
+                        </button>
+                        <button className={`${styles.toolBtn} ${selectedTool === 'water' ? styles.water + ' ' + styles.toolBtnActive : ''}`} onClick={() => setSelectedTool('water')}>
+                            <CloudRain size={28} /><span>Water</span>
+                        </button>
+                        <button className={`${styles.toolBtn} ${selectedTool === 'harvest' ? styles.harvest + ' ' + styles.toolBtnActive : ''}`} onClick={() => setSelectedTool('harvest')}>
+                            <Sparkles size={28} /><span>Harvest</span>
+                        </button>
+                    </div>
+                </div>
+            )}
+
+            {/* SUB VIEWS */}
+            {view === 'lifecycle' && <LifecycleView />}
+            {view === 'news' && <NewsView />}
+        </div>
+    );
+};
