@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingCart, User as UserIcon, LogOut, Leaf, Sun, Moon, Menu, X, ChevronRight, Download, Shield, ShoppingBag, Trophy, Gamepad2 } from 'lucide-react';
+import { ShoppingCart, User as UserIcon, LogOut, Leaf, Sun, Moon, Menu, X, ChevronRight, Download, Shield, ShoppingBag, Trophy, Gamepad2, Sparkles } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
 import { useTheme } from '../../context/ThemeContext';
@@ -9,7 +9,7 @@ import styles from './Navbar.module.css';
 export const Navbar = () => {
     const { user, logout } = useAuth();
     const { items: cartItems } = useCart();
-    const { theme, toggleTheme } = useTheme();
+    const { theme, toggleTheme, isPremium, togglePremium } = useTheme();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const navigate = useNavigate();
 
@@ -22,7 +22,7 @@ export const Navbar = () => {
     const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
     return (
-        <nav className={styles.navbar}>
+        <nav className={`${styles.navbar} ${isPremium ? styles.premiumMode : ''}`}>
             <Link to="/" className={styles.logo} onClick={() => {
                 setIsMenuOpen(false);
                 window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -64,6 +64,16 @@ export const Navbar = () => {
                 <button onClick={toggleTheme} className={styles.themeToggle} title="Toggle Theme">
                     {theme === 'dark' ? <Sun size={20} color="#facc15" /> : <Moon size={20} color="#333" />}
                 </button>
+
+                <div
+                    className={`${styles.premiumToggle} ${isPremium ? styles.premiumToggleActive : ''}`}
+                    onClick={togglePremium}
+                    title={isPremium ? "Switch to Normal" : "Switch to Premium"}
+                >
+                    <div className={styles.toggleCircle}>
+                        <Sparkles size={12} className={styles.toggleIcon} />
+                    </div>
+                </div>
 
                 <div className={styles.authDesktop}>
                     {user ? (

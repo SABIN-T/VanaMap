@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import {
     LayoutDashboard, Sprout, Store,
-    Users, Activity, Bell, Settings, Layers,
+    Users, Activity, Bell, Settings, Layers, Sparkles,
     Menu, X, LogOut, ChevronRight, MessageSquare, DollarSign, Trophy, Database, ScanLine
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
 import { fetchAdminStats } from '../../services/api';
 import styles from './AdminLayout.module.css';
 
@@ -19,6 +20,7 @@ interface AdminLayoutProps {
 export const AdminLayout = ({ title, children }: AdminLayoutProps) => {
     const location = useLocation();
     const { logout, user } = useAuth();
+    const { isPremium, togglePremium } = useTheme();
     const [isSidebarOpen, setSidebarOpen] = useState(true);
     const [stats, setStats] = useState<any>({ unread: {} });
 
@@ -38,6 +40,7 @@ export const AdminLayout = ({ title, children }: AdminLayoutProps) => {
 
     const navItems = [
         { path: '/admin', icon: LayoutDashboard, label: 'Dashboard' },
+        { path: '/admin/premium', icon: Sparkles, label: 'Premium Experience' },
         { path: '/admin/manage-plants', icon: Sprout, label: 'Manage Plants', badge: stats.unread?.plants },
         { path: '/admin/identify', icon: ScanLine, label: 'Biometric Scanner', sub: true },
         { path: '/admin/simulation-data', icon: Database, label: 'Simulation Data', sub: true },
@@ -57,7 +60,7 @@ export const AdminLayout = ({ title, children }: AdminLayoutProps) => {
     const isActive = (path: string) => location.pathname === path;
 
     return (
-        <div className={styles.container}>
+        <div className={`${styles.container} ${isPremium ? styles.premiumMode : ''}`}>
             {/* BACKDROP FOR MOBILE */}
             {isSidebarOpen && <div className={styles.backdrop} onClick={() => setSidebarOpen(false)} />}
 
@@ -124,6 +127,16 @@ export const AdminLayout = ({ title, children }: AdminLayoutProps) => {
                     </div>
 
                     <div className={styles.topBarRight}>
+                        <div
+                            className={`${styles.premiumToggle} ${isPremium ? styles.premiumToggleActive : ''}`}
+                            onClick={togglePremium}
+                            title={isPremium ? "Switch to Normal" : "Switch to Premium"}
+                        >
+                            <div className={styles.toggleCircle}>
+                                <Sparkles size={14} className={styles.toggleIcon} />
+                            </div>
+                        </div>
+
                         <div className={styles.adminBadge}>
                             <div className={styles.adminAvatar}>
                                 {user?.name?.charAt(0) || 'A'}

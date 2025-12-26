@@ -120,3 +120,87 @@ select:focus {
     border-color: var(--color-primary);
     box-shadow: 0 0 0 2px rgba(0, 255, 157, 0.2);
 }
+
+/* ==========================================
+   PREMIUM MODE ENHANCEMENTS
+   ========================================== */
+
+.premium-mode {
+    --glass-bg: rgba(15, 23, 42, 0.4);
+    --backdrop-blur: blur(25px);
+}
+
+.premium-mode body::before {
+    background:
+        radial-gradient(circle at 10% 20%, rgba(16, 185, 129, 0.12), transparent 35%),
+        radial-gradient(circle at 90% 80%, rgba(56, 189, 248, 0.12), transparent 35%),
+        radial-gradient(circle at 50% 50%, rgba(129, 140, 248, 0.05), transparent 50%);
+    animation: premium-pulse 8s ease-in-out infinite alternate;
+}
+
+@keyframes premium-pulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: scale(1.1);
+        opacity: 1;
+    }
+}
+
+/* Premium Buttons Global Override */
+.premium-mode .btn {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    letter-spacing: 0.02em;
+}
+
+.premium-mode .btn-primary {
+    background: linear-gradient(135deg, #10b981 0%, #38bdf8 100%);
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.premium-mode .btn-primary:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(16, 185, 129, 0.5);
+}
+
+.premium-mode .btn-primary::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: 0.6s;
+}
+
+.premium-mode .btn-primary:hover::after {
+    left: 100%;
+}
+
+/* Premium Cards */
+.premium-mode .glass-panel {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+/* High end scrollbar for Premium */
+.premium-mode ::-webkit-scrollbar {
+    width: 6px;
+}
+
+.premium-mode ::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.premium-mode ::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, #10b981, #38bdf8);
+    border-radius: 10px;
+}
