@@ -744,6 +744,11 @@
 }
 
 @media (max-width: 640px) {
+    .homeContainer {
+        padding-bottom: 100px;
+        /* Space for Mobile Tab Bar */
+    }
+
     .heroTitle {
         font-size: 2.5rem;
     }

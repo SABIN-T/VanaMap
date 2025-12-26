@@ -122,6 +122,11 @@
 }
 
 @media (max-width: 768px) {
+    .container {
+        padding-bottom: 100px;
+        /* Space for Mobile Tab Bar */
+    }
+
     .header {
         margin-top: 2rem;
     }

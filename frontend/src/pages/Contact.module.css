@@ -238,7 +238,7 @@
 
 @media (max-width: 640px) {
     .contactContainer {
-        padding: 6rem 1.5rem 4rem;
+        padding: 6rem 1.5rem 100px;
     }
 
     .title {

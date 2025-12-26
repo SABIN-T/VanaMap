@@ -234,7 +234,7 @@
 /* Mobile Optimizations */
 @media (max-width: 768px) {
     .supportContainer {
-        padding: 4rem 1rem 2rem;
+        padding: 4rem 1rem 100px;
     }
 
     .title {

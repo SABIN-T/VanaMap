@@ -428,6 +428,8 @@
 @media (max-width: 768px) {
     .container {
         padding-top: 5rem;
+        padding-bottom: 100px;
+        /* Space for Mobile Tab Bar */
     }
 
     .groupHeader {

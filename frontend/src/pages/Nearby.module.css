@@ -389,6 +389,8 @@
 @media (max-width: 768px) {
     .nearbyContainer {
         padding: 2rem 1rem;
+        padding-bottom: 100px;
+        /* Space for Mobile Tab Bar */
     }
 
     .searchBarWrapper {

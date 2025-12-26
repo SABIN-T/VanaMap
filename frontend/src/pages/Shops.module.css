@@ -292,6 +292,11 @@
 
 /* Mobile Optimizations - Optimized for 2-Column Grid */
 @media (max-width: 640px) {
+    .shopContainer {
+        padding-bottom: 100px;
+        /* Space for Mobile Tab Bar */
+    }
+
     .header {
         margin-bottom: 3rem;
     }
