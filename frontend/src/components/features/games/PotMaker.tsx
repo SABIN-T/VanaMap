@@ -1,9 +1,9 @@
 import { useState, useRef, useCallback } from 'react';
-import { Upload, Camera, Save, ShoppingCart, Layers, AlertCircle, RotateCcw, X, Check } from 'lucide-react';
+import { Upload, Camera, Save, ShoppingCart, Layers, RotateCcw, X, Check } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Cropper from 'react-easy-crop';
 import { Canvas, useLoader } from '@react-three/fiber';
-import { OrbitControls, Stage, PresentationControls, useTexture } from '@react-three/drei';
+import { Stage, PresentationControls } from '@react-three/drei';
 import * as THREE from 'three';
 import styles from './PotMaker.module.css';
 
@@ -86,7 +86,7 @@ export const PotMaker = ({ onBack }: PotMakerProps) => {
 
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const onCropComplete = useCallback((_, croppedAreaPixels: any) => {
+    const onCropComplete = useCallback((_area: any, croppedAreaPixels: any) => {
         setCroppedAreaPixels(croppedAreaPixels);
     }, []);
 
