@@ -329,7 +329,7 @@ out skel qt;
                                 <span>1km</span>
                                 <span>1000km</span>
                             </div>
-                            {searchRadius > 900 && (
+                            {searchRadius > 600 && (
                                 <div style={{ fontSize: '0.75rem', color: '#facc15', marginTop: '0.5rem', display: 'flex', alignItems: 'center', gap: '6px', animation: 'fadeIn 0.3s' }}>
                                     <AlertCircle size={12} /> Pro Tip: For global searches, try typing the city name in the box above.
                                 </div>
