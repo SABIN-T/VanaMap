@@ -8,9 +8,9 @@
   "description": "Smart Ecosystem Simulator & Plant Finder",
   "icons": [
     {
-      "src": "/logo.png",
+      "src": "/pwa-icon.jpg",
       "sizes": "192x192 512x512",
-      "type": "image/png"
+      "type": "image/jpeg"
     }
   ]
 }
