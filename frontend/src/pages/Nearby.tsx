@@ -64,6 +64,7 @@ export const Nearby = () => {
 
     const [manualSearchQuery, setManualSearchQuery] = useState('');
     const [searchRadius, setSearchRadius] = useState(50);
+    const [isScanningPublic, setIsScanningPublic] = useState(false);
     const hasInitialLocateRef = useRef(false);
 
     const handleManualLocationSearch = async () => {
@@ -99,6 +100,10 @@ export const Nearby = () => {
 
     const fetchAllData = async (lat: number, lng: number, radiusKm: number) => {
         setLoading(true);
+        setIsScanningPublic(true); // Start background scan tracker
+
+        let verifiedVendors: Vendor[] = [];
+
         try {
             // Reverse Geocoding
             try {
@@ -112,17 +117,26 @@ export const Nearby = () => {
                 console.warn("Geocoding failed", e);
             }
 
+            // 1. Fetch Backend Data (Fast)
             let allVendors = await fetchVendors();
             if (allVendors.length === 0) {
                 const { VENDORS } = await import('../data/mocks');
-                seedDatabase([], VENDORS); // No await needed strictly if just seeding memory/local for now, but safer
+                seedDatabase([], VENDORS);
                 allVendors = await fetchVendors();
             }
-            const verifiedVendors = allVendors.filter(v => v.verified === true);
+            verifiedVendors = allVendors.filter(v => v.verified === true);
 
+            // Initial Render with Verified Data ONLY
+            const nearbyBackend = verifiedVendors
+                .filter(v => getDistanceFromLatLonInKm(lat, lng, v.latitude, v.longitude) <= radiusKm)
+                .map(v => ({ ...v, distance: getDistanceFromLatLonInKm(lat, lng, v.latitude, v.longitude) }))
+                .sort((a, b) => (a.distance || 0) - (b.distance || 0));
+
+            setNearbyVendors(nearbyBackend);
+            setLoading(false); // <--- UNBLOCK UI FOR VERIFIED VENDORS IMMEDIATELY
+
+            // 2. Fetch OSM Data (Slower)
             const radiusMeters = radiusKm * 1000;
-
-            // Improved Overpass Query - Strictly Gardens and Nurseries
             const overpassQuery = `
 [out:json][timeout:25];
 (
@@ -144,18 +158,12 @@ out skel qt;
                 if (osmData.elements) {
                     unverifiedVendors = osmData.elements
                         .filter((el: OSMElement) => {
-                            // Must have coordinates
                             if (!el.lat || !el.lon) return false;
-
-                            // If it's a shop, it must have a name. If it's a public garden, name is optional but good.
                             const tags = el.tags || {};
                             const name = tags.name || "Unknown Garden";
-
-                            // Filter out non-garden related shops
                             const nameLower = name.toLowerCase();
                             const excludeKeywords = ['hardware', 'supermarket', 'grocery', 'general store', 'convenience', 'department store'];
                             if (excludeKeywords.some(keyword => nameLower.includes(keyword))) return false;
-
                             return true;
                         })
                         .map((el: OSMElement) => {
@@ -182,14 +190,23 @@ out skel qt;
                 }
             } catch (err) { console.error("OSM Error", err); }
 
-            const combined = [...verifiedVendors, ...unverifiedVendors];
-            const nearby = combined.filter(v => getDistanceFromLatLonInKm(lat, lng, v.latitude, v.longitude) <= radiusKm)
-                .map(v => ({ ...v, distance: getDistanceFromLatLonInKm(lat, lng, v.latitude, v.longitude) }))
-                .sort((a, b) => (a.distance || 0) - (b.distance || 0));
+            // 3. Merge and Update with Public Data
+            // We re-filter everything to ensure distance correctness and sort order
+            const nearbyPublic = unverifiedVendors
+                .filter(v => getDistanceFromLatLonInKm(lat, lng, v.latitude, v.longitude) <= radiusKm)
+                .map(v => ({ ...v, distance: getDistanceFromLatLonInKm(lat, lng, v.latitude, v.longitude) }));
 
-            setNearbyVendors(nearby);
-        } finally {
+            // Merge with previous backend results (re-calculate backend to be safe or use state setter)
+            // Using state setter is safer if user moved map, but here we are in one flow.
+            // Actually, we can just re-merge nearbyBackend and nearbyPublic.
+
+            const combined = [...nearbyBackend, ...nearbyPublic].sort((a, b) => (a.distance || 0) - (b.distance || 0));
+            setNearbyVendors(combined);
+
+        } catch (e) {
             setLoading(false);
+        } finally {
+            setIsScanningPublic(false);
         }
     };
 
@@ -235,6 +252,7 @@ out skel qt;
     const resultsHeaderRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
+        // Scroll logic only if really loaded or we have some vendors
         if (!loading && displayVendors.length > 0 && position) {
             // Scroll to first outlet after short delay for map zoom
             setTimeout(() => {
@@ -346,11 +364,19 @@ out skel qt;
                     <div className={styles.resultsHeader} ref={resultsHeaderRef} style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', scrollMarginTop: '2rem' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%' }}>
                             <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 800 }}>Nearby Outlets ({displayVendors.length})</h3>
+
                         </div>
                         {/* Subtitle - hidden on very small screens via CSS/Inline if needed, but simpler text helps */}
                         <p style={{ margin: '-0.25rem 0 0 0', fontSize: '0.75rem', color: 'var(--color-text-muted)', maxWidth: '100%', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
                             Showing results within a {searchRadius}km radius
                         </p>
+
+                        {/* ACTIVE SCANNER INDICATOR */}
+                        {isScanningPublic && (
+                            <div style={{ fontSize: '0.75rem', color: '#38bdf8', display: 'flex', alignItems: 'center', gap: '6px', marginTop: '0.25rem' }}>
+                                <RefreshCw size={10} className="animate-spin" /> Updating public listings...
+                            </div>
+                        )}
 
                         <div className={styles.tabGroup} style={{ width: '100%', display: 'flex', gap: '0.5rem', overflowX: 'auto', paddingBottom: '4px' }}>
                             <button className={`${styles.tabBtn} ${activeTab === 'all' ? styles.active : ''}`} onClick={() => setActiveTab('all')} style={{ flex: 1, justifyContent: 'center', whiteSpace: 'nowrap' }}>
@@ -365,9 +391,8 @@ out skel qt;
                         </div>
                     </div>
 
-                    {/* Public/All Tab Warning Hint Actions - Output moved OUT of header but inside Section */}
-                    {/* Public/All Tab Warning Hint Actions - Shown only when no results found */}
-                    {!loading && (activeTab === 'unverified' || activeTab === 'all') && displayVendors.length === 0 && (
+                    {/* Public/All Tab Warning Hint Actions - Shown only when no results found AND not scanning */}
+                    {!loading && !isScanningPublic && (activeTab === 'unverified' || activeTab === 'all') && displayVendors.length === 0 && (
                         <div style={{
                             marginBottom: '1rem',
                             padding: '1rem',
@@ -432,14 +457,11 @@ out skel qt;
                                 .pulse-fast { animation: pulseFast 0.6s infinite ease-in-out; }
                             `}</style>
                         </div>
-                    ) : displayVendors.length === 0 ? (
-                        /* Only show generic empty state for Verified tab, others use the Action Card above */
-                        activeTab === 'verified' ? (
-                            <div style={{ textAlign: 'center', padding: '4rem', background: 'var(--color-bg-card)', borderRadius: '2rem', border: '1px dashed var(--glass-border)' }}>
-                                <MapPin size={48} color="var(--color-text-muted)" style={{ marginBottom: '1rem' }} />
-                                <p style={{ color: 'var(--color-text-muted)' }}>No confirmed partners found. Try the 'Public' tab.</p>
-                            </div>
-                        ) : null
+                    ) : displayVendors.length === 0 && activeTab === 'verified' ? (
+                        <div style={{ textAlign: 'center', padding: '4rem', background: 'var(--color-bg-card)', borderRadius: '2rem', border: '1px dashed var(--glass-border)' }}>
+                            <MapPin size={48} color="var(--color-text-muted)" style={{ marginBottom: '1rem' }} />
+                            <p style={{ color: 'var(--color-text-muted)' }}>No confirmed partners found. Try the 'Public' tab.</p>
+                        </div>
                     ) : (
                         <>
                             <div className={styles.vendorGrid}>
