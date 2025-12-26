@@ -17,7 +17,11 @@ const createImage = (url: string): Promise<HTMLImageElement> =>
         const image = new Image();
         image.addEventListener('load', () => resolve(image));
         image.addEventListener('error', (error) => reject(error));
-        image.setAttribute('crossOrigin', 'anonymous');
+        // Only needed if loading from external URL, but our source is almost always base64 from FileReader here.
+        // If it is a base64 string, setting crossOrigin can sometimes cause issues in some environments.
+        if (!url.startsWith('data:')) {
+            image.setAttribute('crossOrigin', 'anonymous');
+        }
         image.src = url;
     });
 
