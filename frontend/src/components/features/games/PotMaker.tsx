@@ -239,28 +239,7 @@ export const PotMaker = ({ onBack }: PotMakerProps) => {
         toast.success("Design downloading...");
     };
 
-    const handleBuy = async () => {
-        if (!finalImage) return;
 
-        if (autoSaveOn) {
-            setSaving(true);
-            try {
-                const token = localStorage.getItem('token');
-                await fetch(`${API_URL}/user/designs`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-                    body: JSON.stringify({
-                        imageUrl: finalImage,
-                        shape: selectedShape,
-                        size: selectedSize
-                    })
-                });
-            } catch (e) { console.error("Auto-save failed during buy"); }
-            setSaving(false);
-        }
-
-        toast.success("Order placed (Simulated)!");
-    };
 
     const handleSaveDesign = async () => {
         handleDownload(); // Always download as requested
@@ -471,8 +450,8 @@ export const PotMaker = ({ onBack }: PotMakerProps) => {
                             <button className={styles.saveBtn} onClick={() => handleSaveDesign()} disabled={saving}>
                                 <Save size={20} /> Save & Download
                             </button>
-                            <button className={styles.buyBtn} onClick={handleBuy} disabled={saving}>
-                                <ShoppingCart size={20} /> Buy <span className={styles.badge}>msg</span>
+                            <button className={styles.buyBtn} disabled={true} style={{ opacity: 0.7, cursor: 'not-allowed' }}>
+                                <ShoppingCart size={20} /> Coming Soon
                             </button>
                         </div>
                     </div>
