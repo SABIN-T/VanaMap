@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingCart, User as UserIcon, LogOut, Leaf, Sun, Moon, Menu, X, ChevronRight, Download, Shield, ShoppingBag, MessageCircle, Trophy } from 'lucide-react';
+import { ShoppingCart, User as UserIcon, LogOut, Leaf, Sun, Moon, Menu, X, ChevronRight, Download, Shield, ShoppingBag, Trophy } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
 import { useTheme } from '../../context/ThemeContext';
@@ -42,13 +42,7 @@ export const Navbar = () => {
                 <Link id="nav-nearby" to="/nearby" className={styles.navLink}>Nearby Shops</Link>
 
                 {/* Doctor AI Button - Desktop Only */}
-                <Link
-                    to="/contact"
-                    className={styles.navLink}
-                    style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
-                >
-                    <MessageCircle size={18} /> Support
-                </Link>
+
 
                 <Link id="nav-shops" to="/shops" className={styles.navLink}>
                     <ShoppingBag size={18} /> Shops
@@ -107,10 +101,7 @@ export const Navbar = () => {
                         <ChevronRight size={18} />
                     </Link>
 
-                    <Link to="/contact" className={styles.mobileNavLink} onClick={() => setIsMenuOpen(false)}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><MessageCircle size={20} /> Support</div>
-                        <ChevronRight size={18} />
-                    </Link>
+
 
                     <Link to="/shops" className={styles.mobileNavLink} onClick={() => setIsMenuOpen(false)}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><ShoppingBag size={20} /> Shops</div>

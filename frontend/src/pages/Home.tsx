@@ -7,7 +7,7 @@ import { fetchPlants, fetchVendors } from '../services/api';
 import { getWeather, geocodeCity, reverseGeocode } from '../services/weather';
 import { calculateAptness } from '../utils/logic';
 import type { Plant, Vendor } from '../types';
-import { Sprout, MapPin, Thermometer, Wind, ArrowDown, Sparkles, Search, AlertCircle, Heart, Sun, Activity, GraduationCap, ShoppingBag, PlusCircle, MoveRight } from 'lucide-react';
+import { Sprout, MapPin, Thermometer, Wind, ArrowDown, Sparkles, Search, AlertCircle, Heart, Sun, Activity, GraduationCap, ShoppingBag, PlusCircle, MoveRight, MessageCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 // Lazy load modal for performance
 const PlantDetailsModal = lazy(() => import('../components/features/plants/PlantDetailsModal').then(module => ({ default: module.PlantDetailsModal })));
@@ -619,6 +619,18 @@ export const Home = () => {
                             Become a Sponsor <MoveRight size={20} style={{ marginLeft: '12px' }} />
                         </Button>
                     </div>
+                </div>
+
+                <div style={{ textAlign: 'center', marginTop: '4rem', marginBottom: '2rem' }}>
+                    <p style={{ color: 'var(--color-text-dim)', marginBottom: '1rem' }}>Need help with the app?</p>
+                    <Button
+                        onClick={() => navigate('/contact')}
+                        variant="ghost"
+                        size="lg"
+                        style={{ border: '1px solid var(--color-border)', borderRadius: '99px' }}
+                    >
+                        <MessageCircle size={20} style={{ marginRight: '8px' }} /> Contact Support
+                    </Button>
                 </div>
 
                 <footer style={{
