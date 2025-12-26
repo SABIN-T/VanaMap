@@ -380,6 +380,8 @@
 
     .content {
         padding: 1.5rem;
+        padding-bottom: 100px;
+        /* Space for mobile tab bar */
     }
 
     .pageTitle {

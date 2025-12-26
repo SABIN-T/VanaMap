@@ -6,6 +6,12 @@
     padding-bottom: 4rem;
 }
 
+@media (max-width: 768px) {
+    .pageContainer {
+        padding-bottom: 120px;
+    }
+}
+
 .mainLayout {
     display: grid;
     grid-template-columns: 1fr;
@@ -203,6 +209,7 @@
 
 .rangeInput {
     -webkit-appearance: none;
+    appearance: none;
     width: 100%;
     height: 6px;
     background: rgba(255, 255, 255, 0.1);

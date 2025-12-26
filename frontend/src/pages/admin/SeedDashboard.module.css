@@ -6,6 +6,12 @@
         radial-gradient(circle at 90% 80%, rgba(56, 189, 248, 0.05) 0%, transparent 40%);
 }
 
+@media (max-width: 768px) {
+    .container {
+        padding-bottom: 100px;
+    }
+}
+
 .header {
     display: flex;
     justify-content: space-between;
