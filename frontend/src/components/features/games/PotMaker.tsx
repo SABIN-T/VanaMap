@@ -1,5 +1,5 @@
-import { useState, useRef, useCallback, useEffect } from 'react';
-import { Upload, Camera, Save, ShoppingCart, Layers, RotateCcw, X, Check, Move, Maximize, RotateKw } from 'lucide-react';
+import { useState, useRef, useCallback } from 'react';
+import { Upload, Camera, Save, ShoppingCart, Layers, RotateCcw, X, Check, Move, Maximize, RotateCw } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Cropper from 'react-easy-crop';
 import { Canvas, useLoader } from '@react-three/fiber';
@@ -218,10 +218,28 @@ export const PotMaker = ({ onBack }: PotMakerProps) => {
                         <div className={styles.optionsGrid}>
                             <div className={styles.optionGroup}>
                                 <h3>Shape</h3>
-                                <div className={styles.optionRow}>
-                                    <button className={`${styles.optBtn} ${selectedShape === 'classic' ? styles.optActive : ''}`} onClick={() => setSelectedShape('classic')}>Classic</button>
-                                    <button className={`${styles.optBtn} ${selectedShape === 'modern' ? styles.optActive : ''}`} onClick={() => setSelectedShape('modern')}>Modern</button>
-                                    <button className={`${styles.optBtn} ${selectedShape === 'wide' ? styles.optActive : ''}`} onClick={() => setSelectedShape('wide')}>Wide</button>
+                                <div className={styles.visualOptions}>
+                                    <div
+                                        className={`${styles.visualOption} ${selectedShape === 'classic' ? styles.visualActive : ''}`}
+                                        onClick={() => setSelectedShape('classic')}
+                                    >
+                                        <img src="/pot-classic.png" alt="Classic Pot" />
+                                        <span>Classic</span>
+                                    </div>
+                                    <div
+                                        className={`${styles.visualOption} ${selectedShape === 'modern' ? styles.visualActive : ''}`}
+                                        onClick={() => setSelectedShape('modern')}
+                                    >
+                                        <img src="/pot-modern.png" alt="Modern Pot" />
+                                        <span>Modern</span>
+                                    </div>
+                                    <div
+                                        className={`${styles.visualOption} ${selectedShape === 'wide' ? styles.visualActive : ''}`}
+                                        onClick={() => setSelectedShape('wide')}
+                                    >
+                                        <img src="/pot-wide.png" alt="Wide Pot" />
+                                        <span>Wide</span>
+                                    </div>
                                 </div>
                             </div>
 
@@ -315,7 +333,7 @@ export const PotMaker = ({ onBack }: PotMakerProps) => {
                                 <input type="range" min="-1" max="1" step="0.1" value={texOffsetY} onChange={(e) => setTexOffsetY(parseFloat(e.target.value))} />
                             </div>
                             <div className={styles.controlRow}>
-                                <RotateKw size={16} />
+                                <RotateCw size={16} />
                                 <input type="range" min="0" max="360" step="10" value={texRotation} onChange={(e) => setTexRotation(parseFloat(e.target.value))} />
                             </div>
                         </div>
