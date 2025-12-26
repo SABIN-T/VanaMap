@@ -1,8 +1,8 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 import { Upload, Camera, Save, ShoppingCart, Layers, RotateCcw, X, Check, Move, Maximize, RotateCw } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Cropper from 'react-easy-crop';
-import { Canvas, useLoader } from '@react-three/fiber';
+import { Canvas, useLoader, useThree } from '@react-three/fiber';
 import { Stage, PresentationControls } from '@react-three/drei';
 import * as THREE from 'three';
 import styles from './PotMaker.module.css';
@@ -114,8 +114,22 @@ const PotModel = ({
 };
 
 
+// --- CAPTURE HELPER ---
+const CaptureRelay = ({ captureRef }: { captureRef: React.MutableRefObject<any> }) => {
+    const { gl, scene, camera } = useThree();
+
+    useEffect(() => {
+        captureRef.current = () => {
+            gl.render(scene, camera);
+            return gl.domElement.toDataURL('image/png', 1.0);
+        };
+    }, [gl, scene, camera, captureRef]);
+
+    return null;
+};
+
 export const PotMaker = ({ onBack }: PotMakerProps) => {
-    const [step, setStep] = useState<'select' | 'upload' | 'crop' | 'preview'>('select');
+    const [step, setStep] = useState<'select' | 'upload' | 'crop' | 'preview' | 'result'>('select');
 
     // Selection State
     const [selectedShape, setSelectedShape] = useState<PotShape>('classic');
@@ -123,18 +137,21 @@ export const PotMaker = ({ onBack }: PotMakerProps) => {
 
     const [imageSrc, setImageSrc] = useState<string | null>(null);
     const [croppedImage, setCroppedImage] = useState<string | null>(null);
+    const [finalImage, setFinalImage] = useState<string | null>(null); // The 3D render snapshot
+
     const [crop, setCrop] = useState({ x: 0, y: 0 });
     const [zoom, setZoom] = useState(1);
     const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
     const [saving, setSaving] = useState(false);
 
     // 3D Texture Transforms
-    const [texScale, setTexScale] = useState(1); // Locked Aspect Ratio scale for simplicity
+    const [texScale, setTexScale] = useState(1);
     const [texOffsetX, setTexOffsetX] = useState(0);
     const [texOffsetY, setTexOffsetY] = useState(0);
     const [texRotation, setTexRotation] = useState(0);
 
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const captureRef = useRef<() => string>(null);
 
     const onCropComplete = useCallback((_area: any, croppedAreaPixels: any) => {
         setCroppedAreaPixels(croppedAreaPixels);
@@ -161,23 +178,30 @@ export const PotMaker = ({ onBack }: PotMakerProps) => {
         }
     };
 
+    const handleFinalize = () => {
+        if (captureRef.current) {
+            const snapshot = captureRef.current();
+            setFinalImage(snapshot);
+            setStep('result');
+            toast.success("3D View Captured!");
+        }
+    };
+
     const handleSaveDesign = async (saveOnly: boolean = false) => {
-        if (!croppedImage) return;
+        if (!finalImage) return;
         setSaving(true);
         try {
             const token = localStorage.getItem('token');
-            // We pass the transforms too so they can be recreated/ordered
             await fetch('http://localhost:5000/api/user/designs', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                 body: JSON.stringify({
-                    imageUrl: croppedImage,
+                    imageUrl: finalImage, // Saving the 3D snapshot
                     shape: selectedShape,
-                    size: selectedSize,
-                    transforms: { scale: texScale, x: texOffsetX, y: texOffsetY, rot: texRotation }
+                    size: selectedSize
                 })
             });
-            toast.success(saveOnly ? "Saved!" : "Coming Soon: Buying!");
+            toast.success(saveOnly ? "Saved to Profile!" : "Order placed (Simulated)!");
         } catch (e) { toast.error("Error saving"); }
         setSaving(false);
     };
@@ -191,7 +215,8 @@ export const PotMaker = ({ onBack }: PotMakerProps) => {
                     {step === 'select' && "Step 1: Choose your base"}
                     {step === 'upload' && "Step 2: Upload your art"}
                     {step === 'crop' && "Step 3: Crop"}
-                    {step === 'preview' && "Step 4: Customize on Pot"}
+                    {step === 'preview' && "Step 4: Customize"}
+                    {step === 'result' && "Final Step: Review & Save"}
                 </p>
             </div>
 
@@ -273,14 +298,11 @@ export const PotMaker = ({ onBack }: PotMakerProps) => {
                 {step === 'crop' && (
                     <div className={styles.cropContainer}>
                         <div className={styles.cropperWrapper}>
-                            {/* Removed strict aspect={4/3} to allow freer cropping if desired, using 1 or undefined */}
                             <Cropper
                                 image={imageSrc || ''}
                                 crop={crop}
                                 zoom={zoom}
-                                aspect={1} // Square default, but user wanted any size. Let's keep square for wrapping logic simplicity or 4/3. Sticking to 1 for now or 4/3. 
-                                // Actually, user said "resized to any size inzoom outzoom". 
-                                // Let's set minZoom very low.
+                                aspect={1}
                                 minZoom={0.5}
                                 onCropChange={setCrop}
                                 onCropComplete={onCropComplete}
@@ -301,7 +323,12 @@ export const PotMaker = ({ onBack }: PotMakerProps) => {
                 {step === 'preview' && (
                     <div className={styles.previewContainer}>
                         <div className={styles.canvasWrapper}>
-                            <Canvas shadows camera={{ position: [0, 2, 5], fov: 45 }}>
+                            <Canvas
+                                shadows
+                                gl={{ preserveDrawingBuffer: true }} // Allow screenshot
+                                camera={{ position: [0, 2, 5], fov: 45 }}
+                            >
+                                <CaptureRelay captureRef={captureRef} />
                                 <ambientLight intensity={0.5} />
                                 <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
                                 <PresentationControls speed={1.5} global zoom={0.7} polar={[-0.1, Math.PI / 4]}>
@@ -311,7 +338,7 @@ export const PotMaker = ({ onBack }: PotMakerProps) => {
                                             shape={selectedShape}
                                             size={selectedSize}
                                             scaleX={texScale}
-                                            scaleY={texScale} // Uniform scaling for now
+                                            scaleY={texScale}
                                             offsetX={texOffsetX}
                                             offsetY={texOffsetY}
                                             rotation={texRotation}
@@ -341,10 +368,35 @@ export const PotMaker = ({ onBack }: PotMakerProps) => {
 
                         <div className={styles.controls}>
                             <button className={styles.actionBtn} onClick={() => setStep('crop')}><Camera size={20} /> Re-Crop</button>
-                            <button className={styles.actionBtn} onClick={() => setStep('select')}><RotateCcw size={20} /> Reset</button>
                             <div className={styles.divider} />
-                            <button className={styles.saveBtn} onClick={() => handleSaveDesign(true)} disabled={saving}><Save size={20} /> Save</button>
-                            <button className={styles.buyBtn} onClick={() => handleSaveDesign(false)} disabled={saving}><ShoppingCart size={20} /> Buy <span className={styles.badge}>msg</span></button>
+                            {/* Finalize Button */}
+                            <button className={styles.saveBtn} onClick={handleFinalize} style={{ width: '100%', justifyContent: 'center' }}>
+                                <Check size={20} /> Generate Final View
+                            </button>
+                        </div>
+                    </div>
+                )}
+
+                {/* STEP 5: FINAL RESULT */}
+                {step === 'result' && finalImage && (
+                    <div className={styles.previewContainer}>
+                        <div className={styles.canvasWrapper} style={{ background: '#fff', overflow: 'hidden' }}>
+                            {/* Display the Captured Image */}
+                            <img src={finalImage} alt="Final Design" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                        </div>
+                        <p style={{ color: '#94a3b8', fontSize: '0.9rem' }}>This is how your masterpiece looks!</p>
+
+                        <div className={styles.controls}>
+                            <button className={styles.actionBtn} onClick={() => setStep('preview')}>
+                                <RotateCcw size={20} /> Keep Editing
+                            </button>
+                            <div className={styles.divider} />
+                            <button className={styles.saveBtn} onClick={() => handleSaveDesign(true)} disabled={saving}>
+                                <Save size={20} /> Save Design
+                            </button>
+                            <button className={styles.buyBtn} onClick={() => handleSaveDesign(false)} disabled={saving}>
+                                <ShoppingCart size={20} /> Buy <span className={styles.badge}>msg</span>
+                            </button>
                         </div>
                     </div>
                 )}
