@@ -53,10 +53,34 @@ const REAL_INDOOR_PLANTS = [
     { name: "Kentia Palm", sci: "Howea forsteriana", life: "50+ Years" },
     { name: "Zebra Plant", sci: "Aphelandra squarrosa", life: "5-10 Years" },
     { name: "Bromeliad", sci: "Guzmania", life: "2-4 Years" },
-    { name: "Orchid Moth", sci: "Phalaenopsis", life: "10-15 Years" }
+    { name: "Orchid Moth", sci: "Phalaenopsis", life: "10-15 Years" },
+    { name: "Elephant Ear", sci: "Colocasia esculenta", life: "Annual (Bulb)" },
+    { name: "Aluminum Plant", sci: "Pilea cadierei", life: "1-4 Years" },
+    { name: "Arrowhead Plant", sci: "Syngonium podophyllum", life: "5-10 Years" },
+    { name: "Baby Rubber Plant", sci: "Peperomia obtusifolia", life: "5-10 Years" },
+    { name: "Burro's Tail", sci: "Sedum morganianum", life: "5-10 Years" },
+    { name: "Caladium", sci: "Caladium bicolor", life: "Annual (Bulb)" },
+    { name: "Cyclamen", sci: "Cyclamen persicum", life: "3-5 Years" },
+    { name: "Dracaena Lemon Lime", sci: "Dracaena warneckii", life: "10-20 Years" },
+    { name: "Fern Arum", sci: "Zamioculcas", life: "10-15 Years" },
+    { name: "Garden Croton", sci: "Codiaeum variegatum", life: "2-4 Years" },
+    { name: "Gloxinia", sci: "Sinningia speciosa", life: "Annual (Bulb)" },
+    { name: "Grape Ivy", sci: "Cissus rhombifolia", life: "5-10 Years" },
+    { name: "Hens and Chicks", sci: "Sempervivum tectorum", life: "3-5 Years" },
+    { name: "Hoya Carnosa", sci: "Hoya carnosa", life: "10-30 Years" },
+    { name: "Kalanchoe", sci: "Kalanchoe blossfeldiana", life: "2-5 Years" },
+    { name: "Living Stone", sci: "Lithops", life: "40-50 Years" },
+    { name: "Maidenhair Fern", sci: "Adiantum raddianum", life: "5-10 Years" },
+    { name: "Money Tree", sci: "Pachira aquatica", life: "10-15 Years" },
+    { name: "Moth Orchid", sci: "Phalaenopsis", life: "10-15 Years" },
+    { name: "Norfolk Island Pine", sci: "Araucaria heterophylla", life: "10-20 Years" },
+    { name: "Panda Plant", sci: "Kalanchoe tomentosa", life: "5-10 Years" },
+    { name: "Purple Shamock", sci: "Oxalis triangularis", life: "5-10 Years" },
+    { name: "Staghorn Fern", sci: "Platycerium", life: "20-30 Years" },
+    { name: "Wandering Jew", sci: "Tradescantia zebrina", life: "2-5 Years" }
 ];
 
-// REAL IDENTITIES for Outdoor Plants (Expanded to 50+)
+// REAL IDENTITIES for Outdoor Plants (Expanded to 70+)
 const REAL_OUTDOOR_PLANTS = [
     { name: "Lavender", sci: "Lavandula angustifolia", life: "10-15 Years" },
     { name: "Rose Bush", sci: "Rosa", life: "15-20 Years" },
@@ -107,7 +131,27 @@ const REAL_OUTDOOR_PLANTS = [
     { name: "Thyme", sci: "Thymus vulgaris", life: "5-10 Years" },
     { name: "Mint", sci: "Mentha", life: "Perennial (Invasive)" },
     { name: "Sage", sci: "Salvia officinalis", life: "5-10 Years" },
-    { name: "Strawberry", sci: "Fragaria x ananassa", life: "3-5 Years" }
+    { name: "Strawberry", sci: "Fragaria x ananassa", life: "3-5 Years" },
+    { name: "Creeping Phlox", sci: "Phlox subulata", life: "5-10 Years" },
+    { name: "Lamb's Ear", sci: "Stachys byzantina", life: "Perennial" },
+    { name: "Lantana", sci: "Lantana camara", life: "Annual/Perennial" },
+    { name: "Moonflower", sci: "Ipomoea alba", life: "Annual" },
+    { name: "Morning Glory", sci: "Ipomoea", life: "Annual" },
+    { name: "Moss Rose", sci: "Portulaca grandiflora", life: "Annual" },
+    { name: "Nasturtium", sci: "Tropaeolum majus", life: "Annual" },
+    { name: "Periwinkle", sci: "Vinca minor", life: "Perennial" },
+    { name: "Poppy", sci: "Papaver somniferum", life: "Annual" },
+    { name: "Primrose", sci: "Primula vulgaris", life: "Perennial" },
+    { name: "Ranunculus", sci: "Ranunculus asiaticus", life: "Perennial" },
+    { name: "Salvia", sci: "Salvia splendens", life: "Annual" },
+    { name: "Sedum", sci: "Hylotelephium spectabile", life: "Perennial" },
+    { name: "Shasta Daisy", sci: "Leucanthemum x superbum", life: "3-5 Years" },
+    { name: "Sweet Alyssum", sci: "Lobularia maritima", life: "Annual" },
+    { name: "Sweet Pea", sci: "Lathyrus odoratus", life: "Annual" },
+    { name: "Verbena", sci: "Verbena bonariensis", life: "Annual/Perennial" },
+    { name: "Yarrow", sci: "Achillea millefolium", life: "Perennial" },
+    { name: "Zinnia", sci: "Zinnia elegans", life: "Annual" },
+    { name: "Cosmos", sci: "Cosmos bipinnatus", life: "Annual" }
 ];
 
 // Helper to generate a random plant
@@ -146,10 +190,10 @@ const generatePlant = (type, index) => {
     };
 };
 
-// Generate 50 unique Indoor and 50 unique Outdoor plants (Total 100)
-// The source lists are ~50 long, so this will be mostly unique real data.
-const newIndoorPlants = Array.from({ length: 50 }, (_, i) => generatePlant('indoor', i));
-const newOutdoorPlants = Array.from({ length: 50 }, (_, i) => generatePlant('outdoor', i));
+// Generate 70 unique Indoor and 70 unique Outdoor plants (Total 140)
+// The source lists are ~70 long, so this will be mostly unique real data.
+const newIndoorPlants = Array.from({ length: 70 }, (_, i) => generatePlant('indoor', i));
+const newOutdoorPlants = Array.from({ length: 70 }, (_, i) => generatePlant('outdoor', i));
 
 const dataFilePath = path.join(__dirname, 'plant-data.js');
 
@@ -170,4 +214,4 @@ module.exports = { indoorPlants, outdoorPlants };
 
 fs.writeFileSync(path.join(__dirname, 'plant-data.js'), newFileContent);
 
-console.log("Successfully GENERATED plant-data.js with 100 purely REAL plant entries (50 Indoor, 50 Outdoor).");
+console.log("Successfully GENERATED plant-data.js with 140 purely REAL plant entries (70 Indoor, 70 Outdoor).");

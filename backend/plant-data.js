@@ -4,22 +4,22 @@ const indoorPlants = [
         "id": "p_in_1000",
         "name": "Snake Plant",
         "scientificName": "Sansevieria trifasciata",
-        "description": "Valeo aspernatur subvenio anser copia voluntarius causa averto. Argumentum adipiscor vester degenero derideo valeo peccatus.",
-        "imageUrl": "https://images.unsplash.com/photo-3358443680?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 15,
-        "idealTempMax": 25,
-        "minHumidity": 59,
+        "description": "Excepturi vulariter recusandae sulum vigilo. Aliquam tantum acceptus tamen absens asporto trepide vinco defluo aestivus.",
+        "imageUrl": "https://images.unsplash.com/photo-3925752779?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 5,
+        "idealTempMax": 32,
+        "minHumidity": 57,
         "sunlight": "high",
-        "oxygenLevel": "low",
+        "oxygenLevel": "very-high",
         "medicinalValues": [
-            "candid",
-            "offset"
+            "crowded",
+            "word"
         ],
         "advantages": [
-            "customized",
-            "users"
+            "turn-key",
+            "experiences"
         ],
-        "price": 80,
+        "price": 24,
         "type": "indoor",
         "lifespan": "10-25 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -35,22 +35,22 @@ const indoorPlants = [
         "id": "p_in_1001",
         "name": "Peace Lily",
         "scientificName": "Spathiphyllum wallisii",
-        "description": "Utpote angelus aegrus thesis arbitro custodia veritas debitis adnuo. Vesco varietas appositus.",
-        "imageUrl": "https://images.unsplash.com/photo-4428918822?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 14,
-        "idealTempMax": 27,
-        "minHumidity": 47,
-        "sunlight": "medium",
-        "oxygenLevel": "high",
+        "description": "Ubi certus crepusculum. Vado subito curriculum velociter.",
+        "imageUrl": "https://images.unsplash.com/photo-3023904550?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 12,
+        "idealTempMax": 25,
+        "minHumidity": 60,
+        "sunlight": "low",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "ignorant",
-            "hepatitis"
+            "prestigious",
+            "bug"
         ],
         "advantages": [
-            "immersive",
-            "systems"
+            "interactive",
+            "models"
         ],
-        "price": 200,
+        "price": 48,
         "type": "indoor",
         "lifespan": "3-5 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -66,22 +66,22 @@ const indoorPlants = [
         "id": "p_in_1002",
         "name": "Spider Plant",
         "scientificName": "Chlorophytum comosum",
-        "description": "Demergo ait desparatus tego tabesco neque. Versus nihil accommodo desipio curis arcesso.",
-        "imageUrl": "https://images.unsplash.com/photo-5219330781?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 7,
-        "idealTempMax": 35,
-        "minHumidity": 58,
+        "description": "Subiungo peior patria supplanto. Ager aliquam tracto demonstro conor agnosco assentator volubilis bibo aperte.",
+        "imageUrl": "https://images.unsplash.com/photo-9764563483?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 14,
+        "idealTempMax": 29,
+        "minHumidity": 55,
         "sunlight": "medium",
-        "oxygenLevel": "low",
+        "oxygenLevel": "very-high",
         "medicinalValues": [
-            "bogus",
-            "hunt"
+            "portly",
+            "distinction"
         ],
         "advantages": [
-            "visionary",
-            "applications"
+            "transparent",
+            "functionalities"
         ],
-        "price": 42,
+        "price": 121,
         "type": "indoor",
         "lifespan": "20-50 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -97,22 +97,22 @@ const indoorPlants = [
         "id": "p_in_1003",
         "name": "Fiddle Leaf Fig",
         "scientificName": "Ficus lyrata",
-        "description": "Ceno trepide urbs. Verecundia tenetur talus dignissimos timidus peccatus comes vapulus ars taceo.",
-        "imageUrl": "https://images.unsplash.com/photo-7436016939?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 10,
-        "idealTempMax": 29,
-        "minHumidity": 44,
-        "sunlight": "low",
-        "oxygenLevel": "high",
+        "description": "Vergo canto coepi contabesco denego claro adicio. Vetus vulticulus chirographum voluptatibus subseco.",
+        "imageUrl": "https://images.unsplash.com/photo-7888096443?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 15,
+        "idealTempMax": 28,
+        "minHumidity": 30,
+        "sunlight": "medium",
+        "oxygenLevel": "very-high",
         "medicinalValues": [
-            "accomplished",
-            "almighty"
+            "mild",
+            "traffic"
         ],
         "advantages": [
-            "extensible",
-            "deliverables"
+            "impactful",
+            "applications"
         ],
-        "price": 81,
+        "price": 12,
         "type": "indoor",
         "lifespan": "25-50 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -128,22 +128,22 @@ const indoorPlants = [
         "id": "p_in_1004",
         "name": "Aloe Vera",
         "scientificName": "Aloe barbadensis miller",
-        "description": "Umquam cognatus turba tabgo admitto vix coniuratio. Studio accendo vulgus artificiose vinculum vindico valde bibo.",
-        "imageUrl": "https://images.unsplash.com/photo-6306574107?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 7,
-        "idealTempMax": 29,
-        "minHumidity": 56,
-        "sunlight": "medium",
-        "oxygenLevel": "moderate",
+        "description": "Sollers numquam comprehendo amplexus totus velut verto verus virgo. Vicinus curia derideo campana animus casso magnam.",
+        "imageUrl": "https://images.unsplash.com/photo-1011149180?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 13,
+        "idealTempMax": 33,
+        "minHumidity": 36,
+        "sunlight": "high",
+        "oxygenLevel": "low",
         "medicinalValues": [
-            "compassionate",
-            "utilization"
+            "heavenly",
+            "fowl"
         ],
         "advantages": [
-            "collaborative",
-            "AI"
+            "cross-media",
+            "initiatives"
         ],
-        "price": 118,
+        "price": 78,
         "type": "indoor",
         "lifespan": "5-20 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -159,22 +159,22 @@ const indoorPlants = [
         "id": "p_in_1005",
         "name": "Rubber Plant",
         "scientificName": "Ficus elastica",
-        "description": "Benigne crinis atque caritas suus solvo numquam. Supra atrox absens verus careo curso canis adinventitias.",
-        "imageUrl": "https://images.unsplash.com/photo-6145144454?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 14,
-        "idealTempMax": 31,
-        "minHumidity": 62,
-        "sunlight": "high",
-        "oxygenLevel": "low",
+        "description": "Tenuis vigilo cubitum apud. Vicissitudo aperte aveho ars tribuo contra claustrum textilis.",
+        "imageUrl": "https://images.unsplash.com/photo-5201729340?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 13,
+        "idealTempMax": 32,
+        "minHumidity": 55,
+        "sunlight": "low",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "subdued",
-            "courtroom"
+            "outrageous",
+            "surface"
         ],
         "advantages": [
-            "AI-driven",
-            "relationships"
+            "quantum",
+            "applications"
         ],
-        "price": 59,
+        "price": 142,
         "type": "indoor",
         "lifespan": "15-25 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -190,22 +190,22 @@ const indoorPlants = [
         "id": "p_in_1006",
         "name": "Monstera",
         "scientificName": "Monstera deliciosa",
-        "description": "Deficio turbo argentum valde optio aegre. Tripudio audio textilis balbus considero deporto antea.",
-        "imageUrl": "https://images.unsplash.com/photo-8570378582?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 9,
-        "idealTempMax": 35,
-        "minHumidity": 60,
-        "sunlight": "low",
+        "description": "Armarium creator aeneus. Quasi solitudo aeternus calamitas stultus tumultus tantum accusantium molestiae.",
+        "imageUrl": "https://images.unsplash.com/photo-4169123574?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 29,
+        "minHumidity": 77,
+        "sunlight": "high",
         "oxygenLevel": "high",
         "medicinalValues": [
-            "cuddly",
-            "disposer"
+            "naughty",
+            "diver"
         ],
         "advantages": [
-            "distributed",
-            "paradigms"
+            "turn-key",
+            "infrastructures"
         ],
-        "price": 156,
+        "price": 198,
         "type": "indoor",
         "lifespan": "10-50 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -221,22 +221,22 @@ const indoorPlants = [
         "id": "p_in_1007",
         "name": "Pothos",
         "scientificName": "Epipremnum aureum",
-        "description": "Tam arto deporto umbra vergo officia dolore urbanus. Damno curriculum earum.",
-        "imageUrl": "https://images.unsplash.com/photo-4893632888?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 14,
+        "description": "Admiratio tunc avaritia degusto ex. Admoveo cilicium cura adsum peccatus tenetur pel.",
+        "imageUrl": "https://images.unsplash.com/photo-7299368150?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 8,
         "idealTempMax": 27,
-        "minHumidity": 60,
+        "minHumidity": 43,
         "sunlight": "medium",
         "oxygenLevel": "moderate",
         "medicinalValues": [
-            "competent",
-            "hygienic"
+            "gentle",
+            "council"
         ],
         "advantages": [
-            "out-of-the-box",
-            "systems"
+            "turn-key",
+            "relationships"
         ],
-        "price": 98,
+        "price": 165,
         "type": "indoor",
         "lifespan": "5-10 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -252,22 +252,22 @@ const indoorPlants = [
         "id": "p_in_1008",
         "name": "ZZ Plant",
         "scientificName": "Zamioculcas zamiifolia",
-        "description": "Summopere deorsum sonitus correptius vinculum adflicto. Spiculum cum degusto strues amicitia.",
-        "imageUrl": "https://images.unsplash.com/photo-4640947757?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 12,
+        "description": "Aspernatur circumvenio hic sum video acies. Taedium vinitor tempus patria sui templum adsidue tametsi capillus.",
+        "imageUrl": "https://images.unsplash.com/photo-3736676391?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 6,
         "idealTempMax": 30,
-        "minHumidity": 55,
+        "minHumidity": 75,
         "sunlight": "low",
         "oxygenLevel": "very-high",
         "medicinalValues": [
-            "untrue",
-            "flat"
+            "internal",
+            "lay"
         ],
         "advantages": [
-            "cross-media",
-            "smart contracts"
+            "one-to-one",
+            "users"
         ],
-        "price": 120,
+        "price": 78,
         "type": "indoor",
         "lifespan": "5-10 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -283,22 +283,22 @@ const indoorPlants = [
         "id": "p_in_1009",
         "name": "Boston Fern",
         "scientificName": "Nephrolepis exaltata",
-        "description": "Amoveo vaco summopere deficio molestias. Curiositas vix aspernatur deprimo sufficio vaco officia curis victus.",
-        "imageUrl": "https://images.unsplash.com/photo-2269234017?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 15,
-        "idealTempMax": 33,
-        "minHumidity": 77,
+        "description": "Tres delinquo supplanto inventore textilis. Bibo tumultus volva surgo.",
+        "imageUrl": "https://images.unsplash.com/photo-2557301007?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 8,
+        "idealTempMax": 34,
+        "minHumidity": 34,
         "sunlight": "high",
-        "oxygenLevel": "low",
+        "oxygenLevel": "very-high",
         "medicinalValues": [
-            "juvenile",
-            "divine"
+            "fat",
+            "heartbeat"
         ],
         "advantages": [
-            "back-end",
-            "schemas"
+            "impactful",
+            "functionalities"
         ],
-        "price": 126,
+        "price": 52,
         "type": "indoor",
         "lifespan": "2-5 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -314,22 +314,22 @@ const indoorPlants = [
         "id": "p_in_1010",
         "name": "Jade Plant",
         "scientificName": "Crassula ovata",
-        "description": "Deporto temptatio tricesimus cruciamentum valens socius asperiores. Tam vicinus tamquam totam cupressus.",
-        "imageUrl": "https://images.unsplash.com/photo-1291154133?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 12,
-        "idealTempMax": 35,
-        "minHumidity": 67,
-        "sunlight": "low",
+        "description": "Vox ipsa curiositas porro vado aequitas adnuo capio. Utrimque temperantia ventosus cogito ait torqueo strenuus copiose delicate totam.",
+        "imageUrl": "https://images.unsplash.com/photo-3732330642?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 8,
+        "idealTempMax": 30,
+        "minHumidity": 78,
+        "sunlight": "medium",
         "oxygenLevel": "low",
         "medicinalValues": [
-            "querulous",
-            "chops"
+            "violent",
+            "crest"
         ],
         "advantages": [
-            "out-of-the-box",
-            "systems"
+            "global",
+            "initiatives"
         ],
-        "price": 50,
+        "price": 193,
         "type": "indoor",
         "lifespan": "50-70 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -345,22 +345,22 @@ const indoorPlants = [
         "id": "p_in_1011",
         "name": "Chinese Money Plant",
         "scientificName": "Pilea peperomioides",
-        "description": "Attero veniam averto tui tutamen arceo umerus ad callide tergeo. Beatae ambulo ascit assentator thorax confido amoveo altus repellendus beatus.",
-        "imageUrl": "https://images.unsplash.com/photo-3637218309?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 9,
-        "idealTempMax": 31,
-        "minHumidity": 72,
+        "description": "Confero viduo amplexus claro. Commodi stillicidium toties calco tempore labore rem.",
+        "imageUrl": "https://images.unsplash.com/photo-1609259729?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 6,
+        "idealTempMax": 27,
+        "minHumidity": 58,
         "sunlight": "high",
         "oxygenLevel": "moderate",
         "medicinalValues": [
-            "lasting",
-            "cuckoo"
+            "queasy",
+            "defendant"
         ],
         "advantages": [
-            "visionary",
-            "ROI"
+            "bleeding-edge",
+            "blockchains"
         ],
-        "price": 19,
+        "price": 88,
         "type": "indoor",
         "lifespan": "5-10 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -376,22 +376,22 @@ const indoorPlants = [
         "id": "p_in_1012",
         "name": "Areca Palm",
         "scientificName": "Dypsis lutescens",
-        "description": "Tyrannus totus cogo cedo comptus beatus porro. Verecundia optio brevis candidus tandem caste creber.",
-        "imageUrl": "https://images.unsplash.com/photo-1907530455?auto=format&fit=crop&w=800&q=80",
+        "description": "Tredecim celo comes universe colligo explicabo tripudio. Corpus incidunt ventosus alius laboriosam ulterius caries occaecati clamo.",
+        "imageUrl": "https://images.unsplash.com/photo-2017867684?auto=format&fit=crop&w=800&q=80",
         "idealTempMin": 15,
-        "idealTempMax": 29,
-        "minHumidity": 79,
-        "sunlight": "medium",
-        "oxygenLevel": "moderate",
+        "idealTempMax": 33,
+        "minHumidity": 44,
+        "sunlight": "low",
+        "oxygenLevel": "low",
         "medicinalValues": [
-            "juicy",
-            "nougat"
+            "menacing",
+            "gallery"
         ],
         "advantages": [
-            "world-class",
-            "paradigms"
+            "real-time",
+            "functionalities"
         ],
-        "price": 162,
+        "price": 25,
         "type": "indoor",
         "lifespan": "10-15 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -407,22 +407,22 @@ const indoorPlants = [
         "id": "p_in_1013",
         "name": "Bird of Paradise",
         "scientificName": "Strelitzia reginae",
-        "description": "Ciminatio eos traho tunc tubineus avaritia surculus. Textilis eaque arbitro crepusculum.",
-        "imageUrl": "https://images.unsplash.com/photo-1396674745?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 6,
-        "idealTempMax": 29,
-        "minHumidity": 54,
+        "description": "Depulso amoveo tyrannus triumphus attollo volo vulgivagus alius. Ambulo officiis architecto tibi.",
+        "imageUrl": "https://images.unsplash.com/photo-4482686184?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 7,
+        "idealTempMax": 26,
+        "minHumidity": 62,
         "sunlight": "high",
-        "oxygenLevel": "high",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "enraged",
-            "meatloaf"
+            "well-groomed",
+            "chops"
         ],
         "advantages": [
-            "transparent",
-            "functionalities"
+            "frictionless",
+            "initiatives"
         ],
-        "price": 98,
+        "price": 64,
         "type": "indoor",
         "lifespan": "50-100 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -438,22 +438,22 @@ const indoorPlants = [
         "id": "p_in_1014",
         "name": "Cast Iron Plant",
         "scientificName": "Aspidistra elatior",
-        "description": "Fugit conqueror tredecim suasoria ipsa conitor cetera et similique. Adflicto voluptatibus aegre utrum.",
-        "imageUrl": "https://images.unsplash.com/photo-6597826453?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 14,
-        "idealTempMax": 29,
-        "minHumidity": 46,
+        "description": "Subiungo virgo succedo thesaurus tristis vinum tersus acerbitas. Explicabo vereor cumque creator rerum somnus umbra.",
+        "imageUrl": "https://images.unsplash.com/photo-1650700918?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 6,
+        "idealTempMax": 32,
+        "minHumidity": 35,
         "sunlight": "medium",
-        "oxygenLevel": "very-high",
+        "oxygenLevel": "low",
         "medicinalValues": [
-            "true",
-            "place"
+            "kosher",
+            "fireplace"
         ],
         "advantages": [
-            "ubiquitous",
-            "e-commerce"
+            "quantum",
+            "models"
         ],
-        "price": 67,
+        "price": 119,
         "type": "indoor",
         "lifespan": "50+ Years",
         "foliageTexture": "Glossy/Smooth",
@@ -469,22 +469,22 @@ const indoorPlants = [
         "id": "p_in_1015",
         "name": "Philodendron Green",
         "scientificName": "Philodendron hederaceum",
-        "description": "Iste cauda sono reiciendis. Officiis audentia depraedor accusantium.",
-        "imageUrl": "https://images.unsplash.com/photo-3952709055?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 7,
+        "description": "Amicitia vere solitudo usque crux sperno asperiores creber. Fugit voluptatum voluptate aeger thesis suspendo.",
+        "imageUrl": "https://images.unsplash.com/photo-4250186475?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 14,
         "idealTempMax": 29,
-        "minHumidity": 47,
-        "sunlight": "medium",
-        "oxygenLevel": "low",
+        "minHumidity": 41,
+        "sunlight": "high",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "these",
-            "avalanche"
+            "chilly",
+            "igloo"
         ],
         "advantages": [
             "world-class",
-            "synergies"
+            "applications"
         ],
-        "price": 180,
+        "price": 198,
         "type": "indoor",
         "lifespan": "10+ Years",
         "foliageTexture": "Glossy/Smooth",
@@ -500,22 +500,22 @@ const indoorPlants = [
         "id": "p_in_1016",
         "name": "Majesty Palm",
         "scientificName": "Ravenea rivularis",
-        "description": "Acquiro volutabrum suasoria viduo sumptus contra tergeo. Sophismata eos somniculosus asperiores amor nobis cumque aeneus cenaculum.",
-        "imageUrl": "https://images.unsplash.com/photo-2235535318?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 14,
-        "idealTempMax": 31,
-        "minHumidity": 34,
+        "description": "Succurro adfectus adhaero causa convoco altus vinco accendo vir. Suggero capillus coniecto spes aetas cupio.",
+        "imageUrl": "https://images.unsplash.com/photo-5464315352?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 6,
+        "idealTempMax": 26,
+        "minHumidity": 72,
         "sunlight": "high",
         "oxygenLevel": "high",
         "medicinalValues": [
-            "firsthand",
-            "flame"
+            "far-off",
+            "palate"
         ],
         "advantages": [
-            "collaborative",
-            "channels"
+            "next-generation",
+            "relationships"
         ],
-        "price": 183,
+        "price": 55,
         "type": "indoor",
         "lifespan": "10-20 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -531,22 +531,22 @@ const indoorPlants = [
         "id": "p_in_1017",
         "name": "Dumb Cane",
         "scientificName": "Dieffenbachia seguine",
-        "description": "Peccatus ambitus soluta consectetur. Vito abscido tempora tot curo.",
-        "imageUrl": "https://images.unsplash.com/photo-2123504673?auto=format&fit=crop&w=800&q=80",
+        "description": "Celer dedecor verumtamen. Votum surculus acerbitas sol vitium.",
+        "imageUrl": "https://images.unsplash.com/photo-2064464604?auto=format&fit=crop&w=800&q=80",
         "idealTempMin": 8,
-        "idealTempMax": 34,
-        "minHumidity": 49,
+        "idealTempMax": 29,
+        "minHumidity": 48,
         "sunlight": "high",
         "oxygenLevel": "very-high",
         "medicinalValues": [
-            "married",
-            "partridge"
+            "unrealistic",
+            "membership"
         ],
         "advantages": [
-            "sticky",
-            "functionalities"
+            "one-to-one",
+            "convergence"
         ],
-        "price": 171,
+        "price": 127,
         "type": "indoor",
         "lifespan": "3-5 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -562,22 +562,22 @@ const indoorPlants = [
         "id": "p_in_1018",
         "name": "English Ivy",
         "scientificName": "Hedera helix",
-        "description": "Adversus conduco validus ulterius suffoco cupressus demum decet arceo virga. Conventus autus socius vae aggredior utrum cui.",
-        "imageUrl": "https://images.unsplash.com/photo-8358464542?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 14,
-        "idealTempMax": 35,
-        "minHumidity": 42,
-        "sunlight": "medium",
+        "description": "Ratione defleo valens apostolus atavus. Suffragium complectus tenus voluptas degusto depulso arx blandior placeat apparatus.",
+        "imageUrl": "https://images.unsplash.com/photo-5886352940?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 15,
+        "idealTempMax": 32,
+        "minHumidity": 53,
+        "sunlight": "high",
         "oxygenLevel": "high",
         "medicinalValues": [
-            "ornate",
-            "suitcase"
+            "rich",
+            "hubris"
         ],
         "advantages": [
-            "innovative",
-            "AI"
+            "smart",
+            "platforms"
         ],
-        "price": 62,
+        "price": 146,
         "type": "indoor",
         "lifespan": "10-50 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -593,22 +593,22 @@ const indoorPlants = [
         "id": "p_in_1019",
         "name": "Calathea Rattlesnake",
         "scientificName": "Goeppertia insignis",
-        "description": "Tutamen facilis magni contego. Tibi comedo aequus.",
-        "imageUrl": "https://images.unsplash.com/photo-8665755182?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 15,
+        "description": "Averto vehemens terra eum. Causa succurro ambitus tibi aliquam quod conventus bibo summisse deficio.",
+        "imageUrl": "https://images.unsplash.com/photo-3320339084?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 6,
         "idealTempMax": 29,
-        "minHumidity": 60,
+        "minHumidity": 58,
         "sunlight": "medium",
-        "oxygenLevel": "high",
+        "oxygenLevel": "very-high",
         "medicinalValues": [
-            "heartfelt",
-            "understanding"
+            "circular",
+            "section"
         ],
         "advantages": [
-            "proactive",
-            "functionalities"
+            "best-of-breed",
+            "architectures"
         ],
-        "price": 92,
+        "price": 57,
         "type": "indoor",
         "lifespan": "5-10 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -624,22 +624,22 @@ const indoorPlants = [
         "id": "p_in_1020",
         "name": "Prayer Plant",
         "scientificName": "Maranta leuconeura",
-        "description": "Placeat consuasor vito commodi aegrus. Accendo comptus coniuratio curso peccatus allatus clamo vado tristis.",
-        "imageUrl": "https://images.unsplash.com/photo-3521841612?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 15,
-        "idealTempMax": 30,
-        "minHumidity": 43,
-        "sunlight": "low",
-        "oxygenLevel": "high",
+        "description": "Quisquam casus adflicto caput depopulo placeat corpus volo tabernus strenuus. Casus baiulus vigor antiquus casso.",
+        "imageUrl": "https://images.unsplash.com/photo-7348392589?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 12,
+        "idealTempMax": 27,
+        "minHumidity": 64,
+        "sunlight": "high",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "putrid",
-            "zebra"
+            "menacing",
+            "hospitalization"
         ],
         "advantages": [
-            "dynamic",
-            "applications"
+            "end-to-end",
+            "synergies"
         ],
-        "price": 118,
+        "price": 49,
         "type": "indoor",
         "lifespan": "2-5 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -655,22 +655,22 @@ const indoorPlants = [
         "id": "p_in_1021",
         "name": "Ponytail Palm",
         "scientificName": "Beaucarnea recurvata",
-        "description": "Timor rem canto unde defluo angulus corporis victoria caput curis. Voluptate tutis adsuesco umbra.",
-        "imageUrl": "https://images.unsplash.com/photo-5439636027?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 11,
-        "idealTempMax": 28,
-        "minHumidity": 36,
+        "description": "Deporto trepide vigilo vir sumptus cetera. Turba coerceo denuncio.",
+        "imageUrl": "https://images.unsplash.com/photo-7734896644?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 6,
+        "idealTempMax": 33,
+        "minHumidity": 54,
         "sunlight": "medium",
         "oxygenLevel": "low",
         "medicinalValues": [
-            "tired",
-            "deed"
+            "buzzing",
+            "design"
         ],
         "advantages": [
-            "best-of-breed",
-            "infrastructures"
+            "decentralized",
+            "paradigms"
         ],
-        "price": 75,
+        "price": 25,
         "type": "indoor",
         "lifespan": "50-100 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -686,22 +686,22 @@ const indoorPlants = [
         "id": "p_in_1022",
         "name": "String of Pearls",
         "scientificName": "Curio rowleyanus",
-        "description": "Adstringo aegre valde amicitia. Corrupti ratione eum patria suppellex temporibus.",
-        "imageUrl": "https://images.unsplash.com/photo-2234766154?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 6,
-        "idealTempMax": 34,
-        "minHumidity": 45,
-        "sunlight": "medium",
-        "oxygenLevel": "low",
+        "description": "Stella urbanus conventus textilis creator. Facilis valeo video fugit tepidus comitatus ciminatio.",
+        "imageUrl": "https://images.unsplash.com/photo-9318921729?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 11,
+        "idealTempMax": 35,
+        "minHumidity": 38,
+        "sunlight": "high",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "shadowy",
-            "kinase"
+            "untidy",
+            "millet"
         ],
         "advantages": [
-            "out-of-the-box",
-            "markets"
+            "mission-critical",
+            "users"
         ],
-        "price": 109,
+        "price": 65,
         "type": "indoor",
         "lifespan": "3-5 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -717,22 +717,22 @@ const indoorPlants = [
         "id": "p_in_1023",
         "name": "African Violet",
         "scientificName": "Saintpaulia ionantha",
-        "description": "Hic numquam bellicus sumptus. Aequus pecus bos tum demitto atrox quaerat carmen soluta cedo.",
-        "imageUrl": "https://images.unsplash.com/photo-2818588913?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 7,
-        "idealTempMax": 35,
-        "minHumidity": 36,
-        "sunlight": "medium",
-        "oxygenLevel": "low",
+        "description": "Viridis statua basium caelum appello voco somniculosus cometes torqueo. Velociter statim aurum vacuus damno tum vesco.",
+        "imageUrl": "https://images.unsplash.com/photo-2802171001?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 5,
+        "idealTempMax": 31,
+        "minHumidity": 69,
+        "sunlight": "low",
+        "oxygenLevel": "very-high",
         "medicinalValues": [
-            "uniform",
-            "mantua"
+            "aggressive",
+            "litter"
         ],
         "advantages": [
-            "mission-critical",
-            "architectures"
+            "impactful",
+            "applications"
         ],
-        "price": 62,
+        "price": 48,
         "type": "indoor",
         "lifespan": "50+ Years",
         "foliageTexture": "Glossy/Smooth",
@@ -748,22 +748,22 @@ const indoorPlants = [
         "id": "p_in_1024",
         "name": "Air Plant",
         "scientificName": "Tillandsia",
-        "description": "Tricesimus beatae defluo. Bonus aedificium creptio.",
-        "imageUrl": "https://images.unsplash.com/photo-3420834694?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 13,
-        "idealTempMax": 33,
-        "minHumidity": 30,
+        "description": "Canonicus vester sollers. Sol caelum tolero alioqui adiuvo clibanus turpis coniuratio curtus.",
+        "imageUrl": "https://images.unsplash.com/photo-7444414765?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 8,
+        "idealTempMax": 30,
+        "minHumidity": 48,
         "sunlight": "high",
         "oxygenLevel": "very-high",
         "medicinalValues": [
-            "trivial",
-            "lady"
+            "slight",
+            "dusk"
         ],
         "advantages": [
-            "viral",
-            "partnerships"
+            "ubiquitous",
+            "blockchains"
         ],
-        "price": 132,
+        "price": 185,
         "type": "indoor",
         "lifespan": "2-5 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -779,22 +779,22 @@ const indoorPlants = [
         "id": "p_in_1025",
         "name": "Lucky Bamboo",
         "scientificName": "Dracaena sanderiana",
-        "description": "Fugiat voluptatibus adipisci attonbitus color cavus statua validus bonus. Sequi abeo titulus turbo pauci demo arbitro aegrotatio triumphus vilitas.",
-        "imageUrl": "https://images.unsplash.com/photo-9430651053?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 15,
-        "idealTempMax": 31,
-        "minHumidity": 40,
+        "description": "Curatio appello deleo tempus synagoga. Mollitia facilis tabesco asper amet voluptatum ea assumenda.",
+        "imageUrl": "https://images.unsplash.com/photo-2717846106?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 6,
+        "idealTempMax": 25,
+        "minHumidity": 64,
         "sunlight": "medium",
-        "oxygenLevel": "low",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "super",
-            "summary"
+            "dim",
+            "fort"
         ],
         "advantages": [
-            "efficient",
-            "mindshare"
+            "one-to-one",
+            "content"
         ],
-        "price": 20,
+        "price": 14,
         "type": "indoor",
         "lifespan": "5-10 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -810,22 +810,22 @@ const indoorPlants = [
         "id": "p_in_1026",
         "name": "Christmas Cactus",
         "scientificName": "Schlumbergera buckleyi",
-        "description": "Correptius ascisco urbs usus quibusdam absque tero vos tersus. Tenax capto atrox ademptio subvenio quam delectatio terebro.",
-        "imageUrl": "https://images.unsplash.com/photo-1500020504?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 13,
-        "idealTempMax": 33,
-        "minHumidity": 71,
+        "description": "Certe colligo conculco optio sustineo confero deorsum. Conor tenax quam atqui sopor aiunt sulum arbor acerbitas vespillo.",
+        "imageUrl": "https://images.unsplash.com/photo-8647769512?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 11,
+        "idealTempMax": 26,
+        "minHumidity": 51,
         "sunlight": "medium",
-        "oxygenLevel": "very-high",
+        "oxygenLevel": "low",
         "medicinalValues": [
-            "precious",
-            "tarragon"
+            "untrue",
+            "commodity"
         ],
         "advantages": [
-            "visionary",
-            "content"
+            "B2C",
+            "solutions"
         ],
-        "price": 145,
+        "price": 106,
         "type": "indoor",
         "lifespan": "20-30 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -841,22 +841,22 @@ const indoorPlants = [
         "id": "p_in_1027",
         "name": "Croton",
         "scientificName": "Codiaeum variegatum",
-        "description": "Vis viscus repellat agnitio damnatio triduana stabilis animi vos. Cito cetera vinitor confugo.",
-        "imageUrl": "https://images.unsplash.com/photo-9383544415?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 8,
-        "idealTempMax": 30,
-        "minHumidity": 49,
+        "description": "Cohaero valens deleo vulgus. Adflicto atqui demoror valde defaeco qui omnis congregatio acerbitas.",
+        "imageUrl": "https://images.unsplash.com/photo-4126339028?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 5,
+        "idealTempMax": 29,
+        "minHumidity": 72,
         "sunlight": "medium",
         "oxygenLevel": "very-high",
         "medicinalValues": [
-            "lustrous",
-            "schnitzel"
+            "stained",
+            "tinderbox"
         ],
         "advantages": [
-            "extensible",
-            "paradigms"
+            "quantum",
+            "technologies"
         ],
-        "price": 33,
+        "price": 71,
         "type": "indoor",
         "lifespan": "2-5 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -872,22 +872,22 @@ const indoorPlants = [
         "id": "p_in_1028",
         "name": "Anthurium",
         "scientificName": "Anthurium andraeanum",
-        "description": "Angelus quod aegrus certe numquam patruus cunabula ciminatio recusandae vaco. Amiculum sursum voluptate conservo currus traho.",
-        "imageUrl": "https://images.unsplash.com/photo-9205463272?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 10,
-        "idealTempMax": 26,
-        "minHumidity": 36,
+        "description": "Tepesco sponte uredo aiunt. Anser tum ex decumbo.",
+        "imageUrl": "https://images.unsplash.com/photo-2737509473?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 14,
+        "idealTempMax": 34,
+        "minHumidity": 45,
         "sunlight": "medium",
-        "oxygenLevel": "very-high",
+        "oxygenLevel": "low",
         "medicinalValues": [
-            "crazy",
-            "pillbox"
+            "immaculate",
+            "hydrant"
         ],
         "advantages": [
-            "B2B",
-            "markets"
+            "user-centric",
+            "functionalities"
         ],
-        "price": 105,
+        "price": 48,
         "type": "indoor",
         "lifespan": "5-10 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -903,22 +903,22 @@ const indoorPlants = [
         "id": "p_in_1029",
         "name": "Parlor Palm",
         "scientificName": "Chamaedorea elegans",
-        "description": "Dolores viridis unus depono vicinus tunc. Tondeo vomer fugiat dicta congregatio nihil.",
-        "imageUrl": "https://images.unsplash.com/photo-1655922055?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 11,
-        "idealTempMax": 35,
-        "minHumidity": 77,
-        "sunlight": "medium",
+        "description": "Terga arcus cernuus tempore vitium provident comes statua. Vere conservo victoria vilitas theologus corroboro patruus capillus sum desidero.",
+        "imageUrl": "https://images.unsplash.com/photo-7813164588?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 12,
+        "idealTempMax": 27,
+        "minHumidity": 56,
+        "sunlight": "low",
         "oxygenLevel": "moderate",
         "medicinalValues": [
-            "distant",
-            "jacket"
+            "appropriate",
+            "gripper"
         ],
         "advantages": [
-            "synergistic",
-            "web services"
+            "rich",
+            "systems"
         ],
-        "price": 26,
+        "price": 191,
         "type": "indoor",
         "lifespan": "10-20 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -934,22 +934,22 @@ const indoorPlants = [
         "id": "p_in_1030",
         "name": "Yucca",
         "scientificName": "Yucca elephantipes",
-        "description": "Vicissitudo ascit timor. Adipiscor carus distinctio conscendo defungo.",
-        "imageUrl": "https://images.unsplash.com/photo-8535917357?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 12,
-        "idealTempMax": 33,
-        "minHumidity": 51,
-        "sunlight": "low",
-        "oxygenLevel": "high",
+        "description": "Acies via unde aspernatur. Consuasor custodia adaugeo beatae quos termes cogo nemo cenaculum arbustum.",
+        "imageUrl": "https://images.unsplash.com/photo-7038019952?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 7,
+        "idealTempMax": 26,
+        "minHumidity": 75,
+        "sunlight": "high",
+        "oxygenLevel": "low",
         "medicinalValues": [
-            "spherical",
-            "illusion"
+            "gorgeous",
+            "retrospectivity"
         ],
         "advantages": [
-            "world-class",
-            "deliverables"
+            "real-time",
+            "blockchains"
         ],
-        "price": 191,
+        "price": 22,
         "type": "indoor",
         "lifespan": "20-50 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -965,22 +965,22 @@ const indoorPlants = [
         "id": "p_in_1031",
         "name": "Corn Plant",
         "scientificName": "Dracaena fragrans",
-        "description": "Utroque cumque spoliatio supellex. Exercitationem aer atrox autus debitis conturbo cribro.",
-        "imageUrl": "https://images.unsplash.com/photo-6863590435?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 11,
-        "idealTempMax": 25,
-        "minHumidity": 66,
-        "sunlight": "medium",
+        "description": "Ait acquiro adimpleo. Defungo constans rem.",
+        "imageUrl": "https://images.unsplash.com/photo-5223371316?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 9,
+        "idealTempMax": 31,
+        "minHumidity": 54,
+        "sunlight": "high",
         "oxygenLevel": "high",
         "medicinalValues": [
-            "soulful",
-            "tail"
+            "agitated",
+            "swordfish"
         ],
         "advantages": [
-            "world-class",
-            "deliverables"
+            "rich",
+            "relationships"
         ],
-        "price": 15,
+        "price": 140,
         "type": "indoor",
         "lifespan": "10-20 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -996,22 +996,22 @@ const indoorPlants = [
         "id": "p_in_1032",
         "name": "Hoya Heart",
         "scientificName": "Hoya kerrii",
-        "description": "Cogo perspiciatis amoveo audax tolero. Valeo illo attollo omnis.",
-        "imageUrl": "https://images.unsplash.com/photo-6572064492?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 15,
-        "idealTempMax": 25,
-        "minHumidity": 59,
-        "sunlight": "high",
-        "oxygenLevel": "high",
+        "description": "Decretum compono spoliatio cervus somnus sunt bibo spargo cibo quibusdam. Exercitationem voco tabula aperiam accommodo dicta voluptate.",
+        "imageUrl": "https://images.unsplash.com/photo-6343032520?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 13,
+        "idealTempMax": 29,
+        "minHumidity": 37,
+        "sunlight": "low",
+        "oxygenLevel": "low",
         "medicinalValues": [
-            "snoopy",
-            "sand"
+            "partial",
+            "provider"
         ],
         "advantages": [
-            "ubiquitous",
-            "deliverables"
+            "impactful",
+            "platforms"
         ],
-        "price": 148,
+        "price": 36,
         "type": "indoor",
         "lifespan": "5-10 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -1027,22 +1027,22 @@ const indoorPlants = [
         "id": "p_in_1033",
         "name": "Bunny Ear Cactus",
         "scientificName": "Opuntia microdasys",
-        "description": "Calco celebrer pecus dolores audacia vulnero adipiscor bestia. Deprimo tersus asper arceo amicitia tribuo tremo voro carcer tot.",
-        "imageUrl": "https://images.unsplash.com/photo-1326285081?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 15,
+        "description": "Commodo super brevis antepono ventito delectus velit. Canis solus velit alo vis animus iste confido vitiosus.",
+        "imageUrl": "https://images.unsplash.com/photo-7092250524?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 7,
         "idealTempMax": 35,
-        "minHumidity": 50,
-        "sunlight": "low",
+        "minHumidity": 37,
+        "sunlight": "high",
         "oxygenLevel": "high",
         "medicinalValues": [
-            "tame",
-            "leading"
+            "mild",
+            "fibre"
         ],
         "advantages": [
-            "distributed",
-            "supply-chains"
+            "revolutionary",
+            "smart contracts"
         ],
-        "price": 49,
+        "price": 125,
         "type": "indoor",
         "lifespan": "10-20 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -1058,22 +1058,22 @@ const indoorPlants = [
         "id": "p_in_1034",
         "name": "Haworthia",
         "scientificName": "Haworthia attenuata",
-        "description": "Adhaero amplitudo tremo condico coadunatio atque conduco. Thema vulticulus una dedecor inventore.",
-        "imageUrl": "https://images.unsplash.com/photo-7950815569?auto=format&fit=crop&w=800&q=80",
+        "description": "Defaeco cura umerus causa harum undique. Adiuvo tum thalassinus cupiditate xiphias pecco urbanus.",
+        "imageUrl": "https://images.unsplash.com/photo-6490836440?auto=format&fit=crop&w=800&q=80",
         "idealTempMin": 12,
         "idealTempMax": 28,
-        "minHumidity": 52,
-        "sunlight": "high",
+        "minHumidity": 73,
+        "sunlight": "low",
         "oxygenLevel": "high",
         "medicinalValues": [
-            "weighty",
-            "pinstripe"
+            "every",
+            "yeast"
         ],
         "advantages": [
-            "leading-edge",
-            "niches"
+            "global",
+            "communities"
         ],
-        "price": 23,
+        "price": 14,
         "type": "indoor",
         "lifespan": "40-50 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -1089,22 +1089,22 @@ const indoorPlants = [
         "id": "p_in_1035",
         "name": "Polka Dot Plant",
         "scientificName": "Hypoestes phyllostachya",
-        "description": "Bonus articulus tondeo avaritia est doloremque sui minima in. Valetudo vis decor ventosus ubi sed.",
-        "imageUrl": "https://images.unsplash.com/photo-2723578218?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 31,
-        "minHumidity": 80,
-        "sunlight": "low",
-        "oxygenLevel": "moderate",
+        "description": "Ad cohibeo beatus velit compono crur caries concido. Tum subvenio antiquus defaeco.",
+        "imageUrl": "https://images.unsplash.com/photo-8257628278?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 7,
+        "idealTempMax": 33,
+        "minHumidity": 56,
+        "sunlight": "medium",
+        "oxygenLevel": "high",
         "medicinalValues": [
-            "similar",
-            "academics"
+            "gifted",
+            "stranger"
         ],
         "advantages": [
-            "customized",
-            "channels"
+            "back-end",
+            "relationships"
         ],
-        "price": 47,
+        "price": 25,
         "type": "indoor",
         "lifespan": "Annual/Short-lived",
         "foliageTexture": "Glossy/Smooth",
@@ -1120,22 +1120,22 @@ const indoorPlants = [
         "id": "p_in_1036",
         "name": "Nerve Plant",
         "scientificName": "Fittonia albivenis",
-        "description": "Coma casus ater eaque. Tabesco nesciunt censura uter venia studio sapiente vere careo.",
-        "imageUrl": "https://images.unsplash.com/photo-9039478341?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 14,
-        "idealTempMax": 33,
-        "minHumidity": 63,
+        "description": "Molestias abundans acies. Aegre beatae demulceo ulciscor caute.",
+        "imageUrl": "https://images.unsplash.com/photo-8985614058?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 6,
+        "idealTempMax": 25,
+        "minHumidity": 71,
         "sunlight": "high",
-        "oxygenLevel": "low",
+        "oxygenLevel": "very-high",
         "medicinalValues": [
-            "runny",
-            "amnesty"
+            "unknown",
+            "unibody"
         ],
         "advantages": [
-            "transparent",
-            "platforms"
+            "synergistic",
+            "applications"
         ],
-        "price": 129,
+        "price": 80,
         "type": "indoor",
         "lifespan": "2-3 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -1151,22 +1151,22 @@ const indoorPlants = [
         "id": "p_in_1037",
         "name": "Peperomia",
         "scientificName": "Peperomia obtusifolia",
-        "description": "Astrum tenuis tepidus degenero. Amita odit vorax strenuus cupio.",
-        "imageUrl": "https://images.unsplash.com/photo-3975794214?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 11,
-        "idealTempMax": 32,
-        "minHumidity": 48,
-        "sunlight": "high",
-        "oxygenLevel": "high",
+        "description": "Dolorem dolor vicissitudo delego acervus aggredior temeritas conqueror. Sordeo compono subiungo copia catena aurum.",
+        "imageUrl": "https://images.unsplash.com/photo-1330401335?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 15,
+        "idealTempMax": 33,
+        "minHumidity": 61,
+        "sunlight": "medium",
+        "oxygenLevel": "very-high",
         "medicinalValues": [
-            "quintessential",
-            "horst"
+            "fatherly",
+            "dredger"
         ],
         "advantages": [
-            "collaborative",
-            "networks"
+            "interactive",
+            "communities"
         ],
-        "price": 77,
+        "price": 108,
         "type": "indoor",
         "lifespan": "5-10 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -1182,22 +1182,22 @@ const indoorPlants = [
         "id": "p_in_1038",
         "name": "Sago Palm",
         "scientificName": "Cycas revoluta",
-        "description": "Tollo defungo absens damno corrigo comburo. Contego solitudo conservo ventito amplitudo annus sulum.",
-        "imageUrl": "https://images.unsplash.com/photo-1072638253?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 29,
-        "minHumidity": 64,
-        "sunlight": "low",
-        "oxygenLevel": "low",
+        "description": "Capitulus bos sumptus coadunatio impedit depulso umbra. Alter sono laudantium patior spectaculum conventus terror patruus conor pel.",
+        "imageUrl": "https://images.unsplash.com/photo-4543495147?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 9,
+        "idealTempMax": 27,
+        "minHumidity": 39,
+        "sunlight": "high",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "informal",
-            "distinction"
+            "dreary",
+            "larva"
         ],
         "advantages": [
-            "immersive",
-            "niches"
+            "sticky",
+            "models"
         ],
-        "price": 62,
+        "price": 36,
         "type": "indoor",
         "lifespan": "50-100 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -1213,22 +1213,22 @@ const indoorPlants = [
         "id": "p_in_1039",
         "name": "Asparagus Fern",
         "scientificName": "Asparagus setaceus",
-        "description": "Cohors adfero aranea. Creator ars quam coma consuasor tribuo chirographum bis campana defendo.",
-        "imageUrl": "https://images.unsplash.com/photo-9657106695?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 13,
-        "idealTempMax": 28,
-        "minHumidity": 74,
+        "description": "Cras nemo accusator abbas utpote crinis. Solio admiratio pauper denego apostolus defungo sufficio cibus cresco varietas.",
+        "imageUrl": "https://images.unsplash.com/photo-8078123912?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 15,
+        "idealTempMax": 27,
+        "minHumidity": 49,
         "sunlight": "high",
         "oxygenLevel": "high",
         "medicinalValues": [
-            "shallow",
-            "derby"
+            "beloved",
+            "eyeliner"
         ],
         "advantages": [
-            "B2B",
-            "web services"
+            "granular",
+            "systems"
         ],
-        "price": 119,
+        "price": 74,
         "type": "indoor",
         "lifespan": "10+ Years",
         "foliageTexture": "Glossy/Smooth",
@@ -1244,22 +1244,22 @@ const indoorPlants = [
         "id": "p_in_1040",
         "name": "Begonia Maculata",
         "scientificName": "Begonia maculata",
-        "description": "Defetiscor tremo aiunt quam calamitas. Iure comes cupiditate repellat explicabo distinctio dedecor stultus tibi.",
-        "imageUrl": "https://images.unsplash.com/photo-9187562534?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 10,
-        "idealTempMax": 30,
-        "minHumidity": 68,
+        "description": "Crux cohibeo asporto cuius valens antiquus amo. Cimentarius tener aptus reiciendis arbustum amitto teres amplexus suggero sopor.",
+        "imageUrl": "https://images.unsplash.com/photo-1824144290?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 6,
+        "idealTempMax": 31,
+        "minHumidity": 75,
         "sunlight": "low",
-        "oxygenLevel": "very-high",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "powerful",
-            "descendant"
+            "utter",
+            "mozzarella"
         ],
         "advantages": [
-            "cross-media",
-            "schemas"
+            "turn-key",
+            "convergence"
         ],
-        "price": 18,
+        "price": 96,
         "type": "indoor",
         "lifespan": "2-5 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -1275,22 +1275,22 @@ const indoorPlants = [
         "id": "p_in_1041",
         "name": "Swiss Cheese Vine",
         "scientificName": "Monstera adansonii",
-        "description": "Animi vita adinventitias tabula cilicium aspicio veritas quos addo minima. Illo ante theca decretum esse consectetur tenax defero.",
-        "imageUrl": "https://images.unsplash.com/photo-5442918603?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 7,
-        "idealTempMax": 35,
-        "minHumidity": 37,
+        "description": "Tepesco eveniet capillus quasi ter canonicus appono cultellus voco sufficio. Amissio minus vindico addo teres aliqua decimus stips decretum ulterius.",
+        "imageUrl": "https://images.unsplash.com/photo-6280255357?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 8,
+        "idealTempMax": 31,
+        "minHumidity": 42,
         "sunlight": "high",
-        "oxygenLevel": "very-high",
+        "oxygenLevel": "high",
         "medicinalValues": [
-            "overcooked",
-            "sideboard"
+            "private",
+            "passport"
         ],
         "advantages": [
-            "impactful",
-            "ROI"
+            "plug-and-play",
+            "technologies"
         ],
-        "price": 107,
+        "price": 10,
         "type": "indoor",
         "lifespan": "10+ Years",
         "foliageTexture": "Glossy/Smooth",
@@ -1306,22 +1306,22 @@ const indoorPlants = [
         "id": "p_in_1042",
         "name": "Flamingo Flower",
         "scientificName": "Anthurium scherzerianum",
-        "description": "Ambulo delinquo stillicidium adhuc. Alii creber solium aegrus apud ter quibusdam tamdiu ver.",
-        "imageUrl": "https://images.unsplash.com/photo-9674683332?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 12,
-        "idealTempMax": 28,
-        "minHumidity": 64,
-        "sunlight": "high",
+        "description": "Facilis verto ipsa. Umbra circumvenio admoveo.",
+        "imageUrl": "https://images.unsplash.com/photo-9103387274?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 13,
+        "idealTempMax": 26,
+        "minHumidity": 79,
+        "sunlight": "low",
         "oxygenLevel": "very-high",
         "medicinalValues": [
-            "deficient",
-            "skyline"
+            "apprehensive",
+            "accelerator"
         ],
         "advantages": [
-            "efficient",
-            "communities"
+            "visionary",
+            "paradigms"
         ],
-        "price": 163,
+        "price": 97,
         "type": "indoor",
         "lifespan": "5-10 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -1337,22 +1337,22 @@ const indoorPlants = [
         "id": "p_in_1043",
         "name": "Dragon Tree",
         "scientificName": "Dracaena marginata",
-        "description": "Explicabo textor quae. Deputo ago corroboro quasi.",
-        "imageUrl": "https://images.unsplash.com/photo-6298262566?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 14,
-        "idealTempMax": 26,
-        "minHumidity": 59,
-        "sunlight": "medium",
-        "oxygenLevel": "very-high",
+        "description": "Spectaculum certe corroboro. Nobis amo allatus vomer pectus comparo depromo.",
+        "imageUrl": "https://images.unsplash.com/photo-4277315346?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 9,
+        "idealTempMax": 32,
+        "minHumidity": 37,
+        "sunlight": "high",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "raw",
-            "hornet"
+            "cumbersome",
+            "formula"
         ],
         "advantages": [
-            "scalable",
-            "users"
+            "one-to-one",
+            "synergies"
         ],
-        "price": 52,
+        "price": 43,
         "type": "indoor",
         "lifespan": "10-15 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -1368,22 +1368,22 @@ const indoorPlants = [
         "id": "p_in_1044",
         "name": "Weeping Fig",
         "scientificName": "Ficus benjamina",
-        "description": "Soleo brevis apto unde arbor acer vaco custodia temperantia earum. Alius natus aegrotatio.",
-        "imageUrl": "https://images.unsplash.com/photo-4233655960?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 11,
-        "idealTempMax": 27,
-        "minHumidity": 63,
+        "description": "Comptus virtus patria fugit contego culpa impedit sunt. Curto taceo vulgaris usus sumptus amor credo tenuis celer.",
+        "imageUrl": "https://images.unsplash.com/photo-6886889658?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 7,
+        "idealTempMax": 31,
+        "minHumidity": 47,
         "sunlight": "high",
         "oxygenLevel": "very-high",
         "medicinalValues": [
-            "swift",
-            "intellect"
+            "grown",
+            "lounge"
         ],
         "advantages": [
-            "frictionless",
-            "mindshare"
+            "interactive",
+            "models"
         ],
-        "price": 116,
+        "price": 71,
         "type": "indoor",
         "lifespan": "20-50 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -1399,22 +1399,22 @@ const indoorPlants = [
         "id": "p_in_1045",
         "name": "Silver Satin Pothos",
         "scientificName": "Scindapsus pictus",
-        "description": "Ager depraedor decor absorbeo argumentum aiunt quod ipsum thesaurus. Amita sumo crebro veritatis coaegresco.",
-        "imageUrl": "https://images.unsplash.com/photo-6910752592?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 12,
-        "idealTempMax": 30,
-        "minHumidity": 53,
-        "sunlight": "medium",
-        "oxygenLevel": "very-high",
+        "description": "Nostrum pecto cariosus appono aveho. Depereo dolore attero apostolus verbum tantum eaque.",
+        "imageUrl": "https://images.unsplash.com/photo-1148621021?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 14,
+        "idealTempMax": 29,
+        "minHumidity": 74,
+        "sunlight": "low",
+        "oxygenLevel": "high",
         "medicinalValues": [
-            "agreeable",
-            "boulevard"
+            "better",
+            "pendant"
         ],
         "advantages": [
-            "collaborative",
-            "blockchains"
+            "cross-platform",
+            "synergies"
         ],
-        "price": 200,
+        "price": 102,
         "type": "indoor",
         "lifespan": "5-10 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -1430,22 +1430,22 @@ const indoorPlants = [
         "id": "p_in_1046",
         "name": "Kentia Palm",
         "scientificName": "Howea forsteriana",
-        "description": "Desolo adflicto adflicto atque bardus. Cerno velit denuo thymbra.",
-        "imageUrl": "https://images.unsplash.com/photo-2598800971?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 6,
-        "idealTempMax": 30,
-        "minHumidity": 70,
-        "sunlight": "high",
-        "oxygenLevel": "high",
+        "description": "Subseco barba cupio cometes. Contra vociferor cohibeo talus universe.",
+        "imageUrl": "https://images.unsplash.com/photo-5288200515?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 7,
+        "idealTempMax": 32,
+        "minHumidity": 34,
+        "sunlight": "medium",
+        "oxygenLevel": "very-high",
         "medicinalValues": [
-            "boring",
-            "deed"
+            "untried",
+            "sightseeing"
         ],
         "advantages": [
-            "intuitive",
-            "communities"
+            "immersive",
+            "synergies"
         ],
-        "price": 21,
+        "price": 46,
         "type": "indoor",
         "lifespan": "50+ Years",
         "foliageTexture": "Glossy/Smooth",
@@ -1461,20 +1461,20 @@ const indoorPlants = [
         "id": "p_in_1047",
         "name": "Zebra Plant",
         "scientificName": "Aphelandra squarrosa",
-        "description": "Cursus eos summisse. Undique depopulo avarus acceptus delinquo conscendo compono verto.",
-        "imageUrl": "https://images.unsplash.com/photo-1501954428?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 9,
-        "idealTempMax": 27,
-        "minHumidity": 63,
+        "description": "A coadunatio vix adeo comprehendo nobis antepono sollers clementia cerno. Quasi venustas cerno ademptio auxilium adopto thermae.",
+        "imageUrl": "https://images.unsplash.com/photo-4817842257?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 12,
+        "idealTempMax": 26,
+        "minHumidity": 30,
         "sunlight": "medium",
-        "oxygenLevel": "high",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "tragic",
-            "pendant"
+            "faraway",
+            "effector"
         ],
         "advantages": [
-            "best-of-breed",
-            "channels"
+            "enterprise",
+            "users"
         ],
         "price": 23,
         "type": "indoor",
@@ -1492,22 +1492,22 @@ const indoorPlants = [
         "id": "p_in_1048",
         "name": "Bromeliad",
         "scientificName": "Guzmania",
-        "description": "Decerno cura ambitus velum careo. Coruscus vomito tergum nam depopulo vereor alias ver abeo.",
-        "imageUrl": "https://images.unsplash.com/photo-2356771061?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 15,
+        "description": "Denuncio cilicium vicinus magni dens solium. Ara comitatus depromo quibusdam volva versus tergum.",
+        "imageUrl": "https://images.unsplash.com/photo-7609527752?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 10,
         "idealTempMax": 34,
-        "minHumidity": 78,
-        "sunlight": "low",
-        "oxygenLevel": "very-high",
+        "minHumidity": 66,
+        "sunlight": "medium",
+        "oxygenLevel": "high",
         "medicinalValues": [
-            "expensive",
-            "hydrolyze"
+            "small",
+            "receptor"
         ],
         "advantages": [
-            "enterprise",
-            "lifetime value"
+            "synergistic",
+            "networks"
         ],
-        "price": 104,
+        "price": 182,
         "type": "indoor",
         "lifespan": "2-4 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -1523,24 +1523,644 @@ const indoorPlants = [
         "id": "p_in_1049",
         "name": "Orchid Moth",
         "scientificName": "Phalaenopsis",
-        "description": "Vulticulus casus fuga calco saepe pectus vaco turba. Vir amitto votum aveho nulla assentator.",
-        "imageUrl": "https://images.unsplash.com/photo-4186623265?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 7,
-        "idealTempMax": 31,
-        "minHumidity": 40,
+        "description": "Ocer vomito cogito. Audax vir sustineo sub decor neque solium.",
+        "imageUrl": "https://images.unsplash.com/photo-2314577529?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 28,
+        "minHumidity": 34,
+        "sunlight": "medium",
+        "oxygenLevel": "high",
+        "medicinalValues": [
+            "elegant",
+            "horde"
+        ],
+        "advantages": [
+            "leading-edge",
+            "interfaces"
+        ],
+        "price": 108,
+        "type": "indoor",
+        "lifespan": "10-15 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_1050",
+        "name": "Elephant Ear",
+        "scientificName": "Colocasia esculenta",
+        "description": "Villa depulso fugiat tersus. Curto alienus caries virtus odio.",
+        "imageUrl": "https://images.unsplash.com/photo-7397818694?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 8,
+        "idealTempMax": 25,
+        "minHumidity": 78,
         "sunlight": "medium",
         "oxygenLevel": "very-high",
         "medicinalValues": [
-            "some",
-            "casket"
+            "hurtful",
+            "issue"
         ],
         "advantages": [
-            "dynamic",
-            "lifetime value"
+            "granular",
+            "users"
         ],
-        "price": 188,
+        "price": 46,
+        "type": "indoor",
+        "lifespan": "Annual (Bulb)",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_1051",
+        "name": "Aluminum Plant",
+        "scientificName": "Pilea cadierei",
+        "description": "Infit aveho substantia. Adflicto perspiciatis vinitor defungo beatae.",
+        "imageUrl": "https://images.unsplash.com/photo-9361381726?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 12,
+        "idealTempMax": 34,
+        "minHumidity": 34,
+        "sunlight": "high",
+        "oxygenLevel": "very-high",
+        "medicinalValues": [
+            "shadowy",
+            "giant"
+        ],
+        "advantages": [
+            "innovative",
+            "initiatives"
+        ],
+        "price": 157,
+        "type": "indoor",
+        "lifespan": "1-4 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_1052",
+        "name": "Arrowhead Plant",
+        "scientificName": "Syngonium podophyllum",
+        "description": "Desolo vergo crinis est. Repudiandae complectus agnitio distinctio aspernatur.",
+        "imageUrl": "https://images.unsplash.com/photo-3062514043?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 28,
+        "minHumidity": 48,
+        "sunlight": "high",
+        "oxygenLevel": "very-high",
+        "medicinalValues": [
+            "acceptable",
+            "nougat"
+        ],
+        "advantages": [
+            "turn-key",
+            "AI"
+        ],
+        "price": 177,
+        "type": "indoor",
+        "lifespan": "5-10 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_1053",
+        "name": "Baby Rubber Plant",
+        "scientificName": "Peperomia obtusifolia",
+        "description": "Pecus vesica terra temperantia coepi cohors advoco tibi quasi. Cito numquam celo ait celo solitudo quasi.",
+        "imageUrl": "https://images.unsplash.com/photo-6501477588?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 8,
+        "idealTempMax": 29,
+        "minHumidity": 30,
+        "sunlight": "medium",
+        "oxygenLevel": "low",
+        "medicinalValues": [
+            "burly",
+            "polyester"
+        ],
+        "advantages": [
+            "ubiquitous",
+            "deliverables"
+        ],
+        "price": 52,
+        "type": "indoor",
+        "lifespan": "5-10 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_1054",
+        "name": "Burro's Tail",
+        "scientificName": "Sedum morganianum",
+        "description": "Amicitia commemoro delicate triduana vulgus sequi compono addo. Pel aliquid vito pectus centum vilis.",
+        "imageUrl": "https://images.unsplash.com/photo-1627470621?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 13,
+        "idealTempMax": 31,
+        "minHumidity": 56,
+        "sunlight": "medium",
+        "oxygenLevel": "very-high",
+        "medicinalValues": [
+            "long",
+            "interviewer"
+        ],
+        "advantages": [
+            "vertical",
+            "smart contracts"
+        ],
+        "price": 90,
+        "type": "indoor",
+        "lifespan": "5-10 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_1055",
+        "name": "Caladium",
+        "scientificName": "Caladium bicolor",
+        "description": "Cattus caput debeo delinquo vociferor ultra. Pauper deficio est voluptate sursum mollitia soleo natus.",
+        "imageUrl": "https://images.unsplash.com/photo-6684408227?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 13,
+        "idealTempMax": 25,
+        "minHumidity": 80,
+        "sunlight": "medium",
+        "oxygenLevel": "low",
+        "medicinalValues": [
+            "questionable",
+            "mythology"
+        ],
+        "advantages": [
+            "customized",
+            "smart contracts"
+        ],
+        "price": 94,
+        "type": "indoor",
+        "lifespan": "Annual (Bulb)",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_1056",
+        "name": "Cyclamen",
+        "scientificName": "Cyclamen persicum",
+        "description": "Stella dolores voluptate caste autus adfero ipsum una. Arcesso suasoria strenuus vesper undique virga cunctatio.",
+        "imageUrl": "https://images.unsplash.com/photo-6036429061?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 8,
+        "idealTempMax": 30,
+        "minHumidity": 72,
+        "sunlight": "high",
+        "oxygenLevel": "high",
+        "medicinalValues": [
+            "separate",
+            "rule"
+        ],
+        "advantages": [
+            "magnetic",
+            "technologies"
+        ],
+        "price": 194,
+        "type": "indoor",
+        "lifespan": "3-5 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_1057",
+        "name": "Dracaena Lemon Lime",
+        "scientificName": "Dracaena warneckii",
+        "description": "Cena adiuvo spoliatio confugo hic enim. Eius calcar vulgo atrocitas considero uterque ventito.",
+        "imageUrl": "https://images.unsplash.com/photo-5867300169?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 8,
+        "idealTempMax": 26,
+        "minHumidity": 41,
+        "sunlight": "high",
+        "oxygenLevel": "low",
+        "medicinalValues": [
+            "hoarse",
+            "tuber"
+        ],
+        "advantages": [
+            "holistic",
+            "blockchains"
+        ],
+        "price": 58,
+        "type": "indoor",
+        "lifespan": "10-20 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_1058",
+        "name": "Fern Arum",
+        "scientificName": "Zamioculcas",
+        "description": "Culpa spiculum armarium. Tredecim tibi voluptas tres vulpes creo auctor nostrum thesaurus laboriosam.",
+        "imageUrl": "https://images.unsplash.com/photo-7249956207?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 14,
+        "idealTempMax": 27,
+        "minHumidity": 46,
+        "sunlight": "medium",
+        "oxygenLevel": "very-high",
+        "medicinalValues": [
+            "pessimistic",
+            "deed"
+        ],
+        "advantages": [
+            "user-centric",
+            "supply-chains"
+        ],
+        "price": 95,
         "type": "indoor",
         "lifespan": "10-15 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_1059",
+        "name": "Garden Croton",
+        "scientificName": "Codiaeum variegatum",
+        "description": "Video apto titulus calcar solutio trepide reprehenderit defero demum vereor. Viriliter vere corona omnis.",
+        "imageUrl": "https://images.unsplash.com/photo-5743384096?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 13,
+        "idealTempMax": 35,
+        "minHumidity": 55,
+        "sunlight": "high",
+        "oxygenLevel": "high",
+        "medicinalValues": [
+            "tiny",
+            "swim"
+        ],
+        "advantages": [
+            "back-end",
+            "technologies"
+        ],
+        "price": 51,
+        "type": "indoor",
+        "lifespan": "2-4 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_1060",
+        "name": "Gloxinia",
+        "scientificName": "Sinningia speciosa",
+        "description": "Arca pecco carbo umbra reprehenderit corrigo attollo cogo synagoga spiritus. Cimentarius degusto curis.",
+        "imageUrl": "https://images.unsplash.com/photo-4409735639?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 12,
+        "idealTempMax": 30,
+        "minHumidity": 73,
+        "sunlight": "high",
+        "oxygenLevel": "moderate",
+        "medicinalValues": [
+            "vivid",
+            "awareness"
+        ],
+        "advantages": [
+            "one-to-one",
+            "content"
+        ],
+        "price": 96,
+        "type": "indoor",
+        "lifespan": "Annual (Bulb)",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_1061",
+        "name": "Grape Ivy",
+        "scientificName": "Cissus rhombifolia",
+        "description": "Spoliatio odit reiciendis spargo explicabo ademptio. Absens cupio adflicto appono amo commodi vilis capio sophismata.",
+        "imageUrl": "https://images.unsplash.com/photo-1425879276?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 7,
+        "idealTempMax": 32,
+        "minHumidity": 44,
+        "sunlight": "medium",
+        "oxygenLevel": "high",
+        "medicinalValues": [
+            "upset",
+            "scout"
+        ],
+        "advantages": [
+            "granular",
+            "experiences"
+        ],
+        "price": 31,
+        "type": "indoor",
+        "lifespan": "5-10 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_1062",
+        "name": "Hens and Chicks",
+        "scientificName": "Sempervivum tectorum",
+        "description": "Collum sto spiritus virga calco patior cinis. Vado tendo labore cibo capio vomito concido verumtamen.",
+        "imageUrl": "https://images.unsplash.com/photo-7674782317?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 5,
+        "idealTempMax": 29,
+        "minHumidity": 45,
+        "sunlight": "high",
+        "oxygenLevel": "very-high",
+        "medicinalValues": [
+            "steel",
+            "testimonial"
+        ],
+        "advantages": [
+            "enterprise",
+            "experiences"
+        ],
+        "price": 67,
+        "type": "indoor",
+        "lifespan": "3-5 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_1063",
+        "name": "Hoya Carnosa",
+        "scientificName": "Hoya carnosa",
+        "description": "Comburo thermae talis defendo beneficium sublime saepe sit. Articulus voluptatibus necessitatibus sunt amplus arguo talis charisma totus accusator.",
+        "imageUrl": "https://images.unsplash.com/photo-5454562405?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 14,
+        "idealTempMax": 35,
+        "minHumidity": 46,
+        "sunlight": "medium",
+        "oxygenLevel": "high",
+        "medicinalValues": [
+            "critical",
+            "custom"
+        ],
+        "advantages": [
+            "proactive",
+            "convergence"
+        ],
+        "price": 160,
+        "type": "indoor",
+        "lifespan": "10-30 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_1064",
+        "name": "Kalanchoe",
+        "scientificName": "Kalanchoe blossfeldiana",
+        "description": "Adeptio talus adipiscor depraedor praesentium paulatim ars. Sum convoco tredecim benevolentia una sum depraedor absconditus.",
+        "imageUrl": "https://images.unsplash.com/photo-4682288094?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 6,
+        "idealTempMax": 30,
+        "minHumidity": 54,
+        "sunlight": "high",
+        "oxygenLevel": "moderate",
+        "medicinalValues": [
+            "hairy",
+            "brochure"
+        ],
+        "advantages": [
+            "back-end",
+            "relationships"
+        ],
+        "price": 71,
+        "type": "indoor",
+        "lifespan": "2-5 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_1065",
+        "name": "Living Stone",
+        "scientificName": "Lithops",
+        "description": "Commodi tondeo sum vitiosus. Virga adulescens textilis trepide studio ambitus.",
+        "imageUrl": "https://images.unsplash.com/photo-1251696471?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 13,
+        "idealTempMax": 29,
+        "minHumidity": 63,
+        "sunlight": "high",
+        "oxygenLevel": "low",
+        "medicinalValues": [
+            "well-groomed",
+            "scratch"
+        ],
+        "advantages": [
+            "one-to-one",
+            "smart contracts"
+        ],
+        "price": 108,
+        "type": "indoor",
+        "lifespan": "40-50 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_1066",
+        "name": "Maidenhair Fern",
+        "scientificName": "Adiantum raddianum",
+        "description": "Correptius molestias terminatio tunc studio tristis suppono validus. Aurum despecto vergo sum.",
+        "imageUrl": "https://images.unsplash.com/photo-9310478052?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 7,
+        "idealTempMax": 27,
+        "minHumidity": 30,
+        "sunlight": "high",
+        "oxygenLevel": "very-high",
+        "medicinalValues": [
+            "timely",
+            "bump"
+        ],
+        "advantages": [
+            "mission-critical",
+            "users"
+        ],
+        "price": 60,
+        "type": "indoor",
+        "lifespan": "5-10 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_1067",
+        "name": "Money Tree",
+        "scientificName": "Pachira aquatica",
+        "description": "Auctor comminor cuppedia cognomen tergum tergiversatio causa coerceo. Soluta verto civis bene stillicidium vicissitudo tepesco.",
+        "imageUrl": "https://images.unsplash.com/photo-4137238381?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 14,
+        "idealTempMax": 28,
+        "minHumidity": 73,
+        "sunlight": "low",
+        "oxygenLevel": "low",
+        "medicinalValues": [
+            "vivid",
+            "mouser"
+        ],
+        "advantages": [
+            "24/7",
+            "models"
+        ],
+        "price": 62,
+        "type": "indoor",
+        "lifespan": "10-15 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_1068",
+        "name": "Moth Orchid",
+        "scientificName": "Phalaenopsis",
+        "description": "Carbo subiungo summopere amplus patior vicissitudo ventus contabesco vita terga. Cotidie validus abstergo usitas odit.",
+        "imageUrl": "https://images.unsplash.com/photo-5789927807?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 7,
+        "idealTempMax": 25,
+        "minHumidity": 72,
+        "sunlight": "high",
+        "oxygenLevel": "high",
+        "medicinalValues": [
+            "pessimistic",
+            "strategy"
+        ],
+        "advantages": [
+            "mission-critical",
+            "content"
+        ],
+        "price": 146,
+        "type": "indoor",
+        "lifespan": "10-15 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_1069",
+        "name": "Norfolk Island Pine",
+        "scientificName": "Araucaria heterophylla",
+        "description": "Vicissitudo commodo ipsum accendo. Peior beneficium abscido vesper desidero vesica adipiscor cito.",
+        "imageUrl": "https://images.unsplash.com/photo-8614347053?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 25,
+        "minHumidity": 47,
+        "sunlight": "high",
+        "oxygenLevel": "moderate",
+        "medicinalValues": [
+            "small",
+            "impostor"
+        ],
+        "advantages": [
+            "customized",
+            "partnerships"
+        ],
+        "price": 87,
+        "type": "indoor",
+        "lifespan": "10-20 Years",
         "foliageTexture": "Glossy/Smooth",
         "leafShape": "Ovate-Elliptical",
         "stemStructure": "Herbaceous",
@@ -1557,22 +2177,22 @@ const outdoorPlants = [
         "id": "p_out_1000",
         "name": "Lavender",
         "scientificName": "Lavandula angustifolia",
-        "description": "Corrupti ipsam centum delicate considero collum quis soluta. Coniecto cibus vestrum cunabula.",
-        "imageUrl": "https://images.unsplash.com/photo-5563036282?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 15,
-        "idealTempMax": 31,
-        "minHumidity": 74,
+        "description": "Velit concido delicate sui attonbitus acquiro suppono talus talus textus. Occaecati dolor desolo coepi adstringo vulticulus atavus aptus.",
+        "imageUrl": "https://images.unsplash.com/photo-7671185470?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 5,
+        "idealTempMax": 27,
+        "minHumidity": 72,
         "sunlight": "high",
-        "oxygenLevel": "moderate",
+        "oxygenLevel": "low",
         "medicinalValues": [
-            "sparkling",
-            "thyme"
+            "golden",
+            "rim"
         ],
         "advantages": [
-            "ubiquitous",
-            "ROI"
+            "proactive",
+            "web services"
         ],
-        "price": 18,
+        "price": 196,
         "type": "outdoor",
         "lifespan": "10-15 Years",
         "foliageTexture": "Matte/Textured",
@@ -1588,22 +2208,22 @@ const outdoorPlants = [
         "id": "p_out_1001",
         "name": "Rose Bush",
         "scientificName": "Rosa",
-        "description": "Talio amicitia vicinus summa denuncio ullus vivo deduco. Advoco sodalitas infit dapifer.",
-        "imageUrl": "https://images.unsplash.com/photo-2924954060?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 9,
+        "description": "Virtus audeo sequi cito sponte ait modi. Vero cena suffragium sumptus sperno triduana admoneo.",
+        "imageUrl": "https://images.unsplash.com/photo-8178821223?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 13,
         "idealTempMax": 25,
-        "minHumidity": 74,
+        "minHumidity": 42,
         "sunlight": "high",
-        "oxygenLevel": "moderate",
+        "oxygenLevel": "low",
         "medicinalValues": [
-            "trim",
-            "cantaloupe"
+            "zany",
+            "conservative"
         ],
         "advantages": [
-            "granular",
-            "niches"
+            "vertical",
+            "experiences"
         ],
-        "price": 46,
+        "price": 151,
         "type": "outdoor",
         "lifespan": "15-20 Years",
         "foliageTexture": "Matte/Textured",
@@ -1619,22 +2239,22 @@ const outdoorPlants = [
         "id": "p_out_1002",
         "name": "Hydrangea",
         "scientificName": "Hydrangea macrophylla",
-        "description": "Supplanto abbas pauper demoror. Bene adversus decerno.",
-        "imageUrl": "https://images.unsplash.com/photo-1255075006?auto=format&fit=crop&w=800&q=80",
+        "description": "Carus defendo candidus infit. Beatae tutamen defluo apparatus admoveo.",
+        "imageUrl": "https://images.unsplash.com/photo-7799472715?auto=format&fit=crop&w=800&q=80",
         "idealTempMin": 8,
-        "idealTempMax": 34,
-        "minHumidity": 50,
+        "idealTempMax": 27,
+        "minHumidity": 75,
         "sunlight": "high",
         "oxygenLevel": "low",
         "medicinalValues": [
-            "well-documented",
-            "battle"
+            "prudent",
+            "collaboration"
         ],
         "advantages": [
-            "transparent",
-            "interfaces"
+            "impactful",
+            "applications"
         ],
-        "price": 57,
+        "price": 148,
         "type": "outdoor",
         "lifespan": "50+ Years",
         "foliageTexture": "Matte/Textured",
@@ -1650,22 +2270,22 @@ const outdoorPlants = [
         "id": "p_out_1003",
         "name": "Sunflower",
         "scientificName": "Helianthus annuus",
-        "description": "Solus vulgivagus debeo arbor coerceo expedita. Complectus commemoro victus.",
-        "imageUrl": "https://images.unsplash.com/photo-2847919539?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 12,
-        "idealTempMax": 28,
-        "minHumidity": 48,
+        "description": "Volo thema credo. Sum totidem thesis dapifer quas suppellex.",
+        "imageUrl": "https://images.unsplash.com/photo-4551738629?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 15,
+        "idealTempMax": 30,
+        "minHumidity": 59,
         "sunlight": "high",
         "oxygenLevel": "moderate",
         "medicinalValues": [
-            "affectionate",
-            "birdbath"
+            "monumental",
+            "oil"
         ],
         "advantages": [
-            "quantum",
-            "convergence"
+            "open-source",
+            "supply-chains"
         ],
-        "price": 31,
+        "price": 50,
         "type": "outdoor",
         "lifespan": "Annual (1 Year)",
         "foliageTexture": "Matte/Textured",
@@ -1681,22 +2301,22 @@ const outdoorPlants = [
         "id": "p_out_1004",
         "name": "Tulip",
         "scientificName": "Tulipa",
-        "description": "Doloribus via tui blanditiis delectatio. Spero cohaero alii curia adeo despecto vilitas cauda reprehenderit comis.",
-        "imageUrl": "https://images.unsplash.com/photo-2594197213?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 11,
-        "idealTempMax": 31,
-        "minHumidity": 33,
+        "description": "Cohaero trucido trucido adulescens adfero neque minima desidero caelestis. Appono aeger decet pax hic.",
+        "imageUrl": "https://images.unsplash.com/photo-5863208051?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 15,
+        "idealTempMax": 34,
+        "minHumidity": 64,
         "sunlight": "high",
-        "oxygenLevel": "very-high",
+        "oxygenLevel": "high",
         "medicinalValues": [
-            "tall",
-            "cauliflower"
+            "shimmering",
+            "tuba"
         ],
         "advantages": [
-            "sustainable",
-            "platforms"
+            "sticky",
+            "applications"
         ],
-        "price": 148,
+        "price": 12,
         "type": "outdoor",
         "lifespan": "Perennial (3-5 Years)",
         "foliageTexture": "Matte/Textured",
@@ -1712,22 +2332,22 @@ const outdoorPlants = [
         "id": "p_out_1005",
         "name": "Oak Tree",
         "scientificName": "Quercus",
-        "description": "Colo repudiandae cupiditas sustineo provident conculco attero canonicus patior cunae. Vapulus totus candidus cohibeo subseco adhaero conspergo beneficium.",
-        "imageUrl": "https://images.unsplash.com/photo-7649867599?auto=format&fit=crop&w=800&q=80",
+        "description": "Soleo amet bestia statim conturbo. Vespillo vesco odio ab adeo curriculum amissio doloribus.",
+        "imageUrl": "https://images.unsplash.com/photo-9428340875?auto=format&fit=crop&w=800&q=80",
         "idealTempMin": 15,
-        "idealTempMax": 28,
-        "minHumidity": 58,
+        "idealTempMax": 35,
+        "minHumidity": 33,
         "sunlight": "high",
-        "oxygenLevel": "very-high",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "complicated",
-            "couch"
+            "alert",
+            "freezing"
         ],
         "advantages": [
-            "global",
+            "viral",
             "metrics"
         ],
-        "price": 192,
+        "price": 82,
         "type": "outdoor",
         "lifespan": "100+ Years",
         "foliageTexture": "Matte/Textured",
@@ -1743,22 +2363,22 @@ const outdoorPlants = [
         "id": "p_out_1006",
         "name": "Maple Tree",
         "scientificName": "Acer",
-        "description": "Chirographum porro quod abduco sonitus tempora. Cattus adduco aestas.",
-        "imageUrl": "https://images.unsplash.com/photo-9368959321?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 11,
-        "idealTempMax": 33,
-        "minHumidity": 37,
+        "description": "Valde appono solutio subito nesciunt tum vulpes ater. Sodalitas solium ademptio aegre corporis vulgaris optio.",
+        "imageUrl": "https://images.unsplash.com/photo-9434729298?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 13,
+        "idealTempMax": 27,
+        "minHumidity": 30,
         "sunlight": "high",
-        "oxygenLevel": "very-high",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "scaly",
-            "remark"
+            "fortunate",
+            "lotion"
         ],
         "advantages": [
-            "efficient",
-            "metrics"
+            "cross-platform",
+            "lifetime value"
         ],
-        "price": 192,
+        "price": 109,
         "type": "outdoor",
         "lifespan": "80-100 Years",
         "foliageTexture": "Matte/Textured",
@@ -1774,22 +2394,22 @@ const outdoorPlants = [
         "id": "p_out_1007",
         "name": "Peony",
         "scientificName": "Paeonia",
-        "description": "Umbra virtus comitatus dapifer credo virgo dedecor delectatio videlicet. Abbas cattus adopto arma.",
-        "imageUrl": "https://images.unsplash.com/photo-6436930774?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 7,
-        "idealTempMax": 28,
-        "minHumidity": 62,
+        "description": "Vetus catena tenetur. Bos bibo laudantium venio.",
+        "imageUrl": "https://images.unsplash.com/photo-9432611978?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 6,
+        "idealTempMax": 27,
+        "minHumidity": 52,
         "sunlight": "high",
         "oxygenLevel": "high",
         "medicinalValues": [
-            "wrathful",
-            "knickers"
+            "stained",
+            "decision"
         ],
         "advantages": [
-            "B2C",
-            "mindshare"
+            "innovative",
+            "models"
         ],
-        "price": 173,
+        "price": 136,
         "type": "outdoor",
         "lifespan": "50-100 Years",
         "foliageTexture": "Matte/Textured",
@@ -1805,22 +2425,22 @@ const outdoorPlants = [
         "id": "p_out_1008",
         "name": "Marigold",
         "scientificName": "Tagetes",
-        "description": "Currus sollicito spargo deleniti consequuntur. Deleo bellum denique dolore torqueo tempora attonbitus.",
-        "imageUrl": "https://images.unsplash.com/photo-5627229987?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 12,
-        "idealTempMax": 26,
-        "minHumidity": 65,
+        "description": "Aestas pauci cogo ipsa altus perferendis ulciscor denego. Avaritia aestivus colo aranea virga advoco vos numquam tredecim.",
+        "imageUrl": "https://images.unsplash.com/photo-9950794139?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 11,
+        "idealTempMax": 31,
+        "minHumidity": 39,
         "sunlight": "high",
-        "oxygenLevel": "high",
+        "oxygenLevel": "low",
         "medicinalValues": [
-            "cumbersome",
-            "chow"
+            "somber",
+            "grandson"
         ],
         "advantages": [
-            "enterprise",
-            "applications"
+            "scalable",
+            "lifetime value"
         ],
-        "price": 153,
+        "price": 196,
         "type": "outdoor",
         "lifespan": "Annual (1 Year)",
         "foliageTexture": "Matte/Textured",
@@ -1836,22 +2456,22 @@ const outdoorPlants = [
         "id": "p_out_1009",
         "name": "Basil",
         "scientificName": "Ocimum basilicum",
-        "description": "Hic magnam compono utor sustineo calamitas spargo. Perspiciatis defessus delinquo crepusculum ara validus verumtamen minima tribuo denique.",
-        "imageUrl": "https://images.unsplash.com/photo-1081313802?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 11,
-        "idealTempMax": 34,
-        "minHumidity": 39,
+        "description": "Adsuesco velum compono despecto deduco aliquid. Corroboro inflammatio tametsi alveus.",
+        "imageUrl": "https://images.unsplash.com/photo-7420377797?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 12,
+        "idealTempMax": 27,
+        "minHumidity": 37,
         "sunlight": "high",
-        "oxygenLevel": "very-high",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "drab",
-            "vein"
+            "french",
+            "duffel"
         ],
         "advantages": [
-            "virtual",
-            "content"
+            "innovative",
+            "mindshare"
         ],
-        "price": 86,
+        "price": 152,
         "type": "outdoor",
         "lifespan": "Annual (1 Year)",
         "foliageTexture": "Matte/Textured",
@@ -1867,22 +2487,22 @@ const outdoorPlants = [
         "id": "p_out_1010",
         "name": "Tomato",
         "scientificName": "Solanum lycopersicum",
-        "description": "Adfero terreo neque adstringo suasoria demonstro amissio pel delectus vicinus. Concedo sit umquam voluptatum xiphias excepturi comburo terra terror volubilis.",
-        "imageUrl": "https://images.unsplash.com/photo-2047188431?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 15,
+        "description": "Quis auctus adflicto culpa celo civitas cavus exercitationem demulceo. Vomito magnam odit aliqua conor solium.",
+        "imageUrl": "https://images.unsplash.com/photo-6861345079?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 7,
         "idealTempMax": 27,
-        "minHumidity": 34,
+        "minHumidity": 68,
         "sunlight": "high",
-        "oxygenLevel": "very-high",
+        "oxygenLevel": "high",
         "medicinalValues": [
-            "firm",
-            "travel"
+            "limping",
+            "designation"
         ],
         "advantages": [
-            "impactful",
-            "experiences"
+            "cross-media",
+            "channels"
         ],
-        "price": 96,
+        "price": 188,
         "type": "outdoor",
         "lifespan": "Annual (1 Year)",
         "foliageTexture": "Matte/Textured",
@@ -1898,22 +2518,22 @@ const outdoorPlants = [
         "id": "p_out_1011",
         "name": "Boxwood",
         "scientificName": "Buxus",
-        "description": "Vorax pel tergeo delibero. Quam animus deprecator charisma conqueror corroboro.",
-        "imageUrl": "https://images.unsplash.com/photo-5976263278?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 11,
-        "idealTempMax": 33,
-        "minHumidity": 58,
+        "description": "Viduo solium ustilo abeo veritatis tot. Aureus dolor adopto.",
+        "imageUrl": "https://images.unsplash.com/photo-4736560629?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 12,
+        "idealTempMax": 31,
+        "minHumidity": 43,
         "sunlight": "high",
-        "oxygenLevel": "low",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "anguished",
-            "teriyaki"
+            "negative",
+            "tribe"
         ],
         "advantages": [
-            "smart",
-            "smart contracts"
+            "revolutionary",
+            "models"
         ],
-        "price": 17,
+        "price": 113,
         "type": "outdoor",
         "lifespan": "20-30 Years",
         "foliageTexture": "Matte/Textured",
@@ -1929,22 +2549,22 @@ const outdoorPlants = [
         "id": "p_out_1012",
         "name": "Azalea",
         "scientificName": "Rhododendron",
-        "description": "Sordeo teneo adhuc cometes culpa angelus. A sufficio rerum.",
-        "imageUrl": "https://images.unsplash.com/photo-6967666021?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 34,
-        "minHumidity": 80,
+        "description": "Decumbo adficio concedo contigo nulla dignissimos chirographum vicinus quas ulciscor. Anser quaerat vomica tantum suspendo soleo desino audentia curso virgo.",
+        "imageUrl": "https://images.unsplash.com/photo-9604148351?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 8,
+        "idealTempMax": 29,
+        "minHumidity": 70,
         "sunlight": "high",
-        "oxygenLevel": "moderate",
+        "oxygenLevel": "low",
         "medicinalValues": [
-            "fussy",
-            "safe"
+            "shameful",
+            "bandwidth"
         ],
         "advantages": [
-            "out-of-the-box",
-            "users"
+            "turn-key",
+            "systems"
         ],
-        "price": 69,
+        "price": 25,
         "type": "outdoor",
         "lifespan": "20-50 Years",
         "foliageTexture": "Matte/Textured",
@@ -1960,22 +2580,22 @@ const outdoorPlants = [
         "id": "p_out_1013",
         "name": "Daffodil",
         "scientificName": "Narcissus",
-        "description": "Sursum caelestis ipsam triduana fugiat. Coma vix summopere patior.",
-        "imageUrl": "https://images.unsplash.com/photo-7686384011?auto=format&fit=crop&w=800&q=80",
+        "description": "Viridis laudantium amaritudo chirographum pectus turpis. Dapifer confero architecto maiores aeternus ascisco demum commodi.",
+        "imageUrl": "https://images.unsplash.com/photo-5673730672?auto=format&fit=crop&w=800&q=80",
         "idealTempMin": 9,
-        "idealTempMax": 34,
-        "minHumidity": 51,
+        "idealTempMax": 27,
+        "minHumidity": 76,
         "sunlight": "high",
         "oxygenLevel": "high",
         "medicinalValues": [
-            "white",
-            "iridescence"
+            "ill-fated",
+            "density"
         ],
         "advantages": [
-            "front-end",
-            "metrics"
+            "B2B",
+            "lifetime value"
         ],
-        "price": 50,
+        "price": 112,
         "type": "outdoor",
         "lifespan": "Perennial (10+ Years)",
         "foliageTexture": "Matte/Textured",
@@ -1991,22 +2611,22 @@ const outdoorPlants = [
         "id": "p_out_1014",
         "name": "Daylily",
         "scientificName": "Hemerocallis",
-        "description": "Vigor corroboro comminor ambulo pecus addo surgo et tardus. Sub cunae aperio vilicus utor paens deleo.",
-        "imageUrl": "https://images.unsplash.com/photo-5802178393?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 14,
-        "idealTempMax": 32,
-        "minHumidity": 74,
+        "description": "Theatrum fuga peior tempora. Amitto delibero angustus adicio venustas vito alter cribro arbor.",
+        "imageUrl": "https://images.unsplash.com/photo-1525786098?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 5,
+        "idealTempMax": 28,
+        "minHumidity": 49,
         "sunlight": "high",
-        "oxygenLevel": "low",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "frank",
-            "swim"
+            "unfortunate",
+            "switchboard"
         ],
         "advantages": [
-            "sticky",
-            "lifetime value"
+            "collaborative",
+            "blockchains"
         ],
-        "price": 51,
+        "price": 145,
         "type": "outdoor",
         "lifespan": "Perennial (10+ Years)",
         "foliageTexture": "Matte/Textured",
@@ -2022,22 +2642,22 @@ const outdoorPlants = [
         "id": "p_out_1015",
         "name": "Hostas",
         "scientificName": "Hosta",
-        "description": "Commodo somniculosus laboriosam tabgo undique super. Bonus mollitia bardus catena adopto vergo creo nostrum.",
-        "imageUrl": "https://images.unsplash.com/photo-6814128159?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 26,
-        "minHumidity": 41,
+        "description": "Cernuus advoco calamitas pauci. Asperiores colligo veritatis cado absens allatus.",
+        "imageUrl": "https://images.unsplash.com/photo-6797737220?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 15,
+        "idealTempMax": 32,
+        "minHumidity": 62,
         "sunlight": "high",
         "oxygenLevel": "moderate",
         "medicinalValues": [
-            "rowdy",
-            "aircraft"
+            "personal",
+            "alert"
         ],
         "advantages": [
-            "open-source",
-            "technologies"
+            "leading-edge",
+            "methodologies"
         ],
-        "price": 171,
+        "price": 194,
         "type": "outdoor",
         "lifespan": "30+ Years",
         "foliageTexture": "Matte/Textured",
@@ -2053,22 +2673,22 @@ const outdoorPlants = [
         "id": "p_out_1016",
         "name": "Coneflower",
         "scientificName": "Echinacea purpurea",
-        "description": "Infit exercitationem tollo possimus villa voveo statim. Aut arceo cohibeo volubilis vorax.",
-        "imageUrl": "https://images.unsplash.com/photo-9945814921?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 8,
-        "idealTempMax": 29,
-        "minHumidity": 52,
+        "description": "Utique decet adfero antea officia apto theologus delibero sum utique. Cohors tergiversatio demulceo tenax spiculum vesco.",
+        "imageUrl": "https://images.unsplash.com/photo-8625693064?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 11,
+        "idealTempMax": 32,
+        "minHumidity": 74,
         "sunlight": "high",
-        "oxygenLevel": "moderate",
+        "oxygenLevel": "high",
         "medicinalValues": [
-            "precious",
-            "euphonium"
+            "prudent",
+            "mathematics"
         ],
         "advantages": [
-            "virtual",
-            "content"
+            "open-source",
+            "web services"
         ],
-        "price": 133,
+        "price": 102,
         "type": "outdoor",
         "lifespan": "2-4 Years",
         "foliageTexture": "Matte/Textured",
@@ -2084,22 +2704,22 @@ const outdoorPlants = [
         "id": "p_out_1017",
         "name": "Black-Eyed Susan",
         "scientificName": "Rudbeckia hirta",
-        "description": "Abbas amo saepe tactus. Volutabrum deludo atrocitas argentum civis totidem contra pauper comitatus.",
-        "imageUrl": "https://images.unsplash.com/photo-9390729212?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 33,
-        "minHumidity": 47,
+        "description": "Adulatio angustus tripudio minus defleo theatrum depono aqua. Nesciunt vix administratio correptius.",
+        "imageUrl": "https://images.unsplash.com/photo-9807729896?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 7,
+        "idealTempMax": 27,
+        "minHumidity": 76,
         "sunlight": "high",
-        "oxygenLevel": "low",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "punctual",
-            "following"
+            "whispered",
+            "sandbar"
         ],
         "advantages": [
             "robust",
-            "solutions"
+            "web services"
         ],
-        "price": 132,
+        "price": 94,
         "type": "outdoor",
         "lifespan": "2-3 Years",
         "foliageTexture": "Matte/Textured",
@@ -2115,22 +2735,22 @@ const outdoorPlants = [
         "id": "p_out_1018",
         "name": "Lilac Bush",
         "scientificName": "Syringa vulgaris",
-        "description": "Textilis suspendo adipisci virga depraedor abbas cum. Amicitia defungo caelum vilicus cursus ait sol catena sollers.",
-        "imageUrl": "https://images.unsplash.com/photo-2745468821?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 11,
-        "idealTempMax": 27,
-        "minHumidity": 44,
+        "description": "Aegre stultus antepono debilito antiquus tepesco bardus degenero. Dedecor demergo dignissimos inflammatio.",
+        "imageUrl": "https://images.unsplash.com/photo-2160103107?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 14,
+        "idealTempMax": 26,
+        "minHumidity": 65,
         "sunlight": "high",
-        "oxygenLevel": "high",
+        "oxygenLevel": "very-high",
         "medicinalValues": [
-            "angelic",
-            "version"
+            "common",
+            "lashes"
         ],
         "advantages": [
-            "one-to-one",
-            "technologies"
+            "vertical",
+            "experiences"
         ],
-        "price": 159,
+        "price": 16,
         "type": "outdoor",
         "lifespan": "75+ Years",
         "foliageTexture": "Matte/Textured",
@@ -2146,22 +2766,22 @@ const outdoorPlants = [
         "id": "p_out_1019",
         "name": "Magnolia Tree",
         "scientificName": "Magnolia grandiflora",
-        "description": "Tibi universe stabilis vix caveo cometes ademptio amoveo commodo. Tepesco tero theca tumultus.",
-        "imageUrl": "https://images.unsplash.com/photo-7187150887?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 7,
-        "idealTempMax": 25,
-        "minHumidity": 37,
+        "description": "Ante via villa cribro aequitas tamdiu magni doloribus. Incidunt suffragium earum articulus votum suus.",
+        "imageUrl": "https://images.unsplash.com/photo-8976201196?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 13,
+        "idealTempMax": 34,
+        "minHumidity": 76,
         "sunlight": "high",
         "oxygenLevel": "very-high",
         "medicinalValues": [
-            "jam-packed",
-            "plain"
+            "heavy",
+            "blight"
         ],
         "advantages": [
-            "magnetic",
-            "channels"
+            "efficient",
+            "deliverables"
         ],
-        "price": 190,
+        "price": 159,
         "type": "outdoor",
         "lifespan": "80-120 Years",
         "foliageTexture": "Matte/Textured",
@@ -2177,22 +2797,22 @@ const outdoorPlants = [
         "id": "p_out_1020",
         "name": "Japanese Cherry",
         "scientificName": "Prunus serrulata",
-        "description": "Capillus adfero sui armarium. Solum administratio degusto trado abscido cariosus.",
-        "imageUrl": "https://images.unsplash.com/photo-5143627789?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 7,
-        "idealTempMax": 28,
-        "minHumidity": 62,
+        "description": "Video theatrum curia benigne celebrer cetera. Ultio creptio verbera damno bene crapula tabesco.",
+        "imageUrl": "https://images.unsplash.com/photo-9956631681?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 14,
+        "idealTempMax": 29,
+        "minHumidity": 67,
         "sunlight": "high",
-        "oxygenLevel": "high",
+        "oxygenLevel": "very-high",
         "medicinalValues": [
-            "shy",
-            "hutch"
+            "practical",
+            "volleyball"
         ],
         "advantages": [
-            "smart",
-            "users"
+            "open-source",
+            "interfaces"
         ],
-        "price": 119,
+        "price": 64,
         "type": "outdoor",
         "lifespan": "15-20 Years",
         "foliageTexture": "Matte/Textured",
@@ -2208,22 +2828,22 @@ const outdoorPlants = [
         "id": "p_out_1021",
         "name": "Wisteria",
         "scientificName": "Wisteria sinensis",
-        "description": "Viduo comitatus atrocitas volo curriculum deputo conor. Vis conculco aperio.",
-        "imageUrl": "https://images.unsplash.com/photo-8815659631?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 11,
-        "idealTempMax": 34,
-        "minHumidity": 80,
+        "description": "Ancilla terebro demens approbo contra conor speculum. Calculus aranea tabernus.",
+        "imageUrl": "https://images.unsplash.com/photo-9219235464?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 14,
+        "idealTempMax": 32,
+        "minHumidity": 34,
         "sunlight": "high",
-        "oxygenLevel": "very-high",
+        "oxygenLevel": "high",
         "medicinalValues": [
-            "scientific",
-            "cellar"
+            "zealous",
+            "edge"
         ],
         "advantages": [
-            "magnetic",
-            "users"
+            "front-end",
+            "methodologies"
         ],
-        "price": 142,
+        "price": 178,
         "type": "outdoor",
         "lifespan": "50-100 Years",
         "foliageTexture": "Matte/Textured",
@@ -2239,22 +2859,22 @@ const outdoorPlants = [
         "id": "p_out_1022",
         "name": "Bougainvillea",
         "scientificName": "Bougainvillea glabra",
-        "description": "Celo alo solium verecundia aeger ocer cur esse avarus. Conforto addo aiunt capillus ver desolo triumphus.",
-        "imageUrl": "https://images.unsplash.com/photo-7920332913?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 11,
-        "idealTempMax": 27,
-        "minHumidity": 73,
+        "description": "Sodalitas surgo attonbitus tristis. Tutamen solitudo absens deleo vesica cumque ut.",
+        "imageUrl": "https://images.unsplash.com/photo-7885503897?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 5,
+        "idealTempMax": 34,
+        "minHumidity": 45,
         "sunlight": "high",
         "oxygenLevel": "moderate",
         "medicinalValues": [
-            "meager",
-            "merit"
+            "enchanting",
+            "ice-cream"
         ],
         "advantages": [
-            "distributed",
-            "content"
+            "revolutionary",
+            "networks"
         ],
-        "price": 120,
+        "price": 138,
         "type": "outdoor",
         "lifespan": "20-30 Years",
         "foliageTexture": "Matte/Textured",
@@ -2270,22 +2890,22 @@ const outdoorPlants = [
         "id": "p_out_1023",
         "name": "Gardenia",
         "scientificName": "Gardenia jasminoides",
-        "description": "Aetas ullus bene venia molestias suffragium pel cunctatio thesis spargo. Cruentus sursum clamo conor.",
-        "imageUrl": "https://images.unsplash.com/photo-4899602540?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 29,
-        "minHumidity": 50,
+        "description": "Nostrum solitudo virtus thalassinus. Vaco pecus cribro alii aeternus suscipio cubo at textor.",
+        "imageUrl": "https://images.unsplash.com/photo-2456142830?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 11,
+        "idealTempMax": 27,
+        "minHumidity": 53,
         "sunlight": "high",
         "oxygenLevel": "low",
         "medicinalValues": [
-            "scared",
-            "adrenalin"
+            "austere",
+            "celsius"
         ],
         "advantages": [
-            "cross-platform",
-            "smart contracts"
+            "proactive",
+            "initiatives"
         ],
-        "price": 188,
+        "price": 23,
         "type": "outdoor",
         "lifespan": "15-25 Years",
         "foliageTexture": "Matte/Textured",
@@ -2301,22 +2921,22 @@ const outdoorPlants = [
         "id": "p_out_1024",
         "name": "Camellia",
         "scientificName": "Camellia japonica",
-        "description": "Conscendo ventus debitis ulterius aperio adfectus decumbo coma. Uterque delibero ab bardus auctor sollicito arto.",
-        "imageUrl": "https://images.unsplash.com/photo-1659012647?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 15,
-        "idealTempMax": 28,
-        "minHumidity": 33,
+        "description": "Tondeo provident apparatus tui cur tripudio arma ventosus veritatis. Aduro vigor cattus nobis corporis urbanus fugit sto suppono.",
+        "imageUrl": "https://images.unsplash.com/photo-7622053956?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 9,
+        "idealTempMax": 30,
+        "minHumidity": 46,
         "sunlight": "high",
         "oxygenLevel": "high",
         "medicinalValues": [
-            "indolent",
-            "rule"
+            "poor",
+            "pile"
         ],
         "advantages": [
-            "strategic",
-            "ROI"
+            "user-centric",
+            "experiences"
         ],
-        "price": 107,
+        "price": 11,
         "type": "outdoor",
         "lifespan": "50-100 Years",
         "foliageTexture": "Matte/Textured",
@@ -2332,22 +2952,22 @@ const outdoorPlants = [
         "id": "p_out_1025",
         "name": "Rhododendron",
         "scientificName": "Rhododendron ferrugineum",
-        "description": "Cultura tamquam aequitas ceno conicio sui cruentus certus. Auditor aqua decretum sufficio rem.",
-        "imageUrl": "https://images.unsplash.com/photo-7979848537?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 12,
-        "idealTempMax": 33,
-        "minHumidity": 39,
+        "description": "Averto cunabula asper. Tempora veniam infit cotidie careo aptus.",
+        "imageUrl": "https://images.unsplash.com/photo-7074106892?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 7,
+        "idealTempMax": 34,
+        "minHumidity": 31,
         "sunlight": "high",
         "oxygenLevel": "moderate",
         "medicinalValues": [
-            "good-natured",
-            "tribe"
+            "compassionate",
+            "glider"
         ],
         "advantages": [
-            "immersive",
+            "cutting-edge",
             "content"
         ],
-        "price": 179,
+        "price": 127,
         "type": "outdoor",
         "lifespan": "50+ Years",
         "foliageTexture": "Matte/Textured",
@@ -2363,22 +2983,22 @@ const outdoorPlants = [
         "id": "p_out_1026",
         "name": "Jasmine Vine",
         "scientificName": "Jasminum officinale",
-        "description": "Templum vacuus tener alienus animus vitae. Temperantia qui sollers avarus.",
-        "imageUrl": "https://images.unsplash.com/photo-6839684344?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 15,
-        "idealTempMax": 29,
-        "minHumidity": 54,
+        "description": "Vomito tener vix sopor claustrum abeo dedecor decet verus deprecator. Urbanus vilitas dedico.",
+        "imageUrl": "https://images.unsplash.com/photo-8817742308?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 6,
+        "idealTempMax": 28,
+        "minHumidity": 36,
         "sunlight": "high",
-        "oxygenLevel": "high",
+        "oxygenLevel": "very-high",
         "medicinalValues": [
-            "stupendous",
-            "fit"
+            "obedient",
+            "devastation"
         ],
         "advantages": [
-            "seamless",
-            "web services"
+            "cutting-edge",
+            "functionalities"
         ],
-        "price": 99,
+        "price": 20,
         "type": "outdoor",
         "lifespan": "10-20 Years",
         "foliageTexture": "Matte/Textured",
@@ -2394,20 +3014,20 @@ const outdoorPlants = [
         "id": "p_out_1027",
         "name": "Hibiscus",
         "scientificName": "Hibiscus rosa-sinensis",
-        "description": "Crapula adfero decet soleo votum sonitus veritas autus depromo conculco. Temperantia id vomito.",
-        "imageUrl": "https://images.unsplash.com/photo-3636751896?auto=format&fit=crop&w=800&q=80",
+        "description": "Creator concido tactus verus cernuus. Adulatio bibo ventito delicate velum placeat quam succurro color.",
+        "imageUrl": "https://images.unsplash.com/photo-1815634579?auto=format&fit=crop&w=800&q=80",
         "idealTempMin": 5,
-        "idealTempMax": 29,
-        "minHumidity": 57,
+        "idealTempMax": 34,
+        "minHumidity": 33,
         "sunlight": "high",
-        "oxygenLevel": "low",
+        "oxygenLevel": "very-high",
         "medicinalValues": [
-            "lean",
-            "negotiation"
+            "whole",
+            "opera"
         ],
         "advantages": [
-            "compelling",
-            "niches"
+            "frictionless",
+            "AI"
         ],
         "price": 126,
         "type": "outdoor",
@@ -2425,22 +3045,22 @@ const outdoorPlants = [
         "id": "p_out_1028",
         "name": "Petunia",
         "scientificName": "Petunia hybrida",
-        "description": "Villa vomica utroque voluptatem verbum templum allatus valde. Molestias asperiores quas vado.",
-        "imageUrl": "https://images.unsplash.com/photo-5558943429?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 8,
-        "idealTempMax": 27,
-        "minHumidity": 80,
+        "description": "Tantillus vitium libero viridis sed. Tui conventus sollicito aperiam vomica aiunt careo.",
+        "imageUrl": "https://images.unsplash.com/photo-5195880341?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 11,
+        "idealTempMax": 29,
+        "minHumidity": 57,
         "sunlight": "high",
         "oxygenLevel": "low",
         "medicinalValues": [
-            "disloyal",
-            "cook"
+            "shoddy",
+            "government"
         ],
         "advantages": [
-            "cross-media",
-            "convergence"
+            "rich",
+            "technologies"
         ],
-        "price": 103,
+        "price": 184,
         "type": "outdoor",
         "lifespan": "Annual (1 Year)",
         "foliageTexture": "Matte/Textured",
@@ -2456,22 +3076,22 @@ const outdoorPlants = [
         "id": "p_out_1029",
         "name": "Geranium",
         "scientificName": "Pelargonium",
-        "description": "Thorax adaugeo summisse alienus alo caput solum. Inventore conatus temptatio sumptus cunae attollo vehemens.",
-        "imageUrl": "https://images.unsplash.com/photo-2970394005?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 8,
-        "idealTempMax": 28,
-        "minHumidity": 48,
+        "description": "Curia cuius crur theatrum bonus odit. Possimus vociferor adimpleo bardus.",
+        "imageUrl": "https://images.unsplash.com/photo-5540152952?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 15,
+        "idealTempMax": 30,
+        "minHumidity": 36,
         "sunlight": "high",
-        "oxygenLevel": "high",
+        "oxygenLevel": "low",
         "medicinalValues": [
-            "merry",
-            "retention"
+            "burdensome",
+            "adaptation"
         ],
         "advantages": [
-            "synergistic",
-            "infrastructures"
+            "extensible",
+            "smart contracts"
         ],
-        "price": 44,
+        "price": 38,
         "type": "outdoor",
         "lifespan": "1-3 Years",
         "foliageTexture": "Matte/Textured",
@@ -2487,22 +3107,22 @@ const outdoorPlants = [
         "id": "p_out_1030",
         "name": "Chrysanthemum",
         "scientificName": "Chrysanthemum morifolium",
-        "description": "Ter ceno calcar vitiosus aranea quod carcer tot atrocitas neque. Desidero omnis stips desidero vito catena iusto sub.",
-        "imageUrl": "https://images.unsplash.com/photo-1960118990?auto=format&fit=crop&w=800&q=80",
+        "description": "Aestus iure tabgo admiratio sustineo audio atqui. Pecto vindico ambitus verbera cuppedia textus.",
+        "imageUrl": "https://images.unsplash.com/photo-7098175612?auto=format&fit=crop&w=800&q=80",
         "idealTempMin": 11,
-        "idealTempMax": 28,
-        "minHumidity": 54,
+        "idealTempMax": 29,
+        "minHumidity": 65,
         "sunlight": "high",
         "oxygenLevel": "high",
         "medicinalValues": [
-            "misguided",
-            "glider"
+            "short",
+            "heating"
         ],
         "advantages": [
-            "open-source",
-            "technologies"
+            "holistic",
+            "experiences"
         ],
-        "price": 84,
+        "price": 177,
         "type": "outdoor",
         "lifespan": "Perennial (3-5 Years)",
         "foliageTexture": "Matte/Textured",
@@ -2518,22 +3138,22 @@ const outdoorPlants = [
         "id": "p_out_1031",
         "name": "Pansy",
         "scientificName": "Viola tricolor",
-        "description": "Sperno in textus. Baiulus amaritudo demens censura causa denuncio bellum cogito sursum.",
-        "imageUrl": "https://images.unsplash.com/photo-7004528222?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 14,
-        "idealTempMax": 34,
-        "minHumidity": 69,
+        "description": "Viriliter verbum consuasor constans denique contabesco. Officiis cognomen tepidus aduro coepi ullam.",
+        "imageUrl": "https://images.unsplash.com/photo-1510796260?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 6,
+        "idealTempMax": 26,
+        "minHumidity": 33,
         "sunlight": "high",
-        "oxygenLevel": "moderate",
+        "oxygenLevel": "high",
         "medicinalValues": [
-            "normal",
-            "brief"
+            "unlined",
+            "armchair"
         ],
         "advantages": [
-            "bleeding-edge",
-            "web services"
+            "user-centric",
+            "networks"
         ],
-        "price": 94,
+        "price": 125,
         "type": "outdoor",
         "lifespan": "Biennial (2 Years)",
         "foliageTexture": "Matte/Textured",
@@ -2549,22 +3169,22 @@ const outdoorPlants = [
         "id": "p_out_1032",
         "name": "Snapdragon",
         "scientificName": "Antirrhinum majus",
-        "description": "Curvo carcer agnosco subvenio. Facere crastinus conitor stabilis.",
-        "imageUrl": "https://images.unsplash.com/photo-8251184853?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 12,
-        "idealTempMax": 26,
-        "minHumidity": 48,
+        "description": "Ambitus magnam vix corroboro aptus velit tamdiu ademptio alienus. Molestias amita alias defetiscor aveho adhuc thalassinus uterque tubineus.",
+        "imageUrl": "https://images.unsplash.com/photo-8324205068?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 15,
+        "idealTempMax": 27,
+        "minHumidity": 73,
         "sunlight": "high",
-        "oxygenLevel": "moderate",
+        "oxygenLevel": "low",
         "medicinalValues": [
-            "true",
-            "fellow"
+            "moist",
+            "parade"
         ],
         "advantages": [
-            "impactful",
-            "users"
+            "scalable",
+            "infrastructures"
         ],
-        "price": 169,
+        "price": 32,
         "type": "outdoor",
         "lifespan": "Annual (1 Year)",
         "foliageTexture": "Matte/Textured",
@@ -2580,22 +3200,22 @@ const outdoorPlants = [
         "id": "p_out_1033",
         "name": "Foxglove",
         "scientificName": "Digitalis purpurea",
-        "description": "Autus vilitas charisma undique volup deludo victus. Illo sperno curatio.",
-        "imageUrl": "https://images.unsplash.com/photo-2786946788?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 11,
+        "description": "Eius carcer confugo cubicularis nostrum tres subseco. Autus caelestis cunctatio vociferor tonsor coniecto aequitas.",
+        "imageUrl": "https://images.unsplash.com/photo-7870165382?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 7,
         "idealTempMax": 26,
-        "minHumidity": 53,
+        "minHumidity": 39,
         "sunlight": "high",
-        "oxygenLevel": "very-high",
+        "oxygenLevel": "high",
         "medicinalValues": [
-            "abandoned",
-            "space"
+            "flashy",
+            "zebra"
         ],
         "advantages": [
-            "magnetic",
-            "methodologies"
+            "cross-media",
+            "large language models"
         ],
-        "price": 75,
+        "price": 186,
         "type": "outdoor",
         "lifespan": "Biennial (2 Years)",
         "foliageTexture": "Matte/Textured",
@@ -2611,22 +3231,22 @@ const outdoorPlants = [
         "id": "p_out_1034",
         "name": "Bleeding Heart",
         "scientificName": "Lamprocapnos spectabilis",
-        "description": "Cado appono commodo infit adfero voluptates aestas viriliter provident talis. Veritas cattus ago creator tamisium hic crapula.",
-        "imageUrl": "https://images.unsplash.com/photo-4238236509?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 9,
-        "idealTempMax": 32,
-        "minHumidity": 76,
+        "description": "Benevolentia deorsum cunabula ascisco pauci caveo alias. Adeo aequitas quisquam cedo quidem verbera collum coruscus conscendo stips.",
+        "imageUrl": "https://images.unsplash.com/photo-3404574127?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 13,
+        "idealTempMax": 30,
+        "minHumidity": 74,
         "sunlight": "high",
         "oxygenLevel": "low",
         "medicinalValues": [
-            "dependable",
-            "strategy"
+            "bare",
+            "valley"
         ],
         "advantages": [
-            "back-end",
-            "methodologies"
+            "revolutionary",
+            "metrics"
         ],
-        "price": 199,
+        "price": 179,
         "type": "outdoor",
         "lifespan": "Perennial (5-10 Years)",
         "foliageTexture": "Matte/Textured",
@@ -2642,22 +3262,22 @@ const outdoorPlants = [
         "id": "p_out_1035",
         "name": "Coral Bells",
         "scientificName": "Heuchera",
-        "description": "Aegrus dens tumultus magnam vesco canonicus vos canis vobis. Turbo colligo synagoga vere decet ciminatio textilis curto tum alius.",
-        "imageUrl": "https://images.unsplash.com/photo-7902678202?auto=format&fit=crop&w=800&q=80",
+        "description": "Tondeo arx texo aeger creber patruus repellendus. Consectetur utroque laudantium rem quidem.",
+        "imageUrl": "https://images.unsplash.com/photo-3605760029?auto=format&fit=crop&w=800&q=80",
         "idealTempMin": 15,
-        "idealTempMax": 32,
-        "minHumidity": 37,
+        "idealTempMax": 31,
+        "minHumidity": 48,
         "sunlight": "high",
-        "oxygenLevel": "low",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "sizzling",
-            "packaging"
+            "pastel",
+            "rawhide"
         ],
         "advantages": [
-            "open-source",
-            "content"
+            "dynamic",
+            "relationships"
         ],
-        "price": 68,
+        "price": 134,
         "type": "outdoor",
         "lifespan": "3-5 Years",
         "foliageTexture": "Matte/Textured",
@@ -2673,22 +3293,22 @@ const outdoorPlants = [
         "id": "p_out_1036",
         "name": "Astilbe",
         "scientificName": "Astilbe chinensis",
-        "description": "Unus facilis abscido ceno tolero auctus atavus argentum. Accommodo sufficio velum tepidus alo amplitudo complectus timor sortitus sursum.",
-        "imageUrl": "https://images.unsplash.com/photo-3035560333?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 12,
-        "idealTempMax": 34,
-        "minHumidity": 32,
+        "description": "Amor vestrum titulus despecto desipio confido voco cunabula. Adiuvo ter odio asperiores vito ars.",
+        "imageUrl": "https://images.unsplash.com/photo-6828278842?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 7,
+        "idealTempMax": 26,
+        "minHumidity": 30,
         "sunlight": "high",
         "oxygenLevel": "high",
         "medicinalValues": [
-            "bright",
-            "knitting"
+            "improbable",
+            "premium"
         ],
         "advantages": [
-            "ubiquitous",
-            "relationships"
+            "back-end",
+            "schemas"
         ],
-        "price": 15,
+        "price": 55,
         "type": "outdoor",
         "lifespan": "10+ Years",
         "foliageTexture": "Matte/Textured",
@@ -2704,22 +3324,22 @@ const outdoorPlants = [
         "id": "p_out_1037",
         "name": "Bee Balm",
         "scientificName": "Monarda didyma",
-        "description": "Angustus libero calco cavus. Cum terebro quam tenax velum absorbeo error velociter absum.",
-        "imageUrl": "https://images.unsplash.com/photo-2411582999?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 7,
-        "idealTempMax": 35,
-        "minHumidity": 49,
+        "description": "Astrum tertius nostrum vinum censura solvo ago comburo. Statim culpa officiis tamquam aetas crustulum culpa casso uredo incidunt.",
+        "imageUrl": "https://images.unsplash.com/photo-4278536058?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 6,
+        "idealTempMax": 30,
+        "minHumidity": 53,
         "sunlight": "high",
-        "oxygenLevel": "moderate",
+        "oxygenLevel": "low",
         "medicinalValues": [
-            "old",
-            "exterior"
+            "palatable",
+            "premium"
         ],
         "advantages": [
-            "mission-critical",
-            "supply-chains"
+            "24/7",
+            "methodologies"
         ],
-        "price": 151,
+        "price": 43,
         "type": "outdoor",
         "lifespan": "3-5 Years",
         "foliageTexture": "Matte/Textured",
@@ -2735,22 +3355,22 @@ const outdoorPlants = [
         "id": "p_out_1038",
         "name": "Butterfly Bush",
         "scientificName": "Buddleja davidii",
-        "description": "Vomer tenuis creo. Amplexus velit vilitas suffoco titulus adiuvo speculum conqueror.",
-        "imageUrl": "https://images.unsplash.com/photo-4109348043?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 8,
+        "description": "Deludo vito eaque. Paulatim conatus ter.",
+        "imageUrl": "https://images.unsplash.com/photo-5916692434?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 10,
         "idealTempMax": 30,
-        "minHumidity": 69,
+        "minHumidity": 62,
         "sunlight": "high",
-        "oxygenLevel": "moderate",
+        "oxygenLevel": "very-high",
         "medicinalValues": [
-            "frozen",
-            "kick"
+            "gaseous",
+            "deployment"
         ],
         "advantages": [
-            "scalable",
-            "channels"
+            "killer",
+            "models"
         ],
-        "price": 117,
+        "price": 119,
         "type": "outdoor",
         "lifespan": "10-20 Years",
         "foliageTexture": "Matte/Textured",
@@ -2766,22 +3386,22 @@ const outdoorPlants = [
         "id": "p_out_1039",
         "name": "Juniper Bush",
         "scientificName": "Juniperus",
-        "description": "Dolore utor admiratio atque denique desolo corpus. Sui virgo suscipio coniuratio pecus patruus explicabo videlicet carus civis.",
-        "imageUrl": "https://images.unsplash.com/photo-4555268012?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 6,
+        "description": "Adulatio vivo absconditus utpote argentum apto reprehenderit. Tego aduro ver summisse sophismata vere attollo illo.",
+        "imageUrl": "https://images.unsplash.com/photo-8244798598?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 13,
         "idealTempMax": 31,
-        "minHumidity": 63,
+        "minHumidity": 49,
         "sunlight": "high",
-        "oxygenLevel": "high",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "dependent",
-            "attraction"
+            "yellowish",
+            "event"
         ],
         "advantages": [
-            "integrated",
-            "experiences"
+            "world-class",
+            "markets"
         ],
-        "price": 131,
+        "price": 22,
         "type": "outdoor",
         "lifespan": "30-70 Years",
         "foliageTexture": "Matte/Textured",
@@ -2797,22 +3417,22 @@ const outdoorPlants = [
         "id": "p_out_1040",
         "name": "Holly Bush",
         "scientificName": "Ilex aquifolium",
-        "description": "Volaticus capto sum venustas acsi. Stipes antepono abutor.",
-        "imageUrl": "https://images.unsplash.com/photo-6626566095?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 8,
-        "idealTempMax": 29,
-        "minHumidity": 48,
+        "description": "Adulatio timor candidus. Placeat tredecim color taedium corporis consectetur terebro.",
+        "imageUrl": "https://images.unsplash.com/photo-9261632195?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 6,
+        "idealTempMax": 33,
+        "minHumidity": 44,
         "sunlight": "high",
-        "oxygenLevel": "very-high",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "snoopy",
-            "councilman"
+            "free",
+            "yin"
         ],
         "advantages": [
-            "real-time",
-            "mindshare"
+            "integrated",
+            "synergies"
         ],
-        "price": 22,
+        "price": 84,
         "type": "outdoor",
         "lifespan": "100+ Years",
         "foliageTexture": "Matte/Textured",
@@ -2828,22 +3448,22 @@ const outdoorPlants = [
         "id": "p_out_1041",
         "name": "Pampas Grass",
         "scientificName": "Cortaderia selloana",
-        "description": "Appositus taceo cubitum ut bellum audeo charisma. Aspernatur cribro supplanto adimpleo appositus deduco coruscus candidus.",
-        "imageUrl": "https://images.unsplash.com/photo-9467146664?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 11,
-        "idealTempMax": 26,
-        "minHumidity": 57,
+        "description": "Adiuvo sit minus deorsum. Cimentarius desino quia deinde dens eligendi copia.",
+        "imageUrl": "https://images.unsplash.com/photo-4601801503?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 13,
+        "idealTempMax": 34,
+        "minHumidity": 37,
         "sunlight": "high",
-        "oxygenLevel": "low",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "diligent",
-            "junior"
+            "vague",
+            "sightseeing"
         ],
         "advantages": [
-            "strategic",
-            "web services"
+            "end-to-end",
+            "e-commerce"
         ],
-        "price": 72,
+        "price": 90,
         "type": "outdoor",
         "lifespan": "10-15 Years",
         "foliageTexture": "Matte/Textured",
@@ -2859,22 +3479,22 @@ const outdoorPlants = [
         "id": "p_out_1042",
         "name": "Bamboo",
         "scientificName": "Bambusa vulgaris",
-        "description": "Adiuvo truculenter atrox audeo solum crur repudiandae creator vesco. Currus supellex commemoro abduco suffoco umerus depulso.",
-        "imageUrl": "https://images.unsplash.com/photo-6978068222?auto=format&fit=crop&w=800&q=80",
+        "description": "Annus arbor deinde cicuta. Spoliatio cernuus tergeo taceo cicuta.",
+        "imageUrl": "https://images.unsplash.com/photo-9103150113?auto=format&fit=crop&w=800&q=80",
         "idealTempMin": 7,
-        "idealTempMax": 27,
-        "minHumidity": 68,
+        "idealTempMax": 26,
+        "minHumidity": 43,
         "sunlight": "high",
         "oxygenLevel": "moderate",
         "medicinalValues": [
-            "gaseous",
-            "pomelo"
+            "likable",
+            "adaptation"
         ],
         "advantages": [
-            "global",
-            "architectures"
+            "extensible",
+            "solutions"
         ],
-        "price": 42,
+        "price": 163,
         "type": "outdoor",
         "lifespan": "20-100 Years",
         "foliageTexture": "Matte/Textured",
@@ -2890,22 +3510,22 @@ const outdoorPlants = [
         "id": "p_out_1043",
         "name": "Agave",
         "scientificName": "Agave americana",
-        "description": "Conturbo doloremque desidero vesper absque cernuus. Sordeo canto damno vix coepi vereor adaugeo derelinquo.",
-        "imageUrl": "https://images.unsplash.com/photo-7678990786?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 9,
-        "idealTempMax": 29,
-        "minHumidity": 46,
+        "description": "Vergo tabula solus alioqui vinitor. Absum spoliatio tendo subnecto.",
+        "imageUrl": "https://images.unsplash.com/photo-8125576493?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 8,
+        "idealTempMax": 31,
+        "minHumidity": 34,
         "sunlight": "high",
         "oxygenLevel": "very-high",
         "medicinalValues": [
-            "blaring",
-            "label"
+            "reckless",
+            "negotiation"
         ],
         "advantages": [
-            "holistic",
-            "architectures"
+            "killer",
+            "content"
         ],
-        "price": 37,
+        "price": 131,
         "type": "outdoor",
         "lifespan": "10-30 Years",
         "foliageTexture": "Matte/Textured",
@@ -2921,22 +3541,22 @@ const outdoorPlants = [
         "id": "p_out_1044",
         "name": "Prickly Pear",
         "scientificName": "Opuntia ficus-indica",
-        "description": "Harum incidunt ustulo cedo colligo. Colo super solio acceptus vulpes.",
-        "imageUrl": "https://images.unsplash.com/photo-5902677246?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 7,
+        "description": "Distinctio cariosus colo thesaurus bardus civitas vinco voveo creator. Annus carbo solutio auctus versus causa coniuratio suspendo nesciunt cupressus.",
+        "imageUrl": "https://images.unsplash.com/photo-6413962686?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 10,
         "idealTempMax": 35,
-        "minHumidity": 34,
+        "minHumidity": 33,
         "sunlight": "high",
         "oxygenLevel": "moderate",
         "medicinalValues": [
-            "muffled",
-            "scrap"
+            "haunting",
+            "couch"
         ],
         "advantages": [
-            "collaborative",
-            "users"
+            "bleeding-edge",
+            "ROI"
         ],
-        "price": 175,
+        "price": 190,
         "type": "outdoor",
         "lifespan": "20+ Years",
         "foliageTexture": "Matte/Textured",
@@ -2952,22 +3572,22 @@ const outdoorPlants = [
         "id": "p_out_1045",
         "name": "Rosemary",
         "scientificName": "Salvia rosmarinus",
-        "description": "Aggero aliquid villa. Denique abduco adiuvo.",
-        "imageUrl": "https://images.unsplash.com/photo-9251225858?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 8,
-        "idealTempMax": 25,
-        "minHumidity": 53,
+        "description": "Hic comburo admiratio audacia canonicus aiunt. Centum confero quam.",
+        "imageUrl": "https://images.unsplash.com/photo-2190055971?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 12,
+        "idealTempMax": 28,
+        "minHumidity": 70,
         "sunlight": "high",
-        "oxygenLevel": "very-high",
+        "oxygenLevel": "low",
         "medicinalValues": [
-            "personal",
-            "lyre"
+            "remorseful",
+            "smog"
         ],
         "advantages": [
-            "end-to-end",
-            "niches"
+            "cross-platform",
+            "markets"
         ],
-        "price": 151,
+        "price": 26,
         "type": "outdoor",
         "lifespan": "15-20 Years",
         "foliageTexture": "Matte/Textured",
@@ -2983,22 +3603,22 @@ const outdoorPlants = [
         "id": "p_out_1046",
         "name": "Thyme",
         "scientificName": "Thymus vulgaris",
-        "description": "Maxime adipiscor tenax desidero subseco bis vester sortitus creber. Caput aro volup caput vulnero cui.",
-        "imageUrl": "https://images.unsplash.com/photo-2682758918?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 15,
+        "description": "Asperiores attollo absum vinculum iste congregatio virga corroboro. Solio theca denuo vos theca vaco timor alii corporis.",
+        "imageUrl": "https://images.unsplash.com/photo-7134371197?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 8,
         "idealTempMax": 34,
-        "minHumidity": 73,
+        "minHumidity": 56,
         "sunlight": "high",
-        "oxygenLevel": "very-high",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "elegant",
-            "vibration"
+            "entire",
+            "drug"
         ],
         "advantages": [
-            "out-of-the-box",
-            "experiences"
+            "transparent",
+            "ROI"
         ],
-        "price": 60,
+        "price": 161,
         "type": "outdoor",
         "lifespan": "5-10 Years",
         "foliageTexture": "Matte/Textured",
@@ -3014,22 +3634,22 @@ const outdoorPlants = [
         "id": "p_out_1047",
         "name": "Mint",
         "scientificName": "Mentha",
-        "description": "Iste dapifer corrumpo ars cui infit dapifer coruscus ante. Appello tabesco repudiandae umbra stultus attonbitus sto reprehenderit.",
-        "imageUrl": "https://images.unsplash.com/photo-7581448925?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 33,
-        "minHumidity": 61,
+        "description": "Suppellex pax ascit carcer. Crepusculum peior pax.",
+        "imageUrl": "https://images.unsplash.com/photo-4276003178?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 15,
+        "idealTempMax": 26,
+        "minHumidity": 70,
         "sunlight": "high",
-        "oxygenLevel": "high",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "actual",
-            "instruction"
+            "back",
+            "settler"
         ],
         "advantages": [
             "cross-platform",
-            "applications"
+            "schemas"
         ],
-        "price": 182,
+        "price": 175,
         "type": "outdoor",
         "lifespan": "Perennial (Invasive)",
         "foliageTexture": "Matte/Textured",
@@ -3045,22 +3665,22 @@ const outdoorPlants = [
         "id": "p_out_1048",
         "name": "Sage",
         "scientificName": "Salvia officinalis",
-        "description": "Confugo tum deserunt tredecim vehemens uxor creptio ciminatio. Urbanus benigne rem debitis minus casus balbus auxilium.",
-        "imageUrl": "https://images.unsplash.com/photo-8869940962?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
+        "description": "Esse delectatio supra via avarus annus solus aestivus vulgaris. Tracto error aperiam adfectus.",
+        "imageUrl": "https://images.unsplash.com/photo-3716437954?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 10,
         "idealTempMax": 28,
-        "minHumidity": 47,
+        "minHumidity": 30,
         "sunlight": "high",
-        "oxygenLevel": "low",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "unfortunate",
-            "ectoderm"
+            "shy",
+            "handful"
         ],
         "advantages": [
-            "killer",
-            "synergies"
+            "holistic",
+            "initiatives"
         ],
-        "price": 32,
+        "price": 139,
         "type": "outdoor",
         "lifespan": "5-10 Years",
         "foliageTexture": "Matte/Textured",
@@ -3076,24 +3696,644 @@ const outdoorPlants = [
         "id": "p_out_1049",
         "name": "Strawberry",
         "scientificName": "Fragaria x ananassa",
-        "description": "Umerus turpis defungo amo alius demonstro. Deprecator abeo derelinquo deorsum thymbra inflammatio tutamen.",
-        "imageUrl": "https://images.unsplash.com/photo-7153358741?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 6,
-        "idealTempMax": 30,
-        "minHumidity": 41,
+        "description": "Theatrum astrum clibanus sonitus dolor timor quae. Curvo tabernus torrens tenus.",
+        "imageUrl": "https://images.unsplash.com/photo-9315224356?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 9,
+        "idealTempMax": 27,
+        "minHumidity": 80,
+        "sunlight": "high",
+        "oxygenLevel": "very-high",
+        "medicinalValues": [
+            "awesome",
+            "council"
+        ],
+        "advantages": [
+            "ubiquitous",
+            "infrastructures"
+        ],
+        "price": 21,
+        "type": "outdoor",
+        "lifespan": "3-5 Years",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_1050",
+        "name": "Creeping Phlox",
+        "scientificName": "Phlox subulata",
+        "description": "Temperantia ustilo ventito utilis capitulus decet. Officia teneo autus assumenda.",
+        "imageUrl": "https://images.unsplash.com/photo-8027517313?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 33,
+        "minHumidity": 43,
+        "sunlight": "high",
+        "oxygenLevel": "low",
+        "medicinalValues": [
+            "baggy",
+            "tabletop"
+        ],
+        "advantages": [
+            "quantum",
+            "interfaces"
+        ],
+        "price": 174,
+        "type": "outdoor",
+        "lifespan": "5-10 Years",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_1051",
+        "name": "Lamb's Ear",
+        "scientificName": "Stachys byzantina",
+        "description": "Depromo tribuo pauper valens depulso ascit. Adflicto viridis aetas theca cogito spes adstringo adflicto.",
+        "imageUrl": "https://images.unsplash.com/photo-9107546220?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 9,
+        "idealTempMax": 34,
+        "minHumidity": 51,
+        "sunlight": "high",
+        "oxygenLevel": "low",
+        "medicinalValues": [
+            "silent",
+            "pecan"
+        ],
+        "advantages": [
+            "interactive",
+            "convergence"
+        ],
+        "price": 58,
+        "type": "outdoor",
+        "lifespan": "Perennial",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_1052",
+        "name": "Lantana",
+        "scientificName": "Lantana camara",
+        "description": "Subito ulterius nisi taceo candidus cubicularis turba taceo neque casus. Desidero utpote sapiente certus quia coerceo ter bellum.",
+        "imageUrl": "https://images.unsplash.com/photo-5206864734?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 14,
+        "idealTempMax": 35,
+        "minHumidity": 54,
         "sunlight": "high",
         "oxygenLevel": "moderate",
         "medicinalValues": [
-            "knowledgeable",
-            "numeracy"
+            "valuable",
+            "director"
+        ],
+        "advantages": [
+            "bleeding-edge",
+            "e-commerce"
+        ],
+        "price": 171,
+        "type": "outdoor",
+        "lifespan": "Annual/Perennial",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_1053",
+        "name": "Moonflower",
+        "scientificName": "Ipomoea alba",
+        "description": "Via cohaero tamen vergo coaegresco appositus termes porro arguo. Supplanto cetera tener urbanus.",
+        "imageUrl": "https://images.unsplash.com/photo-4270043399?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 26,
+        "minHumidity": 77,
+        "sunlight": "high",
+        "oxygenLevel": "high",
+        "medicinalValues": [
+            "strict",
+            "harp"
+        ],
+        "advantages": [
+            "visionary",
+            "models"
+        ],
+        "price": 27,
+        "type": "outdoor",
+        "lifespan": "Annual",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_1054",
+        "name": "Morning Glory",
+        "scientificName": "Ipomoea",
+        "description": "Apparatus ab cursus temporibus pecus utroque sequi nam. Veritatis adficio cui aggero quam vestrum pauper subseco.",
+        "imageUrl": "https://images.unsplash.com/photo-3913670127?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 9,
+        "idealTempMax": 35,
+        "minHumidity": 42,
+        "sunlight": "high",
+        "oxygenLevel": "high",
+        "medicinalValues": [
+            "sociable",
+            "reboot"
+        ],
+        "advantages": [
+            "vertical",
+            "relationships"
+        ],
+        "price": 28,
+        "type": "outdoor",
+        "lifespan": "Annual",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_1055",
+        "name": "Moss Rose",
+        "scientificName": "Portulaca grandiflora",
+        "description": "Aggero vomer praesentium advenio bene cur temeritas. Valeo supellex urbs culpa aeneus depereo.",
+        "imageUrl": "https://images.unsplash.com/photo-8317730451?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 6,
+        "idealTempMax": 30,
+        "minHumidity": 76,
+        "sunlight": "high",
+        "oxygenLevel": "very-high",
+        "medicinalValues": [
+            "curly",
+            "gymnast"
         ],
         "advantages": [
             "leading-edge",
+            "methodologies"
+        ],
+        "price": 30,
+        "type": "outdoor",
+        "lifespan": "Annual",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_1056",
+        "name": "Nasturtium",
+        "scientificName": "Tropaeolum majus",
+        "description": "Magnam tersus degenero illo adfectus verbum doloribus ut. Bos turbo sulum.",
+        "imageUrl": "https://images.unsplash.com/photo-8682658475?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 5,
+        "idealTempMax": 28,
+        "minHumidity": 36,
+        "sunlight": "high",
+        "oxygenLevel": "low",
+        "medicinalValues": [
+            "breakable",
+            "cork"
+        ],
+        "advantages": [
+            "compelling",
+            "markets"
+        ],
+        "price": 181,
+        "type": "outdoor",
+        "lifespan": "Annual",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_1057",
+        "name": "Periwinkle",
+        "scientificName": "Vinca minor",
+        "description": "Adhuc delectatio vitium. Aegre minus attero assentator.",
+        "imageUrl": "https://images.unsplash.com/photo-4221551164?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 14,
+        "idealTempMax": 29,
+        "minHumidity": 77,
+        "sunlight": "high",
+        "oxygenLevel": "very-high",
+        "medicinalValues": [
+            "menacing",
+            "pantyhose"
+        ],
+        "advantages": [
+            "compelling",
+            "interfaces"
+        ],
+        "price": 124,
+        "type": "outdoor",
+        "lifespan": "Perennial",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_1058",
+        "name": "Poppy",
+        "scientificName": "Papaver somniferum",
+        "description": "Vilitas tamisium benevolentia turbo demonstro turbo deprimo laborum. Capitulus tabula aiunt theca vitiosus aliqua spiculum ipsa.",
+        "imageUrl": "https://images.unsplash.com/photo-1665098629?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 12,
+        "idealTempMax": 32,
+        "minHumidity": 62,
+        "sunlight": "high",
+        "oxygenLevel": "very-high",
+        "medicinalValues": [
+            "idolized",
+            "peony"
+        ],
+        "advantages": [
+            "distributed",
             "schemas"
         ],
-        "price": 166,
+        "price": 35,
+        "type": "outdoor",
+        "lifespan": "Annual",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_1059",
+        "name": "Primrose",
+        "scientificName": "Primula vulgaris",
+        "description": "Alius statua cupio cariosus. Tutis crustulum aureus coniuratio adfero tener.",
+        "imageUrl": "https://images.unsplash.com/photo-8604763330?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 12,
+        "idealTempMax": 30,
+        "minHumidity": 68,
+        "sunlight": "high",
+        "oxygenLevel": "moderate",
+        "medicinalValues": [
+            "dull",
+            "meadow"
+        ],
+        "advantages": [
+            "value-added",
+            "initiatives"
+        ],
+        "price": 104,
+        "type": "outdoor",
+        "lifespan": "Perennial",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_1060",
+        "name": "Ranunculus",
+        "scientificName": "Ranunculus asiaticus",
+        "description": "Vix civis cauda calculus color communis audax. Aedificium utroque illo.",
+        "imageUrl": "https://images.unsplash.com/photo-3054438703?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 7,
+        "idealTempMax": 30,
+        "minHumidity": 47,
+        "sunlight": "high",
+        "oxygenLevel": "moderate",
+        "medicinalValues": [
+            "tender",
+            "tusk"
+        ],
+        "advantages": [
+            "user-centric",
+            "schemas"
+        ],
+        "price": 20,
+        "type": "outdoor",
+        "lifespan": "Perennial",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_1061",
+        "name": "Salvia",
+        "scientificName": "Salvia splendens",
+        "description": "Utique utor curso a ubi. Desolo thermae utique volubilis ter.",
+        "imageUrl": "https://images.unsplash.com/photo-8699167349?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 8,
+        "idealTempMax": 31,
+        "minHumidity": 34,
+        "sunlight": "high",
+        "oxygenLevel": "very-high",
+        "medicinalValues": [
+            "granular",
+            "caption"
+        ],
+        "advantages": [
+            "frictionless",
+            "systems"
+        ],
+        "price": 126,
+        "type": "outdoor",
+        "lifespan": "Annual",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_1062",
+        "name": "Sedum",
+        "scientificName": "Hylotelephium spectabile",
+        "description": "Alius xiphias dolorem arbitro vulgo aggero. Arcesso suppono solus coerceo.",
+        "imageUrl": "https://images.unsplash.com/photo-5032088627?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 7,
+        "idealTempMax": 34,
+        "minHumidity": 56,
+        "sunlight": "high",
+        "oxygenLevel": "moderate",
+        "medicinalValues": [
+            "acidic",
+            "majority"
+        ],
+        "advantages": [
+            "24/7",
+            "supply-chains"
+        ],
+        "price": 96,
+        "type": "outdoor",
+        "lifespan": "Perennial",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_1063",
+        "name": "Shasta Daisy",
+        "scientificName": "Leucanthemum x superbum",
+        "description": "Contigo decimus molestias sunt utrum ut vigilo exercitationem. Appello tubineus audacia tribuo uberrime cimentarius.",
+        "imageUrl": "https://images.unsplash.com/photo-2553824258?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 5,
+        "idealTempMax": 33,
+        "minHumidity": 72,
+        "sunlight": "high",
+        "oxygenLevel": "very-high",
+        "medicinalValues": [
+            "favorite",
+            "excess"
+        ],
+        "advantages": [
+            "AI-driven",
+            "niches"
+        ],
+        "price": 162,
         "type": "outdoor",
         "lifespan": "3-5 Years",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_1064",
+        "name": "Sweet Alyssum",
+        "scientificName": "Lobularia maritima",
+        "description": "Cupressus causa stipes arto expedita voluptates videlicet pax veniam depromo. Valeo tribuo viscus velum debeo cruentus sumo uredo minima vivo.",
+        "imageUrl": "https://images.unsplash.com/photo-9354613444?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 6,
+        "idealTempMax": 34,
+        "minHumidity": 31,
+        "sunlight": "high",
+        "oxygenLevel": "high",
+        "medicinalValues": [
+            "kosher",
+            "deck"
+        ],
+        "advantages": [
+            "decentralized",
+            "paradigms"
+        ],
+        "price": 168,
+        "type": "outdoor",
+        "lifespan": "Annual",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_1065",
+        "name": "Sweet Pea",
+        "scientificName": "Lathyrus odoratus",
+        "description": "Cuppedia atrox textus. Defungo aegrus adhaero arx cui animadverto et caterva vestrum trado.",
+        "imageUrl": "https://images.unsplash.com/photo-9462202148?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 7,
+        "idealTempMax": 35,
+        "minHumidity": 46,
+        "sunlight": "high",
+        "oxygenLevel": "low",
+        "medicinalValues": [
+            "grounded",
+            "switchboard"
+        ],
+        "advantages": [
+            "24/7",
+            "AI"
+        ],
+        "price": 32,
+        "type": "outdoor",
+        "lifespan": "Annual",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_1066",
+        "name": "Verbena",
+        "scientificName": "Verbena bonariensis",
+        "description": "Cimentarius architecto cavus. Paens acervus autem truculenter clam despecto.",
+        "imageUrl": "https://images.unsplash.com/photo-4184376193?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 7,
+        "idealTempMax": 35,
+        "minHumidity": 31,
+        "sunlight": "high",
+        "oxygenLevel": "very-high",
+        "medicinalValues": [
+            "gracious",
+            "swim"
+        ],
+        "advantages": [
+            "viral",
+            "architectures"
+        ],
+        "price": 161,
+        "type": "outdoor",
+        "lifespan": "Annual/Perennial",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_1067",
+        "name": "Yarrow",
+        "scientificName": "Achillea millefolium",
+        "description": "Vicissitudo ea eos textilis arbustum veniam. Urbanus substantia carpo autem.",
+        "imageUrl": "https://images.unsplash.com/photo-4731363612?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 15,
+        "idealTempMax": 28,
+        "minHumidity": 57,
+        "sunlight": "high",
+        "oxygenLevel": "high",
+        "medicinalValues": [
+            "well-made",
+            "barracks"
+        ],
+        "advantages": [
+            "proactive",
+            "large language models"
+        ],
+        "price": 162,
+        "type": "outdoor",
+        "lifespan": "Perennial",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_1068",
+        "name": "Zinnia",
+        "scientificName": "Zinnia elegans",
+        "description": "Aliquam speculum temporibus decor dedico ulciscor cotidie porro urbanus. Voro conscendo spes crudelis a.",
+        "imageUrl": "https://images.unsplash.com/photo-1323638697?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 8,
+        "idealTempMax": 29,
+        "minHumidity": 67,
+        "sunlight": "high",
+        "oxygenLevel": "very-high",
+        "medicinalValues": [
+            "voluminous",
+            "cricket"
+        ],
+        "advantages": [
+            "interactive",
+            "synergies"
+        ],
+        "price": 50,
+        "type": "outdoor",
+        "lifespan": "Annual",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_1069",
+        "name": "Cosmos",
+        "scientificName": "Cosmos bipinnatus",
+        "description": "Uberrime torrens sumptus utilis vestrum deporto commodi. Synagoga colo animus defetiscor.",
+        "imageUrl": "https://images.unsplash.com/photo-9547433207?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 15,
+        "idealTempMax": 25,
+        "minHumidity": 48,
+        "sunlight": "high",
+        "oxygenLevel": "moderate",
+        "medicinalValues": [
+            "sparse",
+            "overload"
+        ],
+        "advantages": [
+            "ubiquitous",
+            "web services"
+        ],
+        "price": 25,
+        "type": "outdoor",
+        "lifespan": "Annual",
         "foliageTexture": "Matte/Textured",
         "leafShape": "Lanceolateish/Compound",
         "stemStructure": "Woody/Semi-Woody",
