@@ -738,8 +738,27 @@ app.post('/api/admin/seed-plants', auth, admin, async (req, res) => {
 
         res.json({ success: true, ...stats, total: allPlants.length });
     } catch (err) {
-        console.error("SEED ERROR:", err);
-        res.status(500).json({ error: err.message });
+
+        // specific filtering for nature/plants
+        const keywords = ['plant', 'tree', 'forest', 'garden', 'flower', 'nature', 'species', 'conservation', 'climate'];
+        const filteredNews = allNews.filter(item => {
+            const text = (item.title + ' ' + item.snippet).toLowerCase();
+            return keywords.some(k => text.includes(k));
+        });
+
+        // Sort by date and take top 10
+        filteredNews.sort((a, b) => b.pubDate - a.pubDate);
+        const topNews = filteredNews.slice(0, 10);
+
+        newsCache = {
+            data: topNews,
+            lastUpdated: now
+        };
+
+        res.json(topNews);
+    } catch (error) {
+        console.error('Error fetching news:', error);
+        res.status(500).json({ error: 'Failed to fetch news' });
     }
 });
 
@@ -1327,6 +1346,69 @@ app.post('/api/auth/nudge-admin', async (req, res) => {
     } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
+// --- News API ---
+const Parser = require('rss-parser');
+const parser = new Parser();
+let newsCache = {
+    data: [],
+    lastUpdated: 0
+};
+
+app.get('/api/news', async (req, res) => {
+    const ONE_DAY = 24 * 60 * 60 * 1000;
+    const now = Date.now();
+
+    if (newsCache.data.length > 0 && (now - newsCache.lastUpdated) < ONE_DAY) {
+        return res.json(newsCache.data);
+    }
+
+    try {
+        const feedUrls = [
+            'https://www.sciencedaily.com/rss/plants_animals/nature.xml',
+            'https://mongabay.com/feed/',
+            'https://feeds.feedburner.com/enn/main'
+        ];
+
+        const feedPromises = feedUrls.map(url => parser.parseURL(url).catch(e => null));
+        const feeds = await Promise.all(feedPromises);
+
+        let allNews = [];
+        feeds.forEach(feed => {
+            if (feed && feed.items) {
+                feed.items.forEach(item => {
+                    allNews.push({
+                        title: item.title,
+                        link: item.link,
+                        pubDate: new Date(item.pubDate),
+                        source: feed.title || 'Environmental News',
+                        snippet: item.contentSnippet ? item.contentSnippet.substring(0, 150) + '...' : ''
+                    });
+                });
+            }
+        });
+
+        const keywords = ['plant', 'tree', 'forest', 'garden', 'flower', 'nature', 'species', 'conservation', 'climate'];
+        const filteredNews = allNews.filter(item => {
+            const text = (item.title + ' ' + item.snippet).toLowerCase();
+            return keywords.some(k => text.includes(k));
+        });
+
+        filteredNews.sort((a, b) => b.pubDate - a.pubDate);
+        const topNews = filteredNews.slice(0, 10);
+
+        newsCache = {
+            data: topNews,
+            lastUpdated: now
+        };
+
+        res.json(topNews);
+    } catch (error) {
+        console.error('Error fetching news:', error);
+        res.status(500).json({ error: 'Failed to fetch news' });
+    }
+});
+
+// --- Password Reset Request ---
 app.post('/api/auth/reset-password-request', async (req, res) => {
     try {
         const { email } = req.body;

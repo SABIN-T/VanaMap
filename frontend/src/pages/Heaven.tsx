@@ -35,7 +35,7 @@ export const Heaven = () => {
     const [selectedTool, setSelectedTool] = useState<'plant' | 'water' | 'harvest' | null>(null);
     const [isSoundOn, setIsSoundOn] = useState(true);
     const [showTutorial, setShowTutorial] = useState(true);
-    const [news, setNews] = useState<any[]>([]);
+
 
     const playSound = (_type: 'pop' | 'success' | 'water' | 'level') => {
         if (!isSoundOn) return;
@@ -147,30 +147,62 @@ export const Heaven = () => {
 
     // --- NEWS COMPONENT ---
     const NewsView = () => {
+        const [newsData, setNewsData] = useState<any[]>([]);
+        const [loading, setLoading] = useState(true);
+
         useEffect(() => {
-            // Mock fetching news -> in real app use an API
-            const curatedNews = [
-                { title: 'Global Forest Cover Increases by 2% this Year', source: 'Earth Watch', time: '2h ago' },
-                { title: 'New Species of Orchid Discovered in Amazon', source: 'Botany Today', time: '5h ago' },
-                { title: 'Community Gardening Reduces Urban Stress', source: 'Health Nature', time: '8h ago' },
-                { title: 'Ancient Tree Found to be 5,000 Years Old', source: 'History Roots', time: '1d ago' },
-                { title: 'How to Build a Pollinator Garden', source: 'Eco Tips', time: '1d ago' }
-            ];
-            setNews(curatedNews);
+            const fetchNews = async () => {
+                try {
+                    // Try fetch from backend
+                    const res = await fetch('http://localhost:5000/api/news');
+                    if (res.ok) {
+                        const data = await res.json();
+                        setNewsData(data);
+                    } else {
+                        throw new Error("Failed");
+                    }
+                } catch (e) {
+                    console.error("News fetch failed, using fallback", e);
+                    // Fallback if backend offline/fails
+                    const fallbackNews = [
+                        { title: 'Global Forest Cover Increases by 2% this Year', source: 'Earth Watch', time: 'Today', link: 'https://www.sciencedaily.com/news/plants_animals/nature/' },
+                        { title: 'New Species of Orchid Discovered in Amazon', source: 'Botany Today', time: 'Yesterday', link: 'https://news.mongabay.com/' }
+                    ];
+                    setNewsData(fallbackNews);
+                } finally {
+                    setLoading(false);
+                }
+            };
+            fetchNews();
         }, []);
 
         return (
             <div className={styles.subPage}>
                 <h2 className={styles.sectionTitle}>Global Nature Pulse</h2>
-                <div className={styles.newsGrid}>
-                    {news.map((item, i) => (
-                        <div key={i} className={styles.newsCard}>
-                            <div className={styles.newsSource}>{item.source} • {item.time}</div>
-                            <h3 className={styles.newsTitle}>{item.title}</h3>
-                            <button className={styles.readMoreBtn}>Read Story</button>
-                        </div>
-                    ))}
-                </div>
+                {loading ? (
+                    <div style={{ textAlign: 'center', padding: '2rem', color: '#94a3b8' }}>Loading fresh news from nature...</div>
+                ) : (
+                    <div className={styles.newsGrid}>
+                        {newsData.length === 0 && <p style={{ textAlign: 'center' }}>No news available today.</p>}
+                        {newsData.map((item, i) => (
+                            <div key={i} className={styles.newsCard}>
+                                <div className={styles.newsSource}>
+                                    {item.source} • {new Date(item.pubDate || Date.now()).toLocaleDateString()}
+                                </div>
+                                <h3 className={styles.newsTitle}>{item.title}</h3>
+                                {item.snippet && <p style={{ fontSize: '0.9rem', color: '#64748b', marginBottom: '1rem' }}>{item.snippet}</p>}
+                                <a
+                                    href={item.link}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className={styles.readMoreBtn}
+                                >
+                                    Read Full Story
+                                </a>
+                            </div>
+                        ))}
+                    </div>
+                )}
             </div>
         );
     };
