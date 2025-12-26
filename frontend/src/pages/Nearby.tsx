@@ -301,6 +301,7 @@ out skel qt;
                                 min="1"
                                 max="1000"
                                 value={searchRadius}
+                                className="no-swipe"
                                 onChange={(e) => setSearchRadius(Number(e.target.value))}
                                 onMouseUp={() => position && fetchAllData(position[0], position[1], searchRadius)}
                                 onTouchEnd={() => position && fetchAllData(position[0], position[1], searchRadius)}
