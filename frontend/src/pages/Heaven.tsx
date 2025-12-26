@@ -198,19 +198,19 @@ export const Heaven = () => {
             {view === 'menu' && (
                 <div className={styles.menuContainer}>
                     <div className={styles.menuCard} onClick={() => setView('game')}>
-                        <div className={styles.cardIcon} style={{ background: '#dcfce7', color: '#16a34a' }}><Sprout size={48} /></div>
+                        <div className={`${styles.cardIcon} ${styles.iconGreen}`}><Sprout size={40} /></div>
                         <h2>Tiny Gardeners</h2>
                         <p>Grow your own magical virtual garden. Plant, water, and harvest!</p>
                     </div>
 
                     <div className={styles.menuCard} onClick={() => setView('lifecycle')}>
-                        <div className={styles.cardIcon} style={{ background: '#fef9c3', color: '#ca8a04' }}><Recycle size={48} /></div>
+                        <div className={`${styles.cardIcon} ${styles.iconYellow}`}><Recycle size={40} /></div>
                         <h2>Life Cycle</h2>
                         <p>Witness the beautiful journey of birth, life, and renewal.</p>
                     </div>
 
                     <div className={styles.menuCard} onClick={() => setView('news')}>
-                        <div className={styles.cardIcon} style={{ background: '#e0f2fe', color: '#0284c7' }}><Newspaper size={48} /></div>
+                        <div className={`${styles.cardIcon} ${styles.iconBlue}`}><Newspaper size={40} /></div>
                         <h2>Nature News</h2>
                         <p>Real-time updates on our planet's breathing ecosystems.</p>
                     </div>
@@ -233,18 +233,18 @@ export const Heaven = () => {
                     <div className={styles.header}>
                         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px' }}>
                             <h1 className={styles.title}>Tiny Gardeners</h1>
-                            <button onClick={() => setShowTutorial(true)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#94a3b8' }}><Info size={20} /></button>
+                            <button onClick={() => setShowTutorial(true)} className={styles.iconBtn}><Info size={20} /></button>
                         </div>
                         <p className={styles.subtitle}>Level {level}</p>
-                        <div style={{ width: '200px', height: '8px', background: '#e2e8f0', borderRadius: '4px', margin: '10px auto', overflow: 'hidden' }}>
-                            <div style={{ height: '100%', width: `${(xp / xpToNextLevel) * 100}%`, background: '#22c55e', transition: 'width 0.5s' }} />
+                        <div className={styles.xpBarContainer}>
+                            <div className={styles.xpBarFill} style={{ width: `${(xp / xpToNextLevel) * 100}%` }} />
                         </div>
                     </div>
 
                     <div className={styles.statsBar}>
-                        <div className={styles.stat} style={{ color: '#eab308' }}><Coins size={24} fill="#eab308" /> {coins}</div>
-                        <div className={styles.stat} style={{ color: '#ef4444' }}><Heart size={24} fill="#ef4444" /> {plots.filter(p => p.stage > 0).length} Alive</div>
-                        <button onClick={() => setIsSoundOn(!isSoundOn)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#64748b' }}>
+                        <div className={`${styles.stat} ${styles.textYellow}`}><Coins size={20} fill="#eab308" /> {coins}</div>
+                        <div className={`${styles.stat} ${styles.textRed}`}><Heart size={20} fill="#ef4444" /> {plots.filter(p => p.stage > 0).length} Alive</div>
+                        <button onClick={() => setIsSoundOn(!isSoundOn)} className={styles.iconBtn}>
                             {isSoundOn ? <Volume2 /> : <VolumeX />}
                         </button>
                     </div>
