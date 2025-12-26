@@ -7,15 +7,15 @@
 }
 
 body {
-    background-color: #0f172a;
-    /* Deep slate for high contrast */
-    color: #e2e8f0;
+    background-color: var(--color-bg-main);
+    color: var(--color-text-main);
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     line-height: 1.6;
     min-height: 100vh;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    transition: background-color 0.5s cubic-bezier(0.4, 0, 0.2, 1), color 0.5s ease;
 }
 
 body::before {
@@ -26,10 +26,11 @@ body::before {
     width: 100vw;
     height: 100vh;
     background:
-        radial-gradient(circle at 15% 50%, rgba(16, 185, 129, 0.08), transparent 25%),
-        radial-gradient(circle at 85% 30%, rgba(56, 189, 248, 0.08), transparent 25%);
+        radial-gradient(circle at 15% 50%, var(--bg-orb-1), transparent 25%),
+        radial-gradient(circle at 85% 30%, var(--bg-orb-2), transparent 25%);
     pointer-events: none;
     z-index: -1;
+    transition: opacity 0.5s ease;
 }
 
 a {
@@ -59,6 +60,7 @@ button {
     border: var(--glass-border);
     box-shadow: var(--glass-shadow);
     border-radius: var(--radius-md);
+    transition: all 0.3s ease;
 }
 
 .btn {
@@ -74,15 +76,19 @@ button {
 
 .btn-primary {
     background: var(--color-primary);
-    color: #000;
-    /* Black text on neon green */
-    box-shadow: 0 0 15px rgba(0, 255, 157, 0.3);
+    color: #fff;
+    box-shadow: 0 4px 14px 0 rgba(16, 185, 129, 0.39);
+}
+
+[data-theme='light'] .btn-primary {
+    color: white;
+    /* Ensure text is white on the bright green in light mode */
 }
 
 .btn-primary:hover {
-    background: #00e68e;
     transform: translateY(-2px);
-    box-shadow: 0 0 25px rgba(0, 255, 157, 0.5);
+    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.23);
+    filter: brightness(1.1);
 }
 
 .btn-outline {
@@ -91,51 +97,40 @@ button {
 }
 
 .btn-outline:hover {
-    background: rgba(0, 255, 157, 0.1);
-    box-shadow: 0 0 15px rgba(0, 255, 157, 0.2);
+    background: rgba(16, 185, 129, 0.1);
 }
 
 .text-gradient {
-    background: linear-gradient(to right, var(--color-primary), var(--color-secondary));
+    background: var(--gradient-primary);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
 }
 
-/* Common Inputs for Dark Mode */
+/* Common Inputs */
 input,
 textarea,
 select {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: white;
+    background: var(--glass-bg);
+    border: var(--glass-border);
+    color: var(--color-text-main);
     padding: 0.75rem;
     border-radius: var(--radius-md);
     outline: none;
+    transition: all 0.3s ease;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: var(--color-text-dim);
 }
 
 input:focus,
 textarea:focus,
 select:focus {
     border-color: var(--color-primary);
-    box-shadow: 0 0 0 2px rgba(0, 255, 157, 0.2);
-}
-
-/* ==========================================
-   PREMIUM MODE ENHANCEMENTS
-   ========================================== */
-
-.premium-mode {
-    --glass-bg: rgba(15, 23, 42, 0.4);
-    --backdrop-blur: blur(25px);
-}
-
-.premium-mode body::before {
-    background:
-        radial-gradient(circle at 10% 20%, rgba(16, 185, 129, 0.12), transparent 35%),
-        radial-gradient(circle at 90% 80%, rgba(56, 189, 248, 0.12), transparent 35%),
-        radial-gradient(circle at 50% 50%, rgba(129, 140, 248, 0.05), transparent 50%);
-    animation: premium-pulse 8s ease-in-out infinite alternate;
+    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+    background: var(--color-bg-card);
 }
 
 @keyframes premium-pulse {

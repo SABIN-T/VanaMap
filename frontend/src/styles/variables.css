@@ -1,5 +1,7 @@
 :root {
-  /* Neon Nature / Dark Mode Palette */
+  /* --- DARK MODE (DEFAULT) --- */
+
+  /* Core Palette */
   --primary-h: 153;
   --primary-s: 100%;
   --primary-l: 50%;
@@ -8,25 +10,32 @@
   --secondary-s: 100%;
   --secondary-l: 50%;
 
-  /* Core Colors */
   --color-primary: hsl(var(--primary-h), var(--primary-s), var(--primary-l));
   --color-secondary: hsl(var(--secondary-h), var(--secondary-s), var(--secondary-l));
   --gradient-primary: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
 
-  /* Backgrounds */
-  --color-bg-main: #020907;
-  /* Almost Black */
+  /* Backgrounds & Surfaces */
+  --color-bg-main: #0f172a;
+  /* Deep Slate default */
   --color-bg-card: #0a1f18;
   /* Dark Green Tint */
-  --color-text-main: #e0e0e0;
-  --color-text-muted: #94a3b8;
+  --color-bg-alt: #1e293b;
 
-  /* Glassmorphism */
-  --glass-bg: rgba(255, 255, 255, 0.03);
-  /* Very subtle for dark mode */
+  /* Text */
+  --color-text-main: #f8fafc;
+  --color-text-dim: #94a3b8;
+  --color-text-muted: #64748b;
+  --color-border: rgba(255, 255, 255, 0.1);
+
+  /* Glassmorphism (Dark) */
+  --glass-bg: rgba(15, 23, 42, 0.6);
   --glass-border: 1px solid rgba(255, 255, 255, 0.08);
   --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-  --backdrop-blur: blur(12px);
+  --backdrop-blur: blur(16px);
+
+  /* Background Orbs (Dark) */
+  --bg-orb-1: rgba(16, 185, 129, 0.08);
+  --bg-orb-2: rgba(56, 189, 248, 0.08);
 
   /* Spacing & Utilities */
   --radius-md: 0.75rem;
@@ -35,11 +44,46 @@
   --font-main: 'Inter', system-ui, -apple-system, sans-serif;
   --font-heading: 'Outfit', sans-serif;
 }
+
+/* --- PREMIUM LIGHT MODE --- */
 :root[data-theme='light'] {
-  --color-bg-main: #f0fdf4;
-  --color-bg-card: #ffffff;
-  --color-text-main: #1f2937;
-  --primary-l: 40%;
-  --glass-bg: rgba(255, 255, 255, 0.7);
-  --glass-border: 1px solid rgba(0,0,0, 0.05);
+  /* Refined Palette for Light Mode */
+  --primary-l: 45%;
+  /* Slightly darker for contrast against white */
+  --color-primary: #059669;
+  /* Sharp Emerald */
+  --color-secondary: #0284c7;
+  /* Sky Blue */
+  --gradient-primary: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+
+  /* Backgrounds */
+  --color-bg-main: #f8fafc;
+  /* Slate 50 - Premium White */
+  --color-bg-alt: #f1f5f9;
+  --color-bg-card: rgba(255, 255, 255, 0.85);
+
+  /* Text */
+  --color-text-main: #0f172a;
+  /* Slate 900 - Sharp Black */
+  --color-text-dim: #475569;
+  /* Slate 600 */
+  --color-text-muted: #94a3b8;
+  --color-border: rgba(203, 213, 225, 0.6);
+
+  /* Premium Glass (Light) */
+  --glass-bg: rgba(255, 255, 255, 0.75);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.8);
+  --glass-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.02),
+    0 2px 4px -1px rgba(0, 0, 0, 0.02),
+    0 0 0 1px rgba(0, 0, 0, 0.02);
+  /* Crisp outline */
+  --backdrop-blur: blur(24px);
+  /* Heavier blur for frosting */
+
+  /* Background Orbs (Light - Soft Pastels) */
+  --bg-orb-1: rgba(52, 211, 153, 0.15);
+  /* Soft Emerald */
+  --bg-orb-2: rgba(56, 189, 248, 0.15);
+  /* Soft Sky */
 }

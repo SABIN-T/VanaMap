@@ -33,14 +33,17 @@ export const MobileTabBar = () => {
             left: 0,
             width: '100%',
             height: '75px',
-            background: '#0a0f1e', // Matches the image's deep navy
-            borderTop: '1px solid rgba(255,255,255,0.05)',
+            background: 'var(--glass-bg)',
+            backdropFilter: 'var(--backdrop-blur)',
+            WebkitBackdropFilter: 'var(--backdrop-blur)',
+            borderTop: 'var(--glass-border)',
             display: 'grid',
             gridTemplateColumns: `repeat(5, 1fr)`,
             alignItems: 'center',
             paddingBottom: 'env(safe-area-inset-bottom)',
-            zIndex: 10000, // Higher than modal
-            boxShadow: '0 -4px 20px rgba(0,0,0,0.5)'
+            zIndex: 10000,
+            boxShadow: '0 -4px 20px rgba(0,0,0,0.1)',
+            transition: 'all 0.3s ease'
         }}>
             {tabs.map((tab) => (
                 <Link
@@ -52,7 +55,7 @@ export const MobileTabBar = () => {
                         alignItems: 'center',
                         justifyContent: 'center',
                         textDecoration: 'none',
-                        color: isActive(tab.path) ? '#10b981' : '#94a3b8',
+                        color: isActive(tab.path) ? 'var(--color-primary)' : 'var(--color-text-dim)',
                         transition: 'all 0.2s ease',
                         gap: '4px'
                     }}
@@ -65,7 +68,7 @@ export const MobileTabBar = () => {
                                 top: -4,
                                 right: -10,
                                 background: '#ef4444',
-                                color: 'white',
+                                color: '#fff',
                                 fontSize: '0.65rem',
                                 fontWeight: 'bold',
                                 minWidth: '16px',
@@ -74,7 +77,7 @@ export const MobileTabBar = () => {
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                border: '2px solid #0a0f1e'
+                                border: '2px solid var(--color-bg-main)'
                             }}>
                                 {tab.badge}
                             </span>

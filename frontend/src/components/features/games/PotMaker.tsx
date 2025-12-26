@@ -172,18 +172,7 @@ export const PotMaker = ({ onBack }: PotMakerProps) => {
     const [zoom, setZoom] = useState(1);
     const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
     const [saving, setSaving] = useState(false);
-    const [autoSaveOn, setAutoSaveOn] = useState(true);
 
-    useEffect(() => {
-        const fetchSettings = async () => {
-            try {
-                const res = await fetch(`${API_URL}/settings/pot_save_on_buy`);
-                const data = await res.json();
-                if (data.key) setAutoSaveOn(data.value);
-            } catch (e) { console.error(e); }
-        };
-        fetchSettings();
-    }, []);
 
     // 3D Texture Transforms
     const [texScale, setTexScale] = useState(1);
