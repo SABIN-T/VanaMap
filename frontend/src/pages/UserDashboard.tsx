@@ -10,17 +10,22 @@ import toast from 'react-hot-toast';
 import styles from './UserDashboard.module.css';
 
 export const UserDashboard = () => {
-    const { user, changePassword, registerVendor } = useAuth();
-    const { items, favorites: favoritePlants, toggleFavorite } = useCart();
+    const { user, login } = useAuth(); // Removed invalid props
+    const { items, favorites: contextFavorites, toggleFavorite } = useCart(); // Renamed to avoid collision
     const navigate = useNavigate();
 
     const [pwdForm, setPwdForm] = useState({ old: '', new: '', confirm: '' });
     const [showPasswordModal, setShowPasswordModal] = useState(false);
     const [showGuide, setShowGuide] = useState(false);
+
+    // Favorites & Data State
+    const [allPlants, setAllPlants] = useState<Plant[]>([]);
     const [loadingFavs, setLoadingFavs] = useState(false);
+    const [loading, setLoading] = useState(false); // Local loading state
 
     // Vendor Onboarding State
     const [showVendorModal, setShowVendorModal] = useState(false);
+    const [myVendor, setMyVendor] = useState<Vendor | null>(null); // Restored
     const [vendorForm, setVendorForm] = useState<{ name: string, phone: string, address: string, latitude: number | null, longitude: number | null }>({
         name: '', phone: '', address: '', latitude: null, longitude: null
     });
@@ -139,20 +144,7 @@ export const UserDashboard = () => {
         toggleFavorite(plantId); // Context handles optimistic update & API
     };
 
-    // Gamification Notice State
-    const [showGamificationNotice, setShowGamificationNotice] = useState(false);
-
-    useEffect(() => {
-        const hasSeenNotice = localStorage.getItem('hide_gamification_notice');
-        if (!hasSeenNotice) {
-            setShowGamificationNotice(true);
-        }
-    }, []);
-
-    const dismissNotice = () => {
-        setShowGamificationNotice(false);
-        localStorage.setItem('hide_gamification_notice', 'true');
-    };
+    // Gamification Logic - Always Active
 
     const handlePasswordChange = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -193,52 +185,48 @@ export const UserDashboard = () => {
 
     return (
         <div className={styles.container}>
-            {/* GAMIFICATION NOTICE BANNER */}
-            {showGamificationNotice && (
-                <div style={{
-                    marginBottom: '1.5rem',
-                    background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(56, 189, 248, 0.15) 100%)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    borderRadius: '1rem',
-                    padding: '1.25rem',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '0.75rem',
-                    position: 'relative',
-                    animation: 'slideDown 0.4s ease-out'
-                }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-                            <div style={{ background: '#facc15', padding: '0.4rem', borderRadius: '50%', color: 'black' }}>
-                                <Trophy size={18} />
-                            </div>
-                            <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 700 }}>Grow Your Impact!</h3>
+            {/* GAMIFICATION NOTICE BANNER - PERMANENT */}
+            <div style={{
+                marginBottom: '1.5rem',
+                background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(56, 189, 248, 0.15) 100%)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                borderRadius: '1rem',
+                padding: '1.25rem',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.75rem',
+                position: 'relative',
+                animation: 'slideDown 0.4s ease-out'
+            }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                        <div style={{ background: '#facc15', padding: '0.4rem', borderRadius: '50%', color: 'black' }}>
+                            <Trophy size={18} />
                         </div>
-                        <button onClick={dismissNotice} style={{ background: 'transparent', border: 'none', color: 'var(--color-text-muted)', cursor: 'pointer', padding: '4px' }}>
-                            <span style={{ fontSize: '1.5rem', lineHeight: 0.5 }}>×</span>
-                        </button>
+                        <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 700 }}>Grow Your Impact!</h3>
                     </div>
-
-                    <p style={{ margin: 0, fontSize: '0.9rem', color: '#cbd5e1', lineHeight: '1.5' }}>
-                        Welcome back! Here is how your stats work:
-                        <br />
-                        <span style={{ color: '#facc15' }}>• Points:</span> Earned by visiting & collecting plants.
-                        <br />
-                        <span style={{ color: '#38bdf8' }}>• Ranking:</span> Increases automatically as you gain points.
-                        <br />
-                        <span style={{ color: '#10b981' }}>• Oxygen:</span> Directly tied to the "Air Purifying" efficiency of your plant collection.
-                    </p>
-
-                    <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => setShowGuide(true)}
-                        style={{ alignSelf: 'flex-start', fontSize: '0.8rem', borderColor: 'rgba(255,255,255,0.2)' }}
-                    >
-                        View Full Level-Up Guide <ArrowRight size={14} style={{ marginLeft: '4px' }} />
-                    </Button>
+                    {/* Close button removed for permanent display */}
                 </div>
-            )}
+
+                <p style={{ margin: 0, fontSize: '0.9rem', color: '#cbd5e1', lineHeight: '1.5' }}>
+                    Welcome back! Here is how your stats work:
+                    <br />
+                    <span style={{ color: '#facc15' }}>• Points:</span> Earned by visiting & collecting plants.
+                    <br />
+                    <span style={{ color: '#38bdf8' }}>• Ranking:</span> Increases automatically as you gain points.
+                    <br />
+                    <span style={{ color: '#10b981' }}>• Oxygen:</span> Directly tied to the "Air Purifying" efficiency of your plant collection.
+                </p>
+
+                <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => setShowGuide(true)}
+                    style={{ alignSelf: 'flex-start', fontSize: '0.8rem', borderColor: 'rgba(255,255,255,0.2)' }}
+                >
+                    View Full Level-Up Guide <ArrowRight size={14} style={{ marginLeft: '4px' }} />
+                </Button>
+            </div>
 
             {/* VENDOR ONBOARDING MODAL */}
             {showVendorModal && (
