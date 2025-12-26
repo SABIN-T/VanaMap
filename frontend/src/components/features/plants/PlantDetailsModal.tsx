@@ -1,4 +1,4 @@
-import { X, Sun, Wind, Droplet, Leaf, Lightbulb, Fan, AlertTriangle, Sparkles, Stethoscope, BookOpen, GraduationCap } from 'lucide-react';
+import { X, Sun, Wind, Droplet, Leaf, Lightbulb, Fan, AlertTriangle, Sparkles, Stethoscope, BookOpen, GraduationCap, Hourglass } from 'lucide-react';
 import type { Plant } from '../../../types';
 import styles from './PlantDetailsModal.module.css';
 import { useState, useMemo, useEffect } from 'react';
@@ -356,6 +356,13 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                                             <div className={styles.statText}>
                                                 <span className={styles.statLabel}>Water</span>
                                                 <span className={styles.statValue}>Weekly</span>
+                                            </div>
+                                        </div>
+                                        <div className={styles.statItem}>
+                                            <div className={styles.statIcon}><Hourglass className="text-pink-400" /></div>
+                                            <div className={styles.statText}>
+                                                <span className={styles.statLabel}>Life Exp.</span>
+                                                <span className={styles.statValue}>{plant.lifespan || '3-5 Years'}</span>
                                             </div>
                                         </div>
                                     </div>

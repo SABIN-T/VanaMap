@@ -923,7 +923,7 @@
 
 .statsRow {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(3, 1fr);
     gap: 1.5rem;
     margin-top: 2rem;
 }
@@ -951,12 +951,17 @@
 .statText {
     display: flex;
     flex-direction: column;
+    min-width: 0;
+    /* Enable truncation in flex child */
 }
 
 .statLabel {
     font-size: 0.75rem;
     color: #94a3b8;
     margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .statValue {
