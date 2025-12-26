@@ -1,5 +1,5 @@
 import type { Plant } from '../../../types';
-import { Heart, Sun, Wind, ShoppingBag, AlertCircle } from 'lucide-react';
+import { Heart, Sun, Wind, ShoppingBag, AlertCircle, Clock } from 'lucide-react';
 import styles from './PlantCard.module.css';
 import { useAuth } from '../../../context/AuthContext';
 import toast from 'react-hot-toast';
@@ -150,6 +150,11 @@ export const PlantCard = ({ plant, score, isTopMatch, priority = false, onAdd, s
                     <div className={styles.specItem}>
                         <Wind size={14} className="text-blue-400" /> {plant.oxygenLevel} O₂
                     </div>
+                    {plant.lifespan && plant.lifespan !== 'Unknown' && (
+                        <div className={styles.specItem}>
+                            <Clock size={14} className="text-emerald-400" /> {plant.lifespan}
+                        </div>
+                    )}
                 </div>
 
                 {/* Shop Action - Premium UI */}

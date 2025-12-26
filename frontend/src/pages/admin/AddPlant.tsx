@@ -85,7 +85,8 @@ export const AddPlant = () => {
         leafShape: '',
         stemStructure: '',
         overallHabit: '',
-        biometricFeatures: []
+        biometricFeatures: [],
+        lifespan: ''
     });
 
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -162,7 +163,8 @@ export const AddPlant = () => {
                 leafShape: newPlant.leafShape,
                 stemStructure: newPlant.stemStructure,
                 overallHabit: newPlant.overallHabit,
-                biometricFeatures: newPlant.biometricFeatures || []
+                biometricFeatures: newPlant.biometricFeatures || [],
+                lifespan: newPlant.lifespan || 'Unknown'
             };
             await addPlant(plantData);
             toast.success("Specimen Registered", { id: tid });
@@ -173,7 +175,7 @@ export const AddPlant = () => {
                 type: 'indoor', sunlight: 'medium', description: '',
                 idealTempMin: 18, idealTempMax: 30, minHumidity: 40,
                 oxygenLevel: 'high', medicinalValues: [], advantages: [],
-                foliageTexture: '', leafShape: '', stemStructure: '', overallHabit: '', biometricFeatures: []
+                foliageTexture: '', leafShape: '', stemStructure: '', overallHabit: '', biometricFeatures: [], lifespan: ''
             });
             setScientificNameSearch('');
         } catch (err) {
@@ -305,14 +307,25 @@ export const AddPlant = () => {
                                         />
                                     </div>
                                 </div>
-                                <div className={styles.inputGroup}>
-                                    <label className={styles.label}>Description</label>
-                                    <textarea
-                                        value={newPlant.description}
-                                        onChange={(e) => setNewPlant({ ...newPlant, description: e.target.value })}
-                                        className={styles.glassTextarea}
-                                        placeholder="Describe the plant's origin, care needs, and unique features..."
-                                    />
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                                    <div className={styles.inputGroup}>
+                                        <label className={styles.label}>Description</label>
+                                        <textarea
+                                            value={newPlant.description}
+                                            onChange={(e) => setNewPlant({ ...newPlant, description: e.target.value })}
+                                            className={styles.glassTextarea}
+                                            placeholder="Describe the plant's origin, care needs, and unique features..."
+                                        />
+                                    </div>
+                                    <div className={styles.inputGroup}>
+                                        <label className={styles.label}>Expected Lifespan</label>
+                                        <input
+                                            value={newPlant.lifespan}
+                                            onChange={(e) => setNewPlant({ ...newPlant, lifespan: e.target.value })}
+                                            className={styles.glassInput}
+                                            placeholder="e.g. Perennial (10+ Years), Annual"
+                                        />
+                                    </div>
                                 </div>
                             </div>
 
@@ -456,7 +469,7 @@ export const AddPlant = () => {
                         </form>
                     </div>
 
-                </div>
+                </div >
             </div >
         </AdminLayout >
     );

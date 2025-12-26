@@ -1,4368 +1,3106 @@
-// Comprehensive Real-World Plant Database
-// Dictionary of Validated Species with accurate biometric and horticultural data.
-
+// Extended Plant Data Module
 const indoorPlants = [
     {
-        "id": "p_in_01",
+        "id": "p_in_100",
         "name": "Snake Plant",
-        "scientificName": "Dracaena trifasciata",
-        "description": "Architectural succulent with stiff, upright, sword-like leaves. Extremely tolerant of low light and irregular watering.",
-        "imageUrl": "https://images.unsplash.com/photo-1593482886870-9202a88e2c40",
-        "idealTempMin": 15,
-        "idealTempMax": 29,
-        "minHumidity": 30,
-        "sunlight": "low",
-        "oxygenLevel": "very-high",
-        "medicinalValues": [
-            "Air Purification (Benzene/Formaldehyde)",
-            "Nighttime Oxygen Release"
-        ],
-        "advantages": [
-            "Drought Tolerant",
-            "Indestructible"
-        ],
-        "price": 25,
-        "type": "indoor",
-        "foliageTexture": "Waxy/Smooth",
-        "leafShape": "Linear/Lanceolate",
-        "stemStructure": "Rhizomatous",
-        "overallHabit": "Upright/Rosette",
-        "biometricFeatures": [
-            "Horizontal Banding",
-            "Sharp Apex"
-        ]
-    },
-    {
-        "id": "p_in_02",
-        "name": "Monstera Deliciosa",
-        "scientificName": "Monstera deliciosa",
-        "description": "Iconic tropical climber known for its large, perforated (fenestrated) leaves.",
-        "imageUrl": "https://images.unsplash.com/photo-1614594975525-e45190c55d0b",
-        "idealTempMin": 18,
-        "idealTempMax": 30,
-        "minHumidity": 60,
-        "sunlight": "medium",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Fast Climber",
-            "Statement Foliage"
-        ],
-        "price": 45,
-        "type": "indoor",
-        "foliageTexture": "Glossy/Coriaceous",
-        "leafShape": "Cordate (Fenestrated)",
-        "stemStructure": "Vining/Aerial Roots",
-        "overallHabit": "Climbing/Spreading",
-        "biometricFeatures": [
-            "Natural Leaf Holes",
-            "Thick Aerial Roots"
-        ]
-    },
-    {
-        "id": "p_in_03",
-        "name": "Fiddle Leaf Fig",
-        "scientificName": "Ficus lyrata",
-        "description": "Tall indoor tree with very large, heavily veined, violin-shaped leaves.",
-        "imageUrl": "https://images.unsplash.com/photo-1597054232360-1e5b85e05a5a",
-        "idealTempMin": 16,
-        "idealTempMax": 24,
-        "minHumidity": 50,
-        "sunlight": "high",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Dramatic Height",
-            "Structural"
-        ],
-        "price": 80,
-        "type": "indoor",
-        "foliageTexture": "Leathery/Veined",
-        "leafShape": "Pandurate (Violin-shaped)",
-        "stemStructure": "Woody Trunk",
-        "overallHabit": "Tree-like/Upright",
-        "biometricFeatures": [
-            "Prominent Venation",
-            "Large Leaf Surface"
-        ]
-    },
-    {
-        "id": "p_in_04",
-        "name": "Peace Lily",
-        "scientificName": "Spathiphyllum wallisii",
-        "description": "Bushy plant with dark green leaves and distinctive white spathe flowers.",
-        "imageUrl": "https://images.unsplash.com/photo-1593691509543-c55ce32e01b5",
-        "idealTempMin": 18,
-        "idealTempMax": 26,
-        "minHumidity": 60,
-        "sunlight": "low",
-        "oxygenLevel": "very-high",
-        "medicinalValues": [
-            "Mold Spore Removal",
-            "Air Cleaning"
-        ],
-        "advantages": [
-            "Visual Thirst Indicator",
-            "Low Light Bloomer"
-        ],
-        "price": 30,
-        "type": "indoor",
-        "foliageTexture": "Glossy/Ribbed",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Rhizomatous",
-        "overallHabit": "Clumping",
-        "biometricFeatures": [
-            "White Spathe",
-            "Drooping when dry"
-        ]
-    },
-    {
-        "id": "p_in_05",
-        "name": "Golden Pothos",
-        "scientificName": "Epipremnum aureum",
-        "description": "Hardy vine with heart-shaped green leaves splashed with yellow variegation.",
-        "imageUrl": "https://images.unsplash.com/photo-1598512140411-dc4a42b00511",
-        "idealTempMin": 15,
-        "idealTempMax": 29,
-        "minHumidity": 40,
-        "sunlight": "medium",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "VOC Removal"
-        ],
-        "advantages": [
-            "Fast Growing",
-            "Propagates Easily"
-        ],
-        "price": 15,
-        "type": "indoor",
-        "foliageTexture": "Smooth/Waxy",
-        "leafShape": "Cordate",
-        "stemStructure": "Vining",
-        "overallHabit": "Trailing/Climbing",
-        "biometricFeatures": [
-            "Yellow Variegation",
-            "Aerial Root Nubs"
-        ]
-    },
-    {
-        "id": "p_in_06",
-        "name": "ZZ Plant",
-        "scientificName": "Zamioculcas zamiifolia",
-        "description": "Prehistoric-looking plant with thick, fleshy stalks and glossy leaflets.",
-        "imageUrl": "https://images.unsplash.com/photo-1632207691143-643e2a9a9361",
-        "idealTempMin": 15,
-        "idealTempMax": 26,
-        "minHumidity": 30,
-        "sunlight": "low",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "Air Purification"
-        ],
-        "advantages": [
-            "Drought Resistant",
-            "Low Light"
-        ],
-        "price": 35,
-        "type": "indoor",
-        "foliageTexture": "High Gloss",
-        "leafShape": "Ovate/Pinnate",
-        "stemStructure": "Succulent Petioles",
-        "overallHabit": "Upright/Vase",
-        "biometricFeatures": [
-            "Bulbous Rhizomes",
-            "Reflective Surface"
-        ]
-    },
-    {
-        "id": "p_in_07",
-        "name": "Spider Plant",
-        "scientificName": "Chlorophytum comosum",
-        "description": "Rosette-forming plant that produces hanging 'babies' on long stems.",
-        "imageUrl": "https://images.unsplash.com/photo-1572688484279-a9e8f75ebe0c",
-        "idealTempMin": 13,
-        "idealTempMax": 27,
-        "minHumidity": 40,
-        "sunlight": "medium",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "Formaldehyde Removal"
-        ],
-        "advantages": [
-            "Pet Safe",
-            "Self-Propagating"
-        ],
-        "price": 20,
-        "type": "indoor",
-        "foliageTexture": "Smooth/Grass-like",
-        "leafShape": "Linear",
-        "stemStructure": "Stoloniferous",
-        "overallHabit": "Arching",
-        "biometricFeatures": [
-            "Central Stripe",
-            "Plantlets"
-        ]
-    },
-    {
-        "id": "p_in_08",
-        "name": "Rubber Plant",
-        "scientificName": "Ficus elastica",
-        "description": "Sturdy tree with thick, glossy, dark green or burgundy leaves.",
-        "imageUrl": "https://images.unsplash.com/photo-1596720512803-085e481b4986",
-        "idealTempMin": 15,
-        "idealTempMax": 28,
-        "minHumidity": 50,
-        "sunlight": "high",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "Toxin Removal"
-        ],
-        "advantages": [
-            "Rapid Growth",
-            "Bold Color"
-        ],
-        "price": 40,
-        "type": "indoor",
-        "foliageTexture": "Glossy/Thick",
-        "leafShape": "Elliptic/Oval",
-        "stemStructure": "Woody Single Stem",
-        "overallHabit": "Tree-like",
-        "biometricFeatures": [
-            "Red Sheath (Stipule)",
-            "White Sap"
-        ]
-    },
-    {
-        "id": "p_in_09",
-        "name": "Boston Fern",
-        "scientificName": "Nephrolepis exaltata",
-        "description": "Full, bushy fern with sword-shaped fronds that arch gracefully.",
-        "imageUrl": "https://images.unsplash.com/photo-1596720512534-72210887ee2c",
-        "idealTempMin": 15,
-        "idealTempMax": 25,
-        "minHumidity": 70,
-        "sunlight": "medium",
-        "oxygenLevel": "very-high",
-        "medicinalValues": [
-            "Air Humidification"
-        ],
-        "advantages": [
-            "Lush Texture",
-            "Non-Toxic"
-        ],
-        "price": 25,
-        "type": "indoor",
-        "foliageTexture": "Feathery/Soft",
-        "leafShape": "Pinnate Frond",
-        "stemStructure": "Rhizomatous",
-        "overallHabit": "Mounding/Arching",
-        "biometricFeatures": [
-            "Sori on underside",
-            "Dense Leaflets"
-        ]
-    },
-    {
-        "id": "p_in_10",
-        "name": "Aloe Vera",
-        "scientificName": "Aloe barbadensis miller",
-        "description": "Succulent known for the healing gel inside its fleshy, serrated leaves.",
-        "imageUrl": "https://images.unsplash.com/photo-1567331140054-3839d67562f8",
-        "idealTempMin": 13,
-        "idealTempMax": 27,
-        "minHumidity": 30,
-        "sunlight": "high",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "Burn Healing",
-            "Skin Care"
-        ],
-        "advantages": [
-            "Medicinal",
-            "Drought Tolerant"
-        ],
-        "price": 15,
-        "type": "indoor",
-        "foliageTexture": "Smooth/Fleshy",
-        "leafShape": "Lanceolate (Succulent)",
-        "stemStructure": "Rosette",
-        "overallHabit": "Clumping",
-        "biometricFeatures": [
-            "Serrated Margins",
-            "Internal Gel"
-        ]
-    },
-    {
-        "id": "p_in_11",
-        "name": "Chinese Evergreen",
-        "scientificName": "Aglaonema commutatum",
-        "description": "Durable plant with patterned leaves in silver, green, and red hues.",
-        "imageUrl": "https://images.unsplash.com/photo-1616690248278-450cb25b6a7a",
-        "idealTempMin": 16,
-        "idealTempMax": 24,
-        "minHumidity": 40,
-        "sunlight": "low",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "Air Purification"
-        ],
-        "advantages": [
-            "Low Light Color",
-            "Slow Growing"
-        ],
-        "price": 35,
-        "type": "indoor",
-        "foliageTexture": "Matte/Patterned",
-        "leafShape": "Elliptic",
-        "stemStructure": "Short/Cane-like",
-        "overallHabit": "Bushy",
-        "biometricFeatures": [
-            "Variegated Patterns",
-            "Sheathed Petioles"
-        ]
-    },
-    {
-        "id": "p_in_12",
-        "name": "Bird of Paradise",
-        "scientificName": "Strelitzia nicolai",
-        "description": "Large, tropical plant with banana-like leaves. brings a jungle feel.",
-        "imageUrl": "https://images.unsplash.com/photo-1549416878-b97f805a96d1",
-        "idealTempMin": 18,
-        "idealTempMax": 30,
-        "minHumidity": 55,
-        "sunlight": "high",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Huge Leaves",
-            "Verticality"
-        ],
-        "price": 65,
-        "type": "indoor",
-        "foliageTexture": "Leathery/Large",
-        "leafShape": "Oblong/Paddle",
-        "stemStructure": "Basal",
-        "overallHabit": "Upright/Arching",
-        "biometricFeatures": [
-            "Split Leaves (Wind)",
-            "Thick Petioles"
-        ]
-    },
-    {
-        "id": "p_in_13",
-        "name": "Cast Iron Plant",
-        "scientificName": "Aspidistra elatior",
-        "description": "Named for its ability to survive deep shade, neglect, and temperature fluctuation.",
-        "imageUrl": "https://images.unsplash.com/photo-1611211232932-da3113c5b960",
-        "idealTempMin": 7,
-        "idealTempMax": 29,
-        "minHumidity": 30,
-        "sunlight": "low",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Indestructible",
-            "Pet Safe"
-        ],
-        "price": 45,
-        "type": "indoor",
-        "foliageTexture": "Leathery/Ribbed",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Rhizomatous",
-        "overallHabit": "Clumping",
-        "biometricFeatures": [
-            "Dark Green",
-            "Long Petioles"
-        ]
-    },
-    {
-        "id": "p_in_14",
-        "name": "Majesty Palm",
-        "scientificName": "Ravenea rivularis",
-        "description": "A robust palm with long, arching green fronds. Loves water.",
-        "imageUrl": "https://images.unsplash.com/photo-1610415664157-548c783c6b24",
-        "idealTempMin": 15,
-        "idealTempMax": 27,
-        "minHumidity": 60,
-        "sunlight": "high",
-        "oxygenLevel": "very-high",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Tropical Look",
-            "Pet Safe"
-        ],
-        "price": 40,
-        "type": "indoor",
-        "foliageTexture": "Feathery",
-        "leafShape": "Pinnate",
-        "stemStructure": "Trunk-forming",
-        "overallHabit": "Upright/Vase",
-        "biometricFeatures": [
-            "Symmetrical Fronds",
-            "Thick Base"
-        ]
-    },
-    {
-        "id": "p_in_15",
-        "name": "Areca Palm",
-        "scientificName": "Dypsis lutescens",
-        "description": "Bamboo-like clustering palm with soft fronds.",
-        "imageUrl": "https://images.unsplash.com/photo-1628169225700-1d8f58b8d96d",
-        "idealTempMin": 16,
-        "idealTempMax": 24,
-        "minHumidity": 55,
-        "sunlight": "high",
-        "oxygenLevel": "very-high",
-        "medicinalValues": [
-            "Xylene Removal"
-        ],
-        "advantages": [
-            "Fine Texture",
-            "Privacy Screen"
-        ],
-        "price": 55,
-        "type": "indoor",
-        "foliageTexture": "Soft/Fine",
-        "leafShape": "Pinnate",
-        "stemStructure": "Clumping Canes",
-        "overallHabit": "Bushy",
-        "biometricFeatures": [
-            "Yellowish Stems",
-            "Multiple Trunks"
-        ]
-    },
-    {
-        "id": "p_in_16",
-        "name": "Prayer Plant",
-        "scientificName": "Maranta leuconeura",
-        "description": "Low-growing plant with striking patterned leaves that fold up at night.",
-        "imageUrl": "https://images.unsplash.com/photo-1616690248166-5f1181822819",
-        "idealTempMin": 18,
-        "idealTempMax": 27,
-        "minHumidity": 60,
-        "sunlight": "medium",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Active Movement",
-            "Pet Safe"
-        ],
-        "price": 25,
-        "type": "indoor",
-        "foliageTexture": "Velvety/Patterned",
-        "leafShape": "Elliptic/Oval",
-        "stemStructure": "Trailing",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Red Veins",
-            "Nyctinasty (Movement)"
-        ]
-    },
-    {
-        "id": "p_in_17",
-        "name": "String of Pearls",
-        "scientificName": "Senecio rowleyanus",
-        "description": "Trailing succulent with spherical, pea-like leaves.",
-        "imageUrl": "https://images.unsplash.com/photo-1589335668748-18e3290de004",
-        "idealTempMin": 10,
-        "idealTempMax": 27,
-        "minHumidity": 30,
-        "sunlight": "high",
-        "oxygenLevel": "low",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Unique Shape",
-            "Hanging Basket"
-        ],
-        "price": 20,
-        "type": "indoor",
-        "foliageTexture": "Smooth",
-        "leafShape": "Spherical",
-        "stemStructure": "Trailing",
-        "overallHabit": "Cascading",
-        "biometricFeatures": [
-            "Translucent 'Window'",
-            "Pea-like"
-        ]
-    },
-    {
-        "id": "p_in_18",
-        "name": "Jade Plant",
-        "scientificName": "Crassula ovata",
-        "description": "Long-lived succulent bonsai with thick woody stems and oval leaves.",
-        "imageUrl": "https://images.unsplash.com/photo-1509304388383-ed5808ce4913",
-        "idealTempMin": 10,
-        "idealTempMax": 29,
-        "minHumidity": 30,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "Symbol of Luck"
-        ],
-        "advantages": [
-            "Longevity",
-            "Easy Propagation"
-        ],
-        "price": 22,
-        "type": "indoor",
-        "foliageTexture": "Smooth/Fleshy",
-        "leafShape": "Obovate",
-        "stemStructure": "Woody/Succulent",
-        "overallHabit": "Tree-like",
-        "biometricFeatures": [
-            "Red Edges in Sun",
-            "Opposite Leaves"
-        ]
-    },
-    {
-        "id": "p_in_19",
-        "name": "Philodendron Brasil",
-        "scientificName": "Philodendron hederaceum",
-        "description": "Vining plant with heart-shaped leaves featuring a lime green center stripe.",
-        "imageUrl": "https://images.unsplash.com/photo-1612361734994-6d91cd4cb744",
-        "idealTempMin": 16,
-        "idealTempMax": 29,
-        "minHumidity": 40,
-        "sunlight": "medium",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Fast Growth",
-            "Easy Care"
-        ],
-        "price": 18,
-        "type": "indoor",
-        "foliageTexture": "Smooth/Glossy",
-        "leafShape": "Cordate",
-        "stemStructure": "Vining",
-        "overallHabit": "Trailing",
-        "biometricFeatures": [
-            "Central Lime Stripe",
-            "Pinkish Stipules"
-        ]
-    },
-    {
-        "id": "p_in_20",
-        "name": "Dumb Cane",
-        "scientificName": "Dieffenbachia seguine",
-        "description": "Lush plant with large, speckled, creamy-white and green leaves.",
-        "imageUrl": "https://images.unsplash.com/photo-1616690248278-450cb25b6a7a",
-        "idealTempMin": 16,
-        "idealTempMax": 27,
-        "minHumidity": 50,
-        "sunlight": "medium",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "None (Toxic Sap)"
-        ],
-        "advantages": [
-            "Showy Foliage",
-            "Air Purifying"
-        ],
-        "price": 30,
-        "type": "indoor",
-        "foliageTexture": "Matte/Smooth",
-        "leafShape": "Oblong/Ovate",
-        "stemStructure": "Cane-like",
-        "overallHabit": "Upright",
-        "biometricFeatures": [
-            "Speckled Patterns",
-            "Thick Stem"
-        ]
-    },
-    {
-        "id": "p_in_21",
-        "name": "Swiss Cheese Plant (Adansonii)",
-        "scientificName": "Monstera adansonii",
-        "description": "Vinining cousin of the Deliciosa, with many holes in smaller leaves.",
-        "imageUrl": "https://images.unsplash.com/photo-1596720512803-085e481b4986",
-        "idealTempMin": 18,
-        "idealTempMax": 29,
-        "minHumidity": 60,
-        "sunlight": "medium",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Textural",
-            "Climbing"
-        ],
-        "price": 25,
-        "type": "indoor",
-        "foliageTexture": "Textured/Thin",
-        "leafShape": "Ovate (Fenestrated)",
-        "stemStructure": "Vining",
-        "overallHabit": "Trailing/Climbing",
-        "biometricFeatures": [
-            "Fully Perforated",
-            "Rapid Runner"
-        ]
-    },
-    {
-        "id": "p_in_22",
-        "name": "Ponytail Palm",
-        "scientificName": "Beaucarnea recurvata",
-        "description": "Fun plant with a swollen, bulbous trunk base and curly, hair-like leaves.",
-        "imageUrl": "https://images.unsplash.com/photo-1612361734994-6d91cd4cb744",
-        "idealTempMin": 10,
-        "idealTempMax": 30,
-        "minHumidity": 30,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Water Storage (Caudex)",
-            "Non-Toxic"
-        ],
-        "price": 45,
-        "type": "indoor",
-        "foliageTexture": "Rough/Grass-like",
-        "leafShape": "Linear",
-        "stemStructure": "Caudiciform",
-        "overallHabit": "Tree-like",
-        "biometricFeatures": [
-            "Bulbous Base",
-            "Recurved Leaves"
-        ]
-    },
-    {
-        "id": "p_in_23",
-        "name": "Alocasia Polly",
-        "scientificName": "Alocasia amazonica",
-        "description": "Striking 'African Mask' plant with dark leaves and bold white veins.",
-        "imageUrl": "https://images.unsplash.com/photo-1601903673322-c35cb58bd61f",
-        "idealTempMin": 18,
-        "idealTempMax": 27,
-        "minHumidity": 70,
-        "sunlight": "medium",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Exotic",
-            "Sculptural"
-        ],
-        "price": 35,
-        "type": "indoor",
-        "foliageTexture": "Glossy/Leathery",
-        "leafShape": "Arrowhead/Sagittate",
-        "stemStructure": "Rhizomatous",
-        "overallHabit": "Upright",
-        "biometricFeatures": [
-            "Scalloped Edges",
-            "Contrasting Veins"
-        ]
-    },
-    {
-        "id": "p_in_24",
-        "name": "Croton",
-        "scientificName": "Codiaeum variegatum",
-        "description": "Shrub with thick leathery leaves in fiery colors of red, orange, and yellow.",
-        "imageUrl": "https://images.unsplash.com/photo-1616690248278-450cb25b6a7a",
-        "idealTempMin": 16,
-        "idealTempMax": 29,
-        "minHumidity": 60,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Vibrant Color",
-            "Tropical"
-        ],
-        "price": 25,
-        "type": "indoor",
-        "foliageTexture": "Leathery/Glossy",
-        "leafShape": "Varied (Lobed/Oval)",
-        "stemStructure": "Woody",
-        "overallHabit": "Bushy",
-        "biometricFeatures": [
-            "Multicolor Variegation",
-            "Stiff Leaves"
-        ]
-    },
-    {
-        "id": "p_in_25",
-        "name": "Calathea Orbifolia",
-        "scientificName": "Goeppertia orbifolia",
-        "description": "Features massive, round, silver-green striped leaves.",
-        "imageUrl": "https://images.unsplash.com/photo-1616690248166-5f1181822819",
-        "idealTempMin": 18,
-        "idealTempMax": 26,
+        "scientificName": "Sansevieria trifasciata",
+        "description": "Deduco vero qui ter speculum terebro desidero impedit thalassinus. Denique arceo apparatus arceo.",
+        "imageUrl": "https://images.unsplash.com/photo-3943247256?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 6,
+        "idealTempMax": 35,
         "minHumidity": 65,
         "sunlight": "low",
-        "oxygenLevel": "high",
+        "oxygenLevel": "low",
         "medicinalValues": [
-            "None"
+            "lighthearted",
+            "resource"
         ],
         "advantages": [
-            "Pet Safe",
-            "Designer Favorite"
+            "generative",
+            "methodologies"
         ],
-        "price": 50,
+        "price": 136,
         "type": "indoor",
-        "foliageTexture": "Smooth/Ribbed",
-        "leafShape": "Orbicular",
-        "stemStructure": "Rhizomatous",
-        "overallHabit": "Clumping",
-        "biometricFeatures": [
-            "Silver Stripes",
-            "Large Surface Area"
-        ]
-    },
-    {
-        "id": "p_in_50",
-        "name": "Bird's Nest Fern",
-        "scientificName": "Asplenium nidus",
-        "description": "Epiphytic fern with large, simple fronds resembling a bird's nest. Needs high humidity.",
-        "imageUrl": "https://images.unsplash.com/photo-1619898239324-406c8cb81561",
-        "idealTempMin": 15,
-        "idealTempMax": 27,
-        "minHumidity": 60,
-        "sunlight": "medium",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Pet Safe",
-            "Unique Form"
-        ],
-        "price": 25,
-        "type": "indoor",
-        "foliageTexture": "Glossiers/Waxy",
-        "leafShape": "Lanceolate (Entire)",
-        "stemStructure": "Rhizomatous",
-        "overallHabit": "Rosette",
-        "biometricFeatures": [
-            "Undulating Margins",
-            "Dark Midrib"
-        ]
-    },
-    {
-        "id": "p_in_51",
-        "name": "Pilea Peperomioides",
-        "scientificName": "Pilea peperomioides",
-        "description": "The 'Cinese Money Plant' has coin-shaped leaves on long petioles. Very popular.",
-        "imageUrl": "https://images.unsplash.com/photo-1628169225700-1d8f58b8d96d",
-        "idealTempMin": 10,
-        "idealTempMax": 30,
-        "minHumidity": 40,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Easy to Propagate",
-            "Fast Growth"
-        ],
-        "price": 15,
-        "type": "indoor",
-        "foliageTexture": "Smooth/Fleshy",
-        "leafShape": "Orbicular (Peltate)",
-        "stemStructure": "Succulent",
-        "overallHabit": "Upright/Clumping",
-        "biometricFeatures": [
-            "Peltate Leaf Attachment",
-            "Coin Shape"
-        ]
-    },
-    {
-        "id": "p_in_52",
-        "name": "Satin Pothos",
-        "scientificName": "Scindapsus pictus",
-        "description": "Vining plant with matte green leaves splashed with shimmering silver.",
-        "imageUrl": "https://images.unsplash.com/photo-1632207691143-643e2a9a9361",
-        "idealTempMin": 18,
-        "idealTempMax": 29,
-        "minHumidity": 50,
-        "sunlight": "medium",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "Remove Formaldehyde"
-        ],
-        "advantages": [
-            "Silver Variegation",
-            "Drought Tolerant"
-        ],
-        "price": 20,
-        "type": "indoor",
-        "foliageTexture": "Matte/Velvety",
-        "leafShape": "Cordate (Asymmetric)",
-        "stemStructure": "Vining",
-        "overallHabit": "Trailing",
-        "biometricFeatures": [
-            "Silver Blotch Patterns",
-            "Curled tips when dry"
-        ]
-    },
-    {
-        "id": "p_in_53",
-        "name": "Parlor Palm",
-        "scientificName": "Chamaedorea elegans",
-        "description": "Compact palm that has been a houseplant staple since the Victorian era.",
-        "imageUrl": "https://images.unsplash.com/photo-1610415664157-548c783c6b24",
-        "idealTempMin": 18,
-        "idealTempMax": 27,
-        "minHumidity": 50,
-        "sunlight": "low",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "Benzene Removal"
-        ],
-        "advantages": [
-            "Pet Safe",
-            "Low Light Tolerant"
-        ],
-        "price": 15,
-        "type": "indoor",
-        "foliageTexture": "Feathery",
-        "leafShape": "Pinnate",
-        "stemStructure": "Single Stem (clustered)",
+        "lifespan": "10-25 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
         "overallHabit": "Upright/Bushy",
         "biometricFeatures": [
-            "Thin Leaflets",
-            "Ringed Stems (Old)"
+            "Interior Adapted",
+            "Smooth Edges"
         ]
     },
     {
-        "id": "p_in_54",
-        "name": "Umbrella Tree",
-        "scientificName": "Schefflera arboricola",
-        "description": "Fast-growing shrub with whorls of glossy green leaves resembling an umbrella.",
-        "imageUrl": "https://images.unsplash.com/photo-1597054232360-1e5b85e05a5a",
-        "idealTempMin": 15,
-        "idealTempMax": 24,
-        "minHumidity": 40,
-        "sunlight": "medium",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Tough",
-            "Can be Braided"
-        ],
-        "price": 35,
-        "type": "indoor",
-        "foliageTexture": "Glossy/Leathery",
-        "leafShape": "Palmate (Compound)",
-        "stemStructure": "Woody",
-        "overallHabit": "Tree/Shrub",
-        "biometricFeatures": [
-            "7-9 Leaflets per stalk",
-            "Whorled Arrangement"
-        ]
-    },
-    {
-        "id": "p_in_55",
-        "name": "Nerve Plant",
-        "scientificName": "Fittonia albivenis",
-        "description": "Low-growing creeper with intricate white, pink, or red veins. Needs high humidity.",
-        "imageUrl": "https://images.unsplash.com/photo-1628169225700-1d8f58b8d96d",
-        "idealTempMin": 18,
-        "idealTempMax": 26,
-        "minHumidity": 70,
-        "sunlight": "low",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Terrarium Plant",
-            "Colorful"
-        ],
-        "price": 10,
-        "type": "indoor",
-        "foliageTexture": "Papery/Soft",
-        "leafShape": "Ovate",
-        "stemStructure": "Creeping",
-        "overallHabit": "Mat-forming",
-        "biometricFeatures": [
-            "Contrasting Veins",
-            "Dramatic Wilting"
-        ]
-    },
-    {
-        "id": "p_in_56",
-        "name": "Elephant Ear",
-        "scientificName": "Alocasia macrorrhizos",
-        "description": "Giant upright leaves shaped like arrows or hearts.",
-        "imageUrl": "https://images.unsplash.com/photo-1601903673322-c35cb58bd61f",
-        "idealTempMin": 15,
-        "idealTempMax": 30,
-        "minHumidity": 60,
-        "sunlight": "high",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "Traditional Medicine (Rhizome)"
-        ],
-        "advantages": [
-            "Statement Size",
-            "Tropical"
-        ],
-        "price": 60,
-        "type": "indoor",
-        "foliageTexture": "Glossy/Thick",
-        "leafShape": "Sagittate (Arrow)",
-        "stemStructure": "Rhizomatous",
-        "overallHabit": "Upright",
-        "biometricFeatures": [
-            "Upwards pointing leaves",
-            "Thick Trunk"
-        ]
-    },
-    {
-        "id": "p_in_57",
-        "name": "Begonia Maculata",
-        "scientificName": "Begonia maculata",
-        "description": "Polka Dot Begonia with angel-wing shaped leaves and red undersides.",
-        "imageUrl": "https://images.unsplash.com/photo-1616690248278-450cb25b6a7a",
-        "idealTempMin": 18,
-        "idealTempMax": 22,
-        "minHumidity": 50,
-        "sunlight": "medium",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Unique Pattern",
-            "Flowering"
-        ],
-        "price": 30,
-        "type": "indoor",
-        "foliageTexture": "Smooth/Spotted",
-        "leafShape": "Asymmetric (Angel Wing)",
-        "stemStructure": "Cane-like",
-        "overallHabit": "Upright",
-        "biometricFeatures": [
-            "Silver Dots",
-            "Deep Red Underside"
-        ]
-    },
-    {
-        "id": "p_in_58",
-        "name": "Air Plant",
-        "scientificName": "Tillandsia ionantha",
-        "description": "Epiphytes that absorb water and nutrients through their leaves, needing no soil.",
-        "imageUrl": "https://images.unsplash.com/photo-1596720512803-085e481b4986",
+        "id": "p_in_101",
+        "name": "Peace Lily",
+        "scientificName": "Spathiphyllum wallisii",
+        "description": "Sumptus cerno cum corrigo territo amicitia venustas quas vado demo. Degero trans minus.",
+        "imageUrl": "https://images.unsplash.com/photo-4512817408?auto=format&fit=crop&w=800&q=80",
         "idealTempMin": 10,
-        "idealTempMax": 32,
-        "minHumidity": 50,
-        "sunlight": "high",
-        "oxygenLevel": "low",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Soil-free",
-            "Mountable anywhere"
-        ],
-        "price": 8,
-        "type": "indoor",
-        "foliageTexture": "Fuzzy (Trichomes)",
-        "leafShape": "Linear/Tapered",
-        "stemStructure": "Reduced/Acauiescent",
-        "overallHabit": "Rosette",
-        "biometricFeatures": [
-            "Silver Trichomes",
-            "Red blush on bloom"
-        ]
-    },
-    {
-        "id": "p_in_60",
-        "name": "Money Tree",
-        "scientificName": "Pachira aquatica",
-        "description": "Braided trunk tree with palm-like leaves, believed to bring financial luck.",
-        "imageUrl": "https://images.unsplash.com/photo-1610415664157-548c783c6b24",
-        "idealTempMin": 16,
-        "idealTempMax": 25,
-        "minHumidity": 50,
+        "idealTempMax": 28,
+        "minHumidity": 56,
         "sunlight": "medium",
         "oxygenLevel": "high",
         "medicinalValues": [
-            "None"
+            "lovable",
+            "deed"
         ],
         "advantages": [
-            "Good Luck Symbol",
-            "Pet Safe"
+            "user-centric",
+            "blockchains"
         ],
-        "price": 45,
+        "price": 49,
         "type": "indoor",
-        "foliageTexture": "Glossy/Thin",
-        "leafShape": "Palmate (Compound)",
-        "stemStructure": "Woody (Braided)",
-        "overallHabit": "Tree",
+        "lifespan": "3-5 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
         "biometricFeatures": [
-            "5-7 Leaflets",
-            "Swollen Base"
+            "Interior Adapted",
+            "Smooth Edges"
         ]
     },
     {
-        "id": "p_in_61",
-        "name": "African Violet",
-        "scientificName": "Saintpaulia ionantha",
-        "description": "Compact fuzzy plant that blooms largely year-round in purple, pink, or white.",
-        "imageUrl": "https://images.unsplash.com/photo-1563217684-28b9d2423e80",
-        "idealTempMin": 18,
-        "idealTempMax": 24,
-        "minHumidity": 50,
-        "sunlight": "medium",
+        "id": "p_in_102",
+        "name": "Spider Plant",
+        "scientificName": "Chlorophytum comosum",
+        "description": "Cupio conventus undique facilis termes avaritia tondeo tredecim ipsa terminatio. Viduo synagoga ipsa vir nesciunt.",
+        "imageUrl": "https://images.unsplash.com/photo-3906339706?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 13,
+        "idealTempMax": 29,
+        "minHumidity": 68,
+        "sunlight": "high",
         "oxygenLevel": "low",
         "medicinalValues": [
-            "None"
+            "easy",
+            "veto"
         ],
         "advantages": [
-            "Continuous Color",
-            "Small Size"
+            "revolutionary",
+            "partnerships"
         ],
-        "price": 12,
+        "price": 133,
         "type": "indoor",
-        "foliageTexture": "Pubescent (Hairy)",
-        "leafShape": "Orbicular/Cordate",
-        "stemStructure": "Short/Rosette",
-        "overallHabit": "Clumping",
+        "lifespan": "20-50 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
         "biometricFeatures": [
-            "Fuzzy Leaves",
-            "Fleshy Petioles"
+            "Interior Adapted",
+            "Smooth Edges"
         ]
     },
     {
-        "id": "p_in_62",
-        "name": "Lucky Bamboo",
-        "scientificName": "Dracaena sanderiana",
-        "description": "Water-grown stalks often twisted into spiral shapes. Feng Shui staple.",
-        "imageUrl": "https://images.unsplash.com/photo-1596720512803-085e481b4986",
-        "idealTempMin": 15,
-        "idealTempMax": 30,
-        "minHumidity": 30,
-        "sunlight": "low",
-        "oxygenLevel": "moderate",
+        "id": "p_in_103",
+        "name": "Fiddle Leaf Fig",
+        "scientificName": "Ficus lyrata",
+        "description": "Deripio agnosco bellum admiratio. Cum commodo tribuo articulus derideo abutor suasoria nobis pauper curvo.",
+        "imageUrl": "https://images.unsplash.com/photo-8161000003?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 8,
+        "idealTempMax": 25,
+        "minHumidity": 79,
+        "sunlight": "high",
+        "oxygenLevel": "low",
         "medicinalValues": [
-            "None"
+            "beneficial",
+            "steeple"
         ],
         "advantages": [
-            "Water Culture",
-            "Symbolic"
+            "AI-driven",
+            "experiences"
         ],
-        "price": 10,
+        "price": 56,
         "type": "indoor",
-        "foliageTexture": "Smooth",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Segmented Cane",
-        "overallHabit": "Upright",
+        "lifespan": "25-50 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
         "biometricFeatures": [
-            "Yellow/Green Striping",
-            "Nodes"
+            "Interior Adapted",
+            "Smooth Edges"
         ]
     },
     {
-        "id": "p_in_63",
-        "name": "String of Hearts",
-        "scientificName": "Ceropegia woodii",
-        "description": "Delicate vine with heart-shaped, mottled leaves. Produces distinctive tubers.",
-        "imageUrl": "https://images.unsplash.com/photo-1632207691143-643e2a9a9361",
-        "idealTempMin": 15,
-        "idealTempMax": 27,
-        "minHumidity": 40,
+        "id": "p_in_104",
+        "name": "Aloe Vera",
+        "scientificName": "Aloe barbadensis miller",
+        "description": "Cur adsidue unus versus cunae vulgaris villa conscendo tergeo. Nesciunt comedo tamisium charisma agnitio deprecator ducimus quo.",
+        "imageUrl": "https://images.unsplash.com/photo-4695193367?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 11,
+        "idealTempMax": 30,
+        "minHumidity": 64,
+        "sunlight": "high",
+        "oxygenLevel": "low",
+        "medicinalValues": [
+            "puny",
+            "affiliate"
+        ],
+        "advantages": [
+            "customized",
+            "blockchains"
+        ],
+        "price": 95,
+        "type": "indoor",
+        "lifespan": "5-20 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_105",
+        "name": "Rubber Plant",
+        "scientificName": "Ficus elastica",
+        "description": "Custodia tondeo solvo debitis cursim. Cetera cohors venustas curso delicate cubo cubitum acceptus.",
+        "imageUrl": "https://images.unsplash.com/photo-3489733833?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 9,
+        "idealTempMax": 28,
+        "minHumidity": 73,
         "sunlight": "high",
         "oxygenLevel": "moderate",
         "medicinalValues": [
-            "None"
+            "courageous",
+            "version"
         ],
         "advantages": [
-            "Fast Trailing",
-            "Unique Pattern"
-        ],
-        "price": 18,
-        "type": "indoor",
-        "foliageTexture": "Succulent/Smooth",
-        "leafShape": "Cordate",
-        "stemStructure": "Vining (Wire-like)",
-        "overallHabit": "Cascading",
-        "biometricFeatures": [
-            "Mottled Pattern",
-            "Aerial Tubers"
-        ]
-    },
-    {
-        "id": "p_in_64",
-        "name": "Corn Plant",
-        "scientificName": "Dracaena fragrans",
-        "description": "Tall, woody stems topped with arching leaves that look like corn stalks.",
-        "imageUrl": "https://images.unsplash.com/photo-1596720512803-085e481b4986",
-        "idealTempMin": 15,
-        "idealTempMax": 26,
-        "minHumidity": 40,
-        "sunlight": "medium",
-        "oxygenLevel": "very-high",
-        "medicinalValues": [
-            "Toxin Removal"
-        ],
-        "advantages": [
-            "Height",
-            "Easy Care"
+            "decentralized",
+            "methodologies"
         ],
         "price": 40,
         "type": "indoor",
-        "foliageTexture": "Glossy",
-        "leafShape": "Lanceolate (Broad)",
-        "stemStructure": "Woody Cane",
-        "overallHabit": "Upright",
+        "lifespan": "15-25 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
         "biometricFeatures": [
-            "Central Yellow Stripe",
-            "Fragrant Flowers (Rare)"
+            "Interior Adapted",
+            "Smooth Edges"
         ]
     },
     {
-        "id": "p_in_65",
-        "name": "Yucca Cane",
-        "scientificName": "Yucca elephantipes",
-        "description": "Drought-tolerant plant with sword-like leaves on thick, woody trunks.",
-        "imageUrl": "https://images.unsplash.com/photo-1596720512534-72210887ee2c",
-        "idealTempMin": 10,
-        "idealTempMax": 30,
-        "minHumidity": 20,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
+        "id": "p_in_106",
+        "name": "Monstera",
+        "scientificName": "Monstera deliciosa",
+        "description": "Depraedor cohibeo cena articulus. Verumtamen enim vobis tepidus aqua.",
+        "imageUrl": "https://images.unsplash.com/photo-1464626763?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 14,
+        "idealTempMax": 31,
+        "minHumidity": 74,
+        "sunlight": "low",
+        "oxygenLevel": "very-high",
         "medicinalValues": [
-            "Edible Flowers (Wild)"
+            "haunting",
+            "blowgun"
         ],
         "advantages": [
-            "Indestructible",
-            "Modern Look"
+            "scalable",
+            "metrics"
         ],
-        "price": 55,
+        "price": 75,
         "type": "indoor",
-        "foliageTexture": "Rough/Leathery",
-        "leafShape": "Ensiform (Sword)",
-        "stemStructure": "Woody Trunk",
-        "overallHabit": "Upright",
+        "lifespan": "10-50 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
         "biometricFeatures": [
-            "Sharp tips",
-            "Serrated margin check"
+            "Interior Adapted",
+            "Smooth Edges"
         ]
     },
     {
-        "id": "p_in_66",
-        "name": "Hoya Carnosa",
-        "scientificName": "Hoya carnosa",
-        "description": "Wax plant with thick leaves and clusters of star-shaped, porcelain-like flowers.",
-        "imageUrl": "https://images.unsplash.com/photo-1589335668748-18e3290de004",
+        "id": "p_in_107",
+        "name": "Pothos",
+        "scientificName": "Epipremnum aureum",
+        "description": "Votum antiquus avaritia argentum. Spes tergeo unus.",
+        "imageUrl": "https://images.unsplash.com/photo-9301452014?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 6,
+        "idealTempMax": 34,
+        "minHumidity": 58,
+        "sunlight": "medium",
+        "oxygenLevel": "very-high",
+        "medicinalValues": [
+            "red",
+            "priesthood"
+        ],
+        "advantages": [
+            "dynamic",
+            "initiatives"
+        ],
+        "price": 131,
+        "type": "indoor",
+        "lifespan": "5-10 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_108",
+        "name": "ZZ Plant",
+        "scientificName": "Zamioculcas zamiifolia",
+        "description": "Sperno cernuus absorbeo laboriosam crux tabula. Sub cauda labore nobis.",
+        "imageUrl": "https://images.unsplash.com/photo-8301818958?auto=format&fit=crop&w=800&q=80",
         "idealTempMin": 15,
-        "idealTempMax": 29,
-        "minHumidity": 50,
-        "sunlight": "high",
+        "idealTempMax": 30,
+        "minHumidity": 78,
+        "sunlight": "medium",
         "oxygenLevel": "moderate",
         "medicinalValues": [
-            "None"
+            "damaged",
+            "negotiation"
         ],
         "advantages": [
-            "Fragrant Blooms",
-            "Long Lived"
+            "compelling",
+            "mindshare"
         ],
-        "price": 25,
+        "price": 105,
         "type": "indoor",
-        "foliageTexture": "Waxy/Succulent",
-        "leafShape": "Ovate/Elliptic",
-        "stemStructure": "Vining",
-        "overallHabit": "Climbing",
+        "lifespan": "5-10 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
         "biometricFeatures": [
-            "Opposite Leaves",
-            "Peduncles"
+            "Interior Adapted",
+            "Smooth Edges"
         ]
     },
     {
-        "id": "p_in_67",
-        "name": "Peperomia Obtusifolia",
-        "scientificName": "Peperomia obtusifolia",
-        "description": "Baby Rubber Plant. Compact, bushy plant with thick, spoon-shaped leaves.",
-        "imageUrl": "https://images.unsplash.com/photo-1632207691143-643e2a9a9361",
-        "idealTempMin": 18,
-        "idealTempMax": 26,
-        "minHumidity": 40,
+        "id": "p_in_109",
+        "name": "Boston Fern",
+        "scientificName": "Nephrolepis exaltata",
+        "description": "Paens tabula sono teneo deludo. Tendo veritas caries denego consequatur tam coaegresco abstergo.",
+        "imageUrl": "https://images.unsplash.com/photo-8430239298?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 8,
+        "idealTempMax": 28,
+        "minHumidity": 55,
+        "sunlight": "low",
+        "oxygenLevel": "moderate",
+        "medicinalValues": [
+            "clean",
+            "shark"
+        ],
+        "advantages": [
+            "user-centric",
+            "networks"
+        ],
+        "price": 165,
+        "type": "indoor",
+        "lifespan": "2-5 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_110",
+        "name": "Jade Plant",
+        "scientificName": "Crassula ovata",
+        "description": "Ter eaque utor villa illo commemoro ter. Absorbeo desipio vicissitudo cunabula ustulo.",
+        "imageUrl": "https://images.unsplash.com/photo-3766428613?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 8,
+        "idealTempMax": 25,
+        "minHumidity": 52,
+        "sunlight": "low",
+        "oxygenLevel": "moderate",
+        "medicinalValues": [
+            "elegant",
+            "outlaw"
+        ],
+        "advantages": [
+            "cutting-edge",
+            "systems"
+        ],
+        "price": 181,
+        "type": "indoor",
+        "lifespan": "50-70 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_111",
+        "name": "Chinese Money Plant",
+        "scientificName": "Pilea peperomioides",
+        "description": "Ea altus caelestis degusto cena uterque veritas confugo adhaero curo. Venio supplanto vespillo ambitus valens crudelis abbas brevis vestigium.",
+        "imageUrl": "https://images.unsplash.com/photo-6780435120?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 9,
+        "idealTempMax": 27,
+        "minHumidity": 58,
         "sunlight": "medium",
         "oxygenLevel": "high",
         "medicinalValues": [
-            "None"
+            "outrageous",
+            "plumber"
         ],
         "advantages": [
-            "Pet Safe",
-            "Desk Plant"
+            "mission-critical",
+            "methodologies"
         ],
-        "price": 12,
+        "price": 164,
         "type": "indoor",
-        "foliageTexture": "Rubber-like/Smooth",
-        "leafShape": "Obovate/Spatulate",
-        "stemStructure": "Succulent Stems",
-        "overallHabit": "Bushy",
+        "lifespan": "5-10 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
         "biometricFeatures": [
-            "Thick Leaves",
-            "Insignificant Spikes"
+            "Interior Adapted",
+            "Smooth Edges"
         ]
     },
     {
-        "id": "p_in_68",
-        "name": "Calathea Medallion",
-        "scientificName": "Goeppertia veitchiana",
-        "description": " Stunning round leaves with a feather pattern on top and purple underneath.",
-        "imageUrl": "https://images.unsplash.com/photo-1616690248166-5f1181822819",
-        "idealTempMin": 18,
+        "id": "p_in_112",
+        "name": "Snake Plant 2",
+        "scientificName": "Sansevieria trifasciata",
+        "description": "Acceptus thermae adfectus pax tactus consuasor. Verto copiose bardus patrocinor arto denique.",
+        "imageUrl": "https://images.unsplash.com/photo-6795279999?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 13,
+        "idealTempMax": 30,
+        "minHumidity": 47,
+        "sunlight": "medium",
+        "oxygenLevel": "very-high",
+        "medicinalValues": [
+            "breakable",
+            "hydrolyze"
+        ],
+        "advantages": [
+            "virtual",
+            "solutions"
+        ],
+        "price": 44,
+        "type": "indoor",
+        "lifespan": "10-25 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_113",
+        "name": "Peace Lily 2",
+        "scientificName": "Spathiphyllum wallisii",
+        "description": "Quis speculum suasoria cumque umbra ter triduana talio. Depopulo alo pariatur.",
+        "imageUrl": "https://images.unsplash.com/photo-2718217670?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 5,
+        "idealTempMax": 33,
+        "minHumidity": 44,
+        "sunlight": "low",
+        "oxygenLevel": "very-high",
+        "medicinalValues": [
+            "well-groomed",
+            "widow"
+        ],
+        "advantages": [
+            "strategic",
+            "relationships"
+        ],
+        "price": 184,
+        "type": "indoor",
+        "lifespan": "3-5 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_114",
+        "name": "Spider Plant 2",
+        "scientificName": "Chlorophytum comosum",
+        "description": "Aperte vivo coadunatio solio. Inflammatio alienus adhuc collum.",
+        "imageUrl": "https://images.unsplash.com/photo-8745027466?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 15,
+        "idealTempMax": 29,
+        "minHumidity": 52,
+        "sunlight": "high",
+        "oxygenLevel": "very-high",
+        "medicinalValues": [
+            "present",
+            "summer"
+        ],
+        "advantages": [
+            "value-added",
+            "large language models"
+        ],
+        "price": 113,
+        "type": "indoor",
+        "lifespan": "20-50 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_115",
+        "name": "Fiddle Leaf Fig 2",
+        "scientificName": "Ficus lyrata",
+        "description": "Quasi possimus volva totidem tum annus adeptio comparo talio. Utrum sumo delego veritatis volo clibanus arbustum cariosus bardus voluptas.",
+        "imageUrl": "https://images.unsplash.com/photo-7329498249?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 11,
+        "idealTempMax": 34,
+        "minHumidity": 57,
+        "sunlight": "medium",
+        "oxygenLevel": "high",
+        "medicinalValues": [
+            "vibrant",
+            "lieu"
+        ],
+        "advantages": [
+            "cross-platform",
+            "applications"
+        ],
+        "price": 97,
+        "type": "indoor",
+        "lifespan": "25-50 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_116",
+        "name": "Aloe Vera 2",
+        "scientificName": "Aloe barbadensis miller",
+        "description": "Territo defessus arcus demonstro debeo ciminatio templum reiciendis artificiose decretum. Id demergo vito alioqui taedium sto addo id auditor vinum.",
+        "imageUrl": "https://images.unsplash.com/photo-5139953447?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 6,
+        "idealTempMax": 32,
+        "minHumidity": 76,
+        "sunlight": "low",
+        "oxygenLevel": "low",
+        "medicinalValues": [
+            "blaring",
+            "climb"
+        ],
+        "advantages": [
+            "ubiquitous",
+            "channels"
+        ],
+        "price": 101,
+        "type": "indoor",
+        "lifespan": "5-20 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_117",
+        "name": "Rubber Plant 2",
+        "scientificName": "Ficus elastica",
+        "description": "Apto tracto abbas cicuta commodi spoliatio deputo varietas combibo. Vicissitudo advenio beatae.",
+        "imageUrl": "https://images.unsplash.com/photo-3643451123?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 10,
         "idealTempMax": 26,
-        "minHumidity": 65,
+        "minHumidity": 35,
         "sunlight": "low",
         "oxygenLevel": "high",
         "medicinalValues": [
-            "None"
+            "needy",
+            "lamp"
         ],
         "advantages": [
-            "Ornate Foliage",
-            "Pet Safe"
+            "enterprise",
+            "e-commerce"
         ],
-        "price": 35,
+        "price": 100,
         "type": "indoor",
-        "foliageTexture": "Smooth/Patterned",
-        "leafShape": "Orbicular",
-        "stemStructure": "Rhizomatous",
-        "overallHabit": "Mounding",
+        "lifespan": "15-25 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
         "biometricFeatures": [
-            "Purple Underside",
-            "Leaf Folding"
+            "Interior Adapted",
+            "Smooth Edges"
         ]
     },
     {
-        "id": "p_in_69",
-        "name": "Lipstick Plant",
-        "scientificName": "Aeschynanthus radicans",
-        "description": "Trailing epiphyte named for its tubular red flowers emerging from dark calyxes.",
-        "imageUrl": "https://images.unsplash.com/photo-1596720512534-72210887ee2c",
-        "idealTempMin": 18,
-        "idealTempMax": 27,
-        "minHumidity": 50,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
+        "id": "p_in_118",
+        "name": "Monstera 2",
+        "scientificName": "Monstera deliciosa",
+        "description": "Arto demoror tamdiu ver. Torrens tepesco caecus.",
+        "imageUrl": "https://images.unsplash.com/photo-6444338811?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 14,
+        "idealTempMax": 33,
+        "minHumidity": 31,
+        "sunlight": "low",
+        "oxygenLevel": "very-high",
         "medicinalValues": [
-            "None"
+            "bruised",
+            "amnesty"
         ],
         "advantages": [
-            "Showy Flowers",
-            "Hanging Basket"
+            "plug-and-play",
+            "lifetime value"
         ],
-        "price": 22,
+        "price": 171,
         "type": "indoor",
-        "foliageTexture": "Leathery",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Vining",
-        "overallHabit": "Trailing",
+        "lifespan": "10-50 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
         "biometricFeatures": [
-            "Tubular Flowers",
-            "Fleshy Leaves"
+            "Interior Adapted",
+            "Smooth Edges"
         ]
     },
     {
-        "id": "p_in_70",
-        "name": "Staghorn Fern",
-        "scientificName": "Platycerium bifurcatum",
-        "description": "Epiphytic fern with two types of fronds: shield fronds and antler-like fertile fronds.",
-        "imageUrl": "https://images.unsplash.com/photo-1614594975525-e45190c55d0b",
-        "idealTempMin": 10,
-        "idealTempMax": 30,
-        "minHumidity": 60,
-        "sunlight": "medium",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Living Art",
-            "Unique"
-        ],
-        "price": 45,
-        "type": "indoor",
-        "foliageTexture": "Fuzzy/Leathery",
-        "leafShape": "Lobed (Antler)",
-        "stemStructure": "Rhizome (Hidden)",
-        "overallHabit": "Epiphytic Clump",
-        "biometricFeatures": [
-            "Shield Fronds",
-            "Forked Tips"
-        ]
-    },
-    {
-        "id": "p_in_71",
-        "name": "Bromeliad (Guzmania)",
-        "scientificName": "Guzmania lingulata",
-        "description": "Tropical plant with long lasting, colorful flower bracts in red, orange, or yellow.",
-        "imageUrl": "https://images.unsplash.com/photo-1616690248278-450cb25b6a7a",
-        "idealTempMin": 18,
-        "idealTempMax": 27,
-        "minHumidity": 55,
-        "sunlight": "medium",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Exotic Color",
-            "Pet Safe"
-        ],
-        "price": 25,
-        "type": "indoor",
-        "foliageTexture": "Smooth/Stiff",
-        "leafShape": "Linear",
-        "stemStructure": "Rosette",
-        "overallHabit": "Upright",
-        "biometricFeatures": [
-            "Central Tank",
-            "Colored Bracts"
-        ]
-    },
-    {
-        "id": "p_in_72",
-        "name": "Tradescantia Zebrina",
-        "scientificName": "Tradescantia zebrina",
-        "description": "Inch Plant. Fast-growing trailer with purple and silver striped leaves.",
-        "imageUrl": "https://images.unsplash.com/photo-1612361734994-6d91cd4cb744",
-        "idealTempMin": 10,
-        "idealTempMax": 27,
+        "id": "p_in_119",
+        "name": "Pothos 2",
+        "scientificName": "Epipremnum aureum",
+        "description": "Suffoco summa deinde bestia contra architecto odio vita teres congregatio. Clarus cur decerno amicitia cimentarius vacuus adsum adfectus.",
+        "imageUrl": "https://images.unsplash.com/photo-4502170094?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 6,
+        "idealTempMax": 29,
         "minHumidity": 40,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
+        "sunlight": "medium",
+        "oxygenLevel": "high",
         "medicinalValues": [
-            "Antioxidant (Tea)"
+            "pointed",
+            "seal"
         ],
         "advantages": [
-            "Fast Growth",
-            "Colorful"
+            "cross-media",
+            "smart contracts"
         ],
-        "price": 10,
+        "price": 198,
         "type": "indoor",
-        "foliageTexture": "Glistening",
-        "leafShape": "Ovate-Acute",
-        "stemStructure": "Succulent/Jointed",
-        "overallHabit": "Trailing",
+        "lifespan": "5-10 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
         "biometricFeatures": [
-            "Sparkling Cells",
-            "Purple Color"
+            "Interior Adapted",
+            "Smooth Edges"
         ]
     },
     {
-        "id": "p_in_73",
-        "name": "Kalanchoe",
-        "scientificName": "Kalanchoe blossfeldiana",
-        "description": "Succulent with scalloped leaves and clusters of long-lasting flowers.",
-        "imageUrl": "https://images.unsplash.com/photo-1509304388383-ed5808ce4913",
-        "idealTempMin": 10,
+        "id": "p_in_120",
+        "name": "ZZ Plant 2",
+        "scientificName": "Zamioculcas zamiifolia",
+        "description": "Decimus coniuratio officia tonsor summisse aeternus nihil deleo taceo quas. Crebro illum callide caries textilis excepturi praesentium vere verbera.",
+        "imageUrl": "https://images.unsplash.com/photo-6027455722?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 13,
+        "idealTempMax": 29,
+        "minHumidity": 33,
+        "sunlight": "medium",
+        "oxygenLevel": "very-high",
+        "medicinalValues": [
+            "stable",
+            "jazz"
+        ],
+        "advantages": [
+            "innovative",
+            "initiatives"
+        ],
+        "price": 141,
+        "type": "indoor",
+        "lifespan": "5-10 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_121",
+        "name": "Boston Fern 2",
+        "scientificName": "Nephrolepis exaltata",
+        "description": "Caelestis cibo atqui debeo. Sophismata caritas torrens adamo ea coma sumptus dolore viduo celer.",
+        "imageUrl": "https://images.unsplash.com/photo-2101238435?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 9,
         "idealTempMax": 30,
+        "minHumidity": 35,
+        "sunlight": "high",
+        "oxygenLevel": "very-high",
+        "medicinalValues": [
+            "friendly",
+            "silk"
+        ],
+        "advantages": [
+            "enterprise",
+            "experiences"
+        ],
+        "price": 168,
+        "type": "indoor",
+        "lifespan": "2-5 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_122",
+        "name": "Jade Plant 2",
+        "scientificName": "Crassula ovata",
+        "description": "Laboriosam beatae textus patior provident attero deserunt amet. Adamo deripio comedo unde harum.",
+        "imageUrl": "https://images.unsplash.com/photo-1128476920?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 14,
+        "idealTempMax": 33,
+        "minHumidity": 55,
+        "sunlight": "low",
+        "oxygenLevel": "moderate",
+        "medicinalValues": [
+            "recent",
+            "duffel"
+        ],
+        "advantages": [
+            "plug-and-play",
+            "applications"
+        ],
+        "price": 183,
+        "type": "indoor",
+        "lifespan": "50-70 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_123",
+        "name": "Chinese Money Plant 2",
+        "scientificName": "Pilea peperomioides",
+        "description": "Fugit voluptatibus aegre similique. Colo speculum volutabrum demitto.",
+        "imageUrl": "https://images.unsplash.com/photo-7454233271?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 6,
+        "idealTempMax": 25,
+        "minHumidity": 74,
+        "sunlight": "medium",
+        "oxygenLevel": "low",
+        "medicinalValues": [
+            "zesty",
+            "midwife"
+        ],
+        "advantages": [
+            "innovative",
+            "architectures"
+        ],
+        "price": 88,
+        "type": "indoor",
+        "lifespan": "5-10 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_124",
+        "name": "Snake Plant 3",
+        "scientificName": "Sansevieria trifasciata",
+        "description": "Totam subito tabernus atrocitas assentator. Coniecto tot aegre alioqui carus ancilla decretum debitis.",
+        "imageUrl": "https://images.unsplash.com/photo-4983294941?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 12,
+        "idealTempMax": 27,
+        "minHumidity": 35,
+        "sunlight": "high",
+        "oxygenLevel": "low",
+        "medicinalValues": [
+            "rusty",
+            "fencing"
+        ],
+        "advantages": [
+            "turn-key",
+            "blockchains"
+        ],
+        "price": 14,
+        "type": "indoor",
+        "lifespan": "10-25 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_125",
+        "name": "Peace Lily 3",
+        "scientificName": "Spathiphyllum wallisii",
+        "description": "Tolero vespillo caritas adfectus trado vox votum depraedor tristis. Vigilo provident celo angelus.",
+        "imageUrl": "https://images.unsplash.com/photo-2941327775?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 12,
+        "idealTempMax": 31,
+        "minHumidity": 30,
+        "sunlight": "low",
+        "oxygenLevel": "high",
+        "medicinalValues": [
+            "corny",
+            "heating"
+        ],
+        "advantages": [
+            "customized",
+            "methodologies"
+        ],
+        "price": 47,
+        "type": "indoor",
+        "lifespan": "3-5 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_126",
+        "name": "Spider Plant 3",
+        "scientificName": "Chlorophytum comosum",
+        "description": "Certus acceptus audeo corona. Certus denuo virtus tenetur officia caelum traho debitis.",
+        "imageUrl": "https://images.unsplash.com/photo-1537222688?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 15,
+        "idealTempMax": 32,
+        "minHumidity": 49,
+        "sunlight": "low",
+        "oxygenLevel": "very-high",
+        "medicinalValues": [
+            "short",
+            "swim"
+        ],
+        "advantages": [
+            "collaborative",
+            "schemas"
+        ],
+        "price": 99,
+        "type": "indoor",
+        "lifespan": "20-50 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_127",
+        "name": "Fiddle Leaf Fig 3",
+        "scientificName": "Ficus lyrata",
+        "description": "Talio verto cariosus ancilla acceptus conscendo succedo amor. Cui ascit bis caelestis colligo.",
+        "imageUrl": "https://images.unsplash.com/photo-7366013239?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 34,
+        "minHumidity": 72,
+        "sunlight": "high",
+        "oxygenLevel": "low",
+        "medicinalValues": [
+            "outlying",
+            "mathematics"
+        ],
+        "advantages": [
+            "viral",
+            "architectures"
+        ],
+        "price": 20,
+        "type": "indoor",
+        "lifespan": "25-50 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_128",
+        "name": "Aloe Vera 3",
+        "scientificName": "Aloe barbadensis miller",
+        "description": "Paens turbo synagoga vindico consequatur circumvenio tamisium sed brevis. Degenero sumo congregatio aufero debeo aperio unus laborum.",
+        "imageUrl": "https://images.unsplash.com/photo-7390387506?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 9,
+        "idealTempMax": 33,
+        "minHumidity": 37,
+        "sunlight": "high",
+        "oxygenLevel": "low",
+        "medicinalValues": [
+            "apt",
+            "fog"
+        ],
+        "advantages": [
+            "seamless",
+            "convergence"
+        ],
+        "price": 148,
+        "type": "indoor",
+        "lifespan": "5-20 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_129",
+        "name": "Rubber Plant 3",
+        "scientificName": "Ficus elastica",
+        "description": "Debitis ara tametsi. Temptatio stabilis corrumpo xiphias vicissitudo hic totam aro curiositas.",
+        "imageUrl": "https://images.unsplash.com/photo-9661293753?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 5,
+        "idealTempMax": 25,
+        "minHumidity": 49,
+        "sunlight": "high",
+        "oxygenLevel": "very-high",
+        "medicinalValues": [
+            "rundown",
+            "contractor"
+        ],
+        "advantages": [
+            "vertical",
+            "architectures"
+        ],
+        "price": 12,
+        "type": "indoor",
+        "lifespan": "15-25 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_130",
+        "name": "Monstera 3",
+        "scientificName": "Monstera deliciosa",
+        "description": "Optio aspernatur sollicito defaeco. Cibus corporis usitas aer bellum velit truculenter cultura ambulo.",
+        "imageUrl": "https://images.unsplash.com/photo-8305994645?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 6,
+        "idealTempMax": 33,
+        "minHumidity": 55,
+        "sunlight": "low",
+        "oxygenLevel": "high",
+        "medicinalValues": [
+            "boiling",
+            "management"
+        ],
+        "advantages": [
+            "user-centric",
+            "web services"
+        ],
+        "price": 192,
+        "type": "indoor",
+        "lifespan": "10-50 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_131",
+        "name": "Pothos 3",
+        "scientificName": "Epipremnum aureum",
+        "description": "Adimpleo cognatus color ullam vigilo curatio amo carmen supellex tutis. Tener compello arceo collum caute stips vaco pauper vulariter assumenda.",
+        "imageUrl": "https://images.unsplash.com/photo-4327588891?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 5,
+        "idealTempMax": 26,
+        "minHumidity": 39,
+        "sunlight": "low",
+        "oxygenLevel": "low",
+        "medicinalValues": [
+            "classic",
+            "technician"
+        ],
+        "advantages": [
+            "distributed",
+            "initiatives"
+        ],
+        "price": 140,
+        "type": "indoor",
+        "lifespan": "5-10 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_132",
+        "name": "ZZ Plant 3",
+        "scientificName": "Zamioculcas zamiifolia",
+        "description": "Explicabo teneo voveo comptus uterque arx canto. Carpo velociter censura nam animadverto culpa.",
+        "imageUrl": "https://images.unsplash.com/photo-5654492626?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 11,
+        "idealTempMax": 31,
+        "minHumidity": 47,
+        "sunlight": "medium",
+        "oxygenLevel": "moderate",
+        "medicinalValues": [
+            "genuine",
+            "cappelletti"
+        ],
+        "advantages": [
+            "customized",
+            "markets"
+        ],
+        "price": 129,
+        "type": "indoor",
+        "lifespan": "5-10 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_133",
+        "name": "Boston Fern 3",
+        "scientificName": "Nephrolepis exaltata",
+        "description": "Viridis spes ulciscor curia. Et ipsum bellicus consuasor.",
+        "imageUrl": "https://images.unsplash.com/photo-5573412060?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 5,
+        "idealTempMax": 25,
+        "minHumidity": 50,
+        "sunlight": "medium",
+        "oxygenLevel": "very-high",
+        "medicinalValues": [
+            "lazy",
+            "bob"
+        ],
+        "advantages": [
+            "scalable",
+            "users"
+        ],
+        "price": 64,
+        "type": "indoor",
+        "lifespan": "2-5 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_134",
+        "name": "Jade Plant 3",
+        "scientificName": "Crassula ovata",
+        "description": "Conservo atqui angelus corrigo eveniet. Degusto maxime teres ex approbo crinis stips cado.",
+        "imageUrl": "https://images.unsplash.com/photo-6646309064?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 12,
+        "idealTempMax": 25,
+        "minHumidity": 47,
+        "sunlight": "medium",
+        "oxygenLevel": "very-high",
+        "medicinalValues": [
+            "simple",
+            "ceramics"
+        ],
+        "advantages": [
+            "generative",
+            "metrics"
+        ],
+        "price": 173,
+        "type": "indoor",
+        "lifespan": "50-70 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_135",
+        "name": "Chinese Money Plant 3",
+        "scientificName": "Pilea peperomioides",
+        "description": "Statua dolor cubicularis. Inflammatio alias conculco socius tribuo peccatus ventosus crinis.",
+        "imageUrl": "https://images.unsplash.com/photo-2741688165?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 7,
+        "idealTempMax": 33,
+        "minHumidity": 67,
+        "sunlight": "low",
+        "oxygenLevel": "low",
+        "medicinalValues": [
+            "wide-eyed",
+            "mainstream"
+        ],
+        "advantages": [
+            "real-time",
+            "content"
+        ],
+        "price": 28,
+        "type": "indoor",
+        "lifespan": "5-10 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_136",
+        "name": "Snake Plant 4",
+        "scientificName": "Sansevieria trifasciata",
+        "description": "Timidus porro conspergo caste sublime vomito altus. Commemoro eos defaeco arceo conqueror cum civis abstergo.",
+        "imageUrl": "https://images.unsplash.com/photo-6833472338?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 5,
+        "idealTempMax": 29,
+        "minHumidity": 72,
+        "sunlight": "low",
+        "oxygenLevel": "high",
+        "medicinalValues": [
+            "expensive",
+            "deduction"
+        ],
+        "advantages": [
+            "viral",
+            "systems"
+        ],
+        "price": 157,
+        "type": "indoor",
+        "lifespan": "10-25 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_137",
+        "name": "Peace Lily 4",
+        "scientificName": "Spathiphyllum wallisii",
+        "description": "Cuius virtus delego volo voveo ater in apud peccatus. Viridis vereor doloribus attollo.",
+        "imageUrl": "https://images.unsplash.com/photo-9598494452?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 29,
+        "minHumidity": 77,
+        "sunlight": "medium",
+        "oxygenLevel": "low",
+        "medicinalValues": [
+            "unsightly",
+            "yak"
+        ],
+        "advantages": [
+            "visionary",
+            "blockchains"
+        ],
+        "price": 100,
+        "type": "indoor",
+        "lifespan": "3-5 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_138",
+        "name": "Spider Plant 4",
+        "scientificName": "Chlorophytum comosum",
+        "description": "Desparatus acsi adamo. Aro crastinus verbera capitulus vomer amicitia sono approbo.",
+        "imageUrl": "https://images.unsplash.com/photo-9573120934?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 6,
+        "idealTempMax": 30,
+        "minHumidity": 49,
+        "sunlight": "high",
+        "oxygenLevel": "high",
+        "medicinalValues": [
+            "parched",
+            "molasses"
+        ],
+        "advantages": [
+            "one-to-one",
+            "schemas"
+        ],
+        "price": 148,
+        "type": "indoor",
+        "lifespan": "20-50 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_139",
+        "name": "Fiddle Leaf Fig 4",
+        "scientificName": "Ficus lyrata",
+        "description": "Sollers ipsa concedo verbum una veniam suadeo adipiscor. Causa careo adaugeo spiritus denego.",
+        "imageUrl": "https://images.unsplash.com/photo-3490123656?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 11,
+        "idealTempMax": 25,
+        "minHumidity": 69,
+        "sunlight": "low",
+        "oxygenLevel": "moderate",
+        "medicinalValues": [
+            "jubilant",
+            "designation"
+        ],
+        "advantages": [
+            "innovative",
+            "mindshare"
+        ],
+        "price": 34,
+        "type": "indoor",
+        "lifespan": "25-50 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_140",
+        "name": "Aloe Vera 4",
+        "scientificName": "Aloe barbadensis miller",
+        "description": "Dedico caute torqueo aestas. Amo casso acies spargo.",
+        "imageUrl": "https://images.unsplash.com/photo-6376105520?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 8,
+        "idealTempMax": 26,
+        "minHumidity": 46,
+        "sunlight": "low",
+        "oxygenLevel": "low",
+        "medicinalValues": [
+            "probable",
+            "courtroom"
+        ],
+        "advantages": [
+            "virtual",
+            "methodologies"
+        ],
+        "price": 184,
+        "type": "indoor",
+        "lifespan": "5-20 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_141",
+        "name": "Rubber Plant 4",
+        "scientificName": "Ficus elastica",
+        "description": "Nemo deinde articulus cresco cubitum spoliatio ultio commemoro impedit. Mollitia ventosus capitulus contego assentator amoveo.",
+        "imageUrl": "https://images.unsplash.com/photo-4358793518?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 8,
+        "idealTempMax": 29,
+        "minHumidity": 30,
+        "sunlight": "medium",
+        "oxygenLevel": "moderate",
+        "medicinalValues": [
+            "some",
+            "instance"
+        ],
+        "advantages": [
+            "cross-platform",
+            "applications"
+        ],
+        "price": 178,
+        "type": "indoor",
+        "lifespan": "15-25 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_142",
+        "name": "Monstera 4",
+        "scientificName": "Monstera deliciosa",
+        "description": "Cohaero deorsum adamo earum vox atque absum tristis tero. Quaerat adicio correptius venia alias blanditiis crebro.",
+        "imageUrl": "https://images.unsplash.com/photo-2160484171?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 14,
+        "idealTempMax": 25,
+        "minHumidity": 39,
+        "sunlight": "low",
+        "oxygenLevel": "high",
+        "medicinalValues": [
+            "gifted",
+            "priesthood"
+        ],
+        "advantages": [
+            "sticky",
+            "users"
+        ],
+        "price": 46,
+        "type": "indoor",
+        "lifespan": "10-50 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_143",
+        "name": "Pothos 4",
+        "scientificName": "Epipremnum aureum",
+        "description": "Cavus versus quaerat temeritas debitis canonicus. Aequus taceo arcesso arceo degenero amor stultus virgo argentum.",
+        "imageUrl": "https://images.unsplash.com/photo-8597483836?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 15,
+        "idealTempMax": 25,
+        "minHumidity": 56,
+        "sunlight": "high",
+        "oxygenLevel": "low",
+        "medicinalValues": [
+            "prime",
+            "handover"
+        ],
+        "advantages": [
+            "customized",
+            "communities"
+        ],
+        "price": 89,
+        "type": "indoor",
+        "lifespan": "5-10 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_144",
+        "name": "ZZ Plant 4",
+        "scientificName": "Zamioculcas zamiifolia",
+        "description": "Solus curso aliqua timor enim traho. Testimonium bos vivo utpote supplanto.",
+        "imageUrl": "https://images.unsplash.com/photo-9325070835?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 14,
+        "idealTempMax": 34,
+        "minHumidity": 58,
+        "sunlight": "medium",
+        "oxygenLevel": "low",
+        "medicinalValues": [
+            "trustworthy",
+            "jet"
+        ],
+        "advantages": [
+            "innovative",
+            "technologies"
+        ],
+        "price": 183,
+        "type": "indoor",
+        "lifespan": "5-10 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
+        "biometricFeatures": [
+            "Interior Adapted",
+            "Smooth Edges"
+        ]
+    },
+    {
+        "id": "p_in_145",
+        "name": "Boston Fern 4",
+        "scientificName": "Nephrolepis exaltata",
+        "description": "Atque corona asperiores. Vomica ulterius comparo acies paens amitto aliquid vae.",
+        "imageUrl": "https://images.unsplash.com/photo-8220093914?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 12,
+        "idealTempMax": 32,
         "minHumidity": 30,
         "sunlight": "high",
         "oxygenLevel": "moderate",
         "medicinalValues": [
-            "Wound Healing (Some species)"
+            "juicy",
+            "heartache"
         ],
         "advantages": [
-            "Flowering Succulent",
-            "Drought Tolerant"
-        ],
-        "price": 12,
-        "type": "indoor",
-        "foliageTexture": "Waxy/Thick",
-        "leafShape": "Ovate (Scalloped)",
-        "stemStructure": "Succulent",
-        "overallHabit": "Bushy",
-        "biometricFeatures": [
-            "Crenate Margins",
-            "Dense Flower Corymbs"
-        ]
-    },
-    {
-        "id": "p_in_74",
-        "name": "Aglaonema Silver Bay",
-        "scientificName": "Aglaonema commutatum 'Silver Bay'",
-        "description": "Full, lush variety with silver-centered green leaves. incredibly low-light tolerant.",
-        "imageUrl": "https://images.unsplash.com/photo-1616690248278-450cb25b6a7a",
-        "idealTempMin": 16,
-        "idealTempMax": 25,
-        "minHumidity": 40,
-        "sunlight": "low",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Office Plant",
-            "Easy Care"
-        ],
-        "price": 30,
-        "type": "indoor",
-        "foliageTexture": "Sheen/Smooth",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Short Cane",
-        "overallHabit": "Bushy",
-        "biometricFeatures": [
-            "Silver Center",
-            "Acute Tip"
-        ]
-    },
-    {
-        "id": "p_in_75",
-        "name": "Cyclamen",
-        "scientificName": "Cyclamen persicum",
-        "description": "Winter-blooming tuberous plant with swept-back petals and patterned leaves.",
-        "imageUrl": "https://images.unsplash.com/photo-1563217684-28b9d2423e80",
-        "idealTempMin": 10,
-        "idealTempMax": 20,
-        "minHumidity": 50,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "None (Toxic)"
-        ],
-        "advantages": [
-            "Cool weather bloom",
-            "Compact"
-        ],
-        "price": 15,
-        "type": "indoor",
-        "foliageTexture": "Matte/Patterned",
-        "leafShape": "Cordate",
-        "stemStructure": "Tuberous",
-        "overallHabit": "Clumping",
-        "biometricFeatures": [
-            "Reflexed Petals",
-            "Silver Marbling"
-        ]
-    },
-    {
-        "id": "p_in_76",
-        "name": "Bird of Paradise (White)",
-        "scientificName": "Strelitzia nicolai",
-        "description": "Large indoor tree with banana-like leaves and bird-head shaped flowers.",
-        "imageUrl": "https://images.unsplash.com/photo-1549416878-b97f805a96d1",
-        "idealTempMin": 18,
-        "idealTempMax": 30,
-        "minHumidity": 50,
-        "sunlight": "high",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Structural",
-            "Tropical"
+            "compelling",
+            "smart contracts"
         ],
         "price": 70,
         "type": "indoor",
-        "foliageTexture": "Leathery",
-        "leafShape": "Oblong",
-        "stemStructure": "Basal",
-        "overallHabit": "Upright",
-        "biometricFeatures": [
-            "Split leaves",
-            "Thick base"
-        ]
-    },
-    {
-        "id": "p_in_77",
-        "name": "Flamingo Flower",
-        "scientificName": "Anthurium andraeanum",
-        "description": "Long-blooming houseplant with heart-shaped waxy red spathes.",
-        "imageUrl": "https://images.unsplash.com/photo-1563217684-28b9d2423e80",
-        "idealTempMin": 16,
-        "idealTempMax": 27,
-        "minHumidity": 60,
-        "sunlight": "medium",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "Air Purification"
-        ],
-        "advantages": [
-            "Continuous Bloom",
-            "Showy"
-        ],
-        "price": 25,
-        "type": "indoor",
-        "foliageTexture": "Glossy",
-        "leafShape": "Cordate",
-        "stemStructure": "Short",
-        "overallHabit": "Upright",
-        "biometricFeatures": [
-            "Spadix",
-            "Colorful Spathe"
-        ]
-    },
-    {
-        "id": "p_in_78",
-        "name": "Polka Dot Plant",
-        "scientificName": "Hypoestes phyllostachya",
-        "description": "Small colorful plant with speckled leaves in pink, red, or white.",
-        "imageUrl": "https://images.unsplash.com/photo-1628169225700-1d8f58b8d96d",
-        "idealTempMin": 18,
-        "idealTempMax": 27,
-        "minHumidity": 50,
-        "sunlight": "medium",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Terrarium friendly",
-            "Colorful"
-        ],
-        "price": 8,
-        "type": "indoor",
-        "foliageTexture": "Tomentose (Slightly fuzzy)",
-        "leafShape": "Ovate",
+        "lifespan": "2-5 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
         "stemStructure": "Herbaceous",
-        "overallHabit": "Mounding",
+        "overallHabit": "Upright/Bushy",
         "biometricFeatures": [
-            "Speckled Variegation",
-            "Thin Leaves"
+            "Interior Adapted",
+            "Smooth Edges"
         ]
     },
     {
-        "id": "p_in_79",
-        "name": "Dragon Tree",
-        "scientificName": "Dracaena marginata",
-        "description": "Architectural plant with spiky leaves on slender, woody stems.",
-        "imageUrl": "https://images.unsplash.com/photo-1596720512803-085e481b4986",
-        "idealTempMin": 16,
-        "idealTempMax": 26,
-        "minHumidity": 40,
-        "sunlight": "medium",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "Toxin Removal"
-        ],
-        "advantages": [
-            "Modern look",
-            "Durable"
-        ],
-        "price": 35,
-        "type": "indoor",
-        "foliageTexture": "Smooth/Glossy",
-        "leafShape": "Linear (Sword)",
-        "stemStructure": "Woody Cane",
-        "overallHabit": "Upright",
-        "biometricFeatures": [
-            "Red edged leaves",
-            "Tufted habit"
-        ]
-    },
-    {
-        "id": "p_in_80",
-        "name": "Rabbit's Foot Fern",
-        "scientificName": "Davallia fejeensis",
-        "description": "Fern with lacy fronds and creeping fuzzy rhizomes that look like rabbit feet.",
-        "imageUrl": "https://images.unsplash.com/photo-1614594975525-e45190c55d0b",
-        "idealTempMin": 13,
-        "idealTempMax": 27,
-        "minHumidity": 50,
-        "sunlight": "medium",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Unique Rhizomes",
-            "Safe for pets"
-        ],
-        "price": 20,
-        "type": "indoor",
-        "foliageTexture": "Fine/Lacy",
-        "leafShape": "Compound (Bi/Tripinnate)",
-        "stemStructure": "Fuzzy Rhizome",
-        "overallHabit": "Creeping/Epiphytic",
-        "biometricFeatures": [
-            "Furry 'Feet'",
-            "Delicate Fronds"
-        ]
-    },
-    {
-        "id": "p_in_81",
-        "name": "Button Fern",
-        "scientificName": "Pellaea rotundifolia",
-        "description": "Small fern with round, dark green, button-like leaflets.",
-        "imageUrl": "https://images.unsplash.com/photo-1596720512534-72210887ee2c",
-        "idealTempMin": 15,
-        "idealTempMax": 24,
-        "minHumidity": 40,
-        "sunlight": "low",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Compact",
-            "Cute texture"
-        ],
-        "price": 15,
-        "type": "indoor",
-        "foliageTexture": "Leathery",
-        "leafShape": "Orbicular",
-        "stemStructure": "Wire-like Rachis",
-        "overallHabit": "Mounding",
-        "biometricFeatures": [
-            "Round Pinnae",
-            "Dark stems"
-        ]
-    },
-    {
-        "id": "p_in_82",
-        "name": "Rattlesnake Plant",
-        "scientificName": "Goeppertia insignis",
-        "description": "Long wavy leaves with dark green spots resembling reptile skin.",
-        "imageUrl": "https://images.unsplash.com/photo-1616690248166-5f1181822819",
-        "idealTempMin": 18,
-        "idealTempMax": 27,
-        "minHumidity": 60,
-        "sunlight": "low",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Patterned foliage",
-            "Pet Safe"
-        ],
-        "price": 30,
-        "type": "indoor",
-        "foliageTexture": "Wavy/Smooth",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Rhizomatous",
-        "overallHabit": "Bunching",
-        "biometricFeatures": [
-            "Undulating margin",
-            "Purple underside"
-        ]
-    },
-    {
-        "id": "p_in_83",
-        "name": "Arrowhead Plant",
-        "scientificName": "Syngonium podophyllum",
-        "description": "Vine with arrow-shaped leaves that change form as they mature.",
-        "imageUrl": "https://images.unsplash.com/photo-1632207691143-643e2a9a9361",
-        "idealTempMin": 16,
-        "idealTempMax": 29,
-        "minHumidity": 50,
-        "sunlight": "medium",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "Voc Removal"
-        ],
-        "advantages": [
-            "Fast growing",
-            "Variety of colors"
-        ],
-        "price": 15,
-        "type": "indoor",
-        "foliageTexture": "Papery/Smooth",
-        "leafShape": "Sagittate/Hastate",
-        "stemStructure": "Vining",
-        "overallHabit": "Climbing/Trailing",
-        "biometricFeatures": [
-            "Arrow shape",
-            "Milky sap"
-        ]
-    },
-    {
-        "id": "p_in_84",
-        "name": "Natal Mahogany",
-        "scientificName": "Trichilia emetica",
-        "description": "Hardy indoor tree with dark, glossy leaves. Very tolerant of low light.",
-        "imageUrl": "https://images.unsplash.com/photo-1596720512534-72210887ee2c",
+        "id": "p_in_146",
+        "name": "Jade Plant 4",
+        "scientificName": "Crassula ovata",
+        "description": "Vir delectus subnecto. Sulum clam molestiae aduro comparo curso defetiscor crur accommodo delinquo.",
+        "imageUrl": "https://images.unsplash.com/photo-9556832764?auto=format&fit=crop&w=800&q=80",
         "idealTempMin": 15,
         "idealTempMax": 30,
-        "minHumidity": 40,
+        "minHumidity": 70,
         "sunlight": "low",
         "oxygenLevel": "very-high",
         "medicinalValues": [
-            "Traditional Emetic (Bark)"
+            "weary",
+            "tribe"
         ],
         "advantages": [
-            "Tree for shade",
-            "Lush canopy"
+            "impactful",
+            "mindshare"
         ],
-        "price": 65,
+        "price": 49,
         "type": "indoor",
-        "foliageTexture": "Glossy",
-        "leafShape": "Pinnate",
-        "stemStructure": "Woody Tree",
-        "overallHabit": "Upright",
+        "lifespan": "50-70 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
         "biometricFeatures": [
-            "Compound leaves",
-            "Dark green"
+            "Interior Adapted",
+            "Smooth Edges"
         ]
     },
     {
-        "id": "p_in_85",
-        "name": "Asparagus Fern",
-        "scientificName": "Asparagus setaceus",
-        "description": "Not a true fern, but a lily family member with soft, needle-like foliage.",
-        "imageUrl": "https://images.unsplash.com/photo-1596720512803-085e481b4986",
-        "idealTempMin": 13,
-        "idealTempMax": 24,
-        "minHumidity": 50,
-        "sunlight": "medium",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Feathery texture",
-            "Fast filler"
-        ],
-        "price": 12,
-        "type": "indoor",
-        "foliageTexture": "Fine/Plumose",
-        "leafShape": "Cladodes (Needle)",
-        "stemStructure": "Wiry/Thorny",
-        "overallHabit": "Climbing/Mounding",
-        "biometricFeatures": [
-            "Flat sprays",
-            "Tiny thorns"
-        ]
-    },
-    {
-        "id": "p_in_86",
-        "name": "False Aralia",
-        "scientificName": "Plerandra elegantissima",
-        "description": "Elegant shrub with dark, coppery-green, finger-like leaves with sawtooth edges.",
-        "imageUrl": "https://images.unsplash.com/photo-1616690248278-450cb25b6a7a",
-        "idealTempMin": 18,
-        "idealTempMax": 29,
-        "minHumidity": 50,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Serrated texture",
-            "Vertical"
-        ],
-        "price": 40,
-        "type": "indoor",
-        "foliageTexture": "Leathery",
-        "leafShape": "Palmate/Serrated",
-        "stemStructure": "Woody",
-        "overallHabit": "Upright",
-        "biometricFeatures": [
-            "Toothed margins",
-            "Blackish green"
-        ]
-    },
-    {
-        "id": "p_in_87",
-        "name": "Baby Tears",
-        "scientificName": "Soleirolia soleirolii",
-        "description": "Creeping plant with thousands of tiny round leaves. Forms a dense green mat.",
-        "imageUrl": "https://images.unsplash.com/photo-1589335668748-18e3290de004",
-        "idealTempMin": 10,
-        "idealTempMax": 24,
-        "minHumidity": 70,
-        "sunlight": "medium",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Groundcover",
-            "Terrariums"
-        ],
-        "price": 10,
-        "type": "indoor",
-        "foliageTexture": "Delicate",
-        "leafShape": "Orbicular (Tiny)",
-        "stemStructure": "Filiform (Thread)",
-        "overallHabit": "Creeping",
-        "biometricFeatures": [
-            "Tiny leaves (<5mm)",
-            "Dense mat"
-        ]
-    },
-    {
-        "id": "p_in_88",
-        "name": "Desert Rose",
-        "scientificName": "Adenium obesum",
-        "description": "Succulent srub with a swollen trunk (caudex) and trumpet flowers.",
-        "imageUrl": "https://images.unsplash.com/photo-1567331140054-3839d67562f8",
-        "idealTempMin": 15,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "high",
-        "oxygenLevel": "low",
-        "medicinalValues": [
-            "Toxic Sap"
-        ],
-        "advantages": [
-            "Bonsai subject",
-            "Flowers"
-        ],
-        "price": 35,
-        "type": "indoor",
-        "foliageTexture": "Leathery",
-        "leafShape": "Obovate",
-        "stemStructure": "Caudiciform",
-        "overallHabit": "Upright",
-        "biometricFeatures": [
-            "Swollen base",
-            "Terminal flowers"
-        ]
-    },
-    {
-        "id": "p_in_89",
-        "name": "Ming Aralia",
-        "scientificName": "Polyscias fruticosa",
-        "description": "Ferny, feathery foliage on gnarled woody branches. Zen aesthetic.",
-        "imageUrl": "https://images.unsplash.com/photo-1610415664157-548c783c6b24",
-        "idealTempMin": 18,
-        "idealTempMax": 29,
-        "minHumidity": 60,
-        "sunlight": "medium",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "Tonic (Asian medicine)"
-        ],
-        "advantages": [
-            "Exotic form",
-            "Air cleaning"
-        ],
-        "price": 45,
-        "type": "indoor",
-        "foliageTexture": "Fine/Lacy",
-        "leafShape": "Tripinnate (Compound)",
-        "stemStructure": "Woody",
-        "overallHabit": "Tree-like",
-        "biometricFeatures": [
-            "Irregular branching",
-            "Parsley-like leaves"
-        ]
-    },
-    {
-        "id": "p_in_90",
-        "name": "Elephant Bush",
-        "scientificName": "Portulacaria afra",
-        "description": "Succulent shrub resembling Jade Plant but with smaller leaves and red stems.",
-        "imageUrl": "https://images.unsplash.com/photo-1509304388383-ed5808ce4913",
-        "idealTempMin": 10,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "high",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "Edible leaves (sour)"
-        ],
-        "advantages": [
-            "Carbon sponge",
-            "Edible"
-        ],
-        "price": 15,
-        "type": "indoor",
-        "foliageTexture": "Fleshy/Smooth",
-        "leafShape": "Obovate",
-        "stemStructure": "Succulent/Woody",
-        "overallHabit": "Bushy/Sprawling",
-        "biometricFeatures": [
-            "Red stems",
-            "Opposite leaves"
-        ]
-    },
-    {
-        "id": "p_in_91",
-        "name": "Creeping Fig",
-        "scientificName": "Ficus pumila",
-        "description": "Aggressive vine with small heart-shaped leaves that clings to walls.",
-        "imageUrl": "https://images.unsplash.com/photo-1632207691143-643e2a9a9361",
-        "idealTempMin": 13,
-        "idealTempMax": 29,
-        "minHumidity": 60,
-        "sunlight": "medium",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Wall cover",
-            "Fast growth"
-        ],
-        "price": 12,
-        "type": "indoor",
-        "foliageTexture": "Papery/Rough",
-        "leafShape": "Cordate (Small)",
-        "stemStructure": "Woody Vine",
-        "overallHabit": "Climbing",
-        "biometricFeatures": [
-            "Aerial roots",
-            "Juvenile/Adult forms"
-        ]
-    },
-    {
-        "id": "p_in_92",
-        "name": "Moon Valley Pilea",
-        "scientificName": "Pilea mollis",
-        "description": "Deeply textured leaves resembling lunar craters.",
-        "imageUrl": "https://images.unsplash.com/photo-1628169225700-1d8f58b8d96d",
-        "idealTempMin": 18,
+        "id": "p_in_147",
+        "name": "Chinese Money Plant 4",
+        "scientificName": "Pilea peperomioides",
+        "description": "Appositus antea volo cariosus curto cursus vaco. Totam civitas coruscus laboriosam subito compono.",
+        "imageUrl": "https://images.unsplash.com/photo-9161369043?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 8,
         "idealTempMax": 26,
-        "minHumidity": 60,
+        "minHumidity": 47,
         "sunlight": "medium",
         "oxygenLevel": "moderate",
         "medicinalValues": [
-            "None"
+            "unlawful",
+            "merit"
         ],
         "advantages": [
-            "High texture",
-            "Compact"
+            "innovative",
+            "architectures"
         ],
-        "price": 15,
+        "price": 42,
         "type": "indoor",
-        "foliageTexture": "Bullate (Crinkled)",
-        "leafShape": "Ovate/Serrated",
+        "lifespan": "5-10 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
         "stemStructure": "Herbaceous",
-        "overallHabit": "Bushy",
+        "overallHabit": "Upright/Bushy",
         "biometricFeatures": [
-            "Deep veins",
-            "Hairy"
+            "Interior Adapted",
+            "Smooth Edges"
         ]
     },
     {
-        "id": "p_in_93",
-        "name": "Silver Satin Epipremnum",
-        "scientificName": "Scindapsus pictus 'Exotica'",
-        "description": "Large leaves with heavy silver splashing.",
-        "imageUrl": "https://images.unsplash.com/photo-1596720512803-085e481b4986",
-        "idealTempMin": 18,
-        "idealTempMax": 29,
-        "minHumidity": 50,
-        "sunlight": "medium",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Silver foliage",
-            "Easy vine"
-        ],
-        "price": 25,
-        "type": "indoor",
-        "foliageTexture": "Matte/Velvet",
-        "leafShape": "Cordate (Asymmetric)",
-        "stemStructure": "Vining",
-        "overallHabit": "Trailing",
-        "biometricFeatures": [
-            "Silver variegation",
-            "Curled tip"
-        ]
-    },
-    {
-        "id": "p_in_94",
-        "name": "Zebra Haworthia",
-        "scientificName": "Haworthiopsis fasciata",
-        "description": "Small succulent rosette with white horizontal stripes.",
-        "imageUrl": "https://images.unsplash.com/photo-1567331140054-3839d67562f8",
-        "idealTempMin": 10,
-        "idealTempMax": 30,
-        "minHumidity": 30,
-        "sunlight": "medium",
+        "id": "p_in_148",
+        "name": "Snake Plant 5",
+        "scientificName": "Sansevieria trifasciata",
+        "description": "Caute aiunt aperio arto cilicium custodia strues studio adficio spectaculum. Arguo suscipit urbanus eum vilis eveniet ducimus cervus.",
+        "imageUrl": "https://images.unsplash.com/photo-9536362149?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 12,
+        "idealTempMax": 31,
+        "minHumidity": 69,
+        "sunlight": "low",
         "oxygenLevel": "low",
         "medicinalValues": [
-            "None"
+            "formal",
+            "dandelion"
         ],
         "advantages": [
-            "Pet Safe",
-            "Compact"
+            "viral",
+            "large language models"
         ],
-        "price": 10,
+        "price": 127,
         "type": "indoor",
-        "foliageTexture": "Hard/Rough",
-        "leafShape": "Lanceolate (Triangle)",
-        "stemStructure": "Rosette",
-        "overallHabit": "Clump",
+        "lifespan": "10-25 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
+        "stemStructure": "Herbaceous",
+        "overallHabit": "Upright/Bushy",
         "biometricFeatures": [
-            "White tubercles",
-            "Accaulescent"
+            "Interior Adapted",
+            "Smooth Edges"
         ]
     },
     {
-        "id": "p_in_95",
-        "name": "Living Stone",
-        "scientificName": "Lithops",
-        "description": "Tiny succulents that evolved to look like rocks to avoid being eaten.",
-        "imageUrl": "https://images.unsplash.com/photo-1589335668748-18e3290de004",
-        "idealTempMin": 10,
-        "idealTempMax": 35,
-        "minHumidity": 10,
-        "sunlight": "high",
-        "oxygenLevel": "low",
+        "id": "p_in_149",
+        "name": "Peace Lily 5",
+        "scientificName": "Spathiphyllum wallisii",
+        "description": "Autus adaugeo altus animi cupiditas. Tener depopulo volup aqua caries subseco aedificium cum accommodo cohors.",
+        "imageUrl": "https://images.unsplash.com/photo-2214040673?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 11,
+        "idealTempMax": 33,
+        "minHumidity": 57,
+        "sunlight": "low",
+        "oxygenLevel": "very-high",
         "medicinalValues": [
-            "None"
+            "thick",
+            "produce"
         ],
         "advantages": [
-            "Curiosity",
-            "Tiny"
-        ],
-        "price": 8,
-        "type": "indoor",
-        "foliageTexture": "Smooth/Stoned",
-        "leafShape": "Truncate",
-        "stemStructure": "None",
-        "overallHabit": "Embedded",
-        "biometricFeatures": [
-            "Fissure on top",
-            "Mimicry"
-        ]
-    },
-    {
-        "id": "p_in_96",
-        "name": "Panda Plant",
-        "scientificName": "Kalanchoe tomentosa",
-        "description": "Fuzzy, silver-green succulent leaves with rusty brown spots on the tips.",
-        "imageUrl": "https://images.unsplash.com/photo-1567331140054-3839d67562f8",
-        "idealTempMin": 15,
-        "idealTempMax": 30,
-        "minHumidity": 30,
-        "sunlight": "medium",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Soft touch",
-            "Cute"
+            "magnetic",
+            "architectures"
         ],
         "price": 12,
         "type": "indoor",
-        "foliageTexture": "Velvety/Furry",
-        "leafShape": "Obovate",
-        "stemStructure": "Succulent",
-        "overallHabit": "Upright",
-        "biometricFeatures": [
-            "Dense hairs",
-            "Chid-safe feel"
-        ]
-    },
-    {
-        "id": "p_in_97",
-        "name": "Fishbone Cactus",
-        "scientificName": "Disocactus anguliger",
-        "description": "Epiphytic cactus with zigzag stems resembling a fish skeleton.",
-        "imageUrl": "https://images.unsplash.com/photo-1632207691143-643e2a9a9361",
-        "idealTempMin": 15,
-        "idealTempMax": 30,
-        "minHumidity": 50,
-        "sunlight": "medium",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Fun shape",
-            "Fragrant night bloom"
-        ],
-        "price": 20,
-        "type": "indoor",
-        "foliageTexture": "Smooth",
-        "leafShape": "Lobed (stem)",
-        "stemStructure": "Flattened Stem",
-        "overallHabit": "Trailing",
-        "biometricFeatures": [
-            "Zigzag lobes",
-            "No leaves"
-        ]
-    },
-    {
-        "id": "p_in_98",
-        "name": "Oxalis",
-        "scientificName": "Oxalis triangularis",
-        "description": "Purple Shamrock. Bulb plant with purple triangular leaves that fold at night.",
-        "imageUrl": "https://images.unsplash.com/photo-1616690248166-5f1181822819",
-        "idealTempMin": 15,
-        "idealTempMax": 25,
-        "minHumidity": 50,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "Edible (sour)"
-        ],
-        "advantages": [
-            "Purple Foliage",
-            "Movement"
-        ],
-        "price": 15,
-        "type": "indoor",
-        "foliageTexture": "Smooth",
-        "leafShape": "Triangular (Compound)",
-        "stemStructure": "Acauiescent",
-        "overallHabit": "Mounding",
-        "biometricFeatures": [
-            "Wait-a-bit",
-            "Nyctinasty"
-        ]
-    },
-    {
-        "id": "p_in_99",
-        "name": "Mistletoe Cactus",
-        "scientificName": "Rhipsalis baccifera",
-        "description": "Trailing cactus with thin, pencil-like green stems. Jungle cactus.",
-        "imageUrl": "https://images.unsplash.com/photo-1596720512803-085e481b4986",
-        "idealTempMin": 16,
-        "idealTempMax": 29,
-        "minHumidity": 60,
-        "sunlight": "medium",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Unique Texture",
-            "Trailing"
-        ],
-        "price": 18,
-        "type": "indoor",
-        "foliageTexture": "Smooth",
-        "leafShape": "None (Stems)",
-        "stemStructure": "Cylindrical/Pendant",
-        "overallHabit": "Epiphytic",
-        "biometricFeatures": [
-            "Aerial roots",
-            "White berries"
-        ]
-    },
-    {
-        "id": "p_in_100",
-        "name": "Sensitive Plant",
-        "scientificName": "Mimosa pudica",
-        "description": "Leaves fold inward immediately when touched.",
-        "imageUrl": "https://images.unsplash.com/photo-1563217684-28b9d2423e80",
-        "idealTempMin": 18,
-        "idealTempMax": 30,
-        "minHumidity": 60,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "Traditional uses"
-        ],
-        "advantages": [
-            "Interactive",
-            "Educational"
-        ],
-        "price": 12,
-        "type": "indoor",
-        "foliageTexture": "Fine/Hairy",
-        "leafShape": "Bipinnate",
+        "lifespan": "3-5 Years",
+        "foliageTexture": "Glossy/Smooth",
+        "leafShape": "Ovate-Elliptical",
         "stemStructure": "Herbaceous",
-        "overallHabit": "Sprawling",
+        "overallHabit": "Upright/Bushy",
         "biometricFeatures": [
-            "Thigmonasty (Touch response)",
-            "Pink puffs"
+            "Interior Adapted",
+            "Smooth Edges"
         ]
     }
 ];
 
 const outdoorPlants = [
     {
-        "id": "p_out_01",
-        "name": "English Lavender",
+        "id": "p_out_100",
+        "name": "Lavender",
         "scientificName": "Lavandula angustifolia",
-        "description": "Aromatic herb with purple flower spikes and silvery foliage. Loves sun and dry soil.",
-        "imageUrl": "https://images.unsplash.com/photo-1563217684-28b9d2423e80",
-        "idealTempMin": -5,
-        "idealTempMax": 30,
-        "minHumidity": 30,
+        "description": "Necessitatibus cum bardus valetudo. Vapulus conventus omnis sortitus derelinquo studio.",
+        "imageUrl": "https://images.unsplash.com/photo-6651942526?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 14,
+        "idealTempMax": 28,
+        "minHumidity": 55,
         "sunlight": "high",
-        "oxygenLevel": "high",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "Relaxation",
-            "Antiseptic"
+            "superb",
+            "netsuke"
         ],
         "advantages": [
-            "Pollinator Friendly",
-            "Drought Tolerant"
+            "value-added",
+            "applications"
         ],
-        "price": 15,
+        "price": 102,
         "type": "outdoor",
-        "foliageTexture": "Soft/Fuzzy",
-        "leafShape": "Linear",
-        "stemStructure": "Woody Base",
-        "overallHabit": "Mounding",
+        "lifespan": "10-15 Years",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
         "biometricFeatures": [
-            "Square Stems",
-            "Fragrant Oil Glands"
+            "Sun Hardy",
+            "Outdoor Adapted"
         ]
     },
     {
-        "id": "p_out_02",
-        "name": "Garden Rose",
-        "scientificName": "Rosa hybrids",
-        "description": "Classic flowering shrub known for fragrant, multi-petaled blooms.",
-        "imageUrl": "https://images.unsplash.com/photo-1518698544840-7815610e199f",
-        "idealTempMin": -10,
+        "id": "p_out_101",
+        "name": "Rose Bush",
+        "scientificName": "Rosa",
+        "description": "Adficio alveus autus. Alius usitas dolorem dapifer sum cilicium.",
+        "imageUrl": "https://images.unsplash.com/photo-2098692796?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 11,
+        "idealTempMax": 33,
+        "minHumidity": 61,
+        "sunlight": "high",
+        "oxygenLevel": "very-high",
+        "medicinalValues": [
+            "urban",
+            "iridescence"
+        ],
+        "advantages": [
+            "AI-driven",
+            "convergence"
+        ],
+        "price": 138,
+        "type": "outdoor",
+        "lifespan": "15-20 Years",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_102",
+        "name": "Hydrangea",
+        "scientificName": "Hydrangea macrophylla",
+        "description": "Solutio ambulo cruciamentum vacuus theca repudiandae audeo sto vita. Crustulum suspendo tabesco ventus delinquo confugo tutamen spiculum.",
+        "imageUrl": "https://images.unsplash.com/photo-3168829534?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 15,
+        "idealTempMax": 35,
+        "minHumidity": 50,
+        "sunlight": "high",
+        "oxygenLevel": "high",
+        "medicinalValues": [
+            "everlasting",
+            "larva"
+        ],
+        "advantages": [
+            "B2B",
+            "relationships"
+        ],
+        "price": 29,
+        "type": "outdoor",
+        "lifespan": "50+ Years",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_103",
+        "name": "Sunflower",
+        "scientificName": "Helianthus annuus",
+        "description": "Subiungo acerbitas adopto auditor demonstro alveus cura decumbo antiquus umerus. Talio cras vitiosus celer tendo.",
+        "imageUrl": "https://images.unsplash.com/photo-5495781580?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 9,
+        "idealTempMax": 28,
+        "minHumidity": 71,
+        "sunlight": "high",
+        "oxygenLevel": "very-high",
+        "medicinalValues": [
+            "both",
+            "boulevard"
+        ],
+        "advantages": [
+            "one-to-one",
+            "niches"
+        ],
+        "price": 199,
+        "type": "outdoor",
+        "lifespan": "Annual (1 Year)",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_104",
+        "name": "Tulip",
+        "scientificName": "Tulipa",
+        "description": "Constans apto contabesco. Hic administratio earum spes aliqua.",
+        "imageUrl": "https://images.unsplash.com/photo-5137468363?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 29,
+        "minHumidity": 58,
+        "sunlight": "high",
+        "oxygenLevel": "moderate",
+        "medicinalValues": [
+            "rewarding",
+            "netsuke"
+        ],
+        "advantages": [
+            "scalable",
+            "solutions"
+        ],
+        "price": 32,
+        "type": "outdoor",
+        "lifespan": "Perennial (3-5 Years)",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_105",
+        "name": "Oak Tree",
+        "scientificName": "Quercus",
+        "description": "Defaeco colo acceptus laudantium accusantium. Ipsam vestrum carpo vesco vaco ago qui cura ulterius sub.",
+        "imageUrl": "https://images.unsplash.com/photo-8616947193?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 25,
+        "minHumidity": 61,
+        "sunlight": "high",
+        "oxygenLevel": "low",
+        "medicinalValues": [
+            "sure-footed",
+            "fat"
+        ],
+        "advantages": [
+            "cutting-edge",
+            "users"
+        ],
+        "price": 60,
+        "type": "outdoor",
+        "lifespan": "100+ Years",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_106",
+        "name": "Maple Tree",
+        "scientificName": "Acer",
+        "description": "Audacia careo delectatio abduco cibus creta unde repellendus cresco video. Tondeo caput cerno unus arbitro trado rerum victus thorax.",
+        "imageUrl": "https://images.unsplash.com/photo-5509106271?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 8,
+        "idealTempMax": 28,
+        "minHumidity": 63,
+        "sunlight": "high",
+        "oxygenLevel": "moderate",
+        "medicinalValues": [
+            "bony",
+            "subsidy"
+        ],
+        "advantages": [
+            "24/7",
+            "architectures"
+        ],
+        "price": 63,
+        "type": "outdoor",
+        "lifespan": "80-100 Years",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_107",
+        "name": "Peony",
+        "scientificName": "Paeonia",
+        "description": "Vilis cribro tempus coruscus. Cribro dens acquiro.",
+        "imageUrl": "https://images.unsplash.com/photo-5049863591?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 14,
+        "idealTempMax": 25,
+        "minHumidity": 71,
+        "sunlight": "high",
+        "oxygenLevel": "low",
+        "medicinalValues": [
+            "silky",
+            "jazz"
+        ],
+        "advantages": [
+            "integrated",
+            "partnerships"
+        ],
+        "price": 82,
+        "type": "outdoor",
+        "lifespan": "50-100 Years",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_108",
+        "name": "Marigold",
+        "scientificName": "Tagetes",
+        "description": "Quaerat verbera teneo. Crustulum textor sed comis creo sit cenaculum delinquo cunabula.",
+        "imageUrl": "https://images.unsplash.com/photo-7157609729?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 12,
+        "idealTempMax": 31,
+        "minHumidity": 32,
+        "sunlight": "high",
+        "oxygenLevel": "very-high",
+        "medicinalValues": [
+            "doting",
+            "jellyfish"
+        ],
+        "advantages": [
+            "decentralized",
+            "AI"
+        ],
+        "price": 106,
+        "type": "outdoor",
+        "lifespan": "Annual (1 Year)",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_109",
+        "name": "Basil",
+        "scientificName": "Ocimum basilicum",
+        "description": "Complectus architecto turpis volaticus animi concedo. Contra charisma esse voluptate vaco considero.",
+        "imageUrl": "https://images.unsplash.com/photo-1322117555?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 7,
+        "idealTempMax": 26,
+        "minHumidity": 33,
+        "sunlight": "high",
+        "oxygenLevel": "moderate",
+        "medicinalValues": [
+            "elderly",
+            "place"
+        ],
+        "advantages": [
+            "compelling",
+            "experiences"
+        ],
+        "price": 188,
+        "type": "outdoor",
+        "lifespan": "Annual (1 Year)",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_110",
+        "name": "Tomato",
+        "scientificName": "Solanum lycopersicum",
+        "description": "Valeo ex verbum in tollo curo suasoria deorsum sto. Angulus debilito alioqui cotidie facere ascisco sto combibo subseco.",
+        "imageUrl": "https://images.unsplash.com/photo-6235227864?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 8,
+        "idealTempMax": 35,
+        "minHumidity": 64,
+        "sunlight": "high",
+        "oxygenLevel": "moderate",
+        "medicinalValues": [
+            "doting",
+            "obedience"
+        ],
+        "advantages": [
+            "cross-media",
+            "partnerships"
+        ],
+        "price": 79,
+        "type": "outdoor",
+        "lifespan": "Annual (1 Year)",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_111",
+        "name": "Boxwood",
+        "scientificName": "Buxus",
+        "description": "Coadunatio tametsi clam. Comparo cunabula blandior defungo demitto deorsum vulgo cimentarius delectatio cilicium.",
+        "imageUrl": "https://images.unsplash.com/photo-4640048644?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 12,
+        "idealTempMax": 31,
+        "minHumidity": 77,
+        "sunlight": "high",
+        "oxygenLevel": "moderate",
+        "medicinalValues": [
+            "unsightly",
+            "legislature"
+        ],
+        "advantages": [
+            "24/7",
+            "mindshare"
+        ],
+        "price": 14,
+        "type": "outdoor",
+        "lifespan": "20-30 Years",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_112",
+        "name": "Lavender 2",
+        "scientificName": "Lavandula angustifolia",
+        "description": "Expedita adaugeo sopor alienus curto curso administratio ademptio certe adstringo. Talio conscendo subseco substantia cotidie.",
+        "imageUrl": "https://images.unsplash.com/photo-4494056784?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 10,
         "idealTempMax": 30,
         "minHumidity": 40,
         "sunlight": "high",
-        "oxygenLevel": "moderate",
+        "oxygenLevel": "low",
         "medicinalValues": [
-            "Vitamin C (Hips)",
-            "Skin Oil"
+            "second",
+            "presume"
         ],
         "advantages": [
-            "Fragrance",
-            "Cut Flowers"
+            "strategic",
+            "deliverables"
         ],
-        "price": 35,
+        "price": 60,
         "type": "outdoor",
-        "foliageTexture": "Serrated/Matte",
-        "leafShape": "Pinnate",
-        "stemStructure": "Woody/Thorny",
-        "overallHabit": "Shrub/Climber",
+        "lifespan": "10-15 Years",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
         "biometricFeatures": [
-            "Thorns (Prickles)",
-            "Stipules at base"
+            "Sun Hardy",
+            "Outdoor Adapted"
         ]
     },
     {
-        "id": "p_out_03",
-        "name": "Hydrangea",
+        "id": "p_out_113",
+        "name": "Rose Bush 2",
+        "scientificName": "Rosa",
+        "description": "Ipsum sol terebro ratione amor. Odit alveus astrum voco.",
+        "imageUrl": "https://images.unsplash.com/photo-9562493150?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 11,
+        "idealTempMax": 31,
+        "minHumidity": 51,
+        "sunlight": "high",
+        "oxygenLevel": "moderate",
+        "medicinalValues": [
+            "pointed",
+            "e-mail"
+        ],
+        "advantages": [
+            "robust",
+            "models"
+        ],
+        "price": 24,
+        "type": "outdoor",
+        "lifespan": "15-20 Years",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_114",
+        "name": "Hydrangea 2",
         "scientificName": "Hydrangea macrophylla",
-        "description": "Deciduous shrub with huge flower heads that can change color based on soil pH.",
-        "imageUrl": "https://images.unsplash.com/photo-1502444330663-89cd249f3e58",
-        "idealTempMin": -5,
+        "description": "Votum urbanus curis utor barba. Bene doloremque antiquus victus baiulus.",
+        "imageUrl": "https://images.unsplash.com/photo-3369875473?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 15,
         "idealTempMax": 25,
-        "minHumidity": 50,
-        "sunlight": "medium",
-        "oxygenLevel": "moderate",
+        "minHumidity": 68,
+        "sunlight": "high",
+        "oxygenLevel": "very-high",
         "medicinalValues": [
-            "None"
+            "worse",
+            "co-producer"
         ],
         "advantages": [
-            "Massive Blooms",
-            "Long Flowering"
+            "strategic",
+            "networks"
         ],
-        "price": 40,
+        "price": 138,
         "type": "outdoor",
-        "foliageTexture": "Broad/Serrated",
-        "leafShape": "Ovate",
-        "stemStructure": "Woody",
-        "overallHabit": "Mounding",
+        "lifespan": "50+ Years",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
         "biometricFeatures": [
-            "Opposite Leaves",
-            "Corymb Blooms"
+            "Sun Hardy",
+            "Outdoor Adapted"
         ]
     },
     {
-        "id": "p_out_04",
-        "name": "Japanese Maple",
-        "scientificName": "Acer palmatum",
-        "description": "Elegant deciduous tree with delicate, palm-shaped leaves turning brilliant red in fall.",
-        "imageUrl": "https://images.unsplash.com/photo-1542278917-76856c3fa536",
-        "idealTempMin": -15,
+        "id": "p_out_115",
+        "name": "Sunflower 2",
+        "scientificName": "Helianthus annuus",
+        "description": "Aspernatur brevis coma patior nesciunt correptius video apparatus aperte. Volup delicate cicuta conturbo.",
+        "imageUrl": "https://images.unsplash.com/photo-5274130911?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 12,
+        "idealTempMax": 33,
+        "minHumidity": 42,
+        "sunlight": "high",
+        "oxygenLevel": "moderate",
+        "medicinalValues": [
+            "jealous",
+            "sediment"
+        ],
+        "advantages": [
+            "scalable",
+            "systems"
+        ],
+        "price": 116,
+        "type": "outdoor",
+        "lifespan": "Annual (1 Year)",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_116",
+        "name": "Tulip 2",
+        "scientificName": "Tulipa",
+        "description": "Sufficio votum optio. Demoror delego caelum enim adversus socius delibero.",
+        "imageUrl": "https://images.unsplash.com/photo-6487328087?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 15,
+        "idealTempMax": 33,
+        "minHumidity": 30,
+        "sunlight": "high",
+        "oxygenLevel": "very-high",
+        "medicinalValues": [
+            "firsthand",
+            "fishery"
+        ],
+        "advantages": [
+            "magnetic",
+            "schemas"
+        ],
+        "price": 169,
+        "type": "outdoor",
+        "lifespan": "Perennial (3-5 Years)",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_117",
+        "name": "Oak Tree 2",
+        "scientificName": "Quercus",
+        "description": "Praesentium autem apud vix cura statua. Caste laudantium cenaculum tersus taceo cenaculum patior adopto maiores.",
+        "imageUrl": "https://images.unsplash.com/photo-5744097693?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 9,
         "idealTempMax": 28,
-        "minHumidity": 50,
-        "sunlight": "medium",
+        "minHumidity": 39,
+        "sunlight": "high",
+        "oxygenLevel": "moderate",
+        "medicinalValues": [
+            "actual",
+            "CD"
+        ],
+        "advantages": [
+            "out-of-the-box",
+            "large language models"
+        ],
+        "price": 185,
+        "type": "outdoor",
+        "lifespan": "100+ Years",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_118",
+        "name": "Maple Tree 2",
+        "scientificName": "Acer",
+        "description": "Tepesco creptio alienus. Succedo solitudo quae bis cultura calcar condico.",
+        "imageUrl": "https://images.unsplash.com/photo-3828505512?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 7,
+        "idealTempMax": 34,
+        "minHumidity": 58,
+        "sunlight": "high",
+        "oxygenLevel": "low",
+        "medicinalValues": [
+            "reflecting",
+            "government"
+        ],
+        "advantages": [
+            "front-end",
+            "niches"
+        ],
+        "price": 137,
+        "type": "outdoor",
+        "lifespan": "80-100 Years",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_119",
+        "name": "Peony 2",
+        "scientificName": "Paeonia",
+        "description": "Corona bis contabesco timidus vapulus urbanus comes delicate undique vir. Aro ad denuo antepono.",
+        "imageUrl": "https://images.unsplash.com/photo-5854489943?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 9,
+        "idealTempMax": 30,
+        "minHumidity": 33,
+        "sunlight": "high",
+        "oxygenLevel": "moderate",
+        "medicinalValues": [
+            "long",
+            "mantua"
+        ],
+        "advantages": [
+            "rich",
+            "experiences"
+        ],
+        "price": 100,
+        "type": "outdoor",
+        "lifespan": "50-100 Years",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_120",
+        "name": "Marigold 2",
+        "scientificName": "Tagetes",
+        "description": "Copia nihil vitium confido adicio. Tego viscus attonbitus celebrer abstergo.",
+        "imageUrl": "https://images.unsplash.com/photo-3800594672?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 14,
+        "idealTempMax": 26,
+        "minHumidity": 32,
+        "sunlight": "high",
+        "oxygenLevel": "very-high",
+        "medicinalValues": [
+            "concerned",
+            "nucleotidase"
+        ],
+        "advantages": [
+            "24/7",
+            "functionalities"
+        ],
+        "price": 189,
+        "type": "outdoor",
+        "lifespan": "Annual (1 Year)",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_121",
+        "name": "Basil 2",
+        "scientificName": "Ocimum basilicum",
+        "description": "Curso cerno ver. Tripudio curia arcus bestia.",
+        "imageUrl": "https://images.unsplash.com/photo-2224266140?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 15,
+        "idealTempMax": 33,
+        "minHumidity": 58,
+        "sunlight": "high",
+        "oxygenLevel": "very-high",
+        "medicinalValues": [
+            "handsome",
+            "bungalow"
+        ],
+        "advantages": [
+            "bleeding-edge",
+            "ROI"
+        ],
+        "price": 53,
+        "type": "outdoor",
+        "lifespan": "Annual (1 Year)",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_122",
+        "name": "Tomato 2",
+        "scientificName": "Solanum lycopersicum",
+        "description": "Contabesco voluptates ultra viduo minima. Certe votum laboriosam eum.",
+        "imageUrl": "https://images.unsplash.com/photo-8442642105?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 15,
+        "idealTempMax": 26,
+        "minHumidity": 55,
+        "sunlight": "high",
+        "oxygenLevel": "moderate",
+        "medicinalValues": [
+            "these",
+            "formation"
+        ],
+        "advantages": [
+            "cutting-edge",
+            "schemas"
+        ],
+        "price": 62,
+        "type": "outdoor",
+        "lifespan": "Annual (1 Year)",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_123",
+        "name": "Boxwood 2",
+        "scientificName": "Buxus",
+        "description": "Natus approbo suasoria. Ducimus tumultus crepusculum triumphus capto civitas caute tyrannus.",
+        "imageUrl": "https://images.unsplash.com/photo-8541370983?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 11,
+        "idealTempMax": 33,
+        "minHumidity": 52,
+        "sunlight": "high",
+        "oxygenLevel": "moderate",
+        "medicinalValues": [
+            "indelible",
+            "disk"
+        ],
+        "advantages": [
+            "enterprise",
+            "synergies"
+        ],
+        "price": 183,
+        "type": "outdoor",
+        "lifespan": "20-30 Years",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_124",
+        "name": "Lavender 3",
+        "scientificName": "Lavandula angustifolia",
+        "description": "Ventosus ager architecto aperte quis sopor articulus spes cotidie nobis. Stabilis inflammatio ciminatio iure labore adsum.",
+        "imageUrl": "https://images.unsplash.com/photo-7310140536?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 8,
+        "idealTempMax": 32,
+        "minHumidity": 71,
+        "sunlight": "high",
         "oxygenLevel": "high",
         "medicinalValues": [
-            "None"
+            "obvious",
+            "hubris"
         ],
         "advantages": [
-            "Focal Point",
-            "Seasonal Color"
+            "extensible",
+            "mindshare"
+        ],
+        "price": 86,
+        "type": "outdoor",
+        "lifespan": "10-15 Years",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_125",
+        "name": "Rose Bush 3",
+        "scientificName": "Rosa",
+        "description": "Corporis enim decens libero attonbitus apparatus ver. Ab cetera labore vae caste.",
+        "imageUrl": "https://images.unsplash.com/photo-1907620411?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 14,
+        "idealTempMax": 33,
+        "minHumidity": 54,
+        "sunlight": "high",
+        "oxygenLevel": "low",
+        "medicinalValues": [
+            "writhing",
+            "mortise"
+        ],
+        "advantages": [
+            "enterprise",
+            "solutions"
+        ],
+        "price": 199,
+        "type": "outdoor",
+        "lifespan": "15-20 Years",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_126",
+        "name": "Hydrangea 3",
+        "scientificName": "Hydrangea macrophylla",
+        "description": "Solvo angelus consectetur tam pauper. Arca cresco vitae dens amaritudo unus.",
+        "imageUrl": "https://images.unsplash.com/photo-9744579435?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 7,
+        "idealTempMax": 25,
+        "minHumidity": 78,
+        "sunlight": "high",
+        "oxygenLevel": "low",
+        "medicinalValues": [
+            "grizzled",
+            "pilot"
+        ],
+        "advantages": [
+            "impactful",
+            "large language models"
+        ],
+        "price": 163,
+        "type": "outdoor",
+        "lifespan": "50+ Years",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_127",
+        "name": "Sunflower 3",
+        "scientificName": "Helianthus annuus",
+        "description": "Correptius sophismata tempora vetus decimus subseco suasoria vergo laborum adsuesco. Expedita centum et advoco convoco molestias votum textor degenero.",
+        "imageUrl": "https://images.unsplash.com/photo-5598293271?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 8,
+        "idealTempMax": 33,
+        "minHumidity": 58,
+        "sunlight": "high",
+        "oxygenLevel": "low",
+        "medicinalValues": [
+            "stormy",
+            "defendant"
+        ],
+        "advantages": [
+            "one-to-one",
+            "methodologies"
+        ],
+        "price": 25,
+        "type": "outdoor",
+        "lifespan": "Annual (1 Year)",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_128",
+        "name": "Tulip 3",
+        "scientificName": "Tulipa",
+        "description": "Succedo hic tamquam. Cras antea aveho benevolentia ultra.",
+        "imageUrl": "https://images.unsplash.com/photo-9558231890?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 11,
+        "idealTempMax": 29,
+        "minHumidity": 79,
+        "sunlight": "high",
+        "oxygenLevel": "low",
+        "medicinalValues": [
+            "meaty",
+            "lashes"
+        ],
+        "advantages": [
+            "smart",
+            "partnerships"
+        ],
+        "price": 140,
+        "type": "outdoor",
+        "lifespan": "Perennial (3-5 Years)",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_129",
+        "name": "Oak Tree 3",
+        "scientificName": "Quercus",
+        "description": "Sapiente iusto tutis antiquus vis ventus aegrotatio suadeo. Anser rem contabesco dicta.",
+        "imageUrl": "https://images.unsplash.com/photo-8816634300?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 7,
+        "idealTempMax": 35,
+        "minHumidity": 75,
+        "sunlight": "high",
+        "oxygenLevel": "very-high",
+        "medicinalValues": [
+            "rapid",
+            "longboat"
+        ],
+        "advantages": [
+            "turn-key",
+            "experiences"
+        ],
+        "price": 197,
+        "type": "outdoor",
+        "lifespan": "100+ Years",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_130",
+        "name": "Maple Tree 3",
+        "scientificName": "Acer",
+        "description": "Solum ara amoveo amita denuo deputo curia aegre aro ubi. Traho possimus candidus curis vulgo aurum thymbra ambitus sed cibo.",
+        "imageUrl": "https://images.unsplash.com/photo-4238207119?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 11,
+        "idealTempMax": 25,
+        "minHumidity": 39,
+        "sunlight": "high",
+        "oxygenLevel": "moderate",
+        "medicinalValues": [
+            "rich",
+            "pantyhose"
+        ],
+        "advantages": [
+            "24/7",
+            "web services"
+        ],
+        "price": 142,
+        "type": "outdoor",
+        "lifespan": "80-100 Years",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_131",
+        "name": "Peony 3",
+        "scientificName": "Paeonia",
+        "description": "Pecto conscendo deinde velum admoveo circumvenio. Cur copia impedit patior.",
+        "imageUrl": "https://images.unsplash.com/photo-5428068721?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 15,
+        "idealTempMax": 33,
+        "minHumidity": 76,
+        "sunlight": "high",
+        "oxygenLevel": "very-high",
+        "medicinalValues": [
+            "wonderful",
+            "defendant"
+        ],
+        "advantages": [
+            "one-to-one",
+            "ROI"
+        ],
+        "price": 174,
+        "type": "outdoor",
+        "lifespan": "50-100 Years",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_132",
+        "name": "Marigold 3",
+        "scientificName": "Tagetes",
+        "description": "Sapiente ascisco acervus. Volo caute vado curso tabella autus spargo averto curso.",
+        "imageUrl": "https://images.unsplash.com/photo-6952732957?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 11,
+        "idealTempMax": 28,
+        "minHumidity": 64,
+        "sunlight": "high",
+        "oxygenLevel": "very-high",
+        "medicinalValues": [
+            "neat",
+            "aircraft"
+        ],
+        "advantages": [
+            "one-to-one",
+            "applications"
+        ],
+        "price": 139,
+        "type": "outdoor",
+        "lifespan": "Annual (1 Year)",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_133",
+        "name": "Basil 3",
+        "scientificName": "Ocimum basilicum",
+        "description": "Stipes cometes sustineo currus curia repudiandae caveo. Voro dolore clibanus somniculosus.",
+        "imageUrl": "https://images.unsplash.com/photo-7929774407?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 6,
+        "idealTempMax": 33,
+        "minHumidity": 34,
+        "sunlight": "high",
+        "oxygenLevel": "low",
+        "medicinalValues": [
+            "cruel",
+            "moment"
+        ],
+        "advantages": [
+            "dynamic",
+            "schemas"
+        ],
+        "price": 62,
+        "type": "outdoor",
+        "lifespan": "Annual (1 Year)",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_134",
+        "name": "Tomato 3",
+        "scientificName": "Solanum lycopersicum",
+        "description": "Curiositas autus depromo trado despecto deleo templum ascit adsuesco bellicus. Sui appono theologus theca voluptatibus acer comptus verumtamen texo ustilo.",
+        "imageUrl": "https://images.unsplash.com/photo-1318632732?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 9,
+        "idealTempMax": 32,
+        "minHumidity": 51,
+        "sunlight": "high",
+        "oxygenLevel": "moderate",
+        "medicinalValues": [
+            "mixed",
+            "bid"
+        ],
+        "advantages": [
+            "cross-platform",
+            "infrastructures"
+        ],
+        "price": 189,
+        "type": "outdoor",
+        "lifespan": "Annual (1 Year)",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_135",
+        "name": "Boxwood 3",
+        "scientificName": "Buxus",
+        "description": "Adaugeo cognomen ocer vomito angelus texo culpa labore quis. Animus tenuis tyrannus cubitum.",
+        "imageUrl": "https://images.unsplash.com/photo-7811477140?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 6,
+        "idealTempMax": 30,
+        "minHumidity": 44,
+        "sunlight": "high",
+        "oxygenLevel": "low",
+        "medicinalValues": [
+            "odd",
+            "brace"
+        ],
+        "advantages": [
+            "back-end",
+            "synergies"
+        ],
+        "price": 160,
+        "type": "outdoor",
+        "lifespan": "20-30 Years",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_136",
+        "name": "Lavender 4",
+        "scientificName": "Lavandula angustifolia",
+        "description": "Adaugeo desipio adeptio appono caput denique valde. Delego quidem clementia vita degero subito creo confugo tamen cultellus.",
+        "imageUrl": "https://images.unsplash.com/photo-8957007796?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 14,
+        "idealTempMax": 31,
+        "minHumidity": 70,
+        "sunlight": "high",
+        "oxygenLevel": "low",
+        "medicinalValues": [
+            "cooperative",
+            "intellect"
+        ],
+        "advantages": [
+            "back-end",
+            "web services"
+        ],
+        "price": 25,
+        "type": "outdoor",
+        "lifespan": "10-15 Years",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_137",
+        "name": "Rose Bush 4",
+        "scientificName": "Rosa",
+        "description": "Arca denique venia denuncio pecto subnecto adhaero. Velociter commemoro venustas.",
+        "imageUrl": "https://images.unsplash.com/photo-6143164230?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 15,
+        "idealTempMax": 34,
+        "minHumidity": 31,
+        "sunlight": "high",
+        "oxygenLevel": "very-high",
+        "medicinalValues": [
+            "well-to-do",
+            "incandescence"
+        ],
+        "advantages": [
+            "immersive",
+            "technologies"
+        ],
+        "price": 197,
+        "type": "outdoor",
+        "lifespan": "15-20 Years",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_138",
+        "name": "Hydrangea 4",
+        "scientificName": "Hydrangea macrophylla",
+        "description": "Coniecto crepusculum depromo damnatio tergeo capitulus stella dolorum. Denuncio adversus decens stella.",
+        "imageUrl": "https://images.unsplash.com/photo-9302431596?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 32,
+        "minHumidity": 62,
+        "sunlight": "high",
+        "oxygenLevel": "moderate",
+        "medicinalValues": [
+            "ugly",
+            "insolence"
+        ],
+        "advantages": [
+            "back-end",
+            "initiatives"
+        ],
+        "price": 192,
+        "type": "outdoor",
+        "lifespan": "50+ Years",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_139",
+        "name": "Sunflower 4",
+        "scientificName": "Helianthus annuus",
+        "description": "Decet accedo quasi asper. Bellicus absorbeo similique desolo.",
+        "imageUrl": "https://images.unsplash.com/photo-2658457800?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 15,
+        "idealTempMax": 33,
+        "minHumidity": 37,
+        "sunlight": "high",
+        "oxygenLevel": "low",
+        "medicinalValues": [
+            "sudden",
+            "pants"
+        ],
+        "advantages": [
+            "visionary",
+            "experiences"
+        ],
+        "price": 51,
+        "type": "outdoor",
+        "lifespan": "Annual (1 Year)",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_140",
+        "name": "Tulip 4",
+        "scientificName": "Tulipa",
+        "description": "Demens tolero tabesco advoco. Caelum culpa vulnus adiuvo surgo nulla absconditus.",
+        "imageUrl": "https://images.unsplash.com/photo-5504306361?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 11,
+        "idealTempMax": 25,
+        "minHumidity": 32,
+        "sunlight": "high",
+        "oxygenLevel": "very-high",
+        "medicinalValues": [
+            "uncommon",
+            "courtroom"
+        ],
+        "advantages": [
+            "revolutionary",
+            "functionalities"
+        ],
+        "price": 149,
+        "type": "outdoor",
+        "lifespan": "Perennial (3-5 Years)",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_141",
+        "name": "Oak Tree 4",
+        "scientificName": "Quercus",
+        "description": "Stella vulariter desparatus. Ater aspernatur saepe astrum ascit autus urbs textilis totam speciosus.",
+        "imageUrl": "https://images.unsplash.com/photo-9142790168?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 6,
+        "idealTempMax": 26,
+        "minHumidity": 47,
+        "sunlight": "high",
+        "oxygenLevel": "moderate",
+        "medicinalValues": [
+            "cloudy",
+            "designation"
+        ],
+        "advantages": [
+            "efficient",
+            "users"
+        ],
+        "price": 155,
+        "type": "outdoor",
+        "lifespan": "100+ Years",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_142",
+        "name": "Maple Tree 4",
+        "scientificName": "Acer",
+        "description": "Templum teres tardus amiculum tenus valens territo. Sollers cultellus cedo stultus aperte doloremque carpo degusto tripudio.",
+        "imageUrl": "https://images.unsplash.com/photo-3139910863?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 34,
+        "minHumidity": 68,
+        "sunlight": "high",
+        "oxygenLevel": "very-high",
+        "medicinalValues": [
+            "afraid",
+            "dish"
+        ],
+        "advantages": [
+            "compelling",
+            "interfaces"
+        ],
+        "price": 22,
+        "type": "outdoor",
+        "lifespan": "80-100 Years",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_143",
+        "name": "Peony 4",
+        "scientificName": "Paeonia",
+        "description": "Socius contigo veniam ullam astrum. Nostrum valetudo tergiversatio.",
+        "imageUrl": "https://images.unsplash.com/photo-1355754500?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 14,
+        "idealTempMax": 26,
+        "minHumidity": 67,
+        "sunlight": "high",
+        "oxygenLevel": "low",
+        "medicinalValues": [
+            "stormy",
+            "formula"
+        ],
+        "advantages": [
+            "compelling",
+            "communities"
+        ],
+        "price": 90,
+        "type": "outdoor",
+        "lifespan": "50-100 Years",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_144",
+        "name": "Marigold 4",
+        "scientificName": "Tagetes",
+        "description": "Ulterius non vulariter rerum consuasor. Bardus derelinquo tabgo termes ver cubicularis incidunt cometes decumbo artificiose.",
+        "imageUrl": "https://images.unsplash.com/photo-6008062775?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 7,
+        "idealTempMax": 35,
+        "minHumidity": 45,
+        "sunlight": "high",
+        "oxygenLevel": "high",
+        "medicinalValues": [
+            "muddy",
+            "forager"
+        ],
+        "advantages": [
+            "killer",
+            "initiatives"
+        ],
+        "price": 53,
+        "type": "outdoor",
+        "lifespan": "Annual (1 Year)",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_145",
+        "name": "Basil 4",
+        "scientificName": "Ocimum basilicum",
+        "description": "Solus eligendi tracto utor theologus crepusculum arcesso via aeternus. Temperantia iste torqueo bis conforto apostolus a cicuta charisma.",
+        "imageUrl": "https://images.unsplash.com/photo-9885646500?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 14,
+        "idealTempMax": 28,
+        "minHumidity": 50,
+        "sunlight": "high",
+        "oxygenLevel": "moderate",
+        "medicinalValues": [
+            "plain",
+            "maestro"
+        ],
+        "advantages": [
+            "best-of-breed",
+            "architectures"
         ],
         "price": 120,
         "type": "outdoor",
-        "foliageTexture": "Delicate/Papery",
-        "leafShape": "Palmate (Lobed)",
-        "stemStructure": "Woody Tree",
-        "overallHabit": "Vase/Weeping",
+        "lifespan": "Annual (1 Year)",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
         "biometricFeatures": [
-            "5-7 Lobes",
-            "Opposite Branching"
+            "Sun Hardy",
+            "Outdoor Adapted"
         ]
     },
     {
-        "id": "p_out_05",
-        "name": "Sunflower",
-        "scientificName": "Helianthus annuus",
-        "description": "Tall annual with massive yellow flower heads that track the sun.",
-        "imageUrl": "https://images.unsplash.com/photo-1597848212624-a19eb35e2651",
-        "idealTempMin": 10,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "Seeds (Nutrients)"
-        ],
-        "advantages": [
-            "Fast Growth",
-            "Edible Seeds"
-        ],
-        "price": 10,
-        "type": "outdoor",
-        "foliageTexture": "Rough/Hairy",
-        "leafShape": "Cordate",
-        "stemStructure": "Herbaceous/Stiff",
-        "overallHabit": "Upright (Single Stem)",
-        "biometricFeatures": [
-            "Hirsute Stem",
-            "Ray & Disc Florets"
-        ]
-    },
-    {
-        "id": "p_out_06",
-        "name": "Boxwood",
-        "scientificName": "Buxus sempervirens",
-        "description": "Dense evergreen shrub with small leaves, perfect for hedging and topiary.",
-        "imageUrl": "https://images.unsplash.com/photo-1588631189912-88741369527f",
-        "idealTempMin": -20,
-        "idealTempMax": 30,
-        "minHumidity": 40,
-        "sunlight": "medium",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Winter Interest",
-            "Deer Resistant"
-        ],
-        "price": 30,
-        "type": "outdoor",
-        "foliageTexture": "Smooth/Leathery",
-        "leafShape": "Elliptic/Small",
-        "stemStructure": "Woody",
-        "overallHabit": "Rounded/Compact",
-        "biometricFeatures": [
-            "Opposite Leaves",
-            "Square young stems"
-        ]
-    },
-    {
-        "id": "p_out_07",
-        "name": "Peony",
-        "scientificName": "Paeonia lactiflora",
-        "description": "Herbaceous perennial with massive, fluffy, fragrant blooms in spring.",
-        "imageUrl": "https://images.unsplash.com/photo-1560717278-f7b57bf4b534",
-        "idealTempMin": -20,
-        "idealTempMax": 25,
-        "minHumidity": 40,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "Anti-inflammatory (Root)"
-        ],
-        "advantages": [
-            "Long Lived (50+ yrs)",
-            "Spectacular Bloom"
-        ],
-        "price": 45,
-        "type": "outdoor",
-        "foliageTexture": "Deeply Lobed",
-        "leafShape": "Biternate",
-        "stemStructure": "Herbaceous",
-        "overallHabit": "Clumping",
-        "biometricFeatures": [
-            "Compound Leaves",
-            "Ants on buds"
-        ]
-    },
-    {
-        "id": "p_out_08",
-        "name": "Hosta",
-        "scientificName": "Hosta spp.",
-        "description": "Shade-loving perennial grown for its lush, variegated foliage.",
-        "imageUrl": "https://images.unsplash.com/photo-1596720512534-72210887ee2c",
-        "idealTempMin": -30,
-        "idealTempMax": 28,
-        "minHumidity": 60,
-        "sunlight": "low",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Shade Garden Staple",
-            "Ground Cover"
-        ],
-        "price": 15,
-        "type": "outdoor",
-        "foliageTexture": "Ribbed/Waxy",
-        "leafShape": "Cordate/Broad",
-        "stemStructure": "Rhizomatous",
-        "overallHabit": "Mounding",
-        "biometricFeatures": [
-            "Parallel Venation",
-            "Raceme Flower Spike"
-        ]
-    },
-    {
-        "id": "p_out_09",
-        "name": "Tomato",
+        "id": "p_out_146",
+        "name": "Tomato 4",
         "scientificName": "Solanum lycopersicum",
-        "description": "The most popular vegetable garden plant, producing juicy red edible fruit.",
-        "imageUrl": "https://images.unsplash.com/photo-1592841200221-a6898f307baa",
-        "idealTempMin": 15,
+        "description": "Victus avaritia vigor adulescens accedo consequuntur minus summa decipio. Aliqua adficio amet vociferor illo.",
+        "imageUrl": "https://images.unsplash.com/photo-1266909927?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 10,
         "idealTempMax": 32,
-        "minHumidity": 50,
+        "minHumidity": 55,
         "sunlight": "high",
-        "oxygenLevel": "high",
+        "oxygenLevel": "very-high",
         "medicinalValues": [
-            "Lycopene (Antioxidant)"
+            "extroverted",
+            "permafrost"
         ],
         "advantages": [
-            "Edible",
-            "Productive"
+            "sticky",
+            "schemas"
         ],
-        "price": 8,
+        "price": 192,
         "type": "outdoor",
-        "foliageTexture": "Hairy/Odoriferous",
-        "leafShape": "Pinnate (Compound)",
-        "stemStructure": "Vining/Bush",
-        "overallHabit": "Sprawling",
+        "lifespan": "Annual (1 Year)",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
         "biometricFeatures": [
-            "Glandular Hairs",
-            "Yellow Flowers"
+            "Sun Hardy",
+            "Outdoor Adapted"
         ]
     },
     {
-        "id": "p_out_10",
-        "name": "Azalea",
-        "scientificName": "Rhododendron spp.",
-        "description": "Flowering shrub that erupts in color in spring. Loves acidic soil.",
-        "imageUrl": "https://images.unsplash.com/photo-1589539129532-61a156e5428a",
-        "idealTempMin": -15,
+        "id": "p_out_147",
+        "name": "Boxwood 4",
+        "scientificName": "Buxus",
+        "description": "Modi celebrer tendo temporibus. Abeo solitudo nesciunt accedo decipio excepturi vitiosus sit unde cariosus.",
+        "imageUrl": "https://images.unsplash.com/photo-1997636703?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 9,
+        "idealTempMax": 32,
+        "minHumidity": 74,
+        "sunlight": "high",
+        "oxygenLevel": "very-high",
+        "medicinalValues": [
+            "shocked",
+            "synergy"
+        ],
+        "advantages": [
+            "world-class",
+            "models"
+        ],
+        "price": 131,
+        "type": "outdoor",
+        "lifespan": "20-30 Years",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
+        "biometricFeatures": [
+            "Sun Hardy",
+            "Outdoor Adapted"
+        ]
+    },
+    {
+        "id": "p_out_148",
+        "name": "Lavender 5",
+        "scientificName": "Lavandula angustifolia",
+        "description": "Sto cotidie ventito addo arx fugit admoneo canto antepono. Compono arbor thymbra ambulo vergo.",
+        "imageUrl": "https://images.unsplash.com/photo-1570515125?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 15,
         "idealTempMax": 27,
-        "minHumidity": 50,
-        "sunlight": "medium",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "None (Toxic)"
-        ],
-        "advantages": [
-            "Spring Color",
-            "Evergreen varieties"
-        ],
-        "price": 35,
-        "type": "outdoor",
-        "foliageTexture": "Hairy/Small",
-        "leafShape": "Elliptic/Obovate",
-        "stemStructure": "Woody",
-        "overallHabit": "Bushy",
-        "biometricFeatures": [
-            "Pubescent Leaves",
-            "Funnel Flowers"
-        ]
-    },
-    {
-        "id": "p_out_11",
-        "name": "Rosemary",
-        "scientificName": "Salvia rosmarinus",
-        "description": "Woody perennial herb with fragrant, needle-like leaves.",
-        "imageUrl": "https://images.unsplash.com/photo-1594582969248-8e8e7c10b713",
-        "idealTempMin": -5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "Memory Boost",
-            "Culinary"
-        ],
-        "advantages": [
-            "Deer Resistant",
-            "Drought Hardy"
-        ],
-        "price": 12,
-        "type": "outdoor",
-        "foliageTexture": "Needle-like",
-        "leafShape": "Linear",
-        "stemStructure": "Woody",
-        "overallHabit": "Upright/Spreading",
-        "biometricFeatures": [
-            "White underside",
-            "Resinous Scent"
-        ]
-    },
-    {
-        "id": "p_out_12",
-        "name": "Tulip",
-        "scientificName": "Tulipa gesneriana",
-        "description": "Spring-blooming bulb with large, cup-shaped vibrant flowers.",
-        "imageUrl": "https://images.unsplash.com/photo-1520763185298-1b434c919102",
-        "idealTempMin": -20,
-        "idealTempMax": 20,
-        "minHumidity": 40,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Iconic Spring Flower",
-            "Variety"
-        ],
-        "price": 5,
-        "type": "outdoor",
-        "foliageTexture": "Smooth/Glaucous",
-        "leafShape": "Broadly Linear",
-        "stemStructure": "Bulbous/Scaped",
-        "overallHabit": "Upright",
-        "biometricFeatures": [
-            "Tunicated Bulb",
-            "6 Tepals"
-        ]
-    },
-    {
-        "id": "p_out_13",
-        "name": "Magnolia",
-        "scientificName": "Magnolia grandiflora",
-        "description": "Grand tree with glossy evergreen leaves and massive, lemon-scented white blooms.",
-        "imageUrl": "https://images.unsplash.com/photo-1588350552726-0610b78df426",
-        "idealTempMin": -10,
-        "idealTempMax": 35,
-        "minHumidity": 50,
+        "minHumidity": 37,
         "sunlight": "high",
         "oxygenLevel": "very-high",
         "medicinalValues": [
-            "Bark (Anxiety)"
+            "spherical",
+            "moment"
         ],
         "advantages": [
-            "Year-round Foliage",
-            "Showstopper"
+            "open-source",
+            "initiatives"
         ],
-        "price": 150,
+        "price": 192,
         "type": "outdoor",
-        "foliageTexture": "Leathery/Indumentum",
-        "leafShape": "Elliptic",
-        "stemStructure": "Woody Tree",
-        "overallHabit": "Pyramidal",
+        "lifespan": "10-15 Years",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
         "biometricFeatures": [
-            "Rusty Underside",
-            "Aggregate Fruit"
+            "Sun Hardy",
+            "Outdoor Adapted"
         ]
     },
     {
-        "id": "p_out_14",
-        "name": "Bamboo",
-        "scientificName": "Phyllostachys aurea",
-        "description": "Fast-growing grass with woody stems (culms). Excellent for privacy screens.",
-        "imageUrl": "https://images.unsplash.com/photo-1596720512803-085e481b4986",
-        "idealTempMin": -10,
-        "idealTempMax": 35,
-        "minHumidity": 50,
-        "sunlight": "high",
-        "oxygenLevel": "very-high",
-        "medicinalValues": [
-            "Silica source"
-        ],
-        "advantages": [
-            "Fastest Growing",
-            "Sustainable Material"
-        ],
-        "price": 60,
-        "type": "outdoor",
-        "foliageTexture": "Papery/Rough",
-        "leafShape": "Linear-Lanceolate",
-        "stemStructure": "Jointed Culm",
-        "overallHabit": "Clumping/Running",
-        "biometricFeatures": [
-            "Nodes/Internodes",
-            "Hollow Stem"
-        ]
-    },
-    {
-        "id": "p_out_15",
-        "name": "Marigold",
-        "scientificName": "Tagetes erecta",
-        "description": "Bright orange/yellow annuals that repel garden pests.",
-        "imageUrl": "https://images.unsplash.com/photo-1603529323380-6e4f1a239922",
+        "id": "p_out_149",
+        "name": "Rose Bush 5",
+        "scientificName": "Rosa",
+        "description": "Enim contego tot despecto coepi ambitus tero. Auxilium corroboro cupiditate adimpleo comedo ventito apostolus adsum.",
+        "imageUrl": "https://images.unsplash.com/photo-8616873473?auto=format&fit=crop&w=800&q=80",
         "idealTempMin": 10,
-        "idealTempMax": 35,
+        "idealTempMax": 26,
         "minHumidity": 30,
         "sunlight": "high",
         "oxygenLevel": "moderate",
         "medicinalValues": [
-            "Skin Healing",
-            "Eye Health (Lutein)"
+            "dual",
+            "adult"
         ],
         "advantages": [
-            "Pest Repellent",
-            "Continuous Bloom"
+            "seamless",
+            "content"
         ],
-        "price": 6,
+        "price": 184,
         "type": "outdoor",
-        "foliageTexture": "Fern-like",
-        "leafShape": "Pinnatisect",
-        "stemStructure": "Herbaceous",
-        "overallHabit": "Bushy",
+        "lifespan": "15-20 Years",
+        "foliageTexture": "Matte/Textured",
+        "leafShape": "Lanceolateish/Compound",
+        "stemStructure": "Woody/Semi-Woody",
+        "overallHabit": "Spreading/Climbing",
         "biometricFeatures": [
-            "Pungent Scent",
-            "Composite Flower"
-        ]
-    },
-    {
-        "id": "p_out_16",
-        "name": "Thyme",
-        "scientificName": "Thymus vulgaris",
-        "description": "Low-growing woody herb with tiny aromatic leaves.",
-        "imageUrl": "https://images.unsplash.com/photo-1616790875220-4318c41d1a93",
-        "idealTempMin": -10,
-        "idealTempMax": 30,
-        "minHumidity": 20,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "Antimicrobial",
-            "Respiratory"
-        ],
-        "advantages": [
-            "Ground Cover",
-            "Edible"
-        ],
-        "price": 8,
-        "type": "outdoor",
-        "foliageTexture": "Tiny/Hard",
-        "leafShape": "Ovate/Tiny",
-        "stemStructure": "Woody Subshrub",
-        "overallHabit": "Mat-forming",
-        "biometricFeatures": [
-            "Square Stem",
-            "Opposite Leaves"
-        ]
-    },
-    {
-        "id": "p_out_17",
-        "name": "Bougainvillea",
-        "scientificName": "Bougainvillea glabra",
-        "description": "Thorny vine with vibrant papery bracts in magenta, purple, or red.",
-        "imageUrl": "https://images.unsplash.com/photo-1563217684-28b9d2423e80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 40,
-        "sunlight": "high",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Drought Tolerant",
-            "Intense Color"
-        ],
-        "price": 45,
-        "type": "outdoor",
-        "foliageTexture": "Smooth",
-        "leafShape": "Ovate-Acuminate",
-        "stemStructure": "Woody Climber",
-        "overallHabit": "Scandent",
-        "biometricFeatures": [
-            "Colorful Bracts",
-            "Axillary Thorns"
-        ]
-    },
-    {
-        "id": "p_out_18",
-        "name": "Fern (Outdoor)",
-        "scientificName": "Polystichum munitum",
-        "description": "Western Sword Fern. Hardy evergreen fern for shady spots.",
-        "imageUrl": "https://images.unsplash.com/photo-1596720512534-72210887ee2c",
-        "idealTempMin": -15,
-        "idealTempMax": 25,
-        "minHumidity": 60,
-        "sunlight": "low",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "Traditional Pain Relief"
-        ],
-        "advantages": [
-            "Erosion Control",
-            "Winter Greenery"
-        ],
-        "price": 20,
-        "type": "outdoor",
-        "foliageTexture": "Leathery",
-        "leafShape": "Pinnate",
-        "stemStructure": "Rhizome",
-        "overallHabit": "Clumping",
-        "biometricFeatures": [
-            "Sori rows",
-            "Chaffy scales"
-        ]
-    },
-    {
-        "id": "p_out_19",
-        "name": "Dahlia",
-        "scientificName": "Dahlia pinnata",
-        "description": "Tuberous plant producing complex, geometric flowers in rainbow colors.",
-        "imageUrl": "https://images.unsplash.com/photo-1595133642352-7b3c27150a58",
-        "idealTempMin": 10,
-        "idealTempMax": 28,
-        "minHumidity": 50,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "Insulin (Historical)"
-        ],
-        "advantages": [
-            "Cut Flower",
-            "Diverse Forms"
-        ],
-        "price": 12,
-        "type": "outdoor",
-        "foliageTexture": "Rough",
-        "leafShape": "Pinnate/Serrated",
-        "stemStructure": "Hollow Herbaceous",
-        "overallHabit": "Bushy",
-        "biometricFeatures": [
-            "Tuberous Roots",
-            "Composite Head"
-        ]
-    },
-    {
-        "id": "p_out_20",
-        "name": "Wisteria",
-        "scientificName": "Wisteria sinensis",
-        "description": "Vigorous woody vine dripping with cascading clusters of purple flowers.",
-        "imageUrl": "https://images.unsplash.com/photo-1563217684-28b9d2423e80",
-        "idealTempMin": -20,
-        "idealTempMax": 30,
-        "minHumidity": 40,
-        "sunlight": "high",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Romantic Aesthetic",
-            "Fragrance"
-        ],
-        "price": 55,
-        "type": "outdoor",
-        "foliageTexture": "Smooth",
-        "leafShape": "Pinnate (Compound)",
-        "stemStructure": "Woody Liana",
-        "overallHabit": "Climbing/Twining",
-        "biometricFeatures": [
-            "Velvety Pods",
-            "Raceme Inflorescence"
-        ]
-    },
-    {
-        "id": "p_out_21",
-        "name": "Juniper",
-        "scientificName": "Juniperus chinensis",
-        "description": "Coniferous evergreen shrub/tree with berry-like cones. Tough and hardy.",
-        "imageUrl": "https://images.unsplash.com/photo-1588631189912-88741369527f",
-        "idealTempMin": -30,
-        "idealTempMax": 30,
-        "minHumidity": 30,
-        "sunlight": "high",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "Antiseptic (Berries)"
-        ],
-        "advantages": [
-            "Screening",
-            "Bird Habitat"
-        ],
-        "price": 40,
-        "type": "outdoor",
-        "foliageTexture": "Scale-like/Needle",
-        "leafShape": "Awl/Scale",
-        "stemStructure": "Woody",
-        "overallHabit": "Pyramidal/Spreading",
-        "biometricFeatures": [
-            "Blue 'Berries' (Cones)",
-            "Aromatic foliage"
-        ]
-    },
-    {
-        "id": "p_out_22",
-        "name": "Agave",
-        "scientificName": "Agave americana",
-        "description": "Large succulent rosette with sharp spines. Monocarpic (blooms once then dies).",
-        "imageUrl": "https://images.unsplash.com/photo-1567331140054-3839d67562f8",
-        "idealTempMin": -5,
-        "idealTempMax": 40,
-        "minHumidity": 10,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "Sweetener (Nectar)",
-            "Antiseptic"
-        ],
-        "advantages": [
-            "Xeriscaping",
-            "Structural"
-        ],
-        "price": 50,
-        "type": "outdoor",
-        "foliageTexture": "Smooth/Tough",
-        "leafShape": "Lanceolate (Thick)",
-        "stemStructure": "Basal Rosette",
-        "overallHabit": "Mounding",
-        "biometricFeatures": [
-            "Terminal Spine",
-            "Imprint patterns"
-        ]
-    },
-    {
-        "id": "p_out_23",
-        "name": "Morning Glory",
-        "scientificName": "Ipomoea purpurea",
-        "description": "Fast-growing annual vine with trumpet flowers that open in the morning.",
-        "imageUrl": "https://images.unsplash.com/photo-1594582969248-8e8e7c10b713",
-        "idealTempMin": 10,
-        "idealTempMax": 30,
-        "minHumidity": 50,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Quick Cover",
-            "Pollinators"
-        ],
-        "price": 5,
-        "type": "outdoor",
-        "foliageTexture": "Hairy",
-        "leafShape": "Cordate (Heart)",
-        "stemStructure": "Twining Herbaceous",
-        "overallHabit": "Climbing",
-        "biometricFeatures": [
-            "Funnel Flower",
-            "Twining Stem"
-        ]
-    },
-    {
-        "id": "p_out_24",
-        "name": "Hibiscus",
-        "scientificName": "Hibiscus rosa-sinensis",
-        "description": "Tropical shrub with huge, trumpet-shaped flowers and prominent stamen.",
-        "imageUrl": "https://images.unsplash.com/photo-1549416878-b97f805a96d1",
-        "idealTempMin": 10,
-        "idealTempMax": 32,
-        "minHumidity": 60,
-        "sunlight": "high",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "Tea (Blood Pressure)"
-        ],
-        "advantages": [
-            "Tropical Flair",
-            "Edible Flowers"
-        ],
-        "price": 35,
-        "type": "outdoor",
-        "foliageTexture": "Glossy/Serrated",
-        "leafShape": "Ovate",
-        "stemStructure": "Woody",
-        "overallHabit": "Bushy",
-        "biometricFeatures": [
-            "Prominent Stamen Column",
-            "5 Petals"
-        ]
-    },
-    {
-        "id": "p_out_25",
-        "name": "Hostas (Blue)",
-        "scientificName": "Hosta sieboldiana",
-        "description": "Large, blue-green corrugated leaves. The king of the shade garden.",
-        "imageUrl": "https://images.unsplash.com/photo-1596720512534-72210887ee2c",
-        "idealTempMin": -30,
-        "idealTempMax": 25,
-        "minHumidity": 60,
-        "sunlight": "low",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Texture",
-            "Cool Color"
-        ],
-        "price": 25,
-        "type": "outdoor",
-        "foliageTexture": "Corrugated/Waxy",
-        "leafShape": "Broadly Ovate",
-        "stemStructure": "Rhizomatous",
-        "overallHabit": "Mounding",
-        "biometricFeatures": [
-            "Glaucous coating",
-            "Parallel veins"
-        ]
-    },
-    {
-        "id": "p_out_26",
-        "name": "Bleeding Heart",
-        "scientificName": "Lamprocapnos spectabilis",
-        "description": "Graceful shade perennial with heart-shaped pink flowers dangling from arching stems.",
-        "imageUrl": "https://images.unsplash.com/photo-1563217684-28b9d2423e80",
-        "idealTempMin": -30,
-        "idealTempMax": 20,
-        "minHumidity": 60,
-        "sunlight": "low",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Unique Flower",
-            "Early Bloomer"
-        ],
-        "price": 20,
-        "type": "outdoor",
-        "foliageTexture": "Soft/Fern-like",
-        "leafShape": "Compound",
-        "stemStructure": "Fleshy/Herbaceous",
-        "overallHabit": "Arching",
-        "biometricFeatures": [
-            "Pendant Flowers",
-            "Dissected Leaves"
-        ]
-    },
-    {
-        "id": "p_out_27",
-        "name": "Coneflower",
-        "scientificName": "Echinacea purpurea",
-        "description": "Tough prairie native with purple daisylike flowers and orange cones. Medicinal powerhouse.",
-        "imageUrl": "https://images.unsplash.com/photo-1595133642352-7b3c27150a58",
-        "idealTempMin": -30,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "Immune Support",
-            "Cold Relief"
-        ],
-        "advantages": [
-            "Pollinator Magnet",
-            "Drought Tolerant"
-        ],
-        "price": 15,
-        "type": "outdoor",
-        "foliageTexture": "Rough/Hairy",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Stiff Herbaceous",
-        "overallHabit": "Clumping",
-        "biometricFeatures": [
-            "Spiky Cone",
-            "Reflexed Ray Florets"
-        ]
-    },
-    {
-        "id": "p_out_28",
-        "name": "Black-Eyed Susan",
-        "scientificName": "Rudbeckia hirta",
-        "description": "Cheerful yellow wildflowers with dark brown centers.",
-        "imageUrl": "https://images.unsplash.com/photo-1603529323380-6e4f1a239922",
-        "idealTempMin": -30,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "Immune Stimulant (Roots)"
-        ],
-        "advantages": [
-            "Long Blooming",
-            "Hardy"
-        ],
-        "price": 10,
-        "type": "outdoor",
-        "foliageTexture": "Hairy/Rough",
-        "leafShape": "Ovate/Lanceolate",
-        "stemStructure": "Herbaceous",
-        "overallHabit": "Upright",
-        "biometricFeatures": [
-            "Hirsute Stems",
-            "Composite Flower"
-        ]
-    },
-    {
-        "id": "p_out_29",
-        "name": "Japanese Pachysandra",
-        "scientificName": "Pachysandra terminalis",
-        "description": "Evergreen groundcover for deep shade. Forms a dense green carpet.",
-        "imageUrl": "https://images.unsplash.com/photo-1596720512534-72210887ee2c",
-        "idealTempMin": -30,
-        "idealTempMax": 25,
-        "minHumidity": 50,
-        "sunlight": "low",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Shade Solution",
-            "Deer Resistant"
-        ],
-        "price": 8,
-        "type": "outdoor",
-        "foliageTexture": "Glossy/Leathery",
-        "leafShape": "Obovate (Toothed)",
-        "stemStructure": "Rhizomatous",
-        "overallHabit": "Spreading Carpet",
-        "biometricFeatures": [
-            "Whorled Leaves",
-            "Terminal Spikes"
-        ]
-    },
-    {
-        "id": "p_out_30",
-        "name": "Forsythia",
-        "scientificName": "Forsythia x intermedia",
-        "description": "Deciduous shrub that announces spring with a burst of bright yellow flowers before leaves appear.",
-        "imageUrl": "https://images.unsplash.com/photo-1628169225700-1d8f58b8d96d",
-        "idealTempMin": -25,
-        "idealTempMax": 30,
-        "minHumidity": 40,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "Antiviral (Fruit)"
-        ],
-        "advantages": [
-            "Early Color",
-            "Fast Growing"
-        ],
-        "price": 30,
-        "type": "outdoor",
-        "foliageTexture": "Smooth/Serrated",
-        "leafShape": "Ovate-Lanceolate",
-        "stemStructure": "Woody Cane",
-        "overallHabit": "Arching Shrub",
-        "biometricFeatures": [
-            "Lenticels on bark",
-            "Square stems"
-        ]
-    },
-    {
-        "id": "p_out_31",
-        "name": "Lilac",
-        "scientificName": "Syringa vulgaris",
-        "description": "Old-fashioned shrub famous for its heavily scented purple or white conical blooms.",
-        "imageUrl": "https://images.unsplash.com/photo-1563217684-28b9d2423e80",
-        "idealTempMin": -40,
-        "idealTempMax": 25,
-        "minHumidity": 40,
-        "sunlight": "high",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "Aromatherapy"
-        ],
-        "advantages": [
-            "Fragrance",
-            "Cold Hardy"
-        ],
-        "price": 45,
-        "type": "outdoor",
-        "foliageTexture": "Smooth",
-        "leafShape": "Cordate",
-        "stemStructure": "Woody",
-        "overallHabit": "Upright Shrub",
-        "biometricFeatures": [
-            "Panicle Blooms",
-            "Opposite Leaves"
-        ]
-    },
-    {
-        "id": "p_out_32",
-        "name": "Butterfly Bush",
-        "scientificName": "Buddleja davidii",
-        "description": "Fast growing shrub with long flower spikes that attract butterflies and hummingbirds.",
-        "imageUrl": "https://images.unsplash.com/photo-1563217684-28b9d2423e80",
-        "idealTempMin": -20,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Wildlife Magnet",
-            "Long Bloom"
-        ],
-        "price": 25,
-        "type": "outdoor",
-        "foliageTexture": "Gray-Green/Felted",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody/Cane",
-        "overallHabit": "Arching",
-        "biometricFeatures": [
-            "Square Stems",
-            "Honey Scent"
-        ]
-    },
-    {
-        "id": "p_out_33",
-        "name": "Daylily",
-        "scientificName": "Hemerocallis",
-        "description": "Rugged perennial with trumpet flowers that last only one day, but produced in succession.",
-        "imageUrl": "https://images.unsplash.com/photo-1595133642352-7b3c27150a58",
-        "idealTempMin": -35,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "Edible buds"
-        ],
-        "advantages": [
-            "Roadside Tough",
-            "Vast Variety"
-        ],
-        "price": 12,
-        "type": "outdoor",
-        "foliageTexture": "Grass-like",
-        "leafShape": "Linear (Keel)",
-        "stemStructure": "Rhizomatous",
-        "overallHabit": "Clumping",
-        "biometricFeatures": [
-            "Tuberous Roots",
-            "Fan arrangement"
-        ]
-    },
-    {
-        "id": "p_out_34",
-        "name": "Lamb's Ear",
-        "scientificName": "Stachys byzantina",
-        "description": "Grown for its incredibly soft, fuzzy, silver-gray foliage. Children love it.",
-        "imageUrl": "https://images.unsplash.com/photo-1589335668748-18e3290de004",
-        "idealTempMin": -30,
-        "idealTempMax": 30,
-        "minHumidity": 20,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "Antimicrobial Bandage"
-        ],
-        "advantages": [
-            "Texture",
-            "Drought Tolerant"
-        ],
-        "price": 10,
-        "type": "outdoor",
-        "foliageTexture": "Woolly/Velvet",
-        "leafShape": "Oblong",
-        "stemStructure": "Herbaceous",
-        "overallHabit": "Mat-forming",
-        "biometricFeatures": [
-            "Dense Trichomes",
-            "Square Stem"
-        ]
-    },
-    {
-        "id": "p_out_35",
-        "name": "Yew",
-        "scientificName": "Taxus baccata",
-        "description": "Dense evergreen conifer often used for formal hedges. Long lived but toxic.",
-        "imageUrl": "https://images.unsplash.com/photo-1588631189912-88741369527f",
-        "idealTempMin": -25,
-        "idealTempMax": 25,
-        "minHumidity": 50,
-        "sunlight": "medium",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "Taxol (Cancer Drug) - warning toxic"
-        ],
-        "advantages": [
-            "Shade Tolerant Evergreen",
-            "Clippable"
-        ],
-        "price": 50,
-        "type": "outdoor",
-        "foliageTexture": "Needle (Flat)",
-        "leafShape": "Linear",
-        "stemStructure": "Woody",
-        "overallHabit": "Broad/Upright",
-        "biometricFeatures": [
-            "Red Arils",
-            "Spiral arrangement"
-        ]
-    },
-    {
-        "id": "p_out_36",
-        "name": "Coral Bells",
-        "scientificName": "Heuchera",
-        "description": "Mounding perennial grown for its colorful foliage in purple, caramel, lime, and red.",
-        "imageUrl": "https://images.unsplash.com/photo-1616690248166-5f1181822819",
-        "idealTempMin": -30,
-        "idealTempMax": 30,
-        "minHumidity": 40,
-        "sunlight": "medium",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "Astringent (Root)"
-        ],
-        "advantages": [
-            "Foliage Color",
-            "Compact"
-        ],
-        "price": 18,
-        "type": "outdoor",
-        "foliageTexture": "Lobed/Ruffled",
-        "leafShape": "Cordate/Orbicular",
-        "stemStructure": "Rhizomatous",
-        "overallHabit": "Mounding",
-        "biometricFeatures": [
-            "Long Petioles",
-            "Tiny Bell Flowers"
-        ]
-    },
-    {
-        "id": "p_out_37",
-        "name": "Lantana",
-        "scientificName": "Lantana camara",
-        "description": "Heat-loving shrub/groundcover with clusters of multicolor flowers.",
-        "imageUrl": "https://images.unsplash.com/photo-1603529323380-6e4f1a239922",
-        "idealTempMin": -5,
-        "idealTempMax": 40,
-        "minHumidity": 20,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "None (Toxic berries)"
-        ],
-        "advantages": [
-            "Butterfly Magnet",
-            "Heat Proof"
-        ],
-        "price": 15,
-        "type": "outdoor",
-        "foliageTexture": "Rough/Sandpaper",
-        "leafShape": "Ovate",
-        "stemStructure": "Woody Subshrub",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Aromatic Leaves",
-            "Square Stem"
-        ]
-    },
-    {
-        "id": "p_out_38",
-        "name": "Crape Myrtle",
-        "scientificName": "Lagerstroemia indica",
-        "description": "Summer-blooming tree with peeling bark and crinkled flowers.",
-        "imageUrl": "https://images.unsplash.com/photo-1549416878-b97f805a96d1",
-        "idealTempMin": -15,
-        "idealTempMax": 35,
-        "minHumidity": 40,
-        "sunlight": "high",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Summer Color",
-            "Beautiful Bark"
-        ],
-        "price": 75,
-        "type": "outdoor",
-        "foliageTexture": "Smooth",
-        "leafShape": "Elliptic/Obovate",
-        "stemStructure": "Multi-trunk Tree",
-        "overallHabit": "Vase",
-        "biometricFeatures": [
-            "Exfoliating Bark",
-            "Panicle Bloom"
-        ]
-    },
-    {
-        "id": "p_out_39",
-        "name": "Snapdragon",
-        "scientificName": "Antirrhinum majus",
-        "description": "Cool-season annual with tall spikes of dragon-faced flowers that open when squeezed.",
-        "imageUrl": "https://images.unsplash.com/photo-1595133642352-7b3c27150a58",
-        "idealTempMin": -5,
-        "idealTempMax": 25,
-        "minHumidity": 40,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Fun for Kids",
-            "Cut Flower"
-        ],
-        "price": 6,
-        "type": "outdoor",
-        "foliageTexture": "Smooth",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Herbaceous",
-        "overallHabit": "Upright Spike",
-        "biometricFeatures": [
-            "Bilabiate Flower",
-            "Opposite/Alternate"
-        ]
-    },
-    {
-        "id": "p_out_40",
-        "name": "Ornamental Grass (Maiden)",
-        "scientificName": "Miscanthus sinensis",
-        "description": "Tall, graceful grass with feathery plumes in autumn.",
-        "imageUrl": "https://images.unsplash.com/photo-1596720512803-085e481b4986",
-        "idealTempMin": -25,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "high",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Movement",
-            "Winter Interest"
-        ],
-        "price": 25,
-        "type": "outdoor",
-        "foliageTexture": "Rough Edge",
-        "leafShape": "Linear",
-        "stemStructure": "Culm",
-        "overallHabit": "Clumping",
-        "biometricFeatures": [
-            "Midrib Silver",
-            "Plumes"
-        ]
-    },
-    {
-        "id": "p_out_41",
-        "name": "Clematis",
-        "scientificName": "Clematis",
-        "description": "Queen of the climbers. Vines with diverse, showy flowers.",
-        "imageUrl": "https://images.unsplash.com/photo-1563217684-28b9d2423e80",
-        "idealTempMin": -30,
-        "idealTempMax": 25,
-        "minHumidity": 50,
-        "sunlight": "medium",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Vertical Color",
-            "Diverse"
-        ],
-        "price": 35,
-        "type": "outdoor",
-        "foliageTexture": "Smooth",
-        "leafShape": "Compound (Leaflet)",
-        "stemStructure": "Climbing Liana",
-        "overallHabit": "Vining",
-        "biometricFeatures": [
-            "Twining Petioles",
-            "Opposite Leaves"
-        ]
-    },
-    {
-        "id": "p_out_42",
-        "name": "Hellebore",
-        "scientificName": "Helleborus orientalis",
-        "description": "Lenten Rose. Blooms in late winter/early spring with nodding, cup-shaped flowers.",
-        "imageUrl": "https://images.unsplash.com/photo-1563217684-28b9d2423e80",
-        "idealTempMin": -20,
-        "idealTempMax": 20,
-        "minHumidity": 50,
-        "sunlight": "low",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "None (Toxic)"
-        ],
-        "advantages": [
-            "Evergreen",
-            "Shade Tolerant"
-        ],
-        "price": 25,
-        "type": "outdoor",
-        "foliageTexture": "Leathery/Toothed",
-        "leafShape": "Palmate/Pedate",
-        "stemStructure": "Rhizomatous",
-        "overallHabit": "Clumping",
-        "biometricFeatures": [
-            "Sepals not petals",
-            "Dark foliage"
-        ]
-    },
-    {
-        "id": "p_out_43",
-        "name": "Sedum 'Autumn Joy'",
-        "scientificName": "Hylotelephium telephium",
-        "description": "Upright succulent perennial with flat flower heads that turn pink-bronze in fall.",
-        "imageUrl": "https://images.unsplash.com/photo-1509304388383-ed5808ce4913",
-        "idealTempMin": -30,
-        "idealTempMax": 35,
-        "minHumidity": 20,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "Vulnerary (Leaf juice)"
-        ],
-        "advantages": [
-            "Pollinators",
-            "Winter Skeleton"
-        ],
-        "price": 15,
-        "type": "outdoor",
-        "foliageTexture": "Fleshy/Smooth",
-        "leafShape": "Ovate/Toothed",
-        "stemStructure": "Succulent",
-        "overallHabit": "Clump",
-        "biometricFeatures": [
-            "Glaucous leaves",
-            "Corymb"
-        ]
-    },
-    {
-        "id": "p_out_44",
-        "name": "Fuchsia",
-        "scientificName": "Fuchsia magellanica",
-        "description": "Shrub or hanging plant with exotic, two-tone pendant flowers.",
-        "imageUrl": "https://images.unsplash.com/photo-1563217684-28b9d2423e80",
-        "idealTempMin": 5,
-        "idealTempMax": 25,
-        "minHumidity": 60,
-        "sunlight": "medium",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Hummingbirds",
-            "Shade Color"
-        ],
-        "price": 20,
-        "type": "outdoor",
-        "foliageTexture": "Smooth/Serrated",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Arching",
-        "biometricFeatures": [
-            "Pendant Bloom",
-            "Red Stems"
-        ]
-    },
-    {
-        "id": "p_out_45",
-        "name": "Weigela",
-        "scientificName": "Weigela florida",
-        "description": "Old-fashioned shrub with trumpet-shaped flowers in pink or red.",
-        "imageUrl": "https://images.unsplash.com/photo-1589539129532-61a156e5428a",
-        "idealTempMin": -25,
-        "idealTempMax": 30,
-        "minHumidity": 40,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Spring Bloom",
-            "Easy"
-        ],
-        "price": 30,
-        "type": "outdoor",
-        "foliageTexture": "Rough",
-        "leafShape": "Elliptic",
-        "stemStructure": "Woody",
-        "overallHabit": "Arching",
-        "biometricFeatures": [
-            "Opposite Leaves",
-            "Funnel Flower"
-        ]
-    },
-    {
-        "id": "p_out_46",
-        "name": "Zinnia",
-        "scientificName": "Zinnia elegans",
-        "description": "Easy annual with dahlia-like blooms in every color except blue.",
-        "imageUrl": "https://images.unsplash.com/photo-1595133642352-7b3c27150a58",
-        "idealTempMin": 15,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Cut Flower",
-            "Butterfly Magnet"
-        ],
-        "price": 5,
-        "type": "outdoor",
-        "foliageTexture": "Sandpaper-like",
-        "leafShape": "Ovate/Lanceolate",
-        "stemStructure": "Herbaceous",
-        "overallHabit": "Upright/Bushy",
-        "biometricFeatures": [
-            "Opposite/Sessile",
-            "Ray Florets"
-        ]
-    },
-    {
-        "id": "p_out_47",
-        "name": "Gardenia",
-        "scientificName": "Gardenia jasminoides",
-        "description": "Finicky shrub with glossy dark leaves and intensely fragrant wax-white flowers.",
-        "imageUrl": "https://images.unsplash.com/photo-1588350552726-0610b78df426",
-        "idealTempMin": 10,
-        "idealTempMax": 30,
-        "minHumidity": 70,
-        "sunlight": "medium",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "Fruit (Traditional Medicine)"
-        ],
-        "advantages": [
-            "Scent",
-            "Elegant"
-        ],
-        "price": 40,
-        "type": "outdoor",
-        "foliageTexture": "Glossy/Leathery",
-        "leafShape": "Lanceolate/Obovate",
-        "stemStructure": "Woody",
-        "overallHabit": "Rounded Shrub",
-        "biometricFeatures": [
-            "Whorled leaves",
-            "Waxy Bloom"
-        ]
-    },
-    {
-        "id": "p_out_48",
-        "name": "Pansy",
-        "scientificName": "Viola x wittrockiana",
-        "description": "Cool-weather favorite with flat, face-like flowers.",
-        "imageUrl": "https://images.unsplash.com/photo-1563217684-28b9d2423e80",
-        "idealTempMin": -5,
-        "idealTempMax": 20,
-        "minHumidity": 40,
-        "sunlight": "medium",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "Expectorant (Viola)"
-        ],
-        "advantages": [
-            "Edible",
-            "Winter Color (Mild climates)"
-        ],
-        "price": 4,
-        "type": "outdoor",
-        "foliageTexture": "Smooth",
-        "leafShape": "Ovate/Crenate",
-        "stemStructure": "Herbaceous",
-        "overallHabit": "Low/Clump",
-        "biometricFeatures": [
-            "Stipules",
-            "5 Petals (2 up, 3 down)"
-        ]
-    },
-    {
-        "id": "p_out_49",
-        "name": "Elephant Ear (Colocasia)",
-        "scientificName": "Colocasia esculenta",
-        "description": "Tropical tuber grown for its massive, downward-hanging foliage.",
-        "imageUrl": "https://images.unsplash.com/photo-1601903673322-c35cb58bd61f",
-        "idealTempMin": 15,
-        "idealTempMax": 35,
-        "minHumidity": 70,
-        "sunlight": "medium",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "Edible Tuber (Taro - cooked)"
-        ],
-        "advantages": [
-            "Jungle Look",
-            "Wet Soil Tolerant"
-        ],
-        "price": 25,
-        "type": "outdoor",
-        "foliageTexture": "Velvety/Matte",
-        "leafShape": "Peltate/Sagittate",
-        "stemStructure": "Tuberous",
-        "overallHabit": "Upright Clump",
-        "biometricFeatures": [
-            "Hanging leaves",
-            "Peltate attachment"
-        ]
-    },
-    {
-        "id": "p_out_50",
-        "name": "Sweet Potato Vine",
-        "scientificName": "Ipomoea batatas",
-        "description": "Ornamental vine meant for foliage in chartreuse, purple, or bronze.",
-        "imageUrl": "https://images.unsplash.com/photo-1596720512803-085e481b4986",
-        "idealTempMin": 10,
-        "idealTempMax": 35,
-        "minHumidity": 40,
-        "sunlight": "high",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "Edible Tuber (but bred for looks)"
-        ],
-        "advantages": [
-            "Trailer",
-            "Heat Loving"
-        ],
-        "price": 8,
-        "type": "outdoor",
-        "foliageTexture": "Smooth",
-        "leafShape": "Cordate/Lobed",
-        "stemStructure": "Vining",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Palmate Lobes",
-            "Milky Sap"
-        ]
-    },
-    {
-        "id": "p_out_51",
-        "name": "Tickseed",
-        "scientificName": "Coreopsis",
-        "description": "Daisy-like bright flowers that bloom all summer.",
-        "imageUrl": "https://images.unsplash.com/photo-1595133642352-7b3c27150a58",
-        "idealTempMin": -20,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Native",
-            "Pollinators"
-        ],
-        "price": 8,
-        "type": "outdoor",
-        "foliageTexture": "Fine",
-        "leafShape": "Lobed/Linear",
-        "stemStructure": "Herbaceous",
-        "overallHabit": "Mounding",
-        "biometricFeatures": [
-            "Toothed petals",
-            "Yellow/Red"
-        ]
-    },
-    {
-        "id": "p_out_52",
-        "name": "Bee Balm",
-        "scientificName": "Monarda didyma",
-        "description": "Crown-shaped bright red or purple flowers. Leaves smell like bergamot.",
-        "imageUrl": "https://images.unsplash.com/photo-1595133642352-7b3c27150a58",
-        "idealTempMin": -30,
-        "idealTempMax": 30,
-        "minHumidity": 40,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "Antiseptic (Tea)"
-        ],
-        "advantages": [
-            "Hummingbirds",
-            "Tea"
-        ],
-        "price": 12,
-        "type": "outdoor",
-        "foliageTexture": "Hairy",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Square Stem",
-        "overallHabit": "Clumping",
-        "biometricFeatures": [
-            "Mint scent",
-            "Tubular flowers"
-        ]
-    },
-    {
-        "id": "p_out_53",
-        "name": "Phlox (Garden)",
-        "scientificName": "Phlox paniculata",
-        "description": "Tall clusters of fragrant pink, white, or purple flowers.",
-        "imageUrl": "https://images.unsplash.com/photo-1563217684-28b9d2423e80",
-        "idealTempMin": -30,
-        "idealTempMax": 30,
-        "minHumidity": 50,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Fragrance",
-            "Cut flower"
-        ],
-        "price": 12,
-        "type": "outdoor",
-        "foliageTexture": "Smooth",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Herbaceous",
-        "overallHabit": "Upright",
-        "biometricFeatures": [
-            "Opposite leaves",
-            "Panicle"
-        ]
-    },
-    {
-        "id": "p_out_54",
-        "name": "Russian Sage",
-        "scientificName": "Perovskia atriplicifolia",
-        "description": "Hazy purple spikes on silver foliage. Heat lover.",
-        "imageUrl": "https://images.unsplash.com/photo-1563217684-28b9d2423e80",
-        "idealTempMin": -30,
-        "idealTempMax": 35,
-        "minHumidity": 20,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Drought tolerant",
-            "Deer resistant"
-        ],
-        "price": 15,
-        "type": "outdoor",
-        "foliageTexture": "Dissected/Gray",
-        "leafShape": "Lobed",
-        "stemStructure": "Semi-woody",
-        "overallHabit": "Upright/Spreading",
-        "biometricFeatures": [
-            "Square stem",
-            "Aromatic"
-        ]
-    },
-    {
-        "id": "p_out_55",
-        "name": "Astilbe",
-        "scientificName": "Astilbe chinensis",
-        "description": "Fern-like foliage with feathery flower plumes in shade.",
-        "imageUrl": "https://images.unsplash.com/photo-1563217684-28b9d2423e80",
-        "idealTempMin": -30,
-        "idealTempMax": 25,
-        "minHumidity": 60,
-        "sunlight": "low",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Shade color",
-            "Texture"
-        ],
-        "price": 15,
-        "type": "outdoor",
-        "foliageTexture": "Fern-like",
-        "leafShape": "Compound (Ternately)",
-        "stemStructure": "Herbaceous",
-        "overallHabit": "Clumping",
-        "biometricFeatures": [
-            "Plume flower",
-            "Toothed leaflet"
-        ]
-    },
-    {
-        "id": "p_out_56",
-        "name": "Yarrow",
-        "scientificName": "Achillea millefolium",
-        "description": "Flat-topped flower clusters on ferny aromatic leaves.",
-        "imageUrl": "https://images.unsplash.com/photo-1603529323380-6e4f1a239922",
-        "idealTempMin": -40,
-        "idealTempMax": 35,
-        "minHumidity": 20,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "Styptic (Stops bleeding)"
-        ],
-        "advantages": [
-            "Native",
-            "Tough"
-        ],
-        "price": 10,
-        "type": "outdoor",
-        "foliageTexture": "Feathery/Fine",
-        "leafShape": "Bipinnatisect",
-        "stemStructure": "Herbaceous",
-        "overallHabit": "Mat-forming/Erect",
-        "biometricFeatures": [
-            "Flat corymb",
-            "Aromatic"
-        ]
-    },
-    {
-        "id": "p_out_57",
-        "name": "Catmint",
-        "scientificName": "Nepeta faassenii",
-        "description": "Mounds of gray-green leaves and lavender flowers. Cats love it.",
-        "imageUrl": "https://images.unsplash.com/photo-1563217684-28b9d2423e80",
-        "idealTempMin": -30,
-        "idealTempMax": 30,
-        "minHumidity": 30,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "Sedative (Tea)"
-        ],
-        "advantages": [
-            "Long bloom",
-            "Pest free"
-        ],
-        "price": 12,
-        "type": "outdoor",
-        "foliageTexture": "Velvety/Gray",
-        "leafShape": "Ovate/Crenate",
-        "stemStructure": "Herbaceous",
-        "overallHabit": "Mounding",
-        "biometricFeatures": [
-            "Square stem",
-            "Opposite"
-        ]
-    },
-    {
-        "id": "p_out_58",
-        "name": "Hollyhock",
-        "scientificName": "Alcea rosea",
-        "description": "Towering spikes (6-8ft) of hibiscus-like flowers. Cottage staple.",
-        "imageUrl": "https://images.unsplash.com/photo-1595133642352-7b3c27150a58",
-        "idealTempMin": -30,
-        "idealTempMax": 30,
-        "minHumidity": 40,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "Soothing (Root)"
-        ],
-        "advantages": [
-            "Height",
-            "Nostalgic"
-        ],
-        "price": 8,
-        "type": "outdoor",
-        "foliageTexture": "Rough/Hairy",
-        "leafShape": "Palmately Lobed",
-        "stemStructure": "Stout Herbaceous",
-        "overallHabit": "Vertical",
-        "biometricFeatures": [
-            "Large leaf",
-            "Alternate"
-        ]
-    },
-    {
-        "id": "p_out_59",
-        "name": "Delphinium",
-        "scientificName": "Delphinium elatum",
-        "description": "Tall regal spikes of true blue flowers.",
-        "imageUrl": "https://images.unsplash.com/photo-1563217684-28b9d2423e80",
-        "idealTempMin": -30,
-        "idealTempMax": 22,
-        "minHumidity": 50,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "None (Toxic)"
-        ],
-        "advantages": [
-            "True Blue",
-            "Show stopper"
-        ],
-        "price": 18,
-        "type": "outdoor",
-        "foliageTexture": "Deeply Lobed",
-        "leafShape": "Palmate",
-        "stemStructure": "Hollow",
-        "overallHabit": "Vertical",
-        "biometricFeatures": [
-            "Spurred flower",
-            "Basal leaves"
-        ]
-    },
-    {
-        "id": "p_in_60",
-        "name": "Lupine",
-        "scientificName": "Lupinus",
-        "description": "Spires of pea-like flowers rising from palmate foliage.",
-        "imageUrl": "https://images.unsplash.com/photo-1563217684-28b9d2423e80",
-        "idealTempMin": -30,
-        "idealTempMax": 25,
-        "minHumidity": 40,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "None (Toxic seeds)"
-        ],
-        "advantages": [
-            "Nitrogen fixer",
-            "Wildflower look"
-        ],
-        "price": 12,
-        "type": "outdoor",
-        "foliageTexture": "Soft/Hairy",
-        "leafShape": "Palmate",
-        "stemStructure": "Herbaceous",
-        "overallHabit": "Clumping",
-        "biometricFeatures": [
-            "Whorled leaflets",
-            "Raceme"
-        ]
-    },
-    {
-        "id": "p_out_61",
-        "name": "Petunia",
-        "scientificName": "Petunia x atkinsiana",
-        "description": "Popular annual for hanging baskets with trumpet flowers.",
-        "imageUrl": "https://images.unsplash.com/photo-1563217684-28b9d2423e80",
-        "idealTempMin": 10,
-        "idealTempMax": 30,
-        "minHumidity": 40,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Constant color",
-            "Fragrance (some)"
-        ],
-        "price": 5,
-        "type": "outdoor",
-        "foliageTexture": "Sticky/Hairy",
-        "leafShape": "Ovate",
-        "stemStructure": "Herbaceous",
-        "overallHabit": "Mounding/Trailing",
-        "biometricFeatures": [
-            "Viscid (Sticky)",
-            "Solitary bloom"
-        ]
-    },
-    {
-        "id": "p_out_62",
-        "name": "Geranium (Zonal)",
-        "scientificName": "Pelargonium x hortorum",
-        "description": "Sturdy balls of red, pink, or white flowers on scallop-edged leaves.",
-        "imageUrl": "https://images.unsplash.com/photo-1563217684-28b9d2423e80",
-        "idealTempMin": 5,
-        "idealTempMax": 30,
-        "minHumidity": 30,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "Oil (scented varieties)"
-        ],
-        "advantages": [
-            "Heat tolerant",
-            "Classic"
-        ],
-        "price": 8,
-        "type": "outdoor",
-        "foliageTexture": "Velvety",
-        "leafShape": "Orbicular/Lobed",
-        "stemStructure": "Succulent/Woody base",
-        "overallHabit": "Bushy",
-        "biometricFeatures": [
-            "Zonal band on leaf",
-            "Umbels"
-        ]
-    },
-    {
-        "id": "p_out_63",
-        "name": "Alyssum",
-        "scientificName": "Lobularia maritima",
-        "description": "Low carpet of tiny honey-scented white or purple flowers.",
-        "imageUrl": "https://images.unsplash.com/photo-1563217684-28b9d2423e80",
-        "idealTempMin": 10,
-        "idealTempMax": 25,
-        "minHumidity": 30,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Honey scent",
-            "Edging"
-        ],
-        "price": 4,
-        "type": "outdoor",
-        "foliageTexture": "Fine",
-        "leafShape": "Linear",
-        "stemStructure": "Herbaceous",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Crucifer (4 petals)",
-            "Tiny"
-        ]
-    },
-    {
-        "id": "p_out_64",
-        "name": "Cosmos",
-        "scientificName": "Cosmos bipinnatus",
-        "description": "Airy, daisy-like flowers on tall thread-like stems.",
-        "imageUrl": "https://images.unsplash.com/photo-1595133642352-7b3c27150a58",
-        "idealTempMin": 10,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Self seeds",
-            "Movement"
-        ],
-        "price": 5,
-        "type": "outdoor",
-        "foliageTexture": "Filiform (Threadlike)",
-        "leafShape": "Bipinnatisect",
-        "stemStructure": "Hollow",
-        "overallHabit": "Upright",
-        "biometricFeatures": [
-            "Opposite",
-            "Composite head"
-        ]
-    },
-    {
-        "id": "p_out_65",
-        "name": "Azalea (Deciduous)",
-        "scientificName": "Rhododendron",
-        "description": "Bright orange/yellow fragrant flowers in spring.",
-        "imageUrl": "https://images.unsplash.com/photo-1589539129532-61a156e5428a",
-        "idealTempMin": -25,
-        "idealTempMax": 25,
-        "minHumidity": 50,
-        "sunlight": "medium",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Neon color",
-            "Spring show"
-        ],
-        "price": 40,
-        "type": "outdoor",
-        "foliageTexture": "Soft/Thin",
-        "leafShape": "Elliptic",
-        "stemStructure": "Woody",
-        "overallHabit": "Shrub",
-        "biometricFeatures": [
-            "Alternate",
-            "Truss bloom"
-        ]
-    },
-    {
-        "id": "p_out_66",
-        "name": "Camellia",
-        "scientificName": "Camellia japonica",
-        "description": "Evergreen shrub with rose-like winter blooms.",
-        "imageUrl": "https://images.unsplash.com/photo-1588350552726-0610b78df426",
-        "idealTempMin": -10,
-        "idealTempMax": 25,
-        "minHumidity": 60,
-        "sunlight": "low",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "Tea (Sinensis species)"
-        ],
-        "advantages": [
-            "Winter flower",
-            "Glossy leaf"
-        ],
-        "price": 45,
-        "type": "outdoor",
-        "foliageTexture": "Glossy/Leathery",
-        "leafShape": "Ovate/Serrated",
-        "stemStructure": "Woody",
-        "overallHabit": "Shrub/Tree",
-        "biometricFeatures": [
-            "Alternate",
-            "Multi-petal"
-        ]
-    },
-    {
-        "id": "p_out_67",
-        "name": "Dogwood",
-        "scientificName": "Cornus florida",
-        "description": "Small tree with white/pink bracts in spring and red berries in fall.",
-        "imageUrl": "https://images.unsplash.com/photo-1542278917-76856c3fa536",
-        "idealTempMin": -25,
-        "idealTempMax": 30,
-        "minHumidity": 40,
-        "sunlight": "medium",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "Bark (febrifuge)"
-        ],
-        "advantages": [
-            "4-season interest",
-            "Native"
-        ],
-        "price": 80,
-        "type": "outdoor",
-        "foliageTexture": "Veined",
-        "leafShape": "Ovate/Arcuate veins",
-        "stemStructure": "Woody",
-        "overallHabit": "Tree",
-        "biometricFeatures": [
-            "Opposite",
-            "Showy bracts"
-        ]
-    },
-    {
-        "id": "p_out_68",
-        "name": "Viburnum",
-        "scientificName": "Viburnum opulus",
-        "description": "Snowball bush. Round clusters of white flowers.",
-        "imageUrl": "https://images.unsplash.com/photo-1563217684-28b9d2423e80",
-        "idealTempMin": -30,
-        "idealTempMax": 25,
-        "minHumidity": 40,
-        "sunlight": "medium",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "Cramp bark"
-        ],
-        "advantages": [
-            "Spring flower",
-            "Fall color"
-        ],
-        "price": 35,
-        "type": "outdoor",
-        "foliageTexture": "Lobed/Maple-like",
-        "leafShape": "Trilobed",
-        "stemStructure": "Woody",
-        "overallHabit": "Shrub",
-        "biometricFeatures": [
-            "Opposite",
-            "Drupe fruit"
-        ]
-    },
-    {
-        "id": "p_out_69",
-        "name": "Redbud",
-        "scientificName": "Cercis canadensis",
-        "description": "Tree with magenta pea-flowers covering branches before leaves.",
-        "imageUrl": "https://images.unsplash.com/photo-1542278917-76856c3fa536",
-        "idealTempMin": -25,
-        "idealTempMax": 30,
-        "minHumidity": 40,
-        "sunlight": "medium",
-        "oxygenLevel": "high",
-        "medicinalValues": [
-            "Edible flowers"
-        ],
-        "advantages": [
-            "Early color",
-            "Heart leaf"
-        ],
-        "price": 70,
-        "type": "outdoor",
-        "foliageTexture": "Smooth",
-        "leafShape": "Cordate (Heart)",
-        "stemStructure": "Woody",
-        "overallHabit": "Tree",
-        "biometricFeatures": [
-            "Cauliflory (Flowering on trunk)",
-            "Zigzag twig"
-        ]
-    },
-    {
-        "id": "p_out_70",
-        "name": "Spirea",
-        "scientificName": "Spiraea japonica",
-        "description": "Tough shrub with pink fuzzy flower clusters.",
-        "imageUrl": "https://images.unsplash.com/photo-1628169225700-1d8f58b8d96d",
-        "idealTempMin": -30,
-        "idealTempMax": 30,
-        "minHumidity": 40,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Indestructible",
-            "Chartreuse foliage"
-        ],
-        "price": 25,
-        "type": "outdoor",
-        "foliageTexture": "Serrated",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Mounding",
-        "biometricFeatures": [
-            "Alternate",
-            "Corymb"
-        ]
-    },
-    {
-        "id": "p_out_71",
-        "name": "Pieris",
-        "scientificName": "Pieris japonica",
-        "description": "Lily of the Valley Shrub. Cascading white bell flowers.",
-        "imageUrl": "https://images.unsplash.com/photo-1588350552726-0610b78df426",
-        "idealTempMin": -20,
-        "idealTempMax": 25,
-        "minHumidity": 50,
-        "sunlight": "medium",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Evergreen",
-            "Spring bloom"
-        ],
-        "price": 40,
-        "type": "outdoor",
-        "foliageTexture": "Leathery",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Shrub",
-        "biometricFeatures": [
-            "Whorled/Alternate",
-            "Urceolate flower"
-        ]
-    },
-    {
-        "id": "p_out_72",
-        "name": "Serviceberry",
-        "scientificName": "Amelanchier arborea",
-        "description": "Native tree with white flowers, edible berries, and orange fall color.",
-        "imageUrl": "https://images.unsplash.com/photo-1542278917-76856c3fa536",
-        "idealTempMin": -30,
-        "idealTempMax": 25,
-        "minHumidity": 40,
-        "sunlight": "medium",
-        "oxygenLevel": "very-high",
-        "medicinalValues": [
-            "Nutritious berry"
-        ],
-        "advantages": [
-            "Wildlife",
-            "Edible"
-        ],
-        "price": 60,
-        "type": "outdoor",
-        "foliageTexture": "Smooth",
-        "leafShape": "Ovate",
-        "stemStructure": "Woody",
-        "overallHabit": "Tree",
-        "biometricFeatures": [
-            "Serrated",
-            "Pome fruit"
-        ]
-    },
-    {
-        "id": "p_out_73",
-        "name": "Ninebark",
-        "scientificName": "Physocarpus opulifolius",
-        "description": "Shrub with purple/black leaves and peeling bark.",
-        "imageUrl": "https://images.unsplash.com/photo-1628169225700-1d8f58b8d96d",
-        "idealTempMin": -40,
-        "idealTempMax": 30,
-        "minHumidity": 40,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Dark foliage",
-            "Tough"
-        ],
-        "price": 30,
-        "type": "outdoor",
-        "foliageTexture": "Textured",
-        "leafShape": "Lobed (Maple-like)",
-        "stemStructure": "Woody",
-        "overallHabit": "Arching",
-        "biometricFeatures": [
-            "Exfoliating bark",
-            "Corymb"
-        ]
-    },
-    {
-        "id": "p_out_74",
-        "name": "Smoke Bush",
-        "scientificName": "Cotinus coggygria",
-        "description": "Large shrub with purple leaves and puffs of smoke-like flowers.",
-        "imageUrl": "https://images.unsplash.com/photo-1628169225700-1d8f58b8d96d",
-        "idealTempMin": -25,
-        "idealTempMax": 30,
-        "minHumidity": 30,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Unique texture",
-            "Color"
-        ],
-        "price": 45,
-        "type": "outdoor",
-        "foliageTexture": "Smooth/Waxy",
-        "leafShape": "Orbicular/Obovate",
-        "stemStructure": "Woody",
-        "overallHabit": "Vase",
-        "biometricFeatures": [
-            "Plumose pedicels",
-            "Alternate"
-        ]
-    },
-    {
-        "id": "p_out_75",
-        "name": "Sumac (Tiger Eyes)",
-        "scientificName": "Rhus typhina",
-        "description": "Chartreuse, ferny leaves turning fiery orange in fall.",
-        "imageUrl": "https://images.unsplash.com/photo-1596720512803-085e481b4986",
-        "idealTempMin": -30,
-        "idealTempMax": 30,
-        "minHumidity": 30,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
-        "medicinalValues": [
-            "Berry lemonade (Vitamin C)"
-        ],
-        "advantages": [
-            "Architectural",
-            "Fall color"
-        ],
-        "price": 35,
-        "type": "outdoor",
-        "foliageTexture": "Velvet stems",
-        "leafShape": "Pinnate (Dissected)",
-        "stemStructure": "Woody",
-        "overallHabit": "Upright",
-        "biometricFeatures": [
-            "Fuzzy stems (Staghorn)",
-            "Milky sap"
+            "Sun Hardy",
+            "Outdoor Adapted"
         ]
     }
 ];

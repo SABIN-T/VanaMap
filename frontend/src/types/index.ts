@@ -14,6 +14,7 @@ export interface Plant {
     price?: number;
     // Base price, vendors may override
     type: 'indoor' | 'outdoor';
+    lifespan?: string;
     isNocturnal?: boolean; // For CAM plants (Snake Plant, Aloe) that produce O2 at night
     ecosystem?: string;
     // Biometric Data

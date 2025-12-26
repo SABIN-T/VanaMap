@@ -16,6 +16,7 @@ const PlantSchema = new mongoose.Schema({
     advantages: [String],
     price: Number,
     type: { type: String, enum: ['indoor', 'outdoor'], required: true },
+    lifespan: { type: String, default: 'Unknown' }, // e.g. "Perennial (10+ years)"
     // Biometric Data for AI Scanning
     foliageTexture: String, // e.g. "Glossy", "Matte", "Pubescent"
     leafShape: String, // e.g. "Ovate", "Lanceolate", "Cordate"

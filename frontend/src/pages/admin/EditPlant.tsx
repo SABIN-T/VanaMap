@@ -202,6 +202,17 @@ export const EditPlant = () => {
                                     />
                                 </div>
                             </div>
+                            <div className="mt-6">
+                                <div className={styles.inputGroup}>
+                                    <label className={styles.label}>Expected Lifespan</label>
+                                    <input
+                                        className={styles.glassInput}
+                                        value={plant.lifespan || ''}
+                                        onChange={e => setPlant({ ...plant, lifespan: e.target.value })}
+                                        placeholder="e.g. Perennial, 10-15 Years"
+                                    />
+                                </div>
+                            </div>
                         </div>
 
                         {/* Economics & Type Section */}
