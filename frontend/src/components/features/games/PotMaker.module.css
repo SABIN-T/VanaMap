@@ -1,6 +1,6 @@
 .container {
     width: 100%;
-    max-width: 800px;
+    max-width: 900px;
     margin: 0 auto;
     padding: 2rem;
     color: white;
@@ -10,6 +10,21 @@
 .header {
     text-align: center;
     margin-bottom: 2rem;
+    position: relative;
+}
+
+.backBtnWrapper {
+    background: none;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    position: absolute;
+    left: 0;
+    top: 0;
 }
 
 .title {
@@ -36,108 +51,146 @@
     flex-direction: column;
     align-items: center;
     gap: 2rem;
+    min-height: 500px;
+    background: rgba(15, 23, 42, 0.4);
+    border-radius: 24px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 2rem;
 }
 
-.previewArea {
-    position: relative;
-    width: 350px;
-    height: 350px;
-    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1), transparent 70%);
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    /* Drop shadow for the floating effect */
-    filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.5));
-}
-
-.potContainer {
-    position: relative;
-    width: 300px;
-    height: 300px;
-}
-
-.potBase {
-    position: absolute;
-    top: 0;
-    left: 0;
+/* UPLOAD & CROP STYLES */
+.cropContainer {
     width: 100%;
-    height: 100%;
-    object-fit: contain;
-    z-index: 1;
-}
-
-/* This masks the user image to the main "body" of the pot 
-   Adjust these clip-path values based on the exact 3D render shape */
-.designOverlay {
-    position: absolute;
-    top: 15%;
-    /* Start below rim */
-    left: 10%;
-    width: 80%;
-    height: 65%;
-    background-size: cover;
-    background-position: center;
-    z-index: 2;
-    opacity: 0.9;
-    mix-blend-mode: multiply;
-    /* Realistic blend into ceramic texture */
-    /* Simple curved mask approximation for a cylinder pot */
-    border-radius: 5% 5% 30% 30%;
-    clip-path: polygon(0 0, 100% 0, 95% 100%, 5% 100%);
-    /* Simulate wrapping */
-    transform-style: preserve-3d;
-    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.2);
-}
-
-.lightingOverlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 3;
-    background: linear-gradient(105deg, transparent 40%, rgba(255, 255, 255, 0.2) 50%, transparent 60%);
-    pointer-events: none;
-    border-radius: inherit;
-}
-
-.uploadPrompt {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 4;
+    height: 500px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
-    color: rgba(255, 255, 255, 0.8);
-    background: rgba(0, 0, 0, 0.4);
-    backdrop-filter: blur(4px);
-    padding: 1rem 2rem;
-    border-radius: 12px;
+    justify-content: center;
+    position: relative;
+}
+
+.uploadBox {
+    border: 2px dashed rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    padding: 4rem;
+    text-align: center;
     cursor: pointer;
     transition: all 0.2s;
-    border: 1px dashed rgba(255, 255, 255, 0.3);
 }
 
-.uploadPrompt:hover {
-    background: rgba(0, 0, 0, 0.6);
-    transform: translate(-50%, -50%) scale(1.05);
+.uploadBox:hover {
+    border-color: #10b981;
+    background: rgba(16, 185, 129, 0.05);
 }
 
+.cropperWrapper {
+    position: relative;
+    width: 100%;
+    height: 400px;
+    background: #0f172a;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+}
+
+.cropControls {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+}
+
+.sliderContainer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 40%;
+}
+
+.slider {
+    flex: 1;
+    accent-color: #10b981;
+}
+
+.buttonRow {
+    display: flex;
+    gap: 12px;
+}
+
+.cancelBtn,
+.applyBtn {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.cancelBtn {
+    background: #334155;
+    color: white;
+}
+
+.applyBtn {
+    background: #10b981;
+    color: white;
+}
+
+
+/* PREVIEW & 3D STYLES */
+.previewContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.canvasWrapper {
+    width: 100%;
+    height: 400px;
+    /* Reduced from fixed square to flexible */
+    max-width: 600px;
+    background: rgba(0, 0, 0, 0.2);
+    /* Darker backdrop for contrast */
+    border-radius: 20px;
+    position: relative;
+    cursor: grab;
+}
+
+.canvasWrapper:active {
+    cursor: grabbing;
+}
+
+.rotateHint {
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: rgba(255, 255, 255, 0.7);
+}
+
+
+/* CONTROLS (SHARED) */
 .controls {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
     justify-content: center;
-    width: 100%;
-    background: rgba(15, 23, 42, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    padding: 1.5rem;
-    border-radius: 20px;
 }
 
 .actionBtn,
@@ -160,41 +213,23 @@
     color: white;
 }
 
-.actionBtn:hover {
-    background: rgba(255, 255, 255, 0.15);
-}
-
 .saveBtn {
     background: #10b981;
     color: white;
 }
 
-.saveBtn:hover {
-    background: #059669;
-    transform: translateY(-2px);
-}
-
 .saveBtn:disabled {
     opacity: 0.5;
-    cursor: not-allowed;
 }
 
 .buyBtn {
     background: linear-gradient(135deg, #3b82f6, #2563eb);
     color: white;
     position: relative;
-    overflow: hidden;
-}
-
-.buyBtn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
 }
 
 .buyBtn:disabled {
     opacity: 0.5;
-    cursor: not-allowed;
-    transform: none;
 }
 
 .badge {
@@ -203,18 +238,6 @@
     border-radius: 4px;
     font-size: 0.7rem;
     text-transform: uppercase;
-}
-
-.hint {
-    width: 100%;
-    text-align: center;
-    margin-top: 1rem;
-    color: #ef4444;
-    font-size: 0.85rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
 }
 
 @keyframes fadeIn {
@@ -230,24 +253,11 @@
 }
 
 @media (max-width: 768px) {
-    .previewArea {
-        width: 280px;
-        height: 280px;
+    .header {
+        padding-top: 2rem;
     }
 
-    .potContainer {
-        width: 240px;
-        height: 240px;
-    }
-
-    .controls {
-        flex-direction: column;
-    }
-
-    .actionBtn,
-    .saveBtn,
-    .buyBtn {
-        width: 100%;
-        justify-content: center;
+    .backBtnWrapper {
+        top: -10px;
     }
 }
