@@ -15,7 +15,7 @@ export const Button = ({
 }: ButtonProps) => {
     return (
         <button
-            className={`btn ${variant === 'primary' ? 'btn-primary' : 'btn-outline'} ${className || ''}`}
+            className={`btn ${variant === 'primary' ? 'btn-primary' : 'btn-outline'} btn-${size} ${className || ''}`}
             {...props}
         >
             {children}

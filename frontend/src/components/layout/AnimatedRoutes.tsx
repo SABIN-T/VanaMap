@@ -31,7 +31,7 @@ const Leaderboard = lazy(() => import('../../pages/Leaderboard').then(m => ({ de
 const SeedDashboard = lazy(() => import('../../pages/admin/SeedDashboard').then(m => ({ default: m.SeedDashboard })));
 const PlantIdentifier = lazy(() => import('../../pages/admin/PlantIdentifier').then(m => ({ default: m.PlantIdentifier })));
 const SimulationData = lazy(() => import('../../pages/admin/SimulationData').then(m => ({ default: m.SimulationData })));
-const PotDesigns = lazy(() => import('../../pages/admin/PotDesigns').then(m => ({ default: m.default })));
+const PotDesigns = lazy(() => import('../../pages/admin/PotDesigns'));
 
 
 const LoadingScreen = () => (
@@ -65,7 +65,7 @@ export const AnimatedRoutes = () => {
                     However, wrapping Routes breaks layout sometimes if not 100% height.
                     We ensure the wrapper matches standard layout.
                 */}
-                <div key={location.pathname} className="page-enter" style={{ minHeight: '100vh' }}>
+                <div className="page-enter" style={{ minHeight: '100vh' }}>
                     <Routes location={location}>
                         <Route path="/" element={<Home />} />
                         <Route path="/about" element={<About />} />

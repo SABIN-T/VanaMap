@@ -20,7 +20,7 @@ interface PlantCardProps {
 export const PlantCard = ({ plant, score, isTopMatch, priority = false, onAdd, stockStatus }: PlantCardProps) => {
     const { user, toggleFavorite } = useAuth();
     const isFavorite = user?.favorites.includes(plant.id);
-    const isPetFriendly = (plant as any).petFriendly;
+    const isPetFriendly = plant.petFriendly;
 
     // Determine Price & Stock
     const displayPrice = stockStatus?.minPrice || plant.price || ((plant.name.charCodeAt(0) % 5 + 1) * 150);

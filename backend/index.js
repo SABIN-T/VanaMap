@@ -1221,9 +1221,8 @@ app.patch('/api/user/game-progress', auth, async (req, res) => {
     }
 });
 
-app.get('/api/admin/designs', auth, async (req, res) => {
+app.get('/api/admin/designs', auth, admin, async (req, res) => {
     try {
-        if (req.user.role !== 'admin') return res.status(403).json({ error: "Access denied" });
 
         const usersWithDesigns = await User.find({ "designs.0": { $exists: true } })
             .select('name email designs')
@@ -1454,9 +1453,8 @@ app.get('/api/settings/:key', async (req, res) => {
     } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
-app.post('/api/admin/settings', auth, async (req, res) => {
+app.post('/api/admin/settings', auth, admin, async (req, res) => {
     try {
-        if (req.user.role !== 'admin') return res.status(403).json({ error: "Access denied" });
         const { key, value } = req.body;
 
         let setting = await SystemSettings.findOne({ key });

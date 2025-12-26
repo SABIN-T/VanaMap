@@ -3,6 +3,8 @@ import { Download, Search, Package, ToggleLeft, ToggleRight } from 'lucide-react
 import toast from 'react-hot-toast';
 import styles from './PotDesigns.module.css';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
 interface Design {
     id: string;
     imageUrl: string;
@@ -31,7 +33,7 @@ export default function PotDesigns() {
 
     const fetchSettings = async () => {
         try {
-            const res = await fetch('http://localhost:5000/api/settings/pot_save_on_buy');
+            const res = await fetch(`${API_URL}/settings/pot_save_on_buy`);
             const data = await res.json();
             if (data.key) setAutoSaveOn(data.value);
         } catch (e) { console.error(e); }
@@ -41,7 +43,7 @@ export default function PotDesigns() {
         const newValue = !autoSaveOn;
         try {
             const token = localStorage.getItem('token');
-            const res = await fetch('http://localhost:5000/api/admin/settings', {
+            const res = await fetch(`${API_URL}/admin/settings`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -62,7 +64,7 @@ export default function PotDesigns() {
             // We need a new endpoint generally, but for now let's assume we can fetch all users or a specific designs endpoint.
             // Since we don't have a specific "get all designs" admin endpoint, I'll create one shortly.
             // For now, I'll stub the fetch and assume the endpoint /api/admin/designs will exist.
-            const res = await fetch('http://localhost:5000/api/admin/designs', {
+            const res = await fetch(`${API_URL}/admin/designs`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
             if (res.ok) {

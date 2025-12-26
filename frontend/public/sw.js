@@ -48,26 +48,31 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // 2. API & Static Assets: Stale-While-Revalidate
-    // Strategy: Serve cached content right away (fast), update cache in background.
-    if (url.pathname.startsWith('/api') ||
-        url.pathname.match(/\.(js|css|png|jpg|jpeg|svg|ico|woff2)$/)
-    ) {
+    // 2. JS & CSS: Network First (Prevents Chunk Loading Errors after new builds)
+    if (url.pathname.match(/\.(js|css)$/)) {
+        event.respondWith(
+            fetch(event.request)
+                .then((response) => {
+                    const clonedRes = response.clone();
+                    caches.open(CACHE_NAME).then(cache => cache.put(event.request, clonedRes));
+                    return response;
+                })
+                .catch(() => caches.match(event.request))
+        );
+        return;
+    }
+
+    // 3. Static Assets: Stale-While-Revalidate (Images, Fonts)
+    if (url.pathname.match(/\.(png|jpg|jpeg|svg|ico|woff2)$/)) {
         event.respondWith(
             caches.open(CACHE_NAME).then((cache) => {
                 return cache.match(event.request).then((cachedResponse) => {
                     const fetchPromise = fetch(event.request).then((networkResponse) => {
-                        // Update cache
                         if (networkResponse && networkResponse.status === 200) {
                             cache.put(event.request, networkResponse.clone());
                         }
                         return networkResponse;
-                    }).catch(() => {
-                        // Network failed
-                        return cachedResponse;
-                    });
-
-                    // Return cache if available, else wait for network
+                    }).catch(() => cachedResponse);
                     return cachedResponse || fetchPromise;
                 });
             })

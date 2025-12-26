@@ -24,8 +24,8 @@ if ('serviceWorker' in navigator) {
 window.addEventListener('unhandledrejection', (event) => {
   if (event.reason?.name === 'ChunkLoadError' ||
     (event.reason?.message && event.reason.message.includes('Failed to fetch dynamically imported module'))) {
-    console.warn("Chunk load failed, forcing reload for latest system assets...");
-    window.location.reload();
+    console.warn("Chunk load failed. Latest system assets could not be retrieved automatically.");
+    // window.location.reload(); // Disabled to prevent infinite reload loops
   }
 });
 

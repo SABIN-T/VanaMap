@@ -7,6 +7,8 @@ import { Stage, PresentationControls } from '@react-three/drei';
 import * as THREE from 'three';
 import styles from './PotMaker.module.css';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
 interface PotMakerProps {
     onBack: () => void;
 }
@@ -37,6 +39,47 @@ const getCroppedImg = async (imageSrc: string, pixelCrop: any) => {
 
 
 // --- 3D POT COMPONENT ---
+const TexturedCylinder = ({
+    textureUrl,
+    geometryArgs,
+    scaleX,
+    scaleY,
+    offsetX,
+    offsetY,
+    rotation
+}: any) => {
+    const texture = useLoader(THREE.TextureLoader, textureUrl) as THREE.Texture;
+
+    if (texture) {
+        texture.wrapS = THREE.ClampToEdgeWrapping;
+        texture.wrapT = THREE.ClampToEdgeWrapping;
+        texture.anisotropy = 16;
+        texture.minFilter = THREE.LinearMipmapLinearFilter;
+        texture.magFilter = THREE.LinearFilter;
+        texture.generateMipmaps = true;
+        texture.repeat.set(1 / scaleX, 1 / scaleY);
+        texture.offset.set(offsetX, offsetY);
+        texture.center.set(0.5, 0.5);
+        texture.rotation = rotation * (Math.PI / 180);
+        texture.needsUpdate = true;
+    }
+
+    return (
+        <mesh castShadow receiveShadow position={[0, 0.5, 0]}>
+            <cylinderGeometry args={geometryArgs} />
+            <meshStandardMaterial
+                attach="material-0"
+                color="#ffffff"
+                roughness={0.4}
+                metalness={0.05}
+                map={texture}
+            />
+            <meshStandardMaterial attach="material-1" color="#ffffff" roughness={0.5} />
+            <meshStandardMaterial attach="material-2" color="#ffffff" roughness={0.5} />
+        </mesh>
+    );
+};
+
 const PotModel = ({
     textureUrl,
     shape,
@@ -56,60 +99,33 @@ const PotModel = ({
     offsetY: number,
     rotation: number
 }) => {
-    const texture = textureUrl ? useLoader(THREE.TextureLoader, textureUrl) : null;
-
-    // Apply texture transformations
-    if (texture) {
-        // We want the image to behave like a "sticker" or decal, not a repeating pattern.
-        texture.wrapS = THREE.ClampToEdgeWrapping;
-        texture.wrapT = THREE.ClampToEdgeWrapping;
-
-        // Quality improvements for "High End" look
-        texture.anisotropy = 16;
-        texture.minFilter = THREE.LinearMipmapLinearFilter;
-        texture.magFilter = THREE.LinearFilter;
-        texture.generateMipmaps = true;
-
-        // Inverse logic: Higher "Scale" slider value usually means "Zoom In", 
-        // which for repeats means SMALLER repeat count.
-        // So we invert the slider value: 1 / scale
-        texture.repeat.set(1 / scaleX, 1 / scaleY);
-
-        texture.offset.set(offsetX, offsetY);
-
-        texture.center.set(0.5, 0.5);
-        texture.rotation = rotation * (Math.PI / 180);
-
-        texture.needsUpdate = true;
-    }
-
     // Size multiplier
     const scale = size === 'small' ? 0.8 : size === 'medium' ? 1 : 1.2;
 
     // Geometry args based on shape
-    let geometryArgs: [number, number, number, number] = [1.2, 1, 2.2, 64]; // Classic (Tapered)
+    let geometryArgs: [number, number, number, number] = [1.2, 1, 2.2, 64];
 
-    if (shape === 'modern') geometryArgs = [1.1, 1.1, 2.2, 64]; // Straight Cylinder
-    if (shape === 'wide') geometryArgs = [1.4, 1.2, 1.8, 64]; // Short & Wide
+    if (shape === 'modern') geometryArgs = [1.1, 1.1, 2.2, 64];
+    if (shape === 'wide') geometryArgs = [1.4, 1.2, 1.8, 64];
 
     return (
         <group dispose={null} scale={[scale, scale, scale]}>
-            <mesh castShadow receiveShadow position={[0, 0.5, 0]}>
-                <cylinderGeometry args={geometryArgs} />
-
-                {/* Material 0: Side - Texture */}
-                <meshStandardMaterial
-                    attach="material-0"
-                    color="#ffffff"
-                    roughness={0.4}
-                    metalness={0.05}
-                    map={texture}
+            {textureUrl ? (
+                <TexturedCylinder
+                    textureUrl={textureUrl}
+                    geometryArgs={geometryArgs}
+                    scaleX={scaleX}
+                    scaleY={scaleY}
+                    offsetX={offsetX}
+                    offsetY={offsetY}
+                    rotation={rotation}
                 />
-                {/* Material 1: Top - White */}
-                <meshStandardMaterial attach="material-1" color="#ffffff" roughness={0.5} />
-                {/* Material 2: Bottom - White */}
-                <meshStandardMaterial attach="material-2" color="#ffffff" roughness={0.5} />
-            </mesh>
+            ) : (
+                <mesh castShadow receiveShadow position={[0, 0.5, 0]}>
+                    <cylinderGeometry args={geometryArgs} />
+                    <meshStandardMaterial color="#ffffff" roughness={0.5} />
+                </mesh>
+            )}
 
             {/* Soil */}
             <mesh position={[0, shape === 'wide' ? 1.3 : 1.59, 0]} rotation={[-Math.PI / 2, 0, 0]}>
@@ -119,6 +135,7 @@ const PotModel = ({
         </group>
     );
 };
+
 
 
 // --- CAPTURE HELPER ---
@@ -160,7 +177,7 @@ export const PotMaker = ({ onBack }: PotMakerProps) => {
     useEffect(() => {
         const fetchSettings = async () => {
             try {
-                const res = await fetch('http://localhost:5000/api/settings/pot_save_on_buy');
+                const res = await fetch(`${API_URL}/settings/pot_save_on_buy`);
                 const data = await res.json();
                 if (data.key) setAutoSaveOn(data.value);
             } catch (e) { console.error(e); }
@@ -229,7 +246,7 @@ export const PotMaker = ({ onBack }: PotMakerProps) => {
             setSaving(true);
             try {
                 const token = localStorage.getItem('token');
-                await fetch('http://localhost:5000/api/user/designs', {
+                await fetch(`${API_URL}/user/designs`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                     body: JSON.stringify({
@@ -252,7 +269,7 @@ export const PotMaker = ({ onBack }: PotMakerProps) => {
         setSaving(true);
         try {
             const token = localStorage.getItem('token');
-            await fetch('http://localhost:5000/api/user/designs', {
+            await fetch(`${API_URL}/user/designs`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                 body: JSON.stringify({

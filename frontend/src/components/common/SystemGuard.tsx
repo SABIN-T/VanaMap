@@ -26,14 +26,28 @@ class ErrorBoundary extends Component<Props, State> {
 
         // Auto-fix for common deployment chunk mismatch errors
         if (error.name === 'ChunkLoadError' || error.message?.includes('Failed to fetch dynamically imported module')) {
-            console.warn("System mismatch detected after update. Synchronizing assets...");
-            window.location.reload();
+            console.warn("System mismatch detected. A manual refresh may be needed to synchronize assets.");
         }
     }
 
-    private handleRefresh = () => {
+    private handleRefresh = async () => {
+        // Clear all persistent storage
         localStorage.clear();
-        sessionStorage.clear(); // Clear all session data too
+        sessionStorage.clear();
+
+        // 1. Unregister Service Workers (Crucial for fixing stale asset locks)
+        if ('serviceWorker' in navigator) {
+            try {
+                const registrations = await navigator.serviceWorker.getRegistrations();
+                for (const registration of registrations) {
+                    await registration.unregister();
+                }
+            } catch (e) {
+                console.error("SW unregistration failed", e);
+            }
+        }
+
+        // 2. Force reload from server bypassing cache if possible
         window.location.reload();
     };
 
@@ -47,7 +61,10 @@ class ErrorBoundary extends Component<Props, State> {
                         </div>
                         <h2 className={styles.title}>System Interruption</h2>
                         <p className={styles.desc}>
-                            {this.state.error?.message || "The application encountered an unexpected state."}
+                            The application reached an inconsistent state or couldn't load the latest updates. This usually happens after a system upgrade.
+                        </p>
+                        <p className={styles.desc} style={{ fontSize: '0.85rem', marginTop: '-1rem', opacity: 0.8 }}>
+                            Clicking <strong>Reset & Refresh</strong> will purge stale data and synchronize with the latest version.
                         </p>
                         <div style={{
                             background: 'rgba(0,0,0,0.2)',

@@ -42,8 +42,8 @@ export const UserDashboard = () => {
                     // Robust matching for different ID formats (mongo _id vs. string id)
                     const vendor = vendors.find(v =>
                         String(v.id) === String(user.id) ||
-                        String(v.id) === String((user as any)._id) ||
-                        String((v as any)._id) === String(user.id)
+                        String(v.id) === String(user._id) ||
+                        String(v._id) === String(user.id)
                     );
                     if (vendor) {
                         setMyVendor(vendor);
@@ -359,7 +359,7 @@ export const UserDashboard = () => {
                         <Zap size={20} />
                     </div>
                     <div className={styles.statInfo}>
-                        <div className={styles.statValue}>{(user as any).points || 0}</div>
+                        <div className={styles.statValue}>{user.points || 0}</div>
                         <div className={styles.statLabel}>Points</div>
                     </div>
                     <div className={styles.statTrend} style={{ color: '#10b981' }}>
@@ -373,7 +373,7 @@ export const UserDashboard = () => {
                         <Trophy size={20} />
                     </div>
                     <div className={styles.statInfo}>
-                        <div className={styles.statValue}>#{(user as any).points > 0 ? '4' : 'N/A'}</div>
+                        <div className={styles.statValue}>{user.points && user.points > 0 ? '#4' : 'N/A'}</div>
                         <div className={styles.statLabel}>Ranking</div>
                     </div>
                     <div className={styles.statTrend} style={{ color: '#facc15' }}>

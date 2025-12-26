@@ -25,10 +25,12 @@ export interface Plant {
     biometricFeatures?: string[];
     ecosystemDescription?: string;
     score?: number; // Calculated aptness based on local environment
+    petFriendly?: boolean;
 }
 
 export interface Vendor {
     id: string;
+    _id?: string;
     name: string;
     latitude: number;
     longitude: number;
@@ -67,6 +69,7 @@ export type UserRole = 'user' | 'vendor' | 'admin';
 
 export interface User {
     id: string;
+    _id?: string;
     name: string;
     email: string;
     role: UserRole;
@@ -78,4 +81,5 @@ export interface User {
         approved: boolean;
         requestDate: string;
     };
+    points?: number;
 }
