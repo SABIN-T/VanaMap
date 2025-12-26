@@ -176,7 +176,7 @@ export const UserDashboard = () => {
     }
 
     return (
-        <div className="container" style={{ padding: '3rem 1rem' }}>
+        <div className={styles.container}>
             {/* VENDOR ONBOARDING MODAL */}
             {showVendorModal && (
                 <div style={{
