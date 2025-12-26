@@ -63,6 +63,7 @@ export const Nearby = () => {
     const [activeTab, setActiveTab] = useState<'verified' | 'unverified' | 'all'>((location.state as { tab?: 'verified' | 'unverified' | 'all' })?.tab || 'verified');
 
     const [manualSearchQuery, setManualSearchQuery] = useState('');
+    const [searchRadius, setSearchRadius] = useState(50);
     const hasInitialLocateRef = useRef(false);
 
     const handleManualLocationSearch = async () => {
@@ -84,7 +85,7 @@ export const Nearby = () => {
                 setPlaceName(display_name.split(',')[0]); // Take safe first part
                 toast.success("Target area locked!", { id: tid });
 
-                await fetchAllData(latitude, longitude);
+                await fetchAllData(latitude, longitude, searchRadius);
             } else {
                 toast.error("Location signature not found.", { id: tid });
             }
@@ -96,7 +97,7 @@ export const Nearby = () => {
         }
     };
 
-    const fetchAllData = async (lat: number, lng: number) => {
+    const fetchAllData = async (lat: number, lng: number, radiusKm: number) => {
         setLoading(true);
         try {
             // Reverse Geocoding
@@ -114,20 +115,22 @@ export const Nearby = () => {
             let allVendors = await fetchVendors();
             if (allVendors.length === 0) {
                 const { VENDORS } = await import('../data/mocks');
-                await seedDatabase([], VENDORS);
+                seedDatabase([], VENDORS); // No await needed strictly if just seeding memory/local for now, but safer
                 allVendors = await fetchVendors();
             }
             const verifiedVendors = allVendors.filter(v => v.verified === true);
+
+            const radiusMeters = radiusKm * 1000;
 
             // Improved Overpass Query - Strictly Gardens and Nurseries
             const overpassQuery = `
 [out:json][timeout:25];
 (
-    node["shop"="garden_centre"](around:50000,${lat},${lng});
-    node["shop"="garden"](around:50000,${lat},${lng});
-    node["leisure"="garden"](around:50000,${lat},${lng});
-    node["tourism"="botanical_garden"](around:50000,${lat},${lng});
-    node["landuse"="plant_nursery"]["name"](around:50000,${lat},${lng});
+    node["shop"="garden_centre"](around:${radiusMeters},${lat},${lng});
+    node["shop"="garden"](around:${radiusMeters},${lat},${lng});
+    node["leisure"="garden"](around:${radiusMeters},${lat},${lng});
+    node["tourism"="botanical_garden"](around:${radiusMeters},${lat},${lng});
+    node["landuse"="plant_nursery"]["name"](around:${radiusMeters},${lat},${lng});
 );
 out body;
 >;
@@ -180,7 +183,7 @@ out skel qt;
             } catch (err) { console.error("OSM Error", err); }
 
             const combined = [...verifiedVendors, ...unverifiedVendors];
-            const nearby = combined.filter(v => getDistanceFromLatLonInKm(lat, lng, v.latitude, v.longitude) <= 50)
+            const nearby = combined.filter(v => getDistanceFromLatLonInKm(lat, lng, v.latitude, v.longitude) <= radiusKm)
                 .map(v => ({ ...v, distance: getDistanceFromLatLonInKm(lat, lng, v.latitude, v.longitude) }))
                 .sort((a, b) => (a.distance || 0) - (b.distance || 0));
 
@@ -206,7 +209,7 @@ out skel qt;
                 const { latitude, longitude } = pos.coords;
                 setPosition([latitude, longitude]);
                 if (tid) toast.success("Satellites locked!", { id: tid });
-                await fetchAllData(latitude, longitude);
+                await fetchAllData(latitude, longitude, searchRadius);
             },
             () => {
                 if (tid) toast.error("Precision tracking failed", { id: tid });
@@ -215,7 +218,7 @@ out skel qt;
             },
             { enableHighAccuracy: true, timeout: 15000 }
         );
-    }, [loading]);
+    }, [loading, searchRadius]); // Added searchRadius dependency
 
     useEffect(() => {
         if (!hasInitialLocateRef.current) {
@@ -270,20 +273,49 @@ out skel qt;
             <div className={styles.splitLayout}>
                 <div className={styles.mapWrapper}>
                     {/* Search by Location Bar Moved Above Map */}
-                    <div className={styles.mapSearchBar}>
-                        <div className={styles.mapSearchInput}>
-                            <Search size={18} className={styles.mapSearchIcon} />
-                            <input
-                                type="text"
-                                placeholder="Search city, neighborhood, or zip..."
-                                value={manualSearchQuery}
-                                onChange={(e) => setManualSearchQuery(e.target.value)}
-                                onKeyDown={(e) => e.key === 'Enter' && handleManualLocationSearch()}
-                            />
+                    <div className={styles.mapSearchBarContainer} style={{ background: 'var(--color-bg-card)', padding: '1rem', borderRadius: '1rem', marginBottom: '1rem', border: '1px solid var(--glass-border)' }}>
+                        <div className={styles.mapSearchBar} style={{ marginBottom: '1rem' }}>
+                            <div className={styles.mapSearchInput}>
+                                <Search size={18} className={styles.mapSearchIcon} />
+                                <input
+                                    type="text"
+                                    placeholder="Search city, neighborhood, or zip..."
+                                    value={manualSearchQuery}
+                                    onChange={(e) => setManualSearchQuery(e.target.value)}
+                                    onKeyDown={(e) => e.key === 'Enter' && handleManualLocationSearch()}
+                                />
+                            </div>
+                            <Button onClick={handleManualLocationSearch} disabled={loading} size="sm" style={{ minWidth: '100px', height: '48px' }}>
+                                {loading ? <RefreshCw className="animate-spin" size={20} /> : 'Search'}
+                            </Button>
                         </div>
-                        <Button onClick={handleManualLocationSearch} disabled={loading} size="sm" style={{ minWidth: '100px', height: '48px' }}>
-                            {loading ? <RefreshCw className="animate-spin" size={20} /> : 'Search'}
-                        </Button>
+
+                        {/* Radius Slider Control */}
+                        <div style={{ padding: '0 0.5rem' }}>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem', fontSize: '0.85rem', color: 'var(--color-text-muted)', fontWeight: 600 }}>
+                                <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Zap size={14} className="text-yellow-400" /> Search Radius</span>
+                                <span style={{ color: 'var(--color-text-main)' }}>{searchRadius} km</span>
+                            </div>
+                            <input
+                                type="range"
+                                min="1"
+                                max="1000"
+                                value={searchRadius}
+                                onChange={(e) => setSearchRadius(Number(e.target.value))}
+                                onMouseUp={() => position && fetchAllData(position[0], position[1], searchRadius)}
+                                onTouchEnd={() => position && fetchAllData(position[0], position[1], searchRadius)}
+                                style={{ width: '100%', cursor: 'pointer', height: '6px', background: 'rgba(255,255,255,0.1)', borderRadius: '3px', accentColor: 'var(--color-primary)' }}
+                            />
+                            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '4px', fontSize: '0.7rem', color: 'rgba(255,255,255,0.3)' }}>
+                                <span>1km</span>
+                                <span>1000km</span>
+                            </div>
+                            {searchRadius > 900 && (
+                                <div style={{ fontSize: '0.75rem', color: '#facc15', marginTop: '0.5rem', display: 'flex', alignItems: 'center', gap: '6px', animation: 'fadeIn 0.3s' }}>
+                                    <AlertCircle size={12} /> Pro Tip: For global searches, try typing the city name in the box above.
+                                </div>
+                            )}
+                        </div>
                     </div>
 
                     <div className={styles.mapContainer}>
@@ -316,7 +348,7 @@ out skel qt;
                         </div>
                         {/* Subtitle - hidden on very small screens via CSS/Inline if needed, but simpler text helps */}
                         <p style={{ margin: '-0.25rem 0 0 0', fontSize: '0.75rem', color: 'var(--color-text-muted)', maxWidth: '100%', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }}>
-                            Showing results within a 50km radius
+                            Showing results within a {searchRadius}km radius
                         </p>
 
                         <div className={styles.tabGroup} style={{ width: '100%', display: 'flex', gap: '0.5rem', overflowX: 'auto', paddingBottom: '4px' }}>
