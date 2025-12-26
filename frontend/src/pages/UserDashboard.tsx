@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import { Button } from '../components/common/Button';
-import { Trash2, ShoppingBag, MapPin, Heart, ArrowRight, Loader2, Store, Shield, Lock, Trophy, Zap, TrendingUp, Wind, Award } from 'lucide-react';
+import { Trash2, ShoppingBag, MapPin, Heart, ArrowRight, Loader2, Store, Shield, Lock, Trophy, Zap, TrendingUp, Wind, Award, HelpCircle } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { fetchPlants, fetchVendors, updateVendor, changePassword } from '../services/api';
@@ -17,6 +17,7 @@ export const UserDashboard = () => {
     // Favorites State
     const [allPlants, setAllPlants] = useState<Plant[]>([]);
     const [loadingFavs, setLoadingFavs] = useState(true);
+    const [showGuide, setShowGuide] = useState(false);
 
     // Vendor Onboarding State
     const [showVendorModal, setShowVendorModal] = useState(false);
@@ -428,8 +429,71 @@ export const UserDashboard = () => {
                             ADMIN
                         </button>
                     )}
+
+                    <button onClick={() => setShowGuide(true)} className={styles.iconActionBtn} title="How to Level Up?" style={{ color: '#38bdf8', borderColor: 'rgba(56, 189, 248, 0.3)', background: 'rgba(56, 189, 248, 0.1)' }}>
+                        <HelpCircle size={18} />
+                    </button>
                 </div>
             </div>
+
+            {/* GAMIFICATION GUIDE MODAL */}
+            {showGuide && (
+                <div style={{
+                    position: 'fixed', inset: 0, zIndex: 1001,
+                    background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(8px)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem'
+                }} onClick={() => setShowGuide(false)}>
+                    <div className="glass-panel" style={{
+                        width: '100%', maxWidth: '500px', padding: '2rem', borderRadius: '24px',
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        animation: 'popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)'
+                    }} onClick={e => e.stopPropagation()}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+                            <h2 style={{ fontSize: '1.5rem', fontWeight: 800, margin: 0, display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                                <Zap className="text-yellow-400" /> Level Up Guide
+                            </h2>
+                            <button onClick={() => setShowGuide(false)} style={{ background: 'transparent', border: 'none', color: '#94a3b8', cursor: 'pointer' }}><span style={{ fontSize: '1.5rem' }}>×</span></button>
+                        </div>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                            <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1rem', borderRadius: '1rem', border: '1px solid rgba(255,255,255,0.05)' }}>
+                                <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#facc15', margin: '0 0 0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Zap size={16} /> How to earn Points?</h3>
+                                <ul style={{ margin: 0, paddingLeft: '1.5rem', color: '#cbd5e1', fontSize: '0.9rem', lineHeight: '1.6' }}>
+                                    <li>Add plants to your <strong>Favorites</strong> (+10 pts)</li>
+                                    <li>Add items to your <strong>Cart</strong> (+5 pts)</li>
+                                    <li>Visit the app daily (+2 pts)</li>
+                                    <li>Complete your profile (+50 pts)</li>
+                                </ul>
+                            </div>
+
+                            <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1rem', borderRadius: '1rem', border: '1px solid rgba(255,255,255,0.05)' }}>
+                                <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#38bdf8', margin: '0 0 0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Trophy size={16} /> Ranking System</h3>
+                                <p style={{ margin: 0, color: '#cbd5e1', fontSize: '0.9rem', lineHeight: '1.6' }}>
+                                    Your rank is determined by your total points.
+                                </p>
+                                <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.8rem', fontSize: '0.8rem' }}>
+                                    <span style={{ padding: '2px 8px', borderRadius: '4px', background: 'rgba(255,255,255,0.1)', color: '#94a3b8' }}>0-100: Seed</span>
+                                    <span style={{ padding: '2px 8px', borderRadius: '4px', background: 'rgba(16, 185, 129, 0.2)', color: '#10b981' }}>100+: Sprout</span>
+                                    <span style={{ padding: '2px 8px', borderRadius: '4px', background: 'rgba(250, 204, 21, 0.2)', color: '#facc15' }}>500+: Elite</span>
+                                </div>
+                            </div>
+
+                            <div style={{ background: 'rgba(255,255,255,0.03)', padding: '1rem', borderRadius: '1rem', border: '1px solid rgba(255,255,255,0.05)' }}>
+                                <h3 style={{ fontSize: '1rem', fontWeight: 700, color: '#10b981', margin: '0 0 0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}><Wind size={16} /> Increasing Oxygen</h3>
+                                <p style={{ margin: 0, color: '#cbd5e1', fontSize: '0.9rem', lineHeight: '1.6' }}>
+                                    The Oxygen level represents the cumulative air-purifying impact of your plant collection.
+                                    <br /><br />
+                                    <strong>Tip:</strong> Add high-oxygen plants like <em>Clean Air</em> varieties to boost this stat massively!
+                                </p>
+                            </div>
+                        </div>
+
+                        <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
+                            <Button variant="primary" onClick={() => setShowGuide(false)} style={{ width: '100%' }}>Got it! Time to Grow 🌱</Button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
             {user.role === 'admin' && (
                 <div className={styles.adminMiniPanel}>
