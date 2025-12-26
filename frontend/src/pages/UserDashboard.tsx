@@ -10,8 +10,8 @@ import toast from 'react-hot-toast';
 import styles from './UserDashboard.module.css';
 
 export const UserDashboard = () => {
-    const { user, login } = useAuth(); // Removed invalid props
-    const { items, favorites: contextFavorites, toggleFavorite } = useCart(); // Renamed to avoid collision
+    const { user, toggleFavorite, loading } = useAuth(); // Restored loading from context
+    const { items } = useCart(); // Only items needed from CartContext
     const navigate = useNavigate();
 
     const [pwdForm, setPwdForm] = useState({ old: '', new: '', confirm: '' });
@@ -21,11 +21,11 @@ export const UserDashboard = () => {
     // Favorites & Data State
     const [allPlants, setAllPlants] = useState<Plant[]>([]);
     const [loadingFavs, setLoadingFavs] = useState(false);
-    const [loading, setLoading] = useState(false); // Local loading state
+    // Removed unused setLoading
 
     // Vendor Onboarding State
     const [showVendorModal, setShowVendorModal] = useState(false);
-    const [myVendor, setMyVendor] = useState<Vendor | null>(null); // Restored
+    const [myVendor, setMyVendor] = useState<Vendor | null>(null);
     const [vendorForm, setVendorForm] = useState<{ name: string, phone: string, address: string, latitude: number | null, longitude: number | null }>({
         name: '', phone: '', address: '', latitude: null, longitude: null
     });
@@ -41,8 +41,6 @@ export const UserDashboard = () => {
             if (user?.role === 'vendor') {
                 try {
                     const vendors = await fetchVendors();
-                    // Soft match on ID (mongo _id vs. string id)
-                    // Robust matching for different ID formats (mongo _id vs. string id)
                     const vendor = vendors.find(v =>
                         String(v.id) === String(user.id) ||
                         String(v.id) === String(user._id) ||
@@ -55,11 +53,10 @@ export const UserDashboard = () => {
                             name: vendor.name,
                             address: vendor.address || '',
                             phone: vendor.phone || '',
-                            latitude: vendor.latitude || 0,
+                            latitude: vendor.latitude || 0, // Fallback to 0 if undefined
                             longitude: vendor.longitude || 0
                         }));
 
-                        // Prompt if location missing (essential for Nearby Shops)
                         if (!vendor.latitude || !vendor.longitude) {
                             navigate('/vendor');
                         }
@@ -101,10 +98,15 @@ export const UserDashboard = () => {
         if (!myVendor) return;
         const tid = toast.loading("Updating shop profile...");
         try {
-            const updated = await updateVendor(myVendor.id, {
+            // Fix type mismatch: Convert null to undefined for Vendor type
+            const updatePayload: Partial<Vendor> = {
                 ...vendorForm,
-                verified: false // Admin approval required now
-            });
+                latitude: vendorForm.latitude ?? undefined,
+                longitude: vendorForm.longitude ?? undefined,
+                verified: false
+            };
+
+            const updated = await updateVendor(myVendor.id, updatePayload);
 
             if (updated) {
                 toast.success("Profile submitted! Awaiting Admin verification.", { id: tid });
