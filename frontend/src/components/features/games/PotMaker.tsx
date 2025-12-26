@@ -60,8 +60,9 @@ const PotModel = ({
 
     // Apply texture transformations
     if (texture) {
-        texture.wrapS = THREE.RepeatWrapping;
-        texture.wrapT = THREE.RepeatWrapping;
+        // We want the image to behave like a "sticker" or decal, not a repeating pattern.
+        texture.wrapS = THREE.ClampToEdgeWrapping;
+        texture.wrapT = THREE.ClampToEdgeWrapping;
 
         // Inverse logic: Higher "Scale" slider value usually means "Zoom In", 
         // which for repeats means SMALLER repeat count.
