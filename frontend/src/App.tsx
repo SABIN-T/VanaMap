@@ -6,7 +6,7 @@ import { Toaster } from 'react-hot-toast';
 import { InstallPrompt } from './components/common/InstallPrompt';
 import { MobileTabBar } from './components/layout/MobileTabBar';
 import { SwipeNavigator } from './components/layout/SwipeNavigator';
-import { TourGuide } from './components/features/onboarding/TourGuide';
+
 import { AnimatedRoutes } from './components/layout/AnimatedRoutes';
 
 import { NetworkIndicator } from './components/common/NetworkIndicator';
@@ -19,7 +19,7 @@ function App() {
         <AuthProvider>
           <CartProvider>
             <Router>
-              <TourGuide />
+
               <NetworkIndicator />
               <Toaster
                 position="top-center"
