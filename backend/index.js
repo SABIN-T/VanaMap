@@ -738,6 +738,45 @@ app.post('/api/admin/seed-plants', auth, admin, async (req, res) => {
 
         res.json({ success: true, ...stats, total: allPlants.length });
     } catch (err) {
+        console.error("SEED Error:", err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// --- NEWS API ---
+let newsCache = { data: [], lastUpdated: 0 };
+app.get('/api/news', async (req, res) => {
+    const now = Date.now();
+    if (newsCache.data.length > 0 && (now - newsCache.lastUpdated) < 24 * 60 * 60 * 1000) {
+        return res.json(newsCache.data);
+    }
+
+    try {
+        const Parser = require('rss-parser');
+        const parser = new Parser();
+        const FEED_URLS = [
+            'https://www.sciencedaily.com/rss/plants_animals/nature.xml',
+            'https://news.mongabay.com/feed/',
+            'https://feeds.feedburner.com/enn/main'
+        ];
+
+        const promises = FEED_URLS.map(url => parser.parseURL(url).catch(e => null));
+        const feeds = await Promise.all(promises);
+        const allNews = [];
+
+        feeds.forEach(feed => {
+            if (feed && feed.items) {
+                feed.items.forEach(item => {
+                    allNews.push({
+                        title: item.title,
+                        link: item.link,
+                        pubDate: new Date(item.pubDate),
+                        source: feed.title || 'Nature News',
+                        snippet: item.contentSnippet || item.content || ''
+                    });
+                });
+            }
+        });
 
         // specific filtering for nature/plants
         const keywords = ['plant', 'tree', 'forest', 'garden', 'flower', 'nature', 'species', 'conservation', 'climate'];
