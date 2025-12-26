@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Download, Search, Package } from 'lucide-react';
+import { Download, Search, Package, ToggleLeft, ToggleRight } from 'lucide-react';
 import toast from 'react-hot-toast';
 import styles from './PotDesigns.module.css';
 
@@ -22,10 +22,39 @@ export default function PotDesigns() {
     const [users, setUsers] = useState<UserWithDesigns[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
+    const [autoSaveOn, setAutoSaveOn] = useState(true);
 
     useEffect(() => {
         fetchDesigns();
+        fetchSettings();
     }, []);
+
+    const fetchSettings = async () => {
+        try {
+            const res = await fetch('http://localhost:5000/api/settings/pot_save_on_buy');
+            const data = await res.json();
+            if (data.key) setAutoSaveOn(data.value);
+        } catch (e) { console.error(e); }
+    };
+
+    const toggleAutoSave = async () => {
+        const newValue = !autoSaveOn;
+        try {
+            const token = localStorage.getItem('token');
+            const res = await fetch('http://localhost:5000/api/admin/settings', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ key: 'pot_save_on_buy', value: newValue })
+            });
+            if (res.ok) {
+                setAutoSaveOn(newValue);
+                toast.success(`Auto-save: ${newValue ? 'ON' : 'OFF'}`);
+            }
+        } catch (e) { toast.error("Failed to update setting"); }
+    };
 
     const fetchDesigns = async () => {
         try {
@@ -75,14 +104,24 @@ export default function PotDesigns() {
                     <h1><Package className={styles.icon} /> User Pot Designs</h1>
                     <p>Review and download custom pot creations</p>
                 </div>
-                <div className={styles.searchBar}>
-                    <Search size={18} />
-                    <input
-                        type="text"
-                        placeholder="Search by user..."
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                    />
+                <div className={styles.headerRight}>
+                    <div className={styles.toggleWrapper} onClick={toggleAutoSave}>
+                        <span>Auto-Save on Buy:</span>
+                        {autoSaveOn ? (
+                            <ToggleRight size={32} color="#10b981" className={styles.toggleIcon} />
+                        ) : (
+                            <ToggleLeft size={32} color="#64748b" className={styles.toggleIcon} />
+                        )}
+                    </div>
+                    <div className={styles.searchBar}>
+                        <Search size={18} />
+                        <input
+                            type="text"
+                            placeholder="Search by user..."
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                    </div>
                 </div>
             </div>
 

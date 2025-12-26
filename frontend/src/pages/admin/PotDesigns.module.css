@@ -37,6 +37,44 @@
     font-size: 0.95rem;
 }
 
+.headerRight {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.toggleWrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 8px 16px;
+    border-radius: 12px;
+    transition: all 0.2s;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.toggleWrapper:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.toggleWrapper span {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #94a3b8;
+}
+
+.toggleIcon {
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.toggleIcon:active {
+    transform: scale(0.9);
+}
+
 .searchBar {
     display: flex;
     align-items: center;
@@ -45,7 +83,7 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
     padding: 10px 16px;
     border-radius: 12px;
-    width: 300px;
+    width: 250px;
     transition: all 0.2s;
 }
 

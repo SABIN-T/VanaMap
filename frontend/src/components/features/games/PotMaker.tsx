@@ -155,6 +155,18 @@ export const PotMaker = ({ onBack }: PotMakerProps) => {
     const [zoom, setZoom] = useState(1);
     const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
     const [saving, setSaving] = useState(false);
+    const [autoSaveOn, setAutoSaveOn] = useState(true);
+
+    useEffect(() => {
+        const fetchSettings = async () => {
+            try {
+                const res = await fetch('http://localhost:5000/api/settings/pot_save_on_buy');
+                const data = await res.json();
+                if (data.key) setAutoSaveOn(data.value);
+            } catch (e) { console.error(e); }
+        };
+        fetchSettings();
+    }, []);
 
     // 3D Texture Transforms
     const [texScale, setTexScale] = useState(1);
@@ -199,8 +211,44 @@ export const PotMaker = ({ onBack }: PotMakerProps) => {
         }
     };
 
-    const handleSaveDesign = async (saveOnly: boolean = false) => {
+    const handleDownload = () => {
         if (!finalImage) return;
+        const link = document.createElement('a');
+        link.href = finalImage;
+        link.download = `VanaMap_MyPot_${Date.now()}.png`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        toast.success("Design downloading...");
+    };
+
+    const handleBuy = async () => {
+        if (!finalImage) return;
+
+        if (autoSaveOn) {
+            setSaving(true);
+            try {
+                const token = localStorage.getItem('token');
+                await fetch('http://localhost:5000/api/user/designs', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify({
+                        imageUrl: finalImage,
+                        shape: selectedShape,
+                        size: selectedSize
+                    })
+                });
+            } catch (e) { console.error("Auto-save failed during buy"); }
+            setSaving(false);
+        }
+
+        toast.success("Order placed (Simulated)!");
+    };
+
+    const handleSaveDesign = async () => {
+        handleDownload(); // Always download as requested
+
+        // Also save to database silently
         setSaving(true);
         try {
             const token = localStorage.getItem('token');
@@ -208,13 +256,13 @@ export const PotMaker = ({ onBack }: PotMakerProps) => {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
                 body: JSON.stringify({
-                    imageUrl: finalImage, // Saving the 3D snapshot
+                    imageUrl: finalImage,
                     shape: selectedShape,
                     size: selectedSize
                 })
             });
-            toast.success(saveOnly ? "Saved to Profile!" : "Order placed (Simulated)!");
-        } catch (e) { toast.error("Error saving"); }
+            toast.success("Saved to Profile!");
+        } catch (e) { toast.error("Error saving to profile"); }
         setSaving(false);
     };
 
@@ -403,10 +451,10 @@ export const PotMaker = ({ onBack }: PotMakerProps) => {
                                 <RotateCcw size={20} /> Keep Editing
                             </button>
                             <div className={styles.divider} />
-                            <button className={styles.saveBtn} onClick={() => handleSaveDesign(true)} disabled={saving}>
-                                <Save size={20} /> Save Design
+                            <button className={styles.saveBtn} onClick={() => handleSaveDesign()} disabled={saving}>
+                                <Save size={20} /> Save & Download
                             </button>
-                            <button className={styles.buyBtn} onClick={() => handleSaveDesign(false)} disabled={saving}>
+                            <button className={styles.buyBtn} onClick={handleBuy} disabled={saving}>
                                 <ShoppingCart size={20} /> Buy <span className={styles.badge}>msg</span>
                             </button>
                         </div>

@@ -3,7 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
-const { Plant, Vendor, User, Notification, Chat, PlantSuggestion, SearchLog, PushSubscription } = require('./models');
+const { Plant, Vendor, User, Notification, Chat, PlantSuggestion, SearchLog, PushSubscription, SystemSettings } = require('./models');
 const webpush = require('web-push');
 const helmet = require('helmet');
 const compression = require('compression'); // Performance: Gzip/Brotli
@@ -1439,6 +1439,36 @@ app.post('/api/auth/reset-password-request', async (req, res) => {
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
+});
+
+// --- SYSTEM SETTINGS ---
+app.get('/api/settings/:key', async (req, res) => {
+    try {
+        const setting = await SystemSettings.findOne({ key: req.params.key });
+        if (!setting) {
+            // Default values for common settings
+            if (req.params.key === 'pot_save_on_buy') return res.json({ key: 'pot_save_on_buy', value: true });
+            return res.status(404).json({ error: "Setting not found" });
+        }
+        res.json(setting);
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+app.post('/api/admin/settings', auth, async (req, res) => {
+    try {
+        if (req.user.role !== 'admin') return res.status(403).json({ error: "Access denied" });
+        const { key, value } = req.body;
+
+        let setting = await SystemSettings.findOne({ key });
+        if (!setting) {
+            setting = new SystemSettings({ key, value });
+        } else {
+            setting.value = value;
+        }
+
+        await setting.save();
+        res.json({ success: true, setting });
+    } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
 app.get('/', (req, res) => res.send('VanaMap API v3.0 - Secure & Fast'));

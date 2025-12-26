@@ -156,5 +156,10 @@ module.exports = {
         },
         description: String, // e.g. "User Device" or "Chrome on Windows"
         createdAt: { type: Date, default: Date.now }
+    })),
+    SystemSettings: mongoose.model('SystemSettings', new mongoose.Schema({
+        key: { type: String, unique: true, required: true },
+        value: mongoose.Schema.Types.Mixed,
+        description: String
     }))
 };
