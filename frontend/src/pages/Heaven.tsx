@@ -1,5 +1,5 @@
 import { useState, useEffect, type MouseEvent } from 'react';
-import { Sprout, CloudRain, Coins, Volume2, VolumeX, Sparkles, Heart, Trophy, Info, Newspaper, Recycle, ArrowLeft } from 'lucide-react';
+import { Sprout, CloudRain, Coins, Volume2, VolumeX, Sparkles, Heart, Info, Newspaper, Recycle, ArrowLeft } from 'lucide-react';
 import styles from './Heaven.module.css';
 import confetti from 'canvas-confetti';
 import { updateGameProgress } from '../services/api';
