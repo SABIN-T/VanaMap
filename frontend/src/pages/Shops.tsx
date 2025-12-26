@@ -14,35 +14,49 @@ export const Shops = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [activeCategory, setActiveCategory] = useState<'all' | 'indoor' | 'outdoor'>('all');
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const [selectedPlant, setSelectedPlant] = useState<Plant | null>(null);
+    const [isSlow, setIsSlow] = useState(false);
+
+    const loadData = async () => {
+        setLoading(true);
+        setError(null);
+        const slowTimer = setTimeout(() => setIsSlow(true), 3000);
+
+        try {
+            const [plantsData, vendorsData] = await Promise.all([
+                fetchPlants(),
+                fetchVendors()
+            ]);
+
+            if (plantsData.length === 0) {
+                // Potential silent fail or empty DB
+                console.warn("No plants fetched from server");
+            }
+
+            setPlants(plantsData);
+            setVendors(vendorsData.filter(v => v.verified));
+
+            // Check for auto-open request from navigation
+            if (location.state && (location.state as any).openPlantId) {
+                const targetId = (location.state as any).openPlantId;
+                const found = plantsData.find(p => p.id === targetId);
+                if (found) {
+                    setSelectedPlant(found);
+                    window.history.replaceState({}, document.title);
+                }
+            }
+        } catch (err) {
+            console.error("Failed to load shop items", err);
+            setError("The market systems are currently offline. Please try again in a moment.");
+        } finally {
+            clearTimeout(slowTimer);
+            setLoading(false);
+            setIsSlow(false);
+        }
+    };
 
     useEffect(() => {
-        const loadData = async () => {
-            try {
-                const [plantsData, vendorsData] = await Promise.all([
-                    fetchPlants(),
-                    fetchVendors()
-                ]);
-                setPlants(plantsData);
-                setVendors(vendorsData.filter(v => v.verified));
-
-                // Check for auto-open request from navigation
-                if (location.state && (location.state as any).openPlantId) {
-                    const targetId = (location.state as any).openPlantId;
-                    const found = plantsData.find(p => p.id === targetId);
-                    if (found) {
-                        setSelectedPlant(found);
-                        // Optional: Scroll to it? Or just showing the modal is enough.
-                        // Modal covers screen so no scroll needed.
-                        window.history.replaceState({}, document.title); // Clear state so refresh doesn't reopen
-                    }
-                }
-            } catch (error) {
-                console.error("Failed to load shop items", error);
-            } finally {
-                setLoading(false);
-            }
-        };
         loadData();
     }, []);
 
@@ -155,7 +169,38 @@ export const Shops = () => {
 
             {/* Product Grid */}
             {loading ? (
-                <div style={{ textAlign: 'center', padding: '4rem', color: '#94a3b8' }}>Loading Shop...</div>
+                <div style={{ textAlign: 'center', padding: '6rem 2rem', color: '#94a3b8', display: 'flex', flexDirection: 'column', gap: '1rem', alignItems: 'center' }}>
+                    <div className="pre-loader-pulse"></div>
+                    <div style={{ fontWeight: 600, fontSize: '1.1rem', color: '#fff' }}>Syncing Market Data...</div>
+                    {isSlow && <p style={{ fontSize: '0.85rem', opacity: 0.7 }}>Our servers are waking up, thank you for your patience.</p>}
+                </div>
+            ) : error ? (
+                <div style={{ textAlign: 'center', padding: '6rem 2rem', color: '#ef4444' }}>
+                    <AlertCircle size={48} style={{ marginBottom: '1rem', opacity: 0.5 }} />
+                    <p style={{ marginBottom: '2rem', fontSize: '1.1rem' }}>{error}</p>
+                    <button
+                        onClick={() => loadData()}
+                        className="btn btn-primary"
+                        style={{ padding: '0.8rem 2rem' }}
+                    >
+                        Retry Connection
+                    </button>
+                </div>
+            ) : filteredPlants.length === 0 ? (
+                <div style={{ textAlign: 'center', padding: '6rem 2rem', color: '#94a3b8' }}>
+                    <Search size={48} style={{ marginBottom: '1rem', opacity: 0.2 }} />
+                    <p style={{ fontSize: '1.2rem', fontWeight: 600 }}>No species matching your criteria.</p>
+                    <p style={{ fontSize: '0.9rem', opacity: 0.6 }}>Try adjusting your search or filters.</p>
+                    {plants.length === 0 && (
+                        <button
+                            onClick={() => loadData()}
+                            className="btn btn-outline"
+                            style={{ marginTop: '2rem', padding: '0.8rem 2rem' }}
+                        >
+                            Force Reload
+                        </button>
+                    )}
+                </div>
             ) : (
                 <div className={styles.grid}>
                     {filteredPlants.map(plant => (
