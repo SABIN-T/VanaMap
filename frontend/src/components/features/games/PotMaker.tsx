@@ -228,7 +228,7 @@ export const PotMaker = ({ onBack }: PotMakerProps) => {
                                 <ambientLight intensity={0.5} />
                                 <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} shadow-bias={-0.00001} />
                                 <PresentationControls speed={1.5} global zoom={0.7} polar={[-0.1, Math.PI / 4]}>
-                                    <Stage environment="city" intensity={0.6} castShadow={false}>
+                                    <Stage environment={null} intensity={1} castShadow={false}>
                                         <PotModel textureUrl={croppedImage} />
                                     </Stage>
                                 </PresentationControls>
