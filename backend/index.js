@@ -1221,6 +1221,27 @@ app.patch('/api/user/game-progress', auth, async (req, res) => {
     }
 });
 
+app.post('/api/user/designs', auth, async (req, res) => {
+    try {
+        const { imageUrl } = req.body;
+        const user = await User.findById(req.user.id);
+        if (!user) return res.status(404).json({ error: "User not found" });
+
+        if (!user.designs) user.designs = [];
+
+        user.designs.push({
+            id: 'pot_' + Date.now(),
+            imageUrl,
+            createdAt: new Date()
+        });
+
+        await user.save();
+        res.json({ success: true, designs: user.designs });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 app.get('/api/gamification/leaderboard', async (req, res) => {
     try {
         const users = await User.find({ role: 'user' })

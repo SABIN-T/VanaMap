@@ -1,0 +1,253 @@
+.container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+    color: white;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.title {
+    font-size: 2rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    background: linear-gradient(to right, #fff, #a7f3d0);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    color: #94a3b8;
+    font-size: 1rem;
+}
+
+.workspace {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+}
+
+.previewArea {
+    position: relative;
+    width: 350px;
+    height: 350px;
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.1), transparent 70%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Drop shadow for the floating effect */
+    filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.5));
+}
+
+.potContainer {
+    position: relative;
+    width: 300px;
+    height: 300px;
+}
+
+.potBase {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    z-index: 1;
+}
+
+/* This masks the user image to the main "body" of the pot 
+   Adjust these clip-path values based on the exact 3D render shape */
+.designOverlay {
+    position: absolute;
+    top: 15%;
+    /* Start below rim */
+    left: 10%;
+    width: 80%;
+    height: 65%;
+    background-size: cover;
+    background-position: center;
+    z-index: 2;
+    opacity: 0.9;
+    mix-blend-mode: multiply;
+    /* Realistic blend into ceramic texture */
+    /* Simple curved mask approximation for a cylinder pot */
+    border-radius: 5% 5% 30% 30%;
+    clip-path: polygon(0 0, 100% 0, 95% 100%, 5% 100%);
+    /* Simulate wrapping */
+    transform-style: preserve-3d;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+.lightingOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    background: linear-gradient(105deg, transparent 40%, rgba(255, 255, 255, 0.2) 50%, transparent 60%);
+    pointer-events: none;
+    border-radius: inherit;
+}
+
+.uploadPrompt {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255, 255, 255, 0.8);
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: 1px dashed rgba(255, 255, 255, 0.3);
+}
+
+.uploadPrompt:hover {
+    background: rgba(0, 0, 0, 0.6);
+    transform: translate(-50%, -50%) scale(1.05);
+}
+
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    width: 100%;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    padding: 1.5rem;
+    border-radius: 20px;
+}
+
+.actionBtn,
+.saveBtn,
+.buyBtn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border-radius: 12px;
+    border: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.actionBtn {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+}
+
+.actionBtn:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.saveBtn {
+    background: #10b981;
+    color: white;
+}
+
+.saveBtn:hover {
+    background: #059669;
+    transform: translateY(-2px);
+}
+
+.saveBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.buyBtn {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: white;
+    position: relative;
+    overflow: hidden;
+}
+
+.buyBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.buyBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.badge {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+}
+
+.hint {
+    width: 100%;
+    text-align: center;
+    margin-top: 1rem;
+    color: #ef4444;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .previewArea {
+        width: 280px;
+        height: 280px;
+    }
+
+    .potContainer {
+        width: 240px;
+        height: 240px;
+    }
+
+    .controls {
+        flex-direction: column;
+    }
+
+    .actionBtn,
+    .saveBtn,
+    .buyBtn {
+        width: 100%;
+        justify-content: center;
+    }
+}

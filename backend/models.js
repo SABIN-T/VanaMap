@@ -72,7 +72,12 @@ const UserSchema = new mongoose.Schema({
     verificationOTP: String,
     otpExpires: Date,
     gameLevel: { type: Number, default: 1 },
-    gamePoints: { type: Number, default: 0 }
+    gamePoints: { type: Number, default: 0 },
+    designs: [{
+        id: String,
+        imageUrl: String,
+        createdAt: { type: Date, default: Date.now }
+    }]
 }, { timestamps: true });
 
 const SearchLogSchema = new mongoose.Schema({

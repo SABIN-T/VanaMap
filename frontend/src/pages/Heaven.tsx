@@ -4,6 +4,7 @@ import styles from './Heaven.module.css';
 import confetti from 'canvas-confetti';
 import { updateGameProgress } from '../services/api';
 import toast from 'react-hot-toast';
+import { PotMaker } from '../components/features/games/PotMaker';
 
 interface PlantState {
     id: number;
@@ -22,7 +23,7 @@ const PLANT_TYPES = [
 
 export const Heaven = () => {
     // Hub State
-    const [view, setView] = useState<'menu' | 'game' | 'lifecycle' | 'news'>('menu');
+    const [view, setView] = useState<'menu' | 'game' | 'lifecycle' | 'news' | 'pot-maker'>('menu');
 
     // Game Logic State
     const [coins, setCoins] = useState(100);
@@ -235,6 +236,18 @@ export const Heaven = () => {
                         <p>Grow your own magical virtual garden. Plant, water, and harvest!</p>
                     </div>
 
+                    <div className={styles.menuCard} onClick={() => setView('pot-maker')}>
+                        {/* Using a distinct color/icon for Pot Maker */}
+                        <div style={{
+                            background: 'linear-gradient(135deg, #f472b6 0%, #db2777 100%)',
+                            boxShadow: '0 8px 16px -4px rgba(219, 39, 119, 0.4)'
+                        }} className={styles.cardIcon}>
+                            <Sparkles size={40} color="white" />
+                        </div>
+                        <h2>Pot Studio</h2>
+                        <p>Design your own custom 3D plant pots. Upload art & create!</p>
+                    </div>
+
                     <div className={styles.menuCard} onClick={() => setView('lifecycle')}>
                         <div className={`${styles.cardIcon} ${styles.iconYellow}`}><Recycle size={40} /></div>
                         <h2>Life Cycle</h2>
@@ -306,6 +319,11 @@ export const Heaven = () => {
                         </button>
                     </div>
                 </div>
+            )}
+
+            {/* POT MAKER VIEW */}
+            {view === 'pot-maker' && (
+                <PotMaker onBack={() => setView('menu')} />
             )}
 
             {/* SUB VIEWS */}
