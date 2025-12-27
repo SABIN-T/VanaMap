@@ -4,7 +4,7 @@ import { Button } from '../components/common/Button';
 import { ShoppingBag, MapPin, Heart, ArrowRight, Loader2, Store, Shield, Lock, Trophy, Zap, TrendingUp, Wind, Award, HelpCircle } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { fetchPlants, fetchVendors, updateVendor, changePassword } from '../services/api';
+import { fetchPlants, fetchVendors, updateVendor, changePassword, fetchLeaderboard } from '../services/api';
 import type { Plant, Vendor } from '../types';
 import toast from 'react-hot-toast';
 import styles from './UserDashboard.module.css';
@@ -21,7 +21,7 @@ export const UserDashboard = () => {
     // Favorites & Data State
     const [allPlants, setAllPlants] = useState<Plant[]>([]);
     const [loadingFavs, setLoadingFavs] = useState(false);
-    // Removed unused setLoading
+    const [rank, setRank] = useState<number | null>(null);
 
     // Vendor Onboarding State
     const [showVendorModal, setShowVendorModal] = useState(false);
@@ -35,6 +35,27 @@ export const UserDashboard = () => {
         navigate('/login');
         return null;
     }
+
+    // Fetch Rank
+    useEffect(() => {
+        const getRank = async () => {
+            if (!user) return;
+            try {
+                const leaderboard = await fetchLeaderboard();
+                if (Array.isArray(leaderboard)) {
+                    // Sort descending just to be safe, though backend might already do it
+                    const sorted = leaderboard.sort((a: any, b: any) => (b.points || 0) - (a.points || 0));
+                    const myRankIndex = sorted.findIndex((u: any) => u.id === user.id || u._id === user.id);
+                    if (myRankIndex !== -1) {
+                        setRank(myRankIndex + 1);
+                    }
+                }
+            } catch (error) {
+                console.error("Failed to fetch rank", error);
+            }
+        };
+        getRank();
+    }, [user]);
 
     useEffect(() => {
         const loadVendorData = async () => {
@@ -426,7 +447,7 @@ export const UserDashboard = () => {
                         <Trophy size={20} />
                     </div>
                     <div className={styles.statInfo}>
-                        <div className={styles.statValue}>{user.points && user.points > 0 ? '#4' : 'N/A'}</div>
+                        <div className={styles.statValue}>{rank ? `#${rank}` : 'N/A'}</div>
                         <div className={styles.statLabel}>Ranking</div>
                     </div>
                     <div className={styles.statTrend} style={{ color: '#facc15' }}>
@@ -438,6 +459,7 @@ export const UserDashboard = () => {
                 <div className={styles.statCard}>
                     <div className={styles.statIcon} style={{ background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)', color: 'white' }}>
                         <Wind size={20} />
+
                     </div>
                     <div className={styles.statInfo}>
                         <div className={styles.statValue}>{((favoritePlants.length || items.length) * 1.2).toFixed(1)}L</div>
