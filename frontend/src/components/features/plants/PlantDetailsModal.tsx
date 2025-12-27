@@ -30,6 +30,7 @@ export const PlantDetailsModal = ({ plant, weather, onClose, onBuy }: PlantDetai
 
     // Simulation States
     const [numPeople, setNumPeople] = useState(1);
+    const [simulationHours, setSimulationHours] = useState(24); // New State
     const [isACMode, setIsACMode] = useState(false);
     const [targetTemp, setTargetTemp] = useState(22);
     const [lightLevel, setLightLevel] = useState(70);
@@ -62,19 +63,103 @@ export const PlantDetailsModal = ({ plant, weather, onClose, onBuy }: PlantDetai
         return 1.0;
     }, [currentHumidity]);
 
-    const PLANT_O2_OUTPUT = useMemo(() => {
-        const baseOutput = parseFloat(plant.oxygenLevel) || 20;
 
-        // Simulation Factors
-        const lightFactor = Math.max(0.4, lightLevel / 100); // Plants adapt
 
-        // Final Daily Yield (Liters) = Base * Environment Modifiers
-        const dayYield = baseOutput * temperatureEffect * humidityEffect * lightFactor;
+    // Formula: (Humans * HourlyNeed * Hours) / (PlantHourlyOutput * Hours)
+    // Simplified: (Humans * HourlyNeed) / PlantHourlyOutput
+    // Wait, if user wants plants for 1 hour, they need enough plants to produce that much in 1 hour.
+    // Actually, "Plants Needed" is constant rate. Rate matches Rate.
+    // But if we want to "fill a room" for X hours... let's stick to Rate Matching.
+    // Interpreting User Request: "how many hours to change so accordingly the plant changes".
+    // Maybe they mean: "How long does it take for X plants to fill the room?" or "How many plants to sustain for X hours is same as 24 hours (rate)".
+    // AHH, usually simulation implies "How much Oxygen is accumulated" OR "How many plants to refresh air in X hours".
+    // Let's go with: "Plants required to replenish X people's consumption over Y hours".
+    // Actually, consumption is continuous.
+    // Let's try a "Fresh Air Target" Approach: 
+    // "To generate [Hours] worth of fresh air in real-time, you need..." -> No that's same as rate.
 
-        return dayYield.toFixed(1);
-    }, [plant.oxygenLevel, temperatureEffect, humidityEffect, lightLevel]);
+    // BETTER INTERPRATION: "Accumulation Mode".
+    // "How many plants to produce [Hours] worth of Oxygen in [Hours]?" -> Still rate.
 
-    const plantsNeeded = Math.max(1, Math.ceil((550 * numPeople) / (parseFloat(PLANT_O2_OUTPUT) || 50)));
+    // GAME INTERPRETATION:
+    // User wants to see the number go DOWN if they only need to survive for 1 hour? No.
+    // User likely means: "How many plants to purify the room in X hours?" 
+    // OR: "If I only stay in the room for X hours, do I need fewer plants?" (Technically no, you still breathe at same rate).
+
+    // LET'S DO THIS: 
+    // Total Oxygen Required = People * (550L / 24) * Hours.
+    // Plant Output over Duration = (Plant_L_Day / 24) * Hours.
+    // The 'Hours' cancels out if we just match rate.
+
+    // ALTERNATIVE (User Experience):
+    // Maybe the user thinks "I need less plants for less time".
+    // Let's simply show: "Oxygen Produced in [X] Hours" vs "Required in [X] Hours".
+    // And calculate plants needed to BREAK EVEN over that window. (It's still the same number).
+
+    // WAIT, let's look at "Air Change".
+    // Maybe: "How many plants to scrub the CO2 from X hours of breathing?"
+    // Let's stick to the cumulative logic:
+    // "To provide {Hours} hours of Oxygen:"
+    // It is simply the same rate number.
+
+    // LET'S TRY A "BUFFER" APPROACH for the game feel.
+    // If you only need to survive 1 hour, and the room acts as a buffer...
+    // No, let's keep it simple: "Oxygen Generated in [X] Hours: [Value] L"
+    // And we show if it meets the need.
+    // BUT user asked "plant changes accordingly".
+    // Let's implement: "Target Duration". 
+    // Maybe we treat it as: "I want to generate X hours worth of Oxygen in ONE hour". (Speed charging).
+    // OR "I want to offset X hours of occupancy."
+
+    // LETS DO: "Duration of Stay".
+    // Actually, scientific fact: Plants produce O2 mostly during day.
+    // If you stay 24h, you need night storage.
+    // If you stay 8h (day), you can rely on direct production.
+    // Let's scale based on "Daylight Hours" overlap? Too complex.
+
+    // SIMPLE UX SOLUTION:
+    // Scale the "Goal".
+    // "Goal: Generate Oxygen for [X] Hours".
+    // If I select 1 Hour, I need [Z] Amount for that session.
+    // The visualization shows "Plants needed to produce that amount in... 12 hours?"
+    // No.
+
+    // LET'S GO LITERAL: 
+    // User asks "how many hours... so plant changes".
+    // Let's calculate: Plants Needed = (People * Hours * 23L/hr) / (PlantOutput * Hours).
+    // It's mathematically 1:1.
+    // UNLESS... we account for "Stored Air".
+    // Let's assume the room has NO air.
+
+    // OKAY, let's try a "Purification Speed" angle.
+    // "Time to Refresh Room".
+    // Slider: "Desired Refresh Time (Hours)".
+    // Faster refresh = More plants.
+    // Formula: Plants = (RoomVolume / RefreshTime) / PlantHourlyRate.
+    // Let's assume Room Volume = 50m3 roughly.
+
+    // Let's pivot to "Occupancy Duration" but visually scale the "Total Load".
+    // Let's just show "Total Oxygen Needed for [X] Hours: [Y] Liters".
+    // And "Plants to generate this in ONE day". -> This changes the number!
+    // "I need 8 hours of oxygen (180L). How many plants to make 180L in a day?"
+    // -> 180 / DailyRate.
+    // Result: If you only need 8 hours of O2, you need 1/3rd the plants (if they work all day).
+    // THIS MAKES SENSE FOR A LAYMAN USER!
+    // "I'm only in the office 8 hours." -> Plants work 24h. -> I need fewer plants because they "charge" the room overnight.
+    // Formula: Plants = (People * (550/24 * Hours)) / PlantDailyOutput.
+
+    const plantsNeeded = useMemo(() => {
+        const hourlyNeedPerPerson = 550 / 24; // ~23L
+        const totalNeed = hourlyNeedPerPerson * numPeople * simulationHours; // Total L needed for the duration
+
+        // Plant Daily Output (Assuming they work ~12h effectively, but logic is simplified to 24h cycle avg)
+        const plantDailyOutput = parseFloat(plant.oxygenLevel) || 20;
+        const adjustedDailyOutput = plantDailyOutput * temperatureEffect * humidityEffect * (lightLevel / 100);
+
+        // How many plants to produce 'totalNeed' in a 24h cycle?
+        // (Assuming we bank the O2).
+        return Math.max(1, Math.ceil(totalNeed / adjustedDailyOutput));
+    }, [numPeople, simulationHours, plant.oxygenLevel, temperatureEffect, humidityEffect, lightLevel]);
 
 
     // Stop Propagation Helper
@@ -102,6 +187,20 @@ export const PlantDetailsModal = ({ plant, weather, onClose, onBuy }: PlantDetai
                     type="range" min="1" max="10" value={numPeople}
                     onChange={(e) => setNumPeople(Number(e.target.value))}
                     className={styles.rangeInput}
+                />
+            </div>
+
+            {/* Simulation Duration */}
+            <div className={styles.controlItem}>
+                <div className={styles.controlHeader}>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}><Hourglass size={14} /> Duration (Hours)</span>
+                    <span className={styles.controlValue} style={{ color: '#38bdf8' }}>{simulationHours}h</span>
+                </div>
+                <input
+                    type="range" min="1" max="24" value={simulationHours}
+                    onChange={(e) => setSimulationHours(Number(e.target.value))}
+                    className={styles.rangeInput}
+                    style={{ '--thumb-color': '#38bdf8' } as any}
                 />
             </div>
 
