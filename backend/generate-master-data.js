@@ -65,7 +65,7 @@ const generateBackendData = () => {
         idealTempMax: 30,
         minHumidity: 40,
         sunlight: p.light,
-        oxygenLevel: "high", // Keeping "high" for simple filter compatibility, but added detailed oxygen stats to sim data
+        oxygenLevel: `${p.oxygen} L/day`, // Updated to specific Metric
         medicinalValues: p.medicinal,
         advantages: p.advantages,
         price: randomInt(15, 150),
@@ -88,7 +88,7 @@ const generateBackendData = () => {
         idealTempMax: 35,
         minHumidity: 30,
         sunlight: p.light,
-        oxygenLevel: "moderate",
+        oxygenLevel: `${p.oxygen} L/day`, // Updated to specific Metric
         medicinalValues: p.medicinal,
         advantages: p.advantages,
         price: randomInt(5, 80),
@@ -128,7 +128,7 @@ const generateFrontendMocks = () => {
             idealTempMax: 30,
             minHumidity: 40,
             sunlight: p.light,
-            oxygenLevel: 'high',
+            oxygenLevel: `${p.oxygen} L/day`,
             medicinalValues: p.medicinal,
             advantages: p.advantages,
             price: 25,
@@ -176,7 +176,7 @@ const generateSimulationData = () => {
         oxygenOutput: p.oxygen, // ml/h
         lightRequirement: p.light,
         acTolerance: p.ac,
-        peopleSupported: Number((p.oxygen / 23000).toFixed(4)) // Approx daily need / 24h. Very small number per plant.
+        peopleSupported: Number((p.oxygen / 550).toFixed(4)) // Approx daily need (550L) -> Plants needed = 1 / ratio
     }));
 
     const content = `export interface WorldFloraSpecimen {

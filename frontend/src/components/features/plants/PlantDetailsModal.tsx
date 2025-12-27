@@ -42,17 +42,11 @@ export const PlantDetailsModal = ({ plant, weather, onClose, onBuy }: PlantDetai
     // ==========================================
     // SCIENTIFIC LOGIC
     // ==========================================
-    const getBasePhotosynthesisRate = useMemo(() => {
-        let leafArea = 0.5;
-        const ox = plant.oxygenLevel || 'moderate';
+    // ==========================================
+    // SCIENTIFIC LOGIC
+    // ==========================================
 
-        if (ox === 'very-high') leafArea = 4.2;
-        else if (ox === 'high') leafArea = 2.5;
-        else leafArea = 1.2;
-
-        let baseRate = ox === 'very-high' ? 28 : (ox === 'high' ? 22 : 15);
-        return baseRate * leafArea;
-    }, [plant.oxygenLevel]);
+    // Parse the specific L/day from string "30 L/day"
 
     const temperatureEffect = useMemo(() => {
         const T = currentTemp + 273.15;
@@ -69,10 +63,16 @@ export const PlantDetailsModal = ({ plant, weather, onClose, onBuy }: PlantDetai
     }, [currentHumidity]);
 
     const PLANT_O2_OUTPUT = useMemo(() => {
-        const lightFactor = Math.max(0.1, lightLevel / 100);
-        const dayYield = getBasePhotosynthesisRate * temperatureEffect * humidityEffect * lightFactor * 3600 * 12 * 22.4 / 1000000;
+        const baseOutput = parseFloat(plant.oxygenLevel) || 20;
+
+        // Simulation Factors
+        const lightFactor = Math.max(0.4, lightLevel / 100); // Plants adapt
+
+        // Final Daily Yield (Liters) = Base * Environment Modifiers
+        const dayYield = baseOutput * temperatureEffect * humidityEffect * lightFactor;
+
         return dayYield.toFixed(1);
-    }, [getBasePhotosynthesisRate, temperatureEffect, humidityEffect, lightLevel]);
+    }, [plant.oxygenLevel, temperatureEffect, humidityEffect, lightLevel]);
 
     const plantsNeeded = Math.max(1, Math.ceil((550 * numPeople) / (parseFloat(PLANT_O2_OUTPUT) || 50)));
 
