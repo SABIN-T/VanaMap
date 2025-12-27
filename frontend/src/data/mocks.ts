@@ -5,20 +5,20 @@ export const PLANTS: Plant[] = [
         "id": "mock_1",
         "name": "Snake Plant",
         "scientificName": "Sansevieria trifasciata",
-        "description": "The Snake Plant is a user-friendly indoor plant. It brings hard to kill to your environment.",
+        "description": "The Snake Plant is a user-friendly indoor plant. It brings produces oxygen at night to your environment.",
         "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
         "idealTempMin": 10,
         "idealTempMax": 30,
         "minHumidity": 40,
-        "sunlight": "medium",
+        "sunlight": "Low to bright (250-2000 Lux)",
         "oxygenLevel": "high",
         "medicinalValues": [
             "Air purification",
             "Minor wound healing"
         ],
         "advantages": [
-            "Hard to kill",
-            "Low light tolerant"
+            "Produces Oxygen at Night",
+            "Hard to kill"
         ],
         "price": 25,
         "type": "indoor",
@@ -33,7 +33,7 @@ export const PLANTS: Plant[] = [
         "idealTempMin": 10,
         "idealTempMax": 30,
         "minHumidity": 40,
-        "sunlight": "medium",
+        "sunlight": "Partial Shade (500-1500 Lux)",
         "oxygenLevel": "high",
         "medicinalValues": [
             "Air cleaning",
@@ -56,7 +56,7 @@ export const PLANTS: Plant[] = [
         "idealTempMin": 10,
         "idealTempMax": 30,
         "minHumidity": 40,
-        "sunlight": "medium",
+        "sunlight": "Shade (250-1000 Lux)",
         "oxygenLevel": "high",
         "medicinalValues": [
             "Removes ammonia",
@@ -79,7 +79,7 @@ export const PLANTS: Plant[] = [
         "idealTempMin": 10,
         "idealTempMax": 30,
         "minHumidity": 40,
-        "sunlight": "medium",
+        "sunlight": "Bright direct (2000+ Lux)",
         "oxygenLevel": "high",
         "medicinalValues": [
             "Burns healing",
@@ -102,7 +102,7 @@ export const PLANTS: Plant[] = [
         "idealTempMin": 10,
         "idealTempMax": 30,
         "minHumidity": 40,
-        "sunlight": "medium",
+        "sunlight": "Low to bright (250-1500 Lux)",
         "oxygenLevel": "high",
         "medicinalValues": [
             "Formaldehyde removal"
@@ -124,7 +124,7 @@ export const PLANTS: Plant[] = [
         "idealTempMin": 10,
         "idealTempMax": 30,
         "minHumidity": 40,
-        "sunlight": "medium",
+        "sunlight": "Bright indirect (1000-2000 Lux)",
         "oxygenLevel": "high",
         "medicinalValues": [
             "Anti-inflammatory properties"
@@ -146,7 +146,7 @@ export const PLANTS: Plant[] = [
         "idealTempMin": 10,
         "idealTempMax": 30,
         "minHumidity": 40,
-        "sunlight": "medium",
+        "sunlight": "Bright indirect (1000-2500 Lux)",
         "oxygenLevel": "high",
         "medicinalValues": [
             "Root used for snakebites (traditional)"
@@ -168,7 +168,7 @@ export const PLANTS: Plant[] = [
         "idealTempMin": 10,
         "idealTempMax": 30,
         "minHumidity": 40,
-        "sunlight": "medium",
+        "sunlight": "Low (100-1000 Lux)",
         "oxygenLevel": "high",
         "medicinalValues": [
             "Air purification"
@@ -190,7 +190,7 @@ export const PLANTS: Plant[] = [
         "idealTempMin": 10,
         "idealTempMax": 30,
         "minHumidity": 40,
-        "sunlight": "medium",
+        "sunlight": "Bright indirect (1000-1500 Lux)",
         "oxygenLevel": "high",
         "medicinalValues": [
             "Natural humidifier"
@@ -212,7 +212,7 @@ export const PLANTS: Plant[] = [
         "idealTempMin": 10,
         "idealTempMax": 30,
         "minHumidity": 40,
-        "sunlight": "medium",
+        "sunlight": "Medium (500-1500 Lux)",
         "oxygenLevel": "high",
         "medicinalValues": [
             "Cough relief (extract)"
@@ -234,7 +234,7 @@ export const PLANTS: Plant[] = [
         "idealTempMin": 10,
         "idealTempMax": 30,
         "minHumidity": 40,
-        "sunlight": "medium",
+        "sunlight": "Bright filtered (1500-2500 Lux)",
         "oxygenLevel": "high",
         "medicinalValues": [
             "Toxin removal"
@@ -256,7 +256,7 @@ export const PLANTS: Plant[] = [
         "idealTempMin": 10,
         "idealTempMax": 30,
         "minHumidity": 40,
-        "sunlight": "medium",
+        "sunlight": "Bright indirect (1500-3000 Lux)",
         "oxygenLevel": "high",
         "medicinalValues": [
             "Air cleaning"
@@ -278,7 +278,7 @@ export const PLANTS: Plant[] = [
         "idealTempMin": 10,
         "idealTempMax": 30,
         "minHumidity": 40,
-        "sunlight": "medium",
+        "sunlight": "Direct Sun (3000+ Lux)",
         "oxygenLevel": "high",
         "medicinalValues": [
             "Wart removal (folk)"
@@ -300,7 +300,7 @@ export const PLANTS: Plant[] = [
         "idealTempMin": 10,
         "idealTempMax": 30,
         "minHumidity": 40,
-        "sunlight": "medium",
+        "sunlight": "Bright indirect (1000 Lux)",
         "oxygenLevel": "high",
         "medicinalValues": [
             "Traditional TCM uses"
@@ -322,7 +322,7 @@ export const PLANTS: Plant[] = [
         "idealTempMin": 10,
         "idealTempMax": 30,
         "minHumidity": 40,
-        "sunlight": "medium",
+        "sunlight": "High/Direct (3000+ Lux)",
         "oxygenLevel": "high",
         "medicinalValues": [
             "None suitable for home use"
@@ -344,7 +344,7 @@ export const PLANTS: Plant[] = [
         "idealTempMin": 10,
         "idealTempMax": 30,
         "minHumidity": 40,
-        "sunlight": "medium",
+        "sunlight": "Low to Medium (500-1500 Lux)",
         "oxygenLevel": "high",
         "medicinalValues": [
             "None (Toxic)"
@@ -366,7 +366,7 @@ export const PLANTS: Plant[] = [
         "idealTempMin": 10,
         "idealTempMax": 30,
         "minHumidity": 40,
-        "sunlight": "medium",
+        "sunlight": "Low/Shade (500 Lux)",
         "oxygenLevel": "high",
         "medicinalValues": [
             "None"
@@ -388,7 +388,7 @@ export const PLANTS: Plant[] = [
         "idealTempMin": 10,
         "idealTempMax": 30,
         "minHumidity": 40,
-        "sunlight": "medium",
+        "sunlight": "Bright indirect (2000 Lux)",
         "oxygenLevel": "high",
         "medicinalValues": [
             "None"
@@ -410,7 +410,7 @@ export const PLANTS: Plant[] = [
         "idealTempMin": 10,
         "idealTempMax": 30,
         "minHumidity": 40,
-        "sunlight": "medium",
+        "sunlight": "Low to bright (250-1500 Lux)",
         "oxygenLevel": "high",
         "medicinalValues": [
             "Air cleaning"
@@ -432,7 +432,7 @@ export const PLANTS: Plant[] = [
         "idealTempMin": 10,
         "idealTempMax": 30,
         "minHumidity": 40,
-        "sunlight": "medium",
+        "sunlight": "Bright indirect (1500 Lux)",
         "oxygenLevel": "high",
         "medicinalValues": [
             "Air purification"
@@ -454,7 +454,7 @@ export const PLANTS: Plant[] = [
         "idealTempMin": 10,
         "idealTempMax": 30,
         "minHumidity": 40,
-        "sunlight": "high",
+        "sunlight": "Full Sun (10,000+ Lux)",
         "oxygenLevel": "high",
         "medicinalValues": [
             "Sleep aid",
@@ -477,7 +477,7 @@ export const PLANTS: Plant[] = [
         "idealTempMin": 10,
         "idealTempMax": 30,
         "minHumidity": 40,
-        "sunlight": "high",
+        "sunlight": "Full Sun (10,000+ Lux)",
         "oxygenLevel": "high",
         "medicinalValues": [
             "seeds rich in Vitamin E"
@@ -499,7 +499,7 @@ export const PLANTS: Plant[] = [
         "idealTempMin": 10,
         "idealTempMax": 30,
         "minHumidity": 40,
-        "sunlight": "high",
+        "sunlight": "Full Sun (6+ hours)",
         "oxygenLevel": "high",
         "medicinalValues": [
             "Rose hips (Vitamin C)",
@@ -522,7 +522,7 @@ export const PLANTS: Plant[] = [
         "idealTempMin": 10,
         "idealTempMax": 30,
         "minHumidity": 40,
-        "sunlight": "high",
+        "sunlight": "Full Sun",
         "oxygenLevel": "high",
         "medicinalValues": [
             "Antiseptic",
@@ -545,7 +545,7 @@ export const PLANTS: Plant[] = [
         "idealTempMin": 10,
         "idealTempMax": 30,
         "minHumidity": 40,
-        "sunlight": "high",
+        "sunlight": "Full Sun",
         "oxygenLevel": "high",
         "medicinalValues": [
             "Digestion aid",
@@ -568,7 +568,7 @@ export const PLANTS: Plant[] = [
         "idealTempMin": 10,
         "idealTempMax": 30,
         "minHumidity": 40,
-        "sunlight": "high",
+        "sunlight": "Partial Shade to Sun",
         "oxygenLevel": "high",
         "medicinalValues": [
             "Stomach relief",
@@ -591,7 +591,7 @@ export const PLANTS: Plant[] = [
         "idealTempMin": 10,
         "idealTempMax": 30,
         "minHumidity": 40,
-        "sunlight": "high",
+        "sunlight": "Full Sun",
         "oxygenLevel": "high",
         "medicinalValues": [
             "Memory boost",
@@ -614,7 +614,7 @@ export const PLANTS: Plant[] = [
         "idealTempMin": 10,
         "idealTempMax": 30,
         "minHumidity": 40,
-        "sunlight": "high",
+        "sunlight": "Full Sun",
         "oxygenLevel": "high",
         "medicinalValues": [
             "Skin poultice (traditional)"
@@ -636,7 +636,7 @@ export const PLANTS: Plant[] = [
         "idealTempMin": 10,
         "idealTempMax": 30,
         "minHumidity": 40,
-        "sunlight": "high",
+        "sunlight": "Full Sun",
         "oxygenLevel": "high",
         "medicinalValues": [
             "None (Toxic bulb)"
@@ -658,7 +658,7 @@ export const PLANTS: Plant[] = [
         "idealTempMin": 10,
         "idealTempMax": 30,
         "minHumidity": 40,
-        "sunlight": "high",
+        "sunlight": "Morning Sun / Shade",
         "oxygenLevel": "high",
         "medicinalValues": [
             "Diuretic (root)"
@@ -680,7 +680,7 @@ export const PLANTS: Plant[] = [
         "idealTempMin": 10,
         "idealTempMax": 30,
         "minHumidity": 40,
-        "sunlight": "high",
+        "sunlight": "Full Sun",
         "oxygenLevel": "high",
         "medicinalValues": [
             "Muscle relaxant (white peony)"
@@ -702,7 +702,7 @@ export const PLANTS: Plant[] = [
         "idealTempMin": 10,
         "idealTempMax": 30,
         "minHumidity": 40,
-        "sunlight": "high",
+        "sunlight": "Full Sun",
         "oxygenLevel": "high",
         "medicinalValues": [
             "Tea for cooling",
@@ -725,7 +725,7 @@ export const PLANTS: Plant[] = [
         "idealTempMin": 10,
         "idealTempMax": 30,
         "minHumidity": 40,
-        "sunlight": "high",
+        "sunlight": "Full Sun",
         "oxygenLevel": "high",
         "medicinalValues": [
             "Skin healing oil"
@@ -747,7 +747,7 @@ export const PLANTS: Plant[] = [
         "idealTempMin": 10,
         "idealTempMax": 30,
         "minHumidity": 40,
-        "sunlight": "high",
+        "sunlight": "Full Sun",
         "oxygenLevel": "high",
         "medicinalValues": [
             "Lower blood pressure (tea)"
@@ -769,7 +769,7 @@ export const PLANTS: Plant[] = [
         "idealTempMin": 10,
         "idealTempMax": 30,
         "minHumidity": 40,
-        "sunlight": "high",
+        "sunlight": "Full Sun to Part Shade",
         "oxygenLevel": "high",
         "medicinalValues": [
             "Stress relief aroma"
@@ -791,7 +791,7 @@ export const PLANTS: Plant[] = [
         "idealTempMin": 10,
         "idealTempMax": 30,
         "minHumidity": 40,
-        "sunlight": "high",
+        "sunlight": "Shade / Dappled Light",
         "oxygenLevel": "high",
         "medicinalValues": [
             "None (Toxic)"
@@ -813,7 +813,7 @@ export const PLANTS: Plant[] = [
         "idealTempMin": 10,
         "idealTempMax": 30,
         "minHumidity": 40,
-        "sunlight": "high",
+        "sunlight": "Full Sun",
         "oxygenLevel": "high",
         "medicinalValues": [
             "Anxiety relief",
@@ -836,7 +836,7 @@ export const PLANTS: Plant[] = [
         "idealTempMin": 10,
         "idealTempMax": 30,
         "minHumidity": 40,
-        "sunlight": "high",
+        "sunlight": "Full Sun",
         "oxygenLevel": "high",
         "medicinalValues": [
             "Aromatherapy"
@@ -858,7 +858,7 @@ export const PLANTS: Plant[] = [
         "idealTempMin": 10,
         "idealTempMax": 30,
         "minHumidity": 40,
-        "sunlight": "high",
+        "sunlight": "Sun or Shade",
         "oxygenLevel": "high",
         "medicinalValues": [
             "Fever reducer (historic, risky)"
@@ -880,7 +880,7 @@ export const PLANTS: Plant[] = [
         "idealTempMin": 10,
         "idealTempMax": 30,
         "minHumidity": 40,
-        "sunlight": "high",
+        "sunlight": "Sun / Part Shade",
         "oxygenLevel": "high",
         "medicinalValues": [
             "Expectorant"

@@ -5,50 +5,51 @@ const path = require('path');
 const randomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
 // --- 1. DEFINE REAL PLANT DATA (20 Indoor + 20 Outdoor) ---
+// Added: oxygen (ml/h), light (lux/desc), ac (tolerance)
 const REAL_PLANTS_SOURCE = [
     // --- 20 INDOOR PLANTS ---
-    { name: "Snake Plant", sci: "Sansevieria trifasciata", type: "indoor", life: "10-25 Years", medicinal: ["Air purification", "Minor wound healing"], advantages: ["Hard to kill", "Low light tolerant"], bloom: "Raceme", vein: "Parallel", inflo: "Simple" },
-    { name: "Spider Plant", sci: "Chlorophytum comosum", type: "indoor", life: "20-50 Years", medicinal: ["Air cleaning", "Non-toxic"], advantages: ["Pet safe", "Easy propagation"], bloom: "Panicle", vein: "Parallel", inflo: "Raceme" },
-    { name: "Peace Lily", sci: "Spathiphyllum wallisii", type: "indoor", life: "3-5 Years", medicinal: ["Removes ammonia", "Air purifying"], advantages: ["Visual watering signal", "blooms in shade"], bloom: "Spadix", vein: "Pinnate", inflo: "Spadix" },
-    { name: "Aloe Vera", sci: "Aloe barbadensis", type: "indoor", life: "5-20 Years", medicinal: ["Burns healing", "Skin hydration"], advantages: ["Medicinal gel", "Succulent"], bloom: "Raceme", vein: "Parallel", inflo: "Raceme" },
-    { name: "Pothos", sci: "Epipremnum aureum", type: "indoor", life: "5-10 Years", medicinal: ["Formaldehyde removal"], advantages: ["Fast growing vine", "Low maintenance"], bloom: "Spadix", vein: "Pinnate", inflo: "Spadix" },
-    { name: "Rubber Plant", sci: "Ficus elastica", type: "indoor", life: "15-25 Years", medicinal: ["Anti-inflammatory properties"], advantages: ["Glossy large leaves", "Statement piece"], bloom: "Syconium", vein: "Pinnate", inflo: "Syconium" },
-    { name: "Monstera", sci: "Monstera deliciosa", type: "indoor", life: "10-50 Years", medicinal: ["Root used for snakebites (traditional)"], advantages: ["Iconic split leaves", "Tropical vibe"], bloom: "Spadix", vein: "Reticulate", inflo: "Spadix" },
-    { name: "ZZ Plant", sci: "Zamioculcas zamiifolia", type: "indoor", life: "5-10 Years", medicinal: ["Air purification"], advantages: ["Thrives in darkness", "Drought tolerant"], bloom: "Spadix", vein: "Pinnate", inflo: "Spadix" },
-    { name: "Boston Fern", sci: "Nephrolepis exaltata", type: "indoor", life: "2-5 Years", medicinal: ["Natural humidifier"], advantages: ["Lush foliage", "Pet safe"], bloom: "None (Spores)", vein: "Forked", inflo: "None" },
-    { name: "English Ivy", sci: "Hedera helix", type: "indoor", life: "10-50 Years", medicinal: ["Cough relief (extract)"], advantages: ["Climbing", "Mold reduction"], bloom: "Umbel", vein: "Palmate", inflo: "Umbel" },
-    { name: "Areca Palm", sci: "Dypsis lutescens", type: "indoor", life: "10-15 Years", medicinal: ["Toxin removal"], advantages: ["Pet safe", "Tropical look"], bloom: "Panicle", vein: "Parallel", inflo: "Panicle" },
-    { name: "Fiddle Leaf Fig", sci: "Ficus lyrata", type: "indoor", life: "25-50 Years", medicinal: ["Air cleaning"], advantages: ["Architectural shape", "Huge leaves"], bloom: "Syconium", vein: "Pinnate", inflo: "Syconium" },
-    { name: "Jade Plant", sci: "Crassula ovata", type: "indoor", life: "50-70 Years", medicinal: ["Wart removal (folk)"], advantages: ["Symbol of luck", "Long lived"], bloom: "Corymb", vein: "None", inflo: "Thyrse" },
-    { name: "Chinese Money Plant", sci: "Pilea peperomioides", type: "indoor", life: "5-10 Years", medicinal: ["Traditional TCM uses"], advantages: ["Unique round leaves", "Easy to gift"], bloom: "Cyme", vein: "Peltate", inflo: "Cyme" },
-    { name: "Bird of Paradise", sci: "Strelitzia reginae", type: "indoor", life: "50-100 Years", medicinal: ["None suitable for home use"], advantages: ["Exotic flowers", "Large leaves"], bloom: "Cyme", vein: "Parallel", inflo: "Cyme" },
-    { name: "Dumb Cane", sci: "Dieffenbachia seguine", type: "indoor", life: "3-5 Years", medicinal: ["None (Toxic)"], advantages: ["Beautiful patterns", "Full foliage"], bloom: "Spadix", vein: "Pinnate", inflo: "Spadix" },
-    { name: "Prayer Plant", sci: "Maranta leuconeura", type: "indoor", life: "2-5 Years", medicinal: ["None"], advantages: ["Leaves move at night", "Colorful veins"], bloom: "Raceme", vein: "Parallel", inflo: "Raceme" },
-    { name: "String of Pearls", sci: "Senecio rowleyanus", type: "indoor", life: "3-5 Years", medicinal: ["None"], advantages: ["Unique bead shape", "Hanging visual"], bloom: "Capitulum", vein: "None", inflo: "Cyme" },
-    { name: "Philodendron", sci: "Philodendron hederaceum", type: "indoor", life: "10+ Years", medicinal: ["Air cleaning"], advantages: ["Heart shaped leaves", "Very hardy"], bloom: "Spadix", vein: "Pinnate", inflo: "Spadix" },
-    { name: "Anthurium", sci: "Anthurium andraeanum", type: "indoor", life: "5-10 Years", medicinal: ["Air purification"], advantages: ["Long lasting flowers", "Waxy look"], bloom: "Spadix", vein: "Reticulate", inflo: "Spadix" },
+    { name: "Snake Plant", sci: "Sansevieria trifasciata", type: "indoor", life: "10-25 Years", medicinal: ["Air purification", "Minor wound healing"], advantages: ["Produces Oxygen at Night", "Hard to kill"], bloom: "Raceme", vein: "Parallel", inflo: "Simple", oxygen: 30, light: "Low to bright (250-2000 Lux)", ac: "High tolerance" },
+    { name: "Spider Plant", sci: "Chlorophytum comosum", type: "indoor", life: "20-50 Years", medicinal: ["Air cleaning", "Non-toxic"], advantages: ["Pet safe", "Easy propagation"], bloom: "Panicle", vein: "Parallel", inflo: "Raceme", oxygen: 25, light: "Partial Shade (500-1500 Lux)", ac: "Medium tolerance" },
+    { name: "Peace Lily", sci: "Spathiphyllum wallisii", type: "indoor", life: "3-5 Years", medicinal: ["Removes ammonia", "Air purifying"], advantages: ["Visual watering signal", "blooms in shade"], bloom: "Spadix", vein: "Pinnate", inflo: "Spadix", oxygen: 20, light: "Shade (250-1000 Lux)", ac: "Low (Needs humidity)" },
+    { name: "Aloe Vera", sci: "Aloe barbadensis", type: "indoor", life: "5-20 Years", medicinal: ["Burns healing", "Skin hydration"], advantages: ["Medicinal gel", "Succulent"], bloom: "Raceme", vein: "Parallel", inflo: "Raceme", oxygen: 28, light: "Bright direct (2000+ Lux)", ac: "High tolerance" },
+    { name: "Pothos", sci: "Epipremnum aureum", type: "indoor", life: "5-10 Years", medicinal: ["Formaldehyde removal"], advantages: ["Fast growing vine", "Low maintenance"], bloom: "Spadix", vein: "Pinnate", inflo: "Spadix", oxygen: 22, light: "Low to bright (250-1500 Lux)", ac: "High tolerance" },
+    { name: "Rubber Plant", sci: "Ficus elastica", type: "indoor", life: "15-25 Years", medicinal: ["Anti-inflammatory properties"], advantages: ["Glossy large leaves", "Statement piece"], bloom: "Syconium", vein: "Pinnate", inflo: "Syconium", oxygen: 45, light: "Bright indirect (1000-2000 Lux)", ac: "Medium tolerance" },
+    { name: "Monstera", sci: "Monstera deliciosa", type: "indoor", life: "10-50 Years", medicinal: ["Root used for snakebites (traditional)"], advantages: ["Iconic split leaves", "Tropical vibe"], bloom: "Spadix", vein: "Reticulate", inflo: "Spadix", oxygen: 50, light: "Bright indirect (1000-2500 Lux)", ac: "Medium (Draft sensitive)" },
+    { name: "ZZ Plant", sci: "Zamioculcas zamiifolia", type: "indoor", life: "5-10 Years", medicinal: ["Air purification"], advantages: ["Thrives in darkness", "Drought tolerant"], bloom: "Spadix", vein: "Pinnate", inflo: "Spadix", oxygen: 18, light: "Low (100-1000 Lux)", ac: "High tolerance" },
+    { name: "Boston Fern", sci: "Nephrolepis exaltata", type: "indoor", life: "2-5 Years", medicinal: ["Natural humidifier"], advantages: ["Lush foliage", "Pet safe"], bloom: "None (Spores)", vein: "Forked", inflo: "None", oxygen: 35, light: "Bright indirect (1000-1500 Lux)", ac: "Low (Needs high humidity)" },
+    { name: "English Ivy", sci: "Hedera helix", type: "indoor", life: "10-50 Years", medicinal: ["Cough relief (extract)"], advantages: ["Climbing", "Mold reduction"], bloom: "Umbel", vein: "Palmate", inflo: "Umbel", oxygen: 20, light: "Medium (500-1500 Lux)", ac: "High tolerance" },
+    { name: "Areca Palm", sci: "Dypsis lutescens", type: "indoor", life: "10-15 Years", medicinal: ["Toxin removal"], advantages: ["Pet safe", "Tropical look"], bloom: "Panicle", vein: "Parallel", inflo: "Panicle", oxygen: 60, light: "Bright filtered (1500-2500 Lux)", ac: "Medium tolerance" },
+    { name: "Fiddle Leaf Fig", sci: "Ficus lyrata", type: "indoor", life: "25-50 Years", medicinal: ["Air cleaning"], advantages: ["Architectural shape", "Huge leaves"], bloom: "Syconium", vein: "Pinnate", inflo: "Syconium", oxygen: 40, light: "Bright indirect (1500-3000 Lux)", ac: "Low (Drops leaves in drafts)" },
+    { name: "Jade Plant", sci: "Crassula ovata", type: "indoor", life: "50-70 Years", medicinal: ["Wart removal (folk)"], advantages: ["Symbol of luck", "Long lived"], bloom: "Corymb", vein: "None", inflo: "Thyrse", oxygen: 15, light: "Direct Sun (3000+ Lux)", ac: "High tolerance" },
+    { name: "Chinese Money Plant", sci: "Pilea peperomioides", type: "indoor", life: "5-10 Years", medicinal: ["Traditional TCM uses"], advantages: ["Unique round leaves", "Easy to gift"], bloom: "Cyme", vein: "Peltate", inflo: "Cyme", oxygen: 18, light: "Bright indirect (1000 Lux)", ac: "Medium tolerance" },
+    { name: "Bird of Paradise", sci: "Strelitzia reginae", type: "indoor", life: "50-100 Years", medicinal: ["None suitable for home use"], advantages: ["Exotic flowers", "Large leaves"], bloom: "Cyme", vein: "Parallel", inflo: "Cyme", oxygen: 55, light: "High/Direct (3000+ Lux)", ac: "Medium tolerance" },
+    { name: "Dumb Cane", sci: "Dieffenbachia seguine", type: "indoor", life: "3-5 Years", medicinal: ["None (Toxic)"], advantages: ["Beautiful patterns", "Full foliage"], bloom: "Spadix", vein: "Pinnate", inflo: "Spadix", oxygen: 30, light: "Low to Medium (500-1500 Lux)", ac: "Low (Likes warmth)" },
+    { name: "Prayer Plant", sci: "Maranta leuconeura", type: "indoor", life: "2-5 Years", medicinal: ["None"], advantages: ["Leaves move at night", "Colorful veins"], bloom: "Raceme", vein: "Parallel", inflo: "Raceme", oxygen: 20, light: "Low/Shade (500 Lux)", ac: "Low (Needs humidity)" },
+    { name: "String of Pearls", sci: "Senecio rowleyanus", type: "indoor", life: "3-5 Years", medicinal: ["None"], advantages: ["Unique bead shape", "Hanging visual"], bloom: "Capitulum", vein: "None", inflo: "Cyme", oxygen: 12, light: "Bright indirect (2000 Lux)", ac: "Medium tolerance" },
+    { name: "Philodendron", sci: "Philodendron hederaceum", type: "indoor", life: "10+ Years", medicinal: ["Air cleaning"], advantages: ["Heart shaped leaves", "Very hardy"], bloom: "Spadix", vein: "Pinnate", inflo: "Spadix", oxygen: 25, light: "Low to bright (250-1500 Lux)", ac: "High tolerance" },
+    { name: "Anthurium", sci: "Anthurium andraeanum", type: "indoor", life: "5-10 Years", medicinal: ["Air purification"], advantages: ["Long lasting flowers", "Waxy look"], bloom: "Spadix", vein: "Reticulate", inflo: "Spadix", oxygen: 22, light: "Bright indirect (1500 Lux)", ac: "Medium tolerance" },
 
     // --- 20 OUTDOOR PLANTS ---
-    { name: "Lavender", sci: "Lavandula angustifolia", type: "outdoor", life: "10-15 Years", medicinal: ["Sleep aid", "Anxiety relief"], advantages: ["Fragrant", "Attracts bees"], bloom: "Verticillaster", vein: "Parallel", inflo: "Spike" },
-    { name: "Sunflower", sci: "Helianthus annuus", type: "outdoor", life: "1 Year", medicinal: ["seeds rich in Vitamin E"], advantages: ["Fast growth", "Edible seeds"], bloom: "Capitulum", vein: "Pinnate", inflo: "Head" },
-    { name: "Rose", sci: "Rosa", type: "outdoor", life: "15-20 Years", medicinal: ["Rose hips (Vitamin C)", "Skin toner"], advantages: ["Classic beauty", "Fragrance"], bloom: "Solitary", vein: "Pinnate", inflo: "Corymb" },
-    { name: "Marigold", sci: "Tagetes", type: "outdoor", life: "1 Year", medicinal: ["Antiseptic", "Anti-inflammatory"], advantages: ["Pest repellent", "Vibrant color"], bloom: "Capitulum", vein: "Pinnate", inflo: "Head" },
-    { name: "Basil", sci: "Ocimum basilicum", type: "outdoor", life: "1 Year", medicinal: ["Digestion aid", "Anti-bacterial"], advantages: ["Culinary herb", "Aromatic"], bloom: "Raceme", vein: "Reticulate", inflo: "Raceme" },
-    { name: "Mint", sci: "Mentha", type: "outdoor", life: "Perennial", medicinal: ["Stomach relief", "Headache relief"], advantages: ["Fast growing", "Tea ingredient"], bloom: "Verticillaster", vein: "Reticulate", inflo: "Spike" },
-    { name: "Rosemary", sci: "Salvia rosmarinus", type: "outdoor", life: "15-20 Years", medicinal: ["Memory boost", "Hair growth"], advantages: ["Evergreen shrub", "Culinary use"], bloom: "Raceme", vein: "Reticulate", inflo: "Raceme" },
-    { name: "Tulip", sci: "Tulipa", type: "outdoor", life: "Perennial", medicinal: ["Skin poultice (traditional)"], advantages: ["Spring blooms", "Infinite colors"], bloom: "Solitary", vein: "Parallel", inflo: "Solitary" },
-    { name: "Daffodil", sci: "Narcissus", type: "outdoor", life: "Perennial", medicinal: ["None (Toxic bulb)"], advantages: ["Early spring color", "Deer resistant"], bloom: "Solitary", vein: "Parallel", inflo: "Umbel" },
-    { name: "Hydrangea", sci: "Hydrangea macrophylla", type: "outdoor", life: "50+ Years", medicinal: ["Diuretic (root)"], advantages: ["Massive flower heads", "Color changes with pH"], bloom: "Corymb", vein: "Pinnate", inflo: "Corymb" },
-    { name: "Peony", sci: "Paeonia", type: "outdoor", life: "50-100 Years", medicinal: ["Muscle relaxant (white peony)"], advantages: ["Huge blooms", "Long lifespan"], bloom: "Solitary", vein: "Biternate", inflo: "Solitary" },
-    { name: "Chrysanthemum", sci: "Chrysanthemum", type: "outdoor", life: "3-5 Years", medicinal: ["Tea for cooling", "Eye health"], advantages: ["Fall blooms", "Pest repellent"], bloom: "Capitulum", vein: "Lobed", inflo: "Head" },
-    { name: "Geranium", sci: "Pelargonium", type: "outdoor", life: "1-3 Years", medicinal: ["Skin healing oil"], advantages: ["Mosquito repellent", "Container friendly"], bloom: "Umbel", vein: "Palmate", inflo: "Umbel" },
-    { name: "Hibiscus", sci: "Hibiscus rosa-sinensis", type: "outdoor", life: "5-10 Years", medicinal: ["Lower blood pressure (tea)"], advantages: ["Tropical flair", "Edible flowers"], bloom: "Solitary", vein: "Palmate", inflo: "Solitary" },
-    { name: "Jasmine", sci: "Jasminum", type: "outdoor", life: "10-20 Years", medicinal: ["Stress relief aroma"], advantages: ["Intense fragrance", "Climbing vine"], bloom: "Cyme", vein: "Pinnate", inflo: "Cyme" },
-    { name: "Azalea", sci: "Rhododendron", type: "outdoor", life: "20-50 Years", medicinal: ["None (Toxic)"], advantages: ["Shade tolerant", "Spring spectacle"], bloom: "Umbell", vein: "Pinnate", inflo: "Umbell" },
-    { name: "Magnolia", sci: "Magnolia grandiflora", type: "outdoor", life: "80+ Years", medicinal: ["Anxiety relief", "Weight loss aid"], advantages: ["Grand Southern tree", "Glossy leaves"], bloom: "Solitary", vein: "Pinnate", inflo: "Solitary" },
-    { name: "Lilac", sci: "Syringa vulgaris", type: "outdoor", life: "75+ Years", medicinal: ["Aromatherapy"], advantages: ["Nostalgic scent", "Cold hardy"], bloom: "Panicle", vein: "Pinnate", inflo: "Panicle" },
-    { name: "Boxwood", sci: "Buxus", type: "outdoor", life: "20-30 Years", medicinal: ["Fever reducer (historic, risky)"], advantages: ["Formal hedges", "Evergreen"], bloom: "Glomerule", vein: "Pinnate", inflo: "Glomerule" },
-    { name: "Pansy", sci: "Viola tricolor", type: "outdoor", life: "2 Years", medicinal: ["Expectorant"], advantages: ["Winter/Spring color", "Edible flowers"], bloom: "Solitary", vein: "Pinnate", inflo: "Solitary" }
+    { name: "Lavender", sci: "Lavandula angustifolia", type: "outdoor", life: "10-15 Years", medicinal: ["Sleep aid", "Anxiety relief"], advantages: ["Fragrant", "Attracts bees"], bloom: "Verticillaster", vein: "Parallel", inflo: "Spike", oxygen: 40, light: "Full Sun (10,000+ Lux)", ac: "N/A (Outdoor)" },
+    { name: "Sunflower", sci: "Helianthus annuus", type: "outdoor", life: "1 Year", medicinal: ["seeds rich in Vitamin E"], advantages: ["Fast growth", "Edible seeds"], bloom: "Capitulum", vein: "Pinnate", inflo: "Head", oxygen: 60, light: "Full Sun (10,000+ Lux)", ac: "N/A (Outdoor)" },
+    { name: "Rose", sci: "Rosa", type: "outdoor", life: "15-20 Years", medicinal: ["Rose hips (Vitamin C)", "Skin toner"], advantages: ["Classic beauty", "Fragrance"], bloom: "Solitary", vein: "Pinnate", inflo: "Corymb", oxygen: 35, light: "Full Sun (6+ hours)", ac: "N/A (Outdoor)" },
+    { name: "Marigold", sci: "Tagetes", type: "outdoor", life: "1 Year", medicinal: ["Antiseptic", "Anti-inflammatory"], advantages: ["Pest repellent", "Vibrant color"], bloom: "Capitulum", vein: "Pinnate", inflo: "Head", oxygen: 25, light: "Full Sun", ac: "N/A (Outdoor)" },
+    { name: "Basil", sci: "Ocimum basilicum", type: "outdoor", life: "1 Year", medicinal: ["Digestion aid", "Anti-bacterial"], advantages: ["Culinary herb", "Aromatic"], bloom: "Raceme", vein: "Reticulate", inflo: "Raceme", oxygen: 20, light: "Full Sun", ac: "N/A (Outdoor)" },
+    { name: "Mint", sci: "Mentha", type: "outdoor", life: "Perennial", medicinal: ["Stomach relief", "Headache relief"], advantages: ["Fast growing", "Tea ingredient"], bloom: "Verticillaster", vein: "Reticulate", inflo: "Spike", oxygen: 22, light: "Partial Shade to Sun", ac: "N/A (Outdoor)" },
+    { name: "Rosemary", sci: "Salvia rosmarinus", type: "outdoor", life: "15-20 Years", medicinal: ["Memory boost", "Hair growth"], advantages: ["Evergreen shrub", "Culinary use"], bloom: "Raceme", vein: "Reticulate", inflo: "Raceme", oxygen: 30, light: "Full Sun", ac: "N/A (Outdoor)" },
+    { name: "Tulip", sci: "Tulipa", type: "outdoor", life: "Perennial", medicinal: ["Skin poultice (traditional)"], advantages: ["Spring blooms", "Infinite colors"], bloom: "Solitary", vein: "Parallel", inflo: "Solitary", oxygen: 15, light: "Full Sun", ac: "N/A (Outdoor)" },
+    { name: "Daffodil", sci: "Narcissus", type: "outdoor", life: "Perennial", medicinal: ["None (Toxic bulb)"], advantages: ["Early spring color", "Deer resistant"], bloom: "Solitary", vein: "Parallel", inflo: "Umbel", oxygen: 15, light: "Full Sun", ac: "N/A (Outdoor)" },
+    { name: "Hydrangea", sci: "Hydrangea macrophylla", type: "outdoor", life: "50+ Years", medicinal: ["Diuretic (root)"], advantages: ["Massive flower heads", "Color changes with pH"], bloom: "Corymb", vein: "Pinnate", inflo: "Corymb", oxygen: 40, light: "Morning Sun / Shade", ac: "N/A (Outdoor)" },
+    { name: "Peony", sci: "Paeonia", type: "outdoor", life: "50-100 Years", medicinal: ["Muscle relaxant (white peony)"], advantages: ["Huge blooms", "Long lifespan"], bloom: "Solitary", vein: "Biternate", inflo: "Solitary", oxygen: 38, light: "Full Sun", ac: "N/A (Outdoor)" },
+    { name: "Chrysanthemum", sci: "Chrysanthemum", type: "outdoor", life: "3-5 Years", medicinal: ["Tea for cooling", "Eye health"], advantages: ["Fall blooms", "Pest repellent"], bloom: "Capitulum", vein: "Lobed", inflo: "Head", oxygen: 25, light: "Full Sun", ac: "N/A (Outdoor)" },
+    { name: "Geranium", sci: "Pelargonium", type: "outdoor", life: "1-3 Years", medicinal: ["Skin healing oil"], advantages: ["Mosquito repellent", "Container friendly"], bloom: "Umbel", vein: "Palmate", inflo: "Umbel", oxygen: 20, light: "Full Sun", ac: "N/A (Outdoor)" },
+    { name: "Hibiscus", sci: "Hibiscus rosa-sinensis", type: "outdoor", life: "5-10 Years", medicinal: ["Lower blood pressure (tea)"], advantages: ["Tropical flair", "Edible flowers"], bloom: "Solitary", vein: "Palmate", inflo: "Solitary", oxygen: 45, light: "Full Sun", ac: "N/A (Outdoor)" },
+    { name: "Jasmine", sci: "Jasminum", type: "outdoor", life: "10-20 Years", medicinal: ["Stress relief aroma"], advantages: ["Intense fragrance", "Climbing vine"], bloom: "Cyme", vein: "Pinnate", inflo: "Cyme", oxygen: 30, light: "Full Sun to Part Shade", ac: "N/A (Outdoor)" },
+    { name: "Azalea", sci: "Rhododendron", type: "outdoor", life: "20-50 Years", medicinal: ["None (Toxic)"], advantages: ["Shade tolerant", "Spring spectacle"], bloom: "Umbell", vein: "Pinnate", inflo: "Umbell", oxygen: 35, light: "Shade / Dappled Light", ac: "N/A (Outdoor)" },
+    { name: "Magnolia", sci: "Magnolia grandiflora", type: "outdoor", life: "80+ Years", medicinal: ["Anxiety relief", "Weight loss aid"], advantages: ["Grand Southern tree", "Glossy leaves"], bloom: "Solitary", vein: "Pinnate", inflo: "Solitary", oxygen: 200, light: "Full Sun", ac: "N/A (Outdoor)" },
+    { name: "Lilac", sci: "Syringa vulgaris", type: "outdoor", life: "75+ Years", medicinal: ["Aromatherapy"], advantages: ["Nostalgic scent", "Cold hardy"], bloom: "Panicle", vein: "Pinnate", inflo: "Panicle", oxygen: 60, light: "Full Sun", ac: "N/A (Outdoor)" },
+    { name: "Boxwood", sci: "Buxus", type: "outdoor", life: "20-30 Years", medicinal: ["Fever reducer (historic, risky)"], advantages: ["Formal hedges", "Evergreen"], bloom: "Glomerule", vein: "Pinnate", inflo: "Glomerule", oxygen: 40, light: "Sun or Shade", ac: "N/A (Outdoor)" },
+    { name: "Pansy", sci: "Viola tricolor", type: "outdoor", life: "2 Years", medicinal: ["Expectorant"], advantages: ["Winter/Spring color", "Edible flowers"], bloom: "Solitary", vein: "Pinnate", inflo: "Solitary", oxygen: 10, light: "Sun / Part Shade", ac: "N/A (Outdoor)" }
 ];
 
 // --- 2. GENERATE BACKEND DATA (plant-data.js) ---
@@ -63,8 +64,8 @@ const generateBackendData = () => {
         idealTempMin: 15,
         idealTempMax: 30,
         minHumidity: 40,
-        sunlight: "medium",
-        oxygenLevel: "high",
+        sunlight: p.light,
+        oxygenLevel: "high", // Keeping "high" for simple filter compatibility, but added detailed oxygen stats to sim data
         medicinalValues: p.medicinal,
         advantages: p.advantages,
         price: randomInt(15, 150),
@@ -86,7 +87,7 @@ const generateBackendData = () => {
         idealTempMin: 5,
         idealTempMax: 35,
         minHumidity: 30,
-        sunlight: "high",
+        sunlight: p.light,
         oxygenLevel: "moderate",
         medicinalValues: p.medicinal,
         advantages: p.advantages,
@@ -126,7 +127,7 @@ const generateFrontendMocks = () => {
             idealTempMin: 10,
             idealTempMax: 30,
             minHumidity: 40,
-            sunlight: isIndoor ? 'medium' : 'high',
+            sunlight: p.light,
             oxygenLevel: 'high',
             medicinalValues: p.medicinal,
             advantages: p.advantages,
@@ -171,7 +172,11 @@ const generateSimulationData = () => {
         flowerType: p.bloom,
         leafVenation: p.vein,
         inflorescencePattern: p.inflo,
-        rarityIndex: randomInt(1, 90)
+        rarityIndex: randomInt(1, 90),
+        oxygenOutput: p.oxygen, // ml/h
+        lightRequirement: p.light,
+        acTolerance: p.ac,
+        peopleSupported: Number((p.oxygen / 23000).toFixed(4)) // Approx daily need / 24h. Very small number per plant.
     }));
 
     const content = `export interface WorldFloraSpecimen {
@@ -182,6 +187,10 @@ const generateSimulationData = () => {
     leafVenation: string;
     inflorescencePattern: string;
     rarityIndex: number;
+    oxygenOutput: number; // ml/hour
+    lightRequirement: string;
+    acTolerance: string;
+    peopleSupported: number; // calculated ratio
 }
 
 export const worldFlora: WorldFloraSpecimen[] = ${JSON.stringify(flora, null, 4)};
@@ -196,4 +205,4 @@ generateBackendData();
 generateFrontendMocks();
 generateSimulationData();
 
-console.log("ALL DATA REGENERATED SUCCESSFULLY (20 Indoor + 20 Outdoor).");
+console.log("ALL DATA REGENERATED SUCCESSFULLY (20 Indoor + 20 Outdoor with Sim Data).");

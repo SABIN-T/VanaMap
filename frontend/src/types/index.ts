@@ -7,8 +7,8 @@ export interface Plant {
     idealTempMin: number; // Celsius
     idealTempMax: number;
     minHumidity: number; // Percentage
-    sunlight: 'low' | 'medium' | 'high' | 'direct';
-    oxygenLevel: 'moderate' | 'high' | 'very-high';
+    sunlight: string; // e.g. 'low', '2000 Lux'
+    oxygenLevel: string; // e.g. 'high', '300ml/h'
     medicinalValues: string[];
     advantages: string[];
     price?: number;
