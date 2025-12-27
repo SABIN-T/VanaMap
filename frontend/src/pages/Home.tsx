@@ -285,6 +285,7 @@ export const Home = () => {
                         plant={selectedPlant}
                         weather={weather}
                         onClose={() => window.history.back()}
+                        onBuy={() => handleAddToCart(selectedPlant)}
                     />
                 </Suspense>
             )}
@@ -578,6 +579,8 @@ export const Home = () => {
                                     isTopMatch={weather ? index === 0 && (plant.score || 0) > 0 : false}
                                     priority={index < 2}
                                     stockStatus={getVendorStats(plant.id)}
+                                    hideBuyBtn={true}
+                                    hideStockBadge={true}
                                 />
                             </div>
                         ))

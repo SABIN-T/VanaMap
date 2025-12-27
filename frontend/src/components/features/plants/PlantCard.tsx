@@ -15,9 +15,11 @@ interface PlantCardProps {
         minPrice: number | null;
         hasStock: boolean;
     };
+    hideBuyBtn?: boolean;
+    hideStockBadge?: boolean;
 }
 
-export const PlantCard = ({ plant, score, isTopMatch, priority = false, onAdd, stockStatus }: PlantCardProps) => {
+export const PlantCard = ({ plant, score, isTopMatch, priority = false, onAdd, stockStatus, hideBuyBtn = false, hideStockBadge = false }: PlantCardProps) => {
     const { user, toggleFavorite } = useAuth();
     const isFavorite = user?.favorites.includes(plant.id);
     const isPetFriendly = plant.petFriendly;
@@ -70,7 +72,7 @@ export const PlantCard = ({ plant, score, isTopMatch, priority = false, onAdd, s
                 </div>
 
                 {/* Stock Badge - Stacked above Type Badge */}
-                {stockStatus && (
+                {stockStatus && !hideStockBadge && (
                     <div style={{
                         position: 'absolute',
                         bottom: '54px',
@@ -158,33 +160,35 @@ export const PlantCard = ({ plant, score, isTopMatch, priority = false, onAdd, s
                 </div>
 
                 {/* Shop Action - Premium UI */}
-                <button
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        // If onAdd exists, use it (Add to Cart logic)
-                        if (onAdd) {
-                            onAdd(plant);
-                            // Toast handled in parent or here?
-                            // toast.success(`Viewing ${plant.name} in shops`);
-                        }
-                    }}
-                    className={styles.shopBtn}
-                    aria-label={`Buy ${plant.name}`}
-                    disabled={!inStock}
-                    style={!inStock ? { opacity: 0.6, cursor: 'not-allowed', background: '#334155' } : {}}
-                >
-                    <span style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 700, letterSpacing: '0.5px' }}>
-                        <ShoppingBag size={16} /> Rs. {displayPrice} • {inStock ? 'BUY' : 'SOLD OUT'}
-                    </span>
-                    {/* Glossy sheen effect overlay via CSS is best, but inline simpler for now */}
-                    <div style={{
-                        position: 'absolute', inset: 0,
-                        background: 'linear-gradient(45deg, rgba(255,255,255,0) 40%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 60%)',
-                        transform: 'skewX(-20deg)',
-                        opacity: 0,
-                        transition: 'opacity 0.3s'
-                    }} className="hover-sheen"></div>
-                </button>
+                {!hideBuyBtn && (
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            // If onAdd exists, use it (Add to Cart logic)
+                            if (onAdd) {
+                                onAdd(plant);
+                                // Toast handled in parent or here?
+                                // toast.success(`Viewing ${plant.name} in shops`);
+                            }
+                        }}
+                        className={styles.shopBtn}
+                        aria-label={`Buy ${plant.name}`}
+                        disabled={!inStock}
+                        style={!inStock ? { opacity: 0.6, cursor: 'not-allowed', background: '#334155' } : {}}
+                    >
+                        <span style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', gap: '8px', fontWeight: 700, letterSpacing: '0.5px' }}>
+                            <ShoppingBag size={16} /> Rs. {displayPrice} • {inStock ? 'BUY' : 'SOLD OUT'}
+                        </span>
+                        {/* Glossy sheen effect overlay via CSS is best, but inline simpler for now */}
+                        <div style={{
+                            position: 'absolute', inset: 0,
+                            background: 'linear-gradient(45deg, rgba(255,255,255,0) 40%, rgba(255,255,255,0.2) 50%, rgba(255,255,255,0) 60%)',
+                            transform: 'skewX(-20deg)',
+                            opacity: 0,
+                            transition: 'opacity 0.3s'
+                        }} className="hover-sheen"></div>
+                    </button>
+                )}
             </div>
         </div>
     );

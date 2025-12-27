@@ -1,8 +1,9 @@
-import { X, Sun, Wind, Droplet, Leaf, Lightbulb, Fan, AlertTriangle, Sparkles, Stethoscope, BookOpen, GraduationCap, Hourglass } from 'lucide-react';
+import { X, Sun, Wind, Droplet, Leaf, Lightbulb, Fan, AlertTriangle, Sparkles, Stethoscope, BookOpen, GraduationCap, Hourglass, ShoppingBag } from 'lucide-react';
 import type { Plant } from '../../../types';
 import styles from './PlantDetailsModal.module.css';
 import { useState, useMemo, useEffect } from 'react';
 import type { MouseEvent, TouchEvent } from 'react';
+import { Button } from '../../common/Button';
 
 interface PlantDetailsModalProps {
     plant: Plant;
@@ -12,9 +13,10 @@ interface PlantDetailsModalProps {
         [key: string]: any;
     } | null;
     onClose: () => void;
+    onBuy?: () => void;
 }
 
-export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModalProps) => {
+export const PlantDetailsModal = ({ plant, weather, onClose, onBuy }: PlantDetailsModalProps) => {
     const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
 
     useEffect(() => {
@@ -259,6 +261,14 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                             </div>
                         </div>
 
+                        {onBuy && (
+                            <div style={{ marginTop: '1rem', paddingBottom: '1rem' }}>
+                                <Button onClick={onBuy} variant="primary" style={{ width: '100%', padding: '1rem', fontSize: '1.1rem', background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)', boxShadow: '0 4px 15px rgba(16, 185, 129, 0.4)' }}>
+                                    <ShoppingBag size={20} style={{ marginRight: '8px' }} /> Buy Now
+                                </Button>
+                            </div>
+                        )}
+
                     </div>
                 </div>
                 <style>{`
@@ -303,6 +313,25 @@ export const PlantDetailsModal = ({ plant, weather, onClose }: PlantDetailsModal
                                 <button onClick={() => setActiveTab('overview')} style={{ padding: '10px 24px', borderRadius: '8px', border: 'none', cursor: 'pointer', fontWeight: 600, background: activeTab === 'overview' ? '#334155' : 'transparent', color: activeTab === 'overview' ? 'white' : '#64748b', transition: 'all 0.2s' }}>Overview</button>
                                 <button onClick={() => setActiveTab('simulation')} style={{ padding: '10px 24px', borderRadius: '8px', border: 'none', cursor: 'pointer', fontWeight: 600, background: activeTab === 'simulation' ? '#334155' : 'transparent', color: activeTab === 'simulation' ? '#38bdf8' : '#64748b', transition: 'all 0.2s' }}>Simulation</button>
                             </div>
+
+                            {/* Desktop Buy Button */}
+                            {onBuy && (
+                                <button
+                                    onClick={onBuy}
+                                    style={{
+                                        display: 'flex', alignItems: 'center', gap: '8px',
+                                        background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                                        color: 'white',
+                                        padding: '10px 24px', borderRadius: '12px',
+                                        border: 'none', fontWeight: 700, cursor: 'pointer',
+                                        boxShadow: '0 4px 15px rgba(16, 185, 129, 0.3)',
+                                        transition: 'transform 0.2s'
+                                    }}
+                                    className="hover-scale"
+                                >
+                                    <ShoppingBag size={18} /> Buy Now
+                                </button>
+                            )}
                         </div>
 
                         <div style={{ flex: 1, overflowY: 'auto', padding: '3rem' }}>
