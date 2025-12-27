@@ -8,6 +8,7 @@ export const SeedDashboard = () => {
     const [loading, setLoading] = useState(true);
     const [seedData, setSeedData] = useState<{ indoor: any[], outdoor: any[] }>({ indoor: [], outdoor: [] });
     const [deployedIds, setDeployedIds] = useState<Set<string>>(new Set());
+    const [liveScientificNames, setLiveScientificNames] = useState<Set<string>>(new Set());
     const [deploying, setDeploying] = useState<string | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
 
@@ -21,6 +22,8 @@ export const SeedDashboard = () => {
             setSeedData(seeds);
             // Store IDs of plants that are already in the DB
             setDeployedIds(new Set(livePlants.map((p: any) => p.id)));
+            // Store Scientific Names to prevent duplicates
+            setLiveScientificNames(new Set(livePlants.map((p: any) => p.scientificName?.toLowerCase().trim())));
         } catch (error) {
             toast.error("Failed to load databank");
             console.error(error);
@@ -30,10 +33,18 @@ export const SeedDashboard = () => {
     };
 
     const handlePush = async (plant: any) => {
+        // Validation: Check if scientific name exists
+        const sciName = plant.scientificName?.toLowerCase().trim();
+        if (sciName && liveScientificNames.has(sciName)) {
+            toast.error(`Action Blocked: "${plant.scientificName}" already exists in the live database.`);
+            return;
+        }
+
         setDeploying(plant.id);
         try {
             await seedSinglePlant(plant.id);
             setDeployedIds(prev => new Set(prev).add(plant.id));
+            if (sciName) setLiveScientificNames(prev => new Set(prev).add(sciName));
             toast.success(`${plant.name} deployed to VanaMap Live!`);
         } catch (error: any) {
             toast.error(error.message || "Deployment failed");
