@@ -4,22 +4,22 @@ const indoorPlants = [
         "id": "p_in_1000",
         "name": "Snake Plant",
         "scientificName": "Sansevieria trifasciata",
-        "description": "Excepturi vulariter recusandae sulum vigilo. Aliquam tantum acceptus tamen absens asporto trepide vinco defluo aestivus.",
-        "imageUrl": "https://images.unsplash.com/photo-3925752779?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 32,
-        "minHumidity": 57,
-        "sunlight": "high",
-        "oxygenLevel": "very-high",
+        "description": "The Snake Plant (Sansevieria trifasciata) is a beautiful indoor specimen known for its 10-25 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-2071648721?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 9,
+        "idealTempMax": 33,
+        "minHumidity": 77,
+        "sunlight": "low",
+        "oxygenLevel": "low",
         "medicinalValues": [
-            "crowded",
-            "word"
+            "Air purification",
+            "Stress reduction"
         ],
         "advantages": [
-            "turn-key",
-            "experiences"
+            "Easiest to grow",
+            "Drought tolerant"
         ],
-        "price": 24,
+        "price": 197,
         "type": "indoor",
         "lifespan": "10-25 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -35,22 +35,22 @@ const indoorPlants = [
         "id": "p_in_1001",
         "name": "Peace Lily",
         "scientificName": "Spathiphyllum wallisii",
-        "description": "Ubi certus crepusculum. Vado subito curriculum velociter.",
-        "imageUrl": "https://images.unsplash.com/photo-3023904550?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 12,
-        "idealTempMax": 25,
-        "minHumidity": 60,
-        "sunlight": "low",
-        "oxygenLevel": "moderate",
+        "description": "The Peace Lily (Spathiphyllum wallisii) is a beautiful indoor specimen known for its 3-5 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-5186277651?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 14,
+        "idealTempMax": 29,
+        "minHumidity": 69,
+        "sunlight": "high",
+        "oxygenLevel": "high",
         "medicinalValues": [
-            "prestigious",
-            "bug"
+            "Removes ammonia",
+            "Removes benzene"
         ],
         "advantages": [
-            "interactive",
-            "models"
+            "Flowering indoor",
+            "Visual watering signal"
         ],
-        "price": 48,
+        "price": 158,
         "type": "indoor",
         "lifespan": "3-5 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -66,22 +66,22 @@ const indoorPlants = [
         "id": "p_in_1002",
         "name": "Spider Plant",
         "scientificName": "Chlorophytum comosum",
-        "description": "Subiungo peior patria supplanto. Ager aliquam tracto demonstro conor agnosco assentator volubilis bibo aperte.",
-        "imageUrl": "https://images.unsplash.com/photo-9764563483?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 14,
-        "idealTempMax": 29,
-        "minHumidity": 55,
-        "sunlight": "medium",
+        "description": "The Spider Plant (Chlorophytum comosum) is a beautiful indoor specimen known for its 20-50 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-6624711456?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 35,
+        "minHumidity": 59,
+        "sunlight": "low",
         "oxygenLevel": "very-high",
         "medicinalValues": [
-            "portly",
-            "distinction"
+            "Safe for pets",
+            "Oxygen production"
         ],
         "advantages": [
-            "transparent",
-            "functionalities"
+            "Easy propagation",
+            "Non-toxic"
         ],
-        "price": 121,
+        "price": 50,
         "type": "indoor",
         "lifespan": "20-50 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -97,22 +97,22 @@ const indoorPlants = [
         "id": "p_in_1003",
         "name": "Fiddle Leaf Fig",
         "scientificName": "Ficus lyrata",
-        "description": "Vergo canto coepi contabesco denego claro adicio. Vetus vulticulus chirographum voluptatibus subseco.",
-        "imageUrl": "https://images.unsplash.com/photo-7888096443?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 15,
-        "idealTempMax": 28,
-        "minHumidity": 30,
+        "description": "The Fiddle Leaf Fig (Ficus lyrata) is a beautiful indoor specimen known for its 25-50 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-9319490272?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 5,
+        "idealTempMax": 25,
+        "minHumidity": 59,
         "sunlight": "medium",
-        "oxygenLevel": "very-high",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "mild",
-            "traffic"
+            "Visual stress relief",
+            "Dust collection"
         ],
         "advantages": [
-            "impactful",
-            "applications"
+            "Architectural structure",
+            "Trendy aesthetic"
         ],
-        "price": 12,
+        "price": 92,
         "type": "indoor",
         "lifespan": "25-50 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -128,22 +128,22 @@ const indoorPlants = [
         "id": "p_in_1004",
         "name": "Aloe Vera",
         "scientificName": "Aloe barbadensis miller",
-        "description": "Sollers numquam comprehendo amplexus totus velut verto verus virgo. Vicinus curia derideo campana animus casso magnam.",
-        "imageUrl": "https://images.unsplash.com/photo-1011149180?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 13,
-        "idealTempMax": 33,
-        "minHumidity": 36,
-        "sunlight": "high",
-        "oxygenLevel": "low",
+        "description": "The Aloe Vera (Aloe barbadensis miller) is a beautiful indoor specimen known for its 5-20 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-2451141193?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 7,
+        "idealTempMax": 32,
+        "minHumidity": 39,
+        "sunlight": "medium",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "heavenly",
-            "fowl"
+            "Heals burns",
+            "Skin care"
         ],
         "advantages": [
-            "cross-media",
-            "initiatives"
+            "Releases oxygen at night",
+            "Low maintenance"
         ],
-        "price": 78,
+        "price": 10,
         "type": "indoor",
         "lifespan": "5-20 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -159,22 +159,22 @@ const indoorPlants = [
         "id": "p_in_1005",
         "name": "Rubber Plant",
         "scientificName": "Ficus elastica",
-        "description": "Tenuis vigilo cubitum apud. Vicissitudo aperte aveho ars tribuo contra claustrum textilis.",
-        "imageUrl": "https://images.unsplash.com/photo-5201729340?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 13,
-        "idealTempMax": 32,
-        "minHumidity": 55,
+        "description": "The Rubber Plant (Ficus elastica) is a beautiful indoor specimen known for its 15-25 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-7773019632?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 6,
+        "idealTempMax": 26,
+        "minHumidity": 70,
         "sunlight": "low",
-        "oxygenLevel": "moderate",
+        "oxygenLevel": "very-high",
         "medicinalValues": [
-            "outrageous",
-            "surface"
+            "Removes formaldehyde",
+            "Removes bacteria"
         ],
         "advantages": [
-            "quantum",
-            "applications"
+            "Large foliage",
+            "Robust stem"
         ],
-        "price": 142,
+        "price": 117,
         "type": "indoor",
         "lifespan": "15-25 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -190,22 +190,22 @@ const indoorPlants = [
         "id": "p_in_1006",
         "name": "Monstera",
         "scientificName": "Monstera deliciosa",
-        "description": "Armarium creator aeneus. Quasi solitudo aeternus calamitas stultus tumultus tantum accusantium molestiae.",
-        "imageUrl": "https://images.unsplash.com/photo-4169123574?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 10,
-        "idealTempMax": 29,
-        "minHumidity": 77,
-        "sunlight": "high",
-        "oxygenLevel": "high",
+        "description": "The Monstera (Monstera deliciosa) is a beautiful indoor specimen known for its 10-50 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-9274497144?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 7,
+        "idealTempMax": 32,
+        "minHumidity": 36,
+        "sunlight": "low",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "naughty",
-            "diver"
+            "Mood booster",
+            "Air purifying"
         ],
         "advantages": [
-            "turn-key",
-            "infrastructures"
+            "Statement piece",
+            "Fast grower"
         ],
-        "price": 198,
+        "price": 110,
         "type": "indoor",
         "lifespan": "10-50 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -221,22 +221,22 @@ const indoorPlants = [
         "id": "p_in_1007",
         "name": "Pothos",
         "scientificName": "Epipremnum aureum",
-        "description": "Admiratio tunc avaritia degusto ex. Admoveo cilicium cura adsum peccatus tenetur pel.",
-        "imageUrl": "https://images.unsplash.com/photo-7299368150?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 8,
-        "idealTempMax": 27,
-        "minHumidity": 43,
-        "sunlight": "medium",
+        "description": "The Pothos (Epipremnum aureum) is a beautiful indoor specimen known for its 5-10 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-1929076109?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 12,
+        "idealTempMax": 29,
+        "minHumidity": 40,
+        "sunlight": "low",
         "oxygenLevel": "moderate",
         "medicinalValues": [
-            "gentle",
-            "council"
+            "Removes pollutants",
+            "Eye relaxation"
         ],
         "advantages": [
-            "turn-key",
-            "relationships"
+            "Trailing beauty",
+            "Propagates easily in water"
         ],
-        "price": 165,
+        "price": 142,
         "type": "indoor",
         "lifespan": "5-10 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -252,22 +252,22 @@ const indoorPlants = [
         "id": "p_in_1008",
         "name": "ZZ Plant",
         "scientificName": "Zamioculcas zamiifolia",
-        "description": "Aspernatur circumvenio hic sum video acies. Taedium vinitor tempus patria sui templum adsidue tametsi capillus.",
-        "imageUrl": "https://images.unsplash.com/photo-3736676391?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 6,
-        "idealTempMax": 30,
-        "minHumidity": 75,
-        "sunlight": "low",
+        "description": "The ZZ Plant (Zamioculcas zamiifolia) is a beautiful indoor specimen known for its 5-10 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-3946976293?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 8,
+        "idealTempMax": 32,
+        "minHumidity": 68,
+        "sunlight": "high",
         "oxygenLevel": "very-high",
         "medicinalValues": [
-            "internal",
-            "lay"
+            "Air purification",
+            "Stress reduction"
         ],
         "advantages": [
-            "one-to-one",
-            "users"
+            "Thrives on neglect",
+            "Modern look"
         ],
-        "price": 78,
+        "price": 24,
         "type": "indoor",
         "lifespan": "5-10 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -283,22 +283,22 @@ const indoorPlants = [
         "id": "p_in_1009",
         "name": "Boston Fern",
         "scientificName": "Nephrolepis exaltata",
-        "description": "Tres delinquo supplanto inventore textilis. Bibo tumultus volva surgo.",
-        "imageUrl": "https://images.unsplash.com/photo-2557301007?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 8,
-        "idealTempMax": 34,
-        "minHumidity": 34,
-        "sunlight": "high",
+        "description": "The Boston Fern (Nephrolepis exaltata) is a beautiful indoor specimen known for its 2-5 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-4226595128?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 7,
+        "idealTempMax": 27,
+        "minHumidity": 74,
+        "sunlight": "medium",
         "oxygenLevel": "very-high",
         "medicinalValues": [
-            "fat",
-            "heartbeat"
+            "Natural humidifier",
+            "Clean air"
         ],
         "advantages": [
-            "impactful",
-            "functionalities"
+            "Lush foliage",
+            "Pet friendly"
         ],
-        "price": 52,
+        "price": 185,
         "type": "indoor",
         "lifespan": "2-5 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -314,22 +314,22 @@ const indoorPlants = [
         "id": "p_in_1010",
         "name": "Jade Plant",
         "scientificName": "Crassula ovata",
-        "description": "Vox ipsa curiositas porro vado aequitas adnuo capio. Utrimque temperantia ventosus cogito ait torqueo strenuus copiose delicate totam.",
-        "imageUrl": "https://images.unsplash.com/photo-3732330642?auto=format&fit=crop&w=800&q=80",
+        "description": "The Jade Plant (Crassula ovata) is a beautiful indoor specimen known for its 50-70 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-1026357961?auto=format&fit=crop&w=800&q=80",
         "idealTempMin": 8,
-        "idealTempMax": 30,
-        "minHumidity": 78,
+        "idealTempMax": 27,
+        "minHumidity": 43,
         "sunlight": "medium",
-        "oxygenLevel": "low",
+        "oxygenLevel": "high",
         "medicinalValues": [
-            "violent",
-            "crest"
+            "Skin irritant (Sap)",
+            "Symbolism only"
         ],
         "advantages": [
-            "global",
-            "initiatives"
+            "Long lived",
+            "Easy bonsai"
         ],
-        "price": 193,
+        "price": 32,
         "type": "indoor",
         "lifespan": "50-70 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -345,22 +345,21 @@ const indoorPlants = [
         "id": "p_in_1011",
         "name": "Chinese Money Plant",
         "scientificName": "Pilea peperomioides",
-        "description": "Confero viduo amplexus claro. Commodi stillicidium toties calco tempore labore rem.",
-        "imageUrl": "https://images.unsplash.com/photo-1609259729?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 6,
-        "idealTempMax": 27,
-        "minHumidity": 58,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
+        "description": "The Chinese Money Plant (Pilea peperomioides) is a beautiful indoor specimen known for its 5-10 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-4162701601?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 12,
+        "idealTempMax": 31,
+        "minHumidity": 59,
+        "sunlight": "medium",
+        "oxygenLevel": "low",
         "medicinalValues": [
-            "queasy",
-            "defendant"
+            "None known"
         ],
         "advantages": [
-            "bleeding-edge",
-            "blockchains"
+            "Cute appearance",
+            "Easy to share pups"
         ],
-        "price": 88,
+        "price": 102,
         "type": "indoor",
         "lifespan": "5-10 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -376,22 +375,22 @@ const indoorPlants = [
         "id": "p_in_1012",
         "name": "Areca Palm",
         "scientificName": "Dypsis lutescens",
-        "description": "Tredecim celo comes universe colligo explicabo tripudio. Corpus incidunt ventosus alius laboriosam ulterius caries occaecati clamo.",
-        "imageUrl": "https://images.unsplash.com/photo-2017867684?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 15,
-        "idealTempMax": 33,
-        "minHumidity": 44,
+        "description": "The Areca Palm (Dypsis lutescens) is a beautiful indoor specimen known for its 10-15 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-5189093678?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 9,
+        "idealTempMax": 29,
+        "minHumidity": 58,
         "sunlight": "low",
-        "oxygenLevel": "low",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "menacing",
-            "gallery"
+            "Humidifier",
+            "Removes Xylene"
         ],
         "advantages": [
-            "real-time",
-            "functionalities"
+            "Pet friendly",
+            "Tropical look"
         ],
-        "price": 25,
+        "price": 172,
         "type": "indoor",
         "lifespan": "10-15 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -407,22 +406,21 @@ const indoorPlants = [
         "id": "p_in_1013",
         "name": "Bird of Paradise",
         "scientificName": "Strelitzia reginae",
-        "description": "Depulso amoveo tyrannus triumphus attollo volo vulgivagus alius. Ambulo officiis architecto tibi.",
-        "imageUrl": "https://images.unsplash.com/photo-4482686184?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 7,
-        "idealTempMax": 26,
-        "minHumidity": 62,
+        "description": "The Bird of Paradise (Strelitzia reginae) is a beautiful indoor specimen known for its 50-100 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-6100572673?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 12,
+        "idealTempMax": 32,
+        "minHumidity": 74,
         "sunlight": "high",
-        "oxygenLevel": "moderate",
+        "oxygenLevel": "low",
         "medicinalValues": [
-            "well-groomed",
-            "chops"
+            "None known"
         ],
         "advantages": [
-            "frictionless",
-            "initiatives"
+            "Statement plant",
+            "Exotic flowers"
         ],
-        "price": 64,
+        "price": 35,
         "type": "indoor",
         "lifespan": "50-100 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -438,22 +436,21 @@ const indoorPlants = [
         "id": "p_in_1014",
         "name": "Cast Iron Plant",
         "scientificName": "Aspidistra elatior",
-        "description": "Subiungo virgo succedo thesaurus tristis vinum tersus acerbitas. Explicabo vereor cumque creator rerum somnus umbra.",
-        "imageUrl": "https://images.unsplash.com/photo-1650700918?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 6,
-        "idealTempMax": 32,
-        "minHumidity": 35,
-        "sunlight": "medium",
-        "oxygenLevel": "low",
+        "description": "The Cast Iron Plant (Aspidistra elatior) is a beautiful indoor specimen known for its 50+ Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-1508332815?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 33,
+        "minHumidity": 65,
+        "sunlight": "high",
+        "oxygenLevel": "high",
         "medicinalValues": [
-            "kosher",
-            "fireplace"
+            "None known"
         ],
         "advantages": [
-            "quantum",
-            "models"
+            "Indestructible",
+            "Low light tolerant"
         ],
-        "price": 119,
+        "price": 51,
         "type": "indoor",
         "lifespan": "50+ Years",
         "foliageTexture": "Glossy/Smooth",
@@ -469,22 +466,21 @@ const indoorPlants = [
         "id": "p_in_1015",
         "name": "Philodendron Green",
         "scientificName": "Philodendron hederaceum",
-        "description": "Amicitia vere solitudo usque crux sperno asperiores creber. Fugit voluptatum voluptate aeger thesis suspendo.",
-        "imageUrl": "https://images.unsplash.com/photo-4250186475?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 14,
-        "idealTempMax": 29,
-        "minHumidity": 41,
-        "sunlight": "high",
+        "description": "The Philodendron Green (Philodendron hederaceum) is a beautiful indoor specimen known for its 10+ Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-7197172857?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 6,
+        "idealTempMax": 35,
+        "minHumidity": 53,
+        "sunlight": "low",
         "oxygenLevel": "moderate",
         "medicinalValues": [
-            "chilly",
-            "igloo"
+            "Air scrubbing"
         ],
         "advantages": [
-            "world-class",
-            "applications"
+            "Tolerates dark corners",
+            "Fast growth"
         ],
-        "price": 198,
+        "price": 141,
         "type": "indoor",
         "lifespan": "10+ Years",
         "foliageTexture": "Glossy/Smooth",
@@ -500,22 +496,21 @@ const indoorPlants = [
         "id": "p_in_1016",
         "name": "Majesty Palm",
         "scientificName": "Ravenea rivularis",
-        "description": "Succurro adfectus adhaero causa convoco altus vinco accendo vir. Suggero capillus coniecto spes aetas cupio.",
-        "imageUrl": "https://images.unsplash.com/photo-5464315352?auto=format&fit=crop&w=800&q=80",
+        "description": "The Majesty Palm (Ravenea rivularis) is a beautiful indoor specimen known for its 10-20 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-8665808281?auto=format&fit=crop&w=800&q=80",
         "idealTempMin": 6,
-        "idealTempMax": 26,
-        "minHumidity": 72,
-        "sunlight": "high",
-        "oxygenLevel": "high",
+        "idealTempMax": 27,
+        "minHumidity": 64,
+        "sunlight": "low",
+        "oxygenLevel": "very-high",
         "medicinalValues": [
-            "far-off",
-            "palate"
+            "Air purification"
         ],
         "advantages": [
-            "next-generation",
-            "relationships"
+            "Large size",
+            "Elegant fronds"
         ],
-        "price": 55,
+        "price": 44,
         "type": "indoor",
         "lifespan": "10-20 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -531,22 +526,21 @@ const indoorPlants = [
         "id": "p_in_1017",
         "name": "Dumb Cane",
         "scientificName": "Dieffenbachia seguine",
-        "description": "Celer dedecor verumtamen. Votum surculus acerbitas sol vitium.",
-        "imageUrl": "https://images.unsplash.com/photo-2064464604?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 8,
-        "idealTempMax": 29,
-        "minHumidity": 48,
+        "description": "The Dumb Cane (Dieffenbachia seguine) is a beautiful indoor specimen known for its 3-5 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-9174572975?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 13,
+        "idealTempMax": 25,
+        "minHumidity": 47,
         "sunlight": "high",
-        "oxygenLevel": "very-high",
+        "oxygenLevel": "high",
         "medicinalValues": [
-            "unrealistic",
-            "membership"
+            "Toxic Sap (Warning)"
         ],
         "advantages": [
-            "one-to-one",
-            "convergence"
+            "Bushy growth",
+            "Striking patterns"
         ],
-        "price": 127,
+        "price": 191,
         "type": "indoor",
         "lifespan": "3-5 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -562,22 +556,22 @@ const indoorPlants = [
         "id": "p_in_1018",
         "name": "English Ivy",
         "scientificName": "Hedera helix",
-        "description": "Ratione defleo valens apostolus atavus. Suffragium complectus tenus voluptas degusto depulso arx blandior placeat apparatus.",
-        "imageUrl": "https://images.unsplash.com/photo-5886352940?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 15,
-        "idealTempMax": 32,
-        "minHumidity": 53,
-        "sunlight": "high",
-        "oxygenLevel": "high",
+        "description": "The English Ivy (Hedera helix) is a beautiful indoor specimen known for its 10-50 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-2513669719?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 7,
+        "idealTempMax": 35,
+        "minHumidity": 34,
+        "sunlight": "medium",
+        "oxygenLevel": "very-high",
         "medicinalValues": [
-            "rich",
-            "hubris"
+            "Mold reduction",
+            "Air cleaning"
         ],
         "advantages": [
-            "smart",
-            "platforms"
+            "Climbs trellises",
+            "Classic look"
         ],
-        "price": 146,
+        "price": 105,
         "type": "indoor",
         "lifespan": "10-50 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -593,22 +587,21 @@ const indoorPlants = [
         "id": "p_in_1019",
         "name": "Calathea Rattlesnake",
         "scientificName": "Goeppertia insignis",
-        "description": "Averto vehemens terra eum. Causa succurro ambitus tibi aliquam quod conventus bibo summisse deficio.",
-        "imageUrl": "https://images.unsplash.com/photo-3320339084?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 6,
-        "idealTempMax": 29,
-        "minHumidity": 58,
+        "description": "The Calathea Rattlesnake (Goeppertia insignis) is a beautiful indoor specimen known for its 5-10 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-5968618260?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 8,
+        "idealTempMax": 32,
+        "minHumidity": 30,
         "sunlight": "medium",
-        "oxygenLevel": "very-high",
+        "oxygenLevel": "low",
         "medicinalValues": [
-            "circular",
-            "section"
+            "None known"
         ],
         "advantages": [
-            "best-of-breed",
-            "architectures"
+            "Patterned foliage",
+            "Pet Safe"
         ],
-        "price": 57,
+        "price": 186,
         "type": "indoor",
         "lifespan": "5-10 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -624,22 +617,21 @@ const indoorPlants = [
         "id": "p_in_1020",
         "name": "Prayer Plant",
         "scientificName": "Maranta leuconeura",
-        "description": "Quisquam casus adflicto caput depopulo placeat corpus volo tabernus strenuus. Casus baiulus vigor antiquus casso.",
-        "imageUrl": "https://images.unsplash.com/photo-7348392589?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 12,
-        "idealTempMax": 27,
-        "minHumidity": 64,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
+        "description": "The Prayer Plant (Maranta leuconeura) is a beautiful indoor specimen known for its 2-5 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-2390373838?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 9,
+        "idealTempMax": 31,
+        "minHumidity": 49,
+        "sunlight": "low",
+        "oxygenLevel": "low",
         "medicinalValues": [
-            "menacing",
-            "hospitalization"
+            "Circadian rhythm helper"
         ],
         "advantages": [
-            "end-to-end",
-            "synergies"
+            "Dynamic movement",
+            "Stunning patterns"
         ],
-        "price": 49,
+        "price": 60,
         "type": "indoor",
         "lifespan": "2-5 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -655,22 +647,21 @@ const indoorPlants = [
         "id": "p_in_1021",
         "name": "Ponytail Palm",
         "scientificName": "Beaucarnea recurvata",
-        "description": "Deporto trepide vigilo vir sumptus cetera. Turba coerceo denuncio.",
-        "imageUrl": "https://images.unsplash.com/photo-7734896644?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 6,
-        "idealTempMax": 33,
-        "minHumidity": 54,
-        "sunlight": "medium",
-        "oxygenLevel": "low",
+        "description": "The Ponytail Palm (Beaucarnea recurvata) is a beautiful indoor specimen known for its 50-100 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-9974448766?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 15,
+        "idealTempMax": 28,
+        "minHumidity": 75,
+        "sunlight": "low",
+        "oxygenLevel": "high",
         "medicinalValues": [
-            "buzzing",
-            "design"
+            "None known"
         ],
         "advantages": [
-            "decentralized",
-            "paradigms"
+            "Unique trunk",
+            "Drought tolerant"
         ],
-        "price": 25,
+        "price": 80,
         "type": "indoor",
         "lifespan": "50-100 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -686,22 +677,21 @@ const indoorPlants = [
         "id": "p_in_1022",
         "name": "String of Pearls",
         "scientificName": "Curio rowleyanus",
-        "description": "Stella urbanus conventus textilis creator. Facilis valeo video fugit tepidus comitatus ciminatio.",
-        "imageUrl": "https://images.unsplash.com/photo-9318921729?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 11,
-        "idealTempMax": 35,
-        "minHumidity": 38,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
+        "description": "The String of Pearls (Curio rowleyanus) is a beautiful indoor specimen known for its 3-5 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-4583164312?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 12,
+        "idealTempMax": 29,
+        "minHumidity": 43,
+        "sunlight": "low",
+        "oxygenLevel": "low",
         "medicinalValues": [
-            "untidy",
-            "millet"
+            "Visual interest"
         ],
         "advantages": [
-            "mission-critical",
-            "users"
+            "Hanging basket favorite",
+            "Unique texture"
         ],
-        "price": 65,
+        "price": 166,
         "type": "indoor",
         "lifespan": "3-5 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -717,22 +707,21 @@ const indoorPlants = [
         "id": "p_in_1023",
         "name": "African Violet",
         "scientificName": "Saintpaulia ionantha",
-        "description": "Viridis statua basium caelum appello voco somniculosus cometes torqueo. Velociter statim aurum vacuus damno tum vesco.",
-        "imageUrl": "https://images.unsplash.com/photo-2802171001?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 31,
-        "minHumidity": 69,
+        "description": "The African Violet (Saintpaulia ionantha) is a beautiful indoor specimen known for its 50+ Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-3315630035?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 7,
+        "idealTempMax": 29,
+        "minHumidity": 64,
         "sunlight": "low",
         "oxygenLevel": "very-high",
         "medicinalValues": [
-            "aggressive",
-            "litter"
+            "None known"
         ],
         "advantages": [
-            "impactful",
-            "applications"
+            "Continuous Color",
+            "Small Size"
         ],
-        "price": 48,
+        "price": 113,
         "type": "indoor",
         "lifespan": "50+ Years",
         "foliageTexture": "Glossy/Smooth",
@@ -748,22 +737,21 @@ const indoorPlants = [
         "id": "p_in_1024",
         "name": "Air Plant",
         "scientificName": "Tillandsia",
-        "description": "Canonicus vester sollers. Sol caelum tolero alioqui adiuvo clibanus turpis coniuratio curtus.",
-        "imageUrl": "https://images.unsplash.com/photo-7444414765?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 8,
-        "idealTempMax": 30,
-        "minHumidity": 48,
+        "description": "The Air Plant (Tillandsia) is a beautiful indoor specimen known for its 2-5 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-1370372680?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 12,
+        "idealTempMax": 34,
+        "minHumidity": 60,
         "sunlight": "high",
-        "oxygenLevel": "very-high",
+        "oxygenLevel": "high",
         "medicinalValues": [
-            "slight",
-            "dusk"
+            "None known"
         ],
         "advantages": [
-            "ubiquitous",
-            "blockchains"
+            "Soil-free",
+            "Mountable anywhere"
         ],
-        "price": 185,
+        "price": 28,
         "type": "indoor",
         "lifespan": "2-5 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -779,22 +767,21 @@ const indoorPlants = [
         "id": "p_in_1025",
         "name": "Lucky Bamboo",
         "scientificName": "Dracaena sanderiana",
-        "description": "Curatio appello deleo tempus synagoga. Mollitia facilis tabesco asper amet voluptatum ea assumenda.",
-        "imageUrl": "https://images.unsplash.com/photo-2717846106?auto=format&fit=crop&w=800&q=80",
+        "description": "The Lucky Bamboo (Dracaena sanderiana) is a beautiful indoor specimen known for its 5-10 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-4467397387?auto=format&fit=crop&w=800&q=80",
         "idealTempMin": 6,
         "idealTempMax": 25,
-        "minHumidity": 64,
-        "sunlight": "medium",
-        "oxygenLevel": "moderate",
+        "minHumidity": 51,
+        "sunlight": "low",
+        "oxygenLevel": "high",
         "medicinalValues": [
-            "dim",
-            "fort"
+            "Feng Shui"
         ],
         "advantages": [
-            "one-to-one",
-            "content"
+            "Water Culture",
+            "Symbolic"
         ],
-        "price": 14,
+        "price": 133,
         "type": "indoor",
         "lifespan": "5-10 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -810,22 +797,21 @@ const indoorPlants = [
         "id": "p_in_1026",
         "name": "Christmas Cactus",
         "scientificName": "Schlumbergera buckleyi",
-        "description": "Certe colligo conculco optio sustineo confero deorsum. Conor tenax quam atqui sopor aiunt sulum arbor acerbitas vespillo.",
-        "imageUrl": "https://images.unsplash.com/photo-8647769512?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 11,
-        "idealTempMax": 26,
-        "minHumidity": 51,
-        "sunlight": "medium",
-        "oxygenLevel": "low",
+        "description": "The Christmas Cactus (Schlumbergera buckleyi) is a beautiful indoor specimen known for its 20-30 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-3526309645?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 5,
+        "idealTempMax": 31,
+        "minHumidity": 52,
+        "sunlight": "low",
+        "oxygenLevel": "high",
         "medicinalValues": [
-            "untrue",
-            "commodity"
+            "None known"
         ],
         "advantages": [
-            "B2C",
-            "solutions"
+            "Winter bloom",
+            "Non-toxic"
         ],
-        "price": 106,
+        "price": 120,
         "type": "indoor",
         "lifespan": "20-30 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -841,22 +827,21 @@ const indoorPlants = [
         "id": "p_in_1027",
         "name": "Croton",
         "scientificName": "Codiaeum variegatum",
-        "description": "Cohaero valens deleo vulgus. Adflicto atqui demoror valde defaeco qui omnis congregatio acerbitas.",
-        "imageUrl": "https://images.unsplash.com/photo-4126339028?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 29,
-        "minHumidity": 72,
-        "sunlight": "medium",
+        "description": "The Croton (Codiaeum variegatum) is a beautiful indoor specimen known for its 2-5 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-9163891437?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 6,
+        "idealTempMax": 34,
+        "minHumidity": 74,
+        "sunlight": "high",
         "oxygenLevel": "very-high",
         "medicinalValues": [
-            "stained",
-            "tinderbox"
+            "None known"
         ],
         "advantages": [
-            "quantum",
-            "technologies"
+            "Vibrant colors",
+            "Bushy"
         ],
-        "price": 71,
+        "price": 31,
         "type": "indoor",
         "lifespan": "2-5 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -872,22 +857,21 @@ const indoorPlants = [
         "id": "p_in_1028",
         "name": "Anthurium",
         "scientificName": "Anthurium andraeanum",
-        "description": "Tepesco sponte uredo aiunt. Anser tum ex decumbo.",
-        "imageUrl": "https://images.unsplash.com/photo-2737509473?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 14,
-        "idealTempMax": 34,
-        "minHumidity": 45,
-        "sunlight": "medium",
-        "oxygenLevel": "low",
+        "description": "The Anthurium (Anthurium andraeanum) is a beautiful indoor specimen known for its 5-10 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-4061415310?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 5,
+        "idealTempMax": 32,
+        "minHumidity": 58,
+        "sunlight": "low",
+        "oxygenLevel": "very-high",
         "medicinalValues": [
-            "immaculate",
-            "hydrant"
+            "Removes toluene"
         ],
         "advantages": [
-            "user-centric",
-            "functionalities"
+            "Continuous color",
+            "Exotic look"
         ],
-        "price": 48,
+        "price": 140,
         "type": "indoor",
         "lifespan": "5-10 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -903,22 +887,21 @@ const indoorPlants = [
         "id": "p_in_1029",
         "name": "Parlor Palm",
         "scientificName": "Chamaedorea elegans",
-        "description": "Terga arcus cernuus tempore vitium provident comes statua. Vere conservo victoria vilitas theologus corroboro patruus capillus sum desidero.",
-        "imageUrl": "https://images.unsplash.com/photo-7813164588?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 12,
-        "idealTempMax": 27,
-        "minHumidity": 56,
-        "sunlight": "low",
-        "oxygenLevel": "moderate",
+        "description": "The Parlor Palm (Chamaedorea elegans) is a beautiful indoor specimen known for its 10-20 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-7638207404?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 15,
+        "idealTempMax": 29,
+        "minHumidity": 77,
+        "sunlight": "medium",
+        "oxygenLevel": "low",
         "medicinalValues": [
-            "appropriate",
-            "gripper"
+            "Benzene Removal"
         ],
         "advantages": [
-            "rich",
-            "systems"
+            "Pet Safe",
+            "Low Light Tolerant"
         ],
-        "price": 191,
+        "price": 37,
         "type": "indoor",
         "lifespan": "10-20 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -934,22 +917,21 @@ const indoorPlants = [
         "id": "p_in_1030",
         "name": "Yucca",
         "scientificName": "Yucca elephantipes",
-        "description": "Acies via unde aspernatur. Consuasor custodia adaugeo beatae quos termes cogo nemo cenaculum arbustum.",
-        "imageUrl": "https://images.unsplash.com/photo-7038019952?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 7,
+        "description": "The Yucca (Yucca elephantipes) is a beautiful indoor specimen known for its 20-50 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-1792903616?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 5,
         "idealTempMax": 26,
-        "minHumidity": 75,
+        "minHumidity": 54,
         "sunlight": "high",
-        "oxygenLevel": "low",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "gorgeous",
-            "retrospectivity"
+            "Edible Flowers (Wild)"
         ],
         "advantages": [
-            "real-time",
-            "blockchains"
+            "Indestructible",
+            "Modern Look"
         ],
-        "price": 22,
+        "price": 80,
         "type": "indoor",
         "lifespan": "20-50 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -965,22 +947,21 @@ const indoorPlants = [
         "id": "p_in_1031",
         "name": "Corn Plant",
         "scientificName": "Dracaena fragrans",
-        "description": "Ait acquiro adimpleo. Defungo constans rem.",
-        "imageUrl": "https://images.unsplash.com/photo-5223371316?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 9,
-        "idealTempMax": 31,
-        "minHumidity": 54,
-        "sunlight": "high",
+        "description": "The Corn Plant (Dracaena fragrans) is a beautiful indoor specimen known for its 10-20 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-4562563724?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 6,
+        "idealTempMax": 32,
+        "minHumidity": 67,
+        "sunlight": "low",
         "oxygenLevel": "high",
         "medicinalValues": [
-            "agitated",
-            "swordfish"
+            "Toxin Removal"
         ],
         "advantages": [
-            "rich",
-            "relationships"
+            "Height",
+            "Easy Care"
         ],
-        "price": 140,
+        "price": 137,
         "type": "indoor",
         "lifespan": "10-20 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -996,22 +977,21 @@ const indoorPlants = [
         "id": "p_in_1032",
         "name": "Hoya Heart",
         "scientificName": "Hoya kerrii",
-        "description": "Decretum compono spoliatio cervus somnus sunt bibo spargo cibo quibusdam. Exercitationem voco tabula aperiam accommodo dicta voluptate.",
-        "imageUrl": "https://images.unsplash.com/photo-6343032520?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 13,
-        "idealTempMax": 29,
-        "minHumidity": 37,
-        "sunlight": "low",
-        "oxygenLevel": "low",
+        "description": "The Hoya Heart (Hoya kerrii) is a beautiful indoor specimen known for its 5-10 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-5209433853?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 14,
+        "idealTempMax": 27,
+        "minHumidity": 35,
+        "sunlight": "medium",
+        "oxygenLevel": "high",
         "medicinalValues": [
-            "partial",
-            "provider"
+            "None known"
         ],
         "advantages": [
-            "impactful",
-            "platforms"
+            "Heart shape",
+            "Novelty"
         ],
-        "price": 36,
+        "price": 183,
         "type": "indoor",
         "lifespan": "5-10 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -1027,22 +1007,21 @@ const indoorPlants = [
         "id": "p_in_1033",
         "name": "Bunny Ear Cactus",
         "scientificName": "Opuntia microdasys",
-        "description": "Commodo super brevis antepono ventito delectus velit. Canis solus velit alo vis animus iste confido vitiosus.",
-        "imageUrl": "https://images.unsplash.com/photo-7092250524?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 7,
-        "idealTempMax": 35,
-        "minHumidity": 37,
-        "sunlight": "high",
+        "description": "The Bunny Ear Cactus (Opuntia microdasys) is a beautiful indoor specimen known for its 10-20 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-3996027077?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 29,
+        "minHumidity": 32,
+        "sunlight": "medium",
         "oxygenLevel": "high",
         "medicinalValues": [
-            "mild",
-            "fibre"
+            "None known"
         ],
         "advantages": [
-            "revolutionary",
-            "smart contracts"
+            "Fun shape",
+            "Low water"
         ],
-        "price": 125,
+        "price": 164,
         "type": "indoor",
         "lifespan": "10-20 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -1058,22 +1037,21 @@ const indoorPlants = [
         "id": "p_in_1034",
         "name": "Haworthia",
         "scientificName": "Haworthia attenuata",
-        "description": "Defaeco cura umerus causa harum undique. Adiuvo tum thalassinus cupiditate xiphias pecco urbanus.",
-        "imageUrl": "https://images.unsplash.com/photo-6490836440?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 12,
-        "idealTempMax": 28,
-        "minHumidity": 73,
-        "sunlight": "low",
-        "oxygenLevel": "high",
+        "description": "The Haworthia (Haworthia attenuata) is a beautiful indoor specimen known for its 40-50 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-7585739196?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 33,
+        "minHumidity": 76,
+        "sunlight": "high",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "every",
-            "yeast"
+            "None known"
         ],
         "advantages": [
-            "global",
-            "communities"
+            "Pet Safe",
+            "Compact"
         ],
-        "price": 14,
+        "price": 66,
         "type": "indoor",
         "lifespan": "40-50 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -1089,22 +1067,21 @@ const indoorPlants = [
         "id": "p_in_1035",
         "name": "Polka Dot Plant",
         "scientificName": "Hypoestes phyllostachya",
-        "description": "Ad cohibeo beatus velit compono crur caries concido. Tum subvenio antiquus defaeco.",
-        "imageUrl": "https://images.unsplash.com/photo-8257628278?auto=format&fit=crop&w=800&q=80",
+        "description": "The Polka Dot Plant (Hypoestes phyllostachya) is a beautiful indoor specimen known for its Annual/Short-lived lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-7630344419?auto=format&fit=crop&w=800&q=80",
         "idealTempMin": 7,
-        "idealTempMax": 33,
-        "minHumidity": 56,
-        "sunlight": "medium",
+        "idealTempMax": 34,
+        "minHumidity": 51,
+        "sunlight": "low",
         "oxygenLevel": "high",
         "medicinalValues": [
-            "gifted",
-            "stranger"
+            "None known"
         ],
         "advantages": [
-            "back-end",
-            "relationships"
+            "Terrarium friendly",
+            "Colorful"
         ],
-        "price": 25,
+        "price": 186,
         "type": "indoor",
         "lifespan": "Annual/Short-lived",
         "foliageTexture": "Glossy/Smooth",
@@ -1120,22 +1097,21 @@ const indoorPlants = [
         "id": "p_in_1036",
         "name": "Nerve Plant",
         "scientificName": "Fittonia albivenis",
-        "description": "Molestias abundans acies. Aegre beatae demulceo ulciscor caute.",
-        "imageUrl": "https://images.unsplash.com/photo-8985614058?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 6,
-        "idealTempMax": 25,
-        "minHumidity": 71,
-        "sunlight": "high",
+        "description": "The Nerve Plant (Fittonia albivenis) is a beautiful indoor specimen known for its 2-3 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-6809630378?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 14,
+        "idealTempMax": 31,
+        "minHumidity": 62,
+        "sunlight": "medium",
         "oxygenLevel": "very-high",
         "medicinalValues": [
-            "unknown",
-            "unibody"
+            "None known"
         ],
         "advantages": [
-            "synergistic",
-            "applications"
+            "Terrarium Plant",
+            "Colorful veins"
         ],
-        "price": 80,
+        "price": 130,
         "type": "indoor",
         "lifespan": "2-3 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -1151,22 +1127,21 @@ const indoorPlants = [
         "id": "p_in_1037",
         "name": "Peperomia",
         "scientificName": "Peperomia obtusifolia",
-        "description": "Dolorem dolor vicissitudo delego acervus aggredior temeritas conqueror. Sordeo compono subiungo copia catena aurum.",
-        "imageUrl": "https://images.unsplash.com/photo-1330401335?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 15,
-        "idealTempMax": 33,
-        "minHumidity": 61,
-        "sunlight": "medium",
-        "oxygenLevel": "very-high",
+        "description": "The Peperomia (Peperomia obtusifolia) is a beautiful indoor specimen known for its 5-10 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-6808455543?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 7,
+        "idealTempMax": 29,
+        "minHumidity": 33,
+        "sunlight": "low",
+        "oxygenLevel": "high",
         "medicinalValues": [
-            "fatherly",
-            "dredger"
+            "None known"
         ],
         "advantages": [
-            "interactive",
-            "communities"
+            "Pet Safe",
+            "Desk Plant"
         ],
-        "price": 108,
+        "price": 67,
         "type": "indoor",
         "lifespan": "5-10 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -1182,22 +1157,21 @@ const indoorPlants = [
         "id": "p_in_1038",
         "name": "Sago Palm",
         "scientificName": "Cycas revoluta",
-        "description": "Capitulus bos sumptus coadunatio impedit depulso umbra. Alter sono laudantium patior spectaculum conventus terror patruus conor pel.",
-        "imageUrl": "https://images.unsplash.com/photo-4543495147?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 9,
-        "idealTempMax": 27,
-        "minHumidity": 39,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
+        "description": "The Sago Palm (Cycas revoluta) is a beautiful indoor specimen known for its 50-100 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-1667691909?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 13,
+        "idealTempMax": 26,
+        "minHumidity": 33,
+        "sunlight": "medium",
+        "oxygenLevel": "very-high",
         "medicinalValues": [
-            "dreary",
-            "larva"
+            "None (Toxic)"
         ],
         "advantages": [
-            "sticky",
-            "models"
+            "Prehistoric look",
+            "Hardy"
         ],
-        "price": 36,
+        "price": 177,
         "type": "indoor",
         "lifespan": "50-100 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -1213,22 +1187,21 @@ const indoorPlants = [
         "id": "p_in_1039",
         "name": "Asparagus Fern",
         "scientificName": "Asparagus setaceus",
-        "description": "Cras nemo accusator abbas utpote crinis. Solio admiratio pauper denego apostolus defungo sufficio cibus cresco varietas.",
-        "imageUrl": "https://images.unsplash.com/photo-8078123912?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 15,
-        "idealTempMax": 27,
-        "minHumidity": 49,
+        "description": "The Asparagus Fern (Asparagus setaceus) is a beautiful indoor specimen known for its 10+ Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-1428638899?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 32,
+        "minHumidity": 54,
         "sunlight": "high",
-        "oxygenLevel": "high",
+        "oxygenLevel": "low",
         "medicinalValues": [
-            "beloved",
-            "eyeliner"
+            "None known"
         ],
         "advantages": [
-            "granular",
-            "systems"
+            "Feathery texture",
+            "Fast filler"
         ],
-        "price": 74,
+        "price": 142,
         "type": "indoor",
         "lifespan": "10+ Years",
         "foliageTexture": "Glossy/Smooth",
@@ -1244,22 +1217,21 @@ const indoorPlants = [
         "id": "p_in_1040",
         "name": "Begonia Maculata",
         "scientificName": "Begonia maculata",
-        "description": "Crux cohibeo asporto cuius valens antiquus amo. Cimentarius tener aptus reiciendis arbustum amitto teres amplexus suggero sopor.",
-        "imageUrl": "https://images.unsplash.com/photo-1824144290?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 6,
-        "idealTempMax": 31,
-        "minHumidity": 75,
-        "sunlight": "low",
+        "description": "The Begonia Maculata (Begonia maculata) is a beautiful indoor specimen known for its 2-5 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-2314551644?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 9,
+        "idealTempMax": 28,
+        "minHumidity": 50,
+        "sunlight": "high",
         "oxygenLevel": "moderate",
         "medicinalValues": [
-            "utter",
-            "mozzarella"
+            "None known"
         ],
         "advantages": [
-            "turn-key",
-            "convergence"
+            "Unique Pattern",
+            "Flowering"
         ],
-        "price": 96,
+        "price": 161,
         "type": "indoor",
         "lifespan": "2-5 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -1275,22 +1247,21 @@ const indoorPlants = [
         "id": "p_in_1041",
         "name": "Swiss Cheese Vine",
         "scientificName": "Monstera adansonii",
-        "description": "Tepesco eveniet capillus quasi ter canonicus appono cultellus voco sufficio. Amissio minus vindico addo teres aliqua decimus stips decretum ulterius.",
-        "imageUrl": "https://images.unsplash.com/photo-6280255357?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 8,
-        "idealTempMax": 31,
-        "minHumidity": 42,
+        "description": "The Swiss Cheese Vine (Monstera adansonii) is a beautiful indoor specimen known for its 10+ Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-5391014434?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 9,
+        "idealTempMax": 25,
+        "minHumidity": 76,
         "sunlight": "high",
         "oxygenLevel": "high",
         "medicinalValues": [
-            "private",
-            "passport"
+            "Air purifying"
         ],
         "advantages": [
-            "plug-and-play",
-            "technologies"
+            "Vining holes",
+            "Fast growth"
         ],
-        "price": 10,
+        "price": 15,
         "type": "indoor",
         "lifespan": "10+ Years",
         "foliageTexture": "Glossy/Smooth",
@@ -1306,22 +1277,21 @@ const indoorPlants = [
         "id": "p_in_1042",
         "name": "Flamingo Flower",
         "scientificName": "Anthurium scherzerianum",
-        "description": "Facilis verto ipsa. Umbra circumvenio admoveo.",
-        "imageUrl": "https://images.unsplash.com/photo-9103387274?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 13,
-        "idealTempMax": 26,
-        "minHumidity": 79,
+        "description": "The Flamingo Flower (Anthurium scherzerianum) is a beautiful indoor specimen known for its 5-10 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-4140090090?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 31,
         "sunlight": "low",
-        "oxygenLevel": "very-high",
+        "oxygenLevel": "low",
         "medicinalValues": [
-            "apprehensive",
-            "accelerator"
+            "Air Purification"
         ],
         "advantages": [
-            "visionary",
-            "paradigms"
+            "Continuous Bloom",
+            "Showy"
         ],
-        "price": 97,
+        "price": 122,
         "type": "indoor",
         "lifespan": "5-10 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -1337,22 +1307,21 @@ const indoorPlants = [
         "id": "p_in_1043",
         "name": "Dragon Tree",
         "scientificName": "Dracaena marginata",
-        "description": "Spectaculum certe corroboro. Nobis amo allatus vomer pectus comparo depromo.",
-        "imageUrl": "https://images.unsplash.com/photo-4277315346?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 9,
-        "idealTempMax": 32,
-        "minHumidity": 37,
+        "description": "The Dragon Tree (Dracaena marginata) is a beautiful indoor specimen known for its 10-15 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-4102591002?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 12,
+        "idealTempMax": 31,
+        "minHumidity": 67,
         "sunlight": "high",
-        "oxygenLevel": "moderate",
+        "oxygenLevel": "very-high",
         "medicinalValues": [
-            "cumbersome",
-            "formula"
+            "Toxin Removal"
         ],
         "advantages": [
-            "one-to-one",
-            "synergies"
+            "Modern look",
+            "Durable"
         ],
-        "price": 43,
+        "price": 84,
         "type": "indoor",
         "lifespan": "10-15 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -1368,22 +1337,21 @@ const indoorPlants = [
         "id": "p_in_1044",
         "name": "Weeping Fig",
         "scientificName": "Ficus benjamina",
-        "description": "Comptus virtus patria fugit contego culpa impedit sunt. Curto taceo vulgaris usus sumptus amor credo tenuis celer.",
-        "imageUrl": "https://images.unsplash.com/photo-6886889658?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 7,
+        "description": "The Weeping Fig (Ficus benjamina) is a beautiful indoor specimen known for its 20-50 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-1094381393?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 14,
         "idealTempMax": 31,
-        "minHumidity": 47,
-        "sunlight": "high",
+        "minHumidity": 32,
+        "sunlight": "medium",
         "oxygenLevel": "very-high",
         "medicinalValues": [
-            "grown",
-            "lounge"
+            "Air cleaning"
         ],
         "advantages": [
-            "interactive",
-            "models"
+            "Tree-like",
+            "Elegant"
         ],
-        "price": 71,
+        "price": 155,
         "type": "indoor",
         "lifespan": "20-50 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -1399,22 +1367,21 @@ const indoorPlants = [
         "id": "p_in_1045",
         "name": "Silver Satin Pothos",
         "scientificName": "Scindapsus pictus",
-        "description": "Nostrum pecto cariosus appono aveho. Depereo dolore attero apostolus verbum tantum eaque.",
-        "imageUrl": "https://images.unsplash.com/photo-1148621021?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 14,
-        "idealTempMax": 29,
-        "minHumidity": 74,
+        "description": "The Silver Satin Pothos (Scindapsus pictus) is a beautiful indoor specimen known for its 5-10 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-4654584626?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 11,
+        "idealTempMax": 31,
+        "minHumidity": 39,
         "sunlight": "low",
-        "oxygenLevel": "high",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "better",
-            "pendant"
+            "Remove Formaldehyde"
         ],
         "advantages": [
-            "cross-platform",
-            "synergies"
+            "Silver Variegation",
+            "Drought Tolerant"
         ],
-        "price": 102,
+        "price": 182,
         "type": "indoor",
         "lifespan": "5-10 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -1430,22 +1397,21 @@ const indoorPlants = [
         "id": "p_in_1046",
         "name": "Kentia Palm",
         "scientificName": "Howea forsteriana",
-        "description": "Subseco barba cupio cometes. Contra vociferor cohibeo talus universe.",
-        "imageUrl": "https://images.unsplash.com/photo-5288200515?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 7,
-        "idealTempMax": 32,
-        "minHumidity": 34,
+        "description": "The Kentia Palm (Howea forsteriana) is a beautiful indoor specimen known for its 50+ Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-9577667026?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 12,
+        "idealTempMax": 34,
+        "minHumidity": 54,
         "sunlight": "medium",
-        "oxygenLevel": "very-high",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "untried",
-            "sightseeing"
+            "Air purifying"
         ],
         "advantages": [
-            "immersive",
-            "synergies"
+            "Elegant arching",
+            "Shade tolerant"
         ],
-        "price": 46,
+        "price": 50,
         "type": "indoor",
         "lifespan": "50+ Years",
         "foliageTexture": "Glossy/Smooth",
@@ -1461,22 +1427,21 @@ const indoorPlants = [
         "id": "p_in_1047",
         "name": "Zebra Plant",
         "scientificName": "Aphelandra squarrosa",
-        "description": "A coadunatio vix adeo comprehendo nobis antepono sollers clementia cerno. Quasi venustas cerno ademptio auxilium adopto thermae.",
-        "imageUrl": "https://images.unsplash.com/photo-4817842257?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 12,
+        "description": "The Zebra Plant (Aphelandra squarrosa) is a beautiful indoor specimen known for its 5-10 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-5844234330?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 6,
         "idealTempMax": 26,
-        "minHumidity": 30,
-        "sunlight": "medium",
-        "oxygenLevel": "moderate",
+        "minHumidity": 36,
+        "sunlight": "low",
+        "oxygenLevel": "very-high",
         "medicinalValues": [
-            "faraway",
-            "effector"
+            "None known"
         ],
         "advantages": [
-            "enterprise",
-            "users"
+            "Striped leaves",
+            "Yellow flower"
         ],
-        "price": 23,
+        "price": 183,
         "type": "indoor",
         "lifespan": "5-10 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -1492,22 +1457,21 @@ const indoorPlants = [
         "id": "p_in_1048",
         "name": "Bromeliad",
         "scientificName": "Guzmania",
-        "description": "Denuncio cilicium vicinus magni dens solium. Ara comitatus depromo quibusdam volva versus tergum.",
-        "imageUrl": "https://images.unsplash.com/photo-7609527752?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 10,
-        "idealTempMax": 34,
-        "minHumidity": 66,
-        "sunlight": "medium",
-        "oxygenLevel": "high",
+        "description": "The Bromeliad (Guzmania) is a beautiful indoor specimen known for its 2-4 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-4447370410?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 14,
+        "idealTempMax": 33,
+        "minHumidity": 49,
+        "sunlight": "high",
+        "oxygenLevel": "very-high",
         "medicinalValues": [
-            "small",
-            "receptor"
+            "None known"
         ],
         "advantages": [
-            "synergistic",
-            "networks"
+            "Exotic Color",
+            "Pet Safe"
         ],
-        "price": 182,
+        "price": 170,
         "type": "indoor",
         "lifespan": "2-4 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -1523,22 +1487,21 @@ const indoorPlants = [
         "id": "p_in_1049",
         "name": "Orchid Moth",
         "scientificName": "Phalaenopsis",
-        "description": "Ocer vomito cogito. Audax vir sustineo sub decor neque solium.",
-        "imageUrl": "https://images.unsplash.com/photo-2314577529?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 10,
-        "idealTempMax": 28,
-        "minHumidity": 34,
-        "sunlight": "medium",
-        "oxygenLevel": "high",
+        "description": "The Orchid Moth (Phalaenopsis) is a beautiful indoor specimen known for its 10-15 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-2389914853?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 5,
+        "idealTempMax": 29,
+        "minHumidity": 35,
+        "sunlight": "low",
+        "oxygenLevel": "very-high",
         "medicinalValues": [
-            "elegant",
-            "horde"
+            "Stress relief"
         ],
         "advantages": [
-            "leading-edge",
-            "interfaces"
+            "Long blooming",
+            "Elegant"
         ],
-        "price": 108,
+        "price": 146,
         "type": "indoor",
         "lifespan": "10-15 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -1554,22 +1517,21 @@ const indoorPlants = [
         "id": "p_in_1050",
         "name": "Elephant Ear",
         "scientificName": "Colocasia esculenta",
-        "description": "Villa depulso fugiat tersus. Curto alienus caries virtus odio.",
-        "imageUrl": "https://images.unsplash.com/photo-7397818694?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 8,
-        "idealTempMax": 25,
-        "minHumidity": 78,
-        "sunlight": "medium",
-        "oxygenLevel": "very-high",
+        "description": "The Elephant Ear (Colocasia esculenta) is a beautiful indoor specimen known for its Annual (Bulb) lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-6935022664?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 5,
+        "idealTempMax": 26,
+        "minHumidity": 40,
+        "sunlight": "low",
+        "oxygenLevel": "low",
         "medicinalValues": [
-            "hurtful",
-            "issue"
+            "Traditional Medicine"
         ],
         "advantages": [
-            "granular",
-            "users"
+            "Statement Size",
+            "Tropical"
         ],
-        "price": 46,
+        "price": 67,
         "type": "indoor",
         "lifespan": "Annual (Bulb)",
         "foliageTexture": "Glossy/Smooth",
@@ -1585,22 +1547,21 @@ const indoorPlants = [
         "id": "p_in_1051",
         "name": "Aluminum Plant",
         "scientificName": "Pilea cadierei",
-        "description": "Infit aveho substantia. Adflicto perspiciatis vinitor defungo beatae.",
-        "imageUrl": "https://images.unsplash.com/photo-9361381726?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 12,
-        "idealTempMax": 34,
-        "minHumidity": 34,
-        "sunlight": "high",
-        "oxygenLevel": "very-high",
+        "description": "The Aluminum Plant (Pilea cadierei) is a beautiful indoor specimen known for its 1-4 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-6204800533?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 8,
+        "idealTempMax": 31,
+        "minHumidity": 48,
+        "sunlight": "medium",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "shadowy",
-            "giant"
+            "None known"
         ],
         "advantages": [
-            "innovative",
-            "initiatives"
+            "Silver patterns",
+            "Bushy"
         ],
-        "price": 157,
+        "price": 185,
         "type": "indoor",
         "lifespan": "1-4 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -1616,22 +1577,21 @@ const indoorPlants = [
         "id": "p_in_1052",
         "name": "Arrowhead Plant",
         "scientificName": "Syngonium podophyllum",
-        "description": "Desolo vergo crinis est. Repudiandae complectus agnitio distinctio aspernatur.",
-        "imageUrl": "https://images.unsplash.com/photo-3062514043?auto=format&fit=crop&w=800&q=80",
+        "description": "The Arrowhead Plant (Syngonium podophyllum) is a beautiful indoor specimen known for its 5-10 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-1509052340?auto=format&fit=crop&w=800&q=80",
         "idealTempMin": 10,
-        "idealTempMax": 28,
-        "minHumidity": 48,
+        "idealTempMax": 26,
+        "minHumidity": 45,
         "sunlight": "high",
-        "oxygenLevel": "very-high",
+        "oxygenLevel": "high",
         "medicinalValues": [
-            "acceptable",
-            "nougat"
+            "Voc Removal"
         ],
         "advantages": [
-            "turn-key",
-            "AI"
+            "Fast growing",
+            "Variety of colors"
         ],
-        "price": 177,
+        "price": 186,
         "type": "indoor",
         "lifespan": "5-10 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -1647,22 +1607,21 @@ const indoorPlants = [
         "id": "p_in_1053",
         "name": "Baby Rubber Plant",
         "scientificName": "Peperomia obtusifolia",
-        "description": "Pecus vesica terra temperantia coepi cohors advoco tibi quasi. Cito numquam celo ait celo solitudo quasi.",
-        "imageUrl": "https://images.unsplash.com/photo-6501477588?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 8,
-        "idealTempMax": 29,
-        "minHumidity": 30,
+        "description": "The Baby Rubber Plant (Peperomia obtusifolia) is a beautiful indoor specimen known for its 5-10 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-8028690016?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 13,
+        "idealTempMax": 25,
+        "minHumidity": 71,
         "sunlight": "medium",
         "oxygenLevel": "low",
         "medicinalValues": [
-            "burly",
-            "polyester"
+            "None known"
         ],
         "advantages": [
-            "ubiquitous",
-            "deliverables"
+            "Pet Safe",
+            "Easy care"
         ],
-        "price": 52,
+        "price": 116,
         "type": "indoor",
         "lifespan": "5-10 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -1678,22 +1637,21 @@ const indoorPlants = [
         "id": "p_in_1054",
         "name": "Burro's Tail",
         "scientificName": "Sedum morganianum",
-        "description": "Amicitia commemoro delicate triduana vulgus sequi compono addo. Pel aliquid vito pectus centum vilis.",
-        "imageUrl": "https://images.unsplash.com/photo-1627470621?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 13,
-        "idealTempMax": 31,
-        "minHumidity": 56,
-        "sunlight": "medium",
+        "description": "The Burro's Tail (Sedum morganianum) is a beautiful indoor specimen known for its 5-10 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-3872202266?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 9,
+        "idealTempMax": 32,
+        "minHumidity": 65,
+        "sunlight": "high",
         "oxygenLevel": "very-high",
         "medicinalValues": [
-            "long",
-            "interviewer"
+            "None known"
         ],
         "advantages": [
-            "vertical",
-            "smart contracts"
+            "Trailing succulent",
+            "Unique texture"
         ],
-        "price": 90,
+        "price": 132,
         "type": "indoor",
         "lifespan": "5-10 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -1709,22 +1667,21 @@ const indoorPlants = [
         "id": "p_in_1055",
         "name": "Caladium",
         "scientificName": "Caladium bicolor",
-        "description": "Cattus caput debeo delinquo vociferor ultra. Pauper deficio est voluptate sursum mollitia soleo natus.",
-        "imageUrl": "https://images.unsplash.com/photo-6684408227?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 13,
-        "idealTempMax": 25,
-        "minHumidity": 80,
+        "description": "The Caladium (Caladium bicolor) is a beautiful indoor specimen known for its Annual (Bulb) lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-8294934102?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 8,
+        "idealTempMax": 26,
+        "minHumidity": 69,
         "sunlight": "medium",
-        "oxygenLevel": "low",
+        "oxygenLevel": "very-high",
         "medicinalValues": [
-            "questionable",
-            "mythology"
+            "None (Toxic)"
         ],
         "advantages": [
-            "customized",
-            "smart contracts"
+            "Stunning colors",
+            "Shade lover"
         ],
-        "price": 94,
+        "price": 116,
         "type": "indoor",
         "lifespan": "Annual (Bulb)",
         "foliageTexture": "Glossy/Smooth",
@@ -1740,22 +1697,21 @@ const indoorPlants = [
         "id": "p_in_1056",
         "name": "Cyclamen",
         "scientificName": "Cyclamen persicum",
-        "description": "Stella dolores voluptate caste autus adfero ipsum una. Arcesso suasoria strenuus vesper undique virga cunctatio.",
-        "imageUrl": "https://images.unsplash.com/photo-6036429061?auto=format&fit=crop&w=800&q=80",
+        "description": "The Cyclamen (Cyclamen persicum) is a beautiful indoor specimen known for its 3-5 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-4559215019?auto=format&fit=crop&w=800&q=80",
         "idealTempMin": 8,
         "idealTempMax": 30,
-        "minHumidity": 72,
+        "minHumidity": 39,
         "sunlight": "high",
-        "oxygenLevel": "high",
+        "oxygenLevel": "very-high",
         "medicinalValues": [
-            "separate",
-            "rule"
+            "None (Toxic)"
         ],
         "advantages": [
-            "magnetic",
-            "technologies"
+            "Cool weather bloom",
+            "Compact"
         ],
-        "price": 194,
+        "price": 151,
         "type": "indoor",
         "lifespan": "3-5 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -1771,22 +1727,21 @@ const indoorPlants = [
         "id": "p_in_1057",
         "name": "Dracaena Lemon Lime",
         "scientificName": "Dracaena warneckii",
-        "description": "Cena adiuvo spoliatio confugo hic enim. Eius calcar vulgo atrocitas considero uterque ventito.",
-        "imageUrl": "https://images.unsplash.com/photo-5867300169?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 8,
+        "description": "The Dracaena Lemon Lime (Dracaena warneckii) is a beautiful indoor specimen known for its 10-20 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-7245963670?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 15,
         "idealTempMax": 26,
-        "minHumidity": 41,
-        "sunlight": "high",
-        "oxygenLevel": "low",
+        "minHumidity": 56,
+        "sunlight": "low",
+        "oxygenLevel": "high",
         "medicinalValues": [
-            "hoarse",
-            "tuber"
+            "Air cleaning"
         ],
         "advantages": [
-            "holistic",
-            "blockchains"
+            "Neon color",
+            "Low light"
         ],
-        "price": 58,
+        "price": 174,
         "type": "indoor",
         "lifespan": "10-20 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -1802,22 +1757,21 @@ const indoorPlants = [
         "id": "p_in_1058",
         "name": "Fern Arum",
         "scientificName": "Zamioculcas",
-        "description": "Culpa spiculum armarium. Tredecim tibi voluptas tres vulpes creo auctor nostrum thesaurus laboriosam.",
-        "imageUrl": "https://images.unsplash.com/photo-7249956207?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 14,
-        "idealTempMax": 27,
-        "minHumidity": 46,
-        "sunlight": "medium",
-        "oxygenLevel": "very-high",
+        "description": "The Fern Arum (Zamioculcas) is a beautiful indoor specimen known for its 10-15 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-8390196113?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 6,
+        "idealTempMax": 34,
+        "minHumidity": 66,
+        "sunlight": "low",
+        "oxygenLevel": "high",
         "medicinalValues": [
-            "pessimistic",
-            "deed"
+            "Air cleaning"
         ],
         "advantages": [
-            "user-centric",
-            "supply-chains"
+            "Tough",
+            "Glossy"
         ],
-        "price": 95,
+        "price": 172,
         "type": "indoor",
         "lifespan": "10-15 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -1833,22 +1787,21 @@ const indoorPlants = [
         "id": "p_in_1059",
         "name": "Garden Croton",
         "scientificName": "Codiaeum variegatum",
-        "description": "Video apto titulus calcar solutio trepide reprehenderit defero demum vereor. Viriliter vere corona omnis.",
-        "imageUrl": "https://images.unsplash.com/photo-5743384096?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 13,
-        "idealTempMax": 35,
-        "minHumidity": 55,
+        "description": "The Garden Croton (Codiaeum variegatum) is a beautiful indoor specimen known for its 2-4 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-1967362712?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 6,
+        "idealTempMax": 25,
+        "minHumidity": 43,
         "sunlight": "high",
-        "oxygenLevel": "high",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "tiny",
-            "swim"
+            "None known"
         ],
         "advantages": [
-            "back-end",
-            "technologies"
+            "Colorful foliage",
+            "Structure"
         ],
-        "price": 51,
+        "price": 182,
         "type": "indoor",
         "lifespan": "2-4 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -1864,22 +1817,21 @@ const indoorPlants = [
         "id": "p_in_1060",
         "name": "Gloxinia",
         "scientificName": "Sinningia speciosa",
-        "description": "Arca pecco carbo umbra reprehenderit corrigo attollo cogo synagoga spiritus. Cimentarius degusto curis.",
-        "imageUrl": "https://images.unsplash.com/photo-4409735639?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 12,
-        "idealTempMax": 30,
-        "minHumidity": 73,
+        "description": "The Gloxinia (Sinningia speciosa) is a beautiful indoor specimen known for its Annual (Bulb) lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-5178885670?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 5,
+        "idealTempMax": 33,
+        "minHumidity": 49,
         "sunlight": "high",
-        "oxygenLevel": "moderate",
+        "oxygenLevel": "low",
         "medicinalValues": [
-            "vivid",
-            "awareness"
+            "None known"
         ],
         "advantages": [
-            "one-to-one",
-            "content"
+            "Huge flowers",
+            "Velvety leaves"
         ],
-        "price": 96,
+        "price": 161,
         "type": "indoor",
         "lifespan": "Annual (Bulb)",
         "foliageTexture": "Glossy/Smooth",
@@ -1895,22 +1847,21 @@ const indoorPlants = [
         "id": "p_in_1061",
         "name": "Grape Ivy",
         "scientificName": "Cissus rhombifolia",
-        "description": "Spoliatio odit reiciendis spargo explicabo ademptio. Absens cupio adflicto appono amo commodi vilis capio sophismata.",
-        "imageUrl": "https://images.unsplash.com/photo-1425879276?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 7,
+        "description": "The Grape Ivy (Cissus rhombifolia) is a beautiful indoor specimen known for its 5-10 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-8708581169?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 8,
         "idealTempMax": 32,
-        "minHumidity": 44,
+        "minHumidity": 67,
         "sunlight": "medium",
-        "oxygenLevel": "high",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "upset",
-            "scout"
+            "None known"
         ],
         "advantages": [
-            "granular",
-            "experiences"
+            "Vining",
+            "Low light"
         ],
-        "price": 31,
+        "price": 61,
         "type": "indoor",
         "lifespan": "5-10 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -1926,22 +1877,21 @@ const indoorPlants = [
         "id": "p_in_1062",
         "name": "Hens and Chicks",
         "scientificName": "Sempervivum tectorum",
-        "description": "Collum sto spiritus virga calco patior cinis. Vado tendo labore cibo capio vomito concido verumtamen.",
-        "imageUrl": "https://images.unsplash.com/photo-7674782317?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 29,
-        "minHumidity": 45,
-        "sunlight": "high",
+        "description": "The Hens and Chicks (Sempervivum tectorum) is a beautiful indoor specimen known for its 3-5 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-1756542365?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 15,
+        "idealTempMax": 28,
+        "minHumidity": 70,
+        "sunlight": "medium",
         "oxygenLevel": "very-high",
         "medicinalValues": [
-            "steel",
-            "testimonial"
+            "Skin soothing (Sap)"
         ],
         "advantages": [
-            "enterprise",
-            "experiences"
+            "Cold hardy",
+            "Geometry"
         ],
-        "price": 67,
+        "price": 23,
         "type": "indoor",
         "lifespan": "3-5 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -1957,22 +1907,21 @@ const indoorPlants = [
         "id": "p_in_1063",
         "name": "Hoya Carnosa",
         "scientificName": "Hoya carnosa",
-        "description": "Comburo thermae talis defendo beneficium sublime saepe sit. Articulus voluptatibus necessitatibus sunt amplus arguo talis charisma totus accusator.",
-        "imageUrl": "https://images.unsplash.com/photo-5454562405?auto=format&fit=crop&w=800&q=80",
+        "description": "The Hoya Carnosa (Hoya carnosa) is a beautiful indoor specimen known for its 10-30 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-1913359016?auto=format&fit=crop&w=800&q=80",
         "idealTempMin": 14,
-        "idealTempMax": 35,
-        "minHumidity": 46,
-        "sunlight": "medium",
+        "idealTempMax": 31,
+        "minHumidity": 35,
+        "sunlight": "low",
         "oxygenLevel": "high",
         "medicinalValues": [
-            "critical",
-            "custom"
+            "None known"
         ],
         "advantages": [
-            "proactive",
-            "convergence"
+            "Fragrant Blooms",
+            "Long Lived"
         ],
-        "price": 160,
+        "price": 174,
         "type": "indoor",
         "lifespan": "10-30 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -1988,22 +1937,21 @@ const indoorPlants = [
         "id": "p_in_1064",
         "name": "Kalanchoe",
         "scientificName": "Kalanchoe blossfeldiana",
-        "description": "Adeptio talus adipiscor depraedor praesentium paulatim ars. Sum convoco tredecim benevolentia una sum depraedor absconditus.",
-        "imageUrl": "https://images.unsplash.com/photo-4682288094?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 6,
-        "idealTempMax": 30,
-        "minHumidity": 54,
+        "description": "The Kalanchoe (Kalanchoe blossfeldiana) is a beautiful indoor specimen known for its 2-5 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-8806080447?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 11,
+        "idealTempMax": 28,
+        "minHumidity": 80,
         "sunlight": "high",
-        "oxygenLevel": "moderate",
+        "oxygenLevel": "low",
         "medicinalValues": [
-            "hairy",
-            "brochure"
+            "Wound Healing (Some species)"
         ],
         "advantages": [
-            "back-end",
-            "relationships"
+            "Flowering Succulent",
+            "Drought Tolerant"
         ],
-        "price": 71,
+        "price": 174,
         "type": "indoor",
         "lifespan": "2-5 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -2019,22 +1967,21 @@ const indoorPlants = [
         "id": "p_in_1065",
         "name": "Living Stone",
         "scientificName": "Lithops",
-        "description": "Commodi tondeo sum vitiosus. Virga adulescens textilis trepide studio ambitus.",
-        "imageUrl": "https://images.unsplash.com/photo-1251696471?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 13,
-        "idealTempMax": 29,
-        "minHumidity": 63,
+        "description": "The Living Stone (Lithops) is a beautiful indoor specimen known for its 40-50 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-8642285982?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 15,
+        "idealTempMax": 25,
+        "minHumidity": 75,
         "sunlight": "high",
         "oxygenLevel": "low",
         "medicinalValues": [
-            "well-groomed",
-            "scratch"
+            "None known"
         ],
         "advantages": [
-            "one-to-one",
-            "smart contracts"
+            "Curiosity",
+            "Tiny"
         ],
-        "price": 108,
+        "price": 53,
         "type": "indoor",
         "lifespan": "40-50 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -2050,22 +1997,21 @@ const indoorPlants = [
         "id": "p_in_1066",
         "name": "Maidenhair Fern",
         "scientificName": "Adiantum raddianum",
-        "description": "Correptius molestias terminatio tunc studio tristis suppono validus. Aurum despecto vergo sum.",
-        "imageUrl": "https://images.unsplash.com/photo-9310478052?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 7,
+        "description": "The Maidenhair Fern (Adiantum raddianum) is a beautiful indoor specimen known for its 5-10 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-1516872259?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 8,
         "idealTempMax": 27,
-        "minHumidity": 30,
+        "minHumidity": 56,
         "sunlight": "high",
-        "oxygenLevel": "very-high",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "timely",
-            "bump"
+            "Respiratory aid (Syrup)"
         ],
         "advantages": [
-            "mission-critical",
-            "users"
+            "Delicate texture",
+            "Soft"
         ],
-        "price": 60,
+        "price": 96,
         "type": "indoor",
         "lifespan": "5-10 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -2081,22 +2027,21 @@ const indoorPlants = [
         "id": "p_in_1067",
         "name": "Money Tree",
         "scientificName": "Pachira aquatica",
-        "description": "Auctor comminor cuppedia cognomen tergum tergiversatio causa coerceo. Soluta verto civis bene stillicidium vicissitudo tepesco.",
-        "imageUrl": "https://images.unsplash.com/photo-4137238381?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 14,
-        "idealTempMax": 28,
-        "minHumidity": 73,
-        "sunlight": "low",
-        "oxygenLevel": "low",
+        "description": "The Money Tree (Pachira aquatica) is a beautiful indoor specimen known for its 10-15 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-6424484850?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 5,
+        "idealTempMax": 32,
+        "minHumidity": 61,
+        "sunlight": "high",
+        "oxygenLevel": "high",
         "medicinalValues": [
-            "vivid",
-            "mouser"
+            "None known"
         ],
         "advantages": [
-            "24/7",
-            "models"
+            "Good Luck Symbol",
+            "Pet Safe"
         ],
-        "price": 62,
+        "price": 196,
         "type": "indoor",
         "lifespan": "10-15 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -2112,22 +2057,21 @@ const indoorPlants = [
         "id": "p_in_1068",
         "name": "Moth Orchid",
         "scientificName": "Phalaenopsis",
-        "description": "Carbo subiungo summopere amplus patior vicissitudo ventus contabesco vita terga. Cotidie validus abstergo usitas odit.",
-        "imageUrl": "https://images.unsplash.com/photo-5789927807?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 7,
-        "idealTempMax": 25,
-        "minHumidity": 72,
-        "sunlight": "high",
-        "oxygenLevel": "high",
+        "description": "The Moth Orchid (Phalaenopsis) is a beautiful indoor specimen known for its 10-15 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-8965790783?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 11,
+        "idealTempMax": 30,
+        "minHumidity": 45,
+        "sunlight": "medium",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "pessimistic",
-            "strategy"
+            "None known"
         ],
         "advantages": [
-            "mission-critical",
-            "content"
+            "Easy orchid",
+            "Long bloom"
         ],
-        "price": 146,
+        "price": 116,
         "type": "indoor",
         "lifespan": "10-15 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -2143,22 +2087,21 @@ const indoorPlants = [
         "id": "p_in_1069",
         "name": "Norfolk Island Pine",
         "scientificName": "Araucaria heterophylla",
-        "description": "Vicissitudo commodo ipsum accendo. Peior beneficium abscido vesper desidero vesica adipiscor cito.",
-        "imageUrl": "https://images.unsplash.com/photo-8614347053?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 10,
-        "idealTempMax": 25,
-        "minHumidity": 47,
-        "sunlight": "high",
-        "oxygenLevel": "moderate",
+        "description": "The Norfolk Island Pine (Araucaria heterophylla) is a beautiful indoor specimen known for its 10-20 Years lifespan. It thrives in controlled indoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-3288765346?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 7,
+        "idealTempMax": 27,
+        "minHumidity": 41,
+        "sunlight": "medium",
+        "oxygenLevel": "high",
         "medicinalValues": [
-            "small",
-            "impostor"
+            "None known"
         ],
         "advantages": [
-            "customized",
-            "partnerships"
+            "Mini Christmas tree",
+            "Soft needles"
         ],
-        "price": 87,
+        "price": 50,
         "type": "indoor",
         "lifespan": "10-20 Years",
         "foliageTexture": "Glossy/Smooth",
@@ -2177,22 +2120,24 @@ const outdoorPlants = [
         "id": "p_out_1000",
         "name": "Lavender",
         "scientificName": "Lavandula angustifolia",
-        "description": "Velit concido delicate sui attonbitus acquiro suppono talus talus textus. Occaecati dolor desolo coepi adstringo vulticulus atavus aptus.",
-        "imageUrl": "https://images.unsplash.com/photo-7671185470?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
+        "description": "The Lavender (Lavandula angustifolia) is a beautiful outdoor specimen known for its 10-15 Years lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-8157233096?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 15,
         "idealTempMax": 27,
-        "minHumidity": 72,
+        "minHumidity": 68,
         "sunlight": "high",
-        "oxygenLevel": "low",
+        "oxygenLevel": "high",
         "medicinalValues": [
-            "golden",
-            "rim"
+            "Calming",
+            "Sleep aid",
+            "Antiseptic"
         ],
         "advantages": [
-            "proactive",
-            "web services"
+            "Fragrant",
+            "Bee friendly",
+            "Drought tolerant"
         ],
-        "price": 196,
+        "price": 130,
         "type": "outdoor",
         "lifespan": "10-15 Years",
         "foliageTexture": "Matte/Textured",
@@ -2208,22 +2153,23 @@ const outdoorPlants = [
         "id": "p_out_1001",
         "name": "Rose Bush",
         "scientificName": "Rosa",
-        "description": "Virtus audeo sequi cito sponte ait modi. Vero cena suffragium sumptus sperno triduana admoneo.",
-        "imageUrl": "https://images.unsplash.com/photo-8178821223?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 13,
-        "idealTempMax": 25,
-        "minHumidity": 42,
+        "description": "The Rose Bush (Rosa) is a beautiful outdoor specimen known for its 15-20 Years lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-2282568333?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 6,
+        "idealTempMax": 30,
+        "minHumidity": 31,
         "sunlight": "high",
-        "oxygenLevel": "low",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "zany",
-            "conservative"
+            "Vitamin C (Hips)",
+            "Aromatherapy"
         ],
         "advantages": [
-            "vertical",
-            "experiences"
+            "Beautiful blooms",
+            "Fragrance",
+            "Cut flowers"
         ],
-        "price": 151,
+        "price": 156,
         "type": "outdoor",
         "lifespan": "15-20 Years",
         "foliageTexture": "Matte/Textured",
@@ -2239,22 +2185,21 @@ const outdoorPlants = [
         "id": "p_out_1002",
         "name": "Hydrangea",
         "scientificName": "Hydrangea macrophylla",
-        "description": "Carus defendo candidus infit. Beatae tutamen defluo apparatus admoveo.",
-        "imageUrl": "https://images.unsplash.com/photo-7799472715?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 8,
-        "idealTempMax": 27,
-        "minHumidity": 75,
+        "description": "The Hydrangea (Hydrangea macrophylla) is a beautiful outdoor specimen known for its 50+ Years lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-2068468188?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 9,
+        "idealTempMax": 28,
+        "minHumidity": 70,
         "sunlight": "high",
-        "oxygenLevel": "low",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "prudent",
-            "collaboration"
+            "Diuretic (Root - Caution)"
         ],
         "advantages": [
-            "impactful",
-            "applications"
+            "Showy flowers",
+            "Color change pH"
         ],
-        "price": 148,
+        "price": 158,
         "type": "outdoor",
         "lifespan": "50+ Years",
         "foliageTexture": "Matte/Textured",
@@ -2270,22 +2215,22 @@ const outdoorPlants = [
         "id": "p_out_1003",
         "name": "Sunflower",
         "scientificName": "Helianthus annuus",
-        "description": "Volo thema credo. Sum totidem thesis dapifer quas suppellex.",
-        "imageUrl": "https://images.unsplash.com/photo-4551738629?auto=format&fit=crop&w=800&q=80",
+        "description": "The Sunflower (Helianthus annuus) is a beautiful outdoor specimen known for its Annual (1 Year) lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-5844947370?auto=format&fit=crop&w=800&q=80",
         "idealTempMin": 15,
-        "idealTempMax": 30,
-        "minHumidity": 59,
+        "idealTempMax": 32,
+        "minHumidity": 39,
         "sunlight": "high",
-        "oxygenLevel": "moderate",
+        "oxygenLevel": "low",
         "medicinalValues": [
-            "monumental",
-            "oil"
+            "Nutritious seeds",
+            "Skin oil"
         ],
         "advantages": [
-            "open-source",
-            "supply-chains"
+            "Rapid growth",
+            "Pollinator magnet"
         ],
-        "price": 50,
+        "price": 46,
         "type": "outdoor",
         "lifespan": "Annual (1 Year)",
         "foliageTexture": "Matte/Textured",
@@ -2301,22 +2246,21 @@ const outdoorPlants = [
         "id": "p_out_1004",
         "name": "Tulip",
         "scientificName": "Tulipa",
-        "description": "Cohaero trucido trucido adulescens adfero neque minima desidero caelestis. Appono aeger decet pax hic.",
-        "imageUrl": "https://images.unsplash.com/photo-5863208051?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 15,
-        "idealTempMax": 34,
-        "minHumidity": 64,
+        "description": "The Tulip (Tulipa) is a beautiful outdoor specimen known for its Perennial (3-5 Years) lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-8231694025?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 5,
+        "idealTempMax": 29,
+        "minHumidity": 70,
         "sunlight": "high",
-        "oxygenLevel": "high",
+        "oxygenLevel": "low",
         "medicinalValues": [
-            "shimmering",
-            "tuba"
+            "None specific"
         ],
         "advantages": [
-            "sticky",
-            "applications"
+            "Vibrant spring colors",
+            "Variety"
         ],
-        "price": 12,
+        "price": 123,
         "type": "outdoor",
         "lifespan": "Perennial (3-5 Years)",
         "foliageTexture": "Matte/Textured",
@@ -2332,22 +2276,22 @@ const outdoorPlants = [
         "id": "p_out_1005",
         "name": "Oak Tree",
         "scientificName": "Quercus",
-        "description": "Soleo amet bestia statim conturbo. Vespillo vesco odio ab adeo curriculum amissio doloribus.",
-        "imageUrl": "https://images.unsplash.com/photo-9428340875?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 15,
-        "idealTempMax": 35,
-        "minHumidity": 33,
+        "description": "The Oak Tree (Quercus) is a beautiful outdoor specimen known for its 100+ Years lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-4435923207?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 80,
         "sunlight": "high",
-        "oxygenLevel": "moderate",
+        "oxygenLevel": "very-high",
         "medicinalValues": [
-            "alert",
-            "freezing"
+            "Astringent (Bark)"
         ],
         "advantages": [
-            "viral",
-            "metrics"
+            "Shade",
+            "Wildlife habitat",
+            "Long lived"
         ],
-        "price": 82,
+        "price": 35,
         "type": "outdoor",
         "lifespan": "100+ Years",
         "foliageTexture": "Matte/Textured",
@@ -2363,22 +2307,22 @@ const outdoorPlants = [
         "id": "p_out_1006",
         "name": "Maple Tree",
         "scientificName": "Acer",
-        "description": "Valde appono solutio subito nesciunt tum vulpes ater. Sodalitas solium ademptio aegre corporis vulgaris optio.",
-        "imageUrl": "https://images.unsplash.com/photo-9434729298?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 13,
-        "idealTempMax": 27,
-        "minHumidity": 30,
+        "description": "The Maple Tree (Acer) is a beautiful outdoor specimen known for its 80-100 Years lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-9891854189?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 15,
+        "idealTempMax": 28,
+        "minHumidity": 60,
         "sunlight": "high",
-        "oxygenLevel": "moderate",
+        "oxygenLevel": "high",
         "medicinalValues": [
-            "fortunate",
-            "lotion"
+            "Syrup (Sap)"
         ],
         "advantages": [
-            "cross-platform",
-            "lifetime value"
+            "Fall color",
+            "Shade",
+            "Wood"
         ],
-        "price": 109,
+        "price": 151,
         "type": "outdoor",
         "lifespan": "80-100 Years",
         "foliageTexture": "Matte/Textured",
@@ -2394,22 +2338,21 @@ const outdoorPlants = [
         "id": "p_out_1007",
         "name": "Peony",
         "scientificName": "Paeonia",
-        "description": "Vetus catena tenetur. Bos bibo laudantium venio.",
-        "imageUrl": "https://images.unsplash.com/photo-9432611978?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 6,
-        "idealTempMax": 27,
-        "minHumidity": 52,
+        "description": "The Peony (Paeonia) is a beautiful outdoor specimen known for its 50-100 Years lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-4762037162?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 13,
+        "idealTempMax": 33,
+        "minHumidity": 35,
         "sunlight": "high",
-        "oxygenLevel": "high",
+        "oxygenLevel": "very-high",
         "medicinalValues": [
-            "stained",
-            "decision"
+            "Anti-inflammatory (Root)"
         ],
         "advantages": [
-            "innovative",
-            "models"
+            "Huge flowers",
+            "Long lived"
         ],
-        "price": 136,
+        "price": 36,
         "type": "outdoor",
         "lifespan": "50-100 Years",
         "foliageTexture": "Matte/Textured",
@@ -2425,22 +2368,22 @@ const outdoorPlants = [
         "id": "p_out_1008",
         "name": "Marigold",
         "scientificName": "Tagetes",
-        "description": "Aestas pauci cogo ipsa altus perferendis ulciscor denego. Avaritia aestivus colo aranea virga advoco vos numquam tredecim.",
-        "imageUrl": "https://images.unsplash.com/photo-9950794139?auto=format&fit=crop&w=800&q=80",
+        "description": "The Marigold (Tagetes) is a beautiful outdoor specimen known for its Annual (1 Year) lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-9254846908?auto=format&fit=crop&w=800&q=80",
         "idealTempMin": 11,
-        "idealTempMax": 31,
-        "minHumidity": 39,
+        "idealTempMax": 35,
+        "minHumidity": 45,
         "sunlight": "high",
-        "oxygenLevel": "low",
+        "oxygenLevel": "very-high",
         "medicinalValues": [
-            "somber",
-            "grandson"
+            "Antiseptic",
+            "Eye health (Lutein)"
         ],
         "advantages": [
-            "scalable",
-            "lifetime value"
+            "Repels pests",
+            "Edible petals"
         ],
-        "price": 196,
+        "price": 83,
         "type": "outdoor",
         "lifespan": "Annual (1 Year)",
         "foliageTexture": "Matte/Textured",
@@ -2456,22 +2399,23 @@ const outdoorPlants = [
         "id": "p_out_1009",
         "name": "Basil",
         "scientificName": "Ocimum basilicum",
-        "description": "Adsuesco velum compono despecto deduco aliquid. Corroboro inflammatio tametsi alveus.",
-        "imageUrl": "https://images.unsplash.com/photo-7420377797?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 12,
-        "idealTempMax": 27,
-        "minHumidity": 37,
+        "description": "The Basil (Ocimum basilicum) is a beautiful outdoor specimen known for its Annual (1 Year) lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-3844296796?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 7,
+        "idealTempMax": 31,
+        "minHumidity": 56,
         "sunlight": "high",
-        "oxygenLevel": "moderate",
+        "oxygenLevel": "very-high",
         "medicinalValues": [
-            "french",
-            "duffel"
+            "Anti-inflammatory",
+            "Digestive aid"
         ],
         "advantages": [
-            "innovative",
-            "mindshare"
+            "Delicious",
+            "Fast growing",
+            "Aromatic"
         ],
-        "price": 152,
+        "price": 107,
         "type": "outdoor",
         "lifespan": "Annual (1 Year)",
         "foliageTexture": "Matte/Textured",
@@ -2487,22 +2431,21 @@ const outdoorPlants = [
         "id": "p_out_1010",
         "name": "Tomato",
         "scientificName": "Solanum lycopersicum",
-        "description": "Quis auctus adflicto culpa celo civitas cavus exercitationem demulceo. Vomito magnam odit aliqua conor solium.",
-        "imageUrl": "https://images.unsplash.com/photo-6861345079?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 7,
-        "idealTempMax": 27,
+        "description": "The Tomato (Solanum lycopersicum) is a beautiful outdoor specimen known for its Annual (1 Year) lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-8023318610?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 6,
+        "idealTempMax": 31,
         "minHumidity": 68,
         "sunlight": "high",
-        "oxygenLevel": "high",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "limping",
-            "designation"
+            "Antioxidant (Lycopene)"
         ],
         "advantages": [
-            "cross-media",
-            "channels"
+            "Edible fruit",
+            "Productive"
         ],
-        "price": 188,
+        "price": 124,
         "type": "outdoor",
         "lifespan": "Annual (1 Year)",
         "foliageTexture": "Matte/Textured",
@@ -2518,22 +2461,21 @@ const outdoorPlants = [
         "id": "p_out_1011",
         "name": "Boxwood",
         "scientificName": "Buxus",
-        "description": "Viduo solium ustilo abeo veritatis tot. Aureus dolor adopto.",
-        "imageUrl": "https://images.unsplash.com/photo-4736560629?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 12,
-        "idealTempMax": 31,
-        "minHumidity": 43,
+        "description": "The Boxwood (Buxus) is a beautiful outdoor specimen known for its 20-30 Years lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-4747050209?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 35,
+        "minHumidity": 75,
         "sunlight": "high",
         "oxygenLevel": "moderate",
         "medicinalValues": [
-            "negative",
-            "tribe"
+            "Febrifuge (Historical)"
         ],
         "advantages": [
-            "revolutionary",
-            "models"
+            "Evergreen",
+            "Shapeable hedge"
         ],
-        "price": 113,
+        "price": 92,
         "type": "outdoor",
         "lifespan": "20-30 Years",
         "foliageTexture": "Matte/Textured",
@@ -2549,22 +2491,21 @@ const outdoorPlants = [
         "id": "p_out_1012",
         "name": "Azalea",
         "scientificName": "Rhododendron",
-        "description": "Decumbo adficio concedo contigo nulla dignissimos chirographum vicinus quas ulciscor. Anser quaerat vomica tantum suspendo soleo desino audentia curso virgo.",
-        "imageUrl": "https://images.unsplash.com/photo-9604148351?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 8,
-        "idealTempMax": 29,
-        "minHumidity": 70,
+        "description": "The Azalea (Rhododendron) is a beautiful outdoor specimen known for its 20-50 Years lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-1181829751?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 9,
+        "idealTempMax": 34,
+        "minHumidity": 52,
         "sunlight": "high",
-        "oxygenLevel": "low",
+        "oxygenLevel": "high",
         "medicinalValues": [
-            "shameful",
-            "bandwidth"
+            "None (Toxic)"
         ],
         "advantages": [
-            "turn-key",
-            "systems"
+            "Spring bloom",
+            "Shade tolerant"
         ],
-        "price": 25,
+        "price": 31,
         "type": "outdoor",
         "lifespan": "20-50 Years",
         "foliageTexture": "Matte/Textured",
@@ -2580,22 +2521,21 @@ const outdoorPlants = [
         "id": "p_out_1013",
         "name": "Daffodil",
         "scientificName": "Narcissus",
-        "description": "Viridis laudantium amaritudo chirographum pectus turpis. Dapifer confero architecto maiores aeternus ascisco demum commodi.",
-        "imageUrl": "https://images.unsplash.com/photo-5673730672?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 9,
-        "idealTempMax": 27,
-        "minHumidity": 76,
+        "description": "The Daffodil (Narcissus) is a beautiful outdoor specimen known for its Perennial (10+ Years) lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-2659667415?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 7,
+        "idealTempMax": 33,
+        "minHumidity": 33,
         "sunlight": "high",
-        "oxygenLevel": "high",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "ill-fated",
-            "density"
+            "None (Toxic)"
         ],
         "advantages": [
-            "B2B",
-            "lifetime value"
+            "Deer resistant",
+            "Early bloom"
         ],
-        "price": 112,
+        "price": 75,
         "type": "outdoor",
         "lifespan": "Perennial (10+ Years)",
         "foliageTexture": "Matte/Textured",
@@ -2611,22 +2551,21 @@ const outdoorPlants = [
         "id": "p_out_1014",
         "name": "Daylily",
         "scientificName": "Hemerocallis",
-        "description": "Theatrum fuga peior tempora. Amitto delibero angustus adicio venustas vito alter cribro arbor.",
-        "imageUrl": "https://images.unsplash.com/photo-1525786098?auto=format&fit=crop&w=800&q=80",
+        "description": "The Daylily (Hemerocallis) is a beautiful outdoor specimen known for its Perennial (10+ Years) lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-8609971407?auto=format&fit=crop&w=800&q=80",
         "idealTempMin": 5,
         "idealTempMax": 28,
-        "minHumidity": 49,
+        "minHumidity": 32,
         "sunlight": "high",
-        "oxygenLevel": "moderate",
+        "oxygenLevel": "low",
         "medicinalValues": [
-            "unfortunate",
-            "switchboard"
+            "Edible buds"
         ],
         "advantages": [
-            "collaborative",
-            "blockchains"
+            "Roadside Tough",
+            "Vast Variety"
         ],
-        "price": 145,
+        "price": 13,
         "type": "outdoor",
         "lifespan": "Perennial (10+ Years)",
         "foliageTexture": "Matte/Textured",
@@ -2642,22 +2581,21 @@ const outdoorPlants = [
         "id": "p_out_1015",
         "name": "Hostas",
         "scientificName": "Hosta",
-        "description": "Cernuus advoco calamitas pauci. Asperiores colligo veritatis cado absens allatus.",
-        "imageUrl": "https://images.unsplash.com/photo-6797737220?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 15,
-        "idealTempMax": 32,
-        "minHumidity": 62,
+        "description": "The Hostas (Hosta) is a beautiful outdoor specimen known for its 30+ Years lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-4349359906?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 14,
+        "idealTempMax": 29,
+        "minHumidity": 35,
         "sunlight": "high",
-        "oxygenLevel": "moderate",
+        "oxygenLevel": "high",
         "medicinalValues": [
-            "personal",
-            "alert"
+            "None known"
         ],
         "advantages": [
-            "leading-edge",
-            "methodologies"
+            "Shade foliage",
+            "Textured leaves"
         ],
-        "price": 194,
+        "price": 85,
         "type": "outdoor",
         "lifespan": "30+ Years",
         "foliageTexture": "Matte/Textured",
@@ -2673,22 +2611,22 @@ const outdoorPlants = [
         "id": "p_out_1016",
         "name": "Coneflower",
         "scientificName": "Echinacea purpurea",
-        "description": "Utique decet adfero antea officia apto theologus delibero sum utique. Cohors tergiversatio demulceo tenax spiculum vesco.",
-        "imageUrl": "https://images.unsplash.com/photo-8625693064?auto=format&fit=crop&w=800&q=80",
+        "description": "The Coneflower (Echinacea purpurea) is a beautiful outdoor specimen known for its 2-4 Years lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-7289990572?auto=format&fit=crop&w=800&q=80",
         "idealTempMin": 11,
-        "idealTempMax": 32,
-        "minHumidity": 74,
+        "idealTempMax": 26,
+        "minHumidity": 34,
         "sunlight": "high",
-        "oxygenLevel": "high",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "prudent",
-            "mathematics"
+            "Immune Support",
+            "Cold Relief"
         ],
         "advantages": [
-            "open-source",
-            "web services"
+            "Pollinator Magnet",
+            "Drought Tolerant"
         ],
-        "price": 102,
+        "price": 124,
         "type": "outdoor",
         "lifespan": "2-4 Years",
         "foliageTexture": "Matte/Textured",
@@ -2704,22 +2642,21 @@ const outdoorPlants = [
         "id": "p_out_1017",
         "name": "Black-Eyed Susan",
         "scientificName": "Rudbeckia hirta",
-        "description": "Adulatio angustus tripudio minus defleo theatrum depono aqua. Nesciunt vix administratio correptius.",
-        "imageUrl": "https://images.unsplash.com/photo-9807729896?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 7,
-        "idealTempMax": 27,
-        "minHumidity": 76,
+        "description": "The Black-Eyed Susan (Rudbeckia hirta) is a beautiful outdoor specimen known for its 2-3 Years lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-1410858168?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 14,
+        "idealTempMax": 34,
+        "minHumidity": 51,
         "sunlight": "high",
-        "oxygenLevel": "moderate",
+        "oxygenLevel": "low",
         "medicinalValues": [
-            "whispered",
-            "sandbar"
+            "Immune Stimulant (Roots)"
         ],
         "advantages": [
-            "robust",
-            "web services"
+            "Long Blooming",
+            "Hardy"
         ],
-        "price": 94,
+        "price": 176,
         "type": "outdoor",
         "lifespan": "2-3 Years",
         "foliageTexture": "Matte/Textured",
@@ -2735,22 +2672,21 @@ const outdoorPlants = [
         "id": "p_out_1018",
         "name": "Lilac Bush",
         "scientificName": "Syringa vulgaris",
-        "description": "Aegre stultus antepono debilito antiquus tepesco bardus degenero. Dedecor demergo dignissimos inflammatio.",
-        "imageUrl": "https://images.unsplash.com/photo-2160103107?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 14,
-        "idealTempMax": 26,
-        "minHumidity": 65,
+        "description": "The Lilac Bush (Syringa vulgaris) is a beautiful outdoor specimen known for its 75+ Years lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-9397674382?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 11,
+        "idealTempMax": 27,
+        "minHumidity": 74,
         "sunlight": "high",
-        "oxygenLevel": "very-high",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "common",
-            "lashes"
+            "Aromatherapy"
         ],
         "advantages": [
-            "vertical",
-            "experiences"
+            "Fragrance",
+            "Cold Hardy"
         ],
-        "price": 16,
+        "price": 22,
         "type": "outdoor",
         "lifespan": "75+ Years",
         "foliageTexture": "Matte/Textured",
@@ -2766,22 +2702,21 @@ const outdoorPlants = [
         "id": "p_out_1019",
         "name": "Magnolia Tree",
         "scientificName": "Magnolia grandiflora",
-        "description": "Ante via villa cribro aequitas tamdiu magni doloribus. Incidunt suffragium earum articulus votum suus.",
-        "imageUrl": "https://images.unsplash.com/photo-8976201196?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 13,
-        "idealTempMax": 34,
-        "minHumidity": 76,
+        "description": "The Magnolia Tree (Magnolia grandiflora) is a beautiful outdoor specimen known for its 80-120 Years lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-4161886402?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 8,
+        "idealTempMax": 31,
+        "minHumidity": 69,
         "sunlight": "high",
         "oxygenLevel": "very-high",
         "medicinalValues": [
-            "heavy",
-            "blight"
+            "Anxiety relief (Bark)"
         ],
         "advantages": [
-            "efficient",
-            "deliverables"
+            "Grand flowers",
+            "Evergreen leaves"
         ],
-        "price": 159,
+        "price": 29,
         "type": "outdoor",
         "lifespan": "80-120 Years",
         "foliageTexture": "Matte/Textured",
@@ -2797,22 +2732,21 @@ const outdoorPlants = [
         "id": "p_out_1020",
         "name": "Japanese Cherry",
         "scientificName": "Prunus serrulata",
-        "description": "Video theatrum curia benigne celebrer cetera. Ultio creptio verbera damno bene crapula tabesco.",
-        "imageUrl": "https://images.unsplash.com/photo-9956631681?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 14,
-        "idealTempMax": 29,
-        "minHumidity": 67,
+        "description": "The Japanese Cherry (Prunus serrulata) is a beautiful outdoor specimen known for its 15-20 Years lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-6437574431?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 11,
+        "idealTempMax": 32,
+        "minHumidity": 61,
         "sunlight": "high",
-        "oxygenLevel": "very-high",
+        "oxygenLevel": "high",
         "medicinalValues": [
-            "practical",
-            "volleyball"
+            "Symbolism"
         ],
         "advantages": [
-            "open-source",
-            "interfaces"
+            "Spring blossom",
+            "Ornamental"
         ],
-        "price": 64,
+        "price": 114,
         "type": "outdoor",
         "lifespan": "15-20 Years",
         "foliageTexture": "Matte/Textured",
@@ -2828,22 +2762,21 @@ const outdoorPlants = [
         "id": "p_out_1021",
         "name": "Wisteria",
         "scientificName": "Wisteria sinensis",
-        "description": "Ancilla terebro demens approbo contra conor speculum. Calculus aranea tabernus.",
-        "imageUrl": "https://images.unsplash.com/photo-9219235464?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 14,
-        "idealTempMax": 32,
-        "minHumidity": 34,
+        "description": "The Wisteria (Wisteria sinensis) is a beautiful outdoor specimen known for its 50-100 Years lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-6814885841?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 6,
+        "idealTempMax": 28,
+        "minHumidity": 45,
         "sunlight": "high",
-        "oxygenLevel": "high",
+        "oxygenLevel": "low",
         "medicinalValues": [
-            "zealous",
-            "edge"
+            "None (Toxic)"
         ],
         "advantages": [
-            "front-end",
-            "methodologies"
+            "Cascading flowers",
+            "Fragrance"
         ],
-        "price": 178,
+        "price": 140,
         "type": "outdoor",
         "lifespan": "50-100 Years",
         "foliageTexture": "Matte/Textured",
@@ -2859,22 +2792,21 @@ const outdoorPlants = [
         "id": "p_out_1022",
         "name": "Bougainvillea",
         "scientificName": "Bougainvillea glabra",
-        "description": "Sodalitas surgo attonbitus tristis. Tutamen solitudo absens deleo vesica cumque ut.",
-        "imageUrl": "https://images.unsplash.com/photo-7885503897?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 34,
-        "minHumidity": 45,
+        "description": "The Bougainvillea (Bougainvillea glabra) is a beautiful outdoor specimen known for its 20-30 Years lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-5021976135?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 33,
+        "minHumidity": 63,
         "sunlight": "high",
         "oxygenLevel": "moderate",
         "medicinalValues": [
-            "enchanting",
-            "ice-cream"
+            "Anti-inflammatory"
         ],
         "advantages": [
-            "revolutionary",
-            "networks"
+            "Drought hardy",
+            "Massive color"
         ],
-        "price": 138,
+        "price": 71,
         "type": "outdoor",
         "lifespan": "20-30 Years",
         "foliageTexture": "Matte/Textured",
@@ -2890,22 +2822,21 @@ const outdoorPlants = [
         "id": "p_out_1023",
         "name": "Gardenia",
         "scientificName": "Gardenia jasminoides",
-        "description": "Nostrum solitudo virtus thalassinus. Vaco pecus cribro alii aeternus suscipio cubo at textor.",
-        "imageUrl": "https://images.unsplash.com/photo-2456142830?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 11,
-        "idealTempMax": 27,
-        "minHumidity": 53,
+        "description": "The Gardenia (Gardenia jasminoides) is a beautiful outdoor specimen known for its 15-25 Years lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-2237042728?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 13,
+        "idealTempMax": 25,
+        "minHumidity": 30,
         "sunlight": "high",
-        "oxygenLevel": "low",
+        "oxygenLevel": "very-high",
         "medicinalValues": [
-            "austere",
-            "celsius"
+            "Traditional medicine"
         ],
         "advantages": [
-            "proactive",
-            "initiatives"
+            "Perfume scent",
+            "Glossy leaves"
         ],
-        "price": 23,
+        "price": 24,
         "type": "outdoor",
         "lifespan": "15-25 Years",
         "foliageTexture": "Matte/Textured",
@@ -2921,22 +2852,21 @@ const outdoorPlants = [
         "id": "p_out_1024",
         "name": "Camellia",
         "scientificName": "Camellia japonica",
-        "description": "Tondeo provident apparatus tui cur tripudio arma ventosus veritatis. Aduro vigor cattus nobis corporis urbanus fugit sto suppono.",
-        "imageUrl": "https://images.unsplash.com/photo-7622053956?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 9,
-        "idealTempMax": 30,
-        "minHumidity": 46,
+        "description": "The Camellia (Camellia japonica) is a beautiful outdoor specimen known for its 50-100 Years lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-4242596589?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 12,
+        "idealTempMax": 35,
+        "minHumidity": 51,
         "sunlight": "high",
-        "oxygenLevel": "high",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "poor",
-            "pile"
+            "Tea oil (Seeds)"
         ],
         "advantages": [
-            "user-centric",
-            "experiences"
+            "Winter bloom",
+            "Evergreen"
         ],
-        "price": 11,
+        "price": 40,
         "type": "outdoor",
         "lifespan": "50-100 Years",
         "foliageTexture": "Matte/Textured",
@@ -2952,22 +2882,21 @@ const outdoorPlants = [
         "id": "p_out_1025",
         "name": "Rhododendron",
         "scientificName": "Rhododendron ferrugineum",
-        "description": "Averto cunabula asper. Tempora veniam infit cotidie careo aptus.",
-        "imageUrl": "https://images.unsplash.com/photo-7074106892?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 7,
-        "idealTempMax": 34,
-        "minHumidity": 31,
+        "description": "The Rhododendron (Rhododendron ferrugineum) is a beautiful outdoor specimen known for its 50+ Years lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-7747122273?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 8,
+        "idealTempMax": 30,
+        "minHumidity": 46,
         "sunlight": "high",
-        "oxygenLevel": "moderate",
+        "oxygenLevel": "low",
         "medicinalValues": [
-            "compassionate",
-            "glider"
+            "None (Toxic)"
         ],
         "advantages": [
-            "cutting-edge",
-            "content"
+            "Showy flowers",
+            "Woodland plant"
         ],
-        "price": 127,
+        "price": 56,
         "type": "outdoor",
         "lifespan": "50+ Years",
         "foliageTexture": "Matte/Textured",
@@ -2983,22 +2912,22 @@ const outdoorPlants = [
         "id": "p_out_1026",
         "name": "Jasmine Vine",
         "scientificName": "Jasminum officinale",
-        "description": "Vomito tener vix sopor claustrum abeo dedecor decet verus deprecator. Urbanus vilitas dedico.",
-        "imageUrl": "https://images.unsplash.com/photo-8817742308?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 6,
-        "idealTempMax": 28,
-        "minHumidity": 36,
+        "description": "The Jasmine Vine (Jasminum officinale) is a beautiful outdoor specimen known for its 10-20 Years lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-4497198452?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 8,
+        "idealTempMax": 35,
+        "minHumidity": 51,
         "sunlight": "high",
-        "oxygenLevel": "very-high",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "obedient",
-            "devastation"
+            "Stress relief",
+            "Tea"
         ],
         "advantages": [
-            "cutting-edge",
-            "functionalities"
+            "Incredible scent",
+            "Climbing habit"
         ],
-        "price": 20,
+        "price": 50,
         "type": "outdoor",
         "lifespan": "10-20 Years",
         "foliageTexture": "Matte/Textured",
@@ -3014,22 +2943,21 @@ const outdoorPlants = [
         "id": "p_out_1027",
         "name": "Hibiscus",
         "scientificName": "Hibiscus rosa-sinensis",
-        "description": "Creator concido tactus verus cernuus. Adulatio bibo ventito delicate velum placeat quam succurro color.",
-        "imageUrl": "https://images.unsplash.com/photo-1815634579?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 34,
-        "minHumidity": 33,
+        "description": "The Hibiscus (Hibiscus rosa-sinensis) is a beautiful outdoor specimen known for its 5-10 Years lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-3630580304?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 13,
+        "idealTempMax": 33,
+        "minHumidity": 31,
         "sunlight": "high",
         "oxygenLevel": "very-high",
         "medicinalValues": [
-            "whole",
-            "opera"
+            "Blood pressure tea"
         ],
         "advantages": [
-            "frictionless",
-            "AI"
+            "Tropical vibe",
+            "Vibrant colors"
         ],
-        "price": 126,
+        "price": 95,
         "type": "outdoor",
         "lifespan": "5-10 Years",
         "foliageTexture": "Matte/Textured",
@@ -3045,22 +2973,21 @@ const outdoorPlants = [
         "id": "p_out_1028",
         "name": "Petunia",
         "scientificName": "Petunia hybrida",
-        "description": "Tantillus vitium libero viridis sed. Tui conventus sollicito aperiam vomica aiunt careo.",
-        "imageUrl": "https://images.unsplash.com/photo-5195880341?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 11,
-        "idealTempMax": 29,
-        "minHumidity": 57,
+        "description": "The Petunia (Petunia hybrida) is a beautiful outdoor specimen known for its Annual (1 Year) lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-9170424234?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 14,
+        "idealTempMax": 32,
+        "minHumidity": 77,
         "sunlight": "high",
-        "oxygenLevel": "low",
+        "oxygenLevel": "very-high",
         "medicinalValues": [
-            "shoddy",
-            "government"
+            "None known"
         ],
         "advantages": [
-            "rich",
-            "technologies"
+            "Constant color",
+            "Fragrance (some)"
         ],
-        "price": 184,
+        "price": 162,
         "type": "outdoor",
         "lifespan": "Annual (1 Year)",
         "foliageTexture": "Matte/Textured",
@@ -3076,22 +3003,21 @@ const outdoorPlants = [
         "id": "p_out_1029",
         "name": "Geranium",
         "scientificName": "Pelargonium",
-        "description": "Curia cuius crur theatrum bonus odit. Possimus vociferor adimpleo bardus.",
-        "imageUrl": "https://images.unsplash.com/photo-5540152952?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 15,
-        "idealTempMax": 30,
-        "minHumidity": 36,
+        "description": "The Geranium (Pelargonium) is a beautiful outdoor specimen known for its 1-3 Years lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-4665989519?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 7,
+        "idealTempMax": 31,
+        "minHumidity": 70,
         "sunlight": "high",
-        "oxygenLevel": "low",
+        "oxygenLevel": "very-high",
         "medicinalValues": [
-            "burdensome",
-            "adaptation"
+            "Skin oil"
         ],
         "advantages": [
-            "extensible",
-            "smart contracts"
+            "Mosquito repelling",
+            "Resilient"
         ],
-        "price": 38,
+        "price": 127,
         "type": "outdoor",
         "lifespan": "1-3 Years",
         "foliageTexture": "Matte/Textured",
@@ -3107,22 +3033,21 @@ const outdoorPlants = [
         "id": "p_out_1030",
         "name": "Chrysanthemum",
         "scientificName": "Chrysanthemum morifolium",
-        "description": "Aestus iure tabgo admiratio sustineo audio atqui. Pecto vindico ambitus verbera cuppedia textus.",
-        "imageUrl": "https://images.unsplash.com/photo-7098175612?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 11,
-        "idealTempMax": 29,
-        "minHumidity": 65,
+        "description": "The Chrysanthemum (Chrysanthemum morifolium) is a beautiful outdoor specimen known for its Perennial (3-5 Years) lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-4459760416?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 5,
+        "idealTempMax": 31,
+        "minHumidity": 34,
         "sunlight": "high",
-        "oxygenLevel": "high",
+        "oxygenLevel": "low",
         "medicinalValues": [
-            "short",
-            "heating"
+            "Tea (specific types)"
         ],
         "advantages": [
-            "holistic",
-            "experiences"
+            "Fall color",
+            "Air cleaning"
         ],
-        "price": 177,
+        "price": 150,
         "type": "outdoor",
         "lifespan": "Perennial (3-5 Years)",
         "foliageTexture": "Matte/Textured",
@@ -3138,22 +3063,21 @@ const outdoorPlants = [
         "id": "p_out_1031",
         "name": "Pansy",
         "scientificName": "Viola tricolor",
-        "description": "Viriliter verbum consuasor constans denique contabesco. Officiis cognomen tepidus aduro coepi ullam.",
-        "imageUrl": "https://images.unsplash.com/photo-1510796260?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 6,
-        "idealTempMax": 26,
-        "minHumidity": 33,
+        "description": "The Pansy (Viola tricolor) is a beautiful outdoor specimen known for its Biennial (2 Years) lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-1260868106?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 8,
+        "idealTempMax": 32,
+        "minHumidity": 39,
         "sunlight": "high",
         "oxygenLevel": "high",
         "medicinalValues": [
-            "unlined",
-            "armchair"
+            "Expectorant"
         ],
         "advantages": [
-            "user-centric",
-            "networks"
+            "Edible",
+            "Winter Color"
         ],
-        "price": 125,
+        "price": 175,
         "type": "outdoor",
         "lifespan": "Biennial (2 Years)",
         "foliageTexture": "Matte/Textured",
@@ -3169,22 +3093,21 @@ const outdoorPlants = [
         "id": "p_out_1032",
         "name": "Snapdragon",
         "scientificName": "Antirrhinum majus",
-        "description": "Ambitus magnam vix corroboro aptus velit tamdiu ademptio alienus. Molestias amita alias defetiscor aveho adhuc thalassinus uterque tubineus.",
-        "imageUrl": "https://images.unsplash.com/photo-8324205068?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 15,
-        "idealTempMax": 27,
-        "minHumidity": 73,
+        "description": "The Snapdragon (Antirrhinum majus) is a beautiful outdoor specimen known for its Annual (1 Year) lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-5370144347?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 12,
+        "idealTempMax": 33,
+        "minHumidity": 77,
         "sunlight": "high",
-        "oxygenLevel": "low",
+        "oxygenLevel": "high",
         "medicinalValues": [
-            "moist",
-            "parade"
+            "None known"
         ],
         "advantages": [
-            "scalable",
-            "infrastructures"
+            "Fun for kids",
+            "Cut flowers"
         ],
-        "price": 32,
+        "price": 14,
         "type": "outdoor",
         "lifespan": "Annual (1 Year)",
         "foliageTexture": "Matte/Textured",
@@ -3200,22 +3123,21 @@ const outdoorPlants = [
         "id": "p_out_1033",
         "name": "Foxglove",
         "scientificName": "Digitalis purpurea",
-        "description": "Eius carcer confugo cubicularis nostrum tres subseco. Autus caelestis cunctatio vociferor tonsor coniecto aequitas.",
-        "imageUrl": "https://images.unsplash.com/photo-7870165382?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 7,
-        "idealTempMax": 26,
-        "minHumidity": 39,
+        "description": "The Foxglove (Digitalis purpurea) is a beautiful outdoor specimen known for its Biennial (2 Years) lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-5622274303?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 12,
+        "idealTempMax": 28,
+        "minHumidity": 36,
         "sunlight": "high",
-        "oxygenLevel": "high",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "flashy",
-            "zebra"
+            "Heart medication (Toxic)"
         ],
         "advantages": [
-            "cross-media",
-            "large language models"
+            "Tall spikes",
+            "Cottage garden"
         ],
-        "price": 186,
+        "price": 59,
         "type": "outdoor",
         "lifespan": "Biennial (2 Years)",
         "foliageTexture": "Matte/Textured",
@@ -3231,22 +3153,21 @@ const outdoorPlants = [
         "id": "p_out_1034",
         "name": "Bleeding Heart",
         "scientificName": "Lamprocapnos spectabilis",
-        "description": "Benevolentia deorsum cunabula ascisco pauci caveo alias. Adeo aequitas quisquam cedo quidem verbera collum coruscus conscendo stips.",
-        "imageUrl": "https://images.unsplash.com/photo-3404574127?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 13,
-        "idealTempMax": 30,
-        "minHumidity": 74,
+        "description": "The Bleeding Heart (Lamprocapnos spectabilis) is a beautiful outdoor specimen known for its Perennial (5-10 Years) lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-1409560060?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 14,
+        "idealTempMax": 35,
+        "minHumidity": 41,
         "sunlight": "high",
-        "oxygenLevel": "low",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "bare",
-            "valley"
+            "None known"
         ],
         "advantages": [
-            "revolutionary",
-            "metrics"
+            "Unique Flower",
+            "Early Bloomer"
         ],
-        "price": 179,
+        "price": 97,
         "type": "outdoor",
         "lifespan": "Perennial (5-10 Years)",
         "foliageTexture": "Matte/Textured",
@@ -3262,22 +3183,21 @@ const outdoorPlants = [
         "id": "p_out_1035",
         "name": "Coral Bells",
         "scientificName": "Heuchera",
-        "description": "Tondeo arx texo aeger creber patruus repellendus. Consectetur utroque laudantium rem quidem.",
-        "imageUrl": "https://images.unsplash.com/photo-3605760029?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 15,
-        "idealTempMax": 31,
+        "description": "The Coral Bells (Heuchera) is a beautiful outdoor specimen known for its 3-5 Years lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-1920190113?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 34,
         "minHumidity": 48,
         "sunlight": "high",
-        "oxygenLevel": "moderate",
+        "oxygenLevel": "low",
         "medicinalValues": [
-            "pastel",
-            "rawhide"
+            "Astringent (Root)"
         ],
         "advantages": [
-            "dynamic",
-            "relationships"
+            "Foliage Color",
+            "Compact"
         ],
-        "price": 134,
+        "price": 181,
         "type": "outdoor",
         "lifespan": "3-5 Years",
         "foliageTexture": "Matte/Textured",
@@ -3293,22 +3213,21 @@ const outdoorPlants = [
         "id": "p_out_1036",
         "name": "Astilbe",
         "scientificName": "Astilbe chinensis",
-        "description": "Amor vestrum titulus despecto desipio confido voco cunabula. Adiuvo ter odio asperiores vito ars.",
-        "imageUrl": "https://images.unsplash.com/photo-6828278842?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 7,
-        "idealTempMax": 26,
-        "minHumidity": 30,
+        "description": "The Astilbe (Astilbe chinensis) is a beautiful outdoor specimen known for its 10+ Years lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-3977523128?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 13,
+        "idealTempMax": 28,
+        "minHumidity": 33,
         "sunlight": "high",
-        "oxygenLevel": "high",
+        "oxygenLevel": "very-high",
         "medicinalValues": [
-            "improbable",
-            "premium"
+            "None known"
         ],
         "advantages": [
-            "back-end",
-            "schemas"
+            "Shade color",
+            "Texture"
         ],
-        "price": 55,
+        "price": 200,
         "type": "outdoor",
         "lifespan": "10+ Years",
         "foliageTexture": "Matte/Textured",
@@ -3324,22 +3243,21 @@ const outdoorPlants = [
         "id": "p_out_1037",
         "name": "Bee Balm",
         "scientificName": "Monarda didyma",
-        "description": "Astrum tertius nostrum vinum censura solvo ago comburo. Statim culpa officiis tamquam aetas crustulum culpa casso uredo incidunt.",
-        "imageUrl": "https://images.unsplash.com/photo-4278536058?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 6,
-        "idealTempMax": 30,
+        "description": "The Bee Balm (Monarda didyma) is a beautiful outdoor specimen known for its 3-5 Years lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-8554638509?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 15,
+        "idealTempMax": 25,
         "minHumidity": 53,
         "sunlight": "high",
-        "oxygenLevel": "low",
+        "oxygenLevel": "very-high",
         "medicinalValues": [
-            "palatable",
-            "premium"
+            "Antiseptic (Tea)"
         ],
         "advantages": [
-            "24/7",
-            "methodologies"
+            "Hummingbirds",
+            "Tea"
         ],
-        "price": 43,
+        "price": 197,
         "type": "outdoor",
         "lifespan": "3-5 Years",
         "foliageTexture": "Matte/Textured",
@@ -3355,22 +3273,21 @@ const outdoorPlants = [
         "id": "p_out_1038",
         "name": "Butterfly Bush",
         "scientificName": "Buddleja davidii",
-        "description": "Deludo vito eaque. Paulatim conatus ter.",
-        "imageUrl": "https://images.unsplash.com/photo-5916692434?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 10,
-        "idealTempMax": 30,
-        "minHumidity": 62,
+        "description": "The Butterfly Bush (Buddleja davidii) is a beautiful outdoor specimen known for its 10-20 Years lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-2099626477?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 12,
+        "idealTempMax": 33,
+        "minHumidity": 48,
         "sunlight": "high",
-        "oxygenLevel": "very-high",
+        "oxygenLevel": "low",
         "medicinalValues": [
-            "gaseous",
-            "deployment"
+            "None known"
         ],
         "advantages": [
-            "killer",
-            "models"
+            "Wildlife Magnet",
+            "Long Bloom"
         ],
-        "price": 119,
+        "price": 90,
         "type": "outdoor",
         "lifespan": "10-20 Years",
         "foliageTexture": "Matte/Textured",
@@ -3386,22 +3303,21 @@ const outdoorPlants = [
         "id": "p_out_1039",
         "name": "Juniper Bush",
         "scientificName": "Juniperus",
-        "description": "Adulatio vivo absconditus utpote argentum apto reprehenderit. Tego aduro ver summisse sophismata vere attollo illo.",
-        "imageUrl": "https://images.unsplash.com/photo-8244798598?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 13,
-        "idealTempMax": 31,
-        "minHumidity": 49,
+        "description": "The Juniper Bush (Juniperus) is a beautiful outdoor specimen known for its 30-70 Years lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-5795221130?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 9,
+        "idealTempMax": 29,
+        "minHumidity": 38,
         "sunlight": "high",
         "oxygenLevel": "moderate",
         "medicinalValues": [
-            "yellowish",
-            "event"
+            "Diuretic (Berry)"
         ],
         "advantages": [
-            "world-class",
-            "markets"
+            "Evergreen",
+            "Tough"
         ],
-        "price": 22,
+        "price": 110,
         "type": "outdoor",
         "lifespan": "30-70 Years",
         "foliageTexture": "Matte/Textured",
@@ -3417,22 +3333,21 @@ const outdoorPlants = [
         "id": "p_out_1040",
         "name": "Holly Bush",
         "scientificName": "Ilex aquifolium",
-        "description": "Adulatio timor candidus. Placeat tredecim color taedium corporis consectetur terebro.",
-        "imageUrl": "https://images.unsplash.com/photo-9261632195?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 6,
-        "idealTempMax": 33,
-        "minHumidity": 44,
+        "description": "The Holly Bush (Ilex aquifolium) is a beautiful outdoor specimen known for its 100+ Years lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-8328460209?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 8,
+        "idealTempMax": 29,
+        "minHumidity": 61,
         "sunlight": "high",
-        "oxygenLevel": "moderate",
+        "oxygenLevel": "very-high",
         "medicinalValues": [
-            "free",
-            "yin"
+            "None (Toxic berries)"
         ],
         "advantages": [
-            "integrated",
-            "synergies"
+            "Winter interest",
+            "Security hedge"
         ],
-        "price": 84,
+        "price": 56,
         "type": "outdoor",
         "lifespan": "100+ Years",
         "foliageTexture": "Matte/Textured",
@@ -3448,22 +3363,21 @@ const outdoorPlants = [
         "id": "p_out_1041",
         "name": "Pampas Grass",
         "scientificName": "Cortaderia selloana",
-        "description": "Adiuvo sit minus deorsum. Cimentarius desino quia deinde dens eligendi copia.",
-        "imageUrl": "https://images.unsplash.com/photo-4601801503?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 13,
-        "idealTempMax": 34,
-        "minHumidity": 37,
+        "description": "The Pampas Grass (Cortaderia selloana) is a beautiful outdoor specimen known for its 10-15 Years lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-6285698384?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 11,
+        "idealTempMax": 25,
+        "minHumidity": 71,
         "sunlight": "high",
-        "oxygenLevel": "moderate",
+        "oxygenLevel": "high",
         "medicinalValues": [
-            "vague",
-            "sightseeing"
+            "None known"
         ],
         "advantages": [
-            "end-to-end",
-            "e-commerce"
+            "Screening",
+            "Plumes"
         ],
-        "price": 90,
+        "price": 12,
         "type": "outdoor",
         "lifespan": "10-15 Years",
         "foliageTexture": "Matte/Textured",
@@ -3479,22 +3393,21 @@ const outdoorPlants = [
         "id": "p_out_1042",
         "name": "Bamboo",
         "scientificName": "Bambusa vulgaris",
-        "description": "Annus arbor deinde cicuta. Spoliatio cernuus tergeo taceo cicuta.",
-        "imageUrl": "https://images.unsplash.com/photo-9103150113?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 7,
+        "description": "The Bamboo (Bambusa vulgaris) is a beautiful outdoor specimen known for its 20-100 Years lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-6340899064?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 14,
         "idealTempMax": 26,
-        "minHumidity": 43,
+        "minHumidity": 31,
         "sunlight": "high",
         "oxygenLevel": "moderate",
         "medicinalValues": [
-            "likable",
-            "adaptation"
+            "Silica source"
         ],
         "advantages": [
-            "extensible",
-            "solutions"
+            "Screening",
+            "Fast growth"
         ],
-        "price": 163,
+        "price": 44,
         "type": "outdoor",
         "lifespan": "20-100 Years",
         "foliageTexture": "Matte/Textured",
@@ -3510,22 +3423,21 @@ const outdoorPlants = [
         "id": "p_out_1043",
         "name": "Agave",
         "scientificName": "Agave americana",
-        "description": "Vergo tabula solus alioqui vinitor. Absum spoliatio tendo subnecto.",
-        "imageUrl": "https://images.unsplash.com/photo-8125576493?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 8,
-        "idealTempMax": 31,
-        "minHumidity": 34,
+        "description": "The Agave (Agave americana) is a beautiful outdoor specimen known for its 10-30 Years lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-3324238233?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 27,
+        "minHumidity": 44,
         "sunlight": "high",
-        "oxygenLevel": "very-high",
+        "oxygenLevel": "high",
         "medicinalValues": [
-            "reckless",
-            "negotiation"
+            "Syrup/Sweetener"
         ],
         "advantages": [
-            "killer",
-            "content"
+            "Architectural",
+            "Drought proof"
         ],
-        "price": 131,
+        "price": 98,
         "type": "outdoor",
         "lifespan": "10-30 Years",
         "foliageTexture": "Matte/Textured",
@@ -3541,22 +3453,21 @@ const outdoorPlants = [
         "id": "p_out_1044",
         "name": "Prickly Pear",
         "scientificName": "Opuntia ficus-indica",
-        "description": "Distinctio cariosus colo thesaurus bardus civitas vinco voveo creator. Annus carbo solutio auctus versus causa coniuratio suspendo nesciunt cupressus.",
-        "imageUrl": "https://images.unsplash.com/photo-6413962686?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 10,
-        "idealTempMax": 35,
-        "minHumidity": 33,
+        "description": "The Prickly Pear (Opuntia ficus-indica) is a beautiful outdoor specimen known for its 20+ Years lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-7894178128?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 8,
+        "idealTempMax": 29,
+        "minHumidity": 43,
         "sunlight": "high",
         "oxygenLevel": "moderate",
         "medicinalValues": [
-            "haunting",
-            "couch"
+            "Lower blood sugar"
         ],
         "advantages": [
-            "bleeding-edge",
-            "ROI"
+            "Edible fruit/pad",
+            "Barrier"
         ],
-        "price": 190,
+        "price": 181,
         "type": "outdoor",
         "lifespan": "20+ Years",
         "foliageTexture": "Matte/Textured",
@@ -3572,22 +3483,22 @@ const outdoorPlants = [
         "id": "p_out_1045",
         "name": "Rosemary",
         "scientificName": "Salvia rosmarinus",
-        "description": "Hic comburo admiratio audacia canonicus aiunt. Centum confero quam.",
-        "imageUrl": "https://images.unsplash.com/photo-2190055971?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 12,
-        "idealTempMax": 28,
-        "minHumidity": 70,
+        "description": "The Rosemary (Salvia rosmarinus) is a beautiful outdoor specimen known for its 15-20 Years lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-5347255527?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 5,
+        "idealTempMax": 33,
+        "minHumidity": 74,
         "sunlight": "high",
-        "oxygenLevel": "low",
+        "oxygenLevel": "high",
         "medicinalValues": [
-            "remorseful",
-            "smog"
+            "Memory boost",
+            "Digestion"
         ],
         "advantages": [
-            "cross-platform",
-            "markets"
+            "Edible",
+            "Drought resistant"
         ],
-        "price": 26,
+        "price": 117,
         "type": "outdoor",
         "lifespan": "15-20 Years",
         "foliageTexture": "Matte/Textured",
@@ -3603,22 +3514,22 @@ const outdoorPlants = [
         "id": "p_out_1046",
         "name": "Thyme",
         "scientificName": "Thymus vulgaris",
-        "description": "Asperiores attollo absum vinculum iste congregatio virga corroboro. Solio theca denuo vos theca vaco timor alii corporis.",
-        "imageUrl": "https://images.unsplash.com/photo-7134371197?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 8,
-        "idealTempMax": 34,
-        "minHumidity": 56,
+        "description": "The Thyme (Thymus vulgaris) is a beautiful outdoor specimen known for its 5-10 Years lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-8792752344?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 6,
+        "idealTempMax": 26,
+        "minHumidity": 60,
         "sunlight": "high",
-        "oxygenLevel": "moderate",
+        "oxygenLevel": "low",
         "medicinalValues": [
-            "entire",
-            "drug"
+            "Cough relief",
+            "Antiseptic"
         ],
         "advantages": [
-            "transparent",
-            "ROI"
+            "Groundcover",
+            "Edible"
         ],
-        "price": 161,
+        "price": 35,
         "type": "outdoor",
         "lifespan": "5-10 Years",
         "foliageTexture": "Matte/Textured",
@@ -3634,22 +3545,22 @@ const outdoorPlants = [
         "id": "p_out_1047",
         "name": "Mint",
         "scientificName": "Mentha",
-        "description": "Suppellex pax ascit carcer. Crepusculum peior pax.",
-        "imageUrl": "https://images.unsplash.com/photo-4276003178?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 15,
-        "idealTempMax": 26,
-        "minHumidity": 70,
+        "description": "The Mint (Mentha) is a beautiful outdoor specimen known for its Perennial (Invasive) lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-1525658380?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 14,
+        "idealTempMax": 34,
+        "minHumidity": 40,
         "sunlight": "high",
-        "oxygenLevel": "moderate",
+        "oxygenLevel": "low",
         "medicinalValues": [
-            "back",
-            "settler"
+            "Digestion",
+            "Headache"
         ],
         "advantages": [
-            "cross-platform",
-            "schemas"
+            "Tea",
+            "Fast growing"
         ],
-        "price": 175,
+        "price": 102,
         "type": "outdoor",
         "lifespan": "Perennial (Invasive)",
         "foliageTexture": "Matte/Textured",
@@ -3665,22 +3576,22 @@ const outdoorPlants = [
         "id": "p_out_1048",
         "name": "Sage",
         "scientificName": "Salvia officinalis",
-        "description": "Esse delectatio supra via avarus annus solus aestivus vulgaris. Tracto error aperiam adfectus.",
-        "imageUrl": "https://images.unsplash.com/photo-3716437954?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 10,
-        "idealTempMax": 28,
-        "minHumidity": 30,
+        "description": "The Sage (Salvia officinalis) is a beautiful outdoor specimen known for its 5-10 Years lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-4015725694?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 7,
+        "idealTempMax": 35,
+        "minHumidity": 54,
         "sunlight": "high",
         "oxygenLevel": "moderate",
         "medicinalValues": [
-            "shy",
-            "handful"
+            "Sore throat",
+            "Memory"
         ],
         "advantages": [
-            "holistic",
-            "initiatives"
+            "Edible",
+            "Grey foliage"
         ],
-        "price": 139,
+        "price": 92,
         "type": "outdoor",
         "lifespan": "5-10 Years",
         "foliageTexture": "Matte/Textured",
@@ -3696,22 +3607,21 @@ const outdoorPlants = [
         "id": "p_out_1049",
         "name": "Strawberry",
         "scientificName": "Fragaria x ananassa",
-        "description": "Theatrum astrum clibanus sonitus dolor timor quae. Curvo tabernus torrens tenus.",
-        "imageUrl": "https://images.unsplash.com/photo-9315224356?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 9,
-        "idealTempMax": 27,
-        "minHumidity": 80,
+        "description": "The Strawberry (Fragaria x ananassa) is a beautiful outdoor specimen known for its 3-5 Years lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-7153829149?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 7,
+        "idealTempMax": 35,
+        "minHumidity": 41,
         "sunlight": "high",
-        "oxygenLevel": "very-high",
+        "oxygenLevel": "high",
         "medicinalValues": [
-            "awesome",
-            "council"
+            "Vitamin C"
         ],
         "advantages": [
-            "ubiquitous",
-            "infrastructures"
+            "Delicious fruit",
+            "Groundcover"
         ],
-        "price": 21,
+        "price": 72,
         "type": "outdoor",
         "lifespan": "3-5 Years",
         "foliageTexture": "Matte/Textured",
@@ -3727,22 +3637,21 @@ const outdoorPlants = [
         "id": "p_out_1050",
         "name": "Creeping Phlox",
         "scientificName": "Phlox subulata",
-        "description": "Temperantia ustilo ventito utilis capitulus decet. Officia teneo autus assumenda.",
-        "imageUrl": "https://images.unsplash.com/photo-8027517313?auto=format&fit=crop&w=800&q=80",
+        "description": "The Creeping Phlox (Phlox subulata) is a beautiful outdoor specimen known for its 5-10 Years lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-2264063385?auto=format&fit=crop&w=800&q=80",
         "idealTempMin": 10,
-        "idealTempMax": 33,
-        "minHumidity": 43,
+        "idealTempMax": 27,
+        "minHumidity": 57,
         "sunlight": "high",
-        "oxygenLevel": "low",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "baggy",
-            "tabletop"
+            "None known"
         ],
         "advantages": [
-            "quantum",
-            "interfaces"
+            "Carpet of color",
+            "Spring bloom"
         ],
-        "price": 174,
+        "price": 33,
         "type": "outdoor",
         "lifespan": "5-10 Years",
         "foliageTexture": "Matte/Textured",
@@ -3758,22 +3667,21 @@ const outdoorPlants = [
         "id": "p_out_1051",
         "name": "Lamb's Ear",
         "scientificName": "Stachys byzantina",
-        "description": "Depromo tribuo pauper valens depulso ascit. Adflicto viridis aetas theca cogito spes adstringo adflicto.",
-        "imageUrl": "https://images.unsplash.com/photo-9107546220?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 9,
-        "idealTempMax": 34,
-        "minHumidity": 51,
+        "description": "The Lamb's Ear (Stachys byzantina) is a beautiful outdoor specimen known for its Perennial lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-8802418591?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 6,
+        "idealTempMax": 31,
+        "minHumidity": 49,
         "sunlight": "high",
-        "oxygenLevel": "low",
+        "oxygenLevel": "very-high",
         "medicinalValues": [
-            "silent",
-            "pecan"
+            "Antimicrobial Bandage"
         ],
         "advantages": [
-            "interactive",
-            "convergence"
+            "Texture",
+            "Drought Tolerant"
         ],
-        "price": 58,
+        "price": 138,
         "type": "outdoor",
         "lifespan": "Perennial",
         "foliageTexture": "Matte/Textured",
@@ -3789,22 +3697,21 @@ const outdoorPlants = [
         "id": "p_out_1052",
         "name": "Lantana",
         "scientificName": "Lantana camara",
-        "description": "Subito ulterius nisi taceo candidus cubicularis turba taceo neque casus. Desidero utpote sapiente certus quia coerceo ter bellum.",
-        "imageUrl": "https://images.unsplash.com/photo-5206864734?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 14,
-        "idealTempMax": 35,
-        "minHumidity": 54,
+        "description": "The Lantana (Lantana camara) is a beautiful outdoor specimen known for its Annual/Perennial lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-5840469103?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 9,
+        "idealTempMax": 30,
+        "minHumidity": 76,
         "sunlight": "high",
         "oxygenLevel": "moderate",
         "medicinalValues": [
-            "valuable",
-            "director"
+            "None (Toxic berries)"
         ],
         "advantages": [
-            "bleeding-edge",
-            "e-commerce"
+            "Butterfly Magnet",
+            "Heat Proof"
         ],
-        "price": 171,
+        "price": 157,
         "type": "outdoor",
         "lifespan": "Annual/Perennial",
         "foliageTexture": "Matte/Textured",
@@ -3820,22 +3727,21 @@ const outdoorPlants = [
         "id": "p_out_1053",
         "name": "Moonflower",
         "scientificName": "Ipomoea alba",
-        "description": "Via cohaero tamen vergo coaegresco appositus termes porro arguo. Supplanto cetera tener urbanus.",
-        "imageUrl": "https://images.unsplash.com/photo-4270043399?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 10,
-        "idealTempMax": 26,
-        "minHumidity": 77,
+        "description": "The Moonflower (Ipomoea alba) is a beautiful outdoor specimen known for its Annual lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-8134517057?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 6,
+        "idealTempMax": 25,
+        "minHumidity": 54,
         "sunlight": "high",
         "oxygenLevel": "high",
         "medicinalValues": [
-            "strict",
-            "harp"
+            "None"
         ],
         "advantages": [
-            "visionary",
-            "models"
+            "Night bloom",
+            "Fragrance"
         ],
-        "price": 27,
+        "price": 173,
         "type": "outdoor",
         "lifespan": "Annual",
         "foliageTexture": "Matte/Textured",
@@ -3851,22 +3757,21 @@ const outdoorPlants = [
         "id": "p_out_1054",
         "name": "Morning Glory",
         "scientificName": "Ipomoea",
-        "description": "Apparatus ab cursus temporibus pecus utroque sequi nam. Veritatis adficio cui aggero quam vestrum pauper subseco.",
-        "imageUrl": "https://images.unsplash.com/photo-3913670127?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 9,
-        "idealTempMax": 35,
-        "minHumidity": 42,
+        "description": "The Morning Glory (Ipomoea) is a beautiful outdoor specimen known for its Annual lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-8676430795?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 15,
+        "idealTempMax": 29,
+        "minHumidity": 71,
         "sunlight": "high",
-        "oxygenLevel": "high",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "sociable",
-            "reboot"
+            "None (Toxic seeds)"
         ],
         "advantages": [
-            "vertical",
-            "relationships"
+            "Fast climber",
+            "Daily blooms"
         ],
-        "price": 28,
+        "price": 139,
         "type": "outdoor",
         "lifespan": "Annual",
         "foliageTexture": "Matte/Textured",
@@ -3882,22 +3787,21 @@ const outdoorPlants = [
         "id": "p_out_1055",
         "name": "Moss Rose",
         "scientificName": "Portulaca grandiflora",
-        "description": "Aggero vomer praesentium advenio bene cur temeritas. Valeo supellex urbs culpa aeneus depereo.",
-        "imageUrl": "https://images.unsplash.com/photo-8317730451?auto=format&fit=crop&w=800&q=80",
+        "description": "The Moss Rose (Portulaca grandiflora) is a beautiful outdoor specimen known for its Annual lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-6047041116?auto=format&fit=crop&w=800&q=80",
         "idealTempMin": 6,
-        "idealTempMax": 30,
-        "minHumidity": 76,
+        "idealTempMax": 27,
+        "minHumidity": 31,
         "sunlight": "high",
-        "oxygenLevel": "very-high",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "curly",
-            "gymnast"
+            "None"
         ],
         "advantages": [
-            "leading-edge",
-            "methodologies"
+            "Heat lover",
+            "Succulent"
         ],
-        "price": 30,
+        "price": 105,
         "type": "outdoor",
         "lifespan": "Annual",
         "foliageTexture": "Matte/Textured",
@@ -3913,22 +3817,21 @@ const outdoorPlants = [
         "id": "p_out_1056",
         "name": "Nasturtium",
         "scientificName": "Tropaeolum majus",
-        "description": "Magnam tersus degenero illo adfectus verbum doloribus ut. Bos turbo sulum.",
-        "imageUrl": "https://images.unsplash.com/photo-8682658475?auto=format&fit=crop&w=800&q=80",
+        "description": "The Nasturtium (Tropaeolum majus) is a beautiful outdoor specimen known for its Annual lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-3346931143?auto=format&fit=crop&w=800&q=80",
         "idealTempMin": 5,
-        "idealTempMax": 28,
-        "minHumidity": 36,
+        "idealTempMax": 31,
+        "minHumidity": 53,
         "sunlight": "high",
-        "oxygenLevel": "low",
+        "oxygenLevel": "high",
         "medicinalValues": [
-            "breakable",
-            "cork"
+            "Antibiotic"
         ],
         "advantages": [
-            "compelling",
-            "markets"
+            "Edible flower/leaf",
+            "Fast"
         ],
-        "price": 181,
+        "price": 133,
         "type": "outdoor",
         "lifespan": "Annual",
         "foliageTexture": "Matte/Textured",
@@ -3944,22 +3847,21 @@ const outdoorPlants = [
         "id": "p_out_1057",
         "name": "Periwinkle",
         "scientificName": "Vinca minor",
-        "description": "Adhuc delectatio vitium. Aegre minus attero assentator.",
-        "imageUrl": "https://images.unsplash.com/photo-4221551164?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 14,
-        "idealTempMax": 29,
-        "minHumidity": 77,
+        "description": "The Periwinkle (Vinca minor) is a beautiful outdoor specimen known for its Perennial lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-7968453057?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 13,
+        "idealTempMax": 26,
+        "minHumidity": 42,
         "sunlight": "high",
         "oxygenLevel": "very-high",
         "medicinalValues": [
-            "menacing",
-            "pantyhose"
+            "Circulatory aid"
         ],
         "advantages": [
-            "compelling",
-            "interfaces"
+            "Shade cover",
+            "Evergreen"
         ],
-        "price": 124,
+        "price": 193,
         "type": "outdoor",
         "lifespan": "Perennial",
         "foliageTexture": "Matte/Textured",
@@ -3975,22 +3877,21 @@ const outdoorPlants = [
         "id": "p_out_1058",
         "name": "Poppy",
         "scientificName": "Papaver somniferum",
-        "description": "Vilitas tamisium benevolentia turbo demonstro turbo deprimo laborum. Capitulus tabula aiunt theca vitiosus aliqua spiculum ipsa.",
-        "imageUrl": "https://images.unsplash.com/photo-1665098629?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 12,
-        "idealTempMax": 32,
-        "minHumidity": 62,
+        "description": "The Poppy (Papaver somniferum) is a beautiful outdoor specimen known for its Annual lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-7367124358?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 14,
+        "idealTempMax": 35,
+        "minHumidity": 48,
         "sunlight": "high",
-        "oxygenLevel": "very-high",
+        "oxygenLevel": "low",
         "medicinalValues": [
-            "idolized",
-            "peony"
+            "Pain relief (Opium)"
         ],
         "advantages": [
-            "distributed",
-            "schemas"
+            "Showy",
+            "Self sowing"
         ],
-        "price": 35,
+        "price": 184,
         "type": "outdoor",
         "lifespan": "Annual",
         "foliageTexture": "Matte/Textured",
@@ -4006,22 +3907,21 @@ const outdoorPlants = [
         "id": "p_out_1059",
         "name": "Primrose",
         "scientificName": "Primula vulgaris",
-        "description": "Alius statua cupio cariosus. Tutis crustulum aureus coniuratio adfero tener.",
-        "imageUrl": "https://images.unsplash.com/photo-8604763330?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 12,
-        "idealTempMax": 30,
-        "minHumidity": 68,
+        "description": "The Primrose (Primula vulgaris) is a beautiful outdoor specimen known for its Perennial lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-3386857878?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 9,
+        "idealTempMax": 32,
+        "minHumidity": 73,
         "sunlight": "high",
         "oxygenLevel": "moderate",
         "medicinalValues": [
-            "dull",
-            "meadow"
+            "None known"
         ],
         "advantages": [
-            "value-added",
-            "initiatives"
+            "Early spring color",
+            "Shade"
         ],
-        "price": 104,
+        "price": 196,
         "type": "outdoor",
         "lifespan": "Perennial",
         "foliageTexture": "Matte/Textured",
@@ -4037,22 +3937,21 @@ const outdoorPlants = [
         "id": "p_out_1060",
         "name": "Ranunculus",
         "scientificName": "Ranunculus asiaticus",
-        "description": "Vix civis cauda calculus color communis audax. Aedificium utroque illo.",
-        "imageUrl": "https://images.unsplash.com/photo-3054438703?auto=format&fit=crop&w=800&q=80",
+        "description": "The Ranunculus (Ranunculus asiaticus) is a beautiful outdoor specimen known for its Perennial lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-8664259104?auto=format&fit=crop&w=800&q=80",
         "idealTempMin": 7,
-        "idealTempMax": 30,
-        "minHumidity": 47,
+        "idealTempMax": 32,
+        "minHumidity": 33,
         "sunlight": "high",
-        "oxygenLevel": "moderate",
+        "oxygenLevel": "very-high",
         "medicinalValues": [
-            "tender",
-            "tusk"
+            "None"
         ],
         "advantages": [
-            "user-centric",
-            "schemas"
+            "Rose-like flowers",
+            "Cut flower"
         ],
-        "price": 20,
+        "price": 185,
         "type": "outdoor",
         "lifespan": "Perennial",
         "foliageTexture": "Matte/Textured",
@@ -4068,20 +3967,19 @@ const outdoorPlants = [
         "id": "p_out_1061",
         "name": "Salvia",
         "scientificName": "Salvia splendens",
-        "description": "Utique utor curso a ubi. Desolo thermae utique volubilis ter.",
-        "imageUrl": "https://images.unsplash.com/photo-8699167349?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 8,
-        "idealTempMax": 31,
-        "minHumidity": 34,
+        "description": "The Salvia (Salvia splendens) is a beautiful outdoor specimen known for its Annual lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-9785716165?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 13,
+        "idealTempMax": 35,
+        "minHumidity": 33,
         "sunlight": "high",
-        "oxygenLevel": "very-high",
+        "oxygenLevel": "high",
         "medicinalValues": [
-            "granular",
-            "caption"
+            "None"
         ],
         "advantages": [
-            "frictionless",
-            "systems"
+            "Red spikes",
+            "Hummingbirds"
         ],
         "price": 126,
         "type": "outdoor",
@@ -4099,22 +3997,21 @@ const outdoorPlants = [
         "id": "p_out_1062",
         "name": "Sedum",
         "scientificName": "Hylotelephium spectabile",
-        "description": "Alius xiphias dolorem arbitro vulgo aggero. Arcesso suppono solus coerceo.",
-        "imageUrl": "https://images.unsplash.com/photo-5032088627?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 7,
-        "idealTempMax": 34,
-        "minHumidity": 56,
+        "description": "The Sedum (Hylotelephium spectabile) is a beautiful outdoor specimen known for its Perennial lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-8053030342?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 5,
+        "idealTempMax": 30,
+        "minHumidity": 67,
         "sunlight": "high",
         "oxygenLevel": "moderate",
         "medicinalValues": [
-            "acidic",
-            "majority"
+            "Burn soothing"
         ],
         "advantages": [
-            "24/7",
-            "supply-chains"
+            "Late bloom",
+            "Succulent"
         ],
-        "price": 96,
+        "price": 102,
         "type": "outdoor",
         "lifespan": "Perennial",
         "foliageTexture": "Matte/Textured",
@@ -4130,22 +4027,21 @@ const outdoorPlants = [
         "id": "p_out_1063",
         "name": "Shasta Daisy",
         "scientificName": "Leucanthemum x superbum",
-        "description": "Contigo decimus molestias sunt utrum ut vigilo exercitationem. Appello tubineus audacia tribuo uberrime cimentarius.",
-        "imageUrl": "https://images.unsplash.com/photo-2553824258?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 33,
-        "minHumidity": 72,
+        "description": "The Shasta Daisy (Leucanthemum x superbum) is a beautiful outdoor specimen known for its 3-5 Years lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-5773675209?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 13,
+        "idealTempMax": 28,
+        "minHumidity": 70,
         "sunlight": "high",
         "oxygenLevel": "very-high",
         "medicinalValues": [
-            "favorite",
-            "excess"
+            "None known"
         ],
         "advantages": [
-            "AI-driven",
-            "niches"
+            "Classic white",
+            "Cut flower"
         ],
-        "price": 162,
+        "price": 17,
         "type": "outdoor",
         "lifespan": "3-5 Years",
         "foliageTexture": "Matte/Textured",
@@ -4161,22 +4057,21 @@ const outdoorPlants = [
         "id": "p_out_1064",
         "name": "Sweet Alyssum",
         "scientificName": "Lobularia maritima",
-        "description": "Cupressus causa stipes arto expedita voluptates videlicet pax veniam depromo. Valeo tribuo viscus velum debeo cruentus sumo uredo minima vivo.",
-        "imageUrl": "https://images.unsplash.com/photo-9354613444?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 6,
-        "idealTempMax": 34,
-        "minHumidity": 31,
+        "description": "The Sweet Alyssum (Lobularia maritima) is a beautiful outdoor specimen known for its Annual lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-9535040551?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 9,
+        "idealTempMax": 33,
+        "minHumidity": 41,
         "sunlight": "high",
-        "oxygenLevel": "high",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "kosher",
-            "deck"
+            "None"
         ],
         "advantages": [
-            "decentralized",
-            "paradigms"
+            "Honey scent",
+            "Edging"
         ],
-        "price": 168,
+        "price": 166,
         "type": "outdoor",
         "lifespan": "Annual",
         "foliageTexture": "Matte/Textured",
@@ -4192,22 +4087,21 @@ const outdoorPlants = [
         "id": "p_out_1065",
         "name": "Sweet Pea",
         "scientificName": "Lathyrus odoratus",
-        "description": "Cuppedia atrox textus. Defungo aegrus adhaero arx cui animadverto et caterva vestrum trado.",
-        "imageUrl": "https://images.unsplash.com/photo-9462202148?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 7,
-        "idealTempMax": 35,
-        "minHumidity": 46,
+        "description": "The Sweet Pea (Lathyrus odoratus) is a beautiful outdoor specimen known for its Annual lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-2908331424?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 9,
+        "idealTempMax": 27,
+        "minHumidity": 53,
         "sunlight": "high",
         "oxygenLevel": "low",
         "medicinalValues": [
-            "grounded",
-            "switchboard"
+            "None (Toxic)"
         ],
         "advantages": [
-            "24/7",
-            "AI"
+            "Scent",
+            "Climber"
         ],
-        "price": 32,
+        "price": 195,
         "type": "outdoor",
         "lifespan": "Annual",
         "foliageTexture": "Matte/Textured",
@@ -4223,22 +4117,21 @@ const outdoorPlants = [
         "id": "p_out_1066",
         "name": "Verbena",
         "scientificName": "Verbena bonariensis",
-        "description": "Cimentarius architecto cavus. Paens acervus autem truculenter clam despecto.",
-        "imageUrl": "https://images.unsplash.com/photo-4184376193?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 7,
-        "idealTempMax": 35,
-        "minHumidity": 31,
+        "description": "The Verbena (Verbena bonariensis) is a beautiful outdoor specimen known for its Annual/Perennial lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-8331763968?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 11,
+        "idealTempMax": 34,
+        "minHumidity": 70,
         "sunlight": "high",
-        "oxygenLevel": "very-high",
+        "oxygenLevel": "low",
         "medicinalValues": [
-            "gracious",
-            "swim"
+            "Relaxant"
         ],
         "advantages": [
-            "viral",
-            "architectures"
+            "Airy habit",
+            "Pollinators"
         ],
-        "price": 161,
+        "price": 59,
         "type": "outdoor",
         "lifespan": "Annual/Perennial",
         "foliageTexture": "Matte/Textured",
@@ -4254,22 +4147,21 @@ const outdoorPlants = [
         "id": "p_out_1067",
         "name": "Yarrow",
         "scientificName": "Achillea millefolium",
-        "description": "Vicissitudo ea eos textilis arbustum veniam. Urbanus substantia carpo autem.",
-        "imageUrl": "https://images.unsplash.com/photo-4731363612?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 15,
-        "idealTempMax": 28,
-        "minHumidity": 57,
+        "description": "The Yarrow (Achillea millefolium) is a beautiful outdoor specimen known for its Perennial lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-1431829108?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 13,
+        "idealTempMax": 33,
+        "minHumidity": 80,
         "sunlight": "high",
-        "oxygenLevel": "high",
+        "oxygenLevel": "moderate",
         "medicinalValues": [
-            "well-made",
-            "barracks"
+            "Stops bleeding"
         ],
         "advantages": [
-            "proactive",
-            "large language models"
+            "Native",
+            "Tough"
         ],
-        "price": 162,
+        "price": 125,
         "type": "outdoor",
         "lifespan": "Perennial",
         "foliageTexture": "Matte/Textured",
@@ -4285,22 +4177,21 @@ const outdoorPlants = [
         "id": "p_out_1068",
         "name": "Zinnia",
         "scientificName": "Zinnia elegans",
-        "description": "Aliquam speculum temporibus decor dedico ulciscor cotidie porro urbanus. Voro conscendo spes crudelis a.",
-        "imageUrl": "https://images.unsplash.com/photo-1323638697?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 8,
-        "idealTempMax": 29,
-        "minHumidity": 67,
+        "description": "The Zinnia (Zinnia elegans) is a beautiful outdoor specimen known for its Annual lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-8719282511?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 12,
+        "idealTempMax": 33,
+        "minHumidity": 55,
         "sunlight": "high",
         "oxygenLevel": "very-high",
         "medicinalValues": [
-            "voluminous",
-            "cricket"
+            "None"
         ],
         "advantages": [
-            "interactive",
-            "synergies"
+            "Bright colors",
+            "Cut flower"
         ],
-        "price": 50,
+        "price": 25,
         "type": "outdoor",
         "lifespan": "Annual",
         "foliageTexture": "Matte/Textured",
@@ -4316,22 +4207,21 @@ const outdoorPlants = [
         "id": "p_out_1069",
         "name": "Cosmos",
         "scientificName": "Cosmos bipinnatus",
-        "description": "Uberrime torrens sumptus utilis vestrum deporto commodi. Synagoga colo animus defetiscor.",
-        "imageUrl": "https://images.unsplash.com/photo-9547433207?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 15,
-        "idealTempMax": 25,
-        "minHumidity": 48,
+        "description": "The Cosmos (Cosmos bipinnatus) is a beautiful outdoor specimen known for its Annual lifespan. It thrives in natural outdoor environments and brings a touch of nature to your space.",
+        "imageUrl": "https://images.unsplash.com/photo-2209265171?auto=format&fit=crop&w=800&q=80",
+        "idealTempMin": 7,
+        "idealTempMax": 28,
+        "minHumidity": 41,
         "sunlight": "high",
-        "oxygenLevel": "moderate",
+        "oxygenLevel": "high",
         "medicinalValues": [
-            "sparse",
-            "overload"
+            "None"
         ],
         "advantages": [
-            "ubiquitous",
-            "web services"
+            "Feathery",
+            "Easy from seed"
         ],
-        "price": 25,
+        "price": 32,
         "type": "outdoor",
         "lifespan": "Annual",
         "foliageTexture": "Matte/Textured",

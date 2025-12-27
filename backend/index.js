@@ -1469,6 +1469,30 @@ app.post('/api/admin/settings', auth, admin, async (req, res) => {
     } catch (e) { res.status(500).json({ error: e.message }); }
 });
 
+// --- ADMIN SEED ROUTE (SYSTEM FIX) ---
+app.post('/api/admin/seed-real-data', async (req, res) => {
+    try {
+        console.log("Creating/Updating Real Plant Data...");
+        const { indoorPlants, outdoorPlants } = require('./plant-data');
+        const allPlants = [...indoorPlants, ...outdoorPlants];
+
+        let count = 0;
+        for (const plant of allPlants) {
+            await Plant.updateOne(
+                { id: plant.id },
+                { $set: plant },
+                { upsert: true }
+            );
+            count++;
+        }
+        console.log(`Successfully updated ${count} plants with REAL data.`);
+        res.json({ success: true, message: `Updated ${count} plants with real descriptions, medicinal values, and advantages.` });
+    } catch (e) {
+        console.error("Seed Error:", e);
+        res.status(500).json({ error: e.message });
+    }
+});
+
 app.get('/', (req, res) => res.send('VanaMap API v3.0 - Secure & Fast'));
 
 const PORT = process.env.PORT || 5000;

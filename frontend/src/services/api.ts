@@ -1,5 +1,7 @@
 import type { Plant, Vendor } from '../types';
 
+import { PLANTS } from '../data/mocks';
+
 const API_URL = import.meta.env.VITE_API_URL || 'https://plantoxy.onrender.com/api';
 
 const getHeaders = () => {
@@ -20,14 +22,13 @@ export const fetchPlants = async (): Promise<Plant[]> => {
     try {
         const response = await fetch(`${API_URL}/plants`);
         if (!response.ok) {
-            const errorText = await response.text();
-            console.error(`Failed to fetch plants: ${response.status} ${response.statusText}`, errorText);
-            throw new Error(`Failed to fetch plants: ${response.status}`);
+            console.warn("API Error, falling back to mocks.");
+            return PLANTS; // Fallback to mocks on server error
         }
         return await response.json();
     } catch (error) {
-        console.error("Error fetching plants:", error);
-        return [];
+        console.error("Error fetching plants, using mocks:", error);
+        return PLANTS; // Fallback to mocks on network error
     }
 };
 
