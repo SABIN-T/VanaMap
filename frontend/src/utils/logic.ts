@@ -1,5 +1,45 @@
 import type { Plant } from '../types';
 
+/**
+ * Calculates the biological efficiency of a plant (0.0 to 1.0) based on environmental parameters.
+ */
+export const calculateBiologicalEfficiency = (
+    plant: Plant,
+    temp: number,
+    humidity: number,
+    lightPercent: number = 70
+): number => {
+    // 1. Temperature Efficiency (Gaussian Curve centered at ideal midpoint)
+    const tOpt = (plant.idealTempMin + plant.idealTempMax) / 2;
+    const tRange = plant.idealTempMax - plant.idealTempMin;
+    // Spread of the curve depends on the plant's stated tolerance range
+    const sigma = Math.max(5, tRange / 1.5);
+
+    let tempFactor = Math.exp(-Math.pow(temp - tOpt, 2) / (2 * Math.pow(sigma, 2)));
+
+    // Extreme lethal thresholds
+    if (temp < plant.idealTempMin - 12 || temp > plant.idealTempMax + 15) tempFactor = 0;
+    else if (temp < plant.idealTempMin - 5 || temp > plant.idealTempMax + 8) tempFactor *= 0.5;
+
+    // 2. Humidity Efficiency
+    let humidityFactor = 1.0;
+    if (humidity < plant.minHumidity) {
+        const diff = plant.minHumidity - humidity;
+        const isResilient = plant.stemStructure?.includes('Succulent') || plant.description?.toLowerCase().includes('cactus');
+        humidityFactor = isResilient ? Math.max(0.4, 1 - (diff / 60)) : Math.max(0.1, 1 - (diff / 30));
+    } else if (humidity > 85 && (plant.ecosystem?.toLowerCase().includes('desert') || plant.minHumidity < 30)) {
+        // High humidity penalty for desert plants (rot risk)
+        humidityFactor = 0.7;
+    }
+
+    // 3. Light Efficiency
+    // We assume the input lightPercent (0-100) is relative to the plant's specific needs.
+    // If the plant needs High light and we have 20%, it's bad.
+    const lightFactor = Math.max(0.2, lightPercent / 100);
+
+    return tempFactor * humidityFactor * lightFactor;
+};
+
 export const calculateAptness = (
     plant: Plant,
     currentTemp: number,
@@ -8,83 +48,38 @@ export const calculateAptness = (
     normalizationBase?: number
 ): number => {
     // === SCORING CONSTANTS ===
-    // Total raw score potential: ~100 points without max capping, but we will clamp.
-    // 1. Temperature: 40 pts
-    // 2. Humidity: 30 pts
-    // 3. Resilience/Bonus: 20 pts
-    // 4. AQI Relevance: 10 pts
+    // Total potential: 100 points
 
-    // --- 1. Temperature Check (Critical) ---
-    let tempScore = 40;
-    // Buffer: Plants can usually survive 2-3 degrees outside "ideal" before strict penalty
-    const buffer = 3;
+    // 1. Biological Match: 70 pts
+    const bioEfficiency = calculateBiologicalEfficiency(plant, currentTemp, avgHumidity);
+    let bioScore = bioEfficiency * 70;
 
-    if (currentTemp < (plant.idealTempMin - buffer)) {
-        // Cold stress is severe
-        const diff = (plant.idealTempMin - buffer) - currentTemp;
-        tempScore -= (diff * 4); // Lose 4 points per degree below safe min
-    } else if (currentTemp > (plant.idealTempMax + buffer)) {
-        // Heat stress
-        const diff = currentTemp - (plant.idealTempMax + buffer);
-        tempScore -= (diff * 3); // Lose 3 points per degree above safe max
-    }
-    // Boost for wide temperature tolerance
-    if (plant.idealTempMax - plant.idealTempMin > 15) tempScore += 5;
-
-
-    // --- 2. Humidity Check (Survival) ---
-    let humidityScore = 30;
-    if (avgHumidity < plant.minHumidity) {
-        // Dry air stress
-        const diff = plant.minHumidity - avgHumidity;
-        const isSucculent = plant.stemStructure?.includes('Succulent') || plant.description?.toLowerCase().includes('cactus') || plant.foliageTexture?.includes('Waxy');
-
-        // Succulents forgive dryness better
-        const penaltyFactor = isSucculent ? 0.5 : 2;
-        humidityScore -= (diff * penaltyFactor);
-    } else {
-        // Perfect humidity bonus
-        if (avgHumidity >= plant.minHumidity + 10) humidityScore += 5;
-    }
-
-
-    // --- 3. Property & Resilience Bonuses ---
-    let propertyScore = 0;
+    // 2. Resilience Bonus: 15 pts
+    let resilienceScore = 0;
     const desc = (plant.description || "").toLowerCase();
+    if (desc.includes('hardy') || desc.includes('tough') || desc.includes('low maintenance')) resilienceScore += 10;
+    if (plant.idealTempMax - plant.idealTempMin > 18) resilienceScore += 5;
 
-    // Hardiness check
-    if (desc.includes('hardy') || desc.includes('tough') || desc.includes('indestructible')) propertyScore += 10;
-    // Drought tolerance
-    if (desc.includes('drought') || plant.minHumidity < 35) propertyScore += 5;
-
-
-    // --- 4. Air Quality Relevance ---
+    // 3. Air Quality Relevance: 15 pts
     let aqiScore = 0;
-    const isPurifier = plant.medicinalValues?.includes('Air purification') || plant.advantages?.some(a => a.toLowerCase().includes('purif')) || desc.includes('toxin');
+    const isPurifier = plant.medicinalValues?.includes('Air purification') ||
+        plant.advantages?.some(a => a.toLowerCase().includes('purif')) ||
+        desc.includes('toxin') || desc.includes('benzene');
 
     if (aqi > 100) {
         // In high pollution, purifiers are MORE apt (necessary)
-        if (isPurifier) aqiScore = 20;
+        if (isPurifier) aqiScore = 15;
         else aqiScore = -10; // Sensitive plants suffer
-    } else if (aqi > 50 && isPurifier) {
-        aqiScore = 10;
+    } else if (isPurifier) {
+        aqiScore = 5 + (aqi / 20); // Slight boost as AQI worsens
     }
 
-
     // === FINAL AGGREGATION ===
-    let totalRaw = tempScore + humidityScore + propertyScore + aqiScore;
+    let totalRaw = bioScore + resilienceScore + aqiScore;
 
-    // Critical Failure Checks (override scores to 0 if lethal conditions)
-    if (currentTemp < (plant.idealTempMin - 10)) totalRaw = 0; // Frozen
-    if (currentTemp > (plant.idealTempMax + 10)) totalRaw = 0; // Cooked
-    if (avgHumidity < (plant.minHumidity - 30)) totalRaw = 0; // Dried out (unless cactus, handled by penalty factor but huge gap is bad)
-
-    // Clamp between 0 and 100 (for raw)
+    // Clamp between 0 and 100
     totalRaw = Math.max(0, Math.min(100, totalRaw));
 
-    // Normalization logic
-    // If a normalizationBase is provided (e.g., the highest raw score in the list), 
-    // scale this plant's score so the best plant is 100%.
     if (normalizationBase && normalizationBase > 0) {
         return Math.round((totalRaw / normalizationBase) * 100);
     }
