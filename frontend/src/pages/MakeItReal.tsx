@@ -404,6 +404,8 @@ export const MakeItReal = () => {
     // --- DRAG LOGIC (MOUSE + TOUCH) ---
     const handleStart = () => {
         setIsDragging(true);
+        // Lock body scroll to prevent page from moving while dragging plant
+        document.body.style.overflow = 'hidden';
     };
 
     const handleMove = (clientX: number, clientY: number) => {
@@ -416,6 +418,8 @@ export const MakeItReal = () => {
 
     const handleEnd = () => {
         setIsDragging(false);
+        // Restore body scroll
+        document.body.style.overflow = '';
     };
 
     // Mouse Wrappers
@@ -432,13 +436,12 @@ export const MakeItReal = () => {
 
     // Touch Wrappers
     const handleTouchStart = () => {
-        // e.preventDefault(); 
         handleStart();
     };
     const handleTouchMove = (e: React.TouchEvent) => {
-        // Prevent scrolling while dragging
-        if (isDragging) {
-            // e.preventDefault(); 
+        // Prevent default browser scrolling if dragging
+        if (isDragging && e.cancelable) {
+            e.preventDefault();
         }
         const touch = e.touches[0];
         handleMove(touch.clientX, touch.clientY);
