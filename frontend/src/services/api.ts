@@ -487,3 +487,21 @@ export const sendInquiry = async (data: { name: string, email: string, message: 
     if (!res.ok) throw new Error("Failed to send inquiry");
     return res.json();
 };
+
+export const toggleSeedType = async (id: string) => {
+    const res = await fetch(`${API_URL}/admin/seed-bank/${id}/toggle-type`, {
+        method: 'PATCH',
+        headers: getHeaders()
+    });
+    if (!res.ok) throw new Error("Failed to toggle plant type");
+    return res.json();
+};
+
+export const deleteSeedPlant = async (id: string) => {
+    const res = await fetch(`${API_URL}/admin/seed-bank/${id}`, {
+        method: 'DELETE',
+        headers: getHeaders()
+    });
+    if (!res.ok) throw new Error("Failed to delete plant from seed bank");
+    return res.json();
+};

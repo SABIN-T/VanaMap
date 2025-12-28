@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import styles from './SeedDashboard.module.css';
-import { fetchSeedData, seedSinglePlant, deployAllPlants, fetchPlants, deletePlant } from '../../services/api';
-import { Database, CloudUpload, Check, Rocket, ShieldCheck, Sprout, Search, Trash2 } from 'lucide-react';
+import { fetchSeedData, seedSinglePlant, deployAllPlants, fetchPlants, deletePlant, toggleSeedType, deleteSeedPlant } from '../../services/api';
+import { Database, CloudUpload, Check, Rocket, ShieldCheck, Sprout, Search, Trash2, ArrowLeftRight, X } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 export const SeedDashboard = () => {
@@ -90,6 +90,33 @@ export const SeedDashboard = () => {
         }
     };
 
+    const handleToggleType = async (plant: any) => {
+        setLoading(true);
+        try {
+            const data = await toggleSeedType(plant.id);
+            setSeedData({ indoor: data.indoor, outdoor: data.outdoor });
+            toast.success(`Switched ${plant.name} to ${plant.type === 'indoor' ? 'Outdoor' : 'Indoor'}`);
+        } catch (e: any) {
+            toast.error(e.message || "Switch failed");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleDeleteSeed = async (plant: any) => {
+        if (!confirm(`Warning: This will permanently DELETE ${plant.name} from the Seed Bank file. This cannot be undone.`)) return;
+        setLoading(true);
+        try {
+            const data = await deleteSeedPlant(plant.id);
+            setSeedData({ indoor: data.indoor, outdoor: data.outdoor });
+            toast.success(`${plant.name} erased from Seed Bank.`);
+        } catch (e: any) {
+            toast.error(e.message || "Delete failed");
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const handleDeployAll = async () => {
         if (!confirm("Are you sure you want to DEPLOY ALL plants to production?")) return;
         setLoading(true);
@@ -136,19 +163,40 @@ export const SeedDashboard = () => {
                         </div>
                     </div>
 
+                    <div style={{ display: 'flex', gap: '8px', marginTop: '12px' }}>
+                        <button
+                            className={styles.iconButton}
+                            onClick={() => handleToggleType(plant)}
+                            title="Switch Indoor/Outdoor"
+                            style={{ flex: 1, padding: '8px', borderRadius: '8px', background: '#f3f4f6', border: 'none', cursor: 'pointer' }}
+                        >
+                            <ArrowLeftRight size={16} color="#4b5563" />
+                        </button>
+                        <button
+                            className={styles.iconButton}
+                            onClick={() => handleDeleteSeed(plant)}
+                            title="Delete from Seed Bank"
+                            style={{ flex: 1, padding: '8px', borderRadius: '8px', background: '#fee2e2', border: 'none', cursor: 'pointer' }}
+                        >
+                            <Trash2 size={16} color="#ef4444" />
+                        </button>
+                    </div>
+
                     {isDeployed ? (
                         <button
                             className={styles.removeButton}
                             onClick={() => handleRemove(plant)}
                             disabled={isProcessing || loading}
+                            style={{ marginTop: '8px', width: '100%' }}
                         >
-                            <Trash2 size={14} /> REMOVE
+                            <X size={14} /> REMOVE LIVE
                         </button>
                     ) : (
                         <button
                             className={styles.pushButton}
                             onClick={() => handlePush(plant)}
                             disabled={isProcessing || loading}
+                            style={{ marginTop: '8px', width: '100%' }}
                         >
                             {isProcessing ? (
                                 <span className="animate-spin">⌛</span>

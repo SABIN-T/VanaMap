@@ -743,6 +743,84 @@ app.post('/api/admin/seed-plants', auth, admin, async (req, res) => {
     }
 });
 
+// --- DYNAMIC SEED BANK MANAGEMENT (EDIT/DELETE) ---
+const fs = require('fs');
+const path = require('path');
+
+const updatePlantDataFile = (indoor, outdoor) => {
+    const content = `// MASTER PLANT DATA (Generated & Updated via Admin)
+const indoorPlants = ${JSON.stringify(indoor, null, 4)};
+const outdoorPlants = ${JSON.stringify(outdoor, null, 4)};
+
+module.exports = { indoorPlants, outdoorPlants };
+`;
+    fs.writeFileSync(path.join(__dirname, 'plant-data.js'), content);
+    // Clear cache so next read gets new data
+    delete require.cache[require.resolve('./plant-data')];
+};
+
+app.patch('/api/admin/seed-bank/:id/toggle-type', auth, admin, (req, res) => {
+    try {
+        delete require.cache[require.resolve('./plant-data')];
+        let { indoorPlants, outdoorPlants } = require('./plant-data');
+        const { id } = req.params;
+
+        // Try find in indoor
+        let plant = indoorPlants.find(p => p.id === id);
+        let fromList = 'indoor';
+
+        if (!plant) {
+            plant = outdoorPlants.find(p => p.id === id);
+            fromList = 'outdoor';
+        }
+
+        if (!plant) return res.status(404).json({ error: "Plant not found in Seed Bank" });
+
+        // Remove from current list
+        if (fromList === 'indoor') {
+            indoorPlants = indoorPlants.filter(p => p.id !== id);
+            // Modify plant
+            plant.type = 'outdoor';
+            // Optionally update ID prefix if strictly following convention, but let's keep ID stable for tracking
+            // plant.id = plant.id.replace('p_in_', 'p_out_'); 
+            outdoorPlants.push(plant);
+        } else {
+            outdoorPlants = outdoorPlants.filter(p => p.id !== id);
+            plant.type = 'indoor';
+            indoorPlants.push(plant);
+        }
+
+        updatePlantDataFile(indoorPlants, outdoorPlants);
+        res.json({ success: true, indoor: indoorPlants, outdoor: outdoorPlants });
+
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
+app.delete('/api/admin/seed-bank/:id', auth, admin, (req, res) => {
+    try {
+        delete require.cache[require.resolve('./plant-data')];
+        let { indoorPlants, outdoorPlants } = require('./plant-data');
+        const { id } = req.params;
+
+        const initialLength = indoorPlants.length + outdoorPlants.length;
+
+        indoorPlants = indoorPlants.filter(p => p.id !== id);
+        outdoorPlants = outdoorPlants.filter(p => p.id !== id);
+
+        if (indoorPlants.length + outdoorPlants.length === initialLength) {
+            return res.status(404).json({ error: "Plant not found in Seed Bank" });
+        }
+
+        updatePlantDataFile(indoorPlants, outdoorPlants);
+        res.json({ success: true, indoor: indoorPlants, outdoor: outdoorPlants });
+
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
 // --- NEWS API ---
 let newsCache = { data: [], lastUpdated: 0 };
 app.get('/api/news', async (req, res) => {
