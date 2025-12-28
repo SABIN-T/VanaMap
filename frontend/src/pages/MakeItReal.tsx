@@ -17,6 +17,7 @@ const POT_COLORS = [
 ];
 
 const POT_STYLES = [
+    { id: 'original', name: 'Original', src: '' }, // No virtual pot
     { id: 'base', name: 'Curved', src: '/pot-base.png' },
     { id: 'classic', name: 'Classic', src: '/pot-classic.png' },
     { id: 'modern', name: 'Modern', src: '/pot-modern.png' },
@@ -150,20 +151,22 @@ const bakeComposite = async (plantSrc: string, potSrc: string, colorHex: string,
         ctx.drawImage(plantImg, defaultX + moveX, defaultY + moveY, pW, pH);
 
         // --- LAYER 2: POT ---
-        // Tint Logic Inline (or re-use tinted src if we passed it, but easier to just re-tint here for high-res final)
-        const potCanvas = document.createElement('canvas');
-        potCanvas.width = canvas.width;
-        potCanvas.height = canvas.height;
-        const pCtx = potCanvas.getContext('2d');
-        if (pCtx) {
-            pCtx.drawImage(potImg, 0, 0);
-            pCtx.globalCompositeOperation = 'multiply';
-            pCtx.fillStyle = colorHex;
-            pCtx.fillRect(0, 0, potCanvas.width, potCanvas.height);
-            pCtx.globalCompositeOperation = 'destination-in';
-            pCtx.drawImage(potImg, 0, 0);
+        // Only draw if we have a valid pot source (not original mode)
+        if (potSrc) {
+            const potCanvas = document.createElement('canvas');
+            potCanvas.width = canvas.width;
+            potCanvas.height = canvas.height;
+            const pCtx = potCanvas.getContext('2d');
+            if (pCtx) {
+                pCtx.drawImage(potImg, 0, 0);
+                pCtx.globalCompositeOperation = 'multiply';
+                pCtx.fillStyle = colorHex;
+                pCtx.fillRect(0, 0, potCanvas.width, potCanvas.height);
+                pCtx.globalCompositeOperation = 'destination-in';
+                pCtx.drawImage(potImg, 0, 0);
+            }
+            ctx.drawImage(potCanvas, 0, 0);
         }
-        ctx.drawImage(potCanvas, 0, 0);
 
         resolve(canvas.toDataURL('image/png'));
     });
@@ -194,8 +197,8 @@ export const MakeItReal = () => {
         rawPlantImg: null as string | null, // Original plant image
         cleanPlantImg: null as string | null, // BG Removed plant
         potColor: '#e07a5f',
-        potStyle: 'classic',
-        bgTolerance: 40,
+        potStyle: 'original', // Default to original to keep user's pot
+        bgTolerance: 15, // Lower tolerance to protect white pots
         scale: 1,
         pos: { x: 50, y: 50 },
         offset: { x: 0, y: 0 }, // Plant-in-pot offset
@@ -329,21 +332,20 @@ export const MakeItReal = () => {
     };
 
     const processPlantInitial = async (imgUrl: string) => {
-        // 1. Remove BG
-        const clean = await removeWhiteBackground(imgUrl, 40);
+        // 1. Remove BG (Conservative)
+        const clean = await removeWhiteBackground(imgUrl, 15);
 
-        // 2. AI Suggest Pot Color (Random for now, or mapped to plant type)
-        const suggestedColor = ['#e07a5f', '#ffffff', '#264653'][Math.floor(Math.random() * 3)];
-
+        // 2. Default to exact original first
         setDesignerState(prev => ({
             ...prev,
             cleanPlantImg: clean,
-            potColor: suggestedColor,
-            isProcessing: true // Keep processing for composite
+            potStyle: 'original',
+            bgTolerance: 15,
+            isProcessing: true
         }));
 
-        // 3. Initial Bake
-        await updateComposite(clean, 'classic', suggestedColor, { x: 0, y: 0 });
+        // 3. Initial Bake (Original)
+        await updateComposite(clean, 'original', '#ffffff', { x: 0, y: 0 });
     };
 
     // Core Update Logic
@@ -351,7 +353,12 @@ export const MakeItReal = () => {
         setDesignerState(prev => ({ ...prev, isProcessing: true }));
         try {
             const styleObj = POT_STYLES.find(s => s.id === pStyle) || POT_STYLES[0];
-            const cleanedPot = await removeWhiteBackground(styleObj.src, 20); // cached ideally
+
+            // Handle Original Mode (no virtual pot source)
+            let cleanedPot = '';
+            if (styleObj.src) {
+                cleanedPot = await removeWhiteBackground(styleObj.src, 20);
+            }
 
             const finalUrl = await bakeComposite(
                 cleanPlant,
@@ -515,7 +522,14 @@ export const MakeItReal = () => {
                                         className={`${styles.styleOption} ${designerState.potStyle === s.id ? styles.selected : ''}`}
                                         onClick={() => handleDesignerUpdate({ potStyle: s.id })}
                                     >
-                                        <div className={styles.styleThumb} style={{ backgroundImage: `url(${s.src})` }} />
+                                        {/* Show text for original, image for others */}
+                                        {s.id === 'original' ? (
+                                            <div className={styles.styleThumb} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', border: '1px dashed #666', borderRadius: '50%' }}>
+                                                <ImageIcon size={20} />
+                                            </div>
+                                        ) : (
+                                            <div className={styles.styleThumb} style={{ backgroundImage: `url(${s.src})` }} />
+                                        )}
                                         <span>{s.name}</span>
                                     </div>
                                 ))}
