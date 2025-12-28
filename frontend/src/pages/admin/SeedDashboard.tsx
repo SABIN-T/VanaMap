@@ -118,14 +118,19 @@ export const SeedDashboard = () => {
     };
 
     const handleDeployAll = async () => {
-        if (!confirm("Are you sure you want to DEPLOY ALL plants to production?")) return;
+        if (!confirm("Are you sure you want to DEPLOY ALL new plants to production? Existing live plants will be preserved.")) return;
         setLoading(true);
         try {
-            await deployAllPlants();
+            const res = await deployAllPlants();
             await loadData();
-            toast.success("SYSTEM OVERHAUL COMPLETE: All plants deployed.");
-        } catch (e) {
-            toast.error("Mass deployment failed");
+
+            if (res.added > 0) {
+                toast.success(`Deployment Success: ${res.added} New Plants Added. (${res.skipped} Skipped)`);
+            } else {
+                toast.success(`System Synced: All ${res.skipped} plants are already live.`);
+            }
+        } catch (e: any) {
+            toast.error(e.message || "Mass deployment failed");
         } finally {
             setLoading(false);
         }

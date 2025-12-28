@@ -716,21 +716,33 @@ app.post('/api/admin/seed-single', auth, admin, async (req, res) => {
 
 app.post('/api/admin/seed-plants', auth, admin, async (req, res) => {
     try {
-        console.log("SEED: Starting plant population...");
+        console.log("SEED: Starting Smart Deployment...");
+        // Fresh import to get latest generated data
+        delete require.cache[require.resolve('./plant-data')];
+        const { indoorPlants, outdoorPlants } = require('./plant-data');
         const allPlants = [...indoorPlants, ...outdoorPlants];
-        let stats = { added: 0, updated: 0 };
+
+        let stats = { added: 0, skipped: 0 };
 
         for (const plant of allPlants) {
-            const result = await Plant.updateOne(
+            // Check for existence by Scientific Name (Scientific Truth)
+            const exists = await Plant.exists({ scientificName: plant.scientificName });
+
+            if (exists) {
+                stats.skipped++;
+                continue;
+            }
+
+            // If not found, deploy it
+            await Plant.updateOne(
                 { id: plant.id },
                 { $set: plant },
                 { upsert: true }
             );
-            if (result.upsertedCount > 0) stats.added++;
-            else if (result.modifiedCount > 0) stats.updated++;
+            stats.added++;
         }
 
-        console.log(`SEED: Complete. Added ${stats.added}, Updated ${stats.updated}`);
+        console.log(`SEED: Deployment Complete. Added ${stats.added}, Skipped ${stats.skipped} (Already Live).`);
 
         if (stats.added > 0) {
             await broadcastAlert('plant', `${stats.added} new plants have been added to our collection!`, { count: stats.added, title: 'Library Update 📚' }, '/#plant-grid');
