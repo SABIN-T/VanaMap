@@ -6461,21 +6461,21 @@ export const PLANTS: Plant[] = [
     },
     {
         "id": "mock_293",
-        "name": "Black Bat Flower",
-        "scientificName": "Tacca chantrieri",
-        "description": "The Black Bat Flower is a user-friendly outdoor plant. It brings goth garden to your environment.",
+        "name": "Giant Water Lily",
+        "scientificName": "Victoria amazonica",
+        "description": "The Giant Water Lily is a user-friendly outdoor plant. It brings huge floating leaves to your environment.",
         "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format&fit=crop&q=80",
         "idealTempMin": 10,
         "idealTempMax": 30,
         "minHumidity": 40,
-        "sunlight": "Shade",
-        "oxygenLevel": "25 L/day",
+        "sunlight": "Full Sun",
+        "oxygenLevel": "90 L/day",
         "medicinalValues": [
             "None"
         ],
         "advantages": [
-            "Goth garden",
-            "Unique shape"
+            "Huge floating leaves",
+            "Support a child"
         ],
         "price": 25,
         "type": "outdoor",
