@@ -13,7 +13,15 @@ const POT_COLORS = [
     { name: 'Navy Blue', hex: '#3d405b' },
     { name: 'Concrete', hex: '#9ca3af' },
     { name: 'Mustard', hex: '#f2cc8f' },
+    { name: 'Mustard', hex: '#f2cc8f' },
     { name: 'Black', hex: '#000000' },
+];
+
+const POT_STYLES = [
+    { id: 'base', name: 'Curved', src: '/pot-base.png' },
+    { id: 'classic', name: 'Classic', src: '/pot-classic.png' },
+    { id: 'modern', name: 'Modern', src: '/pot-modern.png' },
+    { id: 'wide', name: 'Wide', src: '/pot-wide.png' },
 ];
 
 const removeWhiteBackground = (imageSrc: string, tolerance: number = 30): Promise<string> => {
@@ -190,7 +198,9 @@ export const MakeItReal = () => {
 
     // Step 2 State: Pot Selection
     const [potColor, setPotColor] = useState<string>('#ffffff');
+    const [potStyle, setPotStyle] = useState<string>('base');
     const [finalComposite, setFinalComposite] = useState<string | null>(null);
+    const [highlightUpload, setHighlightUpload] = useState(false);
 
     // Refs
     const potBaseRef = useRef<string | null>(null);
@@ -273,12 +283,26 @@ export const MakeItReal = () => {
         if (file) {
             const url = URL.createObjectURL(file);
             setRoomImage(url);
+            setHighlightUpload(false);
             toast.success("Room uploaded! Now pick a plant.");
         }
     };
 
+    // Notification when ready
+    useEffect(() => {
+        if (roomImage) {
+            toast("📸 Setup Complete! Tap a plant to place it.", { icon: '🌿' });
+        }
+    }, [roomImage]);
+
     // --- STEP 1 LOGIC: INIT ---
     const onPlantClick = (plant: any) => {
+        if (!roomImage) {
+            toast.error("Please take a photo or upload an image first!");
+            setHighlightUpload(true);
+            return;
+        }
+
         setPreviewPlant(plant);
         setCurrentStep('bg-remove');
         // Reset Logic
@@ -314,21 +338,34 @@ export const MakeItReal = () => {
         }
     };
 
-    // --- STEP 1 -> STEP 2 TRANSITION ---
     const goToPotSelection = () => {
         if (!previewBgRemoved) return;
         setCurrentStep('pot-select');
         setPotColor('#ffffff');
+        setPotStyle('base');
         // Trigger initial composite
-        updatePotComposite('#ffffff');
+        const styleSrc = POT_STYLES[0].src;
+        updatePotComposite('#ffffff', styleSrc);
     };
 
     // --- STEP 2 LOGIC: POT COMPOSITE ---
-    const updatePotComposite = async (color: string) => {
-        if (!previewBgRemoved || !potBaseRef.current) return;
+    // --- POT LOGIC ---
+    const updatePotComposite = async (color: string, styleSrc: string) => {
+        if (!previewBgRemoved) return;
         setIsProcessing(true);
         try {
-            const composite = await generateComposite(previewBgRemoved, potBaseRef.current, color);
+            // Need to clean the chosen pot style first if it's not pre-processed?
+            // For now assuming these pot images are transparent PNGs or need cleaning.
+            // Let's assume they might have white background given `pot-base.png` needed it.
+            // We'll cache cleaned pot styles in a ref if needed, or just clean on fly (might be slow).
+
+            // Optimization: If it is one of the known ones, we might just assume they are clean OR 
+            // process them once. To be safe, let's process.
+
+            const cleanPot = await removeWhiteBackground(styleSrc, 20);
+            // In a real app we would cache this result to avoid re-processing 
+
+            const composite = await generateComposite(previewBgRemoved, cleanPot, color);
             setFinalComposite(composite);
         } finally {
             setIsProcessing(false);
@@ -337,7 +374,14 @@ export const MakeItReal = () => {
 
     const handlePotColorChange = (color: string) => {
         setPotColor(color);
-        updatePotComposite(color);
+        const currentStyleSrc = POT_STYLES.find(s => s.id === potStyle)?.src || POT_STYLES[0].src;
+        updatePotComposite(color, currentStyleSrc);
+    };
+
+    const handlePotStyleChange = (styleId: string) => {
+        setPotStyle(styleId);
+        const styleSrc = POT_STYLES.find(s => s.id === styleId)?.src || POT_STYLES[0].src;
+        updatePotComposite(potColor, styleSrc);
     };
 
     // --- FINISH ---
@@ -346,6 +390,7 @@ export const MakeItReal = () => {
             toast.error("Please upload a room photo first!");
             setCurrentStep('none');
             setPreviewPlant(null);
+            setHighlightUpload(true);
             return;
         }
         setPlacedPlant({ ...previewPlant, imageUrl: finalComposite });
@@ -357,24 +402,51 @@ export const MakeItReal = () => {
     };
 
 
-    // --- DRAG LOGIC ---
-    const handleMouseDown = (e: MouseEvent) => {
-        e.preventDefault();
+    // --- DRAG LOGIC (MOUSE + TOUCH) ---
+    const handleStart = (clientX: number, clientY: number) => {
         setIsDragging(true);
     };
 
-    const handleMouseMove = (e: MouseEvent) => {
+    const handleMove = (clientX: number, clientY: number) => {
         if (!isDragging || !canvasRef.current) return;
-
         const rect = canvasRef.current.getBoundingClientRect();
-        const x = ((e.clientX - rect.left) / rect.width) * 100;
-        const y = ((e.clientY - rect.top) / rect.height) * 100;
-
+        const x = ((clientX - rect.left) / rect.width) * 100;
+        const y = ((clientY - rect.top) / rect.height) * 100;
         setPosition({ x, y });
     };
 
-    const handleMouseUp = () => {
+    const handleEnd = () => {
         setIsDragging(false);
+    };
+
+    // Mouse Wrappers
+    const handleMouseDown = (e: MouseEvent) => {
+        e.preventDefault();
+        handleStart(e.clientX, e.clientY);
+    };
+    const handleMouseMove = (e: MouseEvent) => {
+        handleMove(e.clientX, e.clientY);
+    };
+    const handleMouseUp = () => {
+        handleEnd();
+    };
+
+    // Touch Wrappers
+    const handleTouchStart = (e: React.TouchEvent) => {
+        // e.preventDefault(); // preventing default on touch start might block scrolling if not careful
+        const touch = e.touches[0];
+        handleStart(touch.clientX, touch.clientY);
+    };
+    const handleTouchMove = (e: React.TouchEvent) => {
+        // Prevent scrolling while dragging
+        if (isDragging) {
+            // e.preventDefault(); 
+        }
+        const touch = e.touches[0];
+        handleMove(touch.clientX, touch.clientY);
+    };
+    const handleTouchEnd = () => {
+        handleEnd();
     };
 
     const filteredPlants = plants.filter(p =>
@@ -383,7 +455,12 @@ export const MakeItReal = () => {
     );
 
     return (
-        <div className={styles.container} onMouseUp={handleMouseUp} onMouseLeave={handleMouseUp}>
+        <div
+            className={styles.container}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseUp}
+            onTouchEnd={handleTouchEnd}
+        >
             {/* CAMERA OVERLAY */}
             {showCamera && (
                 <div className={styles.cameraOverlay}>
@@ -476,7 +553,29 @@ export const MakeItReal = () => {
                         {currentStep === 'pot-select' && (
                             <div style={{ marginTop: '0.5rem' }}>
                                 <div className={styles.toggleLabel} style={{ marginBottom: '0.5rem' }}>
-                                    <Palette size={16} /> Choose Pot Color
+                                    <Palette size={16} /> Choose Style
+                                </div>
+                                <div className={styles.colorPalette} style={{ marginBottom: '1rem' }}>
+                                    {POT_STYLES.map(s => (
+                                        <div
+                                            key={s.id}
+                                            className={styles.colorSwatch}
+                                            style={{
+                                                borderRadius: '0.5rem',
+                                                backgroundImage: `url(${s.src})`,
+                                                backgroundSize: 'cover',
+                                                width: '50px',
+                                                height: '50px'
+                                            }}
+                                            data-selected={potStyle === s.id}
+                                            onClick={() => handlePotStyleChange(s.id)}
+                                            title={s.name}
+                                        />
+                                    ))}
+                                </div>
+
+                                <div className={styles.toggleLabel} style={{ marginBottom: '0.5rem' }}>
+                                    <Palette size={16} /> Choose Color
                                 </div>
                                 <div className={styles.colorPalette}>
                                     {POT_COLORS.map(c => (
@@ -554,6 +653,7 @@ export const MakeItReal = () => {
                         className={styles.canvasViewport}
                         ref={canvasRef}
                         onMouseMove={handleMouseMove}
+                        onTouchMove={handleTouchMove}
                     >
                         {!roomImage ? (
                             <div className={styles.canvasEmpty}>
@@ -562,11 +662,17 @@ export const MakeItReal = () => {
                                 <p>Upload a photo of your room or garden to begin visualization.</p>
 
                                 <div className={styles.actionRow}>
-                                    <button className={styles.uploadBtn} onClick={() => fileInputRef.current?.click()}>
+                                    <button
+                                        className={`${styles.uploadBtn} ${highlightUpload ? styles.pulseFocus : ''}`}
+                                        onClick={() => fileInputRef.current?.click()}
+                                    >
                                         <Upload size={24} /> Upload
                                     </button>
                                     <div className={styles.orDivider}>OR</div>
-                                    <button className={styles.cameraBtn} onClick={startCamera}>
+                                    <button
+                                        className={`${styles.cameraBtn} ${highlightUpload ? styles.pulseFocus : ''}`}
+                                        onClick={startCamera}
+                                    >
                                         <Camera size={24} /> Take Photo
                                     </button>
                                 </div>
@@ -594,6 +700,7 @@ export const MakeItReal = () => {
                                             width: '300px'
                                         }}
                                         onMouseDown={handleMouseDown}
+                                        onTouchStart={handleTouchStart}
                                     />
                                 )}
                             </>
@@ -637,6 +744,6 @@ export const MakeItReal = () => {
                     )}
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
