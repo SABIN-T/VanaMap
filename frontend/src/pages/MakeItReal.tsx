@@ -13,7 +13,6 @@ const POT_COLORS = [
     { name: 'Navy Blue', hex: '#3d405b' },
     { name: 'Concrete', hex: '#9ca3af' },
     { name: 'Mustard', hex: '#f2cc8f' },
-    { name: 'Mustard', hex: '#f2cc8f' },
     { name: 'Black', hex: '#000000' },
 ];
 
@@ -403,7 +402,7 @@ export const MakeItReal = () => {
 
 
     // --- DRAG LOGIC (MOUSE + TOUCH) ---
-    const handleStart = (clientX: number, clientY: number) => {
+    const handleStart = () => {
         setIsDragging(true);
     };
 
@@ -422,7 +421,7 @@ export const MakeItReal = () => {
     // Mouse Wrappers
     const handleMouseDown = (e: MouseEvent) => {
         e.preventDefault();
-        handleStart(e.clientX, e.clientY);
+        handleStart();
     };
     const handleMouseMove = (e: MouseEvent) => {
         handleMove(e.clientX, e.clientY);
@@ -432,10 +431,9 @@ export const MakeItReal = () => {
     };
 
     // Touch Wrappers
-    const handleTouchStart = (e: React.TouchEvent) => {
-        // e.preventDefault(); // preventing default on touch start might block scrolling if not careful
-        const touch = e.touches[0];
-        handleStart(touch.clientX, touch.clientY);
+    const handleTouchStart = () => {
+        // e.preventDefault(); 
+        handleStart();
     };
     const handleTouchMove = (e: React.TouchEvent) => {
         // Prevent scrolling while dragging
