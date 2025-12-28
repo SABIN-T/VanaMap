@@ -96,7 +96,9 @@ export const MakeItReal = () => {
             formData.append('size', 'auto');
 
             // 3. Send to Public API (Remove.bg)
-            const apiKey = import.meta.env.VITE_REMOVE_BG_API_KEY;
+            // ⚠️ SECURITY WARNING: Hardcoding API keys in frontend code is risky.
+            // Ideally use VITE_REMOVE_BG_API_KEY environment variable in Vercel.
+            const apiKey = import.meta.env.VITE_REMOVE_BG_API_KEY || "kW5A7cdmPKAgNwGJVD8AuKuV";
 
             if (!apiKey) {
                 console.warn("No API Key found for Remove.bg");
