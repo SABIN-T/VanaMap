@@ -135,7 +135,7 @@ const tintPotImage = async (potSrc: string, colorHex: string): Promise<string> =
 };
 
 // 2. Bakes the final composite with exact offsets
-const bakeComposite = async (plantSrc: string, potSrc: string, colorHex: string, offset: { x: number, y: number }, scale: number): Promise<string> => {
+const bakeComposite = async (plantSrc: string, potSrc: string, colorHex: string, offset: { x: number, y: number }): Promise<string> => {
     return new Promise(async (resolve) => {
         const loadImage = (src: string) => new Promise<HTMLImageElement>((r) => {
             const i = new Image();
@@ -256,10 +256,6 @@ export const MakeItReal = () => {
 
     useEffect(() => {
         loadPlants();
-        // Preload and clean pot base
-        removeWhiteBackground('/pot-base.png', 20).then(res => {
-            potBaseRef.current = res;
-        });
     }, []);
 
     // Camera Logic
@@ -436,8 +432,7 @@ export const MakeItReal = () => {
                 previewBgRemoved!,
                 cleanedPot,
                 potColor,
-                plantPotOffset,
-                1 // scale is handled by bake logic defaults + offsets
+                plantPotOffset
             );
 
             setPlacedPlant({ ...previewPlant, imageUrl: finalUrl });
@@ -593,12 +588,6 @@ export const MakeItReal = () => {
                                                 position: 'absolute',
                                                 height: 'auto',
                                                 width: '50%', // Approximation of standardScale
-                                                left: `calc(50% + ${plantPotOffset.x}px - 25%)`, // Center - half width + offset
-                                                // Wait, we used % logic. 
-                                                // setPlantPotOffset stores PERCENTS of container.
-                                                // So we can use % directly.
-                                                // Base centered position:
-                                                // We want centered horizontally.
                                                 left: `${50 + plantPotOffset.x}%`,
                                                 top: `${50 + plantPotOffset.y}%`,
                                                 transform: 'translate(-50%, -50%)', // Use translate to center handle
@@ -795,8 +784,8 @@ export const MakeItReal = () => {
                     <div
                         className={styles.canvasViewport}
                         ref={canvasRef}
-                        onMouseMove={handleMouseMove}
-                        onTouchMove={handleTouchMove}
+                        onMouseMove={globalMouseMove}
+                        onTouchMove={globalTouchMove}
                     >
                         {!roomImage ? (
                             <div className={styles.canvasEmpty}>
