@@ -28,11 +28,31 @@ export const MakeItReal = () => {
     const [pos, setPos] = useState({ x: 0, y: 0 }); // Percentages
     const [dragging, setDragging] = useState(false);
 
-    // --- INIT ---
-    useEffect(() => {
-        loadPlants();
-        return () => stopCamera(); // Cleanup on unmount
-    }, []);
+    // --- CORE METHODS ---
+    const stopCamera = () => {
+        if (stream) {
+            stream.getTracks().forEach(t => t.stop());
+            setStream(null);
+        }
+    };
+
+    const startStudio = async () => {
+        try {
+            const mediaStream = await navigator.mediaDevices.getUserMedia({
+                video: { facingMode: 'environment' }
+            });
+            setStream(mediaStream);
+            if (videoRef.current) {
+                videoRef.current.srcObject = mediaStream;
+            }
+            // Only switch view if camera succeeds
+            setViewMode('STUDIO');
+            setPos({ x: 50, y: 50 }); // Center plant
+        } catch (e) {
+            console.error("Camera denied", e);
+            toast.error("Camera needed for AR mode.");
+        }
+    };
 
     const loadPlants = async () => {
         try {
@@ -44,6 +64,13 @@ export const MakeItReal = () => {
         }
     };
 
+    // --- EFFECT ---
+    useEffect(() => {
+        loadPlants();
+        return () => stopCamera();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     // --- HELPERS ---
     const resizeImage = (url: string, maxWidth: number): Promise<Blob> => {
         return new Promise((resolve, reject) => {
@@ -51,7 +78,6 @@ export const MakeItReal = () => {
             img.crossOrigin = "Anonymous";
             img.src = url;
 
-            // Timeout if image load hangs (e.g. network issues)
             const timeout = setTimeout(() => reject(new Error('Image Load Timeout')), 10000);
 
             img.onload = () => {
@@ -208,7 +234,7 @@ export const MakeItReal = () => {
             if (!resultUrl) {
                 try {
                     resultUrl = await removeBackgroundHF(resizedBlob);
-                    successStrategy = "Hugging Face (U2-Net)";
+                    successStrategy = "Hugging Face";
                 } catch (e) { console.warn("Strategy B (Hugging Face) failed:", e); }
             }
 
@@ -242,32 +268,6 @@ export const MakeItReal = () => {
     };
 
     // --- CAMERA STUDIO LOGIC ---
-    const startStudio = async () => {
-        try {
-            const mediaStream = await navigator.mediaDevices.getUserMedia({
-                video: { facingMode: 'environment' }
-            });
-            setStream(mediaStream);
-            if (videoRef.current) {
-                videoRef.current.srcObject = mediaStream;
-            }
-            // Only switch view if camera succeeds
-            setViewMode('STUDIO');
-            setPos({ x: 50, y: 50 }); // Center plant
-        } catch (e) {
-            console.error("Camera denied", e);
-            toast.error("Camera needed for AR mode.");
-            // Do NOT switch to STUDIO view, stay on selection
-        }
-    };
-
-    const stopCamera = () => {
-        if (stream) {
-            stream.getTracks().forEach(t => t.stop());
-            setStream(null);
-        }
-    };
-
     const captureScene = () => {
         if (!videoRef.current || !cutoutUrl) return;
 
@@ -391,7 +391,7 @@ export const MakeItReal = () => {
                 <div className={styles.loaderOverlay}>
                     <div className={styles.scanner}>
                         <div className={styles.scanBeam} />
-                        {selectedPlant && <img src={selectedPlant.imageUrl} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.5 }} />}
+                        {selectedPlant && <img src={selectedPlant.imageUrl} alt="Scanning" style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.5 }} />}
                     </div>
                     <div className={styles.loaderText}>Isolating Subject...</div>
                 </div>
@@ -403,7 +403,6 @@ export const MakeItReal = () => {
                     className={styles.arView}
                     onTouchMove={handleTouchMove}
                     onMouseMove={handleMouseMove}
-                    onSubmit={(e) => e.preventDefault()}
                 >
                     {/* 1. Camera Feed */}
                     <video
@@ -422,6 +421,7 @@ export const MakeItReal = () => {
                         <img
                             src={cutoutUrl}
                             className={styles.arPlant}
+                            alt="AR Plant"
                             style={{
                                 left: `${pos.x}%`,
                                 top: `${pos.y}%`,
