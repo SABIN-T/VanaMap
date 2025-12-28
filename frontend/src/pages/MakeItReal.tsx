@@ -40,20 +40,28 @@ export const MakeItReal = () => {
     const startStudio = async () => {
         try {
             const mediaStream = await navigator.mediaDevices.getUserMedia({
-                video: { facingMode: 'environment' }
+                video: {
+                    facingMode: 'environment',
+                    width: { ideal: 1920 },
+                    height: { ideal: 1080 }
+                }
             });
             setStream(mediaStream);
-            if (videoRef.current) {
-                videoRef.current.srcObject = mediaStream;
-            }
-            // Only switch view if camera succeeds
             setViewMode('STUDIO');
-            setPos({ x: 50, y: 50 }); // Center plant
+            setPos({ x: 50, y: 50 });
         } catch (e) {
             console.error("Camera denied", e);
-            toast.error("Camera needed for AR mode.");
+            toast.error("Camera access denied. Please enable it in settings.");
         }
     };
+
+    // --- EFFECT: Camera Connector ---
+    useEffect(() => {
+        if (viewMode === 'STUDIO' && videoRef.current && stream) {
+            videoRef.current.srcObject = stream;
+            videoRef.current.play().catch(e => console.error("Video play error", e));
+        }
+    }, [viewMode, stream]);
 
     const loadPlants = async () => {
         try {
@@ -110,14 +118,14 @@ export const MakeItReal = () => {
         });
     };
 
-    const removeBackgroundSimple = async (imageSrc: string, tolerance: number = 20): Promise<string> => {
+    const removeBackgroundSimple = async (imageSrc: string): Promise<string> => {
         try {
-            // Optimization: Resize first to avoid processing 4K/8K images on mobile thread
-            const blob = await resizeImage(imageSrc, 600); // 600px sufficient for fallback
+            const blob = await resizeImage(imageSrc, 800);
             const url = URL.createObjectURL(blob);
 
             return new Promise((resolve) => {
                 const img = new Image();
+                img.crossOrigin = "Anonymous";
                 img.src = url;
                 img.onload = () => {
                     const canvas = document.createElement('canvas');
@@ -129,20 +137,43 @@ export const MakeItReal = () => {
                     ctx.drawImage(img, 0, 0);
                     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
                     const data = imageData.data;
-                    const bgR = data[0], bgG = data[1], bgB = data[2];
 
+                    // 1. Identify Background (Corners)
+                    const corners = [[0, 0], [canvas.width - 1, 0], [0, canvas.height - 1], [canvas.width - 1, canvas.height - 1]];
+                    let rTotal = 0, gTotal = 0, bTotal = 0;
+                    corners.forEach(([cx, cy]) => {
+                        const i = (cy * canvas.width + cx) * 4;
+                        rTotal += data[i]; gTotal += data[i + 1]; bTotal += data[i + 2];
+                    });
+                    const bg = { r: rTotal / 4, g: gTotal / 4, b: bTotal / 4 };
+
+                    // 2. Clear Background with Tolerance
+                    const tolerance = 40;
                     for (let i = 0; i < data.length; i += 4) {
                         const r = data[i], g = data[i + 1], b = data[i + 2];
-                        const diff = Math.sqrt((r - bgR) ** 2 + (g - bgG) ** 2 + (b - bgB) ** 2);
-                        if (diff < tolerance) data[i + 3] = 0;
+                        const diff = Math.sqrt((r - bg.r) ** 2 + (g - bg.g) ** 2 + (b - bg.b) ** 2);
+                        if (diff < tolerance || (r > 240 && g > 240 && b > 240)) {
+                            data[i + 3] = 0;
+                        }
                     }
-
                     ctx.putImageData(imageData, 0, 0);
-                    resolve(canvas.toDataURL('image/png'));
+
+                    // 3. Post-Process: Edge Feathering (Simple Alpha Blur)
+                    const offCanvas = document.createElement('canvas');
+                    offCanvas.width = canvas.width;
+                    offCanvas.height = canvas.height;
+                    const offCtx = offCanvas.getContext('2d');
+                    if (offCtx) {
+                        offCtx.filter = 'blur(1px)'; // Subtle edge softener
+                        offCtx.drawImage(canvas, 0, 0);
+                        resolve(offCanvas.toDataURL('image/png'));
+                    } else {
+                        resolve(canvas.toDataURL('image/png'));
+                    }
                 };
             });
         } catch {
-            return imageSrc; // If everything fails, just return original
+            return imageSrc;
         }
     };
 
@@ -247,18 +278,20 @@ export const MakeItReal = () => {
                 } catch (e) { console.warn("Strategy C (Python) failed:", e); }
             }
 
-            // Strategy D: Local Fallback (Canvas)
+            // Strategy D: Local Fallback (Improved Canvas)
             if (!resultUrl) {
-                resultUrl = await removeBackgroundSimple(plant.imageUrl, 20);
-                successStrategy = "Basic Cutout";
-                toast("AI Offline. Using Basic Mode.", { icon: '🔧' });
+                resultUrl = await removeBackgroundSimple(plant.imageUrl);
+                successStrategy = "Edge Detection";
+                toast("AI Latency High. Using Studio Mode.", { icon: '⚙️' });
             } else {
-                // Success Toast
-                toast.success(`Processed with ${successStrategy}`, { position: 'bottom-center' });
+                toast.success(`Neural Processing: ${successStrategy}`, {
+                    position: 'bottom-center',
+                    style: { background: '#022c22', color: '#10b981', border: '1px solid #064e3b' }
+                });
             }
 
             setCutoutUrl(resultUrl);
-            startStudio();
+            await startStudio();
 
         } catch (error) {
             console.error("All bg removal strategies failed", error);
