@@ -33,6 +33,7 @@ const PlantIdentifier = lazy(() => import('../../pages/admin/PlantIdentifier').t
 const SimulationData = lazy(() => import('../../pages/admin/SimulationData').then(m => ({ default: m.SimulationData })));
 const PotDesigns = lazy(() => import('../../pages/admin/PotDesigns').then(m => ({ default: m.default })));
 const Premium = lazy(() => import('../../pages/admin/Premium').then(m => ({ default: m.Premium })));
+const PublicPremium = lazy(() => import('../../pages/Premium').then(m => ({ default: m.Premium })));
 
 
 const LoadingScreen = () => (
@@ -116,6 +117,7 @@ export const AnimatedRoutes = () => {
                         <Route path="/shops" element={<Shops />} />
                         <Route path="/leaderboard" element={<Leaderboard />} />
                         <Route path="/heaven" element={<Heaven />} />
+                        <Route path="/premium" element={<PublicPremium />} />
                     </Routes>
                 </div>
             </Suspense>

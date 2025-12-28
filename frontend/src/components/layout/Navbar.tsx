@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingCart, User as UserIcon, LogOut, Leaf, Sun, Moon, Menu, X, ChevronRight, Download, Shield, ShoppingBag, Trophy, Gamepad2 } from 'lucide-react';
+import { ShoppingCart, User as UserIcon, LogOut, Leaf, Sun, Moon, Menu, X, ChevronRight, Download, Shield, ShoppingBag, Trophy, Gamepad2, Crown } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
 import { useTheme } from '../../context/ThemeContext';
@@ -52,6 +52,9 @@ export const Navbar = () => {
                 </Link>
                 <Link id="nav-leaderboard" to="/leaderboard" className={styles.navLink}>
                     <Trophy size={18} /> Ranking
+                </Link>
+                <Link to="/premium" className={styles.navLink} style={{ color: '#facc15' }}>
+                    <Crown size={18} /> Premium
                 </Link>
             </div>
 
