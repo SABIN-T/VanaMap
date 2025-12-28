@@ -602,13 +602,15 @@
     .container {
         padding-top: 70px;
         /* Safe area for Top Nav */
-        padding-bottom: 160px;
-        /* EXTRA Safe area for Bottom Tab Bar */
-        min-height: 100dvh;
-        height: auto;
-        /* Allow growth */
-        overflow-y: visible;
-        /* let it scroll naturally */
+        padding-bottom: 200px;
+        /* EXTRA Safe area */
+        min-height: 100vh;
+        height: auto !important;
+        /* Force auto height */
+        overflow-y: auto !important;
+        /* Force scroll */
+        -webkit-overflow-scrolling: touch;
+        /* Smooth scroll iOS */
     }
 
     .workspace {
