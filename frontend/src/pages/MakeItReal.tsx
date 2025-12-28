@@ -59,8 +59,9 @@ export const MakeItReal = () => {
             formData.append('file', rawBlob, 'plant.png');
 
             // 3. Send to Python API (FastAPI)
-            // Assuming localhost:8000 is running the U-2-Net service
-            const apiRes = await fetch('http://localhost:8000/remove-bg', {
+            // Use env var for production, fallback to localhost for dev
+            const baseUrl = import.meta.env.VITE_AI_API_URL || 'http://localhost:8000';
+            const apiRes = await fetch(`${baseUrl}/remove-bg`, {
                 method: 'POST',
                 body: formData
             });
