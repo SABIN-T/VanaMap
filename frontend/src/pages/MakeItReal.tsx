@@ -138,56 +138,41 @@ export const MakeItReal = () => {
                     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
                     const data = imageData.data;
 
-                    // 1. Precise Background Profile
-                    const bg = { r: data[0], g: data[1], b: data[2] };
-
-                    // 2. Shape-Preservation & Surface Trimming Pass
+                    // 1. Identify "Non-Plant" profile (White/Grey background and pot)
                     const width = canvas.width;
                     const height = canvas.height;
 
-                    // First Pass: Create a transparency mask based on Color + Shape Logic
                     for (let i = 0; i < data.length; i += 4) {
-                        const x = (i / 4) % width;
                         const y = Math.floor((i / 4) / width);
-
                         const r = data[i], g = data[i + 1], b = data[i + 2];
-                        const diff = Math.sqrt((r - bg.r) ** 2 + (g - bg.g) ** 2 + (b - bg.b) ** 2);
 
-                        // PROTECT THE CORE: If we are in the vertical center and high enough from bottom
-                        // we treat white as a "Pot Reflection" if it has high contrast.
-                        const isCoreX = x > width * 0.25 && x < width * 0.75;
-                        const isCoreY = y > height * 0.3 && y < height * 0.92;
+                        // SCIENTIFIC LEAF ISOLATION:
+                        // Most plants are Green/Yellow/Brown. 
+                        // The background and pot are White/Light Grey.
+                        const isLight = r > 180 && g > 180 && b > 180;
+                        const isGrey = Math.abs(r - g) < 20 && Math.abs(g - b) < 20 && Math.abs(r - b) < 20;
 
-                        // SURFACE TRIMMING: If we are at the very bottom, we are aggressive against 
-                        // the floor/table surface even if it's slightly off-white.
-                        const isSurface = y > height * 0.92;
+                        const saturation = Math.max(r, g, b) - Math.min(r, g, b);
 
-                        let tolerance = isCoreX && isCoreY ? 12 : 35;
-                        if (isSurface) tolerance = 60; // Aggressive floor removal
-
-                        // LUMINANCE PROTECTION: Don't kill bright whites in the core area
-                        const isHighlight = r > 240 && g > 240 && b > 240;
-                        const shouldKeep = (isHighlight && isCoreX && isCoreY);
-
-                        if ((diff < tolerance || (r > 240 && !shouldKeep)) && !isHighlight) {
+                        // If it's very light (Background/Pot) AND NOT significantly saturated/greenish
+                        if (isLight && isGrey && saturation < 50) {
                             data[i + 3] = 0;
                         }
 
-                        // Remove the floor shadow if it's far from center bottom
-                        if (isSurface && (x < width * 0.3 || x > width * 0.7)) {
+                        // Aggressively remove the bottom section where the pot base usually sits
+                        if (y > height * 0.75 && isLight) {
                             data[i + 3] = 0;
                         }
                     }
 
-                    // 3. Morphological Cleanup (Simulated via Canvas Filters)
                     ctx.putImageData(imageData, 0, 0);
 
+                    // Final pass: Subtle blur to smooth the plant edges
                     const final = document.createElement('canvas');
                     final.width = width; final.height = height;
                     const fCtx = final.getContext('2d');
                     if (fCtx) {
-                        // High Contrast and Sharpening to separate white pot from white room
-                        fCtx.filter = 'contrast(1.15) saturate(1.1)';
+                        fCtx.filter = 'contrast(1.1)';
                         fCtx.drawImage(canvas, 0, 0);
                         resolve(final.toDataURL('image/png'));
                     } else {
