@@ -92,24 +92,30 @@ export const MakeItReal = () => {
         try {
             // 2. Prepare Form Data
             const formData = new FormData();
-            formData.append('file', rawBlob, 'plant.png');
+            formData.append('image_file', rawBlob);
+            formData.append('size', 'auto');
 
-            // 3. Send to Python API (FastAPI)
-            const baseUrl = import.meta.env.VITE_AI_API_URL || 'http://localhost:8000';
+            // 3. Send to Public API (Remove.bg)
+            const apiKey = import.meta.env.VITE_REMOVE_BG_API_KEY;
 
-            // Timeout promise to prevent hanging
-            const fetchPromise = fetch(`${baseUrl}/remove-bg`, {
+            if (!apiKey) {
+                console.warn("No API Key found for Remove.bg");
+                throw new Error("Missing API Key");
+            }
+
+            const apiRes = await fetch('https://api.remove.bg/v1.0/removebg', {
                 method: 'POST',
+                headers: {
+                    'X-Api-Key': apiKey
+                },
                 body: formData
             });
 
-            const timeoutPromise = new Promise((_, reject) =>
-                setTimeout(() => reject(new Error('Timeout')), 5000)
-            );
-
-            const apiRes = await Promise.race([fetchPromise, timeoutPromise]) as Response;
-
-            if (!apiRes.ok) throw new Error('Neural Network Offline');
+            if (!apiRes.ok) {
+                if (apiRes.status === 402) throw new Error('API Quota Exceeded');
+                if (apiRes.status === 401) throw new Error('Invalid API Key');
+                throw new Error('API Error');
+            }
 
             // 4. Get Result as Blob
             const pngBlob = await apiRes.blob();
@@ -119,13 +125,20 @@ export const MakeItReal = () => {
             startStudio();
 
         } catch (error) {
-            console.warn("AI Service unavailable, switching to local fallback.", error);
+            console.warn("Public AI Service unavailable/failed:", error);
 
             // FALLBACK: Use simple canvas removal
             const fallbackUrl = await removeBackgroundSimple(plant.imageUrl, 20);
 
             setCutoutUrl(fallbackUrl);
-            toast("AI Disconnected. Using basic cutout mode.", { icon: '🔧' });
+
+            // Helpful toast for developer
+            const isApiKeyError = (error as Error).message === "Missing API Key";
+            toast(
+                isApiKeyError ? "Setup API Key in .env for better quality!" : "Using basic cutout mode.",
+                { icon: isApiKeyError ? '🔑' : '🔧' }
+            );
+
             startStudio();
         } finally {
             setIsProcessing(false);
