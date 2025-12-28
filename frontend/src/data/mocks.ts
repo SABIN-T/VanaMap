@@ -7472,6 +7472,1106 @@ export const PLANTS: Plant[] = [
         "price": 25,
         "type": "outdoor",
         "lifespan": "5 Years"
+    },
+    {
+        "id": "mock_339",
+        "name": "Prayer Plant",
+        "scientificName": "Maranta leuconeura",
+        "description": "The Prayer Plant is a user-friendly indoor plant. It brings leaves fold at night to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Low/Indirect",
+        "oxygenLevel": "25 L/day",
+        "medicinalValues": [
+            "None"
+        ],
+        "advantages": [
+            "Leaves fold at night",
+            "Patterned foliage"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "Perennial"
+    },
+    {
+        "id": "mock_340",
+        "name": "Fishbone Prayer Plant",
+        "scientificName": "Ctenanthe burle-marxii",
+        "description": "The Fishbone Prayer Plant is a user-friendly indoor plant. It brings herringbone pattern to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Low/Indirect",
+        "oxygenLevel": "28 L/day",
+        "medicinalValues": [
+            "None"
+        ],
+        "advantages": [
+            "Herringbone pattern",
+            "Air purifier"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "Perennial"
+    },
+    {
+        "id": "mock_341",
+        "name": "Triostar",
+        "scientificName": "Stromanthe sanguinea",
+        "description": "The Triostar is a user-friendly indoor plant. It brings pink variegation to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Bright Indirect",
+        "oxygenLevel": "30 L/day",
+        "medicinalValues": [
+            "None"
+        ],
+        "advantages": [
+            "Pink variegation",
+            "Dramatic"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "Perennial"
+    },
+    {
+        "id": "mock_342",
+        "name": "Watermelon Peperomia",
+        "scientificName": "Peperomia argyreia",
+        "description": "The Watermelon Peperomia is a user-friendly indoor plant. It brings leaves look like watermelon to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Medium",
+        "oxygenLevel": "15 L/day",
+        "medicinalValues": [
+            "None"
+        ],
+        "advantages": [
+            "Leaves look like watermelon",
+            "Compact"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "Perennial"
+    },
+    {
+        "id": "mock_343",
+        "name": "Chinese Money Plant",
+        "scientificName": "Pilea peperomioides",
+        "description": "The Chinese Money Plant is a user-friendly indoor plant. It brings round coin leaves to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Bright Indirect",
+        "oxygenLevel": "20 L/day",
+        "medicinalValues": [
+            "None"
+        ],
+        "advantages": [
+            "Round coin leaves",
+            "Good luck"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "Perennial"
+    },
+    {
+        "id": "mock_344",
+        "name": "Inch Plant",
+        "scientificName": "Tradescantia zebrina",
+        "description": "The Inch Plant is a user-friendly indoor plant. It brings fast growing to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Bright",
+        "oxygenLevel": "35 L/day",
+        "medicinalValues": [
+            "Anti-inflammatory (Folk)"
+        ],
+        "advantages": [
+            "Fast growing",
+            "Purple stripes"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "Perennial"
+    },
+    {
+        "id": "mock_345",
+        "name": "Cast Iron Plant",
+        "scientificName": "Aspidistra elatior",
+        "description": "The Cast Iron Plant is a user-friendly indoor plant. It brings indestructible to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Shade",
+        "oxygenLevel": "40 L/day",
+        "medicinalValues": [
+            "None"
+        ],
+        "advantages": [
+            "Indestructible",
+            "Low light tolerant"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "50 Years"
+    },
+    {
+        "id": "mock_346",
+        "name": "Raven ZZ",
+        "scientificName": "Zamioculcas zamiifolia 'Raven'",
+        "description": "The Raven ZZ is a user-friendly indoor plant. It brings black leaves to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Low to Bright",
+        "oxygenLevel": "45 L/day",
+        "medicinalValues": [
+            "Toxic if eaten"
+        ],
+        "advantages": [
+            "Black leaves",
+            "Drought tolerant"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "Perennial"
+    },
+    {
+        "id": "mock_347",
+        "name": "Chinese Evergreen",
+        "scientificName": "Aglaonema modestum",
+        "description": "The Chinese Evergreen is a user-friendly indoor plant. It brings variegated leaves to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Low/Medium",
+        "oxygenLevel": "38 L/day",
+        "medicinalValues": [
+            "Toxic if eaten"
+        ],
+        "advantages": [
+            "Variegated leaves",
+            "Beginner friendly"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "Perennial"
+    },
+    {
+        "id": "mock_348",
+        "name": "Dumb Cane",
+        "scientificName": "Dieffenbachia seguine",
+        "description": "The Dumb Cane is a user-friendly indoor plant. It brings large tropical leaves to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Medium",
+        "oxygenLevel": "55 L/day",
+        "medicinalValues": [
+            "Toxic sap"
+        ],
+        "advantages": [
+            "Large tropical leaves",
+            "Air purifying"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "Perennial"
+    },
+    {
+        "id": "mock_349",
+        "name": "Philodendron Birkin",
+        "scientificName": "Philodendron 'Birkin'",
+        "description": "The Philodendron Birkin is a user-friendly indoor plant. It brings pinstripe variegation to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Bright Indirect",
+        "oxygenLevel": "42 L/day",
+        "medicinalValues": [
+            "Toxic if eaten"
+        ],
+        "advantages": [
+            "Pinstripe variegation",
+            "Self-heading"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "Perennial"
+    },
+    {
+        "id": "mock_350",
+        "name": "Velvet Leaf Philodendron",
+        "scientificName": "Philodendron micans",
+        "description": "The Velvet Leaf Philodendron is a user-friendly indoor plant. It brings velvety texture to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Medium",
+        "oxygenLevel": "35 L/day",
+        "medicinalValues": [
+            "Toxic if eaten"
+        ],
+        "advantages": [
+            "Velvety texture",
+            "Bronze color"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "Perennial"
+    },
+    {
+        "id": "mock_351",
+        "name": "Neon Pothos",
+        "scientificName": "Epipremnum aureum 'Neon'",
+        "description": "The Neon Pothos is a user-friendly indoor plant. It brings bright neon color to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Medium/Low",
+        "oxygenLevel": "40 L/day",
+        "medicinalValues": [
+            "Toxic if eaten"
+        ],
+        "advantages": [
+            "Bright neon color",
+            "Vining"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "Perennial"
+    },
+    {
+        "id": "mock_352",
+        "name": "Satin Pothos",
+        "scientificName": "Scindapsus pictus",
+        "description": "The Satin Pothos is a user-friendly indoor plant. It brings silver spots to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Medium",
+        "oxygenLevel": "36 L/day",
+        "medicinalValues": [
+            "Toxic if eaten"
+        ],
+        "advantages": [
+            "Silver spots",
+            "Matte texture"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "Perennial"
+    },
+    {
+        "id": "mock_353",
+        "name": "Weeping Fig",
+        "scientificName": "Ficus benjamina",
+        "description": "The Weeping Fig is a user-friendly indoor plant. It brings tree-like to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Bright",
+        "oxygenLevel": "60 L/day",
+        "medicinalValues": [
+            "LatEx allergy warning"
+        ],
+        "advantages": [
+            "Tree-like",
+            "Elegant"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "40 Years"
+    },
+    {
+        "id": "mock_354",
+        "name": "Ruby Rubber Plant",
+        "scientificName": "Ficus elastica 'Ruby'",
+        "description": "The Ruby Rubber Plant is a user-friendly indoor plant. It brings pink/red variation to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Bright",
+        "oxygenLevel": "65 L/day",
+        "medicinalValues": [
+            "Latex"
+        ],
+        "advantages": [
+            "Pink/Red variation",
+            "Glossy"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "50 Years"
+    },
+    {
+        "id": "mock_355",
+        "name": "Dragon Tree",
+        "scientificName": "Dracaena marginata",
+        "description": "The Dragon Tree is a user-friendly indoor plant. It brings spiky silhouette to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Medium",
+        "oxygenLevel": "45 L/day",
+        "medicinalValues": [
+            "None"
+        ],
+        "advantages": [
+            "Spiky silhouette",
+            "Modern look"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "40 Years"
+    },
+    {
+        "id": "mock_356",
+        "name": "Corn Plant",
+        "scientificName": "Dracaena fragrans",
+        "description": "The Corn Plant is a user-friendly indoor plant. It brings thick trunk to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Medium",
+        "oxygenLevel": "50 L/day",
+        "medicinalValues": [
+            "None"
+        ],
+        "advantages": [
+            "Thick trunk",
+            "Striped leaves"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "40 Years"
+    },
+    {
+        "id": "mock_357",
+        "name": "Ponytail Palm",
+        "scientificName": "Beaucarnea recurvata",
+        "description": "The Ponytail Palm is a user-friendly indoor plant. It brings bulbous trunk to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Bright",
+        "oxygenLevel": "30 L/day",
+        "medicinalValues": [
+            "None"
+        ],
+        "advantages": [
+            "Bulbous trunk",
+            "Curly leaves"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "100 Years"
+    },
+    {
+        "id": "mock_358",
+        "name": "Spineless Yucca",
+        "scientificName": "Yucca elephantipes",
+        "description": "The Spineless Yucca is a user-friendly indoor plant. It brings architectural to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Bright",
+        "oxygenLevel": "40 L/day",
+        "medicinalValues": [
+            "Edible flowers"
+        ],
+        "advantages": [
+            "Architectural",
+            "Hardy"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "40 Years"
+    },
+    {
+        "id": "mock_359",
+        "name": "Norfolk Island Pine",
+        "scientificName": "Araucaria heterophylla",
+        "description": "The Norfolk Island Pine is a user-friendly indoor plant. It brings living christmas tree to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Bright",
+        "oxygenLevel": "55 L/day",
+        "medicinalValues": [
+            "None"
+        ],
+        "advantages": [
+            "Living Christmas tree",
+            "Soft needles"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "150 Years"
+    },
+    {
+        "id": "mock_360",
+        "name": "Thanksgiving Cactus",
+        "scientificName": "Schlumbergera truncata",
+        "description": "The Thanksgiving Cactus is a user-friendly indoor plant. It brings winter blooms to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Indirect",
+        "oxygenLevel": "25 L/day",
+        "medicinalValues": [
+            "None"
+        ],
+        "advantages": [
+            "Winter blooms",
+            "Epiphytic"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "50 Years"
+    },
+    {
+        "id": "mock_361",
+        "name": "Wax Plant",
+        "scientificName": "Hoya carnosa",
+        "description": "The Wax Plant is a user-friendly indoor plant. It brings porcelain flowers to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Bright",
+        "oxygenLevel": "30 L/day",
+        "medicinalValues": [
+            "None"
+        ],
+        "advantages": [
+            "Porcelain flowers",
+            "Sweet scent"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "30 Years"
+    },
+    {
+        "id": "mock_362",
+        "name": "String of Pearls",
+        "scientificName": "Senecio rowleyanus",
+        "description": "The String of Pearls is a user-friendly indoor plant. It brings trailing beads to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Bright",
+        "oxygenLevel": "15 L/day",
+        "medicinalValues": [
+            "Toxic if eaten"
+        ],
+        "advantages": [
+            "Trailing beads",
+            "Succulent"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "10 Years"
+    },
+    {
+        "id": "mock_363",
+        "name": "Burro's Tail",
+        "scientificName": "Sedum morganianum",
+        "description": "The Burro's Tail is a user-friendly indoor plant. It brings trailing tails to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Bright",
+        "oxygenLevel": "18 L/day",
+        "medicinalValues": [
+            "None"
+        ],
+        "advantages": [
+            "Trailing tails",
+            "Succulent"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "15 Years"
+    },
+    {
+        "id": "mock_364",
+        "name": "Japanese Maple",
+        "scientificName": "Acer palmatum",
+        "description": "The Japanese Maple is a user-friendly outdoor plant. It brings red foliage to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Part Shade",
+        "oxygenLevel": "60 L/day",
+        "medicinalValues": [
+            "Traditional tonic"
+        ],
+        "advantages": [
+            "Red foliage",
+            "Bonsai favorite"
+        ],
+        "price": 25,
+        "type": "outdoor",
+        "lifespan": "100 Years"
+    },
+    {
+        "id": "mock_365",
+        "name": "Eastern Redbud",
+        "scientificName": "Cercis canadensis",
+        "description": "The Eastern Redbud is a user-friendly outdoor plant. It brings pink flowers on bark to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Sun/Part Shade",
+        "oxygenLevel": "55 L/day",
+        "medicinalValues": [
+            "Astringent bark"
+        ],
+        "advantages": [
+            "Pink flowers on bark",
+            "Heart leaves"
+        ],
+        "price": 25,
+        "type": "outdoor",
+        "lifespan": "50 Years"
+    },
+    {
+        "id": "mock_366",
+        "name": "Flowering Dogwood",
+        "scientificName": "Cornus florida",
+        "description": "The Flowering Dogwood is a user-friendly outdoor plant. It brings white bracts to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Part Shade",
+        "oxygenLevel": "50 L/day",
+        "medicinalValues": [
+            "Quinine substitute"
+        ],
+        "advantages": [
+            "White bracts",
+            "Red berries"
+        ],
+        "price": 25,
+        "type": "outdoor",
+        "lifespan": "80 Years"
+    },
+    {
+        "id": "mock_367",
+        "name": "Southern Magnolia",
+        "scientificName": "Magnolia grandiflora",
+        "description": "The Southern Magnolia is a user-friendly outdoor plant. It brings giant white flowers to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Sun/Part Shade",
+        "oxygenLevel": "110 L/day",
+        "medicinalValues": [
+            "Bark tonic"
+        ],
+        "advantages": [
+            "Giant white flowers",
+            "Evergreen"
+        ],
+        "price": 25,
+        "type": "outdoor",
+        "lifespan": "120 Years"
+    },
+    {
+        "id": "mock_368",
+        "name": "Tulip Poplar",
+        "scientificName": "Liriodendron tulipifera",
+        "description": "The Tulip Poplar is a user-friendly outdoor plant. It brings tulip-shaped flowers to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Full Sun",
+        "oxygenLevel": "140 L/day",
+        "medicinalValues": [
+            "Root stimulant"
+        ],
+        "advantages": [
+            "Tulip-shaped flowers",
+            "Tailored leaves"
+        ],
+        "price": 25,
+        "type": "outdoor",
+        "lifespan": "250 Years"
+    },
+    {
+        "id": "mock_369",
+        "name": "Live Oak",
+        "scientificName": "Quercus virginiana",
+        "description": "The Live Oak is a user-friendly outdoor plant. It brings massive canopy to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Full Sun",
+        "oxygenLevel": "200 L/day",
+        "medicinalValues": [
+            "Astringent galls"
+        ],
+        "advantages": [
+            "Massive canopy",
+            "Spanish moss host"
+        ],
+        "price": 25,
+        "type": "outdoor",
+        "lifespan": "500 Years"
+    },
+    {
+        "id": "mock_370",
+        "name": "Longleaf Pine",
+        "scientificName": "Pinus palustris",
+        "description": "The Longleaf Pine is a user-friendly outdoor plant. It brings long needles to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Full Sun",
+        "oxygenLevel": "130 L/day",
+        "medicinalValues": [
+            "Turpentine"
+        ],
+        "advantages": [
+            "Long needles",
+            "Fire resistant"
+        ],
+        "price": 25,
+        "type": "outdoor",
+        "lifespan": "300 Years"
+    },
+    {
+        "id": "mock_371",
+        "name": "Bald Cypress",
+        "scientificName": "Taxodium distichum",
+        "description": "The Bald Cypress is a user-friendly outdoor plant. It brings knees (roots) to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Wet/Sun",
+        "oxygenLevel": "125 L/day",
+        "medicinalValues": [
+            "Resin for wounds"
+        ],
+        "advantages": [
+            "Knees (roots)",
+            "Deciduous conifer"
+        ],
+        "price": 25,
+        "type": "outdoor",
+        "lifespan": "600 Years"
+    },
+    {
+        "id": "mock_372",
+        "name": "Maidenhair Tree",
+        "scientificName": "Ginkgo biloba",
+        "description": "The Maidenhair Tree is a user-friendly outdoor plant. It brings living fossil to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Full Sun",
+        "oxygenLevel": "90 L/day",
+        "medicinalValues": [
+            "Memory aid"
+        ],
+        "advantages": [
+            "Living fossil",
+            "Fan leaves"
+        ],
+        "price": 25,
+        "type": "outdoor",
+        "lifespan": "1000 Years"
+    },
+    {
+        "id": "mock_373",
+        "name": "Dawn Redwood",
+        "scientificName": "Metasequoia glyptostroboides",
+        "description": "The Dawn Redwood is a user-friendly outdoor plant. It brings ancient lineage to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Full Sun",
+        "oxygenLevel": "135 L/day",
+        "medicinalValues": [
+            "None"
+        ],
+        "advantages": [
+            "Ancient lineage",
+            "Fast growing"
+        ],
+        "price": 25,
+        "type": "outdoor",
+        "lifespan": "600 Years"
+    },
+    {
+        "id": "mock_374",
+        "name": "River Birch",
+        "scientificName": "Betula nigra",
+        "description": "The River Birch is a user-friendly outdoor plant. It brings peeling bark to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Sun",
+        "oxygenLevel": "65 L/day",
+        "medicinalValues": [
+            "Sap vinegar"
+        ],
+        "advantages": [
+            "Peeling bark",
+            "Wet soil lover"
+        ],
+        "price": 25,
+        "type": "outdoor",
+        "lifespan": "70 Years"
+    },
+    {
+        "id": "mock_375",
+        "name": "Weeping Willow",
+        "scientificName": "Salix babylonica",
+        "description": "The Weeping Willow is a user-friendly outdoor plant. It brings dramatic sweep to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Sun",
+        "oxygenLevel": "85 L/day",
+        "medicinalValues": [
+            "Salicylic acid"
+        ],
+        "advantages": [
+            "Dramatic sweep",
+            "Water lover"
+        ],
+        "price": 25,
+        "type": "outdoor",
+        "lifespan": "50 Years"
+    },
+    {
+        "id": "mock_376",
+        "name": "Eastern Red Cedar",
+        "scientificName": "Juniperus virginiana",
+        "description": "The Eastern Red Cedar is a user-friendly outdoor plant. It brings aromatic wood to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Full Sun",
+        "oxygenLevel": "70 L/day",
+        "medicinalValues": [
+            "Gin flavoring"
+        ],
+        "advantages": [
+            "Aromatic wood",
+            "Blue berries"
+        ],
+        "price": 25,
+        "type": "outdoor",
+        "lifespan": "150 Years"
+    },
+    {
+        "id": "mock_377",
+        "name": "American Holly",
+        "scientificName": "Ilex opaca",
+        "description": "The American Holly is a user-friendly outdoor plant. It brings red berries to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Sun/Shade",
+        "oxygenLevel": "55 L/day",
+        "medicinalValues": [
+            "Tea (Caution)"
+        ],
+        "advantages": [
+            "Red berries",
+            "Spiky evergreen"
+        ],
+        "price": 25,
+        "type": "outdoor",
+        "lifespan": "100 Years"
+    },
+    {
+        "id": "mock_378",
+        "name": "Bigleaf Hydrangea",
+        "scientificName": "Hydrangea macrophylla",
+        "description": "The Bigleaf Hydrangea is a user-friendly outdoor plant. It brings color changes w/ ph to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Part Shade",
+        "oxygenLevel": "40 L/day",
+        "medicinalValues": [
+            "Diuretic root"
+        ],
+        "advantages": [
+            "Color changes w/ pH",
+            "Big balls"
+        ],
+        "price": 25,
+        "type": "outdoor",
+        "lifespan": "50 Years"
+    },
+    {
+        "id": "mock_379",
+        "name": "Oakleaf Hydrangea",
+        "scientificName": "Hydrangea quercifolia",
+        "description": "The Oakleaf Hydrangea is a user-friendly outdoor plant. It brings native to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Part Shade",
+        "oxygenLevel": "42 L/day",
+        "medicinalValues": [
+            "None"
+        ],
+        "advantages": [
+            "Native",
+            "Cone flowers"
+        ],
+        "price": 25,
+        "type": "outdoor",
+        "lifespan": "50 Years"
+    },
+    {
+        "id": "mock_380",
+        "name": "Southern Azalea",
+        "scientificName": "Rhododendron indicum",
+        "description": "The Southern Azalea is a user-friendly outdoor plant. It brings spring show to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Part Shade",
+        "oxygenLevel": "35 L/day",
+        "medicinalValues": [
+            "Toxic"
+        ],
+        "advantages": [
+            "Spring show",
+            "Evergreen"
+        ],
+        "price": 25,
+        "type": "outdoor",
+        "lifespan": "50 Years"
+    },
+    {
+        "id": "mock_381",
+        "name": "Camellia",
+        "scientificName": "Camellia japonica",
+        "description": "The Camellia is a user-friendly outdoor plant. It brings winter rose to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Shade",
+        "oxygenLevel": "50 L/day",
+        "medicinalValues": [
+            "Tea oil"
+        ],
+        "advantages": [
+            "Winter rose",
+            "Glossy leaves"
+        ],
+        "price": 25,
+        "type": "outdoor",
+        "lifespan": "100 Years"
+    },
+    {
+        "id": "mock_382",
+        "name": "Gardenia",
+        "scientificName": "Gardenia jasminoides",
+        "description": "The Gardenia is a user-friendly outdoor plant. It brings intense scent to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Part Sun",
+        "oxygenLevel": "45 L/day",
+        "medicinalValues": [
+            "Fruit dye"
+        ],
+        "advantages": [
+            "Intense scent",
+            "Creamy flowers"
+        ],
+        "price": 25,
+        "type": "outdoor",
+        "lifespan": "50 Years"
+    },
+    {
+        "id": "mock_383",
+        "name": "Crape Myrtle",
+        "scientificName": "Lagerstroemia indica",
+        "description": "The Crape Myrtle is a user-friendly outdoor plant. It brings summer bloom to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Full Sun",
+        "oxygenLevel": "55 L/day",
+        "medicinalValues": [
+            "None"
+        ],
+        "advantages": [
+            "Summer bloom",
+            "Peeling bark"
+        ],
+        "price": 25,
+        "type": "outdoor",
+        "lifespan": "50 Years"
+    },
+    {
+        "id": "mock_384",
+        "name": "Chinese Wisteria",
+        "scientificName": "Wisteria sinensis",
+        "description": "The Chinese Wisteria is a user-friendly outdoor plant. It brings cascading purple to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Full Sun",
+        "oxygenLevel": "75 L/day",
+        "medicinalValues": [
+            "Toxic seeds"
+        ],
+        "advantages": [
+            "Cascading purple",
+            "Vigorous"
+        ],
+        "price": 25,
+        "type": "outdoor",
+        "lifespan": "100 Years"
+    },
+    {
+        "id": "mock_385",
+        "name": "Passion Flower",
+        "scientificName": "Passiflora incarnata",
+        "description": "The Passion Flower is a user-friendly outdoor plant. It brings alien flower to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Sun",
+        "oxygenLevel": "30 L/day",
+        "medicinalValues": [
+            "Calmative"
+        ],
+        "advantages": [
+            "Alien flower",
+            "Edible fruit"
+        ],
+        "price": 25,
+        "type": "outdoor",
+        "lifespan": "Perennial"
+    },
+    {
+        "id": "mock_386",
+        "name": "Coral Honeysuckle",
+        "scientificName": "Lonicera sempervirens",
+        "description": "The Coral Honeysuckle is a user-friendly outdoor plant. It brings hummingbird magnet to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Sun",
+        "oxygenLevel": "35 L/day",
+        "medicinalValues": [
+            "None"
+        ],
+        "advantages": [
+            "Hummingbird magnet",
+            "Native"
+        ],
+        "price": 25,
+        "type": "outdoor",
+        "lifespan": "Perennial"
+    },
+    {
+        "id": "mock_387",
+        "name": "Carolina Jessamine",
+        "scientificName": "Gelsemium sempervirens",
+        "description": "The Carolina Jessamine is a user-friendly outdoor plant. It brings yellow trumpets to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Sun",
+        "oxygenLevel": "32 L/day",
+        "medicinalValues": [
+            "Toxic"
+        ],
+        "advantages": [
+            "Yellow trumpets",
+            "Early bloom"
+        ],
+        "price": 25,
+        "type": "outdoor",
+        "lifespan": "Perennial"
+    },
+    {
+        "id": "mock_388",
+        "name": "Purple Coneflower",
+        "scientificName": "Echinacea purpurea",
+        "description": "The Purple Coneflower is a user-friendly outdoor plant. It brings butterfly magnet to your environment.",
+        "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format&fit=crop&q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 30,
+        "minHumidity": 40,
+        "sunlight": "Sun",
+        "oxygenLevel": "25 L/day",
+        "medicinalValues": [
+            "Immune boost"
+        ],
+        "advantages": [
+            "Butterfly magnet",
+            "Native"
+        ],
+        "price": 25,
+        "type": "outdoor",
+        "lifespan": "Perennial"
     }
 ];
 
