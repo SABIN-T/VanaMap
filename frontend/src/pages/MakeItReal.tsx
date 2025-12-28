@@ -50,7 +50,12 @@ export const MakeItReal = () => {
             const img = new Image();
             img.crossOrigin = "Anonymous";
             img.src = url;
+
+            // Timeout if image load hangs (e.g. network issues)
+            const timeout = setTimeout(() => reject(new Error('Image Load Timeout')), 10000);
+
             img.onload = () => {
+                clearTimeout(timeout);
                 const canvas = document.createElement('canvas');
                 let width = img.width;
                 let height = img.height;
@@ -71,38 +76,47 @@ export const MakeItReal = () => {
                     else reject(new Error('Blob Error'));
                 }, 'image/jpeg', 0.8);
             };
-            img.onerror = reject;
+            img.onerror = (e) => {
+                clearTimeout(timeout);
+                reject(new Error('Image Load Failed'));
+            };
         });
     };
 
-    const removeBackgroundSimple = (imageSrc: string, tolerance: number = 20): Promise<string> => {
-        return new Promise((resolve) => {
-            const img = new Image();
-            img.crossOrigin = "Anonymous";
-            img.src = imageSrc;
-            img.onload = () => {
-                const canvas = document.createElement('canvas');
-                canvas.width = img.width;
-                canvas.height = img.height;
-                const ctx = canvas.getContext('2d');
-                if (!ctx) return resolve(imageSrc);
+    const removeBackgroundSimple = async (imageSrc: string, tolerance: number = 20): Promise<string> => {
+        try {
+            // Optimization: Resize first to avoid processing 4K/8K images on mobile thread
+            const blob = await resizeImage(imageSrc, 600); // 600px sufficient for fallback
+            const url = URL.createObjectURL(blob);
 
-                ctx.drawImage(img, 0, 0);
-                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-                const data = imageData.data;
-                const bgR = data[0], bgG = data[1], bgB = data[2];
+            return new Promise((resolve) => {
+                const img = new Image();
+                img.src = url;
+                img.onload = () => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    const ctx = canvas.getContext('2d');
+                    if (!ctx) return resolve(url);
 
-                for (let i = 0; i < data.length; i += 4) {
-                    const r = data[i], g = data[i + 1], b = data[i + 2];
-                    const diff = Math.sqrt((r - bgR) ** 2 + (g - bgG) ** 2 + (b - bgB) ** 2);
-                    if (diff < tolerance) data[i + 3] = 0;
-                }
+                    ctx.drawImage(img, 0, 0);
+                    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                    const data = imageData.data;
+                    const bgR = data[0], bgG = data[1], bgB = data[2];
 
-                ctx.putImageData(imageData, 0, 0);
-                resolve(canvas.toDataURL('image/png'));
-            };
-            img.onerror = () => resolve(imageSrc);
-        });
+                    for (let i = 0; i < data.length; i += 4) {
+                        const r = data[i], g = data[i + 1], b = data[i + 2];
+                        const diff = Math.sqrt((r - bgR) ** 2 + (g - bgG) ** 2 + (b - bgB) ** 2);
+                        if (diff < tolerance) data[i + 3] = 0;
+                    }
+
+                    ctx.putImageData(imageData, 0, 0);
+                    resolve(canvas.toDataURL('image/png'));
+                };
+            });
+        } catch {
+            return imageSrc; // If everything fails, just return original
+        }
     };
 
     // --- AI LOGIC (Remove BG) ---
@@ -112,13 +126,11 @@ export const MakeItReal = () => {
 
         try {
             // 1. Resize Image Client-Side (Speed Optimization)
-            // Downscale to 800px max width to speed up upload & processing
             const resizedBlob = await resizeImage(plant.imageUrl, 800);
 
             // 2. Prepare Form Data
             const formData = new FormData();
             formData.append('image_file', resizedBlob);
-            // 'preview' is vastly faster (approx 0.25MP) and perfect for mobile AR
             formData.append('size', 'preview');
 
             // 3. Send to Public API (Remove.bg)
@@ -160,17 +172,14 @@ export const MakeItReal = () => {
         } catch (error) {
             console.warn("Public AI Service unavailable/failed:", error);
 
-            // FALLBACK: Use simple canvas removal
+            // FALLBACK: Use simple canvas removal (Now Optimized)
             const fallbackUrl = await removeBackgroundSimple(plant.imageUrl, 20);
 
             setCutoutUrl(fallbackUrl);
 
             // Helpful toast for developer
             const isApiKeyError = (error as Error).message === "Missing API Key";
-            toast(
-                isApiKeyError ? "Setup API Key in .env!" : "Using basic cutout mode.",
-                { icon: isApiKeyError ? '🔑' : '🔧' }
-            );
+            toast(isApiKeyError ? "Setup API Key in .env!" : "Using basic cutout mode.", { icon: '🔧' });
 
             startStudio();
         } finally {
@@ -180,8 +189,6 @@ export const MakeItReal = () => {
 
     // --- CAMERA STUDIO LOGIC ---
     const startStudio = async () => {
-        setViewMode('STUDIO');
-        setPos({ x: 50, y: 50 }); // Center plant
         try {
             const mediaStream = await navigator.mediaDevices.getUserMedia({
                 video: { facingMode: 'environment' }
@@ -190,9 +197,13 @@ export const MakeItReal = () => {
             if (videoRef.current) {
                 videoRef.current.srcObject = mediaStream;
             }
+            // Only switch view if camera succeeds
+            setViewMode('STUDIO');
+            setPos({ x: 50, y: 50 }); // Center plant
         } catch (e) {
             console.error("Camera denied", e);
-            toast.error("Camera access required for AR");
+            toast.error("Camera needed for AR mode.");
+            // Do NOT switch to STUDIO view, stay on selection
         }
     };
 
