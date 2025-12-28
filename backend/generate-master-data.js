@@ -369,23 +369,41 @@ const generateBackendData = () => {
         const med = p.medicinal.join(' ').toLowerCase();
         const adv = p.advantages.join(' ').toLowerCase();
         const name = p.name.toLowerCase();
+        const lifeLower = p.life.toLowerCase();
 
+        // 1. Toxicity
+        if (med.includes('toxic') || adv.includes('toxic')) {
+            return "USDA Poisonous Plant Research";
+        }
+        // 2. NASA Air Purifiers
         if (['snake plant', 'spider plant', 'peace lily', 'pothos', 'rubber plant', 'english ivy', 'boston fern', 'aloe vera'].some(n => name.includes(n))) {
             return "NASA Clean Air Study (1989)";
         }
+        // 3. Indian Medicinal
         if (med.includes('ayurveda') || med.includes('ayurvedic') || ['neem', 'tulsi', 'ashoka', 'amaltas', 'arjuna'].some(n => name.includes(n))) {
             return "Ayurvedic Pharmacopoeia of India";
         }
+        // 4. TCM
         if (med.includes('tcm') || med.includes('chinese')) {
             return "Traditional Chinese Medicine (TCM) Database";
         }
+        // 5. Ancient / Rare
         if (p.life === 'Parasitic' || adv.includes('rare') || name.includes('wollemi') || name.includes('corpse')) {
             return "IUCN Red List / Kew Gardens Science";
         }
+        if (lifeLower.includes('1000') || lifeLower.includes('500') || lifeLower.includes('living fossil')) {
+            return "The Gymnosperm Database";
+        }
+        // 6. Food Crops
+        if (['mango', 'banana', 'coconut', 'papaya', 'lemon', 'guava', 'jackfruit', 'drumstick'].some(n => name.includes(n))) {
+            return "USDA FoodData Central";
+        }
+        // 7. Indoor / Ornamental
         if (p.type === 'indoor') {
             return "Royal Horticultural Society (RHS) Plant Finder";
         }
-        return "Missouri Botanical Garden Database";
+        // 8. General / Fallback
+        return "World Flora Online (WFO) / Missouri Botanical Garden";
     };
 
     // Generate data objects (NO escaped backticks here)
@@ -506,23 +524,41 @@ const generateSimulationData = () => {
         const med = p.medicinal.join(' ').toLowerCase();
         const adv = p.advantages.join(' ').toLowerCase();
         const name = p.name.toLowerCase();
+        const lifeLower = p.life.toLowerCase();
 
+        // 1. Toxicity
+        if (med.includes('toxic') || adv.includes('toxic')) {
+            return "USDA Poisonous Plant Research";
+        }
+        // 2. NASA Air Purifiers
         if (['snake plant', 'spider plant', 'peace lily', 'pothos', 'rubber plant', 'english ivy', 'boston fern', 'aloe vera'].some(n => name.includes(n))) {
             return "NASA Clean Air Study (1989)";
         }
+        // 3. Indian Medicinal
         if (med.includes('ayurveda') || med.includes('ayurvedic') || ['neem', 'tulsi', 'ashoka', 'amaltas', 'arjuna'].some(n => name.includes(n))) {
             return "Ayurvedic Pharmacopoeia of India";
         }
+        // 4. TCM
         if (med.includes('tcm') || med.includes('chinese')) {
-            return "TCM Database";
+            return "Traditional Chinese Medicine (TCM) Database";
         }
+        // 5. Ancient / Rare
         if (p.life === 'Parasitic' || adv.includes('rare') || name.includes('wollemi') || name.includes('corpse')) {
-            return "IUCN Red List / Kew Gardens";
+            return "IUCN Red List / Kew Gardens Science";
         }
+        if (lifeLower.includes('1000') || lifeLower.includes('500') || lifeLower.includes('living fossil')) {
+            return "The Gymnosperm Database";
+        }
+        // 6. Food Crops
+        if (['mango', 'banana', 'coconut', 'papaya', 'lemon', 'guava', 'jackfruit', 'drumstick'].some(n => name.includes(n))) {
+            return "USDA FoodData Central";
+        }
+        // 7. Indoor / Ornamental
         if (p.type === 'indoor') {
-            return "RHS Plant Finder";
+            return "Royal Horticultural Society (RHS) Plant Finder";
         }
-        return "Missouri Botanical Garden";
+        // 8. General / Fallback
+        return "World Flora Online (WFO) / Missouri Botanical Garden";
     };
 
     const calculateAptness = (p) => {

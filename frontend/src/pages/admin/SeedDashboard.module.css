@@ -232,19 +232,29 @@
     display: inline-flex;
     align-items: center;
     gap: 0.4rem;
-    background: rgba(56, 189, 248, 0.1);
-    border: 1px solid rgba(56, 189, 248, 0.2);
+    background: rgba(56, 189, 248, 0.08);
+    border: 1px solid rgba(56, 189, 248, 0.15);
     color: #38bdf8;
     padding: 0.35rem 0.6rem;
-    border-radius: 6px;
+    border-radius: 8px;
     font-size: 0.7rem;
     font-weight: 600;
-    margin-top: 0.5rem;
+    margin-top: 0.75rem;
     width: fit-content;
     max-width: 100%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    backdrop-filter: blur(4px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: help;
+}
+
+.verifiedSource:hover {
+    background: rgba(56, 189, 248, 0.15);
+    border-color: rgba(56, 189, 248, 0.4);
+    box-shadow: 0 0 12px rgba(56, 189, 248, 0.2);
+    transform: translateY(-1px);
 }
 
 .searchContainer {
