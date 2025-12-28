@@ -4,7 +4,7 @@ import { Upload, Search, Wand2, RefreshCw, ZoomIn, ZoomOut, Image as ImageIcon, 
 import { fetchPlants } from '../services/api';
 import toast from 'react-hot-toast';
 
-// Helper: Remove White Background (Simple Chroma Key)
+// Helper: Smart Flood Fill to remove background but keep the subject (pots/plants)
 const removeWhiteBackground = (imageSrc: string): Promise<string> => {
     return new Promise((resolve) => {
         const img = new Image();
@@ -12,6 +12,7 @@ const removeWhiteBackground = (imageSrc: string): Promise<string> => {
         img.src = imageSrc;
         img.onload = () => {
             const canvas = document.createElement('canvas');
+            // Limit size for performance if needed, but keeping original for quality
             canvas.width = img.width;
             canvas.height = img.height;
             const ctx = canvas.getContext('2d');
@@ -20,15 +21,66 @@ const removeWhiteBackground = (imageSrc: string): Promise<string> => {
             ctx.drawImage(img, 0, 0);
             const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
             const data = imageData.data;
-            const threshold = 230; // Aggressive white removal
+            const width = canvas.width;
+            const height = canvas.height;
 
-            for (let i = 0; i < data.length; i += 4) {
-                const r = data[i];
-                const g = data[i + 1];
-                const b = data[i + 2];
-                // If pixel is very light, make it transparent
-                if (r > threshold && g > threshold && b > threshold) {
-                    data[i + 3] = 0;
+            // 1. Define "White-ish" background threshold
+            // Standard white background is usually usually near (255,255,255)
+            // We use a strict tolerance to avoid eating into light green leaves, 
+            // but loose enough to catch JPEG artifacts.
+            const isBackground = (r: number, g: number, b: number) => {
+                const threshold = 230;
+                return r > threshold && g > threshold && b > threshold;
+            };
+
+            // 2. Queue-based Flood Fill from corners
+            // This ensures we only remove white pixels connected to the OUTSIDE
+            // protecting white pots or flowers in the center.
+            const queue: number[] = [];
+            const visited = new Uint8Array(width * height);
+
+            // Add all 4 corners as seed points if they are white
+            const corners = [0, width - 1, (height - 1) * width, (height - 1) * width + (width - 1)];
+
+            for (const idx of corners) {
+                const r = data[idx * 4];
+                const g = data[idx * 4 + 1];
+                const b = data[idx * 4 + 2];
+                if (isBackground(r, g, b)) {
+                    queue.push(idx);
+                    visited[idx] = 1;
+                }
+            }
+
+            // Run Flood Fill
+            while (queue.length > 0) {
+                const idx = queue.shift()!;
+                const x = idx % width;
+                const y = Math.floor(idx / width);
+
+                // Turn pixel transparent
+                const pixIdx = idx * 4;
+                data[pixIdx + 3] = 0; // Alpha = 0
+
+                // Check neighbors (4-way connectivity)
+                const neighbors = [
+                    { nx: x + 1, ny: y },
+                    { nx: x - 1, ny: y },
+                    { nx: x, ny: y + 1 },
+                    { nx: x, ny: y - 1 }
+                ];
+
+                for (const { nx, ny } of neighbors) {
+                    if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
+                        const nIdx = ny * width + nx;
+                        if (visited[nIdx] === 0) {
+                            const nPixIdx = nIdx * 4;
+                            if (isBackground(data[nPixIdx], data[nPixIdx + 1], data[nPixIdx + 2])) {
+                                visited[nIdx] = 1;
+                                queue.push(nIdx);
+                            }
+                        }
+                    }
                 }
             }
 
@@ -36,7 +88,6 @@ const removeWhiteBackground = (imageSrc: string): Promise<string> => {
             resolve(canvas.toDataURL('image/png'));
         };
         img.onerror = () => {
-            // If CORS fails or load fails, return original
             console.warn("Could not process image (likely CORS), using original.");
             resolve(imageSrc);
         };
