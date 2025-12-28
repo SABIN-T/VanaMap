@@ -1,5 +1,5 @@
 import type { Plant } from '../../../types';
-import { Heart, Sun, Wind, ShoppingBag, AlertCircle, Clock } from 'lucide-react';
+import { Heart, Sun, Wind, ShoppingBag, AlertCircle, Clock, HelpCircle } from 'lucide-react';
 import styles from './PlantCard.module.css';
 import { useAuth } from '../../../context/AuthContext';
 import toast from 'react-hot-toast';
@@ -57,13 +57,24 @@ export const PlantCard = ({ plant, score, isTopMatch, priority = false, onAdd, s
 
                 <div className={styles.overlayTop}>
                     {score !== undefined && (
-                        <div className={styles.matchBadge} style={{
-                            background: score >= 80 ? 'linear-gradient(135deg, #10b981, #059669)' :
-                                score >= 50 ? 'linear-gradient(135deg, #facc15, #fbbf24)' :
-                                    'linear-gradient(135deg, #f87171, #ef4444)',
-                            color: score >= 50 && score < 80 ? '#000' : '#fff',
-                        }}>
-                            {score}% APTNESS
+                        <div
+                            className={styles.matchBadge}
+                            style={{
+                                background: score >= 80 ? 'linear-gradient(135deg, #10b981, #059669)' :
+                                    score >= 50 ? 'linear-gradient(135deg, #facc15, #fbbf24)' :
+                                        'linear-gradient(135deg, #f87171, #ef4444)',
+                                color: score >= 50 && score < 80 ? '#000' : '#fff',
+                                display: 'flex', alignItems: 'center', gap: '4px', cursor: 'help'
+                            }}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                toast(
+                                    `🌱 ${score}% Aptness: Based on 200 scientific mini-simulations. This plant is scored on its biological stability in your local temperature, humidity, and air quality.`,
+                                    { duration: 5000, style: { background: '#0f172a', color: '#fff', border: '1px solid rgba(255,255,255,0.1)' } }
+                                );
+                            }}
+                        >
+                            {score}% APTNESS <HelpCircle size={10} />
                         </div>
                     )}
                     <button onClick={handleHeartClick} className={styles.favBtn} aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}>

@@ -1,8 +1,9 @@
-import { X, Sun, Wind, Droplet, Leaf, Lightbulb, Fan, AlertTriangle, Sparkles, Stethoscope, BookOpen, GraduationCap, Hourglass, ShoppingBag } from 'lucide-react';
+import { X, Sun, Wind, Droplet, Leaf, Lightbulb, Fan, AlertTriangle, Sparkles, Stethoscope, BookOpen, GraduationCap, Hourglass, ShoppingBag, HelpCircle } from 'lucide-react';
 import type { Plant } from '../../../types';
 import styles from './PlantDetailsModal.module.css';
 import { useState, useMemo, useEffect } from 'react';
 import { Button } from '../../common/Button';
+import toast from 'react-hot-toast';
 import { runRoomSimulationMC } from '../../../utils/logic';
 
 interface PlantDetailsModalProps {
@@ -170,7 +171,23 @@ export const PlantDetailsModal = ({ plant, weather, onClose, onBuy }: PlantDetai
                 <div style={{ fontSize: '3rem', fontWeight: 900, color: 'white', lineHeight: 1, textShadow: '0 0 30px rgba(16, 185, 129, 0.3)' }}>
                     {plantsNeeded}
                 </div>
-                <div style={{ fontSize: '0.9rem', color: '#10b981', fontWeight: 600 }}>Plants Needed</div>
+                <div
+                    style={{
+                        fontSize: '0.9rem', color: '#10b981', fontWeight: 600,
+                        display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+                        cursor: 'help'
+                    }}
+                    onClick={() => {
+                        toast(
+                            "🔬 Scientific Simulation: We run 500 mini-tests to see how this plant behaves in your specific weather. " +
+                            "Plants work 24/7 to 'recharge' your room with fresh air even when you aren't there. " +
+                            "This number ensures you have a healthy oxygen supply for your entire stay!",
+                            { icon: '🌱', duration: 6000, style: { background: '#1e293b', color: '#fff', borderRadius: '12px', border: '1px solid #10b981' } }
+                        );
+                    }}
+                >
+                    Plants Needed <HelpCircle size={14} />
+                </div>
                 <div style={{ fontSize: '0.8rem', color: '#64748b' }}>For {numPeople} People (Needs {numPeople * 550}L O₂)</div>
             </div>
             <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(circle at center, rgba(16, 185, 129, 0.1), transparent 70%)' }}></div>
