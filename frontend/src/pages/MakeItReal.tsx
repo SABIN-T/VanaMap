@@ -163,20 +163,24 @@ export const MakeItReal = () => {
 
     // 3. Self-Hosted Python Service (U2-Net / Rembg)
     const removeBackgroundPython = async (blob: Blob): Promise<string> => {
-        const baseUrl = import.meta.env.VITE_AI_API_URL;
-        if (!baseUrl) throw new Error("No Python Service URL");
+        // Fallback to localhost if no production URL is set
+        const baseUrl = import.meta.env.VITE_AI_API_URL || 'http://localhost:8000';
 
         const formData = new FormData();
         formData.append('file', blob, 'plant.jpg');
 
-        const res = await fetch(`${baseUrl}/remove-bg`, {
-            method: 'POST',
-            body: formData
-        });
-
-        if (!res.ok) throw new Error("Python Service Error");
-        const resBlob = await res.blob();
-        return URL.createObjectURL(resBlob);
+        try {
+            const res = await fetch(`${baseUrl}/remove-bg`, {
+                method: 'POST',
+                body: formData
+            });
+            if (!res.ok) throw new Error(`Python API Error: ${res.status}`);
+            const resBlob = await res.blob();
+            return URL.createObjectURL(resBlob);
+        } catch (e) {
+            // Throwing triggers the next strategy
+            throw new Error(`Python Service Unreachable at ${baseUrl}`);
+        }
     };
 
     // --- MAIN PROCESSOR ---
@@ -192,35 +196,35 @@ export const MakeItReal = () => {
             let resultUrl: string | null = null;
             let successStrategy = "";
 
-            // Strategy A: Remove.bg
+            // Strategy A: Remove.bg (Commercial / Key)
             if (!resultUrl) {
                 try {
                     resultUrl = await removeBackgroundRemoveBg(resizedBlob);
                     successStrategy = "Remove.bg";
-                } catch (e) { console.log("Strategy A skipped:", e); }
+                } catch (e) { console.warn("Strategy A (Remove.bg) failed:", e); }
             }
 
-            // Strategy B: Hugging Face (U2-Net / RMBG)
+            // Strategy B: Hugging Face (Public AI)
             if (!resultUrl) {
                 try {
                     resultUrl = await removeBackgroundHF(resizedBlob);
                     successStrategy = "Hugging Face (U2-Net)";
-                } catch (e) { console.log("Strategy B skipped:", e); }
+                } catch (e) { console.warn("Strategy B (Hugging Face) failed:", e); }
             }
 
-            // Strategy C: Python Service (Self-Hosted)
+            // Strategy C: Python Service (Local/Render)
             if (!resultUrl) {
                 try {
                     resultUrl = await removeBackgroundPython(resizedBlob);
                     successStrategy = "Python Service";
-                } catch (e) { console.log("Strategy C skipped:", e); }
+                } catch (e) { console.warn("Strategy C (Python) failed:", e); }
             }
 
-            // Strategy D: Local Fallback
+            // Strategy D: Local Fallback (Canvas)
             if (!resultUrl) {
                 resultUrl = await removeBackgroundSimple(plant.imageUrl, 20);
                 successStrategy = "Basic Cutout";
-                toast("Using Basic Mode (AI Offline)", { icon: '🔧' });
+                toast("AI Offline. Using Basic Mode.", { icon: '🔧' });
             } else {
                 // Success Toast
                 toast.success(`Processed with ${successStrategy}`, { position: 'bottom-center' });
@@ -230,7 +234,7 @@ export const MakeItReal = () => {
             startStudio();
 
         } catch (error) {
-            console.error("All bg removal failed", error);
+            console.error("All bg removal strategies failed", error);
             toast.error("Could not process image");
         } finally {
             setIsProcessing(false);
