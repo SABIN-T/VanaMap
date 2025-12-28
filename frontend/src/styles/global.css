@@ -164,6 +164,11 @@ select:focus {
     box-shadow: 0 20px 40px rgba(16, 185, 129, 0.5);
 }
 
+.active {
+    background: rgba(16, 185, 129, 0.4) !important;
+    border-color: #10b981 !important;
+}
+
 .premium-mode .btn-primary::after {
     content: '';
     position: absolute;

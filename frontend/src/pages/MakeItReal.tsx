@@ -3,7 +3,7 @@ import styles from './MakeItReal.module.css';
 import { fetchPlants } from '../services/api';
 import type { Plant } from '../types';
 import toast from 'react-hot-toast';
-import { Search, ArrowLeft, ScanLine } from 'lucide-react';
+import { Search, ArrowLeft, ScanLine, Sparkles } from 'lucide-react';
 
 /* 
  * 🧠 MakeItReal v3.0 - Neural Studio
@@ -26,7 +26,8 @@ export const MakeItReal = () => {
     const [stream, setStream] = useState<MediaStream | null>(null);
 
     // Plant Transform State (Draggable)
-    const [pos, setPos] = useState({ x: 0, y: 0 }); // Percentages
+    const [useStudioPot, setUseStudioPot] = useState(true);
+    const [pos, setPos] = useState({ x: 50, y: 50 });
     const [dragging, setDragging] = useState(false);
 
     // --- CORE METHODS ---
@@ -310,7 +311,7 @@ export const MakeItReal = () => {
     };
 
     // --- CAMERA STUDIO LOGIC ---
-    const captureScene = () => {
+    const captureScene = async () => {
         if (!videoRef.current || !cutoutUrl) return;
 
         const video = videoRef.current;
@@ -324,30 +325,45 @@ export const MakeItReal = () => {
         // 1. Draw Video Frame
         ctx.drawImage(video, 0, 0);
 
-        // 2. Draw Plant (respecting current pos)
-        const plantImg = new Image();
-        plantImg.crossOrigin = "Anonymous";
-        plantImg.src = cutoutUrl;
-        plantImg.onload = () => {
-            // Calculate position based on percentages
-            const imgW = canvas.width * 0.5; // Plant is ~50% of screen width
+        // 2. Load Images
+        const [plantImg, potImg] = await Promise.all([
+            new Promise<HTMLImageElement>((resolve) => {
+                const img = new Image(); img.crossOrigin = "Anonymous";
+                img.src = cutoutUrl; img.onload = () => resolve(img);
+            }),
+            useStudioPot ? new Promise<HTMLImageElement>((resolve) => {
+                const img = new Image(); img.src = "/images/sig-pot.png";
+                img.onload = () => resolve(img);
+            }) : Promise.resolve(null)
+        ]);
+
+        // 3. Draw Pot (if enabled)
+        const scale = 0.55;
+        const potW = canvas.width * scale;
+        const potH = (potImg ? (potImg.height / potImg.width) : 1) * potW;
+        const x = (pos.x / 100) * canvas.width - (potW / 2);
+        const y = (pos.y / 100) * canvas.height - (potH / 2);
+
+        if (potImg) {
+            // Draw Plant first (behind/inside pot rim)
+            const plantW = potW * 0.85;
+            const plantH = (plantImg.height / plantImg.width) * plantW;
+            // Place plant slightly above the pot base
+            ctx.drawImage(plantImg, x + (potW - plantW) / 2, y - (plantH * 0.7), plantW, plantH);
+            ctx.drawImage(potImg, x, y, potW, potH);
+        } else {
+            const imgW = canvas.width * scale;
             const imgH = (plantImg.height / plantImg.width) * imgW;
-
-            const x = (pos.x / 100) * canvas.width - (imgW / 2);
-            const y = (pos.y / 100) * canvas.height - (imgH / 2);
-
             ctx.drawImage(plantImg, x, y, imgW, imgH);
+        }
 
-            // 3. Save
-            const finalImage = canvas.toDataURL('image/png');
-            // Download it
-            const link = document.createElement('a');
-            link.download = `vanamap-ar-${Date.now()}.png`;
-            link.href = finalImage;
-            link.click();
-
-            toast.success("Design Saved to Gallery!", { icon: '📸' });
-        };
+        // 4. Save
+        const finalImage = canvas.toDataURL('image/png');
+        const link = document.createElement('a');
+        link.download = `vanamap-design-${Date.now()}.png`;
+        link.href = finalImage;
+        link.click();
+        toast.success("Masterpiece Saved!", { icon: '🏆' });
     };
 
     // --- INTERACTION LOGIC ---
@@ -458,20 +474,37 @@ export const MakeItReal = () => {
                     {/* 2. Drag Overlay */}
                     {dragging && <div style={{ position: 'absolute', inset: 0, zIndex: 10 }} onMouseUp={() => setDragging(false)} onTouchEnd={() => setDragging(false)} />}
 
-                    {/* 3. The Plant */}
+                    {/* 3. The Composition */}
                     {cutoutUrl && (
-                        <img
-                            src={cutoutUrl}
-                            className={styles.arPlant}
-                            alt="AR Plant"
+                        <div
+                            className={styles.composition}
                             style={{
                                 left: `${pos.x}%`,
                                 top: `${pos.y}%`,
                             }}
                             onMouseDown={handleDragStart}
                             onTouchStart={handleDragStart}
-                            draggable={false}
-                        />
+                        >
+                            {/* Foliage */}
+                            <img
+                                src={cutoutUrl}
+                                className={styles.foliage}
+                                alt="Foliage"
+                                draggable={false}
+                                style={{
+                                    transform: useStudioPot ? 'translateY(-30%) scale(0.9)' : 'none'
+                                }}
+                            />
+                            {/* Pot Overlay */}
+                            {useStudioPot && (
+                                <img
+                                    src="/images/sig-pot.png"
+                                    className={styles.potOverlay}
+                                    alt="Pot"
+                                    draggable={false}
+                                />
+                            )}
+                        </div>
                     )}
 
                     {/* 4. UI Layer */}
@@ -482,6 +515,14 @@ export const MakeItReal = () => {
                                 setViewMode('SELECTION');
                             }}>
                                 <ArrowLeft size={20} />
+                            </button>
+
+                            <button
+                                className={`${styles.glassBtn} ${useStudioPot ? styles.active : ''}`}
+                                onClick={() => setUseStudioPot(!useStudioPot)}
+                                title="Toggle Signature Pot"
+                            >
+                                <Sparkles size={18} color={useStudioPot ? '#facc15' : '#fff'} />
                             </button>
                         </div>
 
