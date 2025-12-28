@@ -7,8 +7,8 @@ import toast from 'react-hot-toast';
 export const SeedDashboard = () => {
     const [loading, setLoading] = useState(true);
     const [seedData, setSeedData] = useState<{ indoor: any[], outdoor: any[] }>({ indoor: [], outdoor: [] });
-    const [deployedIds, setDeployedIds] = useState<Set<string>>(new Set());
-    const [liveScientificNames, setLiveScientificNames] = useState<Set<string>>(new Set());
+    // Map of Lowercase Scientific Name -> Live Database ID
+    const [liveScientificMap, setLiveScientificMap] = useState<Map<string, string>>(new Map());
     const [deploying, setDeploying] = useState<string | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
 
@@ -20,10 +20,15 @@ export const SeedDashboard = () => {
         try {
             const [seeds, livePlants] = await Promise.all([fetchSeedData(), fetchPlants()]);
             setSeedData(seeds);
-            // Store IDs of plants that are already in the DB
-            setDeployedIds(new Set(livePlants.map((p: any) => p.id)));
-            // Store Scientific Names to prevent duplicates
-            setLiveScientificNames(new Set(livePlants.map((p: any) => p.scientificName?.toLowerCase().trim())));
+
+            // Build Map: Scientific Name (lower) -> Mongo ID
+            const newMap = new Map<string, string>();
+            livePlants.forEach((p: any) => {
+                if (p.scientificName) {
+                    newMap.set(p.scientificName.toLowerCase().trim(), p.id);
+                }
+            });
+            setLiveScientificMap(newMap);
         } catch (error) {
             toast.error("Failed to load databank");
             console.error(error);
@@ -35,17 +40,25 @@ export const SeedDashboard = () => {
     const handlePush = async (plant: any) => {
         // Validation: Check if scientific name exists
         const sciName = plant.scientificName?.toLowerCase().trim();
-        if (sciName && liveScientificNames.has(sciName)) {
+        if (sciName && liveScientificMap.has(sciName)) {
             toast.error(`Action Blocked: "${plant.scientificName}" already exists in the live database.`);
             return;
         }
 
         setDeploying(plant.id);
         try {
-            await seedSinglePlant(plant.id);
-            setDeployedIds(prev => new Set(prev).add(plant.id));
-            if (sciName) setLiveScientificNames(prev => new Set(prev).add(sciName));
-            toast.success(`${plant.name} deployed to VanaMap Live!`);
+            // Ideally response contains the new plant ID, but if not we can reload or rely on name matching logic for next render if we re-fetch
+            const res = await seedSinglePlant(plant.id);
+
+            // If response has the new plant object, update map immediately
+            if (res && res.id && sciName) {
+                setLiveScientificMap(prev => new Map(prev).set(sciName, res.id));
+                toast.success(`${plant.name} deployed to Live!`);
+            } else {
+                // Fallback: Reload all to get the new ID
+                toast.success(`${plant.name} deployed! Syncing...`);
+                await loadData();
+            }
         } catch (error: any) {
             toast.error(error.message || "Deployment failed");
         } finally {
@@ -54,13 +67,22 @@ export const SeedDashboard = () => {
     };
 
     const handleRemove = async (plant: any) => {
+        const sciName = plant.scientificName?.toLowerCase().trim();
+        const liveId = liveScientificMap.get(sciName);
+
+        if (!liveId) {
+            toast.error("Could not find live record ID for removal.");
+            return;
+        }
+
         if (!confirm(`Are you sure you want to REMOVE ${plant.name} from the live database?`)) return;
+
         try {
-            await deletePlant(plant.id);
-            setDeployedIds(prev => {
-                const newSet = new Set(prev);
-                newSet.delete(plant.id);
-                return newSet;
+            await deletePlant(liveId);
+            setLiveScientificMap(prev => {
+                const newMap = new Map(prev);
+                newMap.delete(sciName);
+                return newMap;
             });
             toast.success(`${plant.name} removed from Live Database.`);
         } catch (error: any) {
@@ -90,7 +112,8 @@ export const SeedDashboard = () => {
     };
 
     const renderCard = (plant: any) => {
-        const isDeployed = deployedIds.has(plant.id);
+        const sciName = plant.scientificName?.toLowerCase().trim();
+        const isDeployed = sciName && liveScientificMap.has(sciName);
         const isProcessing = deploying === plant.id;
 
         return (
