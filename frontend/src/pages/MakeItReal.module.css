@@ -1,130 +1,148 @@
-/* 🌌 MAKE IT REAL - STUDIO 2.0 🌌 */
-/* Designed for spatial depth, clarity, and premium feel */
+/* 👾 NEURAL STUDIO THEME */
+/* High-End, AI-Driven Aesthetic */
 
-@keyframes pulse {
-    0% {
-        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
-    }
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
 
-    70% {
-        box-shadow: 0 0 0 15px rgba(255, 255, 255, 0);
-    }
-
-    100% {
-        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
-    }
-}
-
-.pulseFocus {
-    animation: pulse 1.5s infinite;
-    border-color: #34d399 !important;
-}
-
-.panelScroll {
-    flex: 1;
-    overflow-y: auto;
-    padding-right: 4px;
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
-.panelScroll::-webkit-scrollbar {
-    width: 4px;
-}
-
-.panelScroll::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 4px;
-}
-
-/* --- GLOBAL THEME --- */
 .container {
-    min-height: 100vh;
-    min-height: 100dvh;
-    /* Mobile 100% height fix */
-    background: radial-gradient(circle at 15% 15%, #0f172a 0%, #020617 100%);
+    /* Full viewport logic that respects mobile bars */
+    width: 100vw;
+    height: 100dvh;
+    background: #030712;
+    /* Deepest Void */
     color: #e2e8f0;
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-family: 'Inter', sans-serif;
+    overflow: hidden;
+    position: relative;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
-    /* Prevent body scroll, everything lives in the workspace */
 }
 
-/* --- TOP BAR (WINDOW HEADER) --- */
+/* --- AMBIENT BACKGROUNDS --- */
+.ambientGlow {
+    position: fixed;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+    top: -200px;
+    left: 50%;
+    transform: translateX(-50%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.scanline {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0) 50%, rgba(0, 0, 0, 0.1) 50%, rgba(0, 0, 0, 0.1));
+    background-size: 100% 4px;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.3;
+}
+
+/* --- HEADER --- */
 .header {
+    flex-shrink: 0;
     height: 70px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 2rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    background: rgba(15, 23, 42, 0.5);
-    backdrop-filter: blur(12px);
+    padding: 0 1.5rem;
+    backdrop-filter: blur(20px);
+    background: rgba(3, 7, 18, 0.6);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     z-index: 50;
-    flex-shrink: 0;
+    padding-top: env(safe-area-inset-top);
+    /* Mobile Notch Safe */
 }
 
-.title {
-    font-size: 1.25rem;
+.brand {
+    font-family: 'Space Grotesk', sans-serif;
     font-weight: 700;
-    margin: 0;
-    background: linear-gradient(90deg, #34d399 0%, #2dd4bf 100%);
+    font-size: 1.25rem;
+    letter-spacing: -0.05em;
+    background: linear-gradient(to right, #ffffff, #94a3b8);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    letter-spacing: -0.02em;
-}
-
-.subtitle {
-    color: #64748b;
-    font-size: 0.85rem;
-    text-transform: uppercase;
-    letter-spacing: 0.1em;
-    font-weight: 600;
     display: flex;
     align-items: center;
     gap: 0.5rem;
 }
 
-/* --- MAIN WORKSPACE ("THE OS WINDOW") --- */
-.workspace {
+.brandBadge {
+    font-size: 0.6rem;
+    background: #34d399;
+    color: #022c22;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+/* --- SELECTION VIEW (SCROLLABLE) --- */
+.selectionView {
     flex: 1;
-    display: flex;
-    position: relative;
-    overflow: hidden;
-    padding: 1rem;
-    gap: 1rem;
-}
-
-/* --- LEFT: ASSET LIBRARY ("DRAWER") --- */
-.sidebar {
-    width: 320px;
-    background: rgba(30, 41, 59, 0.4);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 20px;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-}
-
-.sidebarHeader {
+    overflow-y: auto;
+    overflow-x: hidden;
     padding: 1.5rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 180px;
+    /* Massive safe bottom for mobile tabs */
+    z-index: 10;
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    align-items: center;
+    gap: 2rem;
 }
 
-.searchBox {
+.heroSection {
+    text-align: center;
+    max-width: 600px;
+    margin-bottom: 1rem;
+}
+
+.heroTitle {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1.1;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #fff 0%, #cbd5e1 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.heroText {
+    color: #94a3b8;
+    line-height: 1.6;
+    font-size: 1rem;
+}
+
+/* SEARCH BAR IMPL */
+.searchWrapper {
+    width: 100%;
+    max-width: 500px;
     position: relative;
+    margin-bottom: 1rem;
+}
+
+.searchInput {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: white;
+    padding: 1rem 1rem 1rem 3rem;
+    border-radius: 16px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.searchInput:focus {
+    outline: none;
+    border-color: #34d399;
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 0 0 4px rgba(52, 211, 153, 0.1);
 }
 
 .searchIcon {
@@ -133,539 +151,249 @@
     top: 50%;
     transform: translateY(-50%);
     color: #64748b;
-    width: 16px;
-    height: 16px;
 }
 
-.searchInput {
+/* GRID */
+.plantGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1.5rem;
     width: 100%;
-    padding: 0.75rem 1rem 0.75rem 2.75rem;
-    background: rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 12px;
-    color: white;
-    font-size: 0.9rem;
-    transition: all 0.2s;
-}
-
-.searchInput:focus {
-    outline: none;
-    background: rgba(0, 0, 0, 0.4);
-    border-color: #34d399;
-    box-shadow: 0 0 0 2px rgba(52, 211, 153, 0.1);
-}
-
-.plantList {
-    flex: 1;
-    overflow-y: auto;
-    padding: 1rem;
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
-}
-
-/* Custom Scrollbar */
-.plantList::-webkit-scrollbar {
-    width: 6px;
-}
-
-.plantList::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 3px;
+    max-width: 1000px;
 }
 
 .plantCard {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 0.85rem;
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: 14px;
-    border: 1px solid transparent;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    overflow: hidden;
     cursor: pointer;
-    transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    aspect-ratio: 0.8;
 }
 
 .plantCard:hover {
-    background: rgba(255, 255, 255, 0.06);
-    transform: translateY(-2px) scale(1.02);
-    border-color: rgba(52, 211, 153, 0.2);
-    box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.3);
+    transform: translateY(-8px);
+    border-color: rgba(99, 102, 241, 0.5);
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
 }
 
-.thumb {
-    width: 48px;
-    height: 48px;
-    border-radius: 10px;
-    object-fit: cover;
-    background: rgba(255, 255, 255, 0.1);
-}
-
-.plantInfo {
-    flex: 1;
-}
-
-.plantInfo h4 {
-    margin: 0 0 0.25rem 0;
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: #f8fafc;
-}
-
-.plantInfo p {
-    margin: 0;
-    font-size: 0.75rem;
-    color: #94a3b8;
-}
-
-/* --- CENTER: THE STAGE ("VIEWPORT") --- */
-.studioMain {
-    flex: 1;
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    /* Subtle border */
-    position: relative;
-    /* Anchor for panels */
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.5);
-    /* Inner Depth */
-}
-
-/* The actual drawing area */
-.canvasViewport {
-    flex: 1;
-    position: relative;
-    overflow: hidden;
-    touch-action: none;
-    /* Crucial for gesture dragging */
-    cursor: default;
-    background-image:
-        radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-    background-size: 40px 40px;
-    /* Grid hint */
-}
-
-/* Empty State */
-.canvasEmpty {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 2rem;
-    z-index: 10;
-}
-
-.canvasEmpty h2 {
-    font-size: 2rem;
-    font-weight: 300;
-    color: white;
-    margin: 0;
-    letter-spacing: -0.02em;
-}
-
-.canvasEmpty p {
-    color: #94a3b8;
-    max-width: 400px;
-    text-align: center;
-    line-height: 1.6;
-}
-
-/* Buttons */
-.actionRow {
-    display: flex;
-    gap: 1.5rem;
-    align-items: center;
-}
-
-.uploadBtn,
-.cameraBtn {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: white;
-    padding: 1rem 2rem;
-    border-radius: 99px;
-    /* Pill shape */
-    font-weight: 600;
-    font-size: 1rem;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-    position: relative;
-    overflow: hidden;
-}
-
-.uploadBtn::before,
-.cameraBtn::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(120deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-    transform: translateX(-100%);
-    transition: transform 0.5s;
-}
-
-.uploadBtn:hover,
-.cameraBtn:hover {
-    background: rgba(255, 255, 255, 0.1);
-    transform: translateY(-2px);
-    box-shadow: 0 10px 30px -10px rgba(52, 211, 153, 0.3);
-    border-color: rgba(52, 211, 153, 0.5);
-}
-
-.uploadBtn:hover::before,
-.cameraBtn:hover::before {
-    transform: translateX(100%);
-}
-
-.orDivider {
-    color: #475569;
-    font-size: 0.8rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-}
-
-/* --- THE CONTENT --- */
-.roomImage {
+.cardImage {
     width: 100%;
     height: 100%;
-    object-fit: contain;
-    user-select: none;
-    -webkit-user-drag: none;
-    pointer-events: none;
-    /* Let clicks pass to canvas handlers */
+    object-fit: cover;
+    transition: transform 0.5s ease;
 }
 
-.placedPlant {
+.plantCard:hover .cardImage {
+    transform: scale(1.1);
+}
+
+.cardOverlay {
     position: absolute;
-    /* Smooth CSS transforms handled by React style prop, better not to animate here for drag */
-    user-select: none;
-    -webkit-user-drag: none;
-    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.4));
-    will-change: transform, left, top;
-}
-
-.placedPlant:active {
-    cursor: grabbing;
-    filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.6));
-    transform: scale(1.02);
-    /* Slight lift */
-}
-
-/* --- RIGHT: FLOATING "AI STUDIO" PANEL --- */
-.designerPanel {
-    position: absolute;
-    bottom: 24px;
-    right: 24px;
-    width: 340px;
-    background: rgba(15, 23, 42, 0.75);
-    /* Dark Glass */
-    backdrop-filter: blur(24px) saturate(180%);
-    -webkit-backdrop-filter: blur(24px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 24px;
-    padding: 1.5rem;
-    box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    z-index: 100;
-    animation: panelEntry 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 1.5rem 1rem 1rem;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
     display: flex;
     flex-direction: column;
+    justify-content: flex-end;
+}
+
+.cardName {
+    font-weight: 600;
+    font-size: 1rem;
+    color: white;
+    margin: 0;
+}
+
+.cardSci {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    font-style: italic;
+    opacity: 0.8;
+}
+
+/* --- LOADER --- */
+.loaderOverlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: rgba(3, 7, 18, 0.8);
+    backdrop-filter: blur(20px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     gap: 1.5rem;
 }
 
-@keyframes panelEntry {
-    from {
+.scanner {
+    width: 120px;
+    height: 120px;
+    border: 2px solid rgba(52, 211, 153, 0.3);
+    border-radius: 16px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 30px rgba(52, 211, 153, 0.2);
+}
+
+.scanBeam {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: #34d399;
+    box-shadow: 0 0 15px #34d399;
+    animation: scan 1.5s ease-in-out infinite;
+}
+
+@keyframes scan {
+    0% {
+        transform: translateY(0);
         opacity: 0;
-        transform: translateY(40px) scale(0.95);
     }
 
-    to {
+    10% {
         opacity: 1;
-        transform: translateY(0) scale(1);
+    }
+
+    90% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(120px);
+        opacity: 0;
     }
 }
 
-.panelHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.panelHeader h3 {
-    margin: 0;
-    font-size: 0.9rem;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    color: #fff;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-}
-
-.sparkleIcon {
+.loaderText {
+    font-family: 'Space Grotesk', sans-serif;
     color: #34d399;
-    /* Brand Green */
-}
-
-.closePanelBtn {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.05);
-    border: none;
-    color: #94a3b8;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s;
-}
-
-.closePanelBtn:hover {
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
-}
-
-/* Controls Grid */
-.controlGroup label {
-    display: block;
-    font-size: 0.7rem;
-    font-weight: 700;
+    font-size: 1.25rem;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: #64748b;
-    margin-bottom: 0.75rem;
 }
 
-/* 1. Style Grid */
-.styleGrid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    /* 3 cols for compact layout */
-    gap: 0.75rem;
+/* --- AR STUDIO (CAMERA MODE) --- */
+.arView {
+    flex: 1;
+    position: relative;
+    background: #000;
+    overflow: hidden;
 }
 
-.styleOption {
-    height: 80px;
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 12px;
-    border: 2px solid transparent;
-    cursor: pointer;
+.cameraVideo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.8;
+    /* Slight dim for UI contrast */
+}
+
+/* The Ghost Plant */
+.arPlant {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(1);
+    /* Initial center */
+    max-width: 60%;
+    max-height: 60%;
+    filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.6));
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+}
+
+.arPlant:active {
+    cursor: grabbing;
+}
+
+/* AR UI Overlay */
+.arOverlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    /* Let clicks pass to plant if not on UI */
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.4rem;
-    transition: all 0.2s;
-}
-
-.styleOption:hover {
-    background: rgba(255, 255, 255, 0.05);
-}
-
-.styleOption.selected {
-    background: rgba(52, 211, 153, 0.1);
-    border-color: #34d399;
-}
-
-.styleThumb {
-    width: 40px;
-    height: 40px;
-    background-position: center;
-    background-size: contain;
-    background-repeat: no-repeat;
-    opacity: 0.8;
-    transition: opacity 0.2s;
-}
-
-.styleOption.selected .styleThumb {
-    opacity: 1;
-}
-
-.styleOption span {
-    font-size: 0.7rem;
-    color: #cbd5e1;
-}
-
-/* 2. Color Row */
-.colorRow {
-    display: flex;
-    gap: 0.75rem;
     justify-content: space-between;
-    /* Distribute evenly */
-    background: rgba(0, 0, 0, 0.2);
-    padding: 0.75rem;
-    border-radius: 12px;
+    padding: 1.5rem;
+    padding-bottom: 120px;
+    /* Safe space for mobile bot nav */
 }
 
-.colorDot {
-    width: 24px;
-    height: 24px;
-    border-radius: 50%;
-    cursor: pointer;
-    border: 2px solid rgba(255, 255, 255, 0.1);
-    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.colorDot:hover {
-    transform: scale(1.2);
-}
-
-.colorDot[data-active="true"] {
-    transform: scale(1.3);
-    border-color: white;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-}
-
-/* 3. Slider */
-.sliderRow {
+.arHeader {
     display: flex;
-    align-items: center;
-    gap: 1rem;
-    background: rgba(0, 0, 0, 0.3);
-    padding: 0.75rem;
-    border-radius: 12px;
+    justify-content: space-between;
+    pointer-events: auto;
 }
 
-.sliderRow input {
-    flex: 1;
-    height: 4px;
-    background: #334155;
-    border-radius: 2px;
-    -webkit-appearance: none;
-}
-
-.sliderRow input::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 16px;
-    height: 16px;
-    border-radius: 50%;
-    background: white;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-    cursor: grab;
-    margin-top: -6px;
-    /* center on track */
-}
-
-/* --- BOTTOM: TOOLBAR (DOCKED) --- */
-.editorToolbar {
-    position: absolute;
-    bottom: 24px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(16px);
+.glassBtn {
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 99px;
-    padding: 0.5rem 1rem;
-    display: flex;
-    gap: 1rem;
-    align-items: center;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-    z-index: 90;
-}
-
-.toolBtn {
-    background: transparent;
-    border: none;
-    color: #94a3b8;
-    padding: 0.75rem;
-    border-radius: 50%;
-    cursor: pointer;
-    transition: all 0.2s;
+    color: white;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
 }
 
-.toolBtn:hover {
+.glassBtn:hover {
     background: rgba(255, 255, 255, 0.1);
-    color: white;
-    transform: translateY(-2px);
+    transform: scale(1.05);
 }
 
-.magicToggle.magicActive {
-    color: #a78bfa;
-    background: rgba(167, 139, 250, 0.1);
+.arFooter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    pointer-events: auto;
 }
 
-/* --- MOBILE RESPONSIVE --- */
-@media (max-width: 1000px) {
-    .container {
-        padding-top: 70px;
-        /* Safe area for Top Nav */
-        padding-bottom: 200px;
-        /* EXTRA Safe area */
-        min-height: 100vh;
-        height: auto !important;
-        /* Force auto height */
-        overflow-y: auto !important;
-        /* Force scroll */
-        -webkit-overflow-scrolling: touch;
-        /* Smooth scroll iOS */
+.shutterBtn {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 4px solid rgba(255, 255, 255, 0.8);
+    background: transparent;
+    padding: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.shutterInner {
+    width: 100%;
+    height: 100%;
+    background: white;
+    border-radius: 50%;
+    transition: all 0.2s;
+}
+
+.shutterBtn:active .shutterInner {
+    transform: scale(0.85);
+    background: #f43f5e;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+    .plantGrid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
     }
 
-    .workspace {
-        flex-direction: column;
-        padding: 0.5rem;
-        overflow: visible;
-        /* Let children flow */
-        flex: none;
-        /* Don't force fill, let content dictate height */
-        height: auto;
-    }
-
-    .sidebar {
-        width: 100%;
-        height: auto;
-        min-height: 150px;
-        max-height: 250px;
-        flex-shrink: 0;
-        overflow-y: auto;
-    }
-
-    .sidebarHeader {
-        padding: 0.75rem;
-    }
-
-    .studioMain {
-        height: 50vh;
-        /* Fixed height for canvas on mobile */
-        min-height: 400px;
-        flex: none;
-    }
-
-    .designerPanel {
-        position: fixed;
-        /* Fix to viewport to float above other content */
-        width: 100%;
-        left: 0;
-        right: 0;
-        bottom: 85px;
-        /* Sit exactly above standard mobile tab bars */
-        border-radius: 24px 24px 0 0;
-        border-bottom: none;
-        max-height: 40vh;
-        /* Prevent covering entire screen */
-        box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
-    }
-
-    .editorToolbar {
-        position: absolute;
-        bottom: auto;
-        top: 1rem;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 90%;
-        justify-content: center;
-        border-radius: 16px;
+    .arPlant {
+        max-width: 80%;
     }
 }
