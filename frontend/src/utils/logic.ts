@@ -45,7 +45,8 @@ export const calculateAptness = (
     currentTemp: number,
     aqi: number = 20,
     avgHumidity: number = 50,
-    normalizationBase?: number
+    normalizationBase?: number,
+    isAbsolute?: boolean
 ): number => {
     // === SCORING CONSTANTS ===
     // Total potential: 100 points
@@ -67,11 +68,10 @@ export const calculateAptness = (
         desc.includes('toxin') || desc.includes('benzene');
 
     if (aqi > 100) {
-        // In high pollution, purifiers are MORE apt (necessary)
         if (isPurifier) aqiScore = 15;
-        else aqiScore = -10; // Sensitive plants suffer
+        else aqiScore = -10;
     } else if (isPurifier) {
-        aqiScore = 5 + (aqi / 20); // Slight boost as AQI worsens
+        aqiScore = 5 + (aqi / 20);
     }
 
     // === FINAL AGGREGATION ===
@@ -80,11 +80,35 @@ export const calculateAptness = (
     // Clamp between 0 and 100
     totalRaw = Math.max(0, Math.min(100, totalRaw));
 
+    // If absolute mode is requested, return raw score regardless of normalizationBase
+    if (isAbsolute) return Math.round(totalRaw);
+
     if (normalizationBase && normalizationBase > 0) {
-        return Math.round((totalRaw / normalizationBase) * 100);
+        // Robust Normalization: Only scale to 100 if the base is reasonably healthy
+        // If the best plant only scores 30%, we shouldn't normalize it to 100% 
+        // as that's misleading. We'll use a 60% threshold for "Confident Scaling".
+        const confidenceThreshold = 60;
+        const scaleFactor = normalizationBase < confidenceThreshold ? (normalizationBase / confidenceThreshold) : 1;
+
+        return Math.round((totalRaw / normalizationBase) * 100 * scaleFactor);
     }
 
     return Math.round(totalRaw);
+};
+
+/**
+ * Normalizes a list of plant scores based on the highest score in the batch.
+ * Robustness: If the batch leader is very weak, we don't scale it all the way to 100.
+ */
+export const normalizeBatch = (scores: number[]): number[] => {
+    if (scores.length === 0) return [];
+    const maxScore = Math.max(...scores);
+    if (maxScore === 0) return scores;
+
+    const confidenceThreshold = 60; // We need at least 60% raw score to call it a "Perfect Match"
+    const scaleFactor = maxScore < confidenceThreshold ? (maxScore / confidenceThreshold) : 1;
+
+    return scores.map(s => Math.round((s / maxScore) * 100 * scaleFactor));
 };
 
 export const formatDistance = (meters: number): string => {

@@ -5,7 +5,7 @@ import { PlantCard } from '../components/features/plants/PlantCard';
 import { Button } from '../components/common/Button';
 import { fetchPlants, fetchVendors } from '../services/api';
 import { getWeather, geocodeCity, reverseGeocode } from '../services/weather';
-import { calculateAptness } from '../utils/logic';
+import { calculateAptness, normalizeBatch } from '../utils/logic';
 import type { Plant, Vendor } from '../types';
 import { Sprout, MapPin, Thermometer, Wind, ArrowDown, Sparkles, Search, AlertCircle, Heart, Sun, Activity, GraduationCap, ShoppingBag, PlusCircle, MoveRight, MessageCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -263,17 +263,17 @@ export const Home = () => {
             })
             .map(p => {
                 if (!weather) return { ...p, score: 0 };
-                return { ...p, score: calculateAptness(p, weather.avgTemp30Days, weather.air_quality?.aqi, weather.avgHumidity30Days) };
+                // Get absolute score first
+                return { ...p, score: calculateAptness(p, weather.avgTemp30Days, weather.air_quality?.aqi, weather.avgHumidity30Days, undefined, true) };
             })
-            .sort((a, b) => (weather ? b.score - a.score : 0));
+            .sort((a, b) => (weather ? (b.score || 0) - (a.score || 0) : 0));
 
         if (weather && processed.length > 0) {
-            const topScore = processed[0].score;
-            if (topScore > 0) {
-                processed.forEach(p => {
-                    p.score = Math.round((p.score / topScore) * 100);
-                });
-            }
+            const rawScores = processed.map(p => p.score || 0);
+            const normalizedScores = normalizeBatch(rawScores);
+            processed.forEach((p, i) => {
+                p.score = normalizedScores[i];
+            });
         }
         return processed;
     }, [plants, filter, searchQuery, lightFilter, weather]);
