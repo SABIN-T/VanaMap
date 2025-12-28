@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, type MouseEvent } from 'react';
 import styles from './MakeItReal.module.css';
-import { Upload, Search, Wand2, RefreshCw, ZoomIn, ZoomOut, Image as ImageIcon, Camera, X, Check, Loader2, Sparkles, Sliders, Palette } from 'lucide-react';
+import { Upload, Search, Wand2, RefreshCw, ZoomIn, ZoomOut, Image as ImageIcon, Camera, X, Loader2, Sparkles, Sliders } from 'lucide-react';
 import { fetchPlants } from '../services/api';
 import toast from 'react-hot-toast';
 
@@ -102,37 +102,7 @@ const removeWhiteBackground = (imageSrc: string, tolerance: number = 30): Promis
     });
 };
 
-// 1. Just returns the tinted pot image (fast) for the UI overlay
-const tintPotImage = async (potSrc: string, colorHex: string): Promise<string> => {
-    return new Promise((resolve) => {
-        const i = new Image();
-        i.crossOrigin = "Anonymous";
-        i.src = potSrc;
-        i.onload = () => {
-            const canvas = document.createElement('canvas');
-            canvas.width = i.width;
-            canvas.height = i.height;
-            const ctx = canvas.getContext('2d');
-            if (ctx) {
-                ctx.drawImage(i, 0, 0);
 
-                // Tint
-                ctx.globalCompositeOperation = 'multiply';
-                ctx.fillStyle = colorHex;
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-                // Cutout
-                ctx.globalCompositeOperation = 'destination-in';
-                ctx.drawImage(i, 0, 0);
-
-                resolve(canvas.toDataURL('image/png'));
-            } else {
-                resolve(potSrc);
-            }
-        };
-        i.onerror = () => resolve(potSrc);
-    });
-};
 
 // 2. Bakes the final composite with exact offsets
 const bakeComposite = async (plantSrc: string, potSrc: string, colorHex: string, offset: { x: number, y: number }): Promise<string> => {
@@ -240,12 +210,10 @@ export const MakeItReal = () => {
 
     // Derived State for Dragging
     const [isDragging, setIsDragging] = useState(false);
-    const [activeDragTarget, setActiveDragTarget] = useState<'scene' | 'wizard'>('scene');
     const dragStartRef = useRef({ x: 0, y: 0, initialPos: { x: 0, y: 0 } });
 
     // Magic/AI States
     const [showDesigner, setShowDesigner] = useState(false);
-    const [aiSuggesting, setAiSuggesting] = useState(false);
 
     // ... magic mode state
     const [isMagicMode, setIsMagicMode] = useState(false);
@@ -438,9 +406,9 @@ export const MakeItReal = () => {
     };
 
     // --- DRAG HANDLERS ---
+    // --- DRAG HANDLERS ---
     const handleStart = (clientX: number, clientY: number) => {
         setIsDragging(true);
-        setActiveDragTarget('scene');
         document.body.style.overflow = 'hidden';
         dragStartRef.current = {
             x: clientX,
