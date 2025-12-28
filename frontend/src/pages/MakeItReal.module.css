@@ -299,6 +299,167 @@
     }
 }
 
+/* --- PREVIEW MODAL --- */
+.modalOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(8px);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.2s ease-out;
+}
+
+.modalContent {
+    background: #1e293b;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 2rem;
+    padding: 2rem;
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    position: relative;
+}
+
+.modalTitle {
+    margin: 0;
+    color: white;
+    font-size: 1.5rem;
+    text-align: center;
+}
+
+.previewContainer {
+    width: 100%;
+    height: 300px;
+    background:
+        linear-gradient(45deg, #334155 25%, transparent 25%),
+        linear-gradient(-45deg, #334155 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #334155 75%),
+        linear-gradient(-45deg, transparent 75%, #334155 75%);
+    background-size: 20px 20px;
+    background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    background-color: #1e293b;
+    /* Checkerboard for transparency */
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.previewImage {
+    max-width: 80%;
+    max-height: 80%;
+    object-fit: contain;
+    transition: all 0.3s;
+}
+
+.processingOverlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #38bdf8;
+    font-weight: 600;
+    gap: 0.5rem;
+}
+
+.modalActions {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+}
+
+.secondaryBtn {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: white;
+    padding: 1rem;
+    border-radius: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.secondaryBtn:hover {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.primaryBtn {
+    flex: 1;
+    background: #34d399;
+    border: none;
+    color: #064e3b;
+    padding: 1rem;
+    border-radius: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(52, 211, 153, 0.3);
+    transition: all 0.2s;
+}
+
+.primaryBtn:hover {
+    background: #6ee7b7;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(52, 211, 153, 0.4);
+}
+
+.optionRow {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 1rem;
+    border-radius: 1rem;
+}
+
+.toggleLabel {
+    color: #e2e8f0;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.toggleSwitch {
+    position: relative;
+    width: 50px;
+    height: 28px;
+    background: #475569;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.toggleSwitch[data-active="true"] {
+    background: #34d399;
+}
+
+.toggleKnob {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    background: white;
+    border-radius: 50%;
+    top: 2px;
+    left: 2px;
+    transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.toggleSwitch[data-active="true"] .toggleKnob {
+    transform: translateX(22px);
+}
+
 .actionRow {
     display: flex;
     gap: 1.5rem;

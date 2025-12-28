@@ -1,8 +1,47 @@
 import { useState, useRef, useEffect, type MouseEvent } from 'react';
 import styles from './MakeItReal.module.css';
-import { Upload, Search, Wand2, RefreshCw, ZoomIn, ZoomOut, Image as ImageIcon, Camera, X } from 'lucide-react';
+import { Upload, Search, Wand2, RefreshCw, ZoomIn, ZoomOut, Image as ImageIcon, Camera, X, Check, Loader2, Sparkles } from 'lucide-react';
 import { fetchPlants } from '../services/api';
 import toast from 'react-hot-toast';
+
+// Helper: Remove White Background (Simple Chroma Key)
+const removeWhiteBackground = (imageSrc: string): Promise<string> => {
+    return new Promise((resolve) => {
+        const img = new Image();
+        img.crossOrigin = "Anonymous";
+        img.src = imageSrc;
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            if (!ctx) return resolve(imageSrc);
+
+            ctx.drawImage(img, 0, 0);
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imageData.data;
+            const threshold = 230; // Aggressive white removal
+
+            for (let i = 0; i < data.length; i += 4) {
+                const r = data[i];
+                const g = data[i + 1];
+                const b = data[i + 2];
+                // If pixel is very light, make it transparent
+                if (r > threshold && g > threshold && b > threshold) {
+                    data[i + 3] = 0;
+                }
+            }
+
+            ctx.putImageData(imageData, 0, 0);
+            resolve(canvas.toDataURL('image/png'));
+        };
+        img.onerror = () => {
+            // If CORS fails or load fails, return original
+            console.warn("Could not process image (likely CORS), using original.");
+            resolve(imageSrc);
+        };
+    });
+};
 
 export const MakeItReal = () => {
     const [plants, setPlants] = useState<any[]>([]);
@@ -17,6 +56,12 @@ export const MakeItReal = () => {
     const [showCamera, setShowCamera] = useState(false);
     const [stream, setStream] = useState<MediaStream | null>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
+
+    // Modal / Preview State
+    const [previewPlant, setPreviewPlant] = useState<any | null>(null);
+    const [processedImage, setProcessedImage] = useState<string | null>(null);
+    const [isProcessing, setIsProcessing] = useState(false);
+    const [autoRemoveBg, setAutoRemoveBg] = useState(true);
 
     // Transform State
     const [position, setPosition] = useState({ x: 50, y: 50 }); // Percentage
@@ -97,15 +142,46 @@ export const MakeItReal = () => {
         }
     };
 
-    const handlePlantSelect = (plant: any) => {
-        if (!roomImage) {
-            toast.error("Please upload a room photo first!");
+    const onPlantClick = (plant: any) => {
+        setPreviewPlant(plant);
+        setProcessedImage(null); // Clear previous processed image
+        runProcessing(plant.imageUrl, autoRemoveBg);
+    };
+
+    const runProcessing = async (url: string, remove: boolean) => {
+        if (!remove) {
+            setProcessedImage(url);
+            setIsProcessing(false);
             return;
         }
-        setPlacedPlant(plant);
+        setIsProcessing(true);
+        try {
+            const result = await removeWhiteBackground(url);
+            setProcessedImage(result);
+        } finally {
+            setIsProcessing(false);
+        }
+    };
+
+    const toggleBgRemoval = () => {
+        const newVal = !autoRemoveBg;
+        setAutoRemoveBg(newVal);
+        if (previewPlant) {
+            runProcessing(previewPlant.imageUrl, newVal);
+        }
+    };
+
+    const confirmPlacement = () => {
+        if (!roomImage) {
+            toast.error("Please upload a room photo first!");
+            setPreviewPlant(null); // Close modal if no room image
+            return;
+        }
+        setPlacedPlant({ ...previewPlant, imageUrl: processedImage });
         setPosition({ x: 50, y: 50 });
         setScale(1);
-        toast.success(`added ${plant.name} to scene`);
+        setPreviewPlant(null); // Close modal
+        toast.success("Added to scene!");
     };
 
     // --- DRAG LOGIC ---
@@ -135,6 +211,7 @@ export const MakeItReal = () => {
 
     return (
         <div className={styles.container} onMouseUp={handleMouseUp} onMouseLeave={handleMouseUp}>
+            {/* CAMERA OVERLAY */}
             {showCamera && (
                 <div className={styles.cameraOverlay}>
                     <button className={styles.closeCameraBtn} onClick={stopCamera}><X size={32} /></button>
@@ -143,6 +220,48 @@ export const MakeItReal = () => {
                         <button className={styles.shutterBtn} onClick={capturePhoto}>
                             <div className={styles.shutterBtnInner} />
                         </button>
+                    </div>
+                </div>
+            )}
+
+            {/* PLANT PREVIEW MODAL */}
+            {previewPlant && (
+                <div className={styles.modalOverlay} onClick={() => setPreviewPlant(null)}>
+                    <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
+                        <h2 className={styles.modalTitle}>Add {previewPlant.name}?</h2>
+
+                        <div className={styles.previewContainer}>
+                            {processedImage && (
+                                <img src={processedImage} className={styles.previewImage} alt="Preview" key={processedImage} />
+                            )}
+                            {isProcessing && (
+                                <div className={styles.processingOverlay}>
+                                    <Loader2 className="animate-spin" /> Removing Background...
+                                </div>
+                            )}
+                        </div>
+
+                        <div className={styles.optionRow}>
+                            <div className={styles.toggleLabel}>
+                                <Sparkles size={18} color={autoRemoveBg ? '#34d399' : '#94a3b8'} />
+                                Remove Background
+                            </div>
+                            <div
+                                className={styles.toggleSwitch}
+                                data-active={autoRemoveBg}
+                                onClick={toggleBgRemoval}
+                            >
+                                <div className={styles.toggleKnob} />
+                            </div>
+                        </div>
+
+                        <div className={styles.modalActions}>
+                            <button className={styles.secondaryBtn} onClick={() => setPreviewPlant(null)}>Cancel</button>
+                            <button className={styles.primaryBtn} onClick={confirmPlacement} disabled={isProcessing}>
+                                <Check size={18} style={{ marginRight: '8px' }} />
+                                Place in Scene
+                            </button>
+                        </div>
                     </div>
                 </div>
             )}
@@ -172,7 +291,7 @@ export const MakeItReal = () => {
                     <div className={styles.plantList}>
                         {loading ? <div style={{ padding: '2rem', textAlign: 'center', color: '#64748b' }}>Loading Library...</div> :
                             filteredPlants.map(plant => (
-                                <div key={plant.id} className={styles.plantCard} onClick={() => handlePlantSelect(plant)}>
+                                <div key={plant.id} className={styles.plantCard} onClick={() => onPlantClick(plant)}>
                                     <img src={plant.imageUrl} alt={plant.name} className={styles.thumb} />
                                     <div className={styles.plantInfo}>
                                         <h4>{plant.name}</h4>
@@ -265,7 +384,7 @@ export const MakeItReal = () => {
                                     }}
                                     disabled={!placedPlant}
                                 >
-                                    <Wand2 size={18} /> {isMagicMode ? 'Magic ON' : 'Magic OFF'}
+                                    <Wand2 size={18} /> {isMagicMode ? 'Light Blend' : 'Light Blend'}
                                 </button>
                             </div>
                         </div>
