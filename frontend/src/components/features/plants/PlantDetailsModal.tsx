@@ -3,7 +3,7 @@ import type { Plant } from '../../../types';
 import styles from './PlantDetailsModal.module.css';
 import { useState, useMemo, useEffect } from 'react';
 import { Button } from '../../common/Button';
-import { calculateBiologicalEfficiency } from '../../../utils/logic';
+import { runRoomSimulationMC } from '../../../utils/logic';
 
 interface PlantDetailsModalProps {
     plant: Plant;
@@ -49,20 +49,18 @@ export const PlantDetailsModal = ({ plant, weather, onClose, onBuy }: PlantDetai
 
     // Parse the specific L/day from string "30 L/day"
 
-    const bioEfficiency = useMemo(() => {
-        return calculateBiologicalEfficiency(plant, currentTemp, currentHumidity, lightLevel);
-    }, [plant, currentTemp, currentHumidity, lightLevel]);
+    const simResults = useMemo(() => {
+        return runRoomSimulationMC(
+            plant,
+            numPeople,
+            simulationHours,
+            currentTemp,
+            currentHumidity,
+            lightLevel
+        );
+    }, [plant, numPeople, simulationHours, currentTemp, currentHumidity, lightLevel]);
 
-    const plantsNeeded = useMemo(() => {
-        const hourlyNeedPerPerson = 550 / 24; // ~23L
-        const totalNeed = hourlyNeedPerPerson * numPeople * simulationHours;
-
-        // Effective Oxygen production per plant per day (Base * Efficiency)
-        const plantDailyOutput = parseFloat(plant.oxygenLevel) || 20;
-        const adjustedDailyOutput = (plantDailyOutput / 24) * simulationHours * bioEfficiency;
-
-        return Math.max(1, Math.ceil(totalNeed / adjustedDailyOutput));
-    }, [numPeople, simulationHours, plant.oxygenLevel, bioEfficiency]);
+    const plantsNeeded = simResults.plantsNeeded;
 
 
     // Stop Propagation Helper
