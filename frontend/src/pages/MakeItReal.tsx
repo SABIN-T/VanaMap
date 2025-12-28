@@ -183,87 +183,92 @@ export const MakeItReal = () => {
                     </div>
                 </div>
 
-                {/* MAIN CANVAS */}
-                <div
-                    className={styles.canvasArea}
-                    ref={canvasRef}
-                    onMouseMove={handleMouseMove}
-                >
-                    {!roomImage ? (
-                        <div className={styles.canvasEmpty}>
-                            <ImageIcon size={64} style={{ opacity: 0.5 }} />
-                            <h2>Your Space Goes Here</h2>
-                            <p>Upload a photo of your room or garden to begin visualization.</p>
+                {/* MAIN STUDIO AREA */}
+                <div className={styles.studioMain}>
+                    <div
+                        className={styles.canvasViewport}
+                        ref={canvasRef}
+                        onMouseMove={handleMouseMove}
+                    >
+                        {!roomImage ? (
+                            <div className={styles.canvasEmpty}>
+                                <ImageIcon size={64} style={{ opacity: 0.5 }} />
+                                <h2>Your Space Goes Here</h2>
+                                <p>Upload a photo of your room or garden to begin visualization.</p>
 
-                            <div className={styles.actionRow}>
-                                <button className={styles.uploadBtn} onClick={() => fileInputRef.current?.click()}>
-                                    <Upload size={24} /> Upload
-                                </button>
-                                <div className={styles.orDivider}>OR</div>
-                                <button className={styles.cameraBtn} onClick={startCamera}>
-                                    <Camera size={24} /> Take Photo
-                                </button>
-                            </div>
-                            <input
-                                type="file"
-                                ref={fileInputRef}
-                                hidden
-                                accept="image/*"
-                                onChange={handleImageUpload}
-                            />
-                        </div>
-                    ) : (
-                        <>
-                            <img src={roomImage} alt="Room" className={styles.roomImage} />
-
-                            {placedPlant && (
-                                <img
-                                    src={placedPlant.imageUrl}
-                                    alt="Plant"
-                                    className={`${styles.placedPlant} ${isMagicMode ? styles.removeBg : ''}`}
-                                    style={{
-                                        left: `${position.x}%`,
-                                        top: `${position.y}%`,
-                                        transform: `translate(-50%, -50%) scale(${scale})`,
-                                        width: '300px' // Base size
-                                    }}
-                                    onMouseDown={handleMouseDown}
+                                <div className={styles.actionRow}>
+                                    <button className={styles.uploadBtn} onClick={() => fileInputRef.current?.click()}>
+                                        <Upload size={24} /> Upload
+                                    </button>
+                                    <div className={styles.orDivider}>OR</div>
+                                    <button className={styles.cameraBtn} onClick={startCamera}>
+                                        <Camera size={24} /> Take Photo
+                                    </button>
+                                </div>
+                                <input
+                                    type="file"
+                                    ref={fileInputRef}
+                                    hidden
+                                    accept="image/*"
+                                    onChange={handleImageUpload}
                                 />
-                            )}
-
-                            {/* FLOATING CONTROLS */}
-                            <div className={styles.controls}>
-                                <button className={styles.controlBtn} onClick={() => setRoomImage(null)} title="New Photo">
-                                    <RefreshCw size={20} />
-                                </button>
+                            </div>
+                        ) : (
+                            <>
+                                <img src={roomImage} alt="Room" className={styles.roomImage} />
 
                                 {placedPlant && (
-                                    <>
-                                        <div style={{ width: '1px', background: 'rgba(255,255,255,0.1)', height: '24px' }}></div>
-                                        <button className={styles.controlBtn} onClick={() => setScale(s => Math.max(0.5, s - 0.1))} title="Shrink">
-                                            <ZoomOut size={20} />
-                                        </button>
-                                        <span style={{ color: 'white', fontSize: '0.9rem', alignSelf: 'center' }}>{Math.round(scale * 100)}%</span>
-                                        <button className={styles.controlBtn} onClick={() => setScale(s => Math.min(3, s + 0.1))} title="Grow">
-                                            <ZoomIn size={20} />
-                                        </button>
-
-                                        <div style={{ width: '1px', background: 'rgba(255,255,255,0.1)', height: '24px' }}></div>
-
-                                        <button
-                                            className={`${styles.controlBtn} ${styles.magicBtn}`}
-                                            onClick={() => {
-                                                setIsMagicMode(!isMagicMode);
-                                                toast(isMagicMode ? "Original Mode" : "Magic Blend Mode Activated ✨");
-                                            }}
-                                            title="Simulate BG Remove"
-                                        >
-                                            <Wand2 size={18} /> {isMagicMode ? 'Magic ON' : 'Magic OFF'}
-                                        </button>
-                                    </>
+                                    <img
+                                        src={placedPlant.imageUrl}
+                                        alt="Plant"
+                                        className={`${styles.placedPlant} ${isMagicMode ? styles.removeBg : ''}`}
+                                        style={{
+                                            left: `${position.x}%`,
+                                            top: `${position.y}%`,
+                                            transform: `translate(-50%, -50%) scale(${scale})`,
+                                            width: '300px'
+                                        }}
+                                        onMouseDown={handleMouseDown}
+                                    />
                                 )}
+                            </>
+                        )}
+                    </div>
+
+                    {/* TOOLBAR (Visible when image loaded) */}
+                    {roomImage && (
+                        <div className={styles.editorToolbar}>
+                            <div className={styles.toolbarGroup}>
+                                <button className={styles.toolBtn} onClick={() => setRoomImage(null)}>
+                                    <RefreshCw size={18} /> New Canvas
+                                </button>
                             </div>
-                        </>
+
+                            <div className={styles.toolbarGroup}>
+                                <button className={styles.toolBtn} onClick={() => setScale(s => Math.max(0.5, s - 0.1))} disabled={!placedPlant}>
+                                    <ZoomOut size={18} />
+                                </button>
+                                <span style={{ color: 'white', fontWeight: 600, minWidth: '3rem', textAlign: 'center' }}>
+                                    {Math.round(scale * 100)}%
+                                </span>
+                                <button className={styles.toolBtn} onClick={() => setScale(s => Math.min(3, s + 0.1))} disabled={!placedPlant}>
+                                    <ZoomIn size={18} />
+                                </button>
+                            </div>
+
+                            <div className={styles.toolbarGroup}>
+                                <button
+                                    className={`${styles.toolBtn} ${styles.magicToggle} ${isMagicMode ? styles.magicActive : ''}`}
+                                    onClick={() => {
+                                        setIsMagicMode(!isMagicMode);
+                                        toast(isMagicMode ? "Original Mode" : "Magic Blend Mode Activated ✨");
+                                    }}
+                                    disabled={!placedPlant}
+                                >
+                                    <Wand2 size={18} /> {isMagicMode ? 'Magic ON' : 'Magic OFF'}
+                                </button>
+                            </div>
+                        </div>
                     )}
                 </div>
             </div>
