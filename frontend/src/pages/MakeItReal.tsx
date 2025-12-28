@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, type MouseEvent } from 'react';
 import styles from './MakeItReal.module.css';
-import { Upload, Search, Wand2, RefreshCw, ZoomIn, ZoomOut, Image as ImageIcon, Camera, X, Check, Loader2, Sparkles, Sliders, Palette } from 'lucide-react';
+import { Upload, Search, Wand2, RefreshCw, ZoomIn, ZoomOut, Image as ImageIcon, Camera, X, Check, Loader2, Palette } from 'lucide-react';
 import { fetchPlants } from '../services/api';
 import toast from 'react-hot-toast';
 
@@ -160,28 +160,7 @@ const generateComposite = async (plantSrc: string, potSrc: string, colorHex: str
 };
 
 
-const getImgCoordinates = (e: React.MouseEvent, img: HTMLImageElement) => {
-    const rect = img.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    const ratio = img.naturalWidth / img.naturalHeight;
-    const elemRatio = rect.width / rect.height;
-    let drawWidth, drawHeight, offsetX, offsetY;
-    if (ratio > elemRatio) {
-        drawWidth = rect.height * ratio;
-        drawHeight = rect.height;
-        offsetX = (rect.width - drawWidth) / 2;
-        offsetY = 0;
-    } else {
-        drawWidth = rect.width;
-        drawHeight = rect.width / ratio;
-        offsetX = 0;
-        offsetY = (rect.height - drawHeight) / 2;
-    }
-    const naturalX = (x - offsetX) * (img.naturalWidth / drawWidth);
-    const naturalY = (y - offsetY) * (img.naturalHeight / drawHeight);
-    return { x: naturalX, y: naturalY };
-}
+
 
 export const MakeItReal = () => {
     const [plants, setPlants] = useState<any[]>([]);
@@ -203,7 +182,7 @@ export const MakeItReal = () => {
     const [isProcessing, setIsProcessing] = useState(false);
 
     // Potting State
-    const [autoRemoveBg, setAutoRemoveBg] = useState(true);
+
     const [potColor, setPotColor] = useState<string>('#ffffff');
     const [cleanPlantImg, setCleanPlantImg] = useState<string | null>(null);
 
