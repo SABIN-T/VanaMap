@@ -45,6 +45,36 @@ export const MakeItReal = () => {
     };
 
     // --- HELPERS ---
+    const resizeImage = (url: string, maxWidth: number): Promise<Blob> => {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.crossOrigin = "Anonymous";
+            img.src = url;
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                let width = img.width;
+                let height = img.height;
+
+                if (width > maxWidth) {
+                    height = Math.round((height * maxWidth) / width);
+                    width = maxWidth;
+                }
+
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                if (!ctx) return reject(new Error('Canvas Error'));
+
+                ctx.drawImage(img, 0, 0, width, height);
+                canvas.toBlob((blob) => {
+                    if (blob) resolve(blob);
+                    else reject(new Error('Blob Error'));
+                }, 'image/jpeg', 0.8);
+            };
+            img.onerror = reject;
+        });
+    };
+
     const removeBackgroundSimple = (imageSrc: string, tolerance: number = 20): Promise<string> => {
         return new Promise((resolve) => {
             const img = new Image();
@@ -80,20 +110,16 @@ export const MakeItReal = () => {
         setIsProcessing(true);
         setSelectedPlant(plant);
 
-        // 1. Fetch raw image as blob
-        let rawBlob: Blob;
         try {
-            const rawRes = await fetch(plant.imageUrl);
-            rawBlob = await rawRes.blob();
-        } catch {
-            return; // Failed to even load image
-        }
+            // 1. Resize Image Client-Side (Speed Optimization)
+            // Downscale to 800px max width to speed up upload & processing
+            const resizedBlob = await resizeImage(plant.imageUrl, 800);
 
-        try {
             // 2. Prepare Form Data
             const formData = new FormData();
-            formData.append('image_file', rawBlob);
-            formData.append('size', 'auto');
+            formData.append('image_file', resizedBlob);
+            // 'preview' is vastly faster (approx 0.25MP) and perfect for mobile AR
+            formData.append('size', 'preview');
 
             // 3. Send to Public API (Remove.bg)
             // ⚠️ SECURITY WARNING: Hardcoding API keys in frontend code is risky.
@@ -105,13 +131,18 @@ export const MakeItReal = () => {
                 throw new Error("Missing API Key");
             }
 
-            const apiRes = await fetch('https://api.remove.bg/v1.0/removebg', {
+            // Timeout promise (8s to be safe, but typically <2s with optimization)
+            const fetchPromise = fetch('https://api.remove.bg/v1.0/removebg', {
                 method: 'POST',
-                headers: {
-                    'X-Api-Key': apiKey
-                },
+                headers: { 'X-Api-Key': apiKey },
                 body: formData
             });
+
+            const timeoutPromise = new Promise((_, reject) =>
+                setTimeout(() => reject(new Error('Timeout')), 8000)
+            );
+
+            const apiRes = await Promise.race([fetchPromise, timeoutPromise]) as Response;
 
             if (!apiRes.ok) {
                 if (apiRes.status === 402) throw new Error('API Quota Exceeded');
@@ -137,7 +168,7 @@ export const MakeItReal = () => {
             // Helpful toast for developer
             const isApiKeyError = (error as Error).message === "Missing API Key";
             toast(
-                isApiKeyError ? "Setup API Key in .env for better quality!" : "Using basic cutout mode.",
+                isApiKeyError ? "Setup API Key in .env!" : "Using basic cutout mode.",
                 { icon: isApiKeyError ? '🔑' : '🔧' }
             );
 
