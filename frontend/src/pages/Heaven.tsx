@@ -31,6 +31,48 @@ export const Heaven = () => {
     // Hub State
     const [view, setView] = useState<'menu' | 'game' | 'lifecycle' | 'news' | 'pot-maker'>('menu');
 
+    // Game Logic State
+    const [coins, setCoins] = useState(100);
+    const [level, setLevel] = useState(1);
+    const [xp, setXp] = useState(0);
+    const xpToNextLevel = level * 200;
+    const [plots, setPlots] = useState<PlantState[]>(Array(6).fill(null).map((_, i) => ({
+        id: i, stage: 0, type: 'Sunflower', water: 100, timeToNextStage: 0
+    })));
+    const [selectedTool, setSelectedTool] = useState<'plant' | 'water' | 'harvest' | null>(null);
+    const [isSoundOn, setIsSoundOn] = useState(true);
+    const [showTutorial, setShowTutorial] = useState(true);
+
+
+    const playSound = (type?: string) => {
+        if (!isSoundOn) return;
+        if (type) console.debug('Playing sound:', type);
+    };
+
+    // --- GAME EFFECTS ---
+    useEffect(() => {
+        if (view !== 'game') return;
+        const timer = setInterval(() => {
+            setPlots(current => current.map(plot => {
+                if (plot.stage > 0 && plot.stage < 4) {
+                    const newWater = Math.max(0, plot.water - 2);
+                    if (newWater > 0) {
+                        const newTime = plot.timeToNextStage - 1;
+                        if (newTime <= 0) return { ...plot, stage: plot.stage + 1, timeToNextStage: 8, water: newWater - 10 };
+                        return { ...plot, timeToNextStage: newTime, water: newWater };
+                    }
+                    return { ...plot, water: newWater };
+                }
+                return plot;
+            }));
+        }, 1000);
+        return () => clearInterval(timer);
+    }, [view]);
+
+    useEffect(() => {
+        if (level > 1 || xp > 0) updateGameProgress(level, Math.floor(xp)).catch((err: unknown) => console.error(err as Error));
+    }, [level, xp]);
+
     // --- AUTH GATE ---
     if (loading) return <div className={styles.pageWrapper}><div style={{ margin: 'auto', color: 'white' }}>Loading Heaven...</div></div>;
 
@@ -73,48 +115,6 @@ export const Heaven = () => {
             </div>
         );
     }
-
-    // Game Logic State
-    const [coins, setCoins] = useState(100);
-    const [level, setLevel] = useState(1);
-    const [xp, setXp] = useState(0);
-    const xpToNextLevel = level * 200;
-    const [plots, setPlots] = useState<PlantState[]>(Array(6).fill(null).map((_, i) => ({
-        id: i, stage: 0, type: 'Sunflower', water: 100, timeToNextStage: 0
-    })));
-    const [selectedTool, setSelectedTool] = useState<'plant' | 'water' | 'harvest' | null>(null);
-    const [isSoundOn, setIsSoundOn] = useState(true);
-    const [showTutorial, setShowTutorial] = useState(true);
-
-
-    const playSound = (_type: 'pop' | 'success' | 'water' | 'level') => {
-        if (!isSoundOn) return;
-        // In a real app, use new Audio('/sounds/' + type + '.mp3').play();
-    };
-
-    // --- GAME EFFECTS ---
-    useEffect(() => {
-        if (view !== 'game') return;
-        const timer = setInterval(() => {
-            setPlots(current => current.map(plot => {
-                if (plot.stage > 0 && plot.stage < 4) {
-                    let newWater = Math.max(0, plot.water - 2);
-                    if (newWater > 0) {
-                        const newTime = plot.timeToNextStage - 1;
-                        if (newTime <= 0) return { ...plot, stage: plot.stage + 1, timeToNextStage: 8, water: newWater - 10 };
-                        return { ...plot, timeToNextStage: newTime, water: newWater };
-                    }
-                    return { ...plot, water: newWater };
-                }
-                return plot;
-            }));
-        }, 1000);
-        return () => clearInterval(timer);
-    }, [view]);
-
-    useEffect(() => {
-        if (level > 1 || xp > 0) updateGameProgress(level, Math.floor(xp)).catch(err => console.error(err));
-    }, [level, xp]);
 
     // --- GAME HANDLERS ---
     const handlePlotClick = (index: number, e: MouseEvent<HTMLDivElement>) => {
@@ -197,7 +197,14 @@ export const Heaven = () => {
 
     // --- NEWS COMPONENT ---
     const NewsView = () => {
-        const [newsData, setNewsData] = useState<any[]>([]);
+        interface NewsItem {
+            title: string;
+            source: string;
+            pubDate?: string;
+            snippet?: string;
+            link: string;
+        }
+        const [newsData, setNewsData] = useState<NewsItem[]>([]);
         const [loading, setLoading] = useState(true);
 
         useEffect(() => {
@@ -212,8 +219,8 @@ export const Heaven = () => {
                     } else {
                         throw new Error("Failed");
                     }
-                } catch (e) {
-                    console.error("News fetch failed, using fallback", e);
+                } catch (e: unknown) {
+                    console.error("News fetch failed, using fallback", e as Error);
                     // Fallback if backend offline/fails
                     const fallbackNews = [
                         { title: 'Global Forest Cover Increases by 2% this Year', source: 'Earth Watch', time: 'Today', link: 'https://www.sciencedaily.com/news/plants_animals/nature/' },

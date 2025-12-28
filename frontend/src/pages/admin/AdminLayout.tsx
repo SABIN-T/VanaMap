@@ -22,7 +22,7 @@ export const AdminLayout = ({ title, children }: AdminLayoutProps) => {
     const { logout, user } = useAuth();
     const { isPremium, togglePremium } = useTheme();
     const [isSidebarOpen, setSidebarOpen] = useState(true);
-    const [stats, setStats] = useState<any>({ unread: {} });
+    const [stats, setStats] = useState<{ unread?: Record<string, number> }>({ unread: {} });
 
     React.useEffect(() => {
         if (user?.role === 'admin') {
@@ -30,7 +30,7 @@ export const AdminLayout = ({ title, children }: AdminLayoutProps) => {
                 try {
                     const data = await fetchAdminStats();
                     if (data.unread) setStats(data);
-                } catch (e) { console.error("Stats error", e); }
+                } catch (e: unknown) { console.error("Stats error", e as Error); }
             };
             loadStats();
             const interval = setInterval(loadStats, 30000); // Poll every 30s
@@ -85,7 +85,7 @@ export const AdminLayout = ({ title, children }: AdminLayoutProps) => {
                         >
                             <item.icon size={20} className={styles.navIcon} />
                             <span className={styles.navLabel}>{item.label}</span>
-                            {item.badge > 0 && (
+                            {item.badge !== undefined && item.badge > 0 && (
                                 <span style={{
                                     background: '#ef4444',
                                     color: 'white',

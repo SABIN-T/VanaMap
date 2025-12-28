@@ -1,5 +1,6 @@
 export interface Plant {
     id: string;
+    _id?: string;
     name: string;
     scientificName: string;
     description: string;

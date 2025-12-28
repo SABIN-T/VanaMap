@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState, type ReactNode, useEffect } from 'react';
 import type { User } from '../types';
 import { jwtDecode } from "jwt-decode";
@@ -22,7 +23,7 @@ interface AuthContextType {
     user: User | null;
     signup: (data: SignupData) => Promise<{ success: boolean; message?: string; registrationToken?: string; captchaSvg?: string }>;
     login: (credentials: LoginCredentials) => Promise<{ success: boolean; message?: string }>;
-    googleLogin: (credentialResponse: any) => Promise<boolean>;
+    googleLogin: (credentialResponse: { credential?: string }) => Promise<boolean>;
     logout: () => void;
     verify: (registrationToken: string, otp: string) => Promise<{ success: boolean; message?: string }>;
     toggleFavorite: (plantId: string) => void;
@@ -46,7 +47,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 const parsed = JSON.parse(saved);
 
                 // Normalizing legacy vs current structures
-                let userData: any = null;
+                let userData: (User & { token?: string }) | null = null;
 
                 if (parsed.user && typeof parsed.user === 'object') {
                     // Legacy structure: { user: {...}, token: "..." }
@@ -91,9 +92,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             setUser(userData);
             localStorage.setItem('user', JSON.stringify(userData));
             return { success: true };
-        } catch (err: any) {
-            console.error(err);
-            return { success: false, message: err.message };
+        } catch (err: unknown) {
+            const error = err as Error;
+            console.error(error);
+            return { success: false, message: error.message };
         }
     };
 
@@ -115,9 +117,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 registrationToken: data.registrationToken,
                 captchaSvg: data.captchaSvg
             };
-        } catch (err: any) {
-            console.error(err);
-            return { success: false, message: err.message };
+        } catch (err: unknown) {
+            const error = err as Error;
+            console.error(error);
+            return { success: false, message: error.message };
         }
     };
 
@@ -136,13 +139,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             setUser(fullUser);
             localStorage.setItem('user', JSON.stringify(fullUser));
             return { success: true };
-        } catch (err: any) {
-            console.error(err);
-            return { success: false, message: err.message };
+        } catch (err: unknown) {
+            const error = err as Error;
+            console.error(error);
+            return { success: false, message: error.message };
         }
     };
 
-    const googleLogin = async (credentialResponse: any) => {
+    const googleLogin = async (credentialResponse: { credential?: string }) => {
         try {
             if (!credentialResponse.credential) return false;
             const decoded = jwtDecode(credentialResponse.credential) as { name: string; email: string };
@@ -201,7 +205,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                     const base = parsed.user ? { ...parsed.user, token: parsed.token } : parsed;
                     const final = { ...base, ...updates };
                     localStorage.setItem('user', JSON.stringify(final));
-                } catch (e) {
+                } catch {
                     localStorage.setItem('user', JSON.stringify(updated));
                 }
             } else {

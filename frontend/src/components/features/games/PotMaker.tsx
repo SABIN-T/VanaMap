@@ -26,7 +26,7 @@ const createImage = (url: string): Promise<HTMLImageElement> =>
         image.src = url;
     });
 
-const getCroppedImg = async (imageSrc: string, pixelCrop: any) => {
+const getCroppedImg = async (imageSrc: string, pixelCrop: { width: number; height: number; x: number; y: number }) => {
     const image = await createImage(imageSrc);
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
@@ -39,6 +39,16 @@ const getCroppedImg = async (imageSrc: string, pixelCrop: any) => {
 
 
 // --- 3D POT COMPONENT ---
+interface TexturedCylinderProps {
+    textureUrl: string;
+    geometryArgs: [number, number, number, number];
+    scaleX: number;
+    scaleY: number;
+    offsetX: number;
+    offsetY: number;
+    rotation: number;
+}
+
 const TexturedCylinder = ({
     textureUrl,
     geometryArgs,
@@ -47,22 +57,24 @@ const TexturedCylinder = ({
     offsetX,
     offsetY,
     rotation
-}: any) => {
+}: TexturedCylinderProps) => {
     const texture = useLoader(THREE.TextureLoader, textureUrl) as THREE.Texture;
 
-    if (texture) {
-        texture.wrapS = THREE.ClampToEdgeWrapping;
-        texture.wrapT = THREE.ClampToEdgeWrapping;
-        texture.anisotropy = 16;
-        texture.minFilter = THREE.LinearMipmapLinearFilter;
-        texture.magFilter = THREE.LinearFilter;
-        texture.generateMipmaps = true;
-        texture.repeat.set(1 / scaleX, 1 / scaleY);
-        texture.offset.set(offsetX, offsetY);
-        texture.center.set(0.5, 0.5);
-        texture.rotation = rotation * (Math.PI / 180);
-        texture.needsUpdate = true;
-    }
+    useEffect(() => {
+        if (texture) {
+            texture.wrapS = THREE.ClampToEdgeWrapping;
+            texture.wrapT = THREE.ClampToEdgeWrapping;
+            texture.anisotropy = 16;
+            texture.minFilter = THREE.LinearMipmapLinearFilter;
+            texture.magFilter = THREE.LinearFilter;
+            texture.generateMipmaps = true;
+            texture.repeat.set(1 / scaleX, 1 / scaleY);
+            texture.offset.set(offsetX, offsetY);
+            texture.center.set(0.5, 0.5);
+            texture.rotation = rotation * (Math.PI / 180);
+            texture.needsUpdate = true;
+        }
+    }, [texture, scaleX, scaleY, offsetX, offsetY, rotation]);
 
     return (
         <mesh castShadow receiveShadow position={[0, 0.5, 0]}>
@@ -139,7 +151,7 @@ const PotModel = ({
 
 
 // --- CAPTURE HELPER ---
-const CaptureRelay = ({ captureRef }: { captureRef: React.MutableRefObject<any> }) => {
+const CaptureRelay = ({ captureRef }: { captureRef: React.MutableRefObject<(() => string) | null> }) => {
     const { gl, scene, camera } = useThree();
 
     useEffect(() => {
@@ -170,7 +182,7 @@ export const PotMaker = ({ onBack }: PotMakerProps) => {
 
     const [crop, setCrop] = useState({ x: 0, y: 0 });
     const [zoom, setZoom] = useState(1);
-    const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+    const [croppedAreaPixels, setCroppedAreaPixels] = useState<{ width: number; height: number; x: number; y: number } | null>(null);
     const [saving, setSaving] = useState(false);
 
 
@@ -183,7 +195,7 @@ export const PotMaker = ({ onBack }: PotMakerProps) => {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const captureRef = useRef<() => string>(null);
 
-    const onCropComplete = useCallback((_area: any, croppedAreaPixels: any) => {
+    const onCropComplete = useCallback((_: unknown, croppedAreaPixels: { width: number; height: number; x: number; y: number }) => {
         setCroppedAreaPixels(croppedAreaPixels);
     }, []);
 
@@ -247,7 +259,9 @@ export const PotMaker = ({ onBack }: PotMakerProps) => {
                 })
             });
             toast.success("Saved to Profile!");
-        } catch (e) { toast.error("Error saving to profile"); }
+        } catch {
+            toast.error("Error saving to profile");
+        }
         setSaving(false);
     };
 

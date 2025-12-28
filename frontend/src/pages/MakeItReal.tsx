@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect, type MouseEvent, type TouchEvent } from 'react';
 import styles from './MakeItReal.module.css';
 import { fetchPlants } from '../services/api';
+import type { Plant } from '../types';
 import toast from 'react-hot-toast';
 import { Search, ArrowLeft, ScanLine } from 'lucide-react';
 
@@ -12,12 +13,12 @@ import { Search, ArrowLeft, ScanLine } from 'lucide-react';
 export const MakeItReal = () => {
     // --- STATE ---
     const [viewMode, setViewMode] = useState<'SELECTION' | 'STUDIO' | 'RESULT'>('SELECTION');
-    const [plants, setPlants] = useState<any[]>([]);
+    const [plants, setPlants] = useState<Plant[]>([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [isProcessing, setIsProcessing] = useState(false);
 
     // Core Data
-    const [selectedPlant, setSelectedPlant] = useState<any>(null);
+    const [selectedPlant, setSelectedPlant] = useState<Plant | null>(null);
     const [cutoutUrl, setCutoutUrl] = useState<string | null>(null);
 
     // Studio State
@@ -210,7 +211,7 @@ export const MakeItReal = () => {
     };
 
     // --- MAIN PROCESSOR ---
-    const processPlant = async (plant: any) => {
+    const processPlant = async (plant: Plant) => {
         setIsProcessing(true);
         setSelectedPlant(plant);
 

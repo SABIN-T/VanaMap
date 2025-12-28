@@ -32,7 +32,7 @@ export const fetchPlants = async (): Promise<Plant[]> => {
     }
 };
 
-export const fetchUsers = async (): Promise<any[]> => {
+export const fetchUsers = async (): Promise<unknown[]> => {
     try {
         const response = await fetch(`${API_URL}/users`, { headers: getHeaders() });
         if (!response.ok) throw new Error('Failed to fetch users');
@@ -339,7 +339,7 @@ export const fetchSuggestions = async () => {
     return res.json();
 };
 
-export const updateSuggestion = async (id: string, updates: any) => {
+export const updateSuggestion = async (id: string, updates: Record<string, unknown>) => {
     const res = await fetch(`${API_URL}/suggestions/${id}`, {
         method: 'PATCH',
         headers: getHeaders(),
@@ -364,7 +364,7 @@ export const fetchLeaderboard = async () => {
     return res.json();
 };
 
-export const logSearch = async (query: string, plantId?: string, location?: any) => {
+export const logSearch = async (query: string, plantId?: string, location?: unknown) => {
     try {
         await fetch(`${API_URL}/tracking/search`, {
             method: 'POST',
@@ -384,7 +384,7 @@ export const fetchVendorAnalytics = async (vendorId: string) => {
     return res.json();
 };
 
-export const completePurchase = async (items: any[]) => {
+export const completePurchase = async (items: unknown[]) => {
     const res = await fetch(`${API_URL}/user/complete-purchase`, {
         method: 'POST',
         headers: getHeaders(),

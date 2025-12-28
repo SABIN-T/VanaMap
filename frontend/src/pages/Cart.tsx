@@ -15,6 +15,16 @@ export const Cart = () => {
     const navigate = useNavigate();
     const [vendors, setVendors] = useState<Record<string, Vendor>>({});
 
+    useEffect(() => {
+        const loadVendors = async () => {
+            const list = await fetchVendors();
+            const map: Record<string, Vendor> = {};
+            list.forEach(v => map[v.id] = v);
+            setVendors(map);
+        };
+        loadVendors();
+    }, []);
+
     // Auth Gate for Cart
     if (loading) return <div className={styles.container}><div style={{ textAlign: 'center', color: 'white' }}>Loading Cart...</div></div>;
 
@@ -57,16 +67,6 @@ export const Cart = () => {
             </div>
         );
     }
-
-    useEffect(() => {
-        const loadVendors = async () => {
-            const list = await fetchVendors();
-            const map: Record<string, Vendor> = {};
-            list.forEach(v => map[v.id] = v);
-            setVendors(map);
-        };
-        loadVendors();
-    }, []);
 
     // Helper: Group items by vendor
     const groupedItems = items.reduce((acc, item) => {

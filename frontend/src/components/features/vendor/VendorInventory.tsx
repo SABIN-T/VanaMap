@@ -110,7 +110,7 @@ export const VendorInventory = ({ vendor, onUpdate }: VendorInventoryProps) => {
         const currentInventory = vendor.inventory || [];
         const existingIndex = currentInventory.findIndex(i => i.plantId === plant.id);
 
-        let newInventory = [...currentInventory];
+        const newInventory = [...currentInventory];
         const newItem = {
             plantId: plant.id,
             price: newPrice,
