@@ -139,43 +139,52 @@ export const MakeItReal = () => {
                     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
                     const data = imageData.data;
 
-                    // 1. Identify "Non-Plant" profile (White/Grey background and pot)
+                    // 1. Precise Background Profile
                     const width = canvas.width;
                     const height = canvas.height;
+                    const bg = { r: data[0], g: data[1], b: data[2] };
+
+                    // 2. Clear Background + Find Content Bounds
+                    let minX = width, minY = height, maxX = 0, maxY = 0;
+                    let hasContent = false;
 
                     for (let i = 0; i < data.length; i += 4) {
+                        const x = (i / 4) % width;
                         const y = Math.floor((i / 4) / width);
                         const r = data[i], g = data[i + 1], b = data[i + 2];
+                        const diff = Math.sqrt((r - bg.r) ** 2 + (g - bg.g) ** 2 + (b - bg.b) ** 2);
 
-                        // SCIENTIFIC LEAF ISOLATION:
-                        // Most plants are Green/Yellow/Brown. 
-                        // The background and pot are White/Light Grey.
-                        const isLight = r > 180 && g > 180 && b > 180;
-                        const isGrey = Math.abs(r - g) < 20 && Math.abs(g - b) < 20 && Math.abs(r - b) < 20;
+                        // If it's the pot area or background white
+                        const isPotOrBg = (diff < 35) || (r > 200 && g > 200 && b > 200);
 
-                        const saturation = Math.max(r, g, b) - Math.min(r, g, b);
-
-                        // If it's very light (Background/Pot) AND NOT significantly saturated/greenish
-                        if (isLight && isGrey && saturation < 50) {
+                        if (isPotOrBg) {
                             data[i + 3] = 0;
-                        }
-
-                        // Aggressively remove the bottom section where the pot base usually sits
-                        if (y > height * 0.75 && isLight) {
-                            data[i + 3] = 0;
+                        } else {
+                            // Update content bounds
+                            if (x < minX) minX = x;
+                            if (x > maxX) maxX = x;
+                            if (y < minY) minY = y;
+                            if (y > maxY) maxY = y;
+                            hasContent = true;
                         }
                     }
-
                     ctx.putImageData(imageData, 0, 0);
 
-                    // Final pass: Subtle blur to smooth the plant edges
-                    const final = document.createElement('canvas');
-                    final.width = width; final.height = height;
-                    const fCtx = final.getContext('2d');
-                    if (fCtx) {
-                        fCtx.filter = 'contrast(1.1)';
-                        fCtx.drawImage(canvas, 0, 0);
-                        resolve(final.toDataURL('image/png'));
+                    if (!hasContent) {
+                        resolve(canvas.toDataURL('image/png'));
+                        return;
+                    }
+
+                    // 3. AUTO-CROP: Create a new canvas with just the plant content
+                    const cropW = maxX - minX + 1;
+                    const cropH = maxY - minY + 1;
+                    const cropCanvas = document.createElement('canvas');
+                    cropCanvas.width = cropW;
+                    cropCanvas.height = cropH;
+                    const cropCtx = cropCanvas.getContext('2d');
+                    if (cropCtx) {
+                        cropCtx.drawImage(canvas, minX, minY, cropW, cropH, 0, 0, cropW, cropH);
+                        resolve(cropCanvas.toDataURL('image/png'));
                     } else {
                         resolve(canvas.toDataURL('image/png'));
                     }
@@ -346,10 +355,13 @@ export const MakeItReal = () => {
 
         if (potImg) {
             // Draw Plant first (behind/inside pot rim)
-            const plantW = potW * 0.85;
+            const plantW = potW * 1.1; // Make it a bit bushier
             const plantH = (plantImg.height / plantImg.width) * plantW;
-            // Place plant slightly above the pot base
-            ctx.drawImage(plantImg, x + (potW - plantW) / 2, y - (plantH * 0.7), plantW, plantH);
+
+            // SHIFT: Place plant base exactly on the top rim level of the pot
+            // We shift it down so it overlaps the pot area
+            const plantY = y - plantH + (potH * 0.2);
+            ctx.drawImage(plantImg, x + (potW - plantW) / 2, plantY, plantW, plantH);
             ctx.drawImage(potImg, x, y, potW, potH);
         } else {
             const imgW = canvas.width * scale;
@@ -492,7 +504,8 @@ export const MakeItReal = () => {
                                 alt="Foliage"
                                 draggable={false}
                                 style={{
-                                    transform: useStudioPot ? 'translateY(-30%) scale(0.9)' : 'none'
+                                    marginBottom: useStudioPot ? '-40px' : '0',
+                                    zIndex: 1
                                 }}
                             />
                             {/* Pot Overlay */}
@@ -502,6 +515,7 @@ export const MakeItReal = () => {
                                     className={styles.potOverlay}
                                     alt="Pot"
                                     draggable={false}
+                                    style={{ zIndex: 2 }}
                                 />
                             )}
                         </div>
