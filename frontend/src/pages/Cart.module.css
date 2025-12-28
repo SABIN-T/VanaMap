@@ -442,8 +442,229 @@
         justify-content: stretch;
     }
 
-    .whatsappBtn {
-        width: 100%;
-        justify-content: center;
+
+}
+
+
+/* Lock Screen Premium Styles */
+.lockContainer {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    position: relative;
+    overflow: hidden;
+    /* ensure it takes full page */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 200;
+    background: #0f172a;
+    /* Dark base fallback */
+}
+
+.lockOverlay {
+    position: absolute;
+    inset: 0;
+    z-index: 100;
+    backdrop-filter: blur(20px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+/* Background Atmosphere reusing Heaven style concept */
+.sky {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.cloud {
+    position: absolute;
+    color: rgba(255, 255, 255, 0.03);
+    animation: floatCloud 35s linear infinite;
+}
+
+@keyframes floatCloud {
+    from {
+        transform: translateX(-10%);
+    }
+
+    to {
+        transform: translateX(110vw);
+    }
+}
+
+.lockCard {
+    background: rgba(16, 185, 129, 0.05);
+    /* Emerald tint */
+    backdrop-filter: blur(30px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 4rem 3rem;
+    border-radius: 3rem;
+    max-width: 550px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.6);
+    position: relative;
+    overflow: hidden;
+    z-index: 10;
+    animation: popIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.lockCard::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at center, rgba(52, 211, 153, 0.1) 0%, transparent 60%);
+    animation: rotateLock 25s linear infinite;
+    z-index: -1;
+}
+
+@keyframes rotateLock {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes popIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.lockIcon {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    width: 80px;
+    height: 80px;
+    border-radius: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 2rem;
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
+    color: #fff;
+    font-size: 2rem;
+}
+
+.lockTitle {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #fff 0%, #cbd5e1 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -1px;
+    line-height: 1.2;
+}
+
+.lockDesc {
+    color: #94a3b8;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 2.5rem;
+}
+
+.featureList {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+    text-align: left;
+    background: rgba(15, 23, 42, 0.4);
+    padding: 1.5rem;
+    border-radius: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.featureItem {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: #e2e8f0;
+    font-weight: 500;
+}
+
+.featureIcon {
+    color: #34d399;
+    background: rgba(52, 211, 153, 0.1);
+    padding: 0.4rem;
+    border-radius: 0.6rem;
+}
+
+.authButtons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.loginBtn {
+    padding: 1rem 2.5rem;
+    border-radius: 99px;
+    background: #fff;
+    color: #020617;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 1rem;
+    flex: 1;
+}
+
+.loginBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(255, 255, 255, 0.2);
+}
+
+.signupBtn {
+    padding: 1rem 2.5rem;
+    border-radius: 99px;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: #fff;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 1rem;
+    box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+    flex: 1;
+}
+
+.signupBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px rgba(16, 185, 129, 0.4);
+}
+
+@media (max-width: 640px) {
+    .lockCard {
+        padding: 2rem 1.5rem;
+    }
+
+    .lockTitle {
+        font-size: 2rem;
+    }
+
+    .authButtons {
+        flex-direction: column;
     }
 }

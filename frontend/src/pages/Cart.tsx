@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
-import { Trash2, ArrowLeft, Minus, Plus, ShoppingCart, MessageCircle, MapPin, Store, Lock, ShieldCheck, Info, Phone } from 'lucide-react';
+import { Trash2, ArrowLeft, Minus, Plus, ShoppingCart, MessageCircle, MapPin, Store, Lock, ShieldCheck, Info, Phone, Smartphone, RefreshCw, CheckCircle2, CloudRain } from 'lucide-react';
 import { Button } from '../components/common/Button';
 import { fetchVendors, completePurchase } from '../services/api';
 import { formatCurrency } from '../utils/currency';
@@ -11,9 +11,52 @@ import styles from './Cart.module.css';
 
 export const Cart = () => {
     const { items, removeFromCart, updateQuantity } = useCart();
-    const { user } = useAuth();
+    const { user, loading } = useAuth();
     const navigate = useNavigate();
     const [vendors, setVendors] = useState<Record<string, Vendor>>({});
+
+    // Auth Gate for Cart
+    if (loading) return <div className={styles.container}><div style={{ textAlign: 'center', color: 'white' }}>Loading Cart...</div></div>;
+
+    if (!user) {
+        return (
+            <div className={styles.lockContainer}>
+                <div className={styles.sky}>
+                    <CloudRain size={120} className={styles.cloud} style={{ top: '10%', left: '-10%', opacity: 0.4 }} />
+                    <CloudRain size={80} className={styles.cloud} style={{ top: '20%', animationDelay: '5s', opacity: 0.3 }} />
+                </div>
+                <div className={styles.lockOverlay}>
+                    <div className={styles.lockCard}>
+                        <div className={styles.lockIcon}><ShoppingCart size={40} /></div>
+                        <h1 className={styles.lockTitle}>Secure Bag 🛒</h1>
+                        <p className={styles.lockDesc}>
+                            Please <strong>sign in</strong> to manage your orders, sync your cart across devices, and arrange WhatsApp delivery.
+                        </p>
+
+                        <div className={styles.featureList}>
+                            <div className={styles.featureItem}>
+                                <Smartphone className={styles.featureIcon} size={24} />
+                                <span>Sync Cart Across All Devices</span>
+                            </div>
+                            <div className={styles.featureItem}>
+                                <RefreshCw className={styles.featureIcon} size={24} />
+                                <span>Real-time Stock Updates</span>
+                            </div>
+                            <div className={styles.featureItem}>
+                                <CheckCircle2 className={styles.featureIcon} size={24} />
+                                <span>Secure WhatsApp Checkout</span>
+                            </div>
+                        </div>
+
+                        <div className={styles.authButtons}>
+                            <button onClick={() => navigate('/auth?view=login')} className={styles.loginBtn}>Login Here</button>
+                            <button onClick={() => navigate('/auth?view=signup')} className={styles.signupBtn}>Create Account</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     useEffect(() => {
         const loadVendors = async () => {
