@@ -1,6 +1,43 @@
 /* 🌌 MAKE IT REAL - STUDIO 2.0 🌌 */
 /* Designed for spatial depth, clarity, and premium feel */
 
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7);
+    }
+
+    70% {
+        box-shadow: 0 0 0 15px rgba(255, 255, 255, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+    }
+}
+
+.pulseFocus {
+    animation: pulse 1.5s infinite;
+    border-color: #34d399 !important;
+}
+
+.panelScroll {
+    flex: 1;
+    overflow-y: auto;
+    padding-right: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.panelScroll::-webkit-scrollbar {
+    width: 4px;
+}
+
+.panelScroll::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
 /* --- GLOBAL THEME --- */
 .container {
     min-height: 100vh;
