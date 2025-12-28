@@ -40,6 +40,57 @@ export const calculateBiologicalEfficiency = (
     return tempFactor * humidityFactor * lightFactor;
 };
 
+/**
+ * Monte Carlo Aptness Calculation
+ * Instead of static averages, this simulates a 7-day period (168h) with stochastic weather.
+ * Returns a score based on biological stability and resilience.
+ */
+export const calculateAptnessMC = (
+    plant: Plant,
+    baseTemp: number,
+    aqi: number = 20,
+    baseHumidity: number = 50,
+    iterations: number = 200 // Faster iterations for batch processing
+): number => {
+    let totalScoreSum = 0;
+
+    for (let i = 0; i < iterations; i++) {
+        let biologicalStability = 0;
+        const simulationWindow = 24; // Check a 24h cycle for ranking
+
+        for (let h = 0; h < simulationWindow; h++) {
+            // Apply Diurnal & Stochastic Jitter
+            // Assume 6 degree diurnal swing + 3 degree random flux
+            const hour = h % 24;
+            const diurnalEffect = Math.sin((hour - 8) * (Math.PI / 12)) * 3;
+            const jitterTemp = baseTemp + diurnalEffect + (Math.random() - 0.5) * 3;
+            const jitterHumidity = baseHumidity + (Math.random() - 0.5) * 15;
+
+            const efficiency = calculateBiologicalEfficiency(plant, jitterTemp, jitterHumidity);
+            biologicalStability += efficiency;
+        }
+
+        const avgEfficiency = biologicalStability / simulationWindow;
+
+        // Resilience Points (Static)
+        let bonus = 0;
+        const desc = (plant.description || "").toLowerCase();
+        if (desc.includes('hardy') || desc.includes('tough')) bonus += 10;
+        if (plant.idealTempMax - plant.idealTempMin > 18) bonus += 5;
+
+        // AQI Points
+        let aqiPoints = 0;
+        const isPurifier = plant.medicinalValues?.includes('Air purification') ||
+            plant.advantages?.some(a => a.toLowerCase().includes('purif'));
+        if (aqi > 100) aqiPoints = isPurifier ? 15 : -10;
+        else if (isPurifier) aqiPoints = 5;
+
+        totalScoreSum += (avgEfficiency * 70) + bonus + aqiPoints;
+    }
+
+    return Math.max(0, Math.min(100, Math.round(totalScoreSum / iterations)));
+};
+
 export const calculateAptness = (
     plant: Plant,
     currentTemp: number,
@@ -48,52 +99,19 @@ export const calculateAptness = (
     normalizationBase?: number,
     isAbsolute?: boolean
 ): number => {
-    // === SCORING CONSTANTS ===
-    // Total potential: 100 points
-
-    // 1. Biological Match: 70 pts
-    const bioEfficiency = calculateBiologicalEfficiency(plant, currentTemp, avgHumidity);
-    let bioScore = bioEfficiency * 70;
-
-    // 2. Resilience Bonus: 15 pts
-    let resilienceScore = 0;
-    const desc = (plant.description || "").toLowerCase();
-    if (desc.includes('hardy') || desc.includes('tough') || desc.includes('low maintenance')) resilienceScore += 10;
-    if (plant.idealTempMax - plant.idealTempMin > 18) resilienceScore += 5;
-
-    // 3. Air Quality Relevance: 15 pts
-    let aqiScore = 0;
-    const isPurifier = plant.medicinalValues?.includes('Air purification') ||
-        plant.advantages?.some(a => a.toLowerCase().includes('purif')) ||
-        desc.includes('toxin') || desc.includes('benzene');
-
-    if (aqi > 100) {
-        if (isPurifier) aqiScore = 15;
-        else aqiScore = -10;
-    } else if (isPurifier) {
-        aqiScore = 5 + (aqi / 20);
-    }
-
-    // === FINAL AGGREGATION ===
-    let totalRaw = bioScore + resilienceScore + aqiScore;
-
-    // Clamp between 0 and 100
-    totalRaw = Math.max(0, Math.min(100, totalRaw));
+    // We now point calculateAptness to the MC version for robustness
+    const mcScore = calculateAptnessMC(plant, currentTemp, aqi, avgHumidity);
 
     // If absolute mode is requested, return raw score regardless of normalizationBase
-    if (isAbsolute) return Math.round(totalRaw);
+    if (isAbsolute) return mcScore;
 
     if (normalizationBase && normalizationBase > 0) {
-        // Robust Normalization: Only scale to 100 if the base is reasonably healthy
-        // If the best plant only scores 30%, we shouldn't normalize it to 100% 
-        // as that's misleading. We'll use a 60% threshold for "Confident Scaling".
         const confidenceThreshold = 60;
         const scaleFactor = normalizationBase < confidenceThreshold ? (normalizationBase / confidenceThreshold) : 1;
-
-        return Math.round((totalRaw / normalizationBase) * 100 * scaleFactor);
+        return Math.round((mcScore / normalizationBase) * 100 * scaleFactor);
     }
 
-    return Math.round(totalRaw);
+    return mcScore;
 };
 
 /**
