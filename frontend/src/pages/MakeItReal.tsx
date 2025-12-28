@@ -13,6 +13,7 @@ const POT_COLORS = [
     { name: 'Navy Blue', hex: '#3d405b' },
     { name: 'Concrete', hex: '#9ca3af' },
     { name: 'Mustard', hex: '#f2cc8f' },
+    { name: 'Black', hex: '#000000' },
 ];
 
 const removeWhiteBackground = (imageSrc: string, tolerance: number = 30): Promise<string> => {
@@ -50,7 +51,7 @@ const removeWhiteBackground = (imageSrc: string, tolerance: number = 30): Promis
             const corners = [0, width - 1, (height - 1) * width, (height - 1) * width + (width - 1)];
 
             for (const idx of corners) {
-                if (getDist(idx * 4) <= tolerance) { // Use pixel index
+                if (getDist(idx * 4) <= tolerance) {
                     queue.push(idx);
                     visited[idx] = 1;
                 }
@@ -94,88 +95,70 @@ const removeWhiteBackground = (imageSrc: string, tolerance: number = 30): Promis
     });
 };
 
-const recolorPot = (imageSrc: string, startX: number, startY: number, colorHex: string, tolerance: number = 40): Promise<string> => {
-    return new Promise((resolve) => {
-        const img = new Image();
-        img.crossOrigin = "Anonymous";
-        img.src = imageSrc;
-        img.onload = () => {
-            const canvas = document.createElement('canvas');
-            canvas.width = img.width;
-            canvas.height = img.height;
-            const ctx = canvas.getContext('2d');
-            if (!ctx) return resolve(imageSrc);
-            ctx.drawImage(img, 0, 0);
+// Generates a composite of the Plant (no bg) inside the PotBase (tinted)
+const generateComposite = async (plantSrc: string, potSrc: string, colorHex: string): Promise<string> => {
+    return new Promise(async (resolve) => {
+        // Load Images
+        const loadImage = (src: string) => new Promise<HTMLImageElement>((r) => {
+            const i = new Image();
+            i.crossOrigin = "Anonymous";
+            i.src = src;
+            i.onload = () => r(i);
+            i.onerror = () => r(i); // proceeding anyway
+        });
 
-            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            const data = imageData.data;
-            const width = canvas.width;
-            const height = canvas.height;
+        const [plantImg, potImg] = await Promise.all([loadImage(plantSrc), loadImage(potSrc)]);
 
-            const rT = parseInt(colorHex.slice(1, 3), 16);
-            const gT = parseInt(colorHex.slice(3, 5), 16);
-            const bT = parseInt(colorHex.slice(5, 7), 16);
+        const canvas = document.createElement('canvas');
+        canvas.width = potImg.width;
+        canvas.height = potImg.height;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return resolve(plantSrc);
 
-            const seedX = Math.floor(startX);
-            const seedY = Math.floor(startY);
-            const seedIdx = (seedY * width + seedX) * 4;
+        // --- LAYER 1: PLANT (Behind/Inside Pot) ---
+        // Scale plant to fit decently within the pot width
+        // Assume pot opening is roughly 80% of pot width
+        const plantScale = (canvas.width * 0.85) / plantImg.width;
+        const pW = plantImg.width * plantScale;
+        const pH = plantImg.height * plantScale;
 
-            // Bounds check
-            if (seedX < 0 || seedX >= width || seedY < 0 || seedY >= height) return resolve(imageSrc);
+        // Center Horizontally
+        const pX = (canvas.width - pW) / 2;
+        // Position Vertically: Plant bottom should be near the bottom of the pot but hidden
+        // Let's place the bottom of the plant at 90% of pot height
+        const pY = (canvas.height * 0.9) - pH;
 
-            const seedR = data[seedIdx];
-            const seedG = data[seedIdx + 1];
-            const seedB = data[seedIdx + 2];
-            const seedA = data[seedIdx + 3];
+        ctx.drawImage(plantImg, pX, pY, pW, pH);
 
-            if (seedA === 0) return resolve(imageSrc);
+        // --- LAYER 2: POT (Tinted) ---
+        // We need to tint the pot.
+        // Create an offscreen canvas for the pot to apply tint
+        const potCanvas = document.createElement('canvas');
+        potCanvas.width = canvas.width;
+        potCanvas.height = canvas.height;
+        const pCtx = potCanvas.getContext('2d');
+        if (pCtx) {
+            // Draw Pot
+            pCtx.drawImage(potImg, 0, 0);
 
-            const getDist = (ind: number) => {
-                const r = data[ind];
-                const g = data[ind + 1];
-                const b = data[ind + 2];
-                return Math.sqrt((r - seedR) ** 2 + (g - seedG) ** 2 + (b - seedB) ** 2);
-            }
+            // Apply Tint (Multiply)
+            // This works best if pot is white/light.
+            pCtx.globalCompositeOperation = 'multiply';
+            pCtx.fillStyle = colorHex;
+            pCtx.fillRect(0, 0, potCanvas.width, potCanvas.height);
 
-            const queue = [seedY * width + seedX];
-            const visited = new Uint8Array(width * height);
-            visited[seedY * width + seedX] = 1;
-
-            while (queue.length) {
-                const idx = queue.shift()!;
-                const i = idx * 4;
-
-                // Apply Color (Luminance preserving tint)
-                const curR = data[i];
-                const curG = data[i + 1];
-                const curB = data[i + 2];
-                const lum = 0.299 * curR + 0.587 * curG + 0.114 * curB;
-
-                // Mix: 20% Original + 80% Tinted Luminance
-                // Using 200 as base brightness to allow some highlights
-                const tintAmount = 0.8;
-                data[i] = curR * (1 - tintAmount) + Math.min(255, (lum / 200) * rT) * tintAmount;
-                data[i + 1] = curG * (1 - tintAmount) + Math.min(255, (lum / 200) * gT) * tintAmount;
-                data[i + 2] = curB * (1 - tintAmount) + Math.min(255, (lum / 200) * bT) * tintAmount;
-
-                const neighborOffsets = [1, -1, width, -width];
-                for (const offset of neighborOffsets) {
-                    const nbox = idx + offset;
-                    // Simple bounds check (loose)
-                    if (nbox >= 0 && nbox < visited.length && visited[nbox] === 0) {
-                        if (getDist(nbox * 4) < tolerance) {
-                            visited[nbox] = 1;
-                            queue.push(nbox);
-                        }
-                    }
-                }
-            }
-            ctx.putImageData(imageData, 0, 0);
-            resolve(canvas.toDataURL());
+            // Restore Alpha (clean up the rectangle overflow)
+            pCtx.globalCompositeOperation = 'destination-in';
+            pCtx.drawImage(potImg, 0, 0);
         }
-        img.onerror = () => resolve(imageSrc);
-    })
-}
+
+        // Draw the tinted pot on top of the plant
+        ctx.drawImage(potCanvas, 0, 0);
+
+        resolve(canvas.toDataURL('image/png'));
+    });
+};
+
 
 const getImgCoordinates = (e: React.MouseEvent, img: HTMLImageElement) => {
     const rect = img.getBoundingClientRect();
@@ -218,9 +201,16 @@ export const MakeItReal = () => {
     const [previewPlant, setPreviewPlant] = useState<any | null>(null);
     const [processedImage, setProcessedImage] = useState<string | null>(null);
     const [isProcessing, setIsProcessing] = useState(false);
+
+    // Potting State
     const [autoRemoveBg, setAutoRemoveBg] = useState(true);
-    const [bgTolerance, setBgTolerance] = useState(50);
-    const [potColor, setPotColor] = useState<string | null>(null); // New
+    const [potColor, setPotColor] = useState<string>('#ffffff');
+    const [cleanPlantImg, setCleanPlantImg] = useState<string | null>(null);
+
+    // Refs
+    const potBaseRef = useRef<string | null>(null);
+    const canvasRef = useRef<HTMLDivElement>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
     // Transform State
     const [position, setPosition] = useState({ x: 50, y: 50 });
@@ -228,11 +218,12 @@ export const MakeItReal = () => {
     const [isDragging, setIsDragging] = useState(false);
     const [isMagicMode, setIsMagicMode] = useState(false);
 
-    const canvasRef = useRef<HTMLDivElement>(null);
-    const fileInputRef = useRef<HTMLInputElement>(null);
-
     useEffect(() => {
         loadPlants();
+        // Preload and clean pot base
+        removeWhiteBackground('/pot-base.png', 20).then(res => {
+            potBaseRef.current = res;
+        });
     }, []);
 
     // Camera Logic
@@ -301,49 +292,45 @@ export const MakeItReal = () => {
         }
     };
 
-    const onPlantClick = (plant: any) => {
+    const onPlantClick = async (plant: any) => {
         setPreviewPlant(plant);
         setProcessedImage(null);
-        setPotColor(null);
-        runProcessing(plant.imageUrl, autoRemoveBg, bgTolerance);
-    };
-
-    const runProcessing = async (url: string, remove: boolean, tol: number) => {
-        if (!remove) {
-            setProcessedImage(url);
-            return;
-        }
+        setPotColor('#ffffff'); // Reset to white
         setIsProcessing(true);
+
         try {
-            const result = await removeWhiteBackground(url, tol);
-            setProcessedImage(result);
+            // 1. Remove BG from Plant (Always do this for potting flow)
+            // Even if we don't auto-remove in final, we need it for potting
+            const noBg = await removeWhiteBackground(plant.imageUrl, 40);
+            setCleanPlantImg(noBg);
+
+            // 2. Generate Initial Composite
+            if (potBaseRef.current) {
+                const composite = await generateComposite(noBg, potBaseRef.current, '#ffffff');
+                setProcessedImage(composite);
+            } else {
+                // Fallback if pot not loaded yet
+                setProcessedImage(noBg);
+            }
         } finally {
             setIsProcessing(false);
         }
     };
 
-    const handlePreviewClick = async (e: React.MouseEvent<HTMLImageElement>) => {
-        if (!potColor || !processedImage || isProcessing) return;
+    // Effect: Update Composite when Pot Color Changes
+    useEffect(() => {
+        if (!previewPlant || !cleanPlantImg || !potBaseRef.current) return;
 
-        setIsProcessing(true);
-        const { x, y } = getImgCoordinates(e, e.currentTarget);
+        const updateComposite = async () => {
+            // Processing indicator specific to color change? 
+            // Might be fast enough to not need it, but let's see.
+            const composite = await generateComposite(cleanPlantImg, potBaseRef.current!, potColor);
+            setProcessedImage(composite);
+        };
 
-        try {
-            const newImage = await recolorPot(processedImage, x, y, potColor);
-            setProcessedImage(newImage);
-            toast.success("Pot recolored!", { icon: '🎨' });
-        } finally {
-            setIsProcessing(false);
-        }
-    };
+        updateComposite();
+    }, [potColor, cleanPlantImg]); // Re-run if color or base plant changes
 
-    const toggleBgRemoval = () => {
-        const newVal = !autoRemoveBg;
-        setAutoRemoveBg(newVal);
-        if (previewPlant) {
-            runProcessing(previewPlant.imageUrl, newVal, bgTolerance);
-        }
-    };
 
     const confirmPlacement = () => {
         if (!roomImage) {
@@ -405,75 +392,40 @@ export const MakeItReal = () => {
                         <h2 className={styles.modalTitle}>Customize {previewPlant.name}</h2>
 
                         <div className={styles.previewContainer}>
-                            {processedImage && (
+                            {processedImage ? (
                                 <img
                                     src={processedImage}
                                     className={styles.previewImage}
                                     alt="Preview"
-                                    onClick={handlePreviewClick}
-                                    style={{ cursor: potColor ? 'crosshair' : 'default' }}
                                 />
+                            ) : (
+                                <div className="text-gray-400">Loading...</div>
                             )}
                             {isProcessing && (
                                 <div className={styles.processingOverlay}>
-                                    <Loader2 className="animate-spin" /> Removing Background...
+                                    <Loader2 className="animate-spin" /> Preparing Pot...
                                 </div>
                             )}
                         </div>
 
-                        <div className={styles.optionRow}>
-                            <div className={styles.toggleLabel}>
-                                <Sparkles size={18} color={autoRemoveBg ? '#34d399' : '#94a3b8'} />
-                                Auto-Clean Background
+                        {/* CONTROLS */}
+                        <div style={{ marginTop: '0.5rem' }}>
+                            <div className={styles.toggleLabel} style={{ marginBottom: '0.5rem' }}>
+                                <Palette size={16} /> Select Pot Color
                             </div>
-                            <div
-                                className={styles.toggleSwitch}
-                                data-active={autoRemoveBg}
-                                onClick={toggleBgRemoval}
-                            >
-                                <div className={styles.toggleKnob} />
+                            <div className={styles.colorPalette}>
+                                {POT_COLORS.map(c => (
+                                    <div
+                                        key={c.name}
+                                        className={styles.colorSwatch}
+                                        style={{ backgroundColor: c.hex }}
+                                        data-selected={potColor === c.hex}
+                                        onClick={() => setPotColor(c.hex)}
+                                        title={c.name}
+                                    />
+                                ))}
                             </div>
                         </div>
-
-                        {/* TOLERANCE SLIDER */}
-                        {autoRemoveBg && (
-                            <div className={styles.optionRow} style={{ marginTop: '0.5rem', display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: '0.5rem' }}>
-                                <div className={styles.toggleLabel} style={{ justifyContent: 'space-between', fontSize: '0.9rem' }}>
-                                    <span style={{ display: 'flex', gap: '0.5rem' }}><Sliders size={16} /> Sensitivity: {bgTolerance}%</span>
-                                    <input
-                                        type="range"
-                                        min="1"
-                                        max="150"
-                                        value={bgTolerance}
-                                        onChange={(e) => setBgTolerance(parseInt(e.target.value))}
-                                        onMouseUp={() => runProcessing(previewPlant.imageUrl, autoRemoveBg, bgTolerance)}
-                                        style={{ width: '100%', marginTop: '0.5rem', accentColor: '#34d399', cursor: 'pointer' }}
-                                    />
-                                </div>
-                            </div>
-                        )}
-
-                        {/* POT COLOR PALETTE */}
-                        {autoRemoveBg && (
-                            <div style={{ marginTop: '0.5rem' }}>
-                                <div className={styles.toggleLabel} style={{ marginBottom: '0.5rem' }}>
-                                    <Palette size={16} /> Recolor Pot
-                                </div>
-                                <div className={styles.colorPalette}>
-                                    {POT_COLORS.map(c => (
-                                        <div
-                                            key={c.name}
-                                            className={styles.colorSwatch}
-                                            style={{ backgroundColor: c.hex }}
-                                            data-selected={potColor === c.hex}
-                                            onClick={() => setPotColor(c.hex === potColor ? null : c.hex)}
-                                            title={c.name}
-                                        />
-                                    ))}
-                                </div>
-                                {potColor && <div className={styles.instructionText}>Tap on the pot in the image to paint it!</div>}
-                            </div>
-                        )}
 
                         <div className={styles.modalActions}>
                             <button className={styles.secondaryBtn} onClick={() => setPreviewPlant(null)}>Cancel</button>
