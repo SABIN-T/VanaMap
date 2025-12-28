@@ -11,6 +11,7 @@ export const SeedDashboard = () => {
     const [liveScientificMap, setLiveScientificMap] = useState<Map<string, string>>(new Map());
     const [deploying, setDeploying] = useState<string | null>(null);
     const [searchTerm, setSearchTerm] = useState('');
+    const [viewMode, setViewMode] = useState<'all' | 'indoor' | 'outdoor'>('all');
 
     useEffect(() => {
         loadData();
@@ -118,16 +119,19 @@ export const SeedDashboard = () => {
     };
 
     const handleDeployAll = async () => {
-        if (!confirm("Are you sure you want to DEPLOY ALL new plants to production? Existing live plants will be preserved.")) return;
+        const type = viewMode === 'all' ? undefined : viewMode;
+        const typeLabel = viewMode === 'all' ? 'ALL' : viewMode.toUpperCase();
+
+        if (!confirm(`Are you sure you want to DEPLOY ${typeLabel} new plants to production? Existing live plants will be preserved.`)) return;
         setLoading(true);
         try {
-            const res = await deployAllPlants();
+            const res = await deployAllPlants(type);
             await loadData();
 
             if (res.added > 0) {
-                toast.success(`Deployment Success: ${res.added} New Plants Added. (${res.skipped} Skipped)`);
+                toast.success(`Deployment Success: ${res.added} New ${typeLabel} Plants Added. (${res.skipped} Skipped)`);
             } else {
-                toast.success(`System Synced: All ${res.skipped} plants are already live.`);
+                toast.success(`System Synced: All ${res.skipped} ${typeLabel} plants are already live.`);
             }
         } catch (e: any) {
             toast.error(e.message || "Mass deployment failed");
@@ -139,25 +143,52 @@ export const SeedDashboard = () => {
     const filterPlants = (plants: any[]) => {
         return plants.filter(p =>
             p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            p.scientificName?.toLowerCase().includes(searchTerm.toLowerCase())
+            p.scientificName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            p.type.toLowerCase().includes(searchTerm.toLowerCase())
         );
     };
+
+    if (loading) return <div className={styles.loading}>Loading Seed Bank...</div>;
+
+    const filteredIndoor = filterPlants(seedData.indoor);
+    const filteredOutdoor = filterPlants(seedData.outdoor);
 
     const renderCard = (plant: any) => {
         const sciName = plant.scientificName?.toLowerCase().trim();
         const isDeployed = sciName && liveScientificMap.has(sciName);
-        const isProcessing = deploying === plant.id;
 
         return (
             <div key={plant.id} className={`${styles.card} ${isDeployed ? styles.isLive : ''}`}>
-                {isDeployed && (
-                    <div className={styles.deployedBadge}>
-                        <Check size={12} /> LIVE
+                <div className={styles.cardHeader}>
+                    {isDeployed ? (
+                        <div className={styles.statusLive}>
+                            <Check size={14} /> Live
+                        </div>
+                    ) : (
+                        <div className={styles.statusSeed}>
+                            <Sprout size={14} /> Seed
+                        </div>
+                    )}
+                    <div className={styles.actions}>
+                        <button
+                            className={styles.iconBtn}
+                            onClick={() => handleToggleType(plant)}
+                            title="Switch Type (Indoor/Outdoor)"
+                        >
+                            <ArrowLeftRight size={14} />
+                        </button>
+                        <button
+                            className={styles.iconBtn}
+                            onClick={() => handleDeleteSeed(plant)}
+                            title="Delete from File"
+                        >
+                            <Trash2 size={14} />
+                        </button>
                     </div>
-                )}
-                <img src={plant.imageUrl} alt={plant.name} className={styles.cardImage} loading="lazy" />
+                </div>
 
                 <div className={styles.cardContent}>
+                    <img src={plant.imageUrl} alt={plant.name} className={styles.plantImage} />
                     <div>
                         <h3 className={styles.plantName}>{plant.name}</h3>
                         <p className={styles.scientificName}>{plant.scientificName}</p>
@@ -173,100 +204,108 @@ export const SeedDashboard = () => {
                         </div>
                     </div>
 
-                    <div style={{ display: 'flex', gap: '8px', marginTop: '12px' }}>
-                        <button
-                            className={styles.iconButton}
-                            onClick={() => handleToggleType(plant)}
-                            title="Switch Indoor/Outdoor"
-                            style={{ flex: 1, padding: '8px', borderRadius: '8px', background: '#f3f4f6', border: 'none', cursor: 'pointer' }}
-                        >
-                            <ArrowLeftRight size={16} color="#4b5563" />
-                        </button>
-                        <button
-                            className={styles.iconButton}
-                            onClick={() => handleDeleteSeed(plant)}
-                            title="Delete from Seed Bank"
-                            style={{ flex: 1, padding: '8px', borderRadius: '8px', background: '#fee2e2', border: 'none', cursor: 'pointer' }}
-                        >
-                            <Trash2 size={16} color="#ef4444" />
-                        </button>
+                    <div className={styles.deployAction}>
+                        {!isDeployed ? (
+                            <button
+                                className={styles.pushBtn}
+                                onClick={() => handlePush(plant)}
+                                disabled={deploying === plant.id}
+                            >
+                                {deploying === plant.id ? '...' : (
+                                    <>
+                                        <CloudUpload size={14} /> Push to Live
+                                    </>
+                                )}
+                            </button>
+                        ) : (
+                            <button
+                                className={styles.removeBtn}
+                                onClick={() => handleRemove(plant)}
+                            >
+                                <X size={14} /> Remove Live
+                            </button>
+                        )}
                     </div>
-
-                    {isDeployed ? (
-                        <button
-                            className={styles.removeButton}
-                            onClick={() => handleRemove(plant)}
-                            disabled={isProcessing || loading}
-                            style={{ marginTop: '8px', width: '100%' }}
-                        >
-                            <X size={14} /> REMOVE LIVE
-                        </button>
-                    ) : (
-                        <button
-                            className={styles.pushButton}
-                            onClick={() => handlePush(plant)}
-                            disabled={isProcessing || loading}
-                            style={{ marginTop: '8px', width: '100%' }}
-                        >
-                            {isProcessing ? (
-                                <span className="animate-spin">⌛</span>
-                            ) : (
-                                <><Rocket size={14} /> PUSH TO LIVE</>
-                            )}
-                        </button>
-                    )}
                 </div>
             </div>
         );
     };
 
-    const filteredIndoor = filterPlants(seedData.indoor);
-    const filteredOutdoor = filterPlants(seedData.outdoor);
-
     return (
         <div className={styles.container}>
             <div className={styles.header}>
-                <div className={styles.title}>
-                    <h1>Biology Databank</h1>
-                    <p><Database size={16} /> Secure Seed Vault v9.0</p>
+                <div className={styles.headerLeft}>
+                    <Database size={28} className={styles.headerIcon} />
+                    <div>
+                        <h1>Seed Data Bank</h1>
+                        <p>Master Source File Control (v2.0 Verified)</p>
+                    </div>
                 </div>
-                <button className={styles.deployAllBtn} onClick={handleDeployAll} disabled={loading}>
-                    <CloudUpload size={20} />
-                    DEPLOY ALL SYSTEMS
+
+                <div className={styles.headerRight}>
+                    <div className={styles.tabs}>
+                        <button
+                            className={`${styles.tabBtn} ${viewMode === 'all' ? styles.activeTab : ''}`}
+                            onClick={() => setViewMode('all')}
+                        >
+                            All Systems
+                        </button>
+                        <button
+                            className={`${styles.tabBtn} ${viewMode === 'indoor' ? styles.activeTab : ''}`}
+                            onClick={() => setViewMode('indoor')}
+                        >
+                            Indoor Specimen
+                        </button>
+                        <button
+                            className={`${styles.tabBtn} ${viewMode === 'outdoor' ? styles.activeTab : ''}`}
+                            onClick={() => setViewMode('outdoor')}
+                        >
+                            Outdoor Ecosystems
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div className={styles.toolbar}>
+                <div className={styles.searchContainer}>
+                    <Search size={18} className={styles.searchIcon} />
+                    <input
+                        type="text"
+                        placeholder="Search seed bank..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className={styles.searchInput}
+                    />
+                </div>
+
+                <button onClick={handleDeployAll} className={styles.deployAllBtn}>
+                    <Rocket size={18} />
+                    DEPLOY {viewMode === 'all' ? 'ALL SYSTEMS' : viewMode.toUpperCase()}
                 </button>
             </div>
 
-            <div className={styles.searchContainer}>
-                <Search className={styles.searchIcon} size={20} />
-                <input
-                    type="text"
-                    className={styles.searchInput}
-                    placeholder="Search by name, species or type..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                />
-            </div>
+            <div className={styles.content}>
+                {(viewMode === 'all' || viewMode === 'indoor') && (
+                    <div className={styles.section}>
+                        <div className={styles.sectionTitle}>
+                            Inside Sanctuary ({filteredIndoor.length})
+                        </div>
+                        <div className={styles.grid}>
+                            {filteredIndoor.map(renderCard)}
+                        </div>
+                    </div>
+                )}
 
-            <div className={styles.section}>
-                <div className={styles.sectionTitle}>
-                    <ShieldCheck size={24} className="text-emerald-400" />
-                    Indoor Specimens
-                    <span className={styles.sectionBadge}>{filteredIndoor.length} Available</span>
-                </div>
-                <div className={styles.grid}>
-                    {filteredIndoor.map(renderCard)}
-                </div>
-            </div>
-
-            <div className={styles.section}>
-                <div className={styles.sectionTitle}>
-                    <Sprout size={24} className="text-amber-400" />
-                    Outdoor Ecosystems
-                    <span className={styles.sectionBadge}>{filteredOutdoor.length} Available</span>
-                </div>
-                <div className={styles.grid}>
-                    {filteredOutdoor.map(renderCard)}
-                </div>
+                {(viewMode === 'all' || viewMode === 'outdoor') && (
+                    <div className={styles.section}>
+                        <div className={styles.sectionTitle}>
+                            Outside World ({filteredOutdoor.length})
+                        </div>
+                        <div className={styles.grid}>
+                            {filteredOutdoor.map(renderCard)}
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );

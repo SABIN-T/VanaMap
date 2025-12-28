@@ -716,15 +716,21 @@ app.post('/api/admin/seed-single', auth, admin, async (req, res) => {
 
 app.post('/api/admin/seed-plants', auth, admin, async (req, res) => {
     try {
-        console.log("SEED: Starting Smart Deployment...");
+        const { type } = req.body; // 'indoor' | 'outdoor' | null
+        console.log(`SEED: Starting Smart Deployment (${type || 'ALL'})...`);
+
         // Fresh import to get latest generated data
         delete require.cache[require.resolve('./plant-data')];
         const { indoorPlants, outdoorPlants } = require('./plant-data');
-        const allPlants = [...indoorPlants, ...outdoorPlants];
+
+        let targetPlants = [];
+        if (type === 'indoor') targetPlants = indoorPlants;
+        else if (type === 'outdoor') targetPlants = outdoorPlants;
+        else targetPlants = [...indoorPlants, ...outdoorPlants];
 
         let stats = { added: 0, skipped: 0 };
 
-        for (const plant of allPlants) {
+        for (const plant of targetPlants) {
             // Check for existence by Scientific Name (Scientific Truth)
             const exists = await Plant.exists({ scientificName: plant.scientificName });
 
@@ -748,7 +754,7 @@ app.post('/api/admin/seed-plants', auth, admin, async (req, res) => {
             await broadcastAlert('plant', `${stats.added} new plants have been added to our collection!`, { count: stats.added, title: 'Library Update 📚' }, '/#plant-grid');
         }
 
-        res.json({ success: true, ...stats, total: allPlants.length });
+        res.json({ success: true, ...stats, total: targetPlants.length });
     } catch (err) {
         console.error("SEED Error:", err);
         res.status(500).json({ error: err.message });
