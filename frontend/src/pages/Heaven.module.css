@@ -133,6 +133,7 @@
     padding: 2px;
     background: linear-gradient(135deg, transparent, rgba(16, 185, 129, 0.3), transparent);
     -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
     opacity: 0;
@@ -680,5 +681,171 @@
         width: 60px;
         height: 60px;
         font-size: 1.2rem;
+    }
+
+}
+
+/* Lock Screen Premium Styles */
+.lockOverlay {
+
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(20px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+.lockCard {
+    background: rgba(16, 185, 129, 0.05);
+    backdrop-filter: blur(30px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 4rem;
+    border-radius: 3rem;
+    max-width: 600px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    position: relative;
+    overflow: hidden;
+}
+
+.lockCard::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at center, rgba(16, 185, 129, 0.1) 0%, transparent 50%);
+    animation: rotateLock 20s linear infinite;
+    z-index: -1;
+}
+
+.lockIcon {
+    background: linear-gradient(135deg, #34d399 0%, #059669 100%);
+    width: 80px;
+    height: 80px;
+    border-radius: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 2rem;
+    box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+    color: #fff;
+}
+
+.lockTitle {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #fff 0%, #cbd5e1 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -1px;
+}
+
+.lockDesc {
+    color: #94a3b8;
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 3rem;
+}
+
+.featureList {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 3rem;
+    text-align: left;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 1.5rem;
+    border-radius: 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.featureItem {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: #e2e8f0;
+    font-weight: 500;
+}
+
+.featureIcon {
+    color: #34d399;
+}
+
+.authButtons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.loginBtn {
+    padding: 1rem 2.5rem;
+    border-radius: 99px;
+    background: #fff;
+    color: #020617;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 1rem;
+}
+
+.loginBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(255, 255, 255, 0.2);
+}
+
+.signupBtn {
+    padding: 1rem 2.5rem;
+    border-radius: 99px;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: #fff;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 1rem;
+    box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+}
+
+.signupBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px rgba(16, 185, 129, 0.4);
+}
+
+@keyframes rotateLock {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@media (max-width: 640px) {
+    .lockCard {
+        padding: 2rem;
+    }
+
+    .lockTitle {
+        font-size: 2rem;
+    }
+
+    .authButtons {
+        flex-direction: column;
+    }
+
+    .loginBtn,
+    .signupBtn {
+        width: 100%;
     }
 }

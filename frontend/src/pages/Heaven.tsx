@@ -1,5 +1,7 @@
 import { useState, useEffect, type MouseEvent } from 'react';
-import { Sprout, CloudRain, Coins, Volume2, VolumeX, Sparkles, Heart, Info, Newspaper, Recycle, ArrowLeft } from 'lucide-react';
+import { Sprout, CloudRain, Coins, Volume2, VolumeX, Sparkles, Heart, Info, Newspaper, Recycle, ArrowLeft, LockKeyhole, Gamepad2, Box } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 import styles from './Heaven.module.css';
 import confetti from 'canvas-confetti';
 import { updateGameProgress } from '../services/api';
@@ -22,8 +24,55 @@ const PLANT_TYPES = [
 ];
 
 export const Heaven = () => {
+    // Auth State
+    const { user, loading } = useAuth();
+    const navigate = useNavigate();
+
     // Hub State
     const [view, setView] = useState<'menu' | 'game' | 'lifecycle' | 'news' | 'pot-maker'>('menu');
+
+    // --- AUTH GATE ---
+    if (loading) return <div className={styles.pageWrapper}><div style={{ margin: 'auto', color: 'white' }}>Loading Heaven...</div></div>;
+
+    if (!user) {
+        return (
+            <div className={styles.pageWrapper}>
+                <div className={styles.sky}>
+                    <CloudRain size={120} className={styles.cloud} style={{ top: '10%', left: '-10%', opacity: 0.4 }} />
+                    <CloudRain size={80} className={styles.cloud} style={{ top: '20%', animationDelay: '5s', opacity: 0.3 }} />
+                </div>
+                <div className={styles.lockOverlay}>
+                    <div className={styles.lockCard}>
+                        <div className={styles.lockIcon}><LockKeyhole size={40} /></div>
+                        <h1 className={styles.lockTitle}>Unlock Heaven 🌿</h1>
+                        <p className={styles.lockDesc}>
+                            Welcome to <strong>Heaven</strong>. Sign in to access our exclusive nature sanctuary.
+                        </p>
+
+                        <div className={styles.featureList}>
+                            <div className={styles.featureItem}>
+                                <Gamepad2 className={styles.featureIcon} size={24} />
+                                <span>3D Magical Games for Children</span>
+                            </div>
+                            <div className={styles.featureItem}>
+                                <Box className={styles.featureIcon} size={24} />
+                                <span>Premium 3D Pot Design Studio</span>
+                            </div>
+                            <div className={styles.featureItem}>
+                                <Newspaper className={styles.featureIcon} size={24} />
+                                <span>Real-time Global Nature News</span>
+                            </div>
+                        </div>
+
+                        <div className={styles.authButtons}>
+                            <button onClick={() => navigate('/auth?view=login')} className={styles.loginBtn}>Login to VanaMap</button>
+                            <button onClick={() => navigate('/auth?view=signup')} className={styles.signupBtn}>Sign Up Free</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     // Game Logic State
     const [coins, setCoins] = useState(100);
