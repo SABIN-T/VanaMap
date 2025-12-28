@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, type MouseEvent } from 'react';
 import styles from './MakeItReal.module.css';
-import { Upload, Search, Wand2, RefreshCw, ZoomIn, ZoomOut, Image as ImageIcon } from 'lucide-react';
+import { Upload, Search, Wand2, RefreshCw, ZoomIn, ZoomOut, Image as ImageIcon, Camera, X } from 'lucide-react';
 import { fetchPlants } from '../services/api';
 import toast from 'react-hot-toast';
 
@@ -12,6 +12,11 @@ export const MakeItReal = () => {
     // Canvas State
     const [roomImage, setRoomImage] = useState<string | null>(null);
     const [placedPlant, setPlacedPlant] = useState<any | null>(null);
+
+    // Camera State
+    const [showCamera, setShowCamera] = useState(false);
+    const [stream, setStream] = useState<MediaStream | null>(null);
+    const videoRef = useRef<HTMLVideoElement>(null);
 
     // Transform State
     const [position, setPosition] = useState({ x: 50, y: 50 }); // Percentage
@@ -25,6 +30,51 @@ export const MakeItReal = () => {
     useEffect(() => {
         loadPlants();
     }, []);
+
+    // Camera Logic
+    const startCamera = async () => {
+        try {
+            const mediaStream = await navigator.mediaDevices.getUserMedia({
+                video: { facingMode: 'environment' }
+            });
+            setStream(mediaStream);
+            setShowCamera(true);
+        } catch (err) {
+            toast.error("Camera access denied or unavailable.");
+            console.error(err);
+        }
+    };
+
+    const stopCamera = () => {
+        if (stream) {
+            stream.getTracks().forEach(track => track.stop());
+            setStream(null);
+        }
+        setShowCamera(false);
+    };
+
+    const capturePhoto = () => {
+        if (videoRef.current) {
+            const video = videoRef.current;
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const ctx = canvas.getContext('2d');
+            if (ctx) {
+                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                const imageUrl = canvas.toDataURL('image/png');
+                setRoomImage(imageUrl);
+                toast.success("Photo captured!");
+                stopCamera();
+            }
+        }
+    };
+
+    useEffect(() => {
+        if (showCamera && videoRef.current && stream) {
+            videoRef.current.srcObject = stream;
+        }
+    }, [showCamera, stream]);
 
     const loadPlants = async () => {
         try {
@@ -85,6 +135,18 @@ export const MakeItReal = () => {
 
     return (
         <div className={styles.container} onMouseUp={handleMouseUp} onMouseLeave={handleMouseUp}>
+            {showCamera && (
+                <div className={styles.cameraOverlay}>
+                    <button className={styles.closeCameraBtn} onClick={stopCamera}><X size={32} /></button>
+                    <video ref={videoRef} autoPlay playsInline muted className={styles.videoPreview} />
+                    <div className={styles.cameraControls}>
+                        <button className={styles.shutterBtn} onClick={capturePhoto}>
+                            <div className={styles.shutterBtnInner} />
+                        </button>
+                    </div>
+                </div>
+            )}
+
             <div className={styles.header}>
                 <h1 className={styles.title}>Make It Real</h1>
                 <div className={styles.subtitle}>
@@ -132,9 +194,16 @@ export const MakeItReal = () => {
                             <ImageIcon size={64} style={{ opacity: 0.5 }} />
                             <h2>Your Space Goes Here</h2>
                             <p>Upload a photo of your room or garden to begin visualization.</p>
-                            <button className={styles.uploadBtn} onClick={() => fileInputRef.current?.click()}>
-                                <Upload size={24} /> Upload Photo
-                            </button>
+
+                            <div className={styles.actionRow}>
+                                <button className={styles.uploadBtn} onClick={() => fileInputRef.current?.click()}>
+                                    <Upload size={24} /> Upload
+                                </button>
+                                <div className={styles.orDivider}>OR</div>
+                                <button className={styles.cameraBtn} onClick={startCamera}>
+                                    <Camera size={24} /> Take Photo
+                                </button>
+                            </div>
                             <input
                                 type="file"
                                 ref={fileInputRef}
