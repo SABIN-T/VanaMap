@@ -1,14 +1,25 @@
+```typescript
 import { useState, useRef, useEffect, type MouseEvent } from 'react';
 import styles from './MakeItReal.module.css';
-import { Upload, Search, Wand2, RefreshCw, ZoomIn, ZoomOut, Image as ImageIcon, Camera, X, Check, Loader2, Sparkles, Sliders } from 'lucide-react';
+import { Upload, Search, Wand2, RefreshCw, ZoomIn, ZoomOut, Image as ImageIcon, Camera, X, Check, Loader2, Sparkles, Sliders, Palette } from 'lucide-react';
 import { fetchPlants } from '../services/api';
 import toast from 'react-hot-toast';
 
-// Helper: Smart Flood Fill with Tolerance control
+// Constants
+const POT_COLORS = [
+    { name: 'Classic White', hex: '#ffffff' },
+    { name: 'Terracotta', hex: '#e07a5f' },
+    { name: 'Charcoal', hex: '#264653' },
+    { name: 'Sage Green', hex: '#81b29a' },
+    { name: 'Navy Blue', hex: '#3d405b' },
+    { name: 'Concrete', hex: '#9ca3af' },
+    { name: 'Mustard', hex: '#f2cc8f' },
+];
+
 const removeWhiteBackground = (imageSrc: string, tolerance: number = 30): Promise<string> => {
     return new Promise((resolve) => {
         const img = new Image();
-        img.crossOrigin = "Anonymous";
+        img.crossOrigin = "Anonymous"; 
         img.src = imageSrc;
         img.onload = () => {
             const canvas = document.createElement('canvas');
@@ -16,47 +27,43 @@ const removeWhiteBackground = (imageSrc: string, tolerance: number = 30): Promis
             canvas.height = img.height;
             const ctx = canvas.getContext('2d');
             if (!ctx) return resolve(imageSrc);
-
+            
             ctx.drawImage(img, 0, 0);
             const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
             const data = imageData.data;
             const width = canvas.width;
             const height = canvas.height;
-
-            // Reference Background Color (Sample Top-Left Corner)
+            
             const bgR = data[0];
             const bgG = data[1];
             const bgB = data[2];
 
-            // Helper: Calculate Color Distance (Euclidean)
             const getDist = (index: number) => {
-                const r = data[index * 4];
-                const g = data[index * 4 + 1];
-                const b = data[index * 4 + 2];
+                const r = data[index];
+                const g = data[index + 1];
+                const b = data[index + 2];
                 return Math.sqrt((r - bgR) ** 2 + (g - bgG) ** 2 + (b - bgB) ** 2);
             };
 
             const queue: number[] = [];
             const visited = new Uint8Array(width * height);
-
-            // Add all 4 corners as seed points if they match background
-            const corners = [0, width - 1, (height - 1) * width, (height - 1) * width + (width - 1)];
-
+            
+            const corners = [0, width-1, (height-1)*width, (height-1)*width + (width-1)];
+            
             for (const idx of corners) {
-                if (getDist(idx) <= tolerance) {
+                if (getDist(idx * 4) <= tolerance) { // Use pixel index
                     queue.push(idx);
                     visited[idx] = 1;
                 }
             }
 
-            // Run Flood Fill
             while (queue.length > 0) {
                 const idx = queue.shift()!;
                 const x = idx % width;
                 const y = Math.floor(idx / width);
 
                 const pixIdx = idx * 4;
-                data[pixIdx + 3] = 0; // Alpha = 0 (Transparent)
+                data[pixIdx + 3] = 0; 
 
                 const neighbors = [
                     { nx: x + 1, ny: y },
@@ -65,12 +72,11 @@ const removeWhiteBackground = (imageSrc: string, tolerance: number = 30): Promis
                     { nx: x, ny: y - 1 }
                 ];
 
-                for (const { nx, ny } of neighbors) {
+                for (const {nx, ny} of neighbors) {
                     if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
                         const nIdx = ny * width + nx;
                         if (visited[nIdx] === 0) {
-                            // Check if neighbor is similar enough to the reference background color
-                            if (getDist(nIdx) <= tolerance) {
+                            if (getDist(nIdx * 4) <= tolerance) {
                                 visited[nIdx] = 1;
                                 queue.push(nIdx);
                             }
@@ -78,7 +84,7 @@ const removeWhiteBackground = (imageSrc: string, tolerance: number = 30): Promis
                     }
                 }
             }
-
+            
             ctx.putImageData(imageData, 0, 0);
             resolve(canvas.toDataURL('image/png'));
         };
@@ -89,16 +95,119 @@ const removeWhiteBackground = (imageSrc: string, tolerance: number = 30): Promis
     });
 };
 
+const recolorPot = (imageSrc: string, startX: number, startY: number, colorHex: string, tolerance: number = 40): Promise<string> => {
+    return new Promise((resolve) => {
+        const img = new Image();
+        img.crossOrigin = "Anonymous";
+        img.src = imageSrc;
+        img.onload = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext('2d');
+            if (!ctx) return resolve(imageSrc);
+            ctx.drawImage(img, 0, 0);
+            
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imageData.data;
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            const rT = parseInt(colorHex.slice(1,3), 16);
+            const gT = parseInt(colorHex.slice(3,5), 16);
+            const bT = parseInt(colorHex.slice(5,7), 16);
+
+            const seedX = Math.floor(startX);
+            const seedY = Math.floor(startY);
+            const seedIdx = (seedY * width + seedX) * 4;
+            
+            // Bounds check
+            if (seedX < 0 || seedX >= width || seedY < 0 || seedY >= height) return resolve(imageSrc);
+
+            const seedR = data[seedIdx];
+            const seedG = data[seedIdx+1];
+            const seedB = data[seedIdx+2];
+            const seedA = data[seedIdx+3];
+            
+            if (seedA === 0) return resolve(imageSrc); 
+
+            const getDist = (ind: number) => {
+                const r = data[ind];
+                const g = data[ind+1];
+                const b = data[ind+2];
+                return Math.sqrt((r - seedR)**2 + (g - seedG)**2 + (b - seedB)**2);
+            }
+
+            const queue = [seedY * width + seedX];
+            const visited = new Uint8Array(width * height);
+            visited[seedY * width + seedX] = 1;
+
+            while (queue.length) {
+                const idx = queue.shift()!;
+                const i = idx * 4;
+
+                // Apply Color (Luminance preserving tint)
+                const curR = data[i];
+                const curG = data[i+1];
+                const curB = data[i+2];
+                const lum = 0.299*curR + 0.587*curG + 0.114*curB;
+                
+                // Mix: 20% Original + 80% Tinted Luminance
+                // Using 200 as base brightness to allow some highlights
+                const tintAmount = 0.8;
+                data[i] = curR * (1-tintAmount) + Math.min(255, (lum / 200) * rT) * tintAmount;
+                data[i+1] = curG * (1-tintAmount) + Math.min(255, (lum / 200) * gT) * tintAmount;
+                data[i+2] = curB * (1-tintAmount) + Math.min(255, (lum / 200) * bT) * tintAmount;
+
+                const neighborOffsets = [1, -1, width, -width];
+                for (const offset of neighborOffsets) {
+                    const nbox = idx + offset;
+                    // Simple bounds check (loose)
+                    if (nbox >= 0 && nbox < visited.length && visited[nbox] === 0) {
+                         if (getDist(nbox * 4) < tolerance) {
+                             visited[nbox] = 1;
+                             queue.push(nbox);
+                         }
+                    }
+                }
+            }
+            ctx.putImageData(imageData, 0, 0);
+            resolve(canvas.toDataURL());
+        }
+        img.onerror = () => resolve(imageSrc);
+    })
+}
+
+const getImgCoordinates = (e: React.MouseEvent, img: HTMLImageElement) => {
+   const rect = img.getBoundingClientRect();
+   const x = e.clientX - rect.left;
+   const y = e.clientY - rect.top;
+   const ratio = img.naturalWidth / img.naturalHeight;
+   const elemRatio = rect.width / rect.height;
+   let drawWidth, drawHeight, offsetX, offsetY;
+   if (ratio > elemRatio) {
+       drawWidth = rect.height * ratio;
+       drawHeight = rect.height;
+       offsetX = (rect.width - drawWidth) / 2;
+       offsetY = 0;
+   } else {
+       drawWidth = rect.width;
+       drawHeight = rect.width / ratio;
+       offsetX = 0;
+       offsetY = (rect.height - drawHeight) / 2;
+   }
+   const naturalX = (x - offsetX) * (img.naturalWidth / drawWidth);
+   const naturalY = (y - offsetY) * (img.naturalHeight / drawHeight);
+   return { x: naturalX, y: naturalY };
+}
+
 export const MakeItReal = () => {
     const [plants, setPlants] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
-
-    // Canvas State
+    
     const [roomImage, setRoomImage] = useState<string | null>(null);
     const [placedPlant, setPlacedPlant] = useState<any | null>(null);
-
-    // Camera State
     const [showCamera, setShowCamera] = useState(false);
     const [stream, setStream] = useState<MediaStream | null>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
@@ -108,13 +217,14 @@ export const MakeItReal = () => {
     const [processedImage, setProcessedImage] = useState<string | null>(null);
     const [isProcessing, setIsProcessing] = useState(false);
     const [autoRemoveBg, setAutoRemoveBg] = useState(true);
-    const [bgTolerance, setBgTolerance] = useState(50); // Sensitivity Slider
+    const [bgTolerance, setBgTolerance] = useState(50);
+    const [potColor, setPotColor] = useState<string | null>(null); // New
 
     // Transform State
-    const [position, setPosition] = useState({ x: 50, y: 50 }); // Percentage
+    const [position, setPosition] = useState({ x: 50, y: 50 });
     const [scale, setScale] = useState(1);
     const [isDragging, setIsDragging] = useState(false);
-    const [isMagicMode, setIsMagicMode] = useState(false); // Simulated BG Removal
+    const [isMagicMode, setIsMagicMode] = useState(false);
 
     const canvasRef = useRef<HTMLDivElement>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
@@ -123,82 +233,51 @@ export const MakeItReal = () => {
         loadPlants();
     }, []);
 
-    // Camera Logic
     const startCamera = async () => {
         try {
-            const mediaStream = await navigator.mediaDevices.getUserMedia({
-                video: { facingMode: 'environment' }
-            });
+            const mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
             setStream(mediaStream);
             setShowCamera(true);
         } catch (err) {
             toast.error("Camera access denied or unavailable.");
-            console.error(err);
         }
     };
-
     const stopCamera = () => {
-        if (stream) {
-            stream.getTracks().forEach(track => track.stop());
-            setStream(null);
-        }
+        if (stream) stream.getTracks().forEach(track => track.stop());
+        setStream(null);
         setShowCamera(false);
     };
-
     const capturePhoto = () => {
         if (videoRef.current) {
             const video = videoRef.current;
             const canvas = document.createElement('canvas');
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
-            const ctx = canvas.getContext('2d');
-            if (ctx) {
-                ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-                const imageUrl = canvas.toDataURL('image/png');
-                setRoomImage(imageUrl);
-                toast.success("Photo captured!");
-                stopCamera();
-            }
+            canvas.getContext('2d')?.drawImage(video, 0, 0);
+            setRoomImage(canvas.toDataURL('image/png'));
+            stopCamera();
         }
     };
-
-    useEffect(() => {
-        if (showCamera && videoRef.current && stream) {
-            videoRef.current.srcObject = stream;
-        }
-    }, [showCamera, stream]);
+    useEffect(() => { if (showCamera && videoRef.current && stream) videoRef.current.srcObject = stream; }, [showCamera, stream]);
 
     const loadPlants = async () => {
-        try {
-            const data = await fetchPlants();
-            setPlants(data);
-        } catch (error) {
-            console.error(error);
-            toast.error("Failed to load plant library");
-        } finally {
-            setLoading(false);
-        }
+        try { setPlants(await fetchPlants()); } catch { toast.error("Failed to load library"); } finally { setLoading(false); }
     };
-
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
-        if (file) {
-            const url = URL.createObjectURL(file);
-            setRoomImage(url);
-            toast.success("Room uploaded! Now pick a plant.");
-        }
+        if (file) setRoomImage(URL.createObjectURL(file));
     };
 
     const onPlantClick = (plant: any) => {
         setPreviewPlant(plant);
-        setProcessedImage(null); // Clear previous processed image
+        setProcessedImage(null);
+        setPotColor(null); // Reset pot color when a new plant is selected
         runProcessing(plant.imageUrl, autoRemoveBg, bgTolerance);
     };
 
     const runProcessing = async (url: string, remove: boolean, tol: number) => {
         if (!remove) {
             setProcessedImage(url);
-            setIsProcessing(false);
             return;
         }
         setIsProcessing(true);
@@ -210,218 +289,186 @@ export const MakeItReal = () => {
         }
     };
 
-    const toggleBgRemoval = () => {
-        const newVal = !autoRemoveBg;
-        setAutoRemoveBg(newVal);
-        if (previewPlant) {
-            runProcessing(previewPlant.imageUrl, newVal, bgTolerance);
+    const handlePreviewClick = async (e: React.MouseEvent<HTMLImageElement>) => {
+        if (!potColor || !processedImage || isProcessing) return;
+        
+        setIsProcessing(true);
+        const { x, y } = getImgCoordinates(e, e.currentTarget);
+        
+        try {
+            const newImage = await recolorPot(processedImage, x, y, potColor);
+            setProcessedImage(newImage);
+            toast.success("Pot recolored!", {icon: '🎨'});
+        } finally {
+            setIsProcessing(false);
         }
     };
 
-    const handleToleranceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const val = parseInt(e.target.value);
-        setBgTolerance(val);
-        // Debounce logic could be good here, but for now direct call
-        if (previewPlant && autoRemoveBg) {
-            // Use a timeout to avoid freezing UI on every slide
-            // Just trigger immediately for simplicity as avg image is small
-            runProcessing(previewPlant.imageUrl, autoRemoveBg, val);
-        }
+    const toggleBgRemoval = () => {
+        const newVal = !autoRemoveBg;
+        setAutoRemoveBg(newVal);
+        if (previewPlant) runProcessing(previewPlant.imageUrl, newVal, bgTolerance);
     };
 
     const confirmPlacement = () => {
         if (!roomImage) {
             toast.error("Please upload a room photo first!");
-            setPreviewPlant(null); // Close modal if no room image
+            setPreviewPlant(null);
             return;
         }
         setPlacedPlant({ ...previewPlant, imageUrl: processedImage });
         setPosition({ x: 50, y: 50 });
         setScale(1);
-        setPreviewPlant(null); // Close modal
+        setPreviewPlant(null);
         toast.success("Added to scene!");
     };
 
-    // --- DRAG LOGIC ---
-    const handleMouseDown = (e: MouseEvent) => {
-        e.preventDefault();
-        setIsDragging(true);
-    };
-
+    // Transformations
+    const handleMouseDown = (e: MouseEvent) => { e.preventDefault(); setIsDragging(true); };
     const handleMouseMove = (e: MouseEvent) => {
         if (!isDragging || !canvasRef.current) return;
-
         const rect = canvasRef.current.getBoundingClientRect();
-        const x = ((e.clientX - rect.left) / rect.width) * 100;
-        const y = ((e.clientY - rect.top) / rect.height) * 100;
-
-        setPosition({ x, y });
+        setPosition({ 
+            x: ((e.clientX - rect.left) / rect.width) * 100, 
+            y: ((e.clientY - rect.top) / rect.height) * 100 
+        });
     };
+    const handleMouseUp = () => setIsDragging(false);
 
-    const handleMouseUp = () => {
-        setIsDragging(false);
-    };
-
-    const filteredPlants = plants.filter(p =>
-        p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        p.scientificName?.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filteredPlants = plants.filter(p => p.name.toLowerCase().includes(searchTerm.toLowerCase()));
 
     return (
         <div className={styles.container} onMouseUp={handleMouseUp} onMouseLeave={handleMouseUp}>
-            {/* CAMERA OVERLAY */}
             {showCamera && (
                 <div className={styles.cameraOverlay}>
                     <button className={styles.closeCameraBtn} onClick={stopCamera}><X size={32} /></button>
                     <video ref={videoRef} autoPlay playsInline muted className={styles.videoPreview} />
                     <div className={styles.cameraControls}>
-                        <button className={styles.shutterBtn} onClick={capturePhoto}>
-                            <div className={styles.shutterBtnInner} />
-                        </button>
+                        <button className={styles.shutterBtn} onClick={capturePhoto}><div className={styles.shutterBtnInner}/></button>
                     </div>
                 </div>
             )}
 
-            {/* PLANT PREVIEW MODAL */}
             {previewPlant && (
                 <div className={styles.modalOverlay} onClick={() => setPreviewPlant(null)}>
                     <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
-                        <h2 className={styles.modalTitle}>Add {previewPlant.name}?</h2>
-
+                        <h2 className={styles.modalTitle}>Customize {previewPlant.name}</h2>
                         <div className={styles.previewContainer}>
                             {processedImage && (
-                                <img src={processedImage} className={styles.previewImage} alt="Preview" key={processedImage} />
+                                <img 
+                                    src={processedImage} 
+                                    className={styles.previewImage} 
+                                    alt="Preview" 
+                                    onClick={handlePreviewClick}
+                                    style={{cursor: potColor ? 'crosshair' : 'default'}}
+                                />
                             )}
-                            {isProcessing && (
-                                <div className={styles.processingOverlay}>
-                                    <Loader2 className="animate-spin" /> Removing Background...
-                                </div>
-                            )}
+                            {isProcessing && <div className={styles.processingOverlay}><Loader2 className="animate-spin" /> Processing...</div>}
                         </div>
 
+                        {/* BG Removal Controls */}
                         <div className={styles.optionRow}>
                             <div className={styles.toggleLabel}>
                                 <Sparkles size={18} color={autoRemoveBg ? '#34d399' : '#94a3b8'} />
-                                Remove Background
+                                Auto-Clean Background
                             </div>
-                            <div
-                                className={styles.toggleSwitch}
-                                data-active={autoRemoveBg}
-                                onClick={toggleBgRemoval}
-                            >
+                            <div className={styles.toggleSwitch} data-active={autoRemoveBg} onClick={toggleBgRemoval}>
                                 <div className={styles.toggleKnob} />
                             </div>
                         </div>
-
-                        {/* TOLERANCE SLIDER */}
                         {autoRemoveBg && (
-                            <div className={styles.optionRow} style={{ marginTop: '0.5rem', display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: '0.5rem' }}>
-                                <div className={styles.toggleLabel} style={{ justifyContent: 'space-between', fontSize: '0.9rem' }}>
-                                    <span style={{ display: 'flex', gap: '0.5rem' }}><Sliders size={16} /> Sensitivity</span>
-                                    <span>{bgTolerance}%</span>
+                            <div className={styles.optionRow}>
+                                <div className={styles.toggleLabel} style={{fontSize:'0.9rem', width:'100%'}}>
+                                    <Sliders size={16} /> Sensitivity: {bgTolerance}%
+                                    <input 
+                                        type="range" min="1" max="150" value={bgTolerance} 
+                                        onChange={e => setBgTolerance(parseInt(e.target.value))}
+                                        onMouseUp={() => runProcessing(previewPlant.imageUrl, autoRemoveBg, bgTolerance)}
+                                        style={{width:'100%', marginTop:'0.5rem', accentColor:'#34d399'}}
+                                    />
                                 </div>
-                                <input
-                                    type="range"
-                                    min="1"
-                                    max="150"
-                                    value={bgTolerance}
-                                    onChange={handleToleranceChange}
-                                    style={{ width: '100%', accentColor: '#34d399', cursor: 'pointer' }}
-                                />
+                            </div>
+                        )}
+
+                        {/* Pot Color Palette */}
+                        {autoRemoveBg && (
+                            <div style={{marginTop:'0.5rem'}}>
+                                <div className={styles.toggleLabel} style={{marginBottom:'0.5rem'}}>
+                                    <Palette size={16} /> Recolor Pot
+                                </div>
+                                <div className={styles.colorPalette}>
+                                    {POT_COLORS.map(c => (
+                                        <div 
+                                            key={c.name}
+                                            className={styles.colorSwatch}
+                                            style={{backgroundColor: c.hex}}
+                                            data-selected={potColor === c.hex}
+                                            onClick={() => setPotColor(c.hex === potColor ? null : c.hex)}
+                                            title={c.name}
+                                        />
+                                    ))}
+                                </div>
+                                {potColor && <div className={styles.instructionText}>Tap on the pot in the image to paint it!</div>}
                             </div>
                         )}
 
                         <div className={styles.modalActions}>
                             <button className={styles.secondaryBtn} onClick={() => setPreviewPlant(null)}>Cancel</button>
                             <button className={styles.primaryBtn} onClick={confirmPlacement} disabled={isProcessing}>
-                                <Check size={18} style={{ marginRight: '8px' }} />
-                                Place in Scene
+                                <Check size={18} style={{marginRight: '8px'}} /> Place
                             </button>
                         </div>
                     </div>
                 </div>
             )}
-
+            
             <div className={styles.header}>
                 <h1 className={styles.title}>Make It Real</h1>
-                <div className={styles.subtitle}>
-                    <Wand2 size={16} /> premium ar visualization studio
-                </div>
+                <div className={styles.subtitle}><Wand2 size={16} /> premium ar visualization studio</div>
             </div>
 
             <div className={styles.workspace}>
-                {/* SIDEBAR: PLANT LIBRARY */}
                 <div className={styles.sidebar}>
                     <div className={styles.sidebarHeader}>
                         <div className={styles.searchBox}>
                             <Search className={styles.searchIcon} size={18} />
-                            <input
-                                type="text"
-                                placeholder="Search nature library..."
-                                className={styles.searchInput}
-                                value={searchTerm}
-                                onChange={(e) => setSearchTerm(e.target.value)}
-                            />
+                            <input type="text" placeholder="Search library..." className={styles.searchInput} value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
                         </div>
                     </div>
                     <div className={styles.plantList}>
-                        {loading ? <div style={{ padding: '2rem', textAlign: 'center', color: '#64748b' }}>Loading Library...</div> :
-                            filteredPlants.map(plant => (
-                                <div key={plant.id} className={styles.plantCard} onClick={() => onPlantClick(plant)}>
-                                    <img src={plant.imageUrl} alt={plant.name} className={styles.thumb} />
-                                    <div className={styles.plantInfo}>
-                                        <h4>{plant.name}</h4>
-                                        <p>{plant.type}</p>
-                                    </div>
-                                </div>
-                            ))}
+                        {loading ? <div>Loading...</div> : filteredPlants.map(p => (
+                            <div key={p.id} className={styles.plantCard} onClick={() => onPlantClick(p)}>
+                                <img src={p.imageUrl} alt={p.name} className={styles.thumb} />
+                                <div className={styles.plantInfo}><h4>{p.name}</h4><p>{p.type}</p></div>
+                            </div>
+                        ))}
                     </div>
                 </div>
 
-                {/* MAIN STUDIO AREA */}
                 <div className={styles.studioMain}>
-                    <div
-                        className={styles.canvasViewport}
-                        ref={canvasRef}
-                        onMouseMove={handleMouseMove}
-                    >
+                    <div className={styles.canvasViewport} ref={canvasRef} onMouseMove={handleMouseMove}>
                         {!roomImage ? (
                             <div className={styles.canvasEmpty}>
                                 <ImageIcon size={64} style={{ opacity: 0.5 }} />
                                 <h2>Your Space Goes Here</h2>
-                                <p>Upload a photo of your room or garden to begin visualization.</p>
-
                                 <div className={styles.actionRow}>
-                                    <button className={styles.uploadBtn} onClick={() => fileInputRef.current?.click()}>
-                                        <Upload size={24} /> Upload
-                                    </button>
+                                    <button className={styles.uploadBtn} onClick={() => fileInputRef.current?.click()}><Upload size={24} /> Upload</button>
                                     <div className={styles.orDivider}>OR</div>
-                                    <button className={styles.cameraBtn} onClick={startCamera}>
-                                        <Camera size={24} /> Take Photo
-                                    </button>
+                                    <button className={styles.cameraBtn} onClick={startCamera}><Camera size={24} /> Take Photo</button>
                                 </div>
-                                <input
-                                    type="file"
-                                    ref={fileInputRef}
-                                    hidden
-                                    accept="image/*"
-                                    onChange={handleImageUpload}
-                                />
+                                <input type="file" ref={fileInputRef} hidden accept="image/*" onChange={handleImageUpload} />
                             </div>
                         ) : (
                             <>
                                 <img src={roomImage} alt="Room" className={styles.roomImage} />
-
                                 {placedPlant && (
-                                    <img
-                                        src={placedPlant.imageUrl}
-                                        alt="Plant"
-                                        className={`${styles.placedPlant} ${isMagicMode ? styles.removeBg : ''}`}
+                                    <img 
+                                        src={placedPlant.imageUrl} 
+                                        alt="Placed Plant"
+                                        className={`${ styles.placedPlant } ${ isMagicMode ? styles.removeBg : '' } `}
                                         style={{
-                                            left: `${position.x}%`,
-                                            top: `${position.y}%`,
-                                            transform: `translate(-50%, -50%) scale(${scale})`,
-                                            width: '300px'
+                                            left: `${ position.x }% `, top: `${ position.y }% `,
+                                            transform: `translate(-50 %, -50 %) scale(${ scale })`, width: '300px'
                                         }}
                                         onMouseDown={handleMouseDown}
                                     />
@@ -429,40 +476,17 @@ export const MakeItReal = () => {
                             </>
                         )}
                     </div>
-
-                    {/* TOOLBAR (Visible when image loaded) */}
                     {roomImage && (
                         <div className={styles.editorToolbar}>
+                            <button className={styles.toolBtn} onClick={() => setRoomImage(null)}><RefreshCw size={18} /> New Canvas</button>
                             <div className={styles.toolbarGroup}>
-                                <button className={styles.toolBtn} onClick={() => setRoomImage(null)}>
-                                    <RefreshCw size={18} /> New Canvas
-                                </button>
+                                <button className={styles.toolBtn} onClick={() => setScale(s => Math.max(0.5, s - 0.1))}><ZoomOut size={18} /></button>
+                                <span style={{color:'white', fontWeight: 600, minWidth: '3rem', textAlign:'center'}}>{Math.round(scale * 100)}%</span>
+                                <button className={styles.toolBtn} onClick={() => setScale(s => Math.min(3, s + 0.1))}><ZoomIn size={18} /></button>
                             </div>
-
-                            <div className={styles.toolbarGroup}>
-                                <button className={styles.toolBtn} onClick={() => setScale(s => Math.max(0.5, s - 0.1))} disabled={!placedPlant}>
-                                    <ZoomOut size={18} />
-                                </button>
-                                <span style={{ color: 'white', fontWeight: 600, minWidth: '3rem', textAlign: 'center' }}>
-                                    {Math.round(scale * 100)}%
-                                </span>
-                                <button className={styles.toolBtn} onClick={() => setScale(s => Math.min(3, s + 0.1))} disabled={!placedPlant}>
-                                    <ZoomIn size={18} />
-                                </button>
-                            </div>
-
-                            <div className={styles.toolbarGroup}>
-                                <button
-                                    className={`${styles.toolBtn} ${styles.magicToggle} ${isMagicMode ? styles.magicActive : ''}`}
-                                    onClick={() => {
-                                        setIsMagicMode(!isMagicMode);
-                                        toast(isMagicMode ? "Original Mode" : "Magic Blend Mode Activated ✨");
-                                    }}
-                                    disabled={!placedPlant}
-                                >
-                                    <Wand2 size={18} /> {isMagicMode ? 'Light Blend' : 'Light Blend'}
-                                </button>
-                            </div>
+                            <button className={`${ styles.toolBtn } ${ styles.magicToggle } ${ isMagicMode ? styles.magicActive : '' } `} onClick={() => setIsMagicMode(!isMagicMode)}>
+                                <Wand2 size={18} /> {isMagicMode ? 'Blend On' : 'Blend Off'}
+                            </button>
                         </div>
                     )}
                 </div>

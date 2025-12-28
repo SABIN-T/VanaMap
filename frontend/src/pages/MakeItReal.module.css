@@ -575,6 +575,45 @@
     transform: rotate(90deg);
 }
 
+/* --- COLOR PALETTE --- */
+.colorPalette {
+    display: flex;
+    gap: 0.8rem;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 1rem;
+    overflow-x: auto;
+}
+
+.colorSwatch {
+    min-width: 36px;
+    min-height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.2s;
+    position: relative;
+}
+
+.colorSwatch:hover {
+    transform: scale(1.1);
+}
+
+.colorSwatch[data-selected="true"] {
+    transform: scale(1.15);
+    border-color: white;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+    z-index: 10;
+}
+
+.instructionText {
+    text-align: center;
+    color: #94a3b8;
+    font-size: 0.9rem;
+    margin-top: -0.5rem;
+    font-style: italic;
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;
