@@ -424,7 +424,8 @@ export const PlantDetailsModal = ({ plant, weather, onClose, onBuy }: PlantDetai
                                         padding: '10px 24px', borderRadius: '12px',
                                         border: 'none', fontWeight: 700, cursor: 'pointer',
                                         boxShadow: '0 4px 15px rgba(16, 185, 129, 0.3)',
-                                        transition: 'transform 0.2s'
+                                        transition: 'transform 0.2s',
+                                        marginRight: '20px' // Added margin to move it left from edge
                                     }}
                                     className="hover-scale"
                                 >
