@@ -44,27 +44,70 @@ export const MakeItReal = () => {
         }
     };
 
+    // --- HELPERS ---
+    const removeBackgroundSimple = (imageSrc: string, tolerance: number = 20): Promise<string> => {
+        return new Promise((resolve) => {
+            const img = new Image();
+            img.crossOrigin = "Anonymous";
+            img.src = imageSrc;
+            img.onload = () => {
+                const canvas = document.createElement('canvas');
+                canvas.width = img.width;
+                canvas.height = img.height;
+                const ctx = canvas.getContext('2d');
+                if (!ctx) return resolve(imageSrc);
+
+                ctx.drawImage(img, 0, 0);
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const data = imageData.data;
+                const bgR = data[0], bgG = data[1], bgB = data[2];
+
+                for (let i = 0; i < data.length; i += 4) {
+                    const r = data[i], g = data[i + 1], b = data[i + 2];
+                    const diff = Math.sqrt((r - bgR) ** 2 + (g - bgG) ** 2 + (b - bgB) ** 2);
+                    if (diff < tolerance) data[i + 3] = 0;
+                }
+
+                ctx.putImageData(imageData, 0, 0);
+                resolve(canvas.toDataURL('image/png'));
+            };
+            img.onerror = () => resolve(imageSrc);
+        });
+    };
+
     // --- AI LOGIC (Remove BG) ---
     const processPlant = async (plant: any) => {
         setIsProcessing(true);
         setSelectedPlant(plant);
 
+        // 1. Fetch raw image as blob
+        let rawBlob: Blob;
         try {
-            // 1. Fetch raw image as blob
             const rawRes = await fetch(plant.imageUrl);
-            const rawBlob = await rawRes.blob();
+            rawBlob = await rawRes.blob();
+        } catch {
+            return; // Failed to even load image
+        }
 
+        try {
             // 2. Prepare Form Data
             const formData = new FormData();
             formData.append('file', rawBlob, 'plant.png');
 
             // 3. Send to Python API (FastAPI)
-            // Use env var for production, fallback to localhost for dev
             const baseUrl = import.meta.env.VITE_AI_API_URL || 'http://localhost:8000';
-            const apiRes = await fetch(`${baseUrl}/remove-bg`, {
+
+            // Timeout promise to prevent hanging
+            const fetchPromise = fetch(`${baseUrl}/remove-bg`, {
                 method: 'POST',
                 body: formData
             });
+
+            const timeoutPromise = new Promise((_, reject) =>
+                setTimeout(() => reject(new Error('Timeout')), 5000)
+            );
+
+            const apiRes = await Promise.race([fetchPromise, timeoutPromise]) as Response;
 
             if (!apiRes.ok) throw new Error('Neural Network Offline');
 
@@ -73,12 +116,16 @@ export const MakeItReal = () => {
             const pngUrl = URL.createObjectURL(pngBlob);
 
             setCutoutUrl(pngUrl);
-            startStudio(); // Move to next screen
+            startStudio();
 
         } catch (error) {
-            console.warn("AI Service unavailable, falling back to raw image", error);
-            setCutoutUrl(plant.imageUrl); // Fallback to square
-            toast("AI disconnected. Showing raw image.", { icon: '⚠️' });
+            console.warn("AI Service unavailable, switching to local fallback.", error);
+
+            // FALLBACK: Use simple canvas removal
+            const fallbackUrl = await removeBackgroundSimple(plant.imageUrl, 20);
+
+            setCutoutUrl(fallbackUrl);
+            toast("AI Disconnected. Using basic cutout mode.", { icon: '🔧' });
             startStudio();
         } finally {
             setIsProcessing(false);
