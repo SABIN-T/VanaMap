@@ -1,4 +1,15 @@
-import { ArrowLeft, Send, Sparkles, Globe, ShieldCheck } from 'lucide-react';
+import {
+    ArrowLeft,
+    Send,
+    Sparkles,
+    Globe,
+    ShieldCheck,
+    Cpu,
+    Activity,
+    Brain,
+    Zap,
+    Gamepad2
+} from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/common/Button';
 import styles from './About.module.css';
@@ -8,50 +19,127 @@ export const About = () => {
 
     return (
         <div className={styles.container}>
+            <button onClick={() => navigate('/')} className={styles.backBtn}>
+                <ArrowLeft size={18} /> BACK TO DISCOVERY
+            </button>
+
             <div className={styles.content}>
                 <header className={styles.header}>
-                    <button onClick={() => navigate('/')} className={styles.backBtn}>
-                        <ArrowLeft size={20} /> Back
-                    </button>
-                    <h1 className={styles.title}>About VanaMap</h1>
-                    <p className={styles.subtitle}>The Future of Urban Ecosystems</p>
+                    <div className={styles.topBadge}>
+                        <Sparkles size={14} /> THE NEXT GENERATION OF BOTANY
+                    </div>
+                    <h1 className={styles.title}>Precision Urban <br /> Ecosystems.</h1>
+                    <p className={styles.subtitle}>
+                        VanaMap isn't just a platform—it's a high-performance simulation engine
+                        designed to turn any urban space into a thriving bio-active sanctuary.
+                    </p>
                 </header>
 
-                <section className={styles.section}>
-                    <h2><Globe className={styles.icon} /> Our Mission</h2>
-                    <p>
-                        VanaMap is more than just a plant finder; it is a smart ecosystem simulator designed to bridge the gap between urban living and nature.
-                        In an era of increasing pollution and disconnect from the environment, our mission is to empower individuals to build their own micro-ecosystems.
-                        We use data-driven insights to match the perfect bio-active plants to your specific location, air quality index (AQI), and lifestyle.
-                    </p>
+                <div className={styles.grid}>
+                    {/* Mission Card */}
+                    <div className={`${styles.bentoCard} ${styles.large}`}>
+                        <div className={styles.cardIcon}><Globe size={24} /></div>
+                        <h3>Engineered for the Earth</h3>
+                        <p>
+                            In an era of rising urban density and ecological shift, we've built a bridge between
+                            metropolitan life and biological intelligence. VanaMap empowers you to build
+                            micro-ecosystems that don't just survive—they optimize your air, your mood,
+                            and your life through data-driven accuracy.
+                        </p>
+                        <div className={styles.glow}></div>
+                    </div>
+
+                    {/* Monte Carlo Card */}
+                    <div className={`${styles.bentoCard} ${styles.medium}`}>
+                        <div className={styles.cardIcon}><Cpu size={24} /></div>
+                        <h3>Monte Carlo Aptness</h3>
+                        <p>
+                            Our proprietary probabilistic engine runs 500 mini-simulations for every plant,
+                            accounting for diurnal temperature swings and stochastic weather patterns
+                            to ensure 99.9% biological reliability.
+                        </p>
+                    </div>
+
+                    {/* AI Doctor Card */}
+                    <div className={`${styles.bentoCard} ${styles.medium}`}>
+                        <div className={styles.cardIcon}><Brain size={24} /></div>
+                        <h3>AI Vision Diagnostics</h3>
+                        <p>
+                            An expert botanist in your pocket. Our neural-network powered AI Doctor
+                            diagnoses over 120+ plant pathologies instantly via your camera.
+                        </p>
+                    </div>
+
+                    {/* Simulation Card */}
+                    <div className={`${styles.bentoCard} ${styles.large}`}>
+                        <div className={styles.cardIcon}><Activity size={24} /></div>
+                        <h3>Advanced Oxygen Analytics</h3>
+                        <p>
+                            Model your room's atmospheric balance with our real-time Room Lab.
+                            We calculate metabolic production rates, accounting for respiration
+                            cycles and nocturnal CAM photosynthesis for precise air quality targets.
+                        </p>
+                        <div className={styles.glow}></div>
+                    </div>
+
+                    {/* Gaming Card */}
+                    <div className={`${styles.bentoCard} ${styles.small}`}>
+                        <div className={styles.cardIcon}><Gamepad2 size={24} /></div>
+                        <h3>The Heaven Ecosystem</h3>
+                        <p>
+                            Bio-gamification at its peak. Earn VanaCoins, cultivate virtual gardens,
+                            and compete in the "Pot Designer" arena to unlock exclusive rewards
+                            across our verified nursery network.
+                        </p>
+                    </div>
+
+                    {/* 3D Card */}
+                    <div className={`${styles.bentoCard} ${styles.small}`}>
+                        <div className={styles.cardIcon}><Zap size={24} /></div>
+                        <h3>3D Ecosystem Studio</h3>
+                        <p>
+                            Design your biophilic space in immersive 3D. Our WebGL integration
+                            allows you to visualize plant growth, pot aesthetics, and spatial
+                            layouts before the first seed is even planted.
+                        </p>
+                    </div>
+
+                    {/* Sustainability Card */}
+                    <div className={`${styles.bentoCard} ${styles.full}`}>
+                        <div className={styles.cardIcon}><ShieldCheck size={24} /></div>
+                        <h3>Hyper-Local, Ethics-First</h3>
+                        <p>
+                            By integrating Nominatim geolocation and a verified network of local
+                            artisanal growers, we eliminate the carbon footprint of long-distance
+                            shipping. Every plant you find is sourced from a professional who
+                            understands your local climate as well as our algorithms do.
+                        </p>
+                    </div>
+                </div>
+
+                <section className={styles.statsSection}>
+                    <div className={styles.statItem}>
+                        <h4>500+</h4>
+                        <p>MC Simulations / Plant</p>
+                    </div>
+                    <div className={styles.statItem}>
+                        <h4>0.1s</h4>
+                        <p>AI Diagnostic Latency</p>
+                    </div>
+                    <div className={styles.statItem}>
+                        <h4>100%</h4>
+                        <p>Ethical Sourcing</p>
+                    </div>
+                    <div className={styles.statItem}>
+                        <h4>24/7</h4>
+                        <p>Active Monitoring</p>
+                    </div>
                 </section>
 
-                <section className={styles.section}>
-                    <h2><Sparkles className={styles.icon} /> Technology & Innovation</h2>
-                    <p>
-                        Built with cutting-edge web technologies, VanaMap integrates real-time weather APIs, air quality sensors, and a botanical database to provide:
-                    </p>
-                    <ul className={styles.list}>
-                        <li>**AI Plant Doctor**: Diagnose plant health issues instantly using our computer vision AI.</li>
-                        <li>**Oxygen Simulation**: Calculate the metabolic rate and oxygen output of your indoor garden.</li>
-                        <li>**Smart Aptness Algorithm**: Matching plants based on 30-day historical weather patterns of your city.</li>
-                        <li>**Hyper-local Sourcing**: A verified network of local nurseries and garden centers to source your plants sustainably.</li>
-                    </ul>
-                </section>
-
-                <section className={styles.section}>
-                    <h2><ShieldCheck className={styles.icon} /> Commitment to Sustainability</h2>
-                    <p>
-                        We are a "Green-First" platform. We prioritize native species that support local biodiversity and partner exclusively with ethical growers.
-                        VanaMap is maintained by a dedicated team of developers, botanists, and environmental enthusiasts committed to a greener Earth.
-                    </p>
-                </section>
-
-                <div className={styles.footer}>
-                    <h3>Join the Movement</h3>
-                    <p>Start your journey towards a cleaner, greener home today.</p>
-                    <Button onClick={() => navigate('/')} variant="primary">
-                        Explore Plants <Send size={16} style={{ marginLeft: '8px' }} />
+                <div className={styles.ctaSection}>
+                    <h2>Ready to optimize your space?</h2>
+                    <Button onClick={() => navigate('/')} variant="primary" style={{ padding: '20px 48px', fontSize: '1.1rem' }}>
+                        Launch Discovery <Send size={20} style={{ marginLeft: '12px' }} />
                     </Button>
                 </div>
             </div>
