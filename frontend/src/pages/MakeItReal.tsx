@@ -1,8 +1,8 @@
-import { useState, useRef, useEffect, MouseEvent, TouchEvent } from 'react';
+import { useState, useRef, useEffect, type MouseEvent, type TouchEvent } from 'react';
 import styles from './MakeItReal.module.css';
 import { fetchPlants } from '../services/api';
 import toast from 'react-hot-toast';
-import { Search, Camera, ArrowLeft, Download, RotateCcw, ScanLine } from 'lucide-react';
+import { Search, ArrowLeft, ScanLine } from 'lucide-react';
 
 /* 
  * 🧠 MakeItReal v3.0 - Neural Studio
@@ -22,7 +22,6 @@ export const MakeItReal = () => {
 
     // Studio State
     const videoRef = useRef<HTMLVideoElement>(null);
-    const canvasRef = useRef<HTMLCanvasElement>(null);
     const [stream, setStream] = useState<MediaStream | null>(null);
 
     // Plant Transform State (Draggable)
@@ -151,7 +150,7 @@ export const MakeItReal = () => {
     };
 
     // --- INTERACTION LOGIC ---
-    const handleDragStart = (e: MouseEvent | TouchEvent) => {
+    const handleDragStart = () => {
         setDragging(true);
     };
 
