@@ -161,6 +161,11 @@ export const SeedDashboard = () => {
                             <span className={styles.stat}>{plant.type}</span>
                             <span className={styles.stat}>${plant.price}</span>
                         </div>
+
+                        <div className={styles.verifiedSource} title={plant.verifiedSource}>
+                            <ShieldCheck size={12} />
+                            {plant.verifiedSource || "Gene Bank verified"}
+                        </div>
                     </div>
 
                     <div style={{ display: 'flex', gap: '8px', marginTop: '12px' }}>
