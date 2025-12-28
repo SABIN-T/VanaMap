@@ -216,40 +216,36 @@ export const MakeItReal = () => {
     const [stream, setStream] = useState<MediaStream | null>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
 
-    // Wizard State
-    // Steps: 'none' -> 'bg-remove' -> 'pot-select' -> 'placed'
-    const [currentStep, setCurrentStep] = useState<'none' | 'bg-remove' | 'pot-select'>('none');
+    // Unified "Designer" State
+    // We treat the placed plant as the single source of truth for the session
+    const [designerState, setDesignerState] = useState({
+        uuid: 0, // force re-render/re-effect
+        plant: null as any,
+        rawPlantImg: null as string | null, // Original plant image
+        cleanPlantImg: null as string | null, // BG Removed plant
+        potColor: '#e07a5f',
+        potStyle: 'classic',
+        bgTolerance: 40,
+        scale: 1,
+        pos: { x: 50, y: 50 },
+        offset: { x: 0, y: 0 }, // Plant-in-pot offset
+        isProcessing: false,
+    });
 
-    const [previewPlant, setPreviewPlant] = useState<any | null>(null);
-    const [isProcessing, setIsProcessing] = useState(false);
-
-    // Step 1 State: BG Removal
-    const [bgTolerance, setBgTolerance] = useState(40);
-    const [autoRemoveBg, setAutoRemoveBg] = useState(true);
-    const [previewBgRemoved, setPreviewBgRemoved] = useState<string | null>(null);
-
-    // Step 2 State
-    const [potColor, setPotColor] = useState<string>('#ffffff');
-    const [potStyle, setPotStyle] = useState<string>('base');
-    const [tintedPotUrl, setTintedPotUrl] = useState<string | null>(null);
-    const [plantPotOffset, setPlantPotOffset] = useState({ x: 0, y: 0 }); // % offset
     const [highlightUpload, setHighlightUpload] = useState(false);
 
-    // Pot Style Source Refs
-    // We can just use the path string directly since we are moving away from composite-on-load
-
     // Refs
-    // const potBaseRef = useRef<string | null>(null); // No longer strictly needed if we use paths, but kept for cache?
     const canvasRef = useRef<HTMLDivElement>(null);
-    const step2PreviewRef = useRef<HTMLDivElement>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    // Transform State (For Final Scene)
-    const [position, setPosition] = useState({ x: 50, y: 50 });
-    const [scale, setScale] = useState(1);
+    // Derived State for Dragging
     const [isDragging, setIsDragging] = useState(false);
     const [activeDragTarget, setActiveDragTarget] = useState<'scene' | 'wizard'>('scene');
     const dragStartRef = useRef({ x: 0, y: 0, initialPos: { x: 0, y: 0 } });
+
+    // Magic/AI States
+    const [showDesigner, setShowDesigner] = useState(false);
+    const [aiSuggesting, setAiSuggesting] = useState(false);
 
     // ... magic mode state
     const [isMagicMode, setIsMagicMode] = useState(false);
@@ -332,164 +328,143 @@ export const MakeItReal = () => {
         }
     }, [roomImage]);
 
-    // --- STEP 1 LOGIC: INIT ---
-    const onPlantClick = (plant: any) => {
+    // --- NEW "ONE CLICK" WORKFLOW ---
+
+    // 1. User Clicks Plant -> Immediate Processing & Placement
+    const onPlantClick = async (plant: any) => {
         if (!roomImage) {
             toast.error("Please take a photo or upload an image first!");
             setHighlightUpload(true);
             return;
         }
 
-        setPreviewPlant(plant);
-        setCurrentStep('bg-remove');
-        // Reset Logic
-        setBgTolerance(40);
-        setAutoRemoveBg(true);
-        setPreviewBgRemoved(null);
+        // Initialize State
+        setDesignerState(prev => ({
+            ...prev,
+            plant,
+            rawPlantImg: plant.imageUrl,
+            cleanPlantImg: null, // Wipe old
+            isProcessing: true,
+            uuid: prev.uuid + 1
+        }));
+        setPlacedPlant(null); // Hide old until ready (or show loading placeholder)
+        setShowDesigner(true);
 
-        // Trigger initial removal
-        runBgRemoval(plant.imageUrl, true, 40);
-    };
-
-    const runBgRemoval = async (url: string, remove: boolean, tol: number) => {
-        setIsProcessing(true);
-        try {
-            if (!remove) {
-                setPreviewBgRemoved(url);
-            } else {
-                const result = await removeWhiteBackground(url, tol);
-                setPreviewBgRemoved(result);
+        toast.promise(
+            processPlantInitial(plant.imageUrl),
+            {
+                loading: '✨ AI is preparing your plant...',
+                success: 'Plant ready! Style it below.',
+                error: 'Could not process plant.'
             }
-        } finally {
-            setIsProcessing(false);
-        }
+        );
     };
 
-    const handleBgToleranceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setBgTolerance(parseInt(e.target.value));
+    const processPlantInitial = async (imgUrl: string) => {
+        // 1. Remove BG
+        const clean = await removeWhiteBackground(imgUrl, 40);
+
+        // 2. AI Suggest Pot Color (Random for now, or mapped to plant type)
+        const suggestedColor = ['#e07a5f', '#ffffff', '#264653'][Math.floor(Math.random() * 3)];
+
+        setDesignerState(prev => ({
+            ...prev,
+            cleanPlantImg: clean,
+            potColor: suggestedColor,
+            isProcessing: true // Keep processing for composite
+        }));
+
+        // 3. Initial Bake
+        await updateComposite(clean, 'classic', suggestedColor, { x: 0, y: 0 });
     };
 
-    const handleBgToleranceCommit = () => {
-        if (previewPlant && autoRemoveBg) {
-            runBgRemoval(previewPlant.imageUrl, true, bgTolerance);
-        }
-    };
-    // --- STEP 1 -> STEP 2 TRANSITION ---
-    const goToPotSelection = () => {
-        if (!previewBgRemoved) return;
-        setCurrentStep('pot-select');
-        setPotColor('#f2cc8f'); // Default to mustard/terracotta for nice look
-        setPotStyle('classic');
-        setPlantPotOffset({ x: 0, y: 0 }); // Reset offset
-
-        // Initial Tint gen
-        processTint('/pot-classic.png', '#f2cc8f');
-    };
-
-    // --- STEP 2 LOGIC: LIVE PREVIEW ---
-    const processTint = async (src: string, color: string) => {
-        setIsProcessing(true);
+    // Core Update Logic
+    const updateComposite = async (cleanPlant: string, pStyle: string, pColor: string, pOffset: { x: number, y: number }) => {
+        setDesignerState(prev => ({ ...prev, isProcessing: true }));
         try {
-            // Should remove bg from pot if needed, generally assets are clean PNGs
-            const cleaned = await removeWhiteBackground(src, 20);
-            const tinted = await tintPotImage(cleaned, color);
-            setTintedPotUrl(tinted);
-        } finally {
-            setIsProcessing(false);
-        }
-    }
-
-    // Handlers
-    const handlePotColorChange = (color: string) => {
-        setPotColor(color);
-        const style = POT_STYLES.find(s => s.id === potStyle) || POT_STYLES[0];
-        processTint(style.src, color);
-    };
-
-    const handlePotStyleChange = (styleId: string) => {
-        setPotStyle(styleId);
-        const style = POT_STYLES.find(s => s.id === styleId) || POT_STYLES[0];
-        processTint(style.src, potColor);
-    };
-
-    // --- FINISH ---
-    const confirmPlacement = async () => {
-        if (!roomImage) {
-            toast.error("Please upload a room photo first!");
-            setCurrentStep('none');
-            setPreviewPlant(null);
-            setHighlightUpload(true);
-            return;
-        }
-
-        // BAKE FINAL IMAGE
-        setIsProcessing(true);
-        try {
-            const style = POT_STYLES.find(s => s.id === potStyle) || POT_STYLES[0];
-            const cleanedPot = await removeWhiteBackground(style.src, 20);
+            const styleObj = POT_STYLES.find(s => s.id === pStyle) || POT_STYLES[0];
+            const cleanedPot = await removeWhiteBackground(styleObj.src, 20); // cached ideally
 
             const finalUrl = await bakeComposite(
-                previewBgRemoved!,
+                cleanPlant,
                 cleanedPot,
-                potColor,
-                plantPotOffset
+                pColor,
+                pOffset
             );
 
-            setPlacedPlant({ ...previewPlant, imageUrl: finalUrl });
-            setPosition({ x: 50, y: 50 });
-            setScale(1);
-            setCurrentStep('none');
-            setPreviewPlant(null);
-            toast.success("Added to scene!");
-        } finally {
-            setIsProcessing(false);
+            setPlacedPlant({
+                imageUrl: finalUrl,
+                name: 'Designed Plant'
+            });
+
+            setDesignerState(prev => ({
+                ...prev,
+                cleanPlantImg: cleanPlant,
+                potStyle: pStyle,
+                potColor: pColor,
+                offset: pOffset,
+                isProcessing: false
+            }));
+
+        } catch (e) {
+            console.error(e);
+            setDesignerState(prev => ({ ...prev, isProcessing: false }));
         }
     };
 
-    // --- DRAG HANDLERS (UNIFIED) ---
-    const handleStart = (target: 'scene' | 'wizard', clientX: number, clientY: number) => {
-        setIsDragging(true);
-        setActiveDragTarget(target);
-        document.body.style.overflow = 'hidden';
+    // Live Tweaks
+    const handleDesignerUpdate = (changes: Partial<typeof designerState>) => {
+        const next = { ...designerState, ...changes };
+        // If critical visual props changed, re-bake
+        if (
+            changes.potColor ||
+            changes.potStyle ||
+            changes.bgTolerance ||
+            changes.offset
+        ) {
+            // If tolerance changed, re-clean plant first
+            if (changes.bgTolerance && next.rawPlantImg) {
+                // Debounce this in real app
+                removeWhiteBackground(next.rawPlantImg, next.bgTolerance).then(clean => {
+                    updateComposite(clean, next.potStyle, next.potColor, next.offset);
+                });
+            } else if (next.cleanPlantImg) {
+                updateComposite(next.cleanPlantImg, next.potStyle, next.potColor, next.offset);
+            }
+        } else {
+            // Just state update (like scale/pos if we moved them here)
+            setDesignerState(next);
+        }
+    };
 
-        // Store start points for precise delta drag
+    // --- DRAG HANDLERS ---
+    const handleStart = (clientX: number, clientY: number) => {
+        setIsDragging(true);
+        setActiveDragTarget('scene');
+        document.body.style.overflow = 'hidden';
         dragStartRef.current = {
             x: clientX,
             y: clientY,
-            initialPos: target === 'scene' ? { ...position } : { ...plantPotOffset }
+            initialPos: { ...designerState.pos }
         };
     };
 
     const handleMove = (clientX: number, clientY: number) => {
-        if (!isDragging) return;
+        if (!isDragging || !canvasRef.current) return;
 
         const dx = clientX - dragStartRef.current.x;
         const dy = clientY - dragStartRef.current.y;
+        const rect = canvasRef.current.getBoundingClientRect();
 
-        if (activeDragTarget === 'scene' && canvasRef.current) {
-            const rect = canvasRef.current.getBoundingClientRect();
-            // Convert delta pixels to %
-            const dXPercent = (dx / rect.width) * 100;
-            const dYPercent = (dy / rect.height) * 100;
+        const dXPercent = (dx / rect.width) * 100;
+        const dYPercent = (dy / rect.height) * 100;
 
-            setPosition({
-                x: dragStartRef.current.initialPos.x + dXPercent,
-                y: dragStartRef.current.initialPos.y + dYPercent
-            });
-        }
-        else if (activeDragTarget === 'wizard' && step2PreviewRef.current) {
-            // For wizard, we move the plant relative to container
-            // We can use same % logic or px logic. 
-            // Let's use % for consistency with bake.
-            const rect = step2PreviewRef.current.getBoundingClientRect();
-            const dXPercent = (dx / rect.width) * 100;
-            const dYPercent = (dy / rect.height) * 100;
+        const newPos = {
+            x: dragStartRef.current.initialPos.x + dXPercent,
+            y: dragStartRef.current.initialPos.y + dYPercent
+        };
 
-            setPlantPotOffset({
-                x: dragStartRef.current.initialPos.x + dXPercent,
-                y: dragStartRef.current.initialPos.y + dYPercent
-            });
-        }
+        setDesignerState(prev => ({ ...prev, pos: newPos }));
     };
 
     const handleEnd = () => {
@@ -498,20 +473,22 @@ export const MakeItReal = () => {
     };
 
     // Wrappers
-    const handleMouseDown = (e: MouseEvent, target: 'scene' | 'wizard') => {
-        e.preventDefault(); // Stop image drag
-        handleStart(target, e.clientX, e.clientY);
+    // Wrappers
+    const handleMouseDown = (e: MouseEvent) => {
+        e.preventDefault();
+        handleStart(e.clientX, e.clientY);
+    };
+
+    const handleTouchStart = (e: React.TouchEvent) => {
+        const t = e.touches[0];
+        handleStart(t.clientX, t.clientY);
     };
 
     const globalMouseMove = (e: MouseEvent) => {
         handleMove(e.clientX, e.clientY);
     };
 
-    const handleTouchStart = (e: React.TouchEvent, target: 'scene' | 'wizard') => {
-        // e.preventDefault(); // usually good to allow tap, but prevent scroll?
-        const t = e.touches[0];
-        handleStart(target, t.clientX, t.clientY);
-    };
+
 
     const globalTouchMove = (e: React.TouchEvent) => {
         if (isDragging && e.cancelable) e.preventDefault();
@@ -550,194 +527,62 @@ export const MakeItReal = () => {
                 </div>
             )}
 
-            {/* WIZARD MODAL */}
-            {currentStep !== 'none' && previewPlant && (
-                <div className={styles.modalOverlay} onClick={() => setCurrentStep('none')}>
-                    <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
+            {/* NEW: FLOATING DESIGNER PANEL */}
+            {showDesigner && (
+                <div className={styles.designerPanel}>
+                    <div className={styles.panelHeader}>
+                        <h3><Sparkles size={16} className={styles.sparkleIcon} /> AI Studio</h3>
+                        <button className={styles.closePanelBtn} onClick={() => setShowDesigner(false)}><X size={16} /></button>
+                    </div>
 
-                        {/* HEADER */}
-                        <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
-                            <h2 className={styles.modalTitle}>
-                                {currentStep === 'bg-remove' ? 'Step 1: Prepare Plant' : 'Step 2: Style Pot'}
-                            </h2>
-                            <div style={{ display: 'flex', justifyContent: 'center', gap: '5px', marginTop: '5px' }}>
-                                <div style={{ height: '4px', width: '30px', background: currentStep === 'bg-remove' ? '#34d399' : '#475569', borderRadius: '2px' }} />
-                                <div style={{ height: '4px', width: '30px', background: currentStep === 'pot-select' ? '#34d399' : '#475569', borderRadius: '2px' }} />
-                            </div>
-                        </div>
-
-                        {/* PREVIEW AREA */}
-                        <div
-                            className={styles.previewContainer}
-                            ref={step2PreviewRef}
-                            style={{ position: 'relative', overflow: 'hidden' }}
-                        >
-                            {currentStep === 'bg-remove' ? (
-                                previewBgRemoved ? (
-                                    <img src={previewBgRemoved} className={styles.previewImage} alt="Remove BG Preview" />
-                                ) : <div className="text-gray-400">Processing...</div>
-                            ) : (
-                                <>
-                                    {/* LIVE PREVIEW COMPOSITION */}
-                                    {/* 1. PLANT (Background Layer) - Draggable */}
-                                    {previewBgRemoved && (
-                                        <img
-                                            src={previewBgRemoved}
-                                            alt="Plant"
-                                            style={{
-                                                position: 'absolute',
-                                                height: 'auto',
-                                                width: '50%', // Approximation of standardScale
-                                                left: `${50 + plantPotOffset.x}%`,
-                                                top: `${50 + plantPotOffset.y}%`,
-                                                transform: 'translate(-50%, -50%)', // Use translate to center handle
-                                                // Actually, bake logic assumes top-left coords.
-                                                // Let's stick to simple CSS Transforms for WYSIWYG
-                                                zIndex: 1,
-                                                cursor: 'grab',
-                                                touchAction: 'none'
-                                            }}
-                                            onMouseDown={(e) => handleMouseDown(e, 'wizard')}
-                                            onTouchStart={(e) => handleTouchStart(e, 'wizard')}
-                                        />
-                                    )}
-
-                                    {/* 2. POT (Foreground Layer) - Static Overlay */}
-                                    {tintedPotUrl ? (
-                                        <img
-                                            src={tintedPotUrl}
-                                            alt="Pot"
-                                            style={{
-                                                position: 'absolute',
-                                                bottom: 0,
-                                                left: 0,
-                                                width: '100%',
-                                                height: '100%',
-                                                objectFit: 'contain',
-                                                zIndex: 10,
-                                                pointerEvents: 'none', // Allow clicks to pass through to plant if overlapping
-                                                // Actually we want to drag the plant BEHIND the pot, so clicking pot shouldn't enable drag?
-                                                // User wants to "touch it and change".
-                                                // If Pot covers plant, user can't touch plant.
-                                                // We should make the Pot capture events but proxy them? Or just set pointerEvents none 
-                                                // and ensure container catches... no.
-                                                // Let's make the Plant draggable. Since it sticks out top, it's grabable.
-                                                // If pot covers it, we might need a transparent overlay div to handle drag.
-                                            }}
-                                        />
-                                    ) : <div className="text-gray-400">Loading Pot...</div>}
-
-                                    {/* Drag Instruction Overlay (fades out?) */}
-                                    <div style={{ position: 'absolute', top: 10, left: 0, width: '100%', textAlign: 'center', zIndex: 20, pointerEvents: 'none', fontSize: '0.8rem', color: 'rgba(255,255,255,0.6)' }}>
-                                        Drag plant to position
-                                    </div>
-                                </>
-                            )}
-
-                            {isProcessing && (
-                                <div className={styles.processingOverlay}>
-                                    <Loader2 className="animate-spin" /> Processing...
-                                </div>
-                            )}
-                        </div>
-
-                        {/* CONTROLS BASED ON STEP */}
-                        {currentStep === 'bg-remove' && (
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                                <div className={styles.optionRow}>
-                                    <div className={styles.toggleLabel}>
-                                        <Sparkles size={18} color={autoRemoveBg ? '#34d399' : '#94a3b8'} />
-                                        Remove Background
-                                    </div>
+                    {/* Controls */}
+                    <div className={styles.panelScroll}>
+                        {/* 1. Pot Style */}
+                        <div className={styles.controlGroup}>
+                            <label>Pot Style</label>
+                            <div className={styles.styleGrid}>
+                                {POT_STYLES.map(s => (
                                     <div
-                                        className={styles.toggleSwitch}
-                                        data-active={autoRemoveBg}
-                                        onClick={() => {
-                                            const newVal = !autoRemoveBg;
-                                            setAutoRemoveBg(newVal);
-                                            runBgRemoval(previewPlant.imageUrl, newVal, bgTolerance);
-                                        }}
+                                        key={s.id}
+                                        className={`${styles.styleOption} ${designerState.potStyle === s.id ? styles.selected : ''}`}
+                                        onClick={() => handleDesignerUpdate({ potStyle: s.id })}
                                     >
-                                        <div className={styles.toggleKnob} />
+                                        <div className={styles.styleThumb} style={{ backgroundImage: `url(${s.src})` }} />
+                                        <span>{s.name}</span>
                                     </div>
-                                </div>
-                                {autoRemoveBg && (
-                                    <div className={styles.optionRow} style={{ flexDirection: 'column', alignItems: 'stretch' }}>
-                                        <div className={styles.toggleLabel} style={{ justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                                            <span style={{ display: 'flex', gap: '0.5rem' }}><Sliders size={16} /> Sensitivity</span>
-                                            <span>{bgTolerance}%</span>
-                                        </div>
-                                        <input
-                                            type="range"
-                                            min="1"
-                                            max="100"
-                                            value={bgTolerance}
-                                            onChange={handleBgToleranceChange}
-                                            onMouseUp={handleBgToleranceCommit}
-                                            onTouchEnd={handleBgToleranceCommit}
-                                            style={{ width: '100%', accentColor: '#34d399', cursor: 'pointer' }}
-                                        />
-                                    </div>
-                                )}
+                                ))}
                             </div>
-                        )}
+                        </div>
 
-                        {currentStep === 'pot-select' && (
-                            <div style={{ marginTop: '0.5rem' }}>
-                                <div className={styles.toggleLabel} style={{ marginBottom: '0.5rem' }}>
-                                    <Palette size={16} /> Choose Style
-                                </div>
-                                <div className={styles.colorPalette} style={{ marginBottom: '1rem' }}>
-                                    {POT_STYLES.map(s => (
-                                        <div
-                                            key={s.id}
-                                            className={styles.colorSwatch}
-                                            style={{
-                                                borderRadius: '0.5rem',
-                                                backgroundImage: `url(${s.src})`,
-                                                backgroundSize: 'cover',
-                                                width: '50px',
-                                                height: '50px'
-                                            }}
-                                            data-selected={potStyle === s.id}
-                                            onClick={() => handlePotStyleChange(s.id)}
-                                            title={s.name}
-                                        />
-                                    ))}
-                                </div>
-
-                                <div className={styles.toggleLabel} style={{ marginBottom: '0.5rem' }}>
-                                    <Palette size={16} /> Choose Color
-                                </div>
-                                <div className={styles.colorPalette}>
-                                    {POT_COLORS.map(c => (
-                                        <div
-                                            key={c.name}
-                                            className={styles.colorSwatch}
-                                            style={{ backgroundColor: c.hex }}
-                                            data-selected={potColor === c.hex}
-                                            onClick={() => handlePotColorChange(c.hex)}
-                                            title={c.name}
-                                        />
-                                    ))}
-                                </div>
+                        {/* 2. Colors */}
+                        <div className={styles.controlGroup}>
+                            <label>Pot Color</label>
+                            <div className={styles.colorRow}>
+                                {POT_COLORS.map(c => (
+                                    <div
+                                        key={c.name}
+                                        className={styles.colorDot}
+                                        style={{ backgroundColor: c.hex }}
+                                        data-active={designerState.potColor === c.hex}
+                                        onClick={() => handleDesignerUpdate({ potColor: c.hex })}
+                                    />
+                                ))}
                             </div>
-                        )}
+                        </div>
 
-                        {/* ACTIONS */}
-                        <div className={styles.modalActions}>
-                            <button className={styles.secondaryBtn} onClick={() => setCurrentStep('none')}>Cancel</button>
-
-                            {currentStep === 'bg-remove' ? (
-                                <button className={styles.primaryBtn} onClick={goToPotSelection} disabled={isProcessing}>
-                                    Next: Choose Pot
-                                </button>
-                            ) : (
-                                <button className={styles.primaryBtn} onClick={confirmPlacement} disabled={isProcessing}>
-                                    <Check size={18} style={{ marginRight: '8px' }} />
-                                    Finish & Place
-                                </button>
-                            )}
+                        {/* 3. Magic Fix */}
+                        <div className={styles.controlGroup}>
+                            <label>Refine Cutout</label>
+                            <div className={styles.sliderRow}>
+                                <Sliders size={14} />
+                                <input
+                                    type="range"
+                                    min="10"
+                                    max="80"
+                                    value={designerState.bgTolerance}
+                                    onChange={(e) => handleDesignerUpdate({ bgTolerance: parseInt(e.target.value) })}
+                                />
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -821,20 +666,44 @@ export const MakeItReal = () => {
                                 <img src={roomImage} alt="Room" className={styles.roomImage} />
 
                                 {placedPlant && (
-                                    <img
-                                        src={placedPlant.imageUrl}
-                                        alt="Placed Plant"
-                                        className={`${styles.placedPlant} ${isMagicMode ? styles.removeBg : ''}`}
-                                        style={{
-                                            left: `${position.x}%`,
-                                            top: `${position.y}%`,
-                                            transform: `translate(-50%, -50%) scale(${scale})`,
-                                            width: '300px',
-                                            cursor: isDragging ? 'grabbing' : 'grab'
-                                        }}
-                                        onMouseDown={(e) => handleMouseDown(e, 'scene')}
-                                        onTouchStart={(e) => handleTouchStart(e, 'scene')}
-                                    />
+                                    <>
+                                        <img
+                                            src={placedPlant.imageUrl}
+                                            alt="Placed Plant"
+                                            className={`${styles.placedPlant} ${isMagicMode ? styles.removeBg : ''}`}
+                                            style={{
+                                                left: `${designerState.pos.x}%`,
+                                                top: `${designerState.pos.y}%`,
+                                                transform: `translate(-50%, -50%) scale(${designerState.scale})`,
+                                                width: '300px',
+                                                cursor: isDragging ? 'grabbing' : 'grab',
+                                                opacity: designerState.isProcessing ? 0.7 : 1,
+                                                filter: designerState.isProcessing ? 'blur(2px)' : 'none',
+                                                transition: 'filter 0.3s'
+                                            }}
+                                            onMouseDown={handleMouseDown}
+                                            onTouchStart={handleTouchStart}
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setShowDesigner(true);
+                                            }}
+                                        />
+
+                                        {designerState.isProcessing && (
+                                            <div
+                                                style={{
+                                                    position: 'absolute',
+                                                    left: `${designerState.pos.x}%`,
+                                                    top: `${designerState.pos.y}%`,
+                                                    transform: 'translate(-50%, -50%)',
+                                                    pointerEvents: 'none',
+                                                    zIndex: 100
+                                                }}
+                                            >
+                                                <Loader2 className="animate-spin" color="#34d399" size={40} />
+                                            </div>
+                                        )}
+                                    </>
                                 )}
                             </>
                         )}
@@ -850,13 +719,13 @@ export const MakeItReal = () => {
                             </div>
 
                             <div className={styles.toolbarGroup}>
-                                <button className={styles.toolBtn} onClick={() => setScale(s => Math.max(0.5, s - 0.1))} disabled={!placedPlant}>
+                                <button className={styles.toolBtn} onClick={() => handleDesignerUpdate({ scale: Math.max(0.5, designerState.scale - 0.1) })} disabled={!placedPlant}>
                                     <ZoomOut size={18} />
                                 </button>
                                 <span style={{ color: 'white', fontWeight: 600, minWidth: '3rem', textAlign: 'center' }}>
-                                    {Math.round(scale * 100)}%
+                                    {Math.round(designerState.scale * 100)}%
                                 </span>
-                                <button className={styles.toolBtn} onClick={() => setScale(s => Math.min(3, s + 0.1))} disabled={!placedPlant}>
+                                <button className={styles.toolBtn} onClick={() => handleDesignerUpdate({ scale: Math.min(3, designerState.scale + 0.1) })} disabled={!placedPlant}>
                                     <ZoomIn size={18} />
                                 </button>
                             </div>
