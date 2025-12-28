@@ -120,7 +120,7 @@ export const MakeItReal = () => {
 
     const removeBackgroundSimple = async (imageSrc: string): Promise<string> => {
         try {
-            const blob = await resizeImage(imageSrc, 800);
+            const blob = await resizeImage(imageSrc, 1000);
             const url = URL.createObjectURL(blob);
 
             return new Promise((resolve) => {
@@ -138,35 +138,54 @@ export const MakeItReal = () => {
                     const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
                     const data = imageData.data;
 
-                    // 1. Identify Background (Corners)
-                    const corners = [[0, 0], [canvas.width - 1, 0], [0, canvas.height - 1], [canvas.width - 1, canvas.height - 1]];
-                    let rTotal = 0, gTotal = 0, bTotal = 0;
-                    corners.forEach(([cx, cy]) => {
-                        const i = (cy * canvas.width + cx) * 4;
-                        rTotal += data[i]; gTotal += data[i + 1]; bTotal += data[i + 2];
-                    });
-                    const bg = { r: rTotal / 4, g: gTotal / 4, b: bTotal / 4 };
+                    // 1. Better Background Sampling (Top edge is almost always pure background)
+                    let rSum = 0, gSum = 0, bSum = 0;
+                    const samplePoints = 10;
+                    for (let x = 0; x < samplePoints; x++) {
+                        const idx = Math.floor(x * (canvas.width / samplePoints)) * 4;
+                        rSum += data[idx]; gSum += data[idx + 1]; bSum += data[idx + 2];
+                    }
+                    const bg = { r: rSum / samplePoints, g: gSum / samplePoints, b: bSum / samplePoints };
 
-                    // 2. Clear Background with Tolerance
-                    const tolerance = 40;
+                    // 2. Advanced Extraction with "Pot Protection"
+                    const tolerance = 35;
+                    const centerX = canvas.width / 2;
+
                     for (let i = 0; i < data.length; i += 4) {
+                        const px = (i / 4) % canvas.width;
+                        const py = Math.floor((i / 4) / canvas.width);
+
                         const r = data[i], g = data[i + 1], b = data[i + 2];
                         const diff = Math.sqrt((r - bg.r) ** 2 + (g - bg.g) ** 2 + (b - bg.b) ** 2);
-                        if (diff < tolerance || (r > 240 && g > 240 && b > 240)) {
+
+                        // Calculate distance from center-bottom (where the pot usually is)
+                        const distToPotCenter = Math.sqrt((px - centerX) ** 2 + (py - (canvas.height * 0.7)) ** 2);
+                        const isPotArea = distToPotCenter < (canvas.width * 0.25);
+
+                        // SCIENTIFIC LOGIC: 
+                        // If we are in the "Pot Area", we use a MUCH tighter tolerance.
+                        // We only remove pixels that are ALMOST EXACTLY the background color. 
+                        // This prevents the white pot from being eaten.
+                        const activeTolerance = isPotArea ? 15 : tolerance;
+
+                        // Check for "Studio White" highlights vs "Flat Background"
+                        const isPureWhiteBG = r > 245 && g > 245 && b > 245 && diff < 10;
+
+                        if (diff < activeTolerance || isPureWhiteBG) {
+                            // Leave a tiny bit of alpha (0.02) for edge smoothing if needed
                             data[i + 3] = 0;
                         }
                     }
                     ctx.putImageData(imageData, 0, 0);
 
-                    // 3. Post-Process: Edge Feathering (Simple Alpha Blur)
-                    const offCanvas = document.createElement('canvas');
-                    offCanvas.width = canvas.width;
-                    offCanvas.height = canvas.height;
-                    const offCtx = offCanvas.getContext('2d');
-                    if (offCtx) {
-                        offCtx.filter = 'blur(1px)'; // Subtle edge softener
-                        offCtx.drawImage(canvas, 0, 0);
-                        resolve(offCanvas.toDataURL('image/png'));
+                    // 3. Final Polish: Alpha Smoothing
+                    const polish = document.createElement('canvas');
+                    polish.width = canvas.width; polish.height = canvas.height;
+                    const pCtx = polish.getContext('2d');
+                    if (pCtx) {
+                        pCtx.filter = 'contrast(1.1) brightness(1.05)'; // Make the pot pop
+                        pCtx.drawImage(canvas, 0, 0);
+                        resolve(polish.toDataURL('image/png'));
                     } else {
                         resolve(canvas.toDataURL('image/png'));
                     }
