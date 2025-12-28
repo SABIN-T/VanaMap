@@ -119,69 +119,119 @@ export const MakeItReal = () => {
         }
     };
 
-    // --- AI LOGIC (Remove BG) ---
+    // --- STRATEGIES ---
+
+    // 1. Remove.bg (Best Quality, requires Key)
+    const removeBackgroundRemoveBg = async (blob: Blob): Promise<string> => {
+        const apiKey = import.meta.env.VITE_REMOVE_BG_API_KEY || "kW5A7cdmPKAgNwGJVD8AuKuV";
+        if (!apiKey) throw new Error("No API Key");
+
+        const formData = new FormData();
+        formData.append('image_file', blob);
+        formData.append('size', 'preview'); // Fast & Good for AR
+
+        const res = await fetch('https://api.remove.bg/v1.0/removebg', {
+            method: 'POST',
+            headers: { 'X-Api-Key': apiKey },
+            body: formData
+        });
+
+        if (!res.ok) throw new Error(`Remove.bg Error: ${res.status}`);
+        const resBlob = await res.blob();
+        return URL.createObjectURL(resBlob);
+    };
+
+    // 2. Hugging Face Inference API (RMBG-1.4 / U2-Net)
+    const removeBackgroundHF = async (blob: Blob): Promise<string> => {
+        // Uses briaai/RMBG-1.4 (State of the art open model)
+        const MODEL_ID = "briaai/RMBG-1.4";
+        const HF_TOKEN = import.meta.env.VITE_HF_TOKEN; // Optional but recommended
+
+        const headers: Record<string, string> = {};
+        if (HF_TOKEN) headers['Authorization'] = `Bearer ${HF_TOKEN}`;
+
+        const res = await fetch(`https://api-inference.huggingface.co/models/${MODEL_ID}`, {
+            method: "POST",
+            headers,
+            body: blob,
+        });
+
+        if (!res.ok) throw new Error(`HF API Error: ${res.status}`);
+        const resBlob = await res.blob();
+        return URL.createObjectURL(resBlob);
+    };
+
+    // 3. Self-Hosted Python Service (U2-Net / Rembg)
+    const removeBackgroundPython = async (blob: Blob): Promise<string> => {
+        const baseUrl = import.meta.env.VITE_AI_API_URL;
+        if (!baseUrl) throw new Error("No Python Service URL");
+
+        const formData = new FormData();
+        formData.append('file', blob, 'plant.jpg');
+
+        const res = await fetch(`${baseUrl}/remove-bg`, {
+            method: 'POST',
+            body: formData
+        });
+
+        if (!res.ok) throw new Error("Python Service Error");
+        const resBlob = await res.blob();
+        return URL.createObjectURL(resBlob);
+    };
+
+    // --- MAIN PROCESSOR ---
     const processPlant = async (plant: any) => {
         setIsProcessing(true);
         setSelectedPlant(plant);
 
         try {
-            // 1. Resize Image Client-Side (Speed Optimization)
-            const resizedBlob = await resizeImage(plant.imageUrl, 800);
+            // 1. Optimize Image (Resize to 1000px for good balance)
+            const resizedBlob = await resizeImage(plant.imageUrl, 1000);
 
-            // 2. Prepare Form Data
-            const formData = new FormData();
-            formData.append('image_file', resizedBlob);
-            formData.append('size', 'preview');
+            // 2. Try Strategies in Order
+            let resultUrl: string | null = null;
+            let successStrategy = "";
 
-            // 3. Send to Public API (Remove.bg)
-            // ⚠️ SECURITY WARNING: Hardcoding API keys in frontend code is risky.
-            // Ideally use VITE_REMOVE_BG_API_KEY environment variable in Vercel.
-            const apiKey = import.meta.env.VITE_REMOVE_BG_API_KEY || "kW5A7cdmPKAgNwGJVD8AuKuV";
-
-            if (!apiKey) {
-                console.warn("No API Key found for Remove.bg");
-                throw new Error("Missing API Key");
+            // Strategy A: Remove.bg
+            if (!resultUrl) {
+                try {
+                    resultUrl = await removeBackgroundRemoveBg(resizedBlob);
+                    successStrategy = "Remove.bg";
+                } catch (e) { console.log("Strategy A skipped:", e); }
             }
 
-            // Timeout promise (8s to be safe, but typically <2s with optimization)
-            const fetchPromise = fetch('https://api.remove.bg/v1.0/removebg', {
-                method: 'POST',
-                headers: { 'X-Api-Key': apiKey },
-                body: formData
-            });
-
-            const timeoutPromise = new Promise((_, reject) =>
-                setTimeout(() => reject(new Error('Timeout')), 8000)
-            );
-
-            const apiRes = await Promise.race([fetchPromise, timeoutPromise]) as Response;
-
-            if (!apiRes.ok) {
-                if (apiRes.status === 402) throw new Error('API Quota Exceeded');
-                if (apiRes.status === 401) throw new Error('Invalid API Key');
-                throw new Error('API Error');
+            // Strategy B: Hugging Face (U2-Net / RMBG)
+            if (!resultUrl) {
+                try {
+                    resultUrl = await removeBackgroundHF(resizedBlob);
+                    successStrategy = "Hugging Face (U2-Net)";
+                } catch (e) { console.log("Strategy B skipped:", e); }
             }
 
-            // 4. Get Result as Blob
-            const pngBlob = await apiRes.blob();
-            const pngUrl = URL.createObjectURL(pngBlob);
+            // Strategy C: Python Service (Self-Hosted)
+            if (!resultUrl) {
+                try {
+                    resultUrl = await removeBackgroundPython(resizedBlob);
+                    successStrategy = "Python Service";
+                } catch (e) { console.log("Strategy C skipped:", e); }
+            }
 
-            setCutoutUrl(pngUrl);
+            // Strategy D: Local Fallback
+            if (!resultUrl) {
+                resultUrl = await removeBackgroundSimple(plant.imageUrl, 20);
+                successStrategy = "Basic Cutout";
+                toast("Using Basic Mode (AI Offline)", { icon: '🔧' });
+            } else {
+                // Success Toast
+                toast.success(`Processed with ${successStrategy}`, { position: 'bottom-center' });
+            }
+
+            setCutoutUrl(resultUrl);
             startStudio();
 
         } catch (error) {
-            console.warn("Public AI Service unavailable/failed:", error);
-
-            // FALLBACK: Use simple canvas removal (Now Optimized)
-            const fallbackUrl = await removeBackgroundSimple(plant.imageUrl, 20);
-
-            setCutoutUrl(fallbackUrl);
-
-            // Helpful toast for developer
-            const isApiKeyError = (error as Error).message === "Missing API Key";
-            toast(isApiKeyError ? "Setup API Key in .env!" : "Using basic cutout mode.", { icon: '🔧' });
-
-            startStudio();
+            console.error("All bg removal failed", error);
+            toast.error("Could not process image");
         } finally {
             setIsProcessing(false);
         }
