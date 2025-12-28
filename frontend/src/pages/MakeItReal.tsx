@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, type MouseEvent } from 'react';
 import styles from './MakeItReal.module.css';
-import { Upload, Search, Wand2, RefreshCw, ZoomIn, ZoomOut, Image as ImageIcon, Camera, X, Check, Loader2, Palette } from 'lucide-react';
+import { Upload, Search, Wand2, RefreshCw, ZoomIn, ZoomOut, Image as ImageIcon, Camera, X, Check, Loader2, Sparkles, Sliders, Palette } from 'lucide-react';
 import { fetchPlants } from '../services/api';
 import toast from 'react-hot-toast';
 
@@ -176,15 +176,21 @@ export const MakeItReal = () => {
     const [stream, setStream] = useState<MediaStream | null>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
 
-    // Modal / Preview State
+    // Wizard State
+    // Steps: 'none' -> 'bg-remove' -> 'pot-select' -> 'placed'
+    const [currentStep, setCurrentStep] = useState<'none' | 'bg-remove' | 'pot-select'>('none');
+
     const [previewPlant, setPreviewPlant] = useState<any | null>(null);
-    const [processedImage, setProcessedImage] = useState<string | null>(null);
     const [isProcessing, setIsProcessing] = useState(false);
 
-    // Potting State
+    // Step 1 State: BG Removal
+    const [bgTolerance, setBgTolerance] = useState(40);
+    const [autoRemoveBg, setAutoRemoveBg] = useState(true);
+    const [previewBgRemoved, setPreviewBgRemoved] = useState<string | null>(null);
 
+    // Step 2 State: Pot Selection
     const [potColor, setPotColor] = useState<string>('#ffffff');
-    const [cleanPlantImg, setCleanPlantImg] = useState<string | null>(null);
+    const [finalComposite, setFinalComposite] = useState<string | null>(null);
 
     // Refs
     const potBaseRef = useRef<string | null>(null);
@@ -271,58 +277,85 @@ export const MakeItReal = () => {
         }
     };
 
-    const onPlantClick = async (plant: any) => {
+    // --- STEP 1 LOGIC: INIT ---
+    const onPlantClick = (plant: any) => {
         setPreviewPlant(plant);
-        setProcessedImage(null);
-        setPotColor('#ffffff'); // Reset to white
+        setCurrentStep('bg-remove');
+        // Reset Logic
+        setBgTolerance(40);
+        setAutoRemoveBg(true);
+        setPreviewBgRemoved(null);
+
+        // Trigger initial removal
+        runBgRemoval(plant.imageUrl, true, 40);
+    };
+
+    const runBgRemoval = async (url: string, remove: boolean, tol: number) => {
         setIsProcessing(true);
-
         try {
-            // 1. Remove BG from Plant (Always do this for potting flow)
-            // Even if we don't auto-remove in final, we need it for potting
-            const noBg = await removeWhiteBackground(plant.imageUrl, 40);
-            setCleanPlantImg(noBg);
-
-            // 2. Generate Initial Composite
-            if (potBaseRef.current) {
-                const composite = await generateComposite(noBg, potBaseRef.current, '#ffffff');
-                setProcessedImage(composite);
+            if (!remove) {
+                setPreviewBgRemoved(url);
             } else {
-                // Fallback if pot not loaded yet
-                setProcessedImage(noBg);
+                const result = await removeWhiteBackground(url, tol);
+                setPreviewBgRemoved(result);
             }
         } finally {
             setIsProcessing(false);
         }
     };
 
-    // Effect: Update Composite when Pot Color Changes
-    useEffect(() => {
-        if (!previewPlant || !cleanPlantImg || !potBaseRef.current) return;
+    const handleBgToleranceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setBgTolerance(parseInt(e.target.value));
+    };
 
-        const updateComposite = async () => {
-            // Processing indicator specific to color change? 
-            // Might be fast enough to not need it, but let's see.
-            const composite = await generateComposite(cleanPlantImg, potBaseRef.current!, potColor);
-            setProcessedImage(composite);
-        };
+    const handleBgToleranceCommit = () => {
+        if (previewPlant && autoRemoveBg) {
+            runBgRemoval(previewPlant.imageUrl, true, bgTolerance);
+        }
+    };
 
-        updateComposite();
-    }, [potColor, cleanPlantImg]); // Re-run if color or base plant changes
+    // --- STEP 1 -> STEP 2 TRANSITION ---
+    const goToPotSelection = () => {
+        if (!previewBgRemoved) return;
+        setCurrentStep('pot-select');
+        setPotColor('#ffffff');
+        // Trigger initial composite
+        updatePotComposite('#ffffff');
+    };
 
+    // --- STEP 2 LOGIC: POT COMPOSITE ---
+    const updatePotComposite = async (color: string) => {
+        if (!previewBgRemoved || !potBaseRef.current) return;
+        setIsProcessing(true);
+        try {
+            const composite = await generateComposite(previewBgRemoved, potBaseRef.current, color);
+            setFinalComposite(composite);
+        } finally {
+            setIsProcessing(false);
+        }
+    };
 
+    const handlePotColorChange = (color: string) => {
+        setPotColor(color);
+        updatePotComposite(color);
+    };
+
+    // --- FINISH ---
     const confirmPlacement = () => {
         if (!roomImage) {
             toast.error("Please upload a room photo first!");
+            setCurrentStep('none');
             setPreviewPlant(null);
             return;
         }
-        setPlacedPlant({ ...previewPlant, imageUrl: processedImage });
+        setPlacedPlant({ ...previewPlant, imageUrl: finalComposite });
         setPosition({ x: 50, y: 50 });
         setScale(1);
+        setCurrentStep('none');
         setPreviewPlant(null);
         toast.success("Added to scene!");
     };
+
 
     // --- DRAG LOGIC ---
     const handleMouseDown = (e: MouseEvent) => {
@@ -364,54 +397,116 @@ export const MakeItReal = () => {
                 </div>
             )}
 
-            {/* PLANT PREVIEW MODAL */}
-            {previewPlant && (
-                <div className={styles.modalOverlay} onClick={() => setPreviewPlant(null)}>
+            {/* WIZARD MODAL */}
+            {currentStep !== 'none' && previewPlant && (
+                <div className={styles.modalOverlay} onClick={() => setCurrentStep('none')}>
                     <div className={styles.modalContent} onClick={e => e.stopPropagation()}>
-                        <h2 className={styles.modalTitle}>Customize {previewPlant.name}</h2>
 
+                        {/* HEADER */}
+                        <div style={{ textAlign: 'center', marginBottom: '1rem' }}>
+                            <h2 className={styles.modalTitle}>
+                                {currentStep === 'bg-remove' ? 'Step 1: Prepare Plant' : 'Step 2: Style Pot'}
+                            </h2>
+                            <div style={{ display: 'flex', justifyContent: 'center', gap: '5px', marginTop: '5px' }}>
+                                <div style={{ height: '4px', width: '30px', background: currentStep === 'bg-remove' ? '#34d399' : '#475569', borderRadius: '2px' }} />
+                                <div style={{ height: '4px', width: '30px', background: currentStep === 'pot-select' ? '#34d399' : '#475569', borderRadius: '2px' }} />
+                            </div>
+                        </div>
+
+                        {/* PREVIEW AREA */}
                         <div className={styles.previewContainer}>
-                            {processedImage ? (
-                                <img
-                                    src={processedImage}
-                                    className={styles.previewImage}
-                                    alt="Preview"
-                                />
+                            {currentStep === 'bg-remove' ? (
+                                previewBgRemoved ? (
+                                    <img src={previewBgRemoved} className={styles.previewImage} alt="Remove BG Preview" />
+                                ) : <div className="text-gray-400">Processing...</div>
                             ) : (
-                                <div className="text-gray-400">Loading...</div>
+                                finalComposite ? (
+                                    <img src={finalComposite} className={styles.previewImage} alt="Pot Preview" />
+                                ) : <div className="text-gray-400">Loading Pot...</div>
                             )}
+
                             {isProcessing && (
                                 <div className={styles.processingOverlay}>
-                                    <Loader2 className="animate-spin" /> Preparing Pot...
+                                    <Loader2 className="animate-spin" /> Processing...
                                 </div>
                             )}
                         </div>
 
-                        {/* CONTROLS */}
-                        <div style={{ marginTop: '0.5rem' }}>
-                            <div className={styles.toggleLabel} style={{ marginBottom: '0.5rem' }}>
-                                <Palette size={16} /> Select Pot Color
-                            </div>
-                            <div className={styles.colorPalette}>
-                                {POT_COLORS.map(c => (
+                        {/* CONTROLS BASED ON STEP */}
+                        {currentStep === 'bg-remove' && (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                <div className={styles.optionRow}>
+                                    <div className={styles.toggleLabel}>
+                                        <Sparkles size={18} color={autoRemoveBg ? '#34d399' : '#94a3b8'} />
+                                        Remove Background
+                                    </div>
                                     <div
-                                        key={c.name}
-                                        className={styles.colorSwatch}
-                                        style={{ backgroundColor: c.hex }}
-                                        data-selected={potColor === c.hex}
-                                        onClick={() => setPotColor(c.hex)}
-                                        title={c.name}
-                                    />
-                                ))}
+                                        className={styles.toggleSwitch}
+                                        data-active={autoRemoveBg}
+                                        onClick={() => {
+                                            const newVal = !autoRemoveBg;
+                                            setAutoRemoveBg(newVal);
+                                            runBgRemoval(previewPlant.imageUrl, newVal, bgTolerance);
+                                        }}
+                                    >
+                                        <div className={styles.toggleKnob} />
+                                    </div>
+                                </div>
+                                {autoRemoveBg && (
+                                    <div className={styles.optionRow} style={{ flexDirection: 'column', alignItems: 'stretch' }}>
+                                        <div className={styles.toggleLabel} style={{ justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                                            <span style={{ display: 'flex', gap: '0.5rem' }}><Sliders size={16} /> Sensitivity</span>
+                                            <span>{bgTolerance}%</span>
+                                        </div>
+                                        <input
+                                            type="range"
+                                            min="1"
+                                            max="100"
+                                            value={bgTolerance}
+                                            onChange={handleBgToleranceChange}
+                                            onMouseUp={handleBgToleranceCommit}
+                                            onTouchEnd={handleBgToleranceCommit}
+                                            style={{ width: '100%', accentColor: '#34d399', cursor: 'pointer' }}
+                                        />
+                                    </div>
+                                )}
                             </div>
-                        </div>
+                        )}
 
+                        {currentStep === 'pot-select' && (
+                            <div style={{ marginTop: '0.5rem' }}>
+                                <div className={styles.toggleLabel} style={{ marginBottom: '0.5rem' }}>
+                                    <Palette size={16} /> Choose Pot Color
+                                </div>
+                                <div className={styles.colorPalette}>
+                                    {POT_COLORS.map(c => (
+                                        <div
+                                            key={c.name}
+                                            className={styles.colorSwatch}
+                                            style={{ backgroundColor: c.hex }}
+                                            data-selected={potColor === c.hex}
+                                            onClick={() => handlePotColorChange(c.hex)}
+                                            title={c.name}
+                                        />
+                                    ))}
+                                </div>
+                            </div>
+                        )}
+
+                        {/* ACTIONS */}
                         <div className={styles.modalActions}>
-                            <button className={styles.secondaryBtn} onClick={() => setPreviewPlant(null)}>Cancel</button>
-                            <button className={styles.primaryBtn} onClick={confirmPlacement} disabled={isProcessing}>
-                                <Check size={18} style={{ marginRight: '8px' }} />
-                                Place in Scene
-                            </button>
+                            <button className={styles.secondaryBtn} onClick={() => setCurrentStep('none')}>Cancel</button>
+
+                            {currentStep === 'bg-remove' ? (
+                                <button className={styles.primaryBtn} onClick={goToPotSelection} disabled={isProcessing}>
+                                    Next: Choose Pot
+                                </button>
+                            ) : (
+                                <button className={styles.primaryBtn} onClick={confirmPlacement} disabled={isProcessing}>
+                                    <Check size={18} style={{ marginRight: '8px' }} />
+                                    Finish & Place
+                                </button>
+                            )}
                         </div>
                     </div>
                 </div>
