@@ -17,12 +17,10 @@ const POT_COLORS = [
 ];
 
 const POT_STYLES = [
-    { id: 'original', name: 'Original', src: '' }, // No virtual pot
-    { id: 'base', name: 'Curved', src: '/pot-base.png' },
-    { id: 'classic', name: 'Classic', src: '/pot-classic.png' },
-    { id: 'modern', name: 'Modern', src: '/pot-modern.png' },
-    { id: 'wide', name: 'Wide', src: '/pot-wide.png' },
+    { id: 'original', name: 'Original', src: '' }, // The only style requested
 ];
+
+// ... (background removal functions skipped, they remain same) ...
 
 const removeBackgroundSimple = (imageSrc: string, tolerance: number = 30): Promise<string> => {
     return new Promise((resolve) => {
@@ -146,56 +144,44 @@ const removeWhiteBackground = async (imageSrc: string, tolerance: number = 30): 
     }
 };
 
-
-
 // 2. Bakes the final composite with exact offsets
 const bakeComposite = async (plantSrc: string, potSrc: string, colorHex: string, offset: { x: number, y: number }): Promise<string> => {
     return new Promise(async (resolve) => {
         const loadImage = (src: string) => new Promise<HTMLImageElement>((r) => {
+            if (!src) return r(null as any); // Handle empty src gracefully
             const i = new Image();
             i.crossOrigin = "Anonymous";
             i.src = src;
             i.onload = () => r(i);
-            i.onerror = () => r(i);
+            i.onerror = () => r(i); // Return image even if error to avoid crash, but check size
         });
 
         const [plantImg, potImg] = await Promise.all([loadImage(plantSrc), loadImage(potSrc)]);
 
         const canvas = document.createElement('canvas');
-        canvas.width = potImg.width;
-        canvas.height = potImg.height;
         const ctx = canvas.getContext('2d');
-        if (!ctx) return resolve(plantSrc);
+        if (!ctx || !plantImg) return resolve(plantSrc);
 
-        // --- LAYER 1: PLANT ---
-        // Apply the user's visual offset and scale
-        // The user offset is in % of the container size (300px).
-        // We need to map 300px visual -> potImg.width actual
+        // Determine Canvas Dimensions
+        if (potImg && potImg.width > 0) {
+            // Virtual Pot Mode: Canvas = Pot Size
+            canvas.width = potImg.width;
+            canvas.height = potImg.height;
 
-        // Visual Container was roughly 300px square in CSS (or responsive).
-        // Let's assume standard normalization:
-        // The 'scale' passed here is simply: canvas.width * 0.85 / plantImg.width (initial default)
-        // Adjustments are made via offset.
+            // --- LAYER 1: PLANT (SCALED TO FIT POT) ---
+            const standardScale = (canvas.width * 0.85) / plantImg.width;
+            const pW = plantImg.width * standardScale;
+            const pH = plantImg.height * standardScale;
 
-        const standardScale = (canvas.width * 0.85) / plantImg.width;
-        const pW = plantImg.width * standardScale;
-        const pH = plantImg.height * standardScale;
+            const defaultX = (canvas.width - pW) / 2;
+            const defaultY = (canvas.height * 0.9) - pH;
 
-        // Default Center
-        const defaultX = (canvas.width - pW) / 2;
-        const defaultY = (canvas.height * 0.9) - pH;
+            const moveX = (offset.x / 100) * canvas.width;
+            const moveY = (offset.y / 100) * canvas.height;
 
-        // Apply Custom Offset
-        // offset.x/y are percentages of the visual container.
-        // If we treat the canvas.width as the 100% reference:
-        const moveX = (offset.x / 100) * canvas.width;
-        const moveY = (offset.y / 100) * canvas.height;
+            ctx.drawImage(plantImg, defaultX + moveX, defaultY + moveY, pW, pH);
 
-        ctx.drawImage(plantImg, defaultX + moveX, defaultY + moveY, pW, pH);
-
-        // --- LAYER 2: POT ---
-        // Only draw if we have a valid pot source (not original mode)
-        if (potSrc) {
+            // --- LAYER 2: POT ---
             const potCanvas = document.createElement('canvas');
             potCanvas.width = canvas.width;
             potCanvas.height = canvas.height;
@@ -209,6 +195,12 @@ const bakeComposite = async (plantSrc: string, potSrc: string, colorHex: string,
                 pCtx.drawImage(potImg, 0, 0);
             }
             ctx.drawImage(potCanvas, 0, 0);
+
+        } else {
+            // Original Mode: Canvas = Plant Size (Fast & Crisp)
+            canvas.width = plantImg.width;
+            canvas.height = plantImg.height;
+            ctx.drawImage(plantImg, 0, 0);
         }
 
         resolve(canvas.toDataURL('image/png'));
