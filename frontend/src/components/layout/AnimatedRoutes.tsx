@@ -34,6 +34,7 @@ const SimulationData = lazy(() => import('../../pages/admin/SimulationData').the
 const PotDesigns = lazy(() => import('../../pages/admin/PotDesigns').then(m => ({ default: m.default })));
 const Premium = lazy(() => import('../../pages/admin/Premium').then(m => ({ default: m.Premium })));
 const PublicPremium = lazy(() => import('../../pages/Premium').then(m => ({ default: m.Premium })));
+const MakeItReal = lazy(() => import('../../pages/MakeItReal').then(m => ({ default: m.MakeItReal })));
 
 
 const LoadingScreen = () => (
@@ -117,6 +118,7 @@ export const AnimatedRoutes = () => {
                         <Route path="/shops" element={<Shops />} />
                         <Route path="/leaderboard" element={<Leaderboard />} />
                         <Route path="/heaven" element={<Heaven />} />
+                        <Route path="/make-it-real" element={<MakeItReal />} />
                         <Route path="/premium" element={<PublicPremium />} />
                     </Routes>
                 </div>

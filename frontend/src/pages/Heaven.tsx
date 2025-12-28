@@ -1,5 +1,5 @@
 import { useState, useEffect, type MouseEvent } from 'react';
-import { Sprout, CloudRain, Coins, Volume2, VolumeX, Sparkles, Heart, Info, Newspaper, Recycle, ArrowLeft, LockKeyhole, Gamepad2, Box } from 'lucide-react';
+import { Sprout, CloudRain, Coins, Volume2, VolumeX, Sparkles, Heart, Info, Newspaper, Recycle, ArrowLeft, LockKeyhole, Gamepad2, Box, Wand2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import styles from './Heaven.module.css';
@@ -296,6 +296,17 @@ export const Heaven = () => {
                         </div>
                         <h2>Pot Studio</h2>
                         <p>Design your own custom 3D plant pots. Upload art & create!</p>
+                    </div>
+
+                    <div className={styles.menuCard} onClick={() => navigate('/make-it-real')}>
+                        <div style={{
+                            background: 'linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%)',
+                            boxShadow: '0 8px 16px -4px rgba(124, 58, 237, 0.4)'
+                        }} className={styles.cardIcon}>
+                            <Wand2 size={40} color="white" />
+                        </div>
+                        <h2>Make It Real</h2>
+                        <p>Visualize plants in your own space with Augmented Reality.</p>
                     </div>
 
                     <div className={styles.menuCard} onClick={() => setView('lifecycle')}>
