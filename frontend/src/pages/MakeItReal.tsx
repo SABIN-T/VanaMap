@@ -24,7 +24,7 @@ const POT_STYLES = [
     { id: 'wide', name: 'Wide', src: '/pot-wide.png' },
 ];
 
-const removeWhiteBackground = (imageSrc: string, tolerance: number = 30): Promise<string> => {
+const removeBackgroundSimple = (imageSrc: string, tolerance: number = 30): Promise<string> => {
     return new Promise((resolve) => {
         const img = new Image();
         img.crossOrigin = "Anonymous";
@@ -101,6 +101,49 @@ const removeWhiteBackground = (imageSrc: string, tolerance: number = 30): Promis
             resolve(imageSrc);
         };
     });
+};
+
+const removeBackgroundAI = async (imageSrc: string): Promise<string> => {
+    try {
+        // Convert input (URL/Base64) to Blob
+        const response = await fetch(imageSrc);
+        const blob = await response.blob();
+
+        const formData = new FormData();
+        formData.append('file', blob, 'image.png');
+
+        // Call local Python AI Service
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
+
+        const res = await fetch('http://localhost:8000/remove-bg', {
+            method: 'POST',
+            body: formData,
+            signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+
+        if (!res.ok) throw new Error('AI Service Failed');
+
+        const resultBlob = await res.blob();
+        return URL.createObjectURL(resultBlob);
+    } catch (e) {
+        throw e;
+    }
+};
+
+const removeWhiteBackground = async (imageSrc: string, tolerance: number = 30): Promise<string> => {
+    // 1. Try AI Service First (Best Quality)
+    try {
+        // Only skip AI if user explicitly requested very specific high-tolerance simple removal?
+        // No, let's always try AI first unless it fails.
+        const result = await removeBackgroundAI(imageSrc);
+        return result;
+    } catch (e) {
+        console.warn("AI Background Removal unavailable (is python server running?), falling back to Canvas algorithm.", e);
+        // 2. Fallback to Simple Algorithm
+        return removeBackgroundSimple(imageSrc, tolerance);
+    }
 };
 
 
