@@ -177,7 +177,7 @@ export const MakeItReal = () => {
             if (!res.ok) throw new Error(`Python API Error: ${res.status}`);
             const resBlob = await res.blob();
             return URL.createObjectURL(resBlob);
-        } catch (e) {
+        } catch {
             // Throwing triggers the next strategy
             throw new Error(`Python Service Unreachable at ${baseUrl}`);
         }
