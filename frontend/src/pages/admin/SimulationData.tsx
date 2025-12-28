@@ -97,7 +97,7 @@ export const SimulationData = () => {
                     {/* Table Header */}
                     <div style={{
                         display: 'grid',
-                        gridTemplateColumns: '2fr 1.5fr 1.5fr 1.5fr 1fr 1fr',
+                        gridTemplateColumns: '2fr 1.25fr 1.25fr 1.25fr 1fr 1fr 0.75fr', // Updated Grid
                         padding: '1.25rem 2rem',
                         background: '#0f172a',
                         borderBottom: '1px solid #334155',
@@ -111,6 +111,7 @@ export const SimulationData = () => {
                         <div>Flower Type</div>
                         <div>Leaf Venation</div>
                         <div>Inflorescence</div>
+                        <div>Aptness</div>
                         <div>Rarity</div>
                         <div style={{ textAlign: 'right' }}>ID Ref</div>
                     </div>
@@ -120,7 +121,7 @@ export const SimulationData = () => {
                         {filteredData.slice(0, 100).map((plant) => (
                             <div key={plant.id} style={{
                                 display: 'grid',
-                                gridTemplateColumns: '2fr 1.5fr 1.5fr 1.5fr 1fr 1fr',
+                                gridTemplateColumns: '2fr 1.25fr 1.25fr 1.25fr 1fr 1fr 0.75fr', // Updated Grid
                                 padding: '1rem 2rem',
                                 borderBottom: '1px solid rgba(255,255,255,0.03)',
                                 alignItems: 'center',
@@ -142,6 +143,24 @@ export const SimulationData = () => {
                                     <Leaf size={14} color="#4ade80" /> {plant.leafVenation}
                                 </div>
                                 <div style={{ color: '#cbd5e1' }}>{plant.inflorescencePattern}</div>
+
+                                {/* APTNESS CELL */}
+                                <div>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                        <div style={{ flex: 1, height: '6px', background: '#334155', borderRadius: '4px', overflow: 'hidden' }}>
+                                            <div style={{
+                                                width: `${plant.aptness || 0}%`,
+                                                height: '100%',
+                                                background: (plant.aptness || 0) > 80 ? '#10b981' : (plant.aptness || 0) > 50 ? '#facc15' : '#ef4444',
+                                                borderRadius: '4px'
+                                            }}></div>
+                                        </div>
+                                        <span style={{ fontSize: '0.75rem', fontWeight: 700, minWidth: '32px', color: (plant.aptness || 0) > 80 ? '#10b981' : (plant.aptness || 0) > 50 ? '#facc15' : '#ef4444' }}>
+                                            {plant.aptness || 0}%
+                                        </span>
+                                    </div>
+                                </div>
+
                                 <div>
                                     <div style={{
                                         display: 'inline-block',

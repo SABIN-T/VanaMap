@@ -474,6 +474,31 @@ export const USERS = [
 
 // --- 4. GENERATE SIMULATION DATA (worldFlora.ts) ---
 const generateSimulationData = () => {
+    const calculateAptness = (p) => {
+        let score = 0;
+
+        // 1. Oxygen Efficiency (Max 40)
+        // Cap oxygen calculation at 150L/day for max score
+        score += Math.min((p.oxygen / 150) * 40, 40);
+
+        // 2. Resilience / Lifespan (Max 30)
+        const lifeLower = p.life.toLowerCase();
+        if (lifeLower.includes('year') || lifeLower.includes('tree')) {
+            const years = parseInt(lifeLower) || 10;
+            score += years > 20 ? 30 : 20;
+        } else if (lifeLower.includes('perennial')) {
+            score += 20;
+        } else {
+            score += 10; // Annuals, etc.
+        }
+
+        // 3. Utility (Max 30)
+        const utilityCount = (p.medicinal.length + p.advantages.length);
+        score += Math.min(utilityCount * 5, 30);
+
+        return Math.min(Math.round(score), 100);
+    };
+
     const flora = REAL_PLANTS_SOURCE.map((p, i) => ({
         id: `wf_${1000 + i}`,
         scientificName: p.sci,
@@ -485,7 +510,8 @@ const generateSimulationData = () => {
         oxygenOutput: p.oxygen, // ml/h
         lightRequirement: p.light,
         acTolerance: p.ac,
-        peopleSupported: Number((p.oxygen / 550).toFixed(4)) // Approx daily need (550L) -> Plants needed = 1 / ratio
+        peopleSupported: Number((p.oxygen / 550).toFixed(4)), // Approx daily need (550L) -> Plants needed = 1 / ratio
+        aptness: calculateAptness(p) // New Normalized Metric
     }));
 
     const content = `export interface WorldFloraSpecimen {
@@ -500,6 +526,7 @@ const generateSimulationData = () => {
     lightRequirement: string;
     acTolerance: string;
     peopleSupported: number; // calculated ratio
+    aptness: number; // 0-100% Simulation Suitability Score
 }
 
 export const worldFlora: WorldFloraSpecimen[] = ${JSON.stringify(flora, null, 4)};
