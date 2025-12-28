@@ -76,7 +76,7 @@ export const MakeItReal = () => {
                     else reject(new Error('Blob Error'));
                 }, 'image/jpeg', 0.8);
             };
-            img.onerror = (e) => {
+            img.onerror = () => {
                 clearTimeout(timeout);
                 reject(new Error('Image Load Failed'));
             };
