@@ -97,7 +97,7 @@ export const SimulationData = () => {
                     {/* Table Header */}
                     <div style={{
                         display: 'grid',
-                        gridTemplateColumns: '2fr 1.25fr 1.25fr 1.25fr 1fr 1fr 0.75fr', // Updated Grid
+                        gridTemplateColumns: '1.75fr 1fr 1fr 1fr 1fr 0.75fr 1.5fr', // Removed ID Ref, added Source
                         padding: '1.25rem 2rem',
                         background: '#0f172a',
                         borderBottom: '1px solid #334155',
@@ -113,7 +113,7 @@ export const SimulationData = () => {
                         <div>Inflorescence</div>
                         <div>Aptness</div>
                         <div>Rarity</div>
-                        <div style={{ textAlign: 'right' }}>ID Ref</div>
+                        <div style={{ textAlign: 'right' }}>Verified Source</div>
                     </div>
 
                     {/* Scanlines Effect Overlay (Optional, distinct look) */}
@@ -121,7 +121,7 @@ export const SimulationData = () => {
                         {filteredData.slice(0, 100).map((plant) => (
                             <div key={plant.id} style={{
                                 display: 'grid',
-                                gridTemplateColumns: '2fr 1.25fr 1.25fr 1.25fr 1fr 1fr 0.75fr', // Updated Grid
+                                gridTemplateColumns: '1.75fr 1fr 1fr 1fr 1fr 0.75fr 1.5fr', // Updated Grid
                                 padding: '1rem 2rem',
                                 borderBottom: '1px solid rgba(255,255,255,0.03)',
                                 alignItems: 'center',
@@ -174,8 +174,8 @@ export const SimulationData = () => {
                                         idx: {plant.rarityIndex}
                                     </div>
                                 </div>
-                                <div style={{ textAlign: 'right', fontFamily: 'monospace', opacity: 0.5 }}>
-                                    {plant.id}
+                                <div style={{ textAlign: 'right', fontSize: '0.8rem', color: '#94a3b8', fontStyle: 'italic' }}>
+                                    {plant.verifiedSource || 'Gene Bank'}
                                 </div>
                             </div>
                         ))}

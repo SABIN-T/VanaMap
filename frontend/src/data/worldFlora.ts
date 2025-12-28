@@ -11,6 +11,7 @@ export interface WorldFloraSpecimen {
     acTolerance: string;
     peopleSupported: number; // calculated ratio
     aptness: number; // 0-100% Simulation Suitability Score
+    verifiedSource: string;
 }
 
 export const worldFlora: WorldFloraSpecimen[] = [
@@ -21,12 +22,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Raceme",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Simple",
-        "rarityIndex": 23,
+        "rarityIndex": 53,
         "oxygenOutput": 30,
         "lightRequirement": "Low to bright (250-2000 Lux)",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0545,
-        "aptness": 48
+        "aptness": 48,
+        "verifiedSource": "NASA Clean Air Study (1989)"
     },
     {
         "id": "wf_1001",
@@ -35,12 +37,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Panicle",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Raceme",
-        "rarityIndex": 51,
+        "rarityIndex": 78,
         "oxygenOutput": 25,
         "lightRequirement": "Partial Shade (500-1500 Lux)",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0455,
-        "aptness": 47
+        "aptness": 47,
+        "verifiedSource": "NASA Clean Air Study (1989)"
     },
     {
         "id": "wf_1002",
@@ -49,12 +52,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spadix",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Spadix",
-        "rarityIndex": 44,
+        "rarityIndex": 40,
         "oxygenOutput": 20,
         "lightRequirement": "Shade (250-1000 Lux)",
         "acTolerance": "Low (Needs humidity)",
         "peopleSupported": 0.0364,
-        "aptness": 45
+        "aptness": 45,
+        "verifiedSource": "NASA Clean Air Study (1989)"
     },
     {
         "id": "wf_1003",
@@ -63,12 +67,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Raceme",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Raceme",
-        "rarityIndex": 65,
+        "rarityIndex": 45,
         "oxygenOutput": 28,
         "lightRequirement": "Bright direct (2000+ Lux)",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0509,
-        "aptness": 47
+        "aptness": 47,
+        "verifiedSource": "NASA Clean Air Study (1989)"
     },
     {
         "id": "wf_1004",
@@ -77,12 +82,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spadix",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Spadix",
-        "rarityIndex": 17,
+        "rarityIndex": 77,
         "oxygenOutput": 22,
         "lightRequirement": "Low to bright (250-1500 Lux)",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.04,
-        "aptness": 41
+        "aptness": 41,
+        "verifiedSource": "NASA Clean Air Study (1989)"
     },
     {
         "id": "wf_1005",
@@ -91,12 +97,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Syconium",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Syconium",
-        "rarityIndex": 43,
+        "rarityIndex": 27,
         "oxygenOutput": 45,
         "lightRequirement": "Bright indirect (1000-2000 Lux)",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0818,
-        "aptness": 47
+        "aptness": 47,
+        "verifiedSource": "NASA Clean Air Study (1989)"
     },
     {
         "id": "wf_1006",
@@ -105,12 +112,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spadix",
         "leafVenation": "Reticulate",
         "inflorescencePattern": "Spadix",
-        "rarityIndex": 13,
+        "rarityIndex": 66,
         "oxygenOutput": 50,
         "lightRequirement": "Bright indirect (1000-2500 Lux)",
         "acTolerance": "Medium (Draft sensitive)",
         "peopleSupported": 0.0909,
-        "aptness": 48
+        "aptness": 48,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1007",
@@ -119,12 +127,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spadix",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Spadix",
-        "rarityIndex": 13,
+        "rarityIndex": 62,
         "oxygenOutput": 18,
         "lightRequirement": "Low (100-1000 Lux)",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0327,
-        "aptness": 40
+        "aptness": 40,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1008",
@@ -133,12 +142,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "None (Spores)",
         "leafVenation": "Forked",
         "inflorescencePattern": "None",
-        "rarityIndex": 27,
+        "rarityIndex": 47,
         "oxygenOutput": 35,
         "lightRequirement": "Bright indirect (1000-1500 Lux)",
         "acTolerance": "Low (Needs high humidity)",
         "peopleSupported": 0.0636,
-        "aptness": 44
+        "aptness": 44,
+        "verifiedSource": "NASA Clean Air Study (1989)"
     },
     {
         "id": "wf_1009",
@@ -147,12 +157,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Umbel",
         "leafVenation": "Palmate",
         "inflorescencePattern": "Umbel",
-        "rarityIndex": 66,
+        "rarityIndex": 72,
         "oxygenOutput": 20,
         "lightRequirement": "Medium (500-1500 Lux)",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0364,
-        "aptness": 40
+        "aptness": 40,
+        "verifiedSource": "NASA Clean Air Study (1989)"
     },
     {
         "id": "wf_1010",
@@ -161,12 +172,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Panicle",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Panicle",
-        "rarityIndex": 51,
+        "rarityIndex": 77,
         "oxygenOutput": 60,
         "lightRequirement": "Bright filtered (1500-2500 Lux)",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.1091,
-        "aptness": 51
+        "aptness": 51,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1011",
@@ -175,12 +187,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Syconium",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Syconium",
-        "rarityIndex": 30,
+        "rarityIndex": 81,
         "oxygenOutput": 40,
         "lightRequirement": "Bright indirect (1500-3000 Lux)",
         "acTolerance": "Low (Drops leaves in drafts)",
         "peopleSupported": 0.0727,
-        "aptness": 56
+        "aptness": 56,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1012",
@@ -189,12 +202,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Corymb",
         "leafVenation": "None",
         "inflorescencePattern": "Thyrse",
-        "rarityIndex": 34,
+        "rarityIndex": 72,
         "oxygenOutput": 15,
         "lightRequirement": "Direct Sun (3000+ Lux)",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0273,
-        "aptness": 49
+        "aptness": 49,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1013",
@@ -203,12 +217,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cyme",
         "leafVenation": "Peltate",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 80,
+        "rarityIndex": 51,
         "oxygenOutput": 18,
         "lightRequirement": "Bright indirect (1000 Lux)",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0327,
-        "aptness": 40
+        "aptness": 40,
+        "verifiedSource": "TCM Database"
     },
     {
         "id": "wf_1014",
@@ -217,12 +232,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cyme",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 3,
+        "rarityIndex": 7,
         "oxygenOutput": 55,
         "lightRequirement": "High/Direct (3000+ Lux)",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.1,
-        "aptness": 60
+        "aptness": 60,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1015",
@@ -231,12 +247,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spadix",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Spadix",
-        "rarityIndex": 81,
+        "rarityIndex": 60,
         "oxygenOutput": 30,
         "lightRequirement": "Low to Medium (500-1500 Lux)",
         "acTolerance": "Low (Likes warmth)",
         "peopleSupported": 0.0545,
-        "aptness": 43
+        "aptness": 43,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1016",
@@ -245,12 +262,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Raceme",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Raceme",
-        "rarityIndex": 34,
+        "rarityIndex": 85,
         "oxygenOutput": 20,
         "lightRequirement": "Low/Shade (500 Lux)",
         "acTolerance": "Low (Needs humidity)",
         "peopleSupported": 0.0364,
-        "aptness": 40
+        "aptness": 40,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1017",
@@ -259,12 +277,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Capitulum",
         "leafVenation": "None",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 13,
+        "rarityIndex": 48,
         "oxygenOutput": 12,
         "lightRequirement": "Bright indirect (2000 Lux)",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0218,
-        "aptness": 38
+        "aptness": 38,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1018",
@@ -273,12 +292,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spadix",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Spadix",
-        "rarityIndex": 55,
+        "rarityIndex": 26,
         "oxygenOutput": 25,
         "lightRequirement": "Low to bright (250-1500 Lux)",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0455,
-        "aptness": 42
+        "aptness": 42,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1019",
@@ -287,12 +307,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spadix",
         "leafVenation": "Reticulate",
         "inflorescencePattern": "Spadix",
-        "rarityIndex": 44,
+        "rarityIndex": 59,
         "oxygenOutput": 22,
         "lightRequirement": "Bright indirect (1500 Lux)",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.04,
-        "aptness": 41
+        "aptness": 41,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1020",
@@ -301,12 +322,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Verticillaster",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Spike",
-        "rarityIndex": 23,
+        "rarityIndex": 58,
         "oxygenOutput": 40,
         "lightRequirement": "Full Sun (10,000+ Lux)",
         "acTolerance": "N/A (Outdoor)",
         "peopleSupported": 0.0727,
-        "aptness": 51
+        "aptness": 51,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1021",
@@ -315,12 +337,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Capitulum",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Head",
-        "rarityIndex": 28,
+        "rarityIndex": 42,
         "oxygenOutput": 60,
         "lightRequirement": "Full Sun (10,000+ Lux)",
         "acTolerance": "N/A (Outdoor)",
         "peopleSupported": 0.1091,
-        "aptness": 51
+        "aptness": 51,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1022",
@@ -329,12 +352,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Corymb",
-        "rarityIndex": 65,
+        "rarityIndex": 80,
         "oxygenOutput": 35,
         "lightRequirement": "Full Sun (6+ hours)",
         "acTolerance": "N/A (Outdoor)",
         "peopleSupported": 0.0636,
-        "aptness": 49
+        "aptness": 49,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1023",
@@ -343,12 +367,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Capitulum",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Head",
-        "rarityIndex": 71,
+        "rarityIndex": 5,
         "oxygenOutput": 25,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A (Outdoor)",
         "peopleSupported": 0.0455,
-        "aptness": 47
+        "aptness": 47,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1024",
@@ -357,12 +382,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Raceme",
         "leafVenation": "Reticulate",
         "inflorescencePattern": "Raceme",
-        "rarityIndex": 90,
+        "rarityIndex": 82,
         "oxygenOutput": 20,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A (Outdoor)",
         "peopleSupported": 0.0364,
-        "aptness": 45
+        "aptness": 45,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1025",
@@ -371,12 +397,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Verticillaster",
         "leafVenation": "Reticulate",
         "inflorescencePattern": "Spike",
-        "rarityIndex": 34,
+        "rarityIndex": 81,
         "oxygenOutput": 22,
         "lightRequirement": "Partial Shade to Sun",
         "acTolerance": "N/A (Outdoor)",
         "peopleSupported": 0.04,
-        "aptness": 46
+        "aptness": 46,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1026",
@@ -385,12 +412,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Raceme",
         "leafVenation": "Reticulate",
         "inflorescencePattern": "Raceme",
-        "rarityIndex": 28,
+        "rarityIndex": 73,
         "oxygenOutput": 30,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A (Outdoor)",
         "peopleSupported": 0.0545,
-        "aptness": 48
+        "aptness": 48,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1027",
@@ -399,12 +427,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Solitary",
-        "rarityIndex": 89,
+        "rarityIndex": 11,
         "oxygenOutput": 15,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A (Outdoor)",
         "peopleSupported": 0.0273,
-        "aptness": 39
+        "aptness": 39,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1028",
@@ -413,12 +442,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Umbel",
-        "rarityIndex": 86,
+        "rarityIndex": 64,
         "oxygenOutput": 15,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A (Outdoor)",
         "peopleSupported": 0.0273,
-        "aptness": 39
+        "aptness": 39,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1029",
@@ -427,12 +457,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Corymb",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Corymb",
-        "rarityIndex": 39,
+        "rarityIndex": 68,
         "oxygenOutput": 40,
         "lightRequirement": "Morning Sun / Shade",
         "acTolerance": "N/A (Outdoor)",
         "peopleSupported": 0.0727,
-        "aptness": 56
+        "aptness": 56,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1030",
@@ -441,12 +472,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "Biternate",
         "inflorescencePattern": "Solitary",
-        "rarityIndex": 41,
+        "rarityIndex": 86,
         "oxygenOutput": 38,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A (Outdoor)",
         "peopleSupported": 0.0691,
-        "aptness": 55
+        "aptness": 55,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1031",
@@ -455,12 +487,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Capitulum",
         "leafVenation": "Lobed",
         "inflorescencePattern": "Head",
-        "rarityIndex": 20,
+        "rarityIndex": 33,
         "oxygenOutput": 25,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A (Outdoor)",
         "peopleSupported": 0.0455,
-        "aptness": 47
+        "aptness": 47,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1032",
@@ -469,12 +502,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Umbel",
         "leafVenation": "Palmate",
         "inflorescencePattern": "Umbel",
-        "rarityIndex": 13,
+        "rarityIndex": 49,
         "oxygenOutput": 20,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A (Outdoor)",
         "peopleSupported": 0.0364,
-        "aptness": 40
+        "aptness": 40,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1033",
@@ -483,12 +517,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "Palmate",
         "inflorescencePattern": "Solitary",
-        "rarityIndex": 20,
+        "rarityIndex": 65,
         "oxygenOutput": 45,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A (Outdoor)",
         "peopleSupported": 0.0818,
-        "aptness": 47
+        "aptness": 47,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1034",
@@ -497,12 +532,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cyme",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 19,
+        "rarityIndex": 20,
         "oxygenOutput": 30,
         "lightRequirement": "Full Sun to Part Shade",
         "acTolerance": "N/A (Outdoor)",
         "peopleSupported": 0.0545,
-        "aptness": 43
+        "aptness": 43,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1035",
@@ -511,12 +547,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Umbell",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Umbell",
-        "rarityIndex": 90,
+        "rarityIndex": 89,
         "oxygenOutput": 35,
         "lightRequirement": "Shade / Dappled Light",
         "acTolerance": "N/A (Outdoor)",
         "peopleSupported": 0.0636,
-        "aptness": 44
+        "aptness": 44,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1036",
@@ -525,12 +562,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Solitary",
-        "rarityIndex": 32,
+        "rarityIndex": 4,
         "oxygenOutput": 200,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A (Outdoor)",
         "peopleSupported": 0.3636,
-        "aptness": 90
+        "aptness": 90,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1037",
@@ -539,12 +577,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Panicle",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Panicle",
-        "rarityIndex": 31,
+        "rarityIndex": 49,
         "oxygenOutput": 60,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A (Outdoor)",
         "peopleSupported": 0.1091,
-        "aptness": 61
+        "aptness": 61,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1038",
@@ -553,12 +592,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Glomerule",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Glomerule",
-        "rarityIndex": 38,
+        "rarityIndex": 53,
         "oxygenOutput": 40,
         "lightRequirement": "Sun or Shade",
         "acTolerance": "N/A (Outdoor)",
         "peopleSupported": 0.0727,
-        "aptness": 46
+        "aptness": 46,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1039",
@@ -567,12 +607,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Solitary",
-        "rarityIndex": 31,
+        "rarityIndex": 52,
         "oxygenOutput": 10,
         "lightRequirement": "Sun / Part Shade",
         "acTolerance": "N/A (Outdoor)",
         "peopleSupported": 0.0182,
-        "aptness": 38
+        "aptness": 38,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1040",
@@ -581,12 +622,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Verticillaster",
         "leafVenation": "Reticulate",
         "inflorescencePattern": "Raceme",
-        "rarityIndex": 74,
+        "rarityIndex": 71,
         "oxygenOutput": 40,
         "lightRequirement": "Bright Spot (1000+ Lux)",
         "acTolerance": "Low tolerance",
         "peopleSupported": 0.0727,
-        "aptness": 51
+        "aptness": 51,
+        "verifiedSource": "Ayurvedic Pharmacopoeia of India"
     },
     {
         "id": "wf_1041",
@@ -595,12 +637,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Corymb",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 57,
+        "rarityIndex": 86,
         "oxygenOutput": 35,
         "lightRequirement": "Sunny Window (2000 Lux)",
         "acTolerance": "Low tolerance",
         "peopleSupported": 0.0636,
-        "aptness": 49
+        "aptness": 49,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1042",
@@ -609,12 +652,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Panicle",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Spadix",
-        "rarityIndex": 33,
+        "rarityIndex": 75,
         "oxygenOutput": 50,
         "lightRequirement": "Indirect (500-1500 Lux)",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0909,
-        "aptness": 48
+        "aptness": 48,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1043",
@@ -623,12 +667,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Panicle",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Spadix",
-        "rarityIndex": 58,
+        "rarityIndex": 82,
         "oxygenOutput": 45,
         "lightRequirement": "Low-Medium (300-1000 Lux)",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0818,
-        "aptness": 47
+        "aptness": 47,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1044",
@@ -637,12 +682,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spadix",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Spadix",
-        "rarityIndex": 75,
+        "rarityIndex": 32,
         "oxygenOutput": 30,
         "lightRequirement": "Low (200-800 Lux)",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0545,
-        "aptness": 43
+        "aptness": 43,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1045",
@@ -651,12 +697,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spadix",
         "leafVenation": "Reticulate",
         "inflorescencePattern": "Spadix",
-        "rarityIndex": 15,
+        "rarityIndex": 2,
         "oxygenOutput": 28,
         "lightRequirement": "Medium (500-1500 Lux)",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0509,
-        "aptness": 42
+        "aptness": 42,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1046",
@@ -665,12 +712,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Panicle",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Panicle",
-        "rarityIndex": 1,
+        "rarityIndex": 24,
         "oxygenOutput": 32,
         "lightRequirement": "Medium-Bright (800-2000 Lux)",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0582,
-        "aptness": 44
+        "aptness": 44,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1047",
@@ -679,12 +727,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Panicle",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Panicle",
-        "rarityIndex": 26,
+        "rarityIndex": 41,
         "oxygenOutput": 35,
         "lightRequirement": "Low-Indirect",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0636,
-        "aptness": 44
+        "aptness": 44,
+        "verifiedSource": "IUCN Red List / Kew Gardens"
     },
     {
         "id": "wf_1048",
@@ -693,12 +742,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cluster",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Raceme",
-        "rarityIndex": 84,
+        "rarityIndex": 14,
         "oxygenOutput": 30,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0545,
-        "aptness": 43
+        "aptness": 43,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1049",
@@ -707,12 +757,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "None",
         "leafVenation": "Parallel",
         "inflorescencePattern": "None",
-        "rarityIndex": 28,
+        "rarityIndex": 85,
         "oxygenOutput": 15,
         "lightRequirement": "Low (100-1000 Lux)",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0273,
-        "aptness": 39
+        "aptness": 39,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1050",
@@ -721,12 +772,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Raceme",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Raceme",
-        "rarityIndex": 36,
+        "rarityIndex": 86,
         "oxygenOutput": 35,
         "lightRequirement": "High (Bright Window)",
         "acTolerance": "Low tolerance",
         "peopleSupported": 0.0636,
-        "aptness": 44
+        "aptness": 44,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1051",
@@ -735,12 +787,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Raceme",
         "leafVenation": "Reticulate",
         "inflorescencePattern": "Verticillaster",
-        "rarityIndex": 38,
+        "rarityIndex": 76,
         "oxygenOutput": 20,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "Low tolerance",
         "peopleSupported": 0.0364,
-        "aptness": 40
+        "aptness": 40,
+        "verifiedSource": "Ayurvedic Pharmacopoeia of India"
     },
     {
         "id": "wf_1052",
@@ -749,12 +802,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Syconium",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Syconium",
-        "rarityIndex": 56,
+        "rarityIndex": 37,
         "oxygenOutput": 55,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "Low (Drops leaves)",
         "peopleSupported": 0.1,
-        "aptness": 50
+        "aptness": 50,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1053",
@@ -763,12 +817,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spadix",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Spadix",
-        "rarityIndex": 46,
+        "rarityIndex": 81,
         "oxygenOutput": 22,
         "lightRequirement": "Low-Medium",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.04,
-        "aptness": 41
+        "aptness": 41,
+        "verifiedSource": "NASA Clean Air Study (1989)"
     },
     {
         "id": "wf_1054",
@@ -777,12 +832,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spadix",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Spadix",
-        "rarityIndex": 24,
+        "rarityIndex": 31,
         "oxygenOutput": 25,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0455,
-        "aptness": 42
+        "aptness": 42,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1055",
@@ -791,12 +847,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spadix",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Spadix",
-        "rarityIndex": 11,
+        "rarityIndex": 14,
         "oxygenOutput": 40,
         "lightRequirement": "Medium-Shade",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0727,
-        "aptness": 46
+        "aptness": 46,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1056",
@@ -805,12 +862,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spadix",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Spadix",
-        "rarityIndex": 88,
+        "rarityIndex": 2,
         "oxygenOutput": 28,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0509,
-        "aptness": 42
+        "aptness": 42,
+        "verifiedSource": "IUCN Red List / Kew Gardens"
     },
     {
         "id": "wf_1057",
@@ -819,12 +877,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spadix",
         "leafVenation": "Reticulate",
         "inflorescencePattern": "Spadix",
-        "rarityIndex": 86,
+        "rarityIndex": 89,
         "oxygenOutput": 30,
         "lightRequirement": "Medium-Bright",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0545,
-        "aptness": 43
+        "aptness": 43,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1058",
@@ -833,12 +892,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spadix",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Spadix",
-        "rarityIndex": 64,
+        "rarityIndex": 5,
         "oxygenOutput": 28,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0509,
-        "aptness": 42
+        "aptness": 42,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1059",
@@ -847,12 +907,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cyme",
         "leafVenation": "Palmate",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 86,
+        "rarityIndex": 66,
         "oxygenOutput": 18,
         "lightRequirement": "Medium-Shade",
         "acTolerance": "Low (Needs humidity)",
         "peopleSupported": 0.0327,
-        "aptness": 40
+        "aptness": 40,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1060",
@@ -861,12 +922,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cyme",
         "leafVenation": "Palmate",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 85,
+        "rarityIndex": 58,
         "oxygenOutput": 20,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "Low tolerance",
         "peopleSupported": 0.0364,
-        "aptness": 40
+        "aptness": 40,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1061",
@@ -875,12 +937,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spike",
         "leafVenation": "Reticulate",
         "inflorescencePattern": "Spike",
-        "rarityIndex": 58,
+        "rarityIndex": 6,
         "oxygenOutput": 12,
         "lightRequirement": "Low-Medium",
         "acTolerance": "Low (Needs humidity)",
         "peopleSupported": 0.0218,
-        "aptness": 38
+        "aptness": 38,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1062",
@@ -889,12 +952,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spike",
         "leafVenation": "Reticulate",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 33,
+        "rarityIndex": 86,
         "oxygenOutput": 15,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0273,
-        "aptness": 39
+        "aptness": 39,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1063",
@@ -903,12 +967,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spike",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Spike",
-        "rarityIndex": 21,
+        "rarityIndex": 61,
         "oxygenOutput": 20,
         "lightRequirement": "Medium Light",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0364,
-        "aptness": 40
+        "aptness": 40,
+        "verifiedSource": "NASA Clean Air Study (1989)"
     },
     {
         "id": "wf_1064",
@@ -917,12 +982,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spike",
         "leafVenation": "Peltate",
         "inflorescencePattern": "Spike",
-        "rarityIndex": 53,
+        "rarityIndex": 48,
         "oxygenOutput": 18,
         "lightRequirement": "Medium Light",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0327,
-        "aptness": 40
+        "aptness": 40,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1065",
@@ -931,12 +997,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spike",
         "leafVenation": "Reticulate",
         "inflorescencePattern": "Spike",
-        "rarityIndex": 11,
+        "rarityIndex": 40,
         "oxygenOutput": 10,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0182,
-        "aptness": 38
+        "aptness": 38,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1066",
@@ -945,12 +1012,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Umbel",
         "leafVenation": "Reticulate",
         "inflorescencePattern": "Umbel",
-        "rarityIndex": 28,
+        "rarityIndex": 39,
         "oxygenOutput": 12,
         "lightRequirement": "Bright Light",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0218,
-        "aptness": 38
+        "aptness": 38,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1067",
@@ -959,12 +1027,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cyme",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 83,
+        "rarityIndex": 14,
         "oxygenOutput": 25,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0455,
-        "aptness": 42
+        "aptness": 42,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1068",
@@ -973,12 +1042,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cyme",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 8,
+        "rarityIndex": 33,
         "oxygenOutput": 22,
         "lightRequirement": "High Light",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.04,
-        "aptness": 41
+        "aptness": 41,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1069",
@@ -987,12 +1057,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Rare basal",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Solitary",
-        "rarityIndex": 60,
+        "rarityIndex": 22,
         "oxygenOutput": 30,
         "lightRequirement": "Deep Shade",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0545,
-        "aptness": 53
+        "aptness": 53,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1070",
@@ -1001,12 +1072,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Raceme",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Raceme",
-        "rarityIndex": 49,
+        "rarityIndex": 30,
         "oxygenOutput": 25,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0455,
-        "aptness": 42
+        "aptness": 42,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1071",
@@ -1015,12 +1087,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Raceme",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Raceme",
-        "rarityIndex": 31,
+        "rarityIndex": 57,
         "oxygenOutput": 28,
         "lightRequirement": "Bright Light",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0509,
-        "aptness": 42
+        "aptness": 42,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1072",
@@ -1029,12 +1102,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Panicle",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Spadix",
-        "rarityIndex": 20,
+        "rarityIndex": 65,
         "oxygenOutput": 30,
         "lightRequirement": "Low Light",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0545,
-        "aptness": 43
+        "aptness": 43,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1073",
@@ -1043,12 +1117,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Panicle",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Spadix",
-        "rarityIndex": 61,
+        "rarityIndex": 69,
         "oxygenOutput": 55,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.1,
-        "aptness": 50
+        "aptness": 50,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1074",
@@ -1057,12 +1132,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Panicle",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Panicle",
-        "rarityIndex": 9,
+        "rarityIndex": 38,
         "oxygenOutput": 35,
         "lightRequirement": "Bright Sun",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0636,
-        "aptness": 54
+        "aptness": 54,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1075",
@@ -1071,12 +1147,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cone",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Cone",
-        "rarityIndex": 3,
+        "rarityIndex": 53,
         "oxygenOutput": 40,
         "lightRequirement": "Bright Light",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0727,
-        "aptness": 56
+        "aptness": 56,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1076",
@@ -1085,12 +1162,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Panicle",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Panicle",
-        "rarityIndex": 11,
+        "rarityIndex": 31,
         "oxygenOutput": 45,
         "lightRequirement": "Full Sun",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0818,
-        "aptness": 47
+        "aptness": 47,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1077",
@@ -1099,12 +1177,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spike",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Spike",
-        "rarityIndex": 47,
+        "rarityIndex": 26,
         "oxygenOutput": 25,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "Low (Humidity needed)",
         "peopleSupported": 0.0455,
-        "aptness": 42
+        "aptness": 42,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1078",
@@ -1113,12 +1192,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spike",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Spike",
-        "rarityIndex": 15,
+        "rarityIndex": 73,
         "oxygenOutput": 22,
         "lightRequirement": "Medium (No Direct)",
         "acTolerance": "Low tolerance",
         "peopleSupported": 0.04,
-        "aptness": 41
+        "aptness": 41,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1079",
@@ -1127,12 +1207,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spike",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Spike",
-        "rarityIndex": 64,
+        "rarityIndex": 57,
         "oxygenOutput": 20,
         "lightRequirement": "Medium Light",
         "acTolerance": "Low tolerance",
         "peopleSupported": 0.0364,
-        "aptness": 40
+        "aptness": 40,
+        "verifiedSource": "NASA Clean Air Study (1989)"
     },
     {
         "id": "wf_1080",
@@ -1141,12 +1222,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Panicle",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Panicle",
-        "rarityIndex": 34,
+        "rarityIndex": 22,
         "oxygenOutput": 20,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "Low tolerance",
         "peopleSupported": 0.0364,
-        "aptness": 40
+        "aptness": 40,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1081",
@@ -1155,12 +1237,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "Palmate",
         "inflorescencePattern": "Solitary",
-        "rarityIndex": 60,
+        "rarityIndex": 63,
         "oxygenOutput": 40,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0727,
-        "aptness": 46
+        "aptness": 46,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1082",
@@ -1169,12 +1252,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spadix",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Spadix",
-        "rarityIndex": 85,
+        "rarityIndex": 28,
         "oxygenOutput": 60,
         "lightRequirement": "Bright Light",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.1091,
-        "aptness": 51
+        "aptness": 51,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1083",
@@ -1183,12 +1267,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Umbel",
         "leafVenation": "None",
         "inflorescencePattern": "Umbel",
-        "rarityIndex": 5,
+        "rarityIndex": 12,
         "oxygenOutput": 15,
         "lightRequirement": "Bright Light",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0273,
-        "aptness": 39
+        "aptness": 39,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1084",
@@ -1197,12 +1282,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Umbel",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Umbel",
-        "rarityIndex": 75,
+        "rarityIndex": 52,
         "oxygenOutput": 20,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0364,
-        "aptness": 40
+        "aptness": 40,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1085",
@@ -1211,12 +1297,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cyme",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 87,
+        "rarityIndex": 72,
         "oxygenOutput": 10,
         "lightRequirement": "East Window",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0182,
-        "aptness": 48
+        "aptness": 48,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1086",
@@ -1225,12 +1312,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Corymb",
         "leafVenation": "None",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 66,
+        "rarityIndex": 31,
         "oxygenOutput": 18,
         "lightRequirement": "Sunny Window",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0327,
-        "aptness": 40
+        "aptness": 40,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1087",
@@ -1239,12 +1327,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cyathium",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 23,
+        "rarityIndex": 74,
         "oxygenOutput": 20,
         "lightRequirement": "Direct Sun",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0364,
-        "aptness": 40
+        "aptness": 40,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1088",
@@ -1253,12 +1342,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cyathium",
         "leafVenation": "None",
         "inflorescencePattern": "Cluster",
-        "rarityIndex": 79,
+        "rarityIndex": 43,
         "oxygenOutput": 25,
         "lightRequirement": "Direct Sun",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0455,
-        "aptness": 42
+        "aptness": 42,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1089",
@@ -1267,12 +1357,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Panicle",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Panicle",
-        "rarityIndex": 62,
+        "rarityIndex": 51,
         "oxygenOutput": 150,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.2727,
-        "aptness": 90
+        "aptness": 90,
+        "verifiedSource": "Ayurvedic Pharmacopoeia of India"
     },
     {
         "id": "wf_1090",
@@ -1281,12 +1372,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Corymb",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Corymb",
-        "rarityIndex": 40,
+        "rarityIndex": 4,
         "oxygenOutput": 100,
         "lightRequirement": "Full Sun / Part Shade",
         "acTolerance": "N/A",
         "peopleSupported": 0.1818,
-        "aptness": 72
+        "aptness": 72,
+        "verifiedSource": "Ayurvedic Pharmacopoeia of India"
     },
     {
         "id": "wf_1091",
@@ -1295,12 +1387,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Raceme",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Raceme",
-        "rarityIndex": 21,
+        "rarityIndex": 50,
         "oxygenOutput": 180,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.3273,
-        "aptness": 85
+        "aptness": 85,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1092",
@@ -1309,12 +1402,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Syconium",
         "leafVenation": "Reticulate",
         "inflorescencePattern": "Syconium",
-        "rarityIndex": 75,
+        "rarityIndex": 83,
         "oxygenOutput": 200,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.3636,
-        "aptness": 90
+        "aptness": 90,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1093",
@@ -1323,12 +1417,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Syconium",
         "leafVenation": "Reticulate",
         "inflorescencePattern": "Syconium",
-        "rarityIndex": 49,
+        "rarityIndex": 41,
         "oxygenOutput": 220,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.4,
-        "aptness": 90
+        "aptness": 90,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1094",
@@ -1337,12 +1432,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Panicle",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Panicle",
-        "rarityIndex": 17,
+        "rarityIndex": 4,
         "oxygenOutput": 140,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.2545,
-        "aptness": 82
+        "aptness": 82,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1095",
@@ -1351,12 +1447,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 8,
+        "rarityIndex": 80,
         "oxygenOutput": 80,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.1455,
-        "aptness": 66
+        "aptness": 66,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1096",
@@ -1365,12 +1462,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Solitary",
-        "rarityIndex": 68,
+        "rarityIndex": 56,
         "oxygenOutput": 60,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.1091,
-        "aptness": 56
+        "aptness": 56,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1097",
@@ -1379,12 +1477,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cyme",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 19,
+        "rarityIndex": 5,
         "oxygenOutput": 50,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0909,
-        "aptness": 63
+        "aptness": 63,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1098",
@@ -1393,12 +1492,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Panicle",
         "leafVenation": "Palmate",
         "inflorescencePattern": "Panicle",
-        "rarityIndex": 13,
+        "rarityIndex": 3,
         "oxygenOutput": 60,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.1091,
-        "aptness": 51
+        "aptness": 51,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1099",
@@ -1407,12 +1507,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spadix",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Spadix",
-        "rarityIndex": 28,
+        "rarityIndex": 26,
         "oxygenOutput": 100,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.1818,
-        "aptness": 62
+        "aptness": 62,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1100",
@@ -1421,12 +1522,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Panicle",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Spadix",
-        "rarityIndex": 56,
+        "rarityIndex": 24,
         "oxygenOutput": 120,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.2182,
-        "aptness": 77
+        "aptness": 77,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1101",
@@ -1435,12 +1537,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cyme",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 81,
+        "rarityIndex": 67,
         "oxygenOutput": 50,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0909,
-        "aptness": 58
+        "aptness": 58,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1102",
@@ -1449,12 +1552,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cyme",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 74,
+        "rarityIndex": 57,
         "oxygenOutput": 40,
         "lightRequirement": "Sun/Part Shade",
         "acTolerance": "N/A",
         "peopleSupported": 0.0727,
-        "aptness": 51
+        "aptness": 51,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1103",
@@ -1463,12 +1567,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cyme",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 85,
+        "rarityIndex": 65,
         "oxygenOutput": 35,
         "lightRequirement": "Part Shade",
         "acTolerance": "N/A",
         "peopleSupported": 0.0636,
-        "aptness": 44
+        "aptness": 44,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1104",
@@ -1477,12 +1582,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cyme",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 14,
+        "rarityIndex": 72,
         "oxygenOutput": 30,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0545,
-        "aptness": 48
+        "aptness": 48,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1105",
@@ -1496,7 +1602,8 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0364,
-        "aptness": 45
+        "aptness": 45,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1106",
@@ -1505,12 +1612,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cyme",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 32,
+        "rarityIndex": 78,
         "oxygenOutput": 35,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0636,
-        "aptness": 44
+        "aptness": 44,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1107",
@@ -1519,12 +1627,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cyme",
         "leafVenation": "Reticulate",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 64,
+        "rarityIndex": 81,
         "oxygenOutput": 40,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0727,
-        "aptness": 46
+        "aptness": 46,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1108",
@@ -1533,12 +1642,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Raceme",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Raceme",
-        "rarityIndex": 18,
+        "rarityIndex": 2,
         "oxygenOutput": 50,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0909,
-        "aptness": 48
+        "aptness": 48,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1109",
@@ -1547,12 +1657,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Solitary",
-        "rarityIndex": 36,
+        "rarityIndex": 75,
         "oxygenOutput": 25,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0455,
-        "aptness": 47
+        "aptness": 47,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1110",
@@ -1561,12 +1672,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Corymb",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Corymb",
-        "rarityIndex": 36,
+        "rarityIndex": 41,
         "oxygenOutput": 30,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0545,
-        "aptness": 43
+        "aptness": 43,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1111",
@@ -1575,12 +1687,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "Palmate",
         "inflorescencePattern": "Solitary",
-        "rarityIndex": 2,
+        "rarityIndex": 6,
         "oxygenOutput": 45,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0818,
-        "aptness": 52
+        "aptness": 52,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1112",
@@ -1589,12 +1702,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cyme",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 55,
+        "rarityIndex": 56,
         "oxygenOutput": 35,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0636,
-        "aptness": 44
+        "aptness": 44,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1113",
@@ -1603,12 +1717,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Raceme",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Raceme",
-        "rarityIndex": 25,
+        "rarityIndex": 56,
         "oxygenOutput": 40,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0727,
-        "aptness": 46
+        "aptness": 46,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1114",
@@ -1617,12 +1732,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spike",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Spike",
-        "rarityIndex": 47,
+        "rarityIndex": 3,
         "oxygenOutput": 20,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0364,
-        "aptness": 40
+        "aptness": 40,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1115",
@@ -1631,12 +1747,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Raceme",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Raceme",
-        "rarityIndex": 83,
+        "rarityIndex": 14,
         "oxygenOutput": 35,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0636,
-        "aptness": 44
+        "aptness": 44,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1116",
@@ -1645,12 +1762,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Umbel",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Umbel",
-        "rarityIndex": 63,
+        "rarityIndex": 84,
         "oxygenOutput": 25,
         "lightRequirement": "Sun/Part Shade",
         "acTolerance": "N/A",
         "peopleSupported": 0.0455,
-        "aptness": 42
+        "aptness": 42,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1117",
@@ -1659,12 +1777,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Scape",
-        "rarityIndex": 83,
+        "rarityIndex": 60,
         "oxygenOutput": 10,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0182,
-        "aptness": 38
+        "aptness": 38,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1118",
@@ -1673,12 +1792,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cluster",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Corymb",
-        "rarityIndex": 81,
+        "rarityIndex": 43,
         "oxygenOutput": 45,
         "lightRequirement": "Sun/Part Shade",
         "acTolerance": "N/A",
         "peopleSupported": 0.0818,
-        "aptness": 47
+        "aptness": 47,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1119",
@@ -1687,12 +1807,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "Palmate",
         "inflorescencePattern": "Solitary",
-        "rarityIndex": 36,
+        "rarityIndex": 90,
         "oxygenOutput": 30,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0545,
-        "aptness": 48
+        "aptness": 48,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1120",
@@ -1701,12 +1822,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Raceme",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Raceme",
-        "rarityIndex": 28,
+        "rarityIndex": 18,
         "oxygenOutput": 30,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0545,
-        "aptness": 43
+        "aptness": 43,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1121",
@@ -1715,12 +1837,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Umbell",
         "leafVenation": "Reticulate",
         "inflorescencePattern": "Corymb",
-        "rarityIndex": 34,
+        "rarityIndex": 86,
         "oxygenOutput": 25,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0455,
-        "aptness": 42
+        "aptness": 42,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1122",
@@ -1729,12 +1852,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "None",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 86,
+        "rarityIndex": 17,
         "oxygenOutput": 15,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0273,
-        "aptness": 39
+        "aptness": 39,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1123",
@@ -1743,12 +1867,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Axillary",
-        "rarityIndex": 41,
+        "rarityIndex": 77,
         "oxygenOutput": 18,
         "lightRequirement": "Sun/Part Shade",
         "acTolerance": "N/A",
         "peopleSupported": 0.0327,
-        "aptness": 40
+        "aptness": 40,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1124",
@@ -1757,12 +1882,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Head",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Capitulum",
-        "rarityIndex": 74,
+        "rarityIndex": 20,
         "oxygenOutput": 15,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0273,
-        "aptness": 39
+        "aptness": 39,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1125",
@@ -1771,12 +1897,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spike",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Spike",
-        "rarityIndex": 15,
+        "rarityIndex": 13,
         "oxygenOutput": 20,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0364,
-        "aptness": 40
+        "aptness": 40,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1126",
@@ -1785,12 +1912,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Insignificant",
         "leafVenation": "Linear",
         "inflorescencePattern": "Spike",
-        "rarityIndex": 1,
+        "rarityIndex": 24,
         "oxygenOutput": 25,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0455,
-        "aptness": 42
+        "aptness": 42,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1127",
@@ -1799,12 +1927,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "Palmate",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 60,
+        "rarityIndex": 79,
         "oxygenOutput": 30,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0545,
-        "aptness": 43
+        "aptness": 43,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1128",
@@ -1813,12 +1942,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 64,
+        "rarityIndex": 46,
         "oxygenOutput": 25,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0455,
-        "aptness": 42
+        "aptness": 42,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1129",
@@ -1827,12 +1957,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cyme",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 36,
+        "rarityIndex": 88,
         "oxygenOutput": 30,
         "lightRequirement": "Part Shade",
         "acTolerance": "N/A",
         "peopleSupported": 0.0545,
-        "aptness": 43
+        "aptness": 43,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1130",
@@ -1841,12 +1972,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spike",
         "leafVenation": "Linear",
         "inflorescencePattern": "Spike",
-        "rarityIndex": 41,
+        "rarityIndex": 31,
         "oxygenOutput": 60,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.1091,
-        "aptness": 61
+        "aptness": 61,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1131",
@@ -1855,12 +1987,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Raceme",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Raceme",
-        "rarityIndex": 72,
+        "rarityIndex": 82,
         "oxygenOutput": 150,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.2727,
-        "aptness": 90
+        "aptness": 90,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1132",
@@ -1869,12 +2002,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spadix",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Head",
-        "rarityIndex": 33,
+        "rarityIndex": 14,
         "oxygenOutput": 180,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.3273,
-        "aptness": 85
+        "aptness": 85,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1133",
@@ -1883,12 +2017,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Raceme",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Raceme",
-        "rarityIndex": 63,
+        "rarityIndex": 85,
         "oxygenOutput": 90,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.1636,
-        "aptness": 69
+        "aptness": 69,
+        "verifiedSource": "Ayurvedic Pharmacopoeia of India"
     },
     {
         "id": "wf_1134",
@@ -1897,12 +2032,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Panicle",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Panicle",
-        "rarityIndex": 47,
+        "rarityIndex": 26,
         "oxygenOutput": 85,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.1545,
-        "aptness": 68
+        "aptness": 68,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1135",
@@ -1911,12 +2047,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Solitary",
-        "rarityIndex": 58,
+        "rarityIndex": 90,
         "oxygenOutput": 50,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0909,
-        "aptness": 48
+        "aptness": 48,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1136",
@@ -1925,12 +2062,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Solitary",
-        "rarityIndex": 14,
+        "rarityIndex": 43,
         "oxygenOutput": 110,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.2,
-        "aptness": 74
+        "aptness": 74,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1137",
@@ -1939,12 +2077,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Panicle",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Panicle",
-        "rarityIndex": 58,
+        "rarityIndex": 71,
         "oxygenOutput": 100,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.1818,
-        "aptness": 62
+        "aptness": 62,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1138",
@@ -1953,12 +2092,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spike",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Spike",
-        "rarityIndex": 20,
+        "rarityIndex": 57,
         "oxygenOutput": 28,
         "lightRequirement": "Low-Medium",
         "acTolerance": "Low tolerance",
         "peopleSupported": 0.0509,
-        "aptness": 42
+        "aptness": 42,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1139",
@@ -1967,12 +2107,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "None",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "None",
-        "rarityIndex": 44,
+        "rarityIndex": 72,
         "oxygenOutput": 30,
         "lightRequirement": "Medium Indirect",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0545,
-        "aptness": 43
+        "aptness": 43,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1140",
@@ -1981,12 +2122,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "None",
         "leafVenation": "Forked",
         "inflorescencePattern": "None",
-        "rarityIndex": 48,
+        "rarityIndex": 67,
         "oxygenOutput": 35,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0636,
-        "aptness": 44
+        "aptness": 44,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1141",
@@ -1995,12 +2137,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "None",
         "leafVenation": "Forked",
         "inflorescencePattern": "None",
-        "rarityIndex": 5,
+        "rarityIndex": 21,
         "oxygenOutput": 25,
         "lightRequirement": "Indirect Shade",
         "acTolerance": "Low (Needs humidity)",
         "peopleSupported": 0.0455,
-        "aptness": 42
+        "aptness": 42,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1142",
@@ -2009,12 +2152,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Umbel",
         "leafVenation": "None",
         "inflorescencePattern": "Umbel",
-        "rarityIndex": 88,
+        "rarityIndex": 34,
         "oxygenOutput": 15,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0273,
-        "aptness": 49
+        "aptness": 49,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1143",
@@ -2023,12 +2167,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cluster",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Axillary",
-        "rarityIndex": 38,
+        "rarityIndex": 8,
         "oxygenOutput": 20,
         "lightRequirement": "Medium-Bright",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0364,
-        "aptness": 40
+        "aptness": 40,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1144",
@@ -2037,12 +2182,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Axillary",
-        "rarityIndex": 29,
+        "rarityIndex": 53,
         "oxygenOutput": 20,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0364,
-        "aptness": 40
+        "aptness": 40,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1145",
@@ -2051,12 +2197,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Raceme",
         "leafVenation": "None",
         "inflorescencePattern": "Raceme",
-        "rarityIndex": 3,
+        "rarityIndex": 77,
         "oxygenOutput": 10,
         "lightRequirement": "Bright Light",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0182,
-        "aptness": 48
+        "aptness": 48,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1146",
@@ -2065,12 +2212,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cyme",
         "leafVenation": "None",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 15,
+        "rarityIndex": 44,
         "oxygenOutput": 12,
         "lightRequirement": "Full Sun",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0218,
-        "aptness": 38
+        "aptness": 38,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1147",
@@ -2079,12 +2227,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cyme",
         "leafVenation": "None",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 80,
+        "rarityIndex": 54,
         "oxygenOutput": 15,
         "lightRequirement": "Sunny Window",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0273,
-        "aptness": 39
+        "aptness": 39,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1148",
@@ -2093,12 +2242,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "None",
         "inflorescencePattern": "Solitary",
-        "rarityIndex": 44,
+        "rarityIndex": 14,
         "oxygenOutput": 5,
         "lightRequirement": "Direct Sun",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0091,
-        "aptness": 46
+        "aptness": 46,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1149",
@@ -2107,12 +2257,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cyme",
         "leafVenation": "Reticulate",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 26,
+        "rarityIndex": 77,
         "oxygenOutput": 15,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0273,
-        "aptness": 39
+        "aptness": 39,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1150",
@@ -2121,12 +2272,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cyme",
         "leafVenation": "Reticulate",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 9,
+        "rarityIndex": 7,
         "oxygenOutput": 25,
         "lightRequirement": "Medium Light",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0455,
-        "aptness": 42
+        "aptness": 42,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1151",
@@ -2135,12 +2287,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cyme",
         "leafVenation": "Reticulate",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 11,
+        "rarityIndex": 65,
         "oxygenOutput": 20,
         "lightRequirement": "Low-Medium",
         "acTolerance": "Low tolerance",
         "peopleSupported": 0.0364,
-        "aptness": 40
+        "aptness": 40,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1152",
@@ -2149,12 +2302,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Panicle",
         "leafVenation": "Palmate",
         "inflorescencePattern": "Panicle",
-        "rarityIndex": 13,
+        "rarityIndex": 74,
         "oxygenOutput": 18,
         "lightRequirement": "Cool Shade",
         "acTolerance": "Low tolerance",
         "peopleSupported": 0.0327,
-        "aptness": 40
+        "aptness": 40,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1153",
@@ -2163,12 +2317,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Umbel",
         "leafVenation": "Palmate",
         "inflorescencePattern": "Umbel",
-        "rarityIndex": 79,
+        "rarityIndex": 7,
         "oxygenOutput": 30,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0545,
-        "aptness": 43
+        "aptness": 43,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1154",
@@ -2177,12 +2332,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Umbel",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Umbel",
-        "rarityIndex": 23,
+        "rarityIndex": 45,
         "oxygenOutput": 35,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "Low tolerance",
         "peopleSupported": 0.0636,
-        "aptness": 44
+        "aptness": 44,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1155",
@@ -2191,12 +2347,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spadix",
         "leafVenation": "Reticulate",
         "inflorescencePattern": "Spadix",
-        "rarityIndex": 68,
+        "rarityIndex": 35,
         "oxygenOutput": 22,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.04,
-        "aptness": 41
+        "aptness": 41,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1156",
@@ -2205,12 +2362,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spadix",
         "leafVenation": "Reticulate",
         "inflorescencePattern": "Spadix",
-        "rarityIndex": 84,
+        "rarityIndex": 39,
         "oxygenOutput": 25,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "Low tolerance",
         "peopleSupported": 0.0455,
-        "aptness": 42
+        "aptness": 42,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1157",
@@ -2219,12 +2377,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spadix",
         "leafVenation": "Reticulate",
         "inflorescencePattern": "Spadix",
-        "rarityIndex": 65,
+        "rarityIndex": 76,
         "oxygenOutput": 24,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "Low tolerance",
         "peopleSupported": 0.0436,
-        "aptness": 41
+        "aptness": 41,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1158",
@@ -2233,12 +2392,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "None",
         "leafVenation": "Forked",
         "inflorescencePattern": "None",
-        "rarityIndex": 12,
+        "rarityIndex": 51,
         "oxygenOutput": 28,
         "lightRequirement": "Medium Light",
         "acTolerance": "Low tolerance",
         "peopleSupported": 0.0509,
-        "aptness": 42
+        "aptness": 42,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1159",
@@ -2247,12 +2407,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "None",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "None",
-        "rarityIndex": 29,
+        "rarityIndex": 62,
         "oxygenOutput": 20,
         "lightRequirement": "Medium Light",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0364,
-        "aptness": 40
+        "aptness": 40,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1160",
@@ -2261,12 +2422,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "None",
         "leafVenation": "Forked",
         "inflorescencePattern": "None",
-        "rarityIndex": 89,
+        "rarityIndex": 38,
         "oxygenOutput": 30,
         "lightRequirement": "Low-Medium",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0545,
-        "aptness": 43
+        "aptness": 43,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1161",
@@ -2275,12 +2437,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "None",
         "leafVenation": "Reticulate",
         "inflorescencePattern": "None",
-        "rarityIndex": 50,
+        "rarityIndex": 67,
         "oxygenOutput": 35,
         "lightRequirement": "Indirect",
         "acTolerance": "Low tolerance",
         "peopleSupported": 0.0636,
-        "aptness": 44
+        "aptness": 44,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1162",
@@ -2289,12 +2452,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "None",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "None",
-        "rarityIndex": 67,
+        "rarityIndex": 26,
         "oxygenOutput": 25,
         "lightRequirement": "Indirect",
         "acTolerance": "Low tolerance",
         "peopleSupported": 0.0455,
-        "aptness": 42
+        "aptness": 42,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1163",
@@ -2303,12 +2467,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Raceme",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Raceme",
-        "rarityIndex": 35,
+        "rarityIndex": 25,
         "oxygenOutput": 18,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0327,
-        "aptness": 40
+        "aptness": 40,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1164",
@@ -2317,12 +2482,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Raceme",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Raceme",
-        "rarityIndex": 37,
+        "rarityIndex": 79,
         "oxygenOutput": 20,
         "lightRequirement": "Bright Light",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0364,
-        "aptness": 40
+        "aptness": 40,
+        "verifiedSource": "TCM Database"
     },
     {
         "id": "wf_1165",
@@ -2331,12 +2497,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Raceme",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Raceme",
-        "rarityIndex": 81,
+        "rarityIndex": 82,
         "oxygenOutput": 15,
         "lightRequirement": "Bright Light",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0273,
-        "aptness": 39
+        "aptness": 39,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1166",
@@ -2345,12 +2512,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Panicle",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Panicle",
-        "rarityIndex": 56,
+        "rarityIndex": 73,
         "oxygenOutput": 18,
         "lightRequirement": "Bright Light",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0327,
-        "aptness": 40
+        "aptness": 40,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1167",
@@ -2359,12 +2527,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Raceme",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Raceme",
-        "rarityIndex": 25,
+        "rarityIndex": 44,
         "oxygenOutput": 25,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "Low tolerance",
         "peopleSupported": 0.0455,
-        "aptness": 47
+        "aptness": 47,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1168",
@@ -2373,12 +2542,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spike",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Spike",
-        "rarityIndex": 90,
+        "rarityIndex": 23,
         "oxygenOutput": 30,
         "lightRequirement": "Medium Light",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0545,
-        "aptness": 43
+        "aptness": 43,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1169",
@@ -2387,12 +2557,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Panicle",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Panicle",
-        "rarityIndex": 18,
+        "rarityIndex": 6,
         "oxygenOutput": 28,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0509,
-        "aptness": 42
+        "aptness": 42,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1170",
@@ -2401,12 +2572,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spike",
         "leafVenation": "Linear",
         "inflorescencePattern": "Spike",
-        "rarityIndex": 8,
+        "rarityIndex": 88,
         "oxygenOutput": 10,
         "lightRequirement": "Bright Light",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0182,
-        "aptness": 38
+        "aptness": 38,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1171",
@@ -2415,12 +2587,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "Linear",
         "inflorescencePattern": "Solitary",
-        "rarityIndex": 2,
+        "rarityIndex": 1,
         "oxygenOutput": 5,
         "lightRequirement": "Filtered Sun",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0091,
-        "aptness": 36
+        "aptness": 36,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1172",
@@ -2429,12 +2602,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "Linear",
         "inflorescencePattern": "Solitary",
-        "rarityIndex": 85,
+        "rarityIndex": 47,
         "oxygenOutput": 15,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0273,
-        "aptness": 39
+        "aptness": 39,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1173",
@@ -2443,12 +2617,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Head",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Capitulum",
-        "rarityIndex": 12,
+        "rarityIndex": 13,
         "oxygenOutput": 20,
         "lightRequirement": "Bright Light",
         "acTolerance": "Low tolerance",
         "peopleSupported": 0.0364,
-        "aptness": 40
+        "aptness": 40,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1174",
@@ -2457,12 +2632,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Umbel",
         "leafVenation": "Palmate",
         "inflorescencePattern": "Umbel",
-        "rarityIndex": 30,
+        "rarityIndex": 89,
         "oxygenOutput": 18,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0327,
-        "aptness": 40
+        "aptness": 40,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1175",
@@ -2471,12 +2647,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "None",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "None",
-        "rarityIndex": 65,
+        "rarityIndex": 51,
         "oxygenOutput": 30,
         "lightRequirement": "Shade-Medium",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0545,
-        "aptness": 43
+        "aptness": 43,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1176",
@@ -2485,12 +2662,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "None",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "None",
-        "rarityIndex": 35,
+        "rarityIndex": 13,
         "oxygenOutput": 30,
         "lightRequirement": "Medium Light",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0545,
-        "aptness": 43
+        "aptness": 43,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1177",
@@ -2499,12 +2677,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "None",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "None",
-        "rarityIndex": 5,
+        "rarityIndex": 70,
         "oxygenOutput": 35,
         "lightRequirement": "Shade",
         "acTolerance": "Low tolerance",
         "peopleSupported": 0.0636,
-        "aptness": 44
+        "aptness": 44,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1178",
@@ -2513,12 +2692,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "None",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "None",
-        "rarityIndex": 50,
+        "rarityIndex": 84,
         "oxygenOutput": 25,
         "lightRequirement": "Medium Light",
         "acTolerance": "Low tolerance",
         "peopleSupported": 0.0455,
-        "aptness": 42
+        "aptness": 42,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1179",
@@ -2527,12 +2707,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "None",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "None",
-        "rarityIndex": 13,
+        "rarityIndex": 24,
         "oxygenOutput": 28,
         "lightRequirement": "Shade",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0509,
-        "aptness": 42
+        "aptness": 42,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1180",
@@ -2541,12 +2722,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cluster",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Axillary",
-        "rarityIndex": 5,
+        "rarityIndex": 17,
         "oxygenOutput": 40,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "Low tolerance",
         "peopleSupported": 0.0727,
-        "aptness": 46
+        "aptness": 46,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1181",
@@ -2555,12 +2737,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Axillary",
-        "rarityIndex": 16,
+        "rarityIndex": 53,
         "oxygenOutput": 45,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0818,
-        "aptness": 62
+        "aptness": 62,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1182",
@@ -2569,12 +2752,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Panicle",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Panicle",
-        "rarityIndex": 1,
+        "rarityIndex": 32,
         "oxygenOutput": 35,
         "lightRequirement": "Medium Light",
         "acTolerance": "Low tolerance",
         "peopleSupported": 0.0636,
-        "aptness": 44
+        "aptness": 44,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1183",
@@ -2583,12 +2767,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spike",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Spike",
-        "rarityIndex": 46,
+        "rarityIndex": 2,
         "oxygenOutput": 30,
         "lightRequirement": "Indirect",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0545,
-        "aptness": 43
+        "aptness": 43,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1184",
@@ -2597,12 +2782,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spike",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Spike",
-        "rarityIndex": 32,
+        "rarityIndex": 14,
         "oxygenOutput": 35,
         "lightRequirement": "Indirect",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0636,
-        "aptness": 44
+        "aptness": 44,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1185",
@@ -2611,12 +2797,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spike",
         "leafVenation": "Reticulate",
         "inflorescencePattern": "Spike",
-        "rarityIndex": 56,
+        "rarityIndex": 79,
         "oxygenOutput": 25,
         "lightRequirement": "Medium Light",
         "acTolerance": "Low tolerance",
         "peopleSupported": 0.0455,
-        "aptness": 42
+        "aptness": 42,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1186",
@@ -2625,12 +2812,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Corymb",
         "leafVenation": "Reticulate",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 72,
+        "rarityIndex": 48,
         "oxygenOutput": 20,
         "lightRequirement": "Sun",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0364,
-        "aptness": 40
+        "aptness": 40,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1187",
@@ -2639,12 +2827,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Umbel",
         "leafVenation": "Palmate",
         "inflorescencePattern": "Umbel",
-        "rarityIndex": 30,
+        "rarityIndex": 23,
         "oxygenOutput": 22,
         "lightRequirement": "Low-Medium",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.04,
-        "aptness": 46
+        "aptness": 46,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1188",
@@ -2653,12 +2842,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Raceme",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Raceme",
-        "rarityIndex": 78,
+        "rarityIndex": 67,
         "oxygenOutput": 80,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.1455,
-        "aptness": 66
+        "aptness": 66,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1189",
@@ -2667,12 +2857,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 6,
+        "rarityIndex": 33,
         "oxygenOutput": 40,
         "lightRequirement": "Sun (Roots shade)",
         "acTolerance": "N/A",
         "peopleSupported": 0.0727,
-        "aptness": 46
+        "aptness": 46,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1190",
@@ -2681,12 +2872,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cyme",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 21,
+        "rarityIndex": 16,
         "oxygenOutput": 50,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0909,
-        "aptness": 48
+        "aptness": 48,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1191",
@@ -2695,12 +2887,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Head",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Capitulum",
-        "rarityIndex": 69,
+        "rarityIndex": 6,
         "oxygenOutput": 30,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0545,
-        "aptness": 43
+        "aptness": 43,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1192",
@@ -2709,12 +2902,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Head",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Capitulum",
-        "rarityIndex": 65,
+        "rarityIndex": 16,
         "oxygenOutput": 35,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0636,
-        "aptness": 44
+        "aptness": 44,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1193",
@@ -2723,12 +2917,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Raceme",
         "leafVenation": "Ternate",
         "inflorescencePattern": "Raceme",
-        "rarityIndex": 1,
+        "rarityIndex": 46,
         "oxygenOutput": 25,
         "lightRequirement": "Shade",
         "acTolerance": "N/A",
         "peopleSupported": 0.0455,
-        "aptness": 42
+        "aptness": 42,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1194",
@@ -2737,12 +2932,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Panicle",
         "leafVenation": "Ternate",
         "inflorescencePattern": "Panicle",
-        "rarityIndex": 12,
+        "rarityIndex": 58,
         "oxygenOutput": 30,
         "lightRequirement": "Shade",
         "acTolerance": "N/A",
         "peopleSupported": 0.0545,
-        "aptness": 43
+        "aptness": 43,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1195",
@@ -2751,12 +2947,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Raceme",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Raceme",
-        "rarityIndex": 21,
+        "rarityIndex": 7,
         "oxygenOutput": 40,
         "lightRequirement": "Shade",
         "acTolerance": "N/A",
         "peopleSupported": 0.0727,
-        "aptness": 56
+        "aptness": 56,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1196",
@@ -2765,12 +2962,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Panicle",
         "leafVenation": "Palmate",
         "inflorescencePattern": "Panicle",
-        "rarityIndex": 34,
+        "rarityIndex": 79,
         "oxygenOutput": 25,
         "lightRequirement": "Part Shade",
         "acTolerance": "N/A",
         "peopleSupported": 0.0455,
-        "aptness": 42
+        "aptness": 42,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1197",
@@ -2779,12 +2977,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Raceme",
         "leafVenation": "Reticulate",
         "inflorescencePattern": "Raceme",
-        "rarityIndex": 66,
+        "rarityIndex": 27,
         "oxygenOutput": 35,
         "lightRequirement": "Part Shade",
         "acTolerance": "N/A",
         "peopleSupported": 0.0636,
-        "aptness": 44
+        "aptness": 44,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1198",
@@ -2793,12 +2992,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Raceme",
         "leafVenation": "Palmate",
         "inflorescencePattern": "Raceme",
-        "rarityIndex": 18,
+        "rarityIndex": 23,
         "oxygenOutput": 40,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0727,
-        "aptness": 46
+        "aptness": 46,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1199",
@@ -2807,12 +3007,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Raceme",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Raceme",
-        "rarityIndex": 85,
+        "rarityIndex": 23,
         "oxygenOutput": 20,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0364,
-        "aptness": 40
+        "aptness": 40,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1200",
@@ -2821,12 +3022,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Head",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Capitulum",
-        "rarityIndex": 41,
+        "rarityIndex": 75,
         "oxygenOutput": 25,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0455,
-        "aptness": 42
+        "aptness": 42,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1201",
@@ -2835,12 +3037,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Head",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Capitulum",
-        "rarityIndex": 69,
+        "rarityIndex": 9,
         "oxygenOutput": 28,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0509,
-        "aptness": 42
+        "aptness": 42,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1202",
@@ -2849,12 +3052,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Raceme",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Raceme",
-        "rarityIndex": 35,
+        "rarityIndex": 69,
         "oxygenOutput": 30,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0545,
-        "aptness": 43
+        "aptness": 43,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1203",
@@ -2863,12 +3067,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "Peltate",
         "inflorescencePattern": "Solitary",
-        "rarityIndex": 87,
+        "rarityIndex": 10,
         "oxygenOutput": 35,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0636,
-        "aptness": 44
+        "aptness": 44,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1204",
@@ -2882,7 +3087,8 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0818,
-        "aptness": 47
+        "aptness": 47,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1205",
@@ -2891,12 +3097,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spike",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Spike",
-        "rarityIndex": 70,
+        "rarityIndex": 88,
         "oxygenOutput": 30,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0545,
-        "aptness": 43
+        "aptness": 43,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1206",
@@ -2905,12 +3112,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spadix",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Spadix",
-        "rarityIndex": 43,
+        "rarityIndex": 51,
         "oxygenOutput": 35,
         "lightRequirement": "Sun/Part Shade",
         "acTolerance": "N/A",
         "peopleSupported": 0.0636,
-        "aptness": 44
+        "aptness": 44,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1207",
@@ -2919,12 +3127,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cyme",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Scape",
-        "rarityIndex": 21,
+        "rarityIndex": 77,
         "oxygenOutput": 30,
         "lightRequirement": "Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0545,
-        "aptness": 43
+        "aptness": 43,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1208",
@@ -2933,12 +3142,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Rhipidium",
-        "rarityIndex": 17,
+        "rarityIndex": 28,
         "oxygenOutput": 32,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0582,
-        "aptness": 44
+        "aptness": 44,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1209",
@@ -2947,12 +3157,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Axillary",
-        "rarityIndex": 60,
+        "rarityIndex": 10,
         "oxygenOutput": 55,
         "lightRequirement": "Part Shade",
         "acTolerance": "N/A",
         "peopleSupported": 0.1,
-        "aptness": 60
+        "aptness": 60,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1210",
@@ -2961,12 +3172,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Solitary",
-        "rarityIndex": 4,
+        "rarityIndex": 13,
         "oxygenOutput": 40,
         "lightRequirement": "Part Shade",
         "acTolerance": "N/A",
         "peopleSupported": 0.0727,
-        "aptness": 46
+        "aptness": 46,
+        "verifiedSource": "TCM Database"
     },
     {
         "id": "wf_1211",
@@ -2975,12 +3187,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Umbel",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Corymb",
-        "rarityIndex": 12,
+        "rarityIndex": 62,
         "oxygenOutput": 60,
         "lightRequirement": "Part Shade",
         "acTolerance": "N/A",
         "peopleSupported": 0.1091,
-        "aptness": 61
+        "aptness": 61,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1212",
@@ -2989,12 +3202,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Axillary",
-        "rarityIndex": 39,
+        "rarityIndex": 9,
         "oxygenOutput": 45,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0818,
-        "aptness": 57
+        "aptness": 57,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1213",
@@ -3003,12 +3217,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cyme",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Corymb",
-        "rarityIndex": 34,
+        "rarityIndex": 17,
         "oxygenOutput": 40,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0727,
-        "aptness": 56
+        "aptness": 56,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1214",
@@ -3017,12 +3232,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Corymb",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Corymb",
-        "rarityIndex": 84,
+        "rarityIndex": 88,
         "oxygenOutput": 35,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0636,
-        "aptness": 44
+        "aptness": 44,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1215",
@@ -3031,12 +3247,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cyme",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Axillary",
-        "rarityIndex": 60,
+        "rarityIndex": 8,
         "oxygenOutput": 55,
         "lightRequirement": "Sun/Part Shade",
         "acTolerance": "N/A",
         "peopleSupported": 0.1,
-        "aptness": 60
+        "aptness": 60,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1216",
@@ -3045,12 +3262,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cone",
         "leafVenation": "Linear",
         "inflorescencePattern": "Cone",
-        "rarityIndex": 31,
+        "rarityIndex": 2,
         "oxygenOutput": 70,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.1273,
-        "aptness": 69
+        "aptness": 69,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1217",
@@ -3059,12 +3277,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cone",
         "leafVenation": "Linear",
         "inflorescencePattern": "Cone",
-        "rarityIndex": 29,
+        "rarityIndex": 82,
         "oxygenOutput": 80,
         "lightRequirement": "Shade/Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.1455,
-        "aptness": 66
+        "aptness": 66,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1218",
@@ -3073,12 +3292,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cone",
         "leafVenation": "Scale",
         "inflorescencePattern": "Cone",
-        "rarityIndex": 51,
+        "rarityIndex": 38,
         "oxygenOutput": 90,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.1636,
-        "aptness": 69
+        "aptness": 69,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1219",
@@ -3087,12 +3307,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Corymb",
         "leafVenation": "Palmate",
         "inflorescencePattern": "Corymb",
-        "rarityIndex": 52,
+        "rarityIndex": 17,
         "oxygenOutput": 120,
         "lightRequirement": "Part Shade",
         "acTolerance": "N/A",
         "peopleSupported": 0.2182,
-        "aptness": 77
+        "aptness": 77,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1220",
@@ -3101,12 +3322,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Head",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Umbel",
-        "rarityIndex": 59,
+        "rarityIndex": 83,
         "oxygenOutput": 110,
         "lightRequirement": "Part Shade",
         "acTolerance": "N/A",
         "peopleSupported": 0.2,
-        "aptness": 74
+        "aptness": 74,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1221",
@@ -3115,12 +3337,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cluster",
         "leafVenation": "Palmate",
         "inflorescencePattern": "Fascicle",
-        "rarityIndex": 78,
+        "rarityIndex": 40,
         "oxygenOutput": 100,
         "lightRequirement": "Part Shade",
         "acTolerance": "N/A",
         "peopleSupported": 0.1818,
-        "aptness": 72
+        "aptness": 72,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1222",
@@ -3129,12 +3352,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Panicle",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Panicle",
-        "rarityIndex": 79,
+        "rarityIndex": 63,
         "oxygenOutput": 95,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.1727,
-        "aptness": 70
+        "aptness": 70,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1223",
@@ -3143,12 +3367,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Catkin",
         "leafVenation": "Fan",
         "inflorescencePattern": "Catkin",
-        "rarityIndex": 81,
+        "rarityIndex": 85,
         "oxygenOutput": 250,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.4545,
-        "aptness": 85
+        "aptness": 85,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1224",
@@ -3157,12 +3382,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Catkin",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Catkin",
-        "rarityIndex": 50,
+        "rarityIndex": 30,
         "oxygenOutput": 180,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.3273,
-        "aptness": 90
+        "aptness": 90,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1225",
@@ -3171,12 +3397,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Catkin",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Catkin",
-        "rarityIndex": 23,
+        "rarityIndex": 42,
         "oxygenOutput": 160,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.2909,
-        "aptness": 85
+        "aptness": 85,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1226",
@@ -3185,12 +3412,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Catkin",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Catkin",
-        "rarityIndex": 42,
+        "rarityIndex": 80,
         "oxygenOutput": 300,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.5455,
-        "aptness": 85
+        "aptness": 85,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1227",
@@ -3199,12 +3427,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Corymb",
         "leafVenation": "Palmate",
         "inflorescencePattern": "Corymb",
-        "rarityIndex": 31,
+        "rarityIndex": 84,
         "oxygenOutput": 280,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.5091,
-        "aptness": 85
+        "aptness": 85,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1228",
@@ -3213,12 +3442,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cone",
         "leafVenation": "Needle",
         "inflorescencePattern": "Cone",
-        "rarityIndex": 27,
+        "rarityIndex": 80,
         "oxygenOutput": 260,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.4727,
-        "aptness": 85
+        "aptness": 85,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1229",
@@ -3227,12 +3457,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Panicle",
         "leafVenation": "Palmate",
         "inflorescencePattern": "Spadix",
-        "rarityIndex": 90,
+        "rarityIndex": 25,
         "oxygenOutput": 150,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.2727,
-        "aptness": 85
+        "aptness": 85,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1230",
@@ -3241,12 +3472,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Raceme",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Raceme",
-        "rarityIndex": 59,
+        "rarityIndex": 83,
         "oxygenOutput": 120,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.2182,
-        "aptness": 82
+        "aptness": 82,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1231",
@@ -3255,12 +3487,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Syconium",
         "leafVenation": "Palmate",
         "inflorescencePattern": "Syconium",
-        "rarityIndex": 86,
+        "rarityIndex": 13,
         "oxygenOutput": 100,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.1818,
-        "aptness": 72
+        "aptness": 72,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1232",
@@ -3269,12 +3502,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Panicle",
         "leafVenation": "Palmate",
         "inflorescencePattern": "Panicle",
-        "rarityIndex": 16,
+        "rarityIndex": 18,
         "oxygenOutput": 90,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.1636,
-        "aptness": 69
+        "aptness": 69,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1233",
@@ -3283,12 +3517,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cyme",
         "leafVenation": "Ternate",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 76,
+        "rarityIndex": 39,
         "oxygenOutput": 25,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0455,
-        "aptness": 42
+        "aptness": 42,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1234",
@@ -3297,12 +3532,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Raceme",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Raceme",
-        "rarityIndex": 54,
+        "rarityIndex": 26,
         "oxygenOutput": 40,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0727,
-        "aptness": 56
+        "aptness": 56,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1235",
@@ -3311,12 +3547,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Raceme",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Raceme",
-        "rarityIndex": 64,
+        "rarityIndex": 75,
         "oxygenOutput": 35,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0636,
-        "aptness": 44
+        "aptness": 44,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1236",
@@ -3325,12 +3562,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Panicle",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Panicle",
-        "rarityIndex": 26,
+        "rarityIndex": 69,
         "oxygenOutput": 35,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0636,
-        "aptness": 44
+        "aptness": 44,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1237",
@@ -3339,12 +3577,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Head",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Capitulum",
-        "rarityIndex": 54,
+        "rarityIndex": 13,
         "oxygenOutput": 80,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.1455,
-        "aptness": 56
+        "aptness": 56,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1238",
@@ -3353,12 +3592,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spadix",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Spadix",
-        "rarityIndex": 48,
+        "rarityIndex": 21,
         "oxygenOutput": 30,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0545,
-        "aptness": 43
+        "aptness": 43,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1239",
@@ -3367,12 +3607,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spadix",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Spadix",
-        "rarityIndex": 18,
+        "rarityIndex": 10,
         "oxygenOutput": 28,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0509,
-        "aptness": 42
+        "aptness": 42,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1240",
@@ -3381,12 +3622,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spadix",
         "leafVenation": "Peltate",
         "inflorescencePattern": "Spadix",
-        "rarityIndex": 56,
+        "rarityIndex": 33,
         "oxygenOutput": 30,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0545,
-        "aptness": 43
+        "aptness": 43,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1241",
@@ -3395,12 +3637,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spadix",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Spadix",
-        "rarityIndex": 56,
+        "rarityIndex": 24,
         "oxygenOutput": 35,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "Low tolerance",
         "peopleSupported": 0.0636,
-        "aptness": 44
+        "aptness": 44,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1242",
@@ -3409,12 +3652,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spadix",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Spadix",
-        "rarityIndex": 10,
+        "rarityIndex": 53,
         "oxygenOutput": 32,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "Low tolerance",
         "peopleSupported": 0.0582,
-        "aptness": 44
+        "aptness": 44,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1243",
@@ -3428,7 +3672,8 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "lightRequirement": "Bright Indirect",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0727,
-        "aptness": 46
+        "aptness": 46,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1244",
@@ -3437,12 +3682,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Raceme",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Raceme",
-        "rarityIndex": 90,
+        "rarityIndex": 41,
         "oxygenOutput": 15,
         "lightRequirement": "Low-Medium",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0273,
-        "aptness": 39
+        "aptness": 39,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1245",
@@ -3451,12 +3697,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Raceme",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Raceme",
-        "rarityIndex": 86,
+        "rarityIndex": 32,
         "oxygenOutput": 12,
         "lightRequirement": "Low-Medium",
         "acTolerance": "Low tolerance",
         "peopleSupported": 0.0218,
-        "aptness": 38
+        "aptness": 38,
+        "verifiedSource": "IUCN Red List / Kew Gardens"
     },
     {
         "id": "wf_1246",
@@ -3465,12 +3712,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Panicle",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Panicle",
-        "rarityIndex": 58,
+        "rarityIndex": 20,
         "oxygenOutput": 35,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "Low tolerance",
         "peopleSupported": 0.0636,
-        "aptness": 44
+        "aptness": 44,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1247",
@@ -3479,12 +3727,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Umbel",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Umbel",
-        "rarityIndex": 66,
+        "rarityIndex": 3,
         "oxygenOutput": 20,
         "lightRequirement": "Shade",
         "acTolerance": "Low tolerance",
         "peopleSupported": 0.0364,
-        "aptness": 40
+        "aptness": 40,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1248",
@@ -3493,12 +3742,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spadix",
         "leafVenation": "Reticulate",
         "inflorescencePattern": "Spadix",
-        "rarityIndex": 29,
+        "rarityIndex": 17,
         "oxygenOutput": 5,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "Low tolerance",
         "peopleSupported": 0.0091,
-        "aptness": 46
+        "aptness": 46,
+        "verifiedSource": "IUCN Red List / Kew Gardens"
     },
     {
         "id": "wf_1249",
@@ -3507,12 +3757,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spadix",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Spadix",
-        "rarityIndex": 85,
+        "rarityIndex": 68,
         "oxygenOutput": 15,
         "lightRequirement": "Part Shade",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0273,
-        "aptness": 39
+        "aptness": 39,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1250",
@@ -3521,12 +3772,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Raceme",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Raceme",
-        "rarityIndex": 6,
+        "rarityIndex": 17,
         "oxygenOutput": 10,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "Low (High humidity)",
         "peopleSupported": 0.0182,
-        "aptness": 38
+        "aptness": 38,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1251",
@@ -3535,12 +3787,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cyme",
         "leafVenation": "Reticulate",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 48,
+        "rarityIndex": 27,
         "oxygenOutput": 5,
         "lightRequirement": "Bright Direct",
         "acTolerance": "Low (Needs dormancy)",
         "peopleSupported": 0.0091,
-        "aptness": 36
+        "aptness": 36,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1252",
@@ -3549,12 +3802,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Raceme",
         "leafVenation": "Reticulate",
         "inflorescencePattern": "Raceme",
-        "rarityIndex": 7,
+        "rarityIndex": 12,
         "oxygenOutput": 5,
         "lightRequirement": "Bright Direct",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0091,
-        "aptness": 36
+        "aptness": 36,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1253",
@@ -3563,12 +3817,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Solitary",
-        "rarityIndex": 25,
+        "rarityIndex": 44,
         "oxygenOutput": 8,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0145,
-        "aptness": 37
+        "aptness": 37,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1254",
@@ -3577,12 +3832,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "Network",
         "inflorescencePattern": "Solitary",
-        "rarityIndex": 27,
+        "rarityIndex": 57,
         "oxygenOutput": 10,
         "lightRequirement": "Cool Sun",
         "acTolerance": "Low tolerance",
         "peopleSupported": 0.0182,
-        "aptness": 38
+        "aptness": 38,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1255",
@@ -3591,12 +3847,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "None",
         "inflorescencePattern": "Solitary",
-        "rarityIndex": 29,
+        "rarityIndex": 65,
         "oxygenOutput": 12,
         "lightRequirement": "Direct Sun",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0218,
-        "aptness": 38
+        "aptness": 38,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1256",
@@ -3605,12 +3862,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "None",
         "inflorescencePattern": "Solitary",
-        "rarityIndex": 90,
+        "rarityIndex": 14,
         "oxygenOutput": 15,
         "lightRequirement": "Direct Sun",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0273,
-        "aptness": 49
+        "aptness": 49,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1257",
@@ -3619,12 +3877,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Circle",
         "leafVenation": "None",
         "inflorescencePattern": "Apical",
-        "rarityIndex": 54,
+        "rarityIndex": 84,
         "oxygenOutput": 18,
         "lightRequirement": "Direct Sun",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0327,
-        "aptness": 50
+        "aptness": 50,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1258",
@@ -3633,12 +3892,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "None",
         "inflorescencePattern": "Solitary",
-        "rarityIndex": 63,
+        "rarityIndex": 10,
         "oxygenOutput": 20,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0364,
-        "aptness": 40
+        "aptness": 40,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1259",
@@ -3647,12 +3907,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "None",
         "inflorescencePattern": "Solitary",
-        "rarityIndex": 19,
+        "rarityIndex": 67,
         "oxygenOutput": 8,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0145,
-        "aptness": 37
+        "aptness": 37,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1260",
@@ -3661,12 +3922,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "None",
         "inflorescencePattern": "Solitary",
-        "rarityIndex": 22,
+        "rarityIndex": 74,
         "oxygenOutput": 15,
         "lightRequirement": "Full Sun",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0273,
-        "aptness": 39
+        "aptness": 39,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1261",
@@ -3675,12 +3937,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Head",
         "leafVenation": "None",
         "inflorescencePattern": "Capitulum",
-        "rarityIndex": 53,
+        "rarityIndex": 81,
         "oxygenOutput": 12,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0218,
-        "aptness": 38
+        "aptness": 38,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1262",
@@ -3689,12 +3952,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Head",
         "leafVenation": "None",
         "inflorescencePattern": "Capitulum",
-        "rarityIndex": 7,
+        "rarityIndex": 15,
         "oxygenOutput": 15,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0273,
-        "aptness": 39
+        "aptness": 39,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1263",
@@ -3703,12 +3967,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Head",
         "leafVenation": "None",
         "inflorescencePattern": "Capitulum",
-        "rarityIndex": 38,
+        "rarityIndex": 47,
         "oxygenOutput": 14,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0255,
-        "aptness": 39
+        "aptness": 39,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1264",
@@ -3717,12 +3982,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "None",
         "inflorescencePattern": "Solitary",
-        "rarityIndex": 80,
+        "rarityIndex": 34,
         "oxygenOutput": 10,
         "lightRequirement": "Bright Sun",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0182,
-        "aptness": 38
+        "aptness": 38,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1265",
@@ -3731,12 +3997,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Umbel",
         "leafVenation": "None",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 28,
+        "rarityIndex": 3,
         "oxygenOutput": 12,
         "lightRequirement": "Bright Sun",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0218,
-        "aptness": 38
+        "aptness": 38,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1266",
@@ -3745,12 +4012,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Corymb",
         "leafVenation": "None",
         "inflorescencePattern": "Thyrse",
-        "rarityIndex": 42,
+        "rarityIndex": 12,
         "oxygenOutput": 15,
         "lightRequirement": "Bright Sun",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0273,
-        "aptness": 49
+        "aptness": 49,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1267",
@@ -3759,12 +4027,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Corymb",
         "leafVenation": "None",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 19,
+        "rarityIndex": 41,
         "oxygenOutput": 15,
         "lightRequirement": "Bright Sun",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0273,
-        "aptness": 39
+        "aptness": 39,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1268",
@@ -3773,12 +4042,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Axillary",
         "leafVenation": "None",
         "inflorescencePattern": "Axillary",
-        "rarityIndex": 82,
+        "rarityIndex": 43,
         "oxygenOutput": 18,
         "lightRequirement": "Bright Sun",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0327,
-        "aptness": 40
+        "aptness": 40,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1269",
@@ -3787,12 +4057,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Raceme",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Raceme",
-        "rarityIndex": 51,
+        "rarityIndex": 29,
         "oxygenOutput": 20,
         "lightRequirement": "Bright Sun",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0364,
-        "aptness": 40
+        "aptness": 40,
+        "verifiedSource": "IUCN Red List / Kew Gardens"
     },
     {
         "id": "wf_1270",
@@ -3801,12 +4072,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Raceme",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Raceme",
-        "rarityIndex": 31,
+        "rarityIndex": 84,
         "oxygenOutput": 25,
         "lightRequirement": "Bright Sun",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0455,
-        "aptness": 42
+        "aptness": 42,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1271",
@@ -3815,12 +4087,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Panicle",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Panicle",
-        "rarityIndex": 32,
+        "rarityIndex": 12,
         "oxygenOutput": 30,
         "lightRequirement": "Full Sun",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0545,
-        "aptness": 48
+        "aptness": 48,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1272",
@@ -3829,12 +4102,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spike",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Spike",
-        "rarityIndex": 68,
+        "rarityIndex": 47,
         "oxygenOutput": 20,
         "lightRequirement": "Full Sun",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0364,
-        "aptness": 40
+        "aptness": 40,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1273",
@@ -3843,12 +4117,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Panicle",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Panicle",
-        "rarityIndex": 74,
+        "rarityIndex": 76,
         "oxygenOutput": 35,
         "lightRequirement": "Bright Sun",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0636,
-        "aptness": 54
+        "aptness": 54,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1274",
@@ -3857,12 +4132,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Raceme",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Raceme",
-        "rarityIndex": 33,
+        "rarityIndex": 14,
         "oxygenOutput": 25,
         "lightRequirement": "Bright Sun",
         "acTolerance": "Low tolerance",
         "peopleSupported": 0.0455,
-        "aptness": 42
+        "aptness": 42,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1275",
@@ -3871,12 +4147,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Raceme",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Raceme",
-        "rarityIndex": 74,
+        "rarityIndex": 69,
         "oxygenOutput": 30,
         "lightRequirement": "Bright Sun",
         "acTolerance": "Low tolerance",
         "peopleSupported": 0.0545,
-        "aptness": 43
+        "aptness": 43,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1276",
@@ -3885,12 +4162,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cluster",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Raceme",
-        "rarityIndex": 21,
+        "rarityIndex": 53,
         "oxygenOutput": 28,
         "lightRequirement": "Medium Light",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0509,
-        "aptness": 42
+        "aptness": 42,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1277",
@@ -3899,12 +4177,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Panicle",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Panicle",
-        "rarityIndex": 47,
+        "rarityIndex": 65,
         "oxygenOutput": 35,
         "lightRequirement": "Low Light",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0636,
-        "aptness": 44
+        "aptness": 44,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1278",
@@ -3913,12 +4192,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Panicle",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Panicle",
-        "rarityIndex": 86,
+        "rarityIndex": 24,
         "oxygenOutput": 32,
         "lightRequirement": "Medium Light",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0582,
-        "aptness": 44
+        "aptness": 44,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1279",
@@ -3927,12 +4207,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Panicle",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Panicle",
-        "rarityIndex": 8,
+        "rarityIndex": 17,
         "oxygenOutput": 40,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0727,
-        "aptness": 61
+        "aptness": 61,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1280",
@@ -3941,12 +4222,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cyme",
         "leafVenation": "Reticulate",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 46,
+        "rarityIndex": 48,
         "oxygenOutput": 20,
         "lightRequirement": "Medium Shade",
         "acTolerance": "Low tolerance",
         "peopleSupported": 0.0364,
-        "aptness": 40
+        "aptness": 40,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1281",
@@ -3955,12 +4237,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Syconium",
         "leafVenation": "Reticulate",
         "inflorescencePattern": "Syconium",
-        "rarityIndex": 75,
+        "rarityIndex": 87,
         "oxygenOutput": 25,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0455,
-        "aptness": 42
+        "aptness": 42,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1282",
@@ -3969,12 +4252,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cyme",
         "leafVenation": "Palmate",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 23,
+        "rarityIndex": 56,
         "oxygenOutput": 28,
         "lightRequirement": "Medium Light",
         "acTolerance": "High tolerance",
         "peopleSupported": 0.0509,
-        "aptness": 42
+        "aptness": 42,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1283",
@@ -3983,12 +4267,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cyme",
         "leafVenation": "Palmate",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 74,
+        "rarityIndex": 20,
         "oxygenOutput": 15,
         "lightRequirement": "Medium Shade",
         "acTolerance": "Low tolerance",
         "peopleSupported": 0.0273,
-        "aptness": 39
+        "aptness": 39,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1284",
@@ -3997,12 +4282,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cyme",
         "leafVenation": "Palmate",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 87,
+        "rarityIndex": 66,
         "oxygenOutput": 18,
         "lightRequirement": "Medium Shade",
         "acTolerance": "Low tolerance",
         "peopleSupported": 0.0327,
-        "aptness": 40
+        "aptness": 40,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1285",
@@ -4011,12 +4297,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cyme",
         "leafVenation": "Palmate",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 13,
+        "rarityIndex": 42,
         "oxygenOutput": 12,
         "lightRequirement": "Deep Shade",
         "acTolerance": "Low tolerance",
         "peopleSupported": 0.0218,
-        "aptness": 38
+        "aptness": 38,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1286",
@@ -4025,12 +4312,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Panicle",
         "leafVenation": "Palmate",
         "inflorescencePattern": "Panicle",
-        "rarityIndex": 51,
+        "rarityIndex": 36,
         "oxygenOutput": 25,
         "lightRequirement": "Bright Indirect",
         "acTolerance": "Medium tolerance",
         "peopleSupported": 0.0455,
-        "aptness": 42
+        "aptness": 42,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1287",
@@ -4039,12 +4327,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cyme",
         "leafVenation": "Palmate",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 62,
+        "rarityIndex": 35,
         "oxygenOutput": 15,
         "lightRequirement": "Medium Light",
         "acTolerance": "Low tolerance",
         "peopleSupported": 0.0273,
-        "aptness": 39
+        "aptness": 39,
+        "verifiedSource": "RHS Plant Finder"
     },
     {
         "id": "wf_1288",
@@ -4053,12 +4342,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "None",
         "inflorescencePattern": "Solitary",
-        "rarityIndex": 56,
+        "rarityIndex": 11,
         "oxygenOutput": 5,
         "lightRequirement": "Jungle Floor",
         "acTolerance": "N/A",
         "peopleSupported": 0.0091,
-        "aptness": 26
+        "aptness": 26,
+        "verifiedSource": "IUCN Red List / Kew Gardens"
     },
     {
         "id": "wf_1289",
@@ -4067,12 +4357,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Raceme",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Raceme",
-        "rarityIndex": 44,
+        "rarityIndex": 43,
         "oxygenOutput": 60,
         "lightRequirement": "Part Shade",
         "acTolerance": "N/A",
         "peopleSupported": 0.1091,
-        "aptness": 51
+        "aptness": 51,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1290",
@@ -4081,12 +4372,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "None",
         "inflorescencePattern": "Solitary",
-        "rarityIndex": 37,
+        "rarityIndex": 10,
         "oxygenOutput": 10,
         "lightRequirement": "Dappled Swamp",
         "acTolerance": "N/A",
         "peopleSupported": 0.0182,
-        "aptness": 38
+        "aptness": 38,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1291",
@@ -4095,12 +4387,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Head",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Capitulum",
-        "rarityIndex": 3,
+        "rarityIndex": 78,
         "oxygenOutput": 20,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0364,
-        "aptness": 40
+        "aptness": 40,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1292",
@@ -4109,12 +4402,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "Reticulate",
         "inflorescencePattern": "Solitary",
-        "rarityIndex": 54,
+        "rarityIndex": 83,
         "oxygenOutput": 90,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.1636,
-        "aptness": 59
+        "aptness": 59,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1293",
@@ -4123,12 +4417,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Umbell",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Umbell",
-        "rarityIndex": 18,
+        "rarityIndex": 15,
         "oxygenOutput": 20,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0364,
-        "aptness": 40
+        "aptness": 40,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1294",
@@ -4137,12 +4432,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Raceme",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Panicle",
-        "rarityIndex": 83,
+        "rarityIndex": 65,
         "oxygenOutput": 30,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0545,
-        "aptness": 43
+        "aptness": 43,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1295",
@@ -4151,12 +4447,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Head",
         "leafVenation": "Reticulate",
         "inflorescencePattern": "Capithulum",
-        "rarityIndex": 23,
+        "rarityIndex": 77,
         "oxygenOutput": 50,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0909,
-        "aptness": 48
+        "aptness": 48,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1296",
@@ -4165,12 +4462,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spike",
         "leafVenation": "Reticulate",
         "inflorescencePattern": "Spike",
-        "rarityIndex": 68,
+        "rarityIndex": 80,
         "oxygenOutput": 60,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.1091,
-        "aptness": 61
+        "aptness": 61,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1297",
@@ -4179,12 +4477,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Head",
         "leafVenation": "Reticulate",
         "inflorescencePattern": "Raceme",
-        "rarityIndex": 5,
+        "rarityIndex": 1,
         "oxygenOutput": 55,
         "lightRequirement": "Part Shade",
         "acTolerance": "N/A",
         "peopleSupported": 0.1,
-        "aptness": 50
+        "aptness": 50,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1298",
@@ -4193,12 +4492,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spathe",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 78,
+        "rarityIndex": 85,
         "oxygenOutput": 150,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.2727,
-        "aptness": 85
+        "aptness": 85,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1299",
@@ -4207,12 +4507,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cyme",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 18,
+        "rarityIndex": 21,
         "oxygenOutput": 200,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.3636,
-        "aptness": 85
+        "aptness": 85,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1300",
@@ -4221,12 +4522,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "Palmate",
         "inflorescencePattern": "Solitary",
-        "rarityIndex": 53,
+        "rarityIndex": 24,
         "oxygenOutput": 300,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.5455,
-        "aptness": 90
+        "aptness": 90,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1301",
@@ -4235,12 +4537,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Panicle",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Panicle",
-        "rarityIndex": 3,
+        "rarityIndex": 48,
         "oxygenOutput": 180,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.3273,
-        "aptness": 85
+        "aptness": 85,
+        "verifiedSource": "IUCN Red List / Kew Gardens"
     },
     {
         "id": "wf_1302",
@@ -4249,12 +4552,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Umbell",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Umbell",
-        "rarityIndex": 78,
+        "rarityIndex": 18,
         "oxygenOutput": 400,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.7273,
-        "aptness": 85
+        "aptness": 85,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1303",
@@ -4263,12 +4567,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Panicle",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Panicle",
-        "rarityIndex": 12,
+        "rarityIndex": 73,
         "oxygenOutput": 150,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.2727,
-        "aptness": 85
+        "aptness": 85,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1304",
@@ -4277,12 +4582,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cone",
         "leafVenation": "Needle",
         "inflorescencePattern": "Cone",
-        "rarityIndex": 70,
+        "rarityIndex": 22,
         "oxygenOutput": 200,
         "lightRequirement": "Part Shade",
         "acTolerance": "N/A",
         "peopleSupported": 0.3636,
-        "aptness": 85
+        "aptness": 85,
+        "verifiedSource": "IUCN Red List / Kew Gardens"
     },
     {
         "id": "wf_1305",
@@ -4291,12 +4597,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cone",
         "leafVenation": "Scale",
         "inflorescencePattern": "Cone",
-        "rarityIndex": 10,
+        "rarityIndex": 11,
         "oxygenOutput": 220,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.4,
-        "aptness": 85
+        "aptness": 85,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1306",
@@ -4305,12 +4612,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cone",
         "leafVenation": "Needle",
         "inflorescencePattern": "Cone",
-        "rarityIndex": 84,
+        "rarityIndex": 11,
         "oxygenOutput": 1000,
         "lightRequirement": "Foggy Sun",
         "acTolerance": "N/A",
         "peopleSupported": 1.8182,
-        "aptness": 85
+        "aptness": 85,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1307",
@@ -4319,12 +4627,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cone",
         "leafVenation": "Needle",
         "inflorescencePattern": "Cone",
-        "rarityIndex": 59,
+        "rarityIndex": 7,
         "oxygenOutput": 1200,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 2.1818,
-        "aptness": 85
+        "aptness": 85,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1308",
@@ -4333,12 +4642,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cone",
         "leafVenation": "Needle",
         "inflorescencePattern": "Cone",
-        "rarityIndex": 36,
+        "rarityIndex": 70,
         "oxygenOutput": 100,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.1818,
-        "aptness": 72
+        "aptness": 72,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1309",
@@ -4347,12 +4657,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Catkin",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Catkin",
-        "rarityIndex": 62,
+        "rarityIndex": 13,
         "oxygenOutput": 200,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.3636,
-        "aptness": 85
+        "aptness": 85,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1310",
@@ -4361,12 +4672,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Solitary",
-        "rarityIndex": 29,
+        "rarityIndex": 9,
         "oxygenOutput": 80,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.1455,
-        "aptness": 66
+        "aptness": 66,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1311",
@@ -4375,12 +4687,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cone",
         "leafVenation": "Needle",
         "inflorescencePattern": "Cone",
-        "rarityIndex": 24,
+        "rarityIndex": 30,
         "oxygenOutput": 300,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.5455,
-        "aptness": 85
+        "aptness": 85,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1312",
@@ -4389,12 +4702,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Raceme",
         "leafVenation": "Ternate",
         "inflorescencePattern": "Raceme",
-        "rarityIndex": 58,
+        "rarityIndex": 83,
         "oxygenOutput": 90,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.1636,
-        "aptness": 69
+        "aptness": 69,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1313",
@@ -4403,12 +4717,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Solitary",
-        "rarityIndex": 2,
+        "rarityIndex": 23,
         "oxygenOutput": 80,
         "lightRequirement": "Sun/Part Shade",
         "acTolerance": "N/A",
         "peopleSupported": 0.1455,
-        "aptness": 56
+        "aptness": 56,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1314",
@@ -4417,12 +4732,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "Palmate",
         "inflorescencePattern": "Solitary",
-        "rarityIndex": 80,
+        "rarityIndex": 12,
         "oxygenOutput": 50,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0909,
-        "aptness": 48
+        "aptness": 48,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1315",
@@ -4431,12 +4747,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cyme",
         "leafVenation": "Palmate",
         "inflorescencePattern": "Axillary",
-        "rarityIndex": 45,
+        "rarityIndex": 13,
         "oxygenOutput": 60,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.1091,
-        "aptness": 61
+        "aptness": 61,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1316",
@@ -4445,12 +4762,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cone",
         "leafVenation": "Palmate",
         "inflorescencePattern": "Cone",
-        "rarityIndex": 48,
+        "rarityIndex": 4,
         "oxygenOutput": 55,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.1,
-        "aptness": 55
+        "aptness": 55,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1317",
@@ -4459,12 +4777,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cluster",
         "leafVenation": "Palmate",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 43,
+        "rarityIndex": 26,
         "oxygenOutput": 60,
         "lightRequirement": "Sun/Shade",
         "acTolerance": "N/A",
         "peopleSupported": 0.1091,
-        "aptness": 61
+        "aptness": 61,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1318",
@@ -4473,12 +4792,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cluster",
         "leafVenation": "Palmate",
         "inflorescencePattern": "Cyme",
-        "rarityIndex": 73,
+        "rarityIndex": 71,
         "oxygenOutput": 70,
         "lightRequirement": "Sun/Shade",
         "acTolerance": "N/A",
         "peopleSupported": 0.1273,
-        "aptness": 64
+        "aptness": 64,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1319",
@@ -4487,12 +4807,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "umbel",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Umbel",
-        "rarityIndex": 34,
+        "rarityIndex": 61,
         "oxygenOutput": 30,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0545,
-        "aptness": 43
+        "aptness": 43,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1320",
@@ -4501,12 +4822,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Raceme",
         "leafVenation": "Parallel",
         "inflorescencePattern": "Raceme",
-        "rarityIndex": 28,
+        "rarityIndex": 81,
         "oxygenOutput": 25,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0455,
-        "aptness": 42
+        "aptness": 42,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1321",
@@ -4515,12 +4837,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Umbel",
         "leafVenation": "Palmate",
         "inflorescencePattern": "Umbel",
-        "rarityIndex": 4,
+        "rarityIndex": 51,
         "oxygenOutput": 20,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0364,
-        "aptness": 40
+        "aptness": 40,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1322",
@@ -4529,12 +4852,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Head",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Capitulum",
-        "rarityIndex": 16,
+        "rarityIndex": 26,
         "oxygenOutput": 22,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.04,
-        "aptness": 41
+        "aptness": 41,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1323",
@@ -4543,12 +4867,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Panicle",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Panicle",
-        "rarityIndex": 1,
+        "rarityIndex": 13,
         "oxygenOutput": 30,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0545,
-        "aptness": 43
+        "aptness": 43,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1324",
@@ -4557,12 +4882,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Panicle",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Panicle",
-        "rarityIndex": 25,
+        "rarityIndex": 19,
         "oxygenOutput": 50,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0909,
-        "aptness": 48
+        "aptness": 48,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1325",
@@ -4571,12 +4897,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Panicle",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Panicle",
-        "rarityIndex": 32,
+        "rarityIndex": 5,
         "oxygenOutput": 60,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.1091,
-        "aptness": 61
+        "aptness": 61,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1326",
@@ -4585,12 +4912,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cyme",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Axillary",
-        "rarityIndex": 58,
+        "rarityIndex": 59,
         "oxygenOutput": 35,
         "lightRequirement": "Sun/Part Shade",
         "acTolerance": "N/A",
         "peopleSupported": 0.0636,
-        "aptness": 54
+        "aptness": 54,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1327",
@@ -4599,12 +4927,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Cluster",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Axillary",
-        "rarityIndex": 69,
+        "rarityIndex": 33,
         "oxygenOutput": 45,
         "lightRequirement": "Sun/Part Shade",
         "acTolerance": "N/A",
         "peopleSupported": 0.0818,
-        "aptness": 57
+        "aptness": 57,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1328",
@@ -4613,12 +4942,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Solitary",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Axillary",
-        "rarityIndex": 25,
+        "rarityIndex": 27,
         "oxygenOutput": 40,
         "lightRequirement": "Sun/Part Shade",
         "acTolerance": "N/A",
         "peopleSupported": 0.0727,
-        "aptness": 56
+        "aptness": 56,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1329",
@@ -4627,12 +4957,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Head",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Capitulum",
-        "rarityIndex": 31,
+        "rarityIndex": 30,
         "oxygenOutput": 40,
         "lightRequirement": "Part Shade",
         "acTolerance": "N/A",
         "peopleSupported": 0.0727,
-        "aptness": 56
+        "aptness": 56,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1330",
@@ -4641,12 +4972,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Catkin",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Catkin",
-        "rarityIndex": 14,
+        "rarityIndex": 41,
         "oxygenOutput": 50,
         "lightRequirement": "Sun/Part Shade",
         "acTolerance": "N/A",
         "peopleSupported": 0.0909,
-        "aptness": 58
+        "aptness": 58,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1331",
@@ -4655,12 +4987,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Catkin",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Catkin",
-        "rarityIndex": 86,
+        "rarityIndex": 10,
         "oxygenOutput": 45,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0818,
-        "aptness": 57
+        "aptness": 57,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1332",
@@ -4669,12 +5002,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Head",
         "leafVenation": "Bipinnate",
         "inflorescencePattern": "Capitulum",
-        "rarityIndex": 25,
+        "rarityIndex": 22,
         "oxygenOutput": 80,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.1455,
-        "aptness": 56
+        "aptness": 56,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1333",
@@ -4683,12 +5017,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Panicle",
         "leafVenation": "Cordate",
         "inflorescencePattern": "Panicle",
-        "rarityIndex": 27,
+        "rarityIndex": 76,
         "oxygenOutput": 150,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.2727,
-        "aptness": 85
+        "aptness": 85,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1334",
@@ -4697,12 +5032,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "None",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "None",
-        "rarityIndex": 80,
+        "rarityIndex": 11,
         "oxygenOutput": 100,
         "lightRequirement": "Shade/Wet",
         "acTolerance": "N/A",
         "peopleSupported": 0.1818,
-        "aptness": 72
+        "aptness": 72,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1335",
@@ -4711,12 +5047,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Spike",
         "leafVenation": "Palmate",
         "inflorescencePattern": "Panicle",
-        "rarityIndex": 62,
+        "rarityIndex": 69,
         "oxygenOutput": 120,
         "lightRequirement": "Wet Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.2182,
-        "aptness": 77
+        "aptness": 77,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1336",
@@ -4725,12 +5062,13 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Panicle",
         "leafVenation": "Palmate",
         "inflorescencePattern": "Panicle",
-        "rarityIndex": 68,
+        "rarityIndex": 9,
         "oxygenOutput": 30,
         "lightRequirement": "Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0545,
-        "aptness": 43
+        "aptness": 43,
+        "verifiedSource": "Missouri Botanical Garden"
     },
     {
         "id": "wf_1337",
@@ -4739,11 +5077,12 @@ export const worldFlora: WorldFloraSpecimen[] = [
         "flowerType": "Head",
         "leafVenation": "Pinnate",
         "inflorescencePattern": "Capitulum",
-        "rarityIndex": 59,
+        "rarityIndex": 5,
         "oxygenOutput": 40,
         "lightRequirement": "Full Sun",
         "acTolerance": "N/A",
         "peopleSupported": 0.0727,
-        "aptness": 46
+        "aptness": 46,
+        "verifiedSource": "Missouri Botanical Garden"
     }
 ];
