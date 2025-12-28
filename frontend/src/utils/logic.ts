@@ -121,66 +121,62 @@ export const calculateAptness = (
 export const runRoomSimulationMC = (
     plant: Plant,
     numPeople: number,
-    hours: number,
+    stayHours: number,
     baseTemp: number,
     baseHumidity: number,
     baseLight: number,
     iterations: number = 500
 ) => {
-    // Constants
-    const O2_NEED_PER_PERSON_HOURLY = 550 / 24; // ~23L/hr
-    const totalRequiredO2 = O2_NEED_PER_PERSON_HOURLY * numPeople * hours;
+    const O2_NEED_PER_PERSON_HOURLY = 550 / 24;
+    const totalRequiredO2 = O2_NEED_PER_PERSON_HOURLY * numPeople * stayHours;
 
-    // Plant Base Hourly Output (scaled to hour from L/day)
     const baseHourlyOutput = (parseFloat(plant.oxygenLevel) || 20) / 24;
     const isCAM = plant.isNocturnal || plant.name.toLowerCase().includes('snake') || plant.name.toLowerCase().includes('aloe');
 
-    let successResults: number[] = [];
+    let dailyProductionSamples: number[] = [];
 
     for (let i = 0; i < iterations; i++) {
-        let totalPlantO2 = 0;
+        let totalDailyPlantO2 = 0;
 
-        for (let h = 0; h < hours; h++) {
-            // Apply Stochastic Jitter (Normal Distribution approximations)
-            const jitterTemp = baseTemp + (Math.random() - 0.5) * 4; // +/- 2 deg
-            const jitterHumidity = baseHumidity + (Math.random() - 0.5) * 10; // +/- 5%
+        // Always simulate a full 24h cycle to find the "Daily Recharge Capacity"
+        for (let h = 0; h < 24; h++) {
+            const jitterTemp = baseTemp + (Math.random() - 0.5) * 4;
+            const jitterHumidity = baseHumidity + (Math.random() - 0.5) * 10;
 
-            // Light varies by hour (Assuming 8 AM to 8 PM is day)
-            // If simulation starts now? Let's assume day/night cycle
-            const currentHour = (new Date().getHours() + h) % 24;
-            const isDaylight = currentHour >= 8 && currentHour <= 20;
+            // Assume a standard solar day for the "Recharge" calculation
+            const isDaylight = h >= 8 && h <= 20;
 
             let hourlyLight = baseLight;
             if (!isDaylight) {
-                hourlyLight = isCAM ? baseLight * 0.2 : 0; // CAM plants still work a bit at night
+                hourlyLight = isCAM ? baseLight * 0.2 : 0;
             } else {
-                hourlyLight = baseLight * (1 + (Math.random() - 0.5) * 0.3); // +/- 15% flux
+                hourlyLight = baseLight * (1 + (Math.random() - 0.5) * 0.3);
             }
 
             const efficiency = calculateBiologicalEfficiency(plant, jitterTemp, jitterHumidity, hourlyLight);
 
-            // If it's night and NOT a CAM plant, the plant consumes O2 (respiration)
-            // Respiration is usually ~5-10% of peak photosynthesis
             if (!isDaylight && !isCAM) {
-                totalPlantO2 -= (baseHourlyOutput * 0.1);
+                totalDailyPlantO2 -= (baseHourlyOutput * 0.1);
             } else {
-                totalPlantO2 += (baseHourlyOutput * efficiency);
+                totalDailyPlantO2 += (baseHourlyOutput * efficiency);
             }
         }
-        successResults.push(totalPlantO2);
+        dailyProductionSamples.push(totalDailyPlantO2);
     }
 
-    // Sort and find a safe percentile (e.g., 5th percentile for "Worst Case" production)
-    successResults.sort((a, b) => a - b);
-    const pessimisticProduction = successResults[Math.floor(iterations * 0.05)];
+    dailyProductionSamples.sort((a, b) => a - b);
+    const pessimisticDailyOutput = dailyProductionSamples[Math.floor(iterations * 0.05)];
 
-    // Calculate plants needed to match the totalRequiredO2 based on pessimistic production
-    const plantsNeeded = Math.max(1, Math.ceil(totalRequiredO2 / Math.max(0.1, pessimisticProduction)));
+    // Scientific Reasoning: 
+    // If you stay for 1 hour, you only need to produce 1/24th of your daily requirement 
+    // because the plant works for you even when you aren't there.
+    // If you stay for 24 hours, you need the full rate.
+    const plantsNeeded = Math.max(1, Math.ceil(totalRequiredO2 / Math.max(0.1, pessimisticDailyOutput)));
 
     return {
         plantsNeeded,
-        avgProductionPerPlant: successResults.reduce((a, b) => a + b, 0) / iterations,
-        isLethal: pessimisticProduction < 0
+        avgProductionPerDay: dailyProductionSamples.reduce((a, b) => a + b, 0) / iterations,
+        isLethal: pessimisticDailyOutput < 0
     };
 };
 
