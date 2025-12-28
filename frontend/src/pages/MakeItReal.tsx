@@ -102,16 +102,47 @@ const removeWhiteBackground = (imageSrc: string, tolerance: number = 30): Promis
     });
 };
 
-// Generates a composite of the Plant (no bg) inside the PotBase (tinted)
-const generateComposite = async (plantSrc: string, potSrc: string, colorHex: string): Promise<string> => {
+// 1. Just returns the tinted pot image (fast) for the UI overlay
+const tintPotImage = async (potSrc: string, colorHex: string): Promise<string> => {
+    return new Promise((resolve) => {
+        const i = new Image();
+        i.crossOrigin = "Anonymous";
+        i.src = potSrc;
+        i.onload = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = i.width;
+            canvas.height = i.height;
+            const ctx = canvas.getContext('2d');
+            if (ctx) {
+                ctx.drawImage(i, 0, 0);
+
+                // Tint
+                ctx.globalCompositeOperation = 'multiply';
+                ctx.fillStyle = colorHex;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+                // Cutout
+                ctx.globalCompositeOperation = 'destination-in';
+                ctx.drawImage(i, 0, 0);
+
+                resolve(canvas.toDataURL('image/png'));
+            } else {
+                resolve(potSrc);
+            }
+        };
+        i.onerror = () => resolve(potSrc);
+    });
+};
+
+// 2. Bakes the final composite with exact offsets
+const bakeComposite = async (plantSrc: string, potSrc: string, colorHex: string, offset: { x: number, y: number }, scale: number): Promise<string> => {
     return new Promise(async (resolve) => {
-        // Load Images
         const loadImage = (src: string) => new Promise<HTMLImageElement>((r) => {
             const i = new Image();
             i.crossOrigin = "Anonymous";
             i.src = src;
             i.onload = () => r(i);
-            i.onerror = () => r(i); // proceeding anyway
+            i.onerror = () => r(i);
         });
 
         const [plantImg, potImg] = await Promise.all([loadImage(plantSrc), loadImage(potSrc)]);
@@ -122,44 +153,46 @@ const generateComposite = async (plantSrc: string, potSrc: string, colorHex: str
         const ctx = canvas.getContext('2d');
         if (!ctx) return resolve(plantSrc);
 
-        // --- LAYER 1: PLANT (Behind/Inside Pot) ---
-        // Scale plant to fit decently within the pot width
-        // Assume pot opening is roughly 80% of pot width
-        const plantScale = (canvas.width * 0.85) / plantImg.width;
-        const pW = plantImg.width * plantScale;
-        const pH = plantImg.height * plantScale;
+        // --- LAYER 1: PLANT ---
+        // Apply the user's visual offset and scale
+        // The user offset is in % of the container size (300px).
+        // We need to map 300px visual -> potImg.width actual
 
-        // Center Horizontally
-        const pX = (canvas.width - pW) / 2;
-        // Position Vertically: Plant bottom should be near the bottom of the pot but hidden
-        // Let's place the bottom of the plant at 90% of pot height
-        const pY = (canvas.height * 0.9) - pH;
+        // Visual Container was roughly 300px square in CSS (or responsive).
+        // Let's assume standard normalization:
+        // The 'scale' passed here is simply: canvas.width * 0.85 / plantImg.width (initial default)
+        // Adjustments are made via offset.
 
-        ctx.drawImage(plantImg, pX, pY, pW, pH);
+        const standardScale = (canvas.width * 0.85) / plantImg.width;
+        const pW = plantImg.width * standardScale;
+        const pH = plantImg.height * standardScale;
 
-        // --- LAYER 2: POT (Tinted) ---
-        // We need to tint the pot.
-        // Create an offscreen canvas for the pot to apply tint
+        // Default Center
+        const defaultX = (canvas.width - pW) / 2;
+        const defaultY = (canvas.height * 0.9) - pH;
+
+        // Apply Custom Offset
+        // offset.x/y are percentages of the visual container.
+        // If we treat the canvas.width as the 100% reference:
+        const moveX = (offset.x / 100) * canvas.width;
+        const moveY = (offset.y / 100) * canvas.height;
+
+        ctx.drawImage(plantImg, defaultX + moveX, defaultY + moveY, pW, pH);
+
+        // --- LAYER 2: POT ---
+        // Tint Logic Inline (or re-use tinted src if we passed it, but easier to just re-tint here for high-res final)
         const potCanvas = document.createElement('canvas');
         potCanvas.width = canvas.width;
         potCanvas.height = canvas.height;
         const pCtx = potCanvas.getContext('2d');
         if (pCtx) {
-            // Draw Pot
             pCtx.drawImage(potImg, 0, 0);
-
-            // Apply Tint (Multiply)
-            // This works best if pot is white/light.
             pCtx.globalCompositeOperation = 'multiply';
             pCtx.fillStyle = colorHex;
             pCtx.fillRect(0, 0, potCanvas.width, potCanvas.height);
-
-            // Restore Alpha (clean up the rectangle overflow)
             pCtx.globalCompositeOperation = 'destination-in';
             pCtx.drawImage(potImg, 0, 0);
         }
-
-        // Draw the tinted pot on top of the plant
         ctx.drawImage(potCanvas, 0, 0);
 
         resolve(canvas.toDataURL('image/png'));
@@ -195,21 +228,30 @@ export const MakeItReal = () => {
     const [autoRemoveBg, setAutoRemoveBg] = useState(true);
     const [previewBgRemoved, setPreviewBgRemoved] = useState<string | null>(null);
 
-    // Step 2 State: Pot Selection
+    // Step 2 State
     const [potColor, setPotColor] = useState<string>('#ffffff');
     const [potStyle, setPotStyle] = useState<string>('base');
-    const [finalComposite, setFinalComposite] = useState<string | null>(null);
+    const [tintedPotUrl, setTintedPotUrl] = useState<string | null>(null);
+    const [plantPotOffset, setPlantPotOffset] = useState({ x: 0, y: 0 }); // % offset
     const [highlightUpload, setHighlightUpload] = useState(false);
 
+    // Pot Style Source Refs
+    // We can just use the path string directly since we are moving away from composite-on-load
+
     // Refs
-    const potBaseRef = useRef<string | null>(null);
+    // const potBaseRef = useRef<string | null>(null); // No longer strictly needed if we use paths, but kept for cache?
     const canvasRef = useRef<HTMLDivElement>(null);
+    const step2PreviewRef = useRef<HTMLDivElement>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    // Transform State
+    // Transform State (For Final Scene)
     const [position, setPosition] = useState({ x: 50, y: 50 });
     const [scale, setScale] = useState(1);
     const [isDragging, setIsDragging] = useState(false);
+    const [activeDragTarget, setActiveDragTarget] = useState<'scene' | 'wizard'>('scene');
+    const dragStartRef = useRef({ x: 0, y: 0, initialPos: { x: 0, y: 0 } });
+
+    // ... magic mode state
     const [isMagicMode, setIsMagicMode] = useState(false);
 
     useEffect(() => {
@@ -336,55 +378,46 @@ export const MakeItReal = () => {
             runBgRemoval(previewPlant.imageUrl, true, bgTolerance);
         }
     };
-
+    // --- STEP 1 -> STEP 2 TRANSITION ---
     const goToPotSelection = () => {
         if (!previewBgRemoved) return;
         setCurrentStep('pot-select');
-        setPotColor('#ffffff');
-        setPotStyle('base');
-        // Trigger initial composite
-        const styleSrc = POT_STYLES[0].src;
-        updatePotComposite('#ffffff', styleSrc);
+        setPotColor('#f2cc8f'); // Default to mustard/terracotta for nice look
+        setPotStyle('classic');
+        setPlantPotOffset({ x: 0, y: 0 }); // Reset offset
+
+        // Initial Tint gen
+        processTint('/pot-classic.png', '#f2cc8f');
     };
 
-    // --- STEP 2 LOGIC: POT COMPOSITE ---
-    // --- POT LOGIC ---
-    const updatePotComposite = async (color: string, styleSrc: string) => {
-        if (!previewBgRemoved) return;
+    // --- STEP 2 LOGIC: LIVE PREVIEW ---
+    const processTint = async (src: string, color: string) => {
         setIsProcessing(true);
         try {
-            // Need to clean the chosen pot style first if it's not pre-processed?
-            // For now assuming these pot images are transparent PNGs or need cleaning.
-            // Let's assume they might have white background given `pot-base.png` needed it.
-            // We'll cache cleaned pot styles in a ref if needed, or just clean on fly (might be slow).
-
-            // Optimization: If it is one of the known ones, we might just assume they are clean OR 
-            // process them once. To be safe, let's process.
-
-            const cleanPot = await removeWhiteBackground(styleSrc, 20);
-            // In a real app we would cache this result to avoid re-processing 
-
-            const composite = await generateComposite(previewBgRemoved, cleanPot, color);
-            setFinalComposite(composite);
+            // Should remove bg from pot if needed, generally assets are clean PNGs
+            const cleaned = await removeWhiteBackground(src, 20);
+            const tinted = await tintPotImage(cleaned, color);
+            setTintedPotUrl(tinted);
         } finally {
             setIsProcessing(false);
         }
-    };
+    }
 
+    // Handlers
     const handlePotColorChange = (color: string) => {
         setPotColor(color);
-        const currentStyleSrc = POT_STYLES.find(s => s.id === potStyle)?.src || POT_STYLES[0].src;
-        updatePotComposite(color, currentStyleSrc);
+        const style = POT_STYLES.find(s => s.id === potStyle) || POT_STYLES[0];
+        processTint(style.src, color);
     };
 
     const handlePotStyleChange = (styleId: string) => {
         setPotStyle(styleId);
-        const styleSrc = POT_STYLES.find(s => s.id === styleId)?.src || POT_STYLES[0].src;
-        updatePotComposite(potColor, styleSrc);
+        const style = POT_STYLES.find(s => s.id === styleId) || POT_STYLES[0];
+        processTint(style.src, potColor);
     };
 
     // --- FINISH ---
-    const confirmPlacement = () => {
+    const confirmPlacement = async () => {
         if (!roomImage) {
             toast.error("Please upload a room photo first!");
             setCurrentStep('none');
@@ -392,63 +425,108 @@ export const MakeItReal = () => {
             setHighlightUpload(true);
             return;
         }
-        setPlacedPlant({ ...previewPlant, imageUrl: finalComposite });
-        setPosition({ x: 50, y: 50 });
-        setScale(1);
-        setCurrentStep('none');
-        setPreviewPlant(null);
-        toast.success("Added to scene!");
+
+        // BAKE FINAL IMAGE
+        setIsProcessing(true);
+        try {
+            const style = POT_STYLES.find(s => s.id === potStyle) || POT_STYLES[0];
+            const cleanedPot = await removeWhiteBackground(style.src, 20);
+
+            const finalUrl = await bakeComposite(
+                previewBgRemoved!,
+                cleanedPot,
+                potColor,
+                plantPotOffset,
+                1 // scale is handled by bake logic defaults + offsets
+            );
+
+            setPlacedPlant({ ...previewPlant, imageUrl: finalUrl });
+            setPosition({ x: 50, y: 50 });
+            setScale(1);
+            setCurrentStep('none');
+            setPreviewPlant(null);
+            toast.success("Added to scene!");
+        } finally {
+            setIsProcessing(false);
+        }
     };
 
-
-    // --- DRAG LOGIC (MOUSE + TOUCH) ---
-    const handleStart = () => {
+    // --- DRAG HANDLERS (UNIFIED) ---
+    const handleStart = (target: 'scene' | 'wizard', clientX: number, clientY: number) => {
         setIsDragging(true);
-        // Lock body scroll to prevent page from moving while dragging plant
+        setActiveDragTarget(target);
         document.body.style.overflow = 'hidden';
+
+        // Store start points for precise delta drag
+        dragStartRef.current = {
+            x: clientX,
+            y: clientY,
+            initialPos: target === 'scene' ? { ...position } : { ...plantPotOffset }
+        };
     };
 
     const handleMove = (clientX: number, clientY: number) => {
-        if (!isDragging || !canvasRef.current) return;
-        const rect = canvasRef.current.getBoundingClientRect();
-        const x = ((clientX - rect.left) / rect.width) * 100;
-        const y = ((clientY - rect.top) / rect.height) * 100;
-        setPosition({ x, y });
+        if (!isDragging) return;
+
+        const dx = clientX - dragStartRef.current.x;
+        const dy = clientY - dragStartRef.current.y;
+
+        if (activeDragTarget === 'scene' && canvasRef.current) {
+            const rect = canvasRef.current.getBoundingClientRect();
+            // Convert delta pixels to %
+            const dXPercent = (dx / rect.width) * 100;
+            const dYPercent = (dy / rect.height) * 100;
+
+            setPosition({
+                x: dragStartRef.current.initialPos.x + dXPercent,
+                y: dragStartRef.current.initialPos.y + dYPercent
+            });
+        }
+        else if (activeDragTarget === 'wizard' && step2PreviewRef.current) {
+            // For wizard, we move the plant relative to container
+            // We can use same % logic or px logic. 
+            // Let's use % for consistency with bake.
+            const rect = step2PreviewRef.current.getBoundingClientRect();
+            const dXPercent = (dx / rect.width) * 100;
+            const dYPercent = (dy / rect.height) * 100;
+
+            setPlantPotOffset({
+                x: dragStartRef.current.initialPos.x + dXPercent,
+                y: dragStartRef.current.initialPos.y + dYPercent
+            });
+        }
     };
 
     const handleEnd = () => {
         setIsDragging(false);
-        // Restore body scroll
         document.body.style.overflow = '';
     };
 
-    // Mouse Wrappers
-    const handleMouseDown = (e: MouseEvent) => {
-        e.preventDefault();
-        handleStart();
-    };
-    const handleMouseMove = (e: MouseEvent) => {
-        handleMove(e.clientX, e.clientY);
-    };
-    const handleMouseUp = () => {
-        handleEnd();
+    // Wrappers
+    const handleMouseDown = (e: MouseEvent, target: 'scene' | 'wizard') => {
+        e.preventDefault(); // Stop image drag
+        handleStart(target, e.clientX, e.clientY);
     };
 
-    // Touch Wrappers
-    const handleTouchStart = () => {
-        handleStart();
+    const globalMouseMove = (e: MouseEvent) => {
+        handleMove(e.clientX, e.clientY);
     };
-    const handleTouchMove = (e: React.TouchEvent) => {
-        // Prevent default browser scrolling if dragging
-        if (isDragging && e.cancelable) {
-            e.preventDefault();
-        }
-        const touch = e.touches[0];
-        handleMove(touch.clientX, touch.clientY);
+
+    const handleTouchStart = (e: React.TouchEvent, target: 'scene' | 'wizard') => {
+        // e.preventDefault(); // usually good to allow tap, but prevent scroll?
+        const t = e.touches[0];
+        handleStart(target, t.clientX, t.clientY);
     };
-    const handleTouchEnd = () => {
-        handleEnd();
+
+    const globalTouchMove = (e: React.TouchEvent) => {
+        if (isDragging && e.cancelable) e.preventDefault();
+        const t = e.touches[0];
+        handleMove(t.clientX, t.clientY);
     };
+
+    // Global Listeners for smooth drag even outside element
+    // We attach these to the CONTAINER or WINDOW effectively by using the main div
+
 
     const filteredPlants = plants.filter(p =>
         p.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -458,9 +536,11 @@ export const MakeItReal = () => {
     return (
         <div
             className={styles.container}
-            onMouseUp={handleMouseUp}
-            onMouseLeave={handleMouseUp}
-            onTouchEnd={handleTouchEnd}
+            onMouseUp={handleEnd}
+            onMouseLeave={handleEnd}
+            onTouchEnd={handleEnd}
+            onMouseMove={globalMouseMove}
+            onTouchMove={globalTouchMove}
         >
             {/* CAMERA OVERLAY */}
             {showCamera && (
@@ -492,15 +572,77 @@ export const MakeItReal = () => {
                         </div>
 
                         {/* PREVIEW AREA */}
-                        <div className={styles.previewContainer}>
+                        <div
+                            className={styles.previewContainer}
+                            ref={step2PreviewRef}
+                            style={{ position: 'relative', overflow: 'hidden' }}
+                        >
                             {currentStep === 'bg-remove' ? (
                                 previewBgRemoved ? (
                                     <img src={previewBgRemoved} className={styles.previewImage} alt="Remove BG Preview" />
                                 ) : <div className="text-gray-400">Processing...</div>
                             ) : (
-                                finalComposite ? (
-                                    <img src={finalComposite} className={styles.previewImage} alt="Pot Preview" />
-                                ) : <div className="text-gray-400">Loading Pot...</div>
+                                <>
+                                    {/* LIVE PREVIEW COMPOSITION */}
+                                    {/* 1. PLANT (Background Layer) - Draggable */}
+                                    {previewBgRemoved && (
+                                        <img
+                                            src={previewBgRemoved}
+                                            alt="Plant"
+                                            style={{
+                                                position: 'absolute',
+                                                height: 'auto',
+                                                width: '50%', // Approximation of standardScale
+                                                left: `calc(50% + ${plantPotOffset.x}px - 25%)`, // Center - half width + offset
+                                                // Wait, we used % logic. 
+                                                // setPlantPotOffset stores PERCENTS of container.
+                                                // So we can use % directly.
+                                                // Base centered position:
+                                                // We want centered horizontally.
+                                                left: `${50 + plantPotOffset.x}%`,
+                                                top: `${50 + plantPotOffset.y}%`,
+                                                transform: 'translate(-50%, -50%)', // Use translate to center handle
+                                                // Actually, bake logic assumes top-left coords.
+                                                // Let's stick to simple CSS Transforms for WYSIWYG
+                                                zIndex: 1,
+                                                cursor: 'grab',
+                                                touchAction: 'none'
+                                            }}
+                                            onMouseDown={(e) => handleMouseDown(e, 'wizard')}
+                                            onTouchStart={(e) => handleTouchStart(e, 'wizard')}
+                                        />
+                                    )}
+
+                                    {/* 2. POT (Foreground Layer) - Static Overlay */}
+                                    {tintedPotUrl ? (
+                                        <img
+                                            src={tintedPotUrl}
+                                            alt="Pot"
+                                            style={{
+                                                position: 'absolute',
+                                                bottom: 0,
+                                                left: 0,
+                                                width: '100%',
+                                                height: '100%',
+                                                objectFit: 'contain',
+                                                zIndex: 10,
+                                                pointerEvents: 'none', // Allow clicks to pass through to plant if overlapping
+                                                // Actually we want to drag the plant BEHIND the pot, so clicking pot shouldn't enable drag?
+                                                // User wants to "touch it and change".
+                                                // If Pot covers plant, user can't touch plant.
+                                                // We should make the Pot capture events but proxy them? Or just set pointerEvents none 
+                                                // and ensure container catches... no.
+                                                // Let's make the Plant draggable. Since it sticks out top, it's grabable.
+                                                // If pot covers it, we might need a transparent overlay div to handle drag.
+                                            }}
+                                        />
+                                    ) : <div className="text-gray-400">Loading Pot...</div>}
+
+                                    {/* Drag Instruction Overlay (fades out?) */}
+                                    <div style={{ position: 'absolute', top: 10, left: 0, width: '100%', textAlign: 'center', zIndex: 20, pointerEvents: 'none', fontSize: '0.8rem', color: 'rgba(255,255,255,0.6)' }}>
+                                        Drag plant to position
+                                    </div>
+                                </>
                             )}
 
                             {isProcessing && (
@@ -698,10 +840,11 @@ export const MakeItReal = () => {
                                             left: `${position.x}%`,
                                             top: `${position.y}%`,
                                             transform: `translate(-50%, -50%) scale(${scale})`,
-                                            width: '300px'
+                                            width: '300px',
+                                            cursor: isDragging ? 'grabbing' : 'grab'
                                         }}
-                                        onMouseDown={handleMouseDown}
-                                        onTouchStart={handleTouchStart}
+                                        onMouseDown={(e) => handleMouseDown(e, 'scene')}
+                                        onTouchStart={(e) => handleTouchStart(e, 'scene')}
                                     />
                                 )}
                             </>
