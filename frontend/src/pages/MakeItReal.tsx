@@ -1,18 +1,17 @@
 import { useState, useRef, useEffect, type MouseEvent } from 'react';
 import styles from './MakeItReal.module.css';
-import { Upload, Search, Wand2, RefreshCw, ZoomIn, ZoomOut, Image as ImageIcon, Camera, X, Check, Loader2, Sparkles } from 'lucide-react';
+import { Upload, Search, Wand2, RefreshCw, ZoomIn, ZoomOut, Image as ImageIcon, Camera, X, Check, Loader2, Sparkles, Sliders } from 'lucide-react';
 import { fetchPlants } from '../services/api';
 import toast from 'react-hot-toast';
 
-// Helper: Smart Flood Fill to remove background but keep the subject (pots/plants)
-const removeWhiteBackground = (imageSrc: string): Promise<string> => {
+// Helper: Smart Flood Fill with Tolerance control
+const removeWhiteBackground = (imageSrc: string, tolerance: number = 30): Promise<string> => {
     return new Promise((resolve) => {
         const img = new Image();
         img.crossOrigin = "Anonymous";
         img.src = imageSrc;
         img.onload = () => {
             const canvas = document.createElement('canvas');
-            // Limit size for performance if needed, but keeping original for quality
             canvas.width = img.width;
             canvas.height = img.height;
             const ctx = canvas.getContext('2d');
@@ -24,29 +23,27 @@ const removeWhiteBackground = (imageSrc: string): Promise<string> => {
             const width = canvas.width;
             const height = canvas.height;
 
-            // 1. Define "White-ish" background threshold
-            // Standard white background is usually usually near (255,255,255)
-            // We use a strict tolerance to avoid eating into light green leaves, 
-            // but loose enough to catch JPEG artifacts.
-            const isBackground = (r: number, g: number, b: number) => {
-                const threshold = 230;
-                return r > threshold && g > threshold && b > threshold;
+            // Reference Background Color (Sample Top-Left Corner)
+            const bgR = data[0];
+            const bgG = data[1];
+            const bgB = data[2];
+
+            // Helper: Calculate Color Distance (Euclidean)
+            const getDist = (index: number) => {
+                const r = data[index * 4];
+                const g = data[index * 4 + 1];
+                const b = data[index * 4 + 2];
+                return Math.sqrt((r - bgR) ** 2 + (g - bgG) ** 2 + (b - bgB) ** 2);
             };
 
-            // 2. Queue-based Flood Fill from corners
-            // This ensures we only remove white pixels connected to the OUTSIDE
-            // protecting white pots or flowers in the center.
             const queue: number[] = [];
             const visited = new Uint8Array(width * height);
 
-            // Add all 4 corners as seed points if they are white
+            // Add all 4 corners as seed points if they match background
             const corners = [0, width - 1, (height - 1) * width, (height - 1) * width + (width - 1)];
 
             for (const idx of corners) {
-                const r = data[idx * 4];
-                const g = data[idx * 4 + 1];
-                const b = data[idx * 4 + 2];
-                if (isBackground(r, g, b)) {
+                if (getDist(idx) <= tolerance) {
                     queue.push(idx);
                     visited[idx] = 1;
                 }
@@ -58,11 +55,9 @@ const removeWhiteBackground = (imageSrc: string): Promise<string> => {
                 const x = idx % width;
                 const y = Math.floor(idx / width);
 
-                // Turn pixel transparent
                 const pixIdx = idx * 4;
-                data[pixIdx + 3] = 0; // Alpha = 0
+                data[pixIdx + 3] = 0; // Alpha = 0 (Transparent)
 
-                // Check neighbors (4-way connectivity)
                 const neighbors = [
                     { nx: x + 1, ny: y },
                     { nx: x - 1, ny: y },
@@ -74,8 +69,8 @@ const removeWhiteBackground = (imageSrc: string): Promise<string> => {
                     if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
                         const nIdx = ny * width + nx;
                         if (visited[nIdx] === 0) {
-                            const nPixIdx = nIdx * 4;
-                            if (isBackground(data[nPixIdx], data[nPixIdx + 1], data[nPixIdx + 2])) {
+                            // Check if neighbor is similar enough to the reference background color
+                            if (getDist(nIdx) <= tolerance) {
                                 visited[nIdx] = 1;
                                 queue.push(nIdx);
                             }
@@ -113,6 +108,7 @@ export const MakeItReal = () => {
     const [processedImage, setProcessedImage] = useState<string | null>(null);
     const [isProcessing, setIsProcessing] = useState(false);
     const [autoRemoveBg, setAutoRemoveBg] = useState(true);
+    const [bgTolerance, setBgTolerance] = useState(50); // Sensitivity Slider
 
     // Transform State
     const [position, setPosition] = useState({ x: 50, y: 50 }); // Percentage
@@ -196,10 +192,10 @@ export const MakeItReal = () => {
     const onPlantClick = (plant: any) => {
         setPreviewPlant(plant);
         setProcessedImage(null); // Clear previous processed image
-        runProcessing(plant.imageUrl, autoRemoveBg);
+        runProcessing(plant.imageUrl, autoRemoveBg, bgTolerance);
     };
 
-    const runProcessing = async (url: string, remove: boolean) => {
+    const runProcessing = async (url: string, remove: boolean, tol: number) => {
         if (!remove) {
             setProcessedImage(url);
             setIsProcessing(false);
@@ -207,7 +203,7 @@ export const MakeItReal = () => {
         }
         setIsProcessing(true);
         try {
-            const result = await removeWhiteBackground(url);
+            const result = await removeWhiteBackground(url, tol);
             setProcessedImage(result);
         } finally {
             setIsProcessing(false);
@@ -218,7 +214,18 @@ export const MakeItReal = () => {
         const newVal = !autoRemoveBg;
         setAutoRemoveBg(newVal);
         if (previewPlant) {
-            runProcessing(previewPlant.imageUrl, newVal);
+            runProcessing(previewPlant.imageUrl, newVal, bgTolerance);
+        }
+    };
+
+    const handleToleranceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const val = parseInt(e.target.value);
+        setBgTolerance(val);
+        // Debounce logic could be good here, but for now direct call
+        if (previewPlant && autoRemoveBg) {
+            // Use a timeout to avoid freezing UI on every slide
+            // Just trigger immediately for simplicity as avg image is small
+            runProcessing(previewPlant.imageUrl, autoRemoveBg, val);
         }
     };
 
@@ -305,6 +312,24 @@ export const MakeItReal = () => {
                                 <div className={styles.toggleKnob} />
                             </div>
                         </div>
+
+                        {/* TOLERANCE SLIDER */}
+                        {autoRemoveBg && (
+                            <div className={styles.optionRow} style={{ marginTop: '0.5rem', display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: '0.5rem' }}>
+                                <div className={styles.toggleLabel} style={{ justifyContent: 'space-between', fontSize: '0.9rem' }}>
+                                    <span style={{ display: 'flex', gap: '0.5rem' }}><Sliders size={16} /> Sensitivity</span>
+                                    <span>{bgTolerance}%</span>
+                                </div>
+                                <input
+                                    type="range"
+                                    min="1"
+                                    max="150"
+                                    value={bgTolerance}
+                                    onChange={handleToleranceChange}
+                                    style={{ width: '100%', accentColor: '#34d399', cursor: 'pointer' }}
+                                />
+                            </div>
+                        )}
 
                         <div className={styles.modalActions}>
                             <button className={styles.secondaryBtn} onClick={() => setPreviewPlant(null)}>Cancel</button>
