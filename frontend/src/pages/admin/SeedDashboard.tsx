@@ -231,8 +231,10 @@ export const SeedDashboard = () => {
         );
     };
 
+    const themeClass = styles[`theme${viewMode.charAt(0).toUpperCase() + viewMode.slice(1)}`];
+
     return (
-        <div className={styles.container}>
+        <div className={`${styles.container} ${themeClass}`}>
             <div className={styles.header}>
                 <div className={styles.headerLeft}>
                     <Database size={28} className={styles.headerIcon} />
