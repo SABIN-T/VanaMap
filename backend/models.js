@@ -10,8 +10,8 @@ const PlantSchema = new mongoose.Schema({
     idealTempMin: Number,
     idealTempMax: Number,
     minHumidity: Number,
-    sunlight: { type: String, enum: ['low', 'medium', 'high', 'direct'] },
-    oxygenLevel: { type: String, enum: ['moderate', 'high', 'very-high'] },
+    sunlight: { type: String }, // e.g. 'low' or '2000 Lux'
+    oxygenLevel: { type: String }, // e.g. 'moderate' or '30 L/day'
     medicinalValues: [String],
     advantages: [String],
     price: Number,

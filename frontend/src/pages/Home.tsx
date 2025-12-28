@@ -238,7 +238,8 @@ export const Home = () => {
         return { totalStock, minPrice, sellerCount: sellingVendors.length, hasStock: totalStock > 0 };
     };
 
-    const getPollutionStatus = (aqi: number = 0) => {
+    const getPollutionStatus = (aqi?: number) => {
+        if (aqi === undefined || aqi === null) return { label: 'Unknown', color: '#94a3b8', desc: 'No Data' };
         if (aqi <= 20) return { label: 'Excellent', color: '#10b981', desc: 'Fresh Air' };
         if (aqi <= 50) return { label: 'Good', color: '#facc15', desc: 'Air is Okay' };
         if (aqi <= 100) return { label: 'Moderate', color: '#fb923c', desc: 'Not very Clean' };
@@ -250,9 +251,9 @@ export const Home = () => {
             .filter(p => {
                 const matchesType = filter === 'all' ? true : p.type === filter;
                 const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    p.scientificName.toLowerCase().includes(searchQuery.toLowerCase());
+                    (p.scientificName || '').toLowerCase().includes(searchQuery.toLowerCase());
                 const matchesLight = lightFilter === 'all' ? true : (() => {
-                    const s = p.sunlight.toLowerCase();
+                    const s = p.sunlight?.toLowerCase() || '';
                     if (lightFilter === 'low') return s.includes('low') || s.includes('shade') || s.includes('shadow');
                     if (lightFilter === 'medium') return s.includes('indirect') || s.includes('partial') || s.includes('medium');
                     if (lightFilter === 'high') return s.includes('full') || s.includes('high') || s.includes('direct') || s.includes('bright');
