@@ -585,5 +585,43 @@ export const fetchDailyNews = async () => {
     }
 };
 
+// --- CUSTOMER SUPPORT ---
+export const createSupportTicket = async (data: { subject: string, message: string }) => {
+    const res = await fetch(`${API_URL}/support`, {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify(data)
+    });
+    if (!res.ok) throw new Error("Failed to create ticket");
+    return res.json();
+};
+
+export const fetchSupportTickets = async () => {
+    const res = await fetch(`${API_URL}/admin/support`, { headers: getHeaders() });
+    if (!res.ok) throw new Error("Failed to fetch tickets");
+    return res.json();
+};
+
+export const replyToTicket = async (id: string, message: string) => {
+    const res = await fetch(`${API_URL}/admin/support/${id}/reply`, {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify({ message })
+    });
+    if (!res.ok) throw new Error("Failed to send reply");
+    return res.json();
+};
+
+// --- BROADCAST ---
+export const broadcastMessage = async (data: { type: string, targetId?: string, title: string, message: string }) => {
+    const res = await fetch(`${API_URL}/admin/broadcast`, {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify(data)
+    });
+    if (!res.ok) throw new Error("Failed to broadcast message");
+    return res.json();
+};
+
 
 

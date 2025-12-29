@@ -51,7 +51,8 @@ export const AdminLayout = ({ title, children }: AdminLayoutProps) => {
         { path: '/admin/manage-points', icon: Trophy, label: 'Leaderboard Points' },
         { path: '/admin/seed-bank', icon: Database, label: 'Seed Data Bank' },
         { path: '/admin/manage-users', icon: Users, label: 'User Directory', badge: stats.unread?.users },
-        { path: '/admin/suggestions', icon: MessageSquare, label: 'User Suggestions' }, // Could add badge if API supported
+        { path: '/admin/suggestions', icon: MessageSquare, label: 'User Suggestions' },
+        { path: '/admin/customer-support', icon: MessageSquare, label: 'Customer Support' },
         { path: '/admin/notifications', icon: Bell, label: 'Notifications', badge: stats.unread?.total },
         { path: '/admin/diag', icon: Activity, label: 'System Health' },
         { path: '/admin/settings', icon: Settings, label: 'Settings' },

@@ -3,7 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
-const { Plant, Vendor, User, Payment, Notification, Chat, PlantSuggestion, SearchLog, PushSubscription, SystemSettings, CustomPot } = require('./models');
+const { Plant, Vendor, User, Payment, Notification, Chat, PlantSuggestion, SearchLog, PushSubscription, SystemSettings, CustomPot, SupportTicket } = require('./models');
 const Razorpay = require('razorpay');
 const webpush = require('web-push');
 const helmet = require('helmet');
@@ -2009,6 +2009,95 @@ app.get('/api/news', async (req, res) => {
 
 app.get('/', (req, res) => res.send('VanaMap API v3.0 - Full Power Simulation Active'));
 
+// 1. User Submit Ticket
+app.post('/api/support', auth, async (req, res) => {
+    try {
+        const { subject, message } = req.body;
+        if (!subject || !message) return res.status(400).json({ error: "Missing fields" });
+
+        const ticket = new SupportTicket({
+            userId: req.user._id,
+            userName: req.user.name,
+            userEmail: req.user.email,
+            subject,
+            message
+        });
+        await ticket.save();
+
+        res.json({ success: true, message: "Ticket created" });
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
+// 2. Admin Get All Tickets
+app.get('/api/admin/support', auth, admin, async (req, res) => {
+    try {
+        const tickets = await SupportTicket.find().sort({ createdAt: -1 });
+        res.json(tickets);
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
+// 3. Admin Reply to Ticket
+app.post('/api/admin/support/:id/reply', auth, admin, async (req, res) => {
+    try {
+        const { message } = req.body;
+        const ticket = await SupportTicket.findById(req.params.id);
+        if (!ticket) return res.status(404).json({ error: "Ticket not found" });
+
+        ticket.adminReply = message;
+        ticket.repliedAt = new Date();
+        ticket.status = 'resolved';
+        await ticket.save();
+
+        // Notify User
+        await broadcastAlert('support_reply', 'Admin responded to your inquiry', {
+            userId: ticket.userId,
+            title: 'Support Response 🔔',
+            body: `Admin: ${message.substring(0, 50)}${message.length > 50 ? '...' : ''}`
+        });
+
+        res.json({ success: true, message: "Reply sent" });
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
+// 4. Admin Broadcast Message (Manual)
+app.post('/api/admin/broadcast', auth, admin, async (req, res) => {
+    try {
+        const { type, targetId, title, message } = req.body; // type: 'all', 'vendor', 'user', 'specific'
+
+        // Use existing broadcastAlert function logic but generalized
+        // If specific targetId is provided, notify just them
+        // If type is all/vendor/user, we iterate and notify
+
+        if (type === 'specific' && targetId) {
+            await broadcastAlert('admin_msg', 'Admin Message', {
+                userId: targetId,
+                title: title || 'System Update',
+                body: message
+            });
+        } else {
+            // For mass broadcast, efficient logic would be needed. 
+            // For now, we assume this is low volume usage or handled by socket broadcast in future.
+            // We'll create a generic notification type that the frontend polls for? 
+            // Actually, existing broadcastAlert saves to DB for specific users. 
+            // MassDB insertion for thousands of users is heavy. 
+            // Instead, we might create a 'SystemAnnouncement' model later.
+            // But for now, let's just support 'specific' user messaging via UI as requested "sepratly".
+            return res.status(400).json({ error: "Mass broadcast not fully implemented in this version. Use specific user targeting." });
+        }
+
+        res.json({ success: true });
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
+// Start Server
 const PORT = process.env.PORT || 5000;
 
 // Global Error Handlers to prevent crash

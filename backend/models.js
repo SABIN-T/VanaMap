@@ -194,5 +194,16 @@ module.exports = {
         decalProps: mongoose.Schema.Types.Mixed,
         status: { type: String, enum: ['unprocessed', 'processed'], default: 'unprocessed' },
         createdAt: { type: Date, default: Date.now }
+    })),
+    SupportTicket: mongoose.model('SupportTicket', new mongoose.Schema({
+        userId: { type: String, required: true },
+        userEmail: { type: String, required: true },
+        userName: { type: String, required: true },
+        subject: { type: String, required: true },
+        message: { type: String, required: true },
+        status: { type: String, enum: ['open', 'in_progress', 'resolved'], default: 'open' },
+        adminReply: String,
+        repliedAt: Date,
+        createdAt: { type: Date, default: Date.now }
     }))
 };

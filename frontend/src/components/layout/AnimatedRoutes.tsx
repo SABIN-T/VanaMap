@@ -40,6 +40,7 @@ const MakeItReal = lazy(() => import('../../pages/MakeItReal').then(m => ({ defa
 const ForestGame = lazy(() => import('../../pages/ForestGame').then(m => ({ default: m.ForestGame })));
 const PotDesigner = lazy(() => import('../../pages/PotDesigner').then(m => ({ default: m.PotDesigner })));
 const DailyNews = lazy(() => import('../../pages/DailyNews').then(m => ({ default: m.DailyNews })));
+const CustomerSupport = lazy(() => import('../../pages/admin/CustomerSupport').then(m => ({ default: m.CustomerSupport })));
 
 
 // Enhanced Loading Screen with timeout feedback
@@ -138,6 +139,7 @@ export const AnimatedRoutes = () => {
                         <Route path="/admin/identify" element={<PlantIdentifier />} />
                         <Route path="/admin/simulation-data" element={<SimulationData />} />
                         <Route path="/admin/suggestions" element={<ManageSuggestions />} />
+                        <Route path="/admin/customer-support" element={<CustomerSupport />} />
                         <Route path="/admin/pot-designs" element={<PotDesigns />} />
                         <Route path="/admin/premium" element={<Premium />} />
 

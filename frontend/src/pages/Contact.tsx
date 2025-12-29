@@ -3,7 +3,6 @@ import { Button } from '../components/common/Button';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import styles from './Contact.module.css';
-import { sendInquiry } from '../services/api';
 import { useState, useEffect } from 'react';
 
 export const Contact = () => {
@@ -29,42 +28,49 @@ export const Contact = () => {
 
         if (userCaptcha !== captchaText) {
             toast.error("Incorrect Captcha Code. Please try again.");
-            setUserCaptcha(''); // Clear input
-            generateCaptcha(); // Refresh code for security
+            setUserCaptcha('');
+            generateCaptcha();
             return;
         }
 
         const form = e.target as HTMLFormElement;
         const name = (form.elements[0] as HTMLInputElement).value;
-        const email = (form.elements[1] as HTMLInputElement).value;
         const message = (form.elements[2] as HTMLTextAreaElement).value;
 
-        const toastId = toast.loading("Sending your message...");
+        const toastId = toast.loading("Dispatching to Admin HQ...");
 
         try {
-            await sendInquiry({ name, email, message });
-            toast.success("Message sent successfully! We'll reply via email.", {
+            // New Support Ticket Logic
+            const api = await import('../services/api');
+            await api.createSupportTicket({
+                subject: `Inquiry from ${name}`, // Auto-subject for now, or add field
+                message: message
+            });
+
+            toast.success("Message Dispatched! Reply will be given in 2 days and will be visible in your Dashboard.", {
                 id: toastId,
-                icon: '🚀',
+                duration: 6000,
+                icon: '📨',
                 style: {
                     borderRadius: '1rem',
                     background: '#0f172a',
                     color: '#fff',
-                    border: '1px solid rgba(16, 185, 129, 0.2)'
+                    border: '1px solid #10b981',
+                    maxWidth: '500px'
                 }
             });
             form.reset();
             setUserCaptcha('');
             generateCaptcha();
-        } catch (error) {
+        } catch (error: any) {
             console.error(error);
-            toast.error("Failed to send message. Please try again.", {
+            toast.error(error.message || "Failed to send. Please Login first.", {
                 id: toastId,
                 style: {
                     borderRadius: '1rem',
                     background: '#0f172a',
                     color: '#fff',
-                    border: '1px solid rgba(244, 63, 94, 0.2)'
+                    border: '1px solid #f43f5e'
                 }
             });
         }
@@ -140,13 +146,7 @@ export const Contact = () => {
                         <div className={styles.inputGroup} style={{ marginBottom: '2rem' }}>
                             <label className={styles.label}>Security Check</label>
                             <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-                                <div style={{
-                                    background: '#22d3ee', color: '#000', fontWeight: '900',
-                                    fontSize: '1.5rem', letterSpacing: '8px', padding: '0.5rem 1rem',
-                                    borderRadius: '8px', fontFamily: 'monospace',
-                                    textTransform: 'uppercase', userSelect: 'none',
-                                    position: 'relative', overflow: 'hidden'
-                                }}>
+                                <div className={styles.captchaBox} style={{ position: 'relative', overflow: 'hidden' }}>
                                     {/* Noise lines for effect */}
                                     <div style={{ position: 'absolute', top: '50%', left: 0, width: '100%', height: '2px', background: 'rgba(0,0,0,0.3)', transform: 'rotate(5deg)' }}></div>
                                     <div style={{ position: 'absolute', top: '20%', left: 0, width: '100%', height: '1px', background: 'rgba(0,0,0,0.3)', transform: 'rotate(-10deg)' }}></div>
