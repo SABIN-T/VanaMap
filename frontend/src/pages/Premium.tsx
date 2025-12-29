@@ -72,13 +72,7 @@ export const Premium = () => {
 
     // ...
 
-    <button
-        onClick={handlePayment}
-        disabled={loading || user?.isPremium}
-        className={`${styles.button} ${user?.isPremium ? styles.btnActive : styles.btnPremium}`}
-    >
-        {loading ? 'Processing...' : (user?.isPremium ? 'Premium Active' : (!user ? 'Login to Claim Free Access' : 'Claim Free Access Now'))}
-    </button>
+
 
     // Alternative: Real Razorpay Flow (Hidden/Secondary if Free is active)
     // Alternative: Real Razorpay Flow (Hidden/Secondary if Free is active)
@@ -235,6 +229,14 @@ export const Premium = () => {
                         </ul>
 
 
+
+                        <button
+                            onClick={handlePayment}
+                            disabled={loading || user?.isPremium}
+                            className={`${styles.button} ${user?.isPremium ? styles.btnActive : styles.btnPremium}`}
+                        >
+                            {loading ? 'Processing...' : (user?.isPremium ? 'Premium Active' : (!user ? 'Login to Claim Free Access' : 'Claim Free Access Now'))}
+                        </button>
                     </div>
                 </div>
 
