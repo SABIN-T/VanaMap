@@ -90,56 +90,59 @@ export default function PotDesigns() {
                             <div key={pot._id} className={styles.card}>
                                 <div className={styles.cardHeader}>
                                     <div className={styles.userInfo}>
-                                        <div className={styles.avatar}>{pot.userName[0]}</div>
-                                        <div>
-                                            <h3>{pot.userName}</h3>
-                                            <span>{pot.userEmail}</span>
+                                        <div className={styles.avatar}>{pot.userName ? pot.userName[0] : 'U'}</div>
+                                        <div className={styles.userMeta}>
+                                            <h3>{pot.userName || 'Anonymous'}</h3>
+                                            <span>{pot.userEmail || 'No Email'}</span>
                                         </div>
                                     </div>
-                                    <div className={styles.colorBadge} style={{ background: pot.potColor }}>
+                                    <div className={styles.colorBadge} style={{
+                                        backgroundColor: pot.potColor,
+                                        color: ['#f8fafc', '#ffffff', '#eab308'].includes(pot.potColor?.toLowerCase()) ? '#000' : '#fff'
+                                    }}>
                                         {pot.potColor}
                                     </div>
                                 </div>
 
                                 <div className={styles.imageDisplay}>
                                     <div className={styles.imageGroup}>
-                                        <span className={styles.imageLabel}><Box size={12} /> 3D Snap</span>
+                                        <span className={styles.imageLabel}><Box size={10} /> Snap</span>
                                         <div className={styles.imageBox}>
                                             {pot.potWithDesignUrl ? (
-                                                <img src={pot.potWithDesignUrl} alt="3D View" />
+                                                <img src={pot.potWithDesignUrl} alt="3D View" loading="lazy" />
                                             ) : (
-                                                <div className={styles.noImage}>No 3D Snap</div>
+                                                <div className={styles.noImage}>Empty</div>
                                             )}
                                         </div>
                                         <button
                                             className={styles.actionBtn}
-                                            onClick={() => handleDownload(pot.potWithDesignUrl, `Vana_3D_${pot.userName}_${pot._id}.png`)}
+                                            onClick={() => handleDownload(pot.potWithDesignUrl, `Vana_3D_${pot.userName}.png`)}
                                         >
-                                            <Download size={14} /> Download 3D
+                                            <Download size={12} /> 3D
                                         </button>
                                     </div>
 
                                     <div className={styles.imageGroup}>
-                                        <span className={styles.imageLabel}><ImageIcon size={12} /> Raw Art</span>
+                                        <span className={styles.imageLabel}><ImageIcon size={10} /> Art</span>
                                         <div className={styles.imageBox}>
                                             {pot.rawDesignUrl ? (
-                                                <img src={pot.rawDesignUrl} alt="Raw Art" />
+                                                <img src={pot.rawDesignUrl} alt="Raw Art" loading="lazy" />
                                             ) : (
-                                                <div className={styles.noImage}>No Raw Artwork</div>
+                                                <div className={styles.noImage}>Empty</div>
                                             )}
                                         </div>
                                         <button
                                             className={`${styles.actionBtn} ${styles.actionBtnRaw}`}
-                                            onClick={() => handleDownload(pot.rawDesignUrl, `Vana_Raw_${pot.userName}_${pot._id}.png`)}
+                                            onClick={() => handleDownload(pot.rawDesignUrl, `Vana_Raw_${pot.userName}.png`)}
                                         >
-                                            <Download size={14} /> Download Raw
+                                            <Download size={12} /> RAW
                                         </button>
                                     </div>
                                 </div>
 
                                 <div className={styles.cardFooter}>
-                                    <span className={styles.date}>{new Date(pot.createdAt).toLocaleString()}</span>
-                                    <span className={styles.status}>{pot.status.toUpperCase()}</span>
+                                    <span className={styles.date}>{new Date(pot.createdAt).toLocaleDateString()}</span>
+                                    <span className={styles.status}>{pot.status || 'NEW'}</span>
                                 </div>
                             </div>
                         ))}

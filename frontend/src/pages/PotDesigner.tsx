@@ -108,7 +108,7 @@ export const PotDesigner = () => {
         const userStr = localStorage.getItem('user');
         if (!userStr) {
             toast.error("Please login to save your design!");
-            navigate('/login');
+            navigate('/auth'); // Updated to /auth for consistent login flow
             return;
         }
 
@@ -116,12 +116,21 @@ export const PotDesigner = () => {
 
         try {
             // Capture the 3D Snapshots
-            // We need use gl.domElement or similar.
-            // In R3F, we can get it via a ref to the Canvas.
             const canvas = canvasRef.current;
-            if (!canvas) throw new Error("Canvas not found");
+            if (!canvas) throw new Error("3D Engine not ready. Please try again in a moment.");
 
-            const potWithDesignUrl = canvas.toDataURL('image/png');
+            // Generate snapshot
+            let potWithDesignUrl = '';
+            try {
+                potWithDesignUrl = canvas.toDataURL('image/png', 0.8);
+            } catch (e) {
+                console.error("Canvas capture failed", e);
+                throw new Error("Unable to capture image from 3D view.");
+            }
+
+            if (!potWithDesignUrl || potWithDesignUrl.length < 100) {
+                throw new Error("Design snapshot failed. Is the hardware accelerator active?");
+            }
 
             await saveCustomPot({
                 potColor: color,
@@ -137,7 +146,7 @@ export const PotDesigner = () => {
             });
 
             setTimeout(() => {
-                toast("Buying option is coming soon! Stay tuned! 🌿", {
+                toast("This buying option is coming soon, stay tuned! 🌿", {
                     icon: '🚀',
                     duration: 5000,
                     style: { background: '#020617', color: '#10b981', border: '1px solid #10b981' }
@@ -146,7 +155,8 @@ export const PotDesigner = () => {
 
         } catch (err: any) {
             toast.dismiss(loadingToast);
-            toast.error(err.message || "Failed to save design");
+            console.error("Collection Save Error:", err);
+            toast.error(err.message || "Failed to save design. Network interruption?");
         }
     };
 

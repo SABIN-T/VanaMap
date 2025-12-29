@@ -123,11 +123,7 @@ export const AnimatedRoutes = () => {
                         <Route path="/contact" element={<Contact />} />
                         <Route path="/support" element={<Support />} />
                         <Route path="/sponsor" element={<Sponsor />} />
-                        <Route path="/shops" element={
-                            <RestrictedRoute path="/shops">
-                                <Shops />
-                            </RestrictedRoute>
-                        } />
+                        <Route path="/shops" element={<Shops />} />
                         <Route path="/leaderboard" element={<Leaderboard />} />
                         <Route path="/heaven" element={
                             <RestrictedRoute path="/heaven">
