@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { Crown, Check, Star, Shield, Zap, Heart } from 'lucide-react';
+import { Crown, Check, Shield, Zap, Heart } from 'lucide-react';
 import toast from 'react-hot-toast';
+import styles from './Premium.module.css';
 
 // Load Razorpay Script
 const loadRazorpay = () => {
@@ -149,134 +150,124 @@ export const Premium = () => {
     */
 
     return (
-        <div className="min-h-screen pt-20 pb-12 px-4 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white relative overflow-hidden">
+        <div className={styles.container}>
             {/* Background Effects */}
-            <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
-                <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl animate-pulse"></div>
-                <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-yellow-500/10 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }}></div>
+            <div className={styles.backgroundEffects}>
+                <div className={`${styles.orb} ${styles.orb1}`}></div>
+                <div className={`${styles.orb} ${styles.orb2}`}></div>
             </div>
 
-            <div className="max-w-4xl mx-auto relative z-10">
-                <div className="text-center mb-16">
-                    <div className="inline-flex items-center justify-center p-3 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-2xl shadow-lg mb-6 transform hover:scale-110 transition-transform duration-300">
-                        <Crown size={48} className="text-white" />
-                    </div>
-                    <h1 className="text-5xl md:text-6xl font-black mb-6 bg-clip-text text-transparent bg-gradient-to-r from-yellow-200 via-yellow-400 to-yellow-200 drop-shadow-sm">
-                        Go Premium
-                    </h1>
-                    <p className="text-xl text-slate-300 max-w-2xl mx-auto leading-relaxed">
-                        Exciting prices are coming soon for choosing proper plant according to your place.
-                        Your chlorophyll points changes and best point holders will get exciting prizes so stay tuned!
-                    </p>
-                </div>
+            <div className={styles.content}>
 
-                <div className="grid md:grid-cols-2 gap-8 items-center">
+                {/* Hero Section */}
+                <header className={styles.hero}>
+                    <div className={styles.crownBadge}>
+                        <Crown size={40} className="text-slate-900" strokeWidth={2.5} />
+                    </div>
+                    <h1 className={styles.title}>
+                        Unlock <span className={styles.titleHighlight}>VanaMap+</span>
+                    </h1>
+                    <p className={styles.subtitle}>
+                        Elevate your plant journey with exclusive AI tools, unlimited collections,
+                        and premium community status.
+                    </p>
+                </header>
+
+                {/* Plans Comparison */}
+                <div className={styles.plansGrid}>
+
                     {/* Free Plan */}
-                    <div className="bg-slate-800/50 backdrop-blur-md rounded-3xl p-8 border border-slate-700 hover:border-slate-500 transition-all duration-300 relative group">
-                        <div className="absolute top-0 right-0 p-4 opacity-50">
-                            <Star className="text-slate-400" size={32} />
-                        </div>
-                        <h3 className="text-2xl font-bold mb-2 text-slate-200">Current Plan</h3>
-                        <div className="text-4xl font-bold mb-6 text-slate-400">
-                            Free
-                        </div>
-                        <ul className="space-y-4 mb-8 text-slate-300">
-                            <li className="flex items-center gap-3">
-                                <Check size={20} className="text-emerald-500" />
+                    <div className={`${styles.card} ${styles.cardFree}`}>
+                        <div className={styles.planName}>Standard</div>
+                        <div className={styles.price}>Free</div>
+                        <div className={styles.promoText}>Forever free for basic use</div>
+
+                        <ul className={styles.features}>
+                            <li className={styles.featureItem}>
+                                <Check size={18} className={styles.checkIcon} />
                                 Basic Plant Search
                             </li>
-                            <li className="flex items-center gap-3">
-                                <Check size={20} className="text-emerald-500" />
+                            <li className={styles.featureItem}>
+                                <Check size={18} className={styles.checkIcon} />
                                 Community Access
                             </li>
-                            <li className="flex items-center gap-3">
-                                <Check size={20} className="text-emerald-500" />
-                                Limited Favorites (3 Max)
+                            <li className={styles.featureItem}>
+                                <Check size={18} className={styles.checkIcon} />
+                                Max 3 Favorites
                             </li>
                         </ul>
-                        <button disabled className="w-full py-3 rounded-xl bg-slate-700 text-slate-400 font-medium cursor-not-allowed">
-                            Active
+                        <button className={`${styles.button} ${styles.btnFree}`} disabled>
+                            Current Plan
                         </button>
                     </div>
 
                     {/* Premium Plan */}
-                    <div className="bg-gradient-to-b from-slate-800 to-slate-900 rounded-3xl p-1 p-[1px] relative overflow-hidden group hover:shadow-[0_0_40px_rgba(250,204,21,0.3)] transition-all duration-500">
-                        <div className="absolute inset-0 bg-gradient-to-r from-yellow-400 via-orange-500 to-yellow-600 animate-spin-slow opacity-75"></div>
-                        <div className="relative bg-slate-900 rounded-[23px] p-8 h-full">
-                            <div className="absolute top-0 right-0 bg-gradient-to-bl from-yellow-500 to-orange-500 text-white text-xs font-bold px-4 py-2 rounded-bl-xl rounded-tr-xl shadow-lg">
-                                LIMITED OFFER
-                            </div>
+                    <div className={`${styles.card} ${styles.cardPremium}`}>
+                        <div className={styles.badge}>Limited Offer</div>
 
-                            <h3 className="text-2xl font-bold mb-2 flex items-center gap-2 text-white">
-                                Premium <Crown size={20} className="text-yellow-400" />
-                            </h3>
-                            <div className="mb-6">
-                                <span className="text-4xl font-bold text-white">₹0</span>
-                                <span className="text-slate-400 text-sm ml-2 line-through">₹10/mo</span>
-                                <p className="text-yellow-400 text-xs mt-1 font-semibold">
-                                    Free until Jan 31, 2026!
-                                </p>
-                            </div>
-
-                            <ul className="space-y-4 mb-8">
-                                <li className="flex items-center gap-3 text-white">
-                                    <div className="p-1 rounded-full bg-emerald-500/20 text-emerald-400"><Check size={16} /></div>
-                                    <span className="font-medium">Access to Heaven</span>
-                                </li>
-                                <li className="flex items-center gap-3 text-slate-300">
-                                    <div className="p-1 rounded-full bg-emerald-500/20 text-emerald-400"><Check size={16} /></div>
-                                    Unlimited Favorites
-                                </li>
-                                <li className="flex items-center gap-3 text-slate-300">
-                                    <div className="p-1 rounded-full bg-emerald-500/20 text-emerald-400"><Check size={16} /></div>
-                                    Chlorophyll Points Multiplier
-                                </li>
-                                <li className="flex items-center gap-3 text-slate-300">
-                                    <div className="p-1 rounded-full bg-emerald-500/20 text-emerald-400"><Shield size={16} /></div>
-                                    Premium Priority Support
-                                </li>
-                            </ul>
-
-                            <button
-                                onClick={handlePayment}
-                                disabled={loading || user?.isPremium}
-                                className={`w-full py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-lg 
-                                    ${user?.isPremium
-                                        ? 'bg-emerald-600 text-white cursor-default'
-                                        : 'bg-gradient-to-r from-yellow-400 to-yellow-600 text-slate-900 hover:shadow-yellow-500/25 hover:scale-[1.02] active:scale-[0.98]'
-                                    }`}
-                            >
-                                {loading ? 'Processing...' : (user?.isPremium ? 'Premium Active' : 'Claim Free Access Now')}
-                            </button>
-                            {!user?.isPremium && (
-                                <p className="text-center text-slate-500 text-xs mt-4">
-                                    Recurring billing of ₹10/mo starts Feb 1, 2026.
-                                </p>
-                            )}
+                        <div className={styles.planName}>
+                            Premium <Crown size={24} fill="currentColor" className="text-yellow-400" />
                         </div>
+
+                        <div className="flex items-baseline mb-1">
+                            <span className={styles.price}>₹0</span>
+                            <span className={styles.priceStrike}>₹10</span>
+                            <span className={styles.priceDuration}>/mo</span>
+                        </div>
+                        <div className={styles.promoText}>Free until Jan 31, 2026!</div>
+
+                        <ul className={styles.features}>
+                            <li className={`${styles.featureItem} ${styles.premium}`}>
+                                <Check size={18} className={styles.checkIcon} />
+                                <span><strong>Unlimited</strong> Favorites</span>
+                            </li>
+                            <li className={`${styles.featureItem} ${styles.premium}`}>
+                                <Check size={18} className={styles.checkIcon} />
+                                <span>Access to <strong>Heaven</strong> (Exclusive)</span>
+                            </li>
+                            <li className={`${styles.featureItem} ${styles.premium}`}>
+                                <Check size={18} className={styles.checkIcon} />
+                                <span>AI Plant Diagnostics</span>
+                            </li>
+                            <li className={`${styles.featureItem} ${styles.premium}`}>
+                                <Check size={18} className={styles.checkIcon} />
+                                <span>Priority Support</span>
+                            </li>
+                        </ul>
+
+                        <button
+                            onClick={handlePayment}
+                            disabled={loading || user?.isPremium}
+                            className={`${styles.button} ${user?.isPremium ? styles.btnActive : styles.btnPremium}`}
+                        >
+                            {loading ? 'Processing...' : (user?.isPremium ? 'Premium Active' : 'Claim Free Access Now')}
+                        </button>
                     </div>
                 </div>
 
-                <div className="mt-16 bg-slate-800/30 backdrop-blur-sm rounded-2xl p-8 border border-white/5 text-center">
-                    <h3 className="text-2xl font-bold text-white mb-4">Why users choose Premium?</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-8">
-                        <div>
-                            <Heart className="mx-auto text-pink-500 mb-4" size={32} />
-                            <h4 className="font-bold text-slate-200">Unlimited Love</h4>
-                            <p className="text-slate-400 text-sm mt-2">Add as many plants as you want to your favorites.</p>
+                {/* Value Props */}
+                <section className={styles.valueProps}>
+                    <h3 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-cyan-400">
+                        Why Go Premium?
+                    </h3>
+                    <div className={styles.propsGrid}>
+                        <div className={styles.propCard}>
+                            <Heart className="text-pink-500 mb-4" size={32} />
+                            <h4 className={styles.propTitle}>Unlimited Collections</h4>
+                            <p className={styles.propDesc}>Build your dream garden without limits. Save every plant you love.</p>
                         </div>
-                        <div>
-                            <Zap className="mx-auto text-yellow-400 mb-4" size={32} />
-                            <h4 className="font-bold text-slate-200">Early Access</h4>
-                            <p className="text-slate-400 text-sm mt-2">Be the first to see new exciting prizes and exotic plants.</p>
+                        <div className={styles.propCard}>
+                            <Zap className="text-yellow-400 mb-4" size={32} />
+                            <h4 className={styles.propTitle}>Early Access</h4>
+                            <p className={styles.propDesc}>Be the first to try new features like AI-powered placement visualization.</p>
                         </div>
-                        <div>
-                            <Shield className="mx-auto text-emerald-400 mb-4" size={32} />
-                            <h4 className="font-bold text-slate-200">Premium Badge</h4>
-                            <p className="text-slate-400 text-sm mt-2">Stand out in the ranking with a special profile badge.</p>
+                        <div className={styles.propCard}>
+                            <Shield className="text-emerald-400 mb-4" size={32} />
+                            <h4 className={styles.propTitle}>Elite Status</h4>
+                            <p className={styles.propDesc}>Stand out in the community leaderboard with a special Premium badge.</p>
                         </div>
                     </div>
-                </div>
+                </section>
             </div>
         </div>
     );
