@@ -38,6 +38,7 @@ const PublicPremium = lazy(() => import('../../pages/Premium').then(m => ({ defa
 const MakeItReal = lazy(() => import('../../pages/MakeItReal').then(m => ({ default: m.MakeItReal })));
 const ForestGame = lazy(() => import('../../pages/ForestGame').then(m => ({ default: m.ForestGame })));
 const PotDesigner = lazy(() => import('../../pages/PotDesigner').then(m => ({ default: m.PotDesigner })));
+const DailyNews = lazy(() => import('../../pages/DailyNews').then(m => ({ default: m.DailyNews })));
 
 
 const LoadingScreen = () => (
@@ -150,6 +151,11 @@ export const AnimatedRoutes = () => {
                         <Route path="/pot-designer" element={
                             <RestrictedRoute path="/pot-designer">
                                 <PotDesigner />
+                            </RestrictedRoute>
+                        } />
+                        <Route path="/daily-news" element={
+                            <RestrictedRoute path="/daily-news">
+                                <DailyNews />
                             </RestrictedRoute>
                         } />
                         <Route path="/premium" element={<PublicPremium />} />

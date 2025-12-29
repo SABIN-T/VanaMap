@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Crown, Zap, ArrowRight, Star, Palette, Gamepad as GamepadIcon } from 'lucide-react';
+import { Crown, Zap, ArrowRight, Star, Palette, Gamepad as GamepadIcon, Newspaper } from 'lucide-react';
 import { useEffect } from 'react';
 import styles from './Heaven.module.css';
 
@@ -98,6 +98,22 @@ export const Heaven = () => {
                         </p>
                         <button className={styles.cardAction}>
                             Play Now <ArrowRight size={16} />
+                        </button>
+                    </div>
+
+                    {/* Daily News */}
+                    <div className={styles.card} onClick={() => navigate('/daily-news')}>
+                        <div className={styles.exclusiveBadge}>New</div>
+                        <div className={styles.cardIconBox}>
+                            <Newspaper size={32} />
+                        </div>
+                        <h3 className={styles.cardTitle}>Daily Botanist</h3>
+                        <p className={styles.cardText}>
+                            Stay updated with breakthrough discoveries, care tips, and
+                            global plant conservation news.
+                        </p>
+                        <button className={styles.cardAction}>
+                            Read Today <ArrowRight size={16} />
                         </button>
                     </div>
                 </div>
