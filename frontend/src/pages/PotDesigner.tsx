@@ -11,7 +11,7 @@ import styles from './PotDesigner.module.css';
 // 3D COMPONENTS
 // ==========================================
 
-function StandardPot({ color }: { color: string }) {
+function StandardPot({ color, children }: { color: string, children?: React.ReactNode }) {
     return (
         <mesh position={[0, 0.5, 0]} castShadow receiveShadow>
             <cylinderGeometry args={[1, 0.7, 2, 64]} />
@@ -21,6 +21,7 @@ function StandardPot({ color }: { color: string }) {
                 metalness={0.1}
                 envMapIntensity={1}
             />
+            {children}
         </mesh>
     );
 }
@@ -31,7 +32,7 @@ function ArtDecal({ image, decalProps }: { image: string, decalProps: any }) {
 
     return (
         <Decal
-            position={[0, decalProps.y, 0.95]}
+            position={[0, decalProps.y - 0.5, 0.95]} // Adjusted Y since mesh is now at origin relative to parent
             rotation={[0, 0, decalProps.rotation]}
             scale={[decalProps.scale, decalProps.scale, 1]}
         >
@@ -49,14 +50,13 @@ function ArtDecal({ image, decalProps }: { image: string, decalProps: any }) {
 function PotComposition({ color, image, decalProps }: any) {
     return (
         <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.5}>
-            <group>
-                <StandardPot color={color} />
+            <StandardPot color={color}>
                 {image && (
                     <Suspense fallback={null}>
                         <ArtDecal image={image} decalProps={decalProps} />
                     </Suspense>
                 )}
-            </group>
+            </StandardPot>
         </Float>
     );
 }
