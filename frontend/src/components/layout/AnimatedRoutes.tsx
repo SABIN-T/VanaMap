@@ -128,11 +128,7 @@ export const AnimatedRoutes = () => {
                                 <Shops />
                             </RestrictedRoute>
                         } />
-                        <Route path="/leaderboard" element={
-                            <RestrictedRoute path="/leaderboard">
-                                <Leaderboard />
-                            </RestrictedRoute>
-                        } />
+                        <Route path="/leaderboard" element={<Leaderboard />} />
                         <Route path="/heaven" element={
                             <RestrictedRoute path="/heaven">
                                 <Heaven />
