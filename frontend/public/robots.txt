@@ -1,4 +1,42 @@
 User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /vendor/
 
+# Sitemap location
 Sitemap: https://www.vanamap.online/sitemap.xml
+
+# Crawl-delay for polite crawling
+Crawl-delay: 1
+
+# Specific bot rules
+User-agent: Googlebot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+User-agent: Bingbot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+User-agent: Slurp
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+User-agent: DuckDuckBot
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+User-agent: Baiduspider
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+User-agent: YandexBot
+Allow: /
+Disallow: /admin/
+Disallow: /api/

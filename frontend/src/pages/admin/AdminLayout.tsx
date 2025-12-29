@@ -3,7 +3,7 @@ import { useLocation, Link } from 'react-router-dom';
 import {
     LayoutDashboard, Sprout, Store,
     Users, Activity, Bell, Settings, Layers, Sparkles,
-    Menu, X, LogOut, ChevronRight, MessageSquare, DollarSign, Trophy, Database, ScanLine
+    Menu, X, LogOut, ChevronRight, MessageSquare, DollarSign, Trophy, Database, ScanLine, Bot
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
@@ -52,6 +52,7 @@ export const AdminLayout = ({ title, children }: AdminLayoutProps) => {
         { path: '/admin/seed-bank', icon: Database, label: 'Seed Data Bank' },
         { path: '/admin/manage-users', icon: Users, label: 'User Directory', badge: stats.unread?.users },
         { path: '/admin/suggestions', icon: MessageSquare, label: 'User Suggestions' },
+        { path: '/admin/ai-doctor', icon: Bot, label: 'AI Plant Doctor' },
         { path: '/admin/customer-support', icon: MessageSquare, label: 'Customer Support' },
         { path: '/admin/notifications', icon: Bell, label: 'Notifications', badge: stats.unread?.total },
         { path: '/admin/diag', icon: Activity, label: 'System Health' },
@@ -61,12 +62,12 @@ export const AdminLayout = ({ title, children }: AdminLayoutProps) => {
     const isActive = (path: string) => location.pathname === path;
 
     return (
-        <div className={`${styles.container} ${isPremium ? styles.premiumMode : ''}`}>
+        <div className={`${styles.container} ${isPremium ? styles.premiumMode : ''} `}>
             {/* BACKDROP FOR MOBILE */}
             {isSidebarOpen && <div className={styles.backdrop} onClick={() => setSidebarOpen(false)} />}
 
             {/* SIDEBAR */}
-            <aside className={`${styles.sidebar} ${isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed}`}>
+            <aside className={`${styles.sidebar} ${isSidebarOpen ? styles.sidebarOpen : styles.sidebarClosed} `}>
                 <div className={styles.sidebarHeader}>
                     <div className={styles.brand}>
                         <div className={styles.logoBox}>
@@ -82,7 +83,7 @@ export const AdminLayout = ({ title, children }: AdminLayoutProps) => {
                             key={item.path}
                             to={item.path}
                             onClick={() => window.innerWidth < 1024 && setSidebarOpen(false)}
-                            className={`${styles.navItem} ${isActive(item.path) ? styles.navActive : ''} ${item.sub ? styles.navSub : ''}`}
+                            className={`${styles.navItem} ${isActive(item.path) ? styles.navActive : ''} ${item.sub ? styles.navSub : ''} `}
                         >
                             <item.icon size={20} className={styles.navIcon} />
                             <span className={styles.navLabel}>{item.label}</span>
@@ -129,7 +130,7 @@ export const AdminLayout = ({ title, children }: AdminLayoutProps) => {
 
                     <div className={styles.topBarRight}>
                         <div
-                            className={`${styles.premiumToggle} ${isPremium ? styles.premiumToggleActive : ''}`}
+                            className={`${styles.premiumToggle} ${isPremium ? styles.premiumToggleActive : ''} `}
                             onClick={togglePremium}
                             title={isPremium ? "Switch to Normal" : "Switch to Premium"}
                         >
