@@ -50,20 +50,35 @@ export const Leaderboard = () => {
 
     const navigate = useNavigate();
 
-    // Map quests to navigation paths
+    // DYNAMIC QUESTS: Rotate based on day of year to keep it fresh!
+    const today = new Date();
+    const dayOfYear = Math.floor((today.getTime() - new Date(today.getFullYear(), 0, 0).getTime()) / 1000 / 60 / 60 / 24);
+
+    // Pool of missions - Easy for kids, engaging for adults
+    const missionPool = [
+        { title: 'Morning Scout', desc: 'Tap to find 3 plants near you!', points: 50, path: '/', action: 'search' },
+        { title: 'Green Shopper', desc: 'Tap to visit a plant shop.', points: 100, path: '/shops', action: 'shop' },
+        { title: 'Wise Reader', desc: 'Tap to read today\'s news.', points: 30, path: '/daily-news', action: 'read' },
+        { title: 'Forest Hero', desc: 'Tap to play the Forest Game!', points: 50, path: '/forest-game', action: 'game' },
+        { title: 'Pot Designer', desc: 'Tap to paint a new pot!', points: 75, path: '/pot-designer', action: 'design' },
+        { title: 'Weather Watch', desc: 'Tap to check local weather.', points: 20, path: '/', action: 'weather' }
+    ];
+
+    // Select 3 missions based on the day automatically
     const quests = [
-        { id: 1, title: 'Morning Dew', desc: 'Identify 3 plants before noon', points: 50, status: 'Active', path: '/', action: 'search' },
-        { id: 2, title: 'Urban Jungle', desc: 'Add a new plant to your collection', points: 100, status: 'Pending', path: '/shops', action: 'shop' },
-        { id: 3, title: 'Knowledge Root', desc: 'Read 2 plant care guides', points: 30, status: 'Completed', path: '/daily-news', action: 'read' },
+        { ...missionPool[dayOfYear % missionPool.length], id: 1, status: 'Active' },
+        { ...missionPool[(dayOfYear + 1) % missionPool.length], id: 2, status: 'Pending' },
+        { ...missionPool[(dayOfYear + 2) % missionPool.length], id: 3, status: 'Completed' }
     ];
 
     const handleQuestClick = (q: any) => {
+        // Simple and clear messaging
         if (q.status === 'Completed') return;
 
-        // Set a flag so the target page knows we are on a quest
-        // We use localStorage to persist cross-page
+        // Persist mission
         sessionStorage.setItem('active_quest', JSON.stringify({ id: q.id, action: q.action, points: q.points, title: q.title }));
 
+        // Go there
         navigate(q.path);
     };
 
@@ -113,11 +128,11 @@ export const Leaderboard = () => {
 
             <header className={styles.header}>
                 <div className={styles.badge}>
-                    <Trophy size={11} /> Global Rankings
+                    <Users size={11} /> Top Gardeners
                 </div>
-                <h1 className={styles.title}>Hall of Fame</h1>
+                <h1 className={styles.title}>Star Guardians</h1>
                 <p className={styles.subtitle}>
-                    Top ecosystem guardians.
+                    See who is saving the planet!
                 </p>
             </header>
 
@@ -125,7 +140,7 @@ export const Leaderboard = () => {
             <div className={styles.questBar}>
                 <div className={styles.questHeader}>
                     <TrendingUp size={16} className="text-emerald-400" />
-                    <span>Daily Quests</span>
+                    <span>Your Daily Missions</span>
                 </div>
                 <div className={styles.questGrid}>
                     {quests.map(q => (
