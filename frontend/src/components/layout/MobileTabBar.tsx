@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Home, MapPin, ShoppingBag, ShoppingCart, Gamepad2 } from 'lucide-react';
+import { Home, MapPin, ShoppingBag, ShoppingCart, Gamepad2, Trophy } from 'lucide-react';
 import { useCart } from '../../context/CartContext';
 import { useEffect, useState } from 'react';
 
@@ -20,6 +20,7 @@ export const MobileTabBar = () => {
         { path: '/', icon: Home, label: 'Home' },
         { path: '/nearby', icon: MapPin, label: 'Nearby' },
         { path: '/shops', icon: ShoppingBag, label: 'Shops' },
+        { path: '/leaderboard', icon: Trophy, label: 'Ranks' },
         { path: '/heaven', icon: Gamepad2, label: 'Heaven' },
         { path: '/cart', icon: ShoppingCart, label: 'Cart', badge: items.length },
     ];
@@ -33,16 +34,16 @@ export const MobileTabBar = () => {
             left: 0,
             width: '100%',
             height: '75px',
-            background: 'var(--glass-bg)',
-            backdropFilter: 'var(--backdrop-blur)',
-            WebkitBackdropFilter: 'var(--backdrop-blur)',
-            borderTop: 'var(--glass-border)',
+            background: 'rgba(15, 23, 42, 0.85)',
+            backdropFilter: 'blur(16px)',
+            WebkitBackdropFilter: 'blur(16px)',
+            borderTop: '1px solid rgba(255, 255, 255, 0.08)',
             display: 'grid',
-            gridTemplateColumns: `repeat(5, 1fr)`,
+            gridTemplateColumns: `repeat(${tabs.length}, 1fr)`,
             alignItems: 'center',
             paddingBottom: 'env(safe-area-inset-bottom)',
             zIndex: 10000,
-            boxShadow: '0 -4px 20px rgba(0,0,0,0.1)',
+            boxShadow: '0 -4px 20px rgba(0,0,0,0.3)',
             transition: 'all 0.3s ease'
         }}>
             {tabs.map((tab) => (
@@ -55,18 +56,18 @@ export const MobileTabBar = () => {
                         alignItems: 'center',
                         justifyContent: 'center',
                         textDecoration: 'none',
-                        color: isActive(tab.path) ? 'var(--color-primary)' : 'var(--color-text-dim)',
+                        color: isActive(tab.path) ? '#10b981' : '#94a3b8',
                         transition: 'all 0.2s ease',
                         gap: '4px'
                     }}
                 >
                     <div style={{ position: 'relative' }}>
-                        <tab.icon size={26} strokeWidth={isActive(tab.path) ? 2.5 : 2} />
+                        <tab.icon size={24} strokeWidth={isActive(tab.path) ? 2.5 : 2} />
                         {tab.badge ? (
                             <span style={{
                                 position: 'absolute',
                                 top: -4,
-                                right: -10,
+                                right: -8,
                                 background: '#ef4444',
                                 color: '#fff',
                                 fontSize: '0.65rem',
@@ -77,7 +78,7 @@ export const MobileTabBar = () => {
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                border: '2px solid var(--color-bg-main)'
+                                border: '2px solid #0f172a'
                             }}>
                                 {tab.badge}
                             </span>
@@ -86,7 +87,7 @@ export const MobileTabBar = () => {
                     <span style={{
                         fontSize: '0.65rem',
                         fontWeight: isActive(tab.path) ? 700 : 500,
-                        textTransform: 'none'
+                        letterSpacing: '0.02em'
                     }}>
                         {tab.label}
                     </span>

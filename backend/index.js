@@ -426,6 +426,9 @@ app.post('/api/payments/verify', auth, async (req, res) => {
             expiry.setMonth(expiry.getMonth() + 1);
             user.premiumExpiry = expiry;
 
+            // Add Bonus Points
+            user.points = (user.points || 0) + 200;
+
             await user.save();
 
             const payment = new Payment({
@@ -474,6 +477,9 @@ app.post('/api/payments/activate-free', auth, async (req, res) => {
         // I will set it to 1 year for now or until 2026.
         user.premiumExpiry = new Date('2026-02-01'); // Valid until Feb 2026 start?
 
+        // Add Bonus Points
+        user.points = (user.points || 0) + 200;
+
         await user.save();
 
         const payment = new Payment({
@@ -485,7 +491,7 @@ app.post('/api/payments/activate-free', auth, async (req, res) => {
         });
         await payment.save();
 
-        await broadcastAlert('premium', `User ${user.name} claimed FREE Premium!`, { userId: user.id });
+        await broadcastAlert('premium', `User ${user.name} claimed FREE Premium & got 200 Chlorophyll! 🌱`, { userId: user.id });
         res.json({ success: true });
     } catch (err) {
         res.status(500).json({ error: err.message });
