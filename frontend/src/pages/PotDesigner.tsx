@@ -156,11 +156,11 @@ export const PotDesigner = () => {
         } catch (err: any) {
             toast.dismiss(loadingToast);
             console.error("Collection Save Error:", err);
-            // Better error message if payload might be too large
-            const msg = err.message?.includes("Payload Too Large")
-                ? "Image too large! Use a smaller file (max 2MB)."
-                : (err.message || "Failed to save design. Network interruption?");
-            toast.error(msg);
+            // Show the actual error message from the API logic
+            const msg = err.message || "Failed to save design. Network interruption?";
+            toast.error(msg, {
+                duration: 4000
+            });
         }
     };
 

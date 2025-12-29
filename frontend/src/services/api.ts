@@ -513,13 +513,19 @@ export const saveCustomPot = async (customData: {
     rawDesignUrl: string;
     decalProps: any;
 }) => {
-    const res = await fetch(`${API_URL}/custom-pots`, {
-        method: 'POST',
-        headers: getHeaders(),
-        body: JSON.stringify(customData)
-    });
-    if (!res.ok) throw new Error("Failed to save custom design");
-    return res.json();
+    try {
+        const res = await fetch(`${API_URL}/custom-pots`, {
+            method: 'POST',
+            headers: getHeaders(),
+            body: JSON.stringify(customData)
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Failed to save custom design");
+        return data;
+    } catch (err: any) {
+        console.error("API Studio Error:", err);
+        throw err;
+    }
 };
 
 export const fetchAdminCustomPots = async () => {

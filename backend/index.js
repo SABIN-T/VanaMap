@@ -1861,36 +1861,39 @@ app.post('/api/custom-pots', auth, async (req, res) => {
         const { potColor, potWithDesignUrl, rawDesignUrl, decalProps } = req.body;
 
         // Log payload size for debugging
-        const sizeKB = Math.round(JSON.stringify(req.body).length / 1024);
-        console.log(`[STUDIO] Received new design. Size: ${sizeKB}KB. Artist: ${req.user.id}`);
+        const payloadStr = JSON.stringify(req.body || {});
+        const sizeKB = Math.round(payloadStr.length / 1024);
+        console.log(`[STUDIO] Received new design. Size: ${sizeKB}KB. UserID: ${req.user?.id}`);
 
-        const user = await User.findById(req.user.id);
-        if (!user) return res.status(401).json({ error: "User session invalid" });
+        const user = await User.findById(req.user?.id);
+        if (!user) {
+            console.error(`[STUDIO] Save failed: User ${req.user?.id} not found in DB.`);
+            return res.status(401).json({ error: "User session invalid. Please log in again." });
+        }
 
         const customPot = new CustomPot({
-            userId: user._id,
-            userName: user.name,
-            userEmail: user.email,
-            potColor,
+            userId: user._id.toString(),
+            userName: user.name || "Unknown User",
+            userEmail: user.email || "No Email",
+            potColor: potColor || "#d97706",
             potWithDesignUrl: potWithDesignUrl || '',
             rawDesignUrl: rawDesignUrl || '',
-            decalProps
+            decalProps: decalProps || {}
         });
 
         await customPot.save();
+        console.log(`[STUDIO] Design saved successfully for ${user.name}`);
 
         broadcastAlert('custom_pot', `New Ceramic Design by ${user.name}`, {
             userId: user._id,
             potColor,
             title: "New Pot Artwork! 🏺"
-        }).catch(() => { });
+        }).catch((e) => console.error("[STUDIO] Alert Broadcast Failed:", e.message));
 
         res.status(201).json({ success: true, message: "Custom design saved to collection!" });
     } catch (err) {
-        console.error("Custom Pot Save Error:", err);
-        // If it's a payload error handled by express, it might not even reach here, 
-        // but if it's a DB error (like doc too large), we catch it here.
-        res.status(500).json({ error: "Database save failed: " + err.message });
+        console.error("Custom Pot Save Error Details:", err);
+        res.status(500).json({ error: "Studio Engine Error: " + err.message });
     }
 });
 
