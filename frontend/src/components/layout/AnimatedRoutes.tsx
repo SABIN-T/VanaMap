@@ -36,6 +36,8 @@ const PotDesigns = lazy(() => import('../../pages/admin/PotDesigns').then(m => (
 const Premium = lazy(() => import('../../pages/admin/Premium').then(m => ({ default: m.Premium })));
 const PublicPremium = lazy(() => import('../../pages/Premium').then(m => ({ default: m.Premium })));
 const MakeItReal = lazy(() => import('../../pages/MakeItReal').then(m => ({ default: m.MakeItReal })));
+const ForestGame = lazy(() => import('../../pages/ForestGame').then(m => ({ default: m.ForestGame })));
+const PotDesigner = lazy(() => import('../../pages/PotDesigner').then(m => ({ default: m.PotDesigner })));
 
 
 const LoadingScreen = () => (
@@ -138,6 +140,16 @@ export const AnimatedRoutes = () => {
                         <Route path="/make-it-real" element={
                             <RestrictedRoute path="/make-it-real">
                                 <MakeItReal />
+                            </RestrictedRoute>
+                        } />
+                        <Route path="/forest-game" element={
+                            <RestrictedRoute path="/forest-game">
+                                <ForestGame />
+                            </RestrictedRoute>
+                        } />
+                        <Route path="/pot-designer" element={
+                            <RestrictedRoute path="/pot-designer">
+                                <PotDesigner />
                             </RestrictedRoute>
                         } />
                         <Route path="/premium" element={<PublicPremium />} />
