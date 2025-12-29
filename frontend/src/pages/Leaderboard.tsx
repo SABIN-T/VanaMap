@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Trophy, Crown, MapPin, Building, Sprout, TrendingUp, Users, ArrowRight } from 'lucide-react';
 import { fetchLeaderboard } from '../services/api';
 import styles from './Leaderboard.module.css';
@@ -47,11 +48,24 @@ export const Leaderboard = () => {
         return () => { isMounted = false; };
     }, []);
 
+    const navigate = useNavigate();
+
+    // Map quests to navigation paths
     const quests = [
-        { id: 1, title: 'Morning Dew', desc: 'Identify 3 plants before noon', points: 50, status: 'Active' },
-        { id: 2, title: 'Urban Jungle', desc: 'Add a new plant to your collection', points: 100, status: 'Pending' },
-        { id: 3, title: 'Knowledge Root', desc: 'Read 2 plant care guides', points: 30, status: 'Completed' },
+        { id: 1, title: 'Morning Dew', desc: 'Identify 3 plants before noon', points: 50, status: 'Active', path: '/', action: 'search' },
+        { id: 2, title: 'Urban Jungle', desc: 'Add a new plant to your collection', points: 100, status: 'Pending', path: '/shops', action: 'shop' },
+        { id: 3, title: 'Knowledge Root', desc: 'Read 2 plant care guides', points: 30, status: 'Completed', path: '/daily-news', action: 'read' },
     ];
+
+    const handleQuestClick = (q: any) => {
+        if (q.status === 'Completed') return;
+
+        // Set a flag so the target page knows we are on a quest
+        // We use localStorage to persist cross-page
+        sessionStorage.setItem('active_quest', JSON.stringify({ id: q.id, action: q.action, points: q.points, title: q.title }));
+
+        navigate(q.path);
+    };
 
     if (loading) {
         return (
@@ -115,7 +129,12 @@ export const Leaderboard = () => {
                 </div>
                 <div className={styles.questGrid}>
                     {quests.map(q => (
-                        <div key={q.id} className={`${styles.questItem} ${q.status === 'Completed' ? styles.questDone : ''}`}>
+                        <div
+                            key={q.id}
+                            onClick={() => handleQuestClick(q)}
+                            className={`${styles.questItem} ${q.status === 'Completed' ? styles.questDone : ''}`}
+                            style={{ cursor: q.status === 'Completed' ? 'default' : 'pointer' }}
+                        >
                             <div className={styles.questInfo}>
                                 <span className={styles.questTitle}>{q.title}</span>
                                 <span className={styles.questDesc}>{q.desc}</span>

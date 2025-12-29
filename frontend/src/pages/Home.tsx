@@ -159,6 +159,21 @@ export const Home = () => {
                 const cleanName = cityName.charAt(0).toUpperCase() + cityName.slice(1);
                 setWeather({ ...weatherData, locationName: cleanName });
                 toast.success(`Synced location: ${cleanName}`);
+
+                // Quest Check: Morning Dew (Action: search)
+                const activeQuest = sessionStorage.getItem('active_quest');
+                if (activeQuest) {
+                    const quest = JSON.parse(activeQuest);
+                    if (quest.action === 'search') {
+                        import('../services/api').then(({ addPoints }) => {
+                            addPoints(quest.points).then(() => {
+                                toast.success(`Quest Complete: ${quest.title}! +${quest.points} CP`, { icon: '🏆', duration: 5000 });
+                                sessionStorage.removeItem('active_quest'); // Clear quest
+                            }).catch(console.error);
+                        });
+                    }
+                }
+
                 scrollToFilters();
                 setSuggestions([]);
             } else {
