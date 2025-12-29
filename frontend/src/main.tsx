@@ -14,9 +14,7 @@ const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "480996649148-rkab0dba
 // Register Service Worker for PWA
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js')
-      .then(() => console.log('SW Registered'))
-      .catch(err => console.log('SW Registration failed', err));
+    navigator.serviceWorker.register('/sw.js').catch(() => { });
   });
 }
 
