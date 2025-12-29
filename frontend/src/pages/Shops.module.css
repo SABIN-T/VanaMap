@@ -162,6 +162,51 @@
     opacity: 0.8;
 }
 
+.stockFilterContainer {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1.25rem;
+    animation: fadeIn 1s ease-out 0.2s backwards;
+}
+
+.stockBtn {
+    background: var(--glass-bg);
+    border: var(--glass-border);
+    color: var(--color-text-dim);
+    padding: 0.5rem 1.25rem;
+    border-radius: 99px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.stockBtn:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.stockBtn.activeIn {
+    background: rgba(16, 185, 129, 0.15);
+    border-color: #10b981;
+    color: #34d399;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
+}
+
+.stockBtn.activeOut {
+    background: rgba(239, 68, 68, 0.1);
+    border-color: #ef4444;
+    color: #f87171;
+    box-shadow: 0 4px 15px rgba(239, 68, 68, 0.15);
+}
+
 .grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));

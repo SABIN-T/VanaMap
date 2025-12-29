@@ -13,6 +13,7 @@ export const Shops = () => {
     const [vendors, setVendors] = useState<Vendor[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [activeCategory, setActiveCategory] = useState<'all' | 'indoor' | 'outdoor'>('all');
+    const [stockFilter, setStockFilter] = useState<'all' | 'inStock' | 'outOfStock'>('all');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [selectedPlant, setSelectedPlant] = useState<Plant | null>(null);
@@ -74,7 +75,11 @@ export const Shops = () => {
         const q = searchQuery.toLowerCase();
         const matchesSearch = p.name.toLowerCase().includes(q) ||
             (p.scientificName?.toLowerCase().includes(q) ?? false);
-        return matchesCategory && matchesSearch;
+
+        const { inStock } = getStockStatus(p);
+        const matchesStock = stockFilter === 'all' ? true : (stockFilter === 'inStock' ? inStock : !inStock);
+
+        return matchesCategory && matchesSearch && matchesStock;
     });
 
     const getStockStatus = (plant: Plant) => {
@@ -164,6 +169,22 @@ export const Shops = () => {
                             <span className={styles.filterDesc}>Natural Resilience</span>
                         </div>
                     </div>
+                </div>
+
+                {/* Stock Filters */}
+                <div className={styles.stockFilterContainer}>
+                    <button
+                        className={`${styles.stockBtn} ${stockFilter === 'inStock' ? styles.activeIn : ''}`}
+                        onClick={() => setStockFilter(stockFilter === 'inStock' ? 'all' : 'inStock')}
+                    >
+                        {stockFilter === 'inStock' ? '✓ ' : ''}In Stock
+                    </button>
+                    <button
+                        className={`${styles.stockBtn} ${stockFilter === 'outOfStock' ? styles.activeOut : ''}`}
+                        onClick={() => setStockFilter(stockFilter === 'outOfStock' ? 'all' : 'outOfStock')}
+                    >
+                        {stockFilter === 'outOfStock' ? '✕ ' : ''}Out of Stock
+                    </button>
                 </div>
             </div>
 
