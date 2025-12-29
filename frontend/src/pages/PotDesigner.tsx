@@ -110,68 +110,69 @@ export const PotDesigner = () => {
             {/* Top Bar */}
             <header className={styles.header}>
                 <button className={styles.backBtn} onClick={() => navigate(-1)}>
-                    <ArrowLeft size={20} /> <span className="hidden sm:inline">EXIT STUDIO</span>
+                    <ArrowLeft size={18} /> EXIT
                 </button>
-                <div className={styles.title}>VANA STUDIO • 3D CONFIGURATOR</div>
-                <div style={{ width: 100 }} className="hidden sm:block"></div>
+                <div className={styles.title}>VANA STUDIO • POT CONFIGURATOR</div>
+                <div style={{ width: 60 }} className="hidden sm:block"></div>
             </header>
 
-            <main className={styles.mainLayout}>
+            <main className={styles.mainWrapper}>
                 {/* 3D Canvas Area */}
-                <div className={styles.canvasWrapper}>
+                <div className={styles.canvasContainer}>
                     <Suspense fallback={
-                        <div className={styles.loadingOverlay}>
-                            <div className={styles.spinner} />
-                            <p>Initializing Environment...</p>
+                        <div className={styles.loading}>
+                            <div className={styles.pulse} />
+                            <p style={{ fontSize: '0.8rem', fontWeight: 700, letterSpacing: '1px' }}>INITIALIZING ENGINE...</p>
                         </div>
                     }>
-                        <Canvas shadows>
-                            <PerspectiveCamera makeDefault position={[0, 2, 5]} fov={40} />
+                        <div className={styles.canvasWrapper}>
+                            <Canvas shadows>
+                                <PerspectiveCamera makeDefault position={[0, 2, 5]} fov={35} />
 
-                            {/* Pro Lighting Setup */}
-                            <ambientLight intensity={0.5} />
-                            <spotLight position={[10, 15, 10]} angle={0.3} penumbra={1} intensity={2} castShadow />
-                            <directionalLight position={[-5, 5, -5]} intensity={1} color="#3b82f6" />
-                            <pointLight position={[0, -2, 5]} intensity={0.5} color="#10b981" />
+                                <ambientLight intensity={0.6} />
+                                <spotLight position={[10, 20, 10]} angle={0.2} penumbra={1} intensity={2.5} castShadow />
+                                <directionalLight position={[-5, 5, -5]} intensity={1.2} color="#3b82f6" />
+                                <pointLight position={[0, -2, 5]} intensity={0.6} color="#10b981" />
 
-                            <PotComposition color={color} image={image} decalProps={decalProps} />
+                                <PotComposition color={color} image={image} decalProps={decalProps} />
 
-                            <ContactShadows position={[0, -0.5, 0]} opacity={0.4} scale={10} blur={2} far={4.5} />
-                            <OrbitControls
-                                enablePan={false}
-                                minPolarAngle={Math.PI / 4}
-                                maxPolarAngle={Math.PI / 1.5}
-                                autoRotate={!image}
-                                autoRotateSpeed={0.5}
-                            />
-                        </Canvas>
+                                <ContactShadows position={[0, -0.5, 0]} opacity={0.5} scale={10} blur={2.4} far={4.5} />
+                                <OrbitControls
+                                    enablePan={false}
+                                    minPolarAngle={Math.PI / 4}
+                                    maxPolarAngle={Math.PI / 1.6}
+                                    autoRotate={!image}
+                                    autoRotateSpeed={0.4}
+                                />
+                            </Canvas>
+                        </div>
                     </Suspense>
 
-                    {/* Quick Tips Overlay */}
-                    <div style={{ position: 'absolute', bottom: '2rem', left: '2rem', display: 'flex', gap: '1rem' }} className="hidden sm:flex">
-                        <div style={{ background: 'rgba(0,0,0,0.5)', padding: '0.5rem 1rem', borderRadius: '99px', fontSize: '0.75rem', fontWeight: 600, backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.1)' }}>
-                            🖱️ Drag to Rotate
+                    {/* Desktop Interaction Tips */}
+                    <div style={{ position: 'absolute', bottom: '1.5rem', left: '1.5rem', display: 'flex', gap: '0.75rem' }} className="hidden sm:flex">
+                        <div style={{ background: 'rgba(0,0,0,0.6)', padding: '0.4rem 0.8rem', borderRadius: '8px', fontSize: '0.65rem', fontWeight: 800, backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.05)', color: '#94a3b8' }}>
+                            ROTATE <span style={{ color: '#fff' }}>DRAG</span>
                         </div>
-                        <div style={{ background: 'rgba(0,0,0,0.5)', padding: '0.5rem 1rem', borderRadius: '99px', fontSize: '0.75rem', fontWeight: 600, backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.1)' }}>
-                            🔍 Scroll to Zoom
+                        <div style={{ background: 'rgba(0,0,0,0.6)', padding: '0.4rem 0.8rem', borderRadius: '8px', fontSize: '0.65rem', fontWeight: 800, backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.05)', color: '#94a3b8' }}>
+                            ZOOM <span style={{ color: '#fff' }}>SCROLL</span>
                         </div>
                     </div>
                 </div>
 
-                {/* Controls Sidebar */}
-                <aside className={styles.controlsSidebar}>
-                    <div className={styles.sidebarContent}>
-                        {/* Section 1: Color */}
+                {/* Scrollable Config Panel */}
+                <div className={styles.scrollArea}>
+                    <div className={styles.content}>
+                        {/* Base Finish */}
                         <section className={styles.section}>
                             <div className={styles.sectionHeader}>
-                                <Palette size={18} />
-                                <h3>Base Finish</h3>
+                                <Palette size={16} />
+                                <h3>Material Finish</h3>
                             </div>
                             <div className={styles.colorGrid}>
                                 {potColors.map((c) => (
                                     <div
                                         key={c.value}
-                                        className={`${styles.colorCircle} ${color === c.value ? styles.colorCircleActive : ''}`}
+                                        className={`${styles.colorItem} ${color === c.value ? styles.colorActive : ''}`}
                                         style={{ backgroundColor: c.value }}
                                         onClick={() => setColor(c.value)}
                                         title={c.name}
@@ -180,57 +181,51 @@ export const PotDesigner = () => {
                             </div>
                         </section>
 
-                        {/* Section 2: Decal */}
+                        {/* Custom Artwork */}
                         <section className={styles.section}>
                             <div className={styles.sectionHeader}>
-                                <Box size={18} />
-                                <h3>Custom Art</h3>
+                                <Box size={16} />
+                                <h3>Artwork Overlay</h3>
                             </div>
 
-                            <input
-                                type="file"
-                                id="pot-art-upload"
-                                hidden
-                                accept="image/*"
-                                onChange={handleImageUpload}
-                            />
-                            <label htmlFor="pot-art-upload" className={styles.uploadArea}>
-                                <div className={styles.uploadLabel}>
-                                    <Upload size={32} color={image ? '#10b981' : '#64748b'} />
-                                    <span>{image ? <b>Change Artwork</b> : <>Click to <b>Upload Artwork</b></>}</span>
+                            <input type="file" id="pot-upload" hidden accept="image/*" onChange={handleImageUpload} />
+                            <label htmlFor="pot-upload" className={styles.uploadBox}>
+                                <div className={styles.uploadInfo}>
+                                    <Upload size={28} color={image ? '#10b981' : '#475569'} />
+                                    <span>{image ? <b>SWITCH IMAGE</b> : <>UPLOAD <b>CUSTOM ART</b></>}</span>
                                 </div>
                             </label>
 
                             {image && (
-                                <div className={styles.adjustmentGroup}>
-                                    <div className={styles.sliderBox}>
-                                        <div className={styles.sliderLabel}>
+                                <div className={styles.sliders}>
+                                    <div className={styles.sliderGroup}>
+                                        <div className={styles.sliderHead}>
                                             <span><Maximize size={12} /> SCALE</span>
                                             <span>{Math.round(decalProps.scale * 100)}%</span>
                                         </div>
                                         <input
-                                            type="range" min="0.5" max="2" step="0.01"
+                                            type="range" min="0.4" max="2.2" step="0.01"
                                             value={decalProps.scale}
                                             onChange={(e) => setDecalProps(p => ({ ...p, scale: parseFloat(e.target.value) }))}
-                                            className={styles.rangeInput}
+                                            className={styles.range}
                                         />
                                     </div>
 
-                                    <div className={styles.sliderBox}>
-                                        <div className={styles.sliderLabel}>
-                                            <span><Move size={12} /> POSITION</span>
+                                    <div className={styles.sliderGroup}>
+                                        <div className={styles.sliderHead}>
+                                            <span><Move size={12} /> ELEVATION</span>
                                             <span>{Math.round(decalProps.y * 100)}</span>
                                         </div>
                                         <input
-                                            type="range" min="-0.5" max="1.5" step="0.01"
+                                            type="range" min="-0.6" max="1.6" step="0.01"
                                             value={decalProps.y}
                                             onChange={(e) => setDecalProps(p => ({ ...p, y: parseFloat(e.target.value) }))}
-                                            className={styles.rangeInput}
+                                            className={styles.range}
                                         />
                                     </div>
 
-                                    <div className={styles.sliderBox}>
-                                        <div className={styles.sliderLabel}>
+                                    <div className={styles.sliderGroup}>
+                                        <div className={styles.sliderHead}>
                                             <span><RotateCcw size={12} /> ROTATION</span>
                                             <span>{Math.round(decalProps.rotation * 57.3)}°</span>
                                         </div>
@@ -238,20 +233,22 @@ export const PotDesigner = () => {
                                             type="range" min="-3.14" max="3.14" step="0.01"
                                             value={decalProps.rotation}
                                             onChange={(e) => setDecalProps(p => ({ ...p, rotation: parseFloat(e.target.value) }))}
-                                            className={styles.rangeInput}
+                                            className={styles.range}
                                         />
                                     </div>
                                 </div>
                             )}
                         </section>
+
+                        <div style={{ height: '40px' }} /> {/* Margin spacer */}
                     </div>
 
-                    <div className={styles.actionArea}>
-                        <button className={styles.buyBtn} onClick={handleAddToCart}>
-                            <ShoppingBag size={20} /> ADD DESIGNED POT TO CART
+                    <div className={styles.footer}>
+                        <button className={styles.checkoutBtn} onClick={handleAddToCart}>
+                            <ShoppingBag size={18} /> ADD TO COLLECTION
                         </button>
                     </div>
-                </aside>
+                </div>
             </main>
         </div>
     );
