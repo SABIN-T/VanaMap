@@ -11,6 +11,7 @@ interface LeaderboardData {
 export const Leaderboard = () => {
     const [data, setData] = useState<LeaderboardData>({ users: [], cities: [] });
     const [loading, setLoading] = useState(true);
+    const [showPromo, setShowPromo] = useState(false);
 
     useEffect(() => {
         const load = async () => {
@@ -24,7 +25,20 @@ export const Leaderboard = () => {
             }
         };
         load();
+
+        // Show Promo if first visit this session (using simple session storage logic or just set true for now)
+        const hasSeenPromo = sessionStorage.getItem('seenLeaderboardPromo');
+        if (!hasSeenPromo) {
+            setShowPromo(true);
+            sessionStorage.setItem('seenLeaderboardPromo', 'true');
+        }
     }, []);
+
+    const quests = [
+        { id: 1, title: 'Morning Dew', desc: 'Identify 3 plants before noon', points: 50, status: 'Active' },
+        { id: 2, title: 'Urban Jungle', desc: 'Add a new plant to your collection', points: 100, status: 'Pending' },
+        { id: 3, title: 'Knowledge Root', desc: 'Read 2 plant care guides', points: 30, status: 'Completed' },
+    ];
 
     if (loading) {
         return (
@@ -45,6 +59,25 @@ export const Leaderboard = () => {
 
     return (
         <div className={styles.container}>
+            {/* PROMO MODAL */}
+            {showPromo && (
+                <div className={styles.modalOverlay}>
+                    <div className={styles.modalCard}>
+                        <div className={styles.modalBadge}>LIMITED TIME OFFER</div>
+                        <Crown size={48} className="text-yellow-400 mx-auto mb-4 animate-bounce" />
+                        <h2 className={styles.modalTitle}>Become an Elite Guardian</h2>
+                        <p className={styles.modalText}>
+                            Reach <strong>2,000 Chlorophyll Points</strong> and unlock
+                            <br />
+                            <span className="text-emerald-400 font-bold text-lg">1 YEAR FREE PREMIUM</span>
+                        </p>
+                        <button onClick={() => setShowPromo(false)} className={styles.modalBtn}>
+                            Challenge Accepted
+                        </button>
+                    </div>
+                </div>
+            )}
+
             <header className={styles.header}>
                 <div className={styles.badge}>
                     <Trophy size={11} /> Global Rankings
@@ -54,6 +87,27 @@ export const Leaderboard = () => {
                     Top ecosystem guardians.
                 </p>
             </header>
+
+            {/* DAILY QUESTS BAR */}
+            <div className={styles.questBar}>
+                <div className={styles.questHeader}>
+                    <TrendingUp size={16} className="text-emerald-400" />
+                    <span>Daily Quests</span>
+                </div>
+                <div className={styles.questGrid}>
+                    {quests.map(q => (
+                        <div key={q.id} className={`${styles.questItem} ${q.status === 'Completed' ? styles.questDone : ''}`}>
+                            <div className={styles.questInfo}>
+                                <span className={styles.questTitle}>{q.title}</span>
+                                <span className={styles.questDesc}>{q.desc}</span>
+                            </div>
+                            <div className={styles.questReward}>
+                                +{q.points} CP
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
 
             {/* PODIUM SECTION */}
             <div className={styles.podium}>
@@ -123,31 +177,61 @@ export const Leaderboard = () => {
                     </div>
                 </div>
 
-                {/* COLUMN 2: NEIGHBORHOOD RANKINGS */}
-                <div>
-                    <h2 className={styles.sectionTitle}>
-                        <Building size={16} className="text-emerald-400" /> Top Zones
-                    </h2>
+                {/* COLUMN 2: EARN GUIDE & ZONES */}
+                <div className="flex flex-col gap-6">
+                    {/* EARN INFO CARD */}
+                    <div className={styles.infoCard}>
+                        <h3 className={styles.infoTitle}>How to Earn CP?</h3>
+                        <ul className={styles.earnList}>
+                            <li>
+                                <span className={styles.earnIcon}>🎮</span>
+                                <div>
+                                    <strong>Play Canopy Hero</strong>
+                                    <span>+10 CP per session</span>
+                                </div>
+                            </li>
+                            <li>
+                                <span className={styles.earnIcon}>🛍️</span>
+                                <div>
+                                    <strong>Shop Green</strong>
+                                    <span>+50 CP per purchase</span>
+                                </div>
+                            </li>
+                            <li>
+                                <span className={styles.earnIcon}>🌱</span>
+                                <div>
+                                    <strong>Identify Plants</strong>
+                                    <span>+5 CP per scan</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
 
                     <div>
-                        {data.cities.length > 0 ? data.cities.map((cityData, idx) => (
-                            <div key={idx} className={styles.cityCard}>
-                                <div className={styles.cityIcon}>
-                                    <TrendingUp size={18} />
-                                </div>
-                                <div className={styles.cityInfo}>
-                                    <span className={styles.cityName}>{cityData._id.city || 'Wilderness'}</span>
-                                    <div className={styles.cityMeta}>
-                                        {cityData.userCount} Citizens
+                        <h2 className={styles.sectionTitle}>
+                            <Building size={16} className="text-emerald-400" /> Top Zones
+                        </h2>
+
+                        <div>
+                            {data.cities.length > 0 ? data.cities.map((cityData, idx) => (
+                                <div key={idx} className={styles.cityCard}>
+                                    <div className={styles.cityIcon}>
+                                        <TrendingUp size={18} />
                                     </div>
+                                    <div className={styles.cityInfo}>
+                                        <span className={styles.cityName}>{cityData._id.city || 'Wilderness'}</span>
+                                        <div className={styles.cityMeta}>
+                                            {cityData.userCount} Citizens
+                                        </div>
+                                    </div>
+                                    <div className={styles.cityPointsValue}>{cityData.totalPoints.toLocaleString()}</div>
                                 </div>
-                                <div className={styles.cityPointsValue}>{cityData.totalPoints.toLocaleString()}</div>
-                            </div>
-                        )) : (
-                            <div style={{ color: '#64748b', textAlign: 'center', padding: '2rem', fontSize: '0.85rem' }}>
-                                No urban ecosystem data yet.
-                            </div>
-                        )}
+                            )) : (
+                                <div style={{ color: '#64748b', textAlign: 'center', padding: '2rem', fontSize: '0.85rem' }}>
+                                    No urban ecosystem data yet.
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>

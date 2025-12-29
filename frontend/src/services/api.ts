@@ -563,3 +563,12 @@ export const deleteAdminCustomPot = async (id: string) => {
     return await res.json();
 };
 
+export const giftPremium = async (userId: string) => {
+    const res = await fetch(`${API_URL}/admin/users/${userId}/gift-premium`, {
+        method: 'POST',
+        headers: getHeaders()
+    });
+    if (!res.ok) throw new Error("Failed to gift premium");
+    return res.json();
+};
+

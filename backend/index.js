@@ -1656,6 +1656,30 @@ app.get('/api/gamification/leaderboard', async (req, res) => {
     }
 });
 
+app.post('/api/admin/users/:id/gift-premium', auth, admin, async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+        if (!user) return res.status(404).json({ error: "User not found" });
+
+        const now = new Date();
+        const oneYearFromNow = new Date(now.setFullYear(now.getFullYear() + 1));
+
+        user.isPremium = true;
+        user.premiumType = 'gift';
+        user.premiumStartDate = new Date();
+        user.premiumExpiry = oneYearFromNow;
+
+        await user.save();
+
+        // Log the action (optional but good for tracking)
+        console.log(`Admin gifted premium to user ${user.email}`);
+
+        res.json({ success: true, user });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 app.post('/api/user/change-password', auth, async (req, res) => {
     try {
         const { oldPassword, newPassword } = req.body;

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
-import { fetchUsers, adminResetPassword, deleteUser, fetchNotifications } from '../../services/api';
-import { AlertCircle, Users, Key, Shield, Search, X, User as UserIcon, Lock } from 'lucide-react';
+import { fetchUsers, adminResetPassword, deleteUser, fetchNotifications, giftPremium } from '../../services/api'; import { AlertCircle, Users, Key, Shield, Search, X, User as UserIcon, Lock, Gift } from 'lucide-react';
+
 import { AdminLayout } from './AdminLayout';
 import styles from './ManageUsers.module.css';
 
@@ -268,6 +268,26 @@ export const ManageUsers = () => {
                                         Cancel
                                     </button>
                                 </form>
+
+                                <div className="mt-4 pt-4 border-t border-slate-700">
+                                    <button
+                                        type="button"
+                                        className={styles.premiumBtn}
+                                        onClick={async () => {
+                                            if (!confirm(`Gift 1 Year Premium to ${selectedUser.name}?`)) return;
+                                            const tid = toast.loading("Gifting Premium...");
+                                            try {
+                                                await giftPremium(selectedUser.id);
+                                                toast.success("Premium Gifted! 🎁", { id: tid });
+                                                loadUsers(); // Refresh to see updated status if we show it
+                                            } catch (e) {
+                                                toast.error("Failed to gift premium", { id: tid });
+                                            }
+                                        }}
+                                    >
+                                        <Gift size={16} /> Gift 1 Year Premium
+                                    </button>
+                                </div>
 
                                 <div className="mt-8 pt-4 border-t border-slate-700">
                                     <button
