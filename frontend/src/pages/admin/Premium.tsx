@@ -6,6 +6,7 @@ import {
     CheckCircle, XCircle
 } from 'lucide-react';
 import toast from 'react-hot-toast';
+import styles from './Premium.module.css';
 
 interface Payment {
     _id: string;
@@ -82,201 +83,215 @@ export const Premium = () => {
         }
     };
 
-    const formatDate = (d: string) => new Date(d).toLocaleDateString();
+    const formatDate = (d: string) => new Date(d).toLocaleDateString(undefined, {
+        year: 'numeric', month: 'short', day: 'numeric'
+    });
 
     return (
         <AdminLayout title="Premium Management">
-            <div className="p-6 max-w-7xl mx-auto space-y-8">
+            <div className={styles.container}>
 
-                {/* Stats Overview */}
                 {loading ? (
-                    <div className="text-center py-20">
-                        <div className="animate-spin w-10 h-10 border-4 border-indigo-500 border-t-transparent rounded-full mx-auto mb-4"></div>
-                        <p className="text-slate-400">Loading Premium Data...</p>
+                    <div className={styles.loadingContainer}>
+                        <div className={styles.loadingSpinner}></div>
+                        <p>Loading Premium Data...</p>
                     </div>
                 ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div className="bg-slate-800 p-6 rounded-2xl border border-slate-700 flex items-center gap-4">
-                            <div className="p-4 rounded-xl bg-purple-500/20 text-purple-400">
-                                <Users size={32} />
-                            </div>
-                            <div>
-                                <h3 className="text-slate-400 text-sm">Active Premium Users</h3>
-                                <p className="text-3xl font-bold text-white">{premiumUsers.length}</p>
-                            </div>
-                        </div>
-
-                        <div className="bg-slate-800 p-6 rounded-2xl border border-slate-700 flex items-center gap-4">
-                            <div className="p-4 rounded-xl bg-emerald-500/20 text-emerald-400">
-                                <CreditCard size={32} />
-                            </div>
-                            <div>
-                                <h3 className="text-slate-400 text-sm">Total Revenue</h3>
-                                <p className="text-3xl font-bold text-white">
-                                    ₹{payments.reduce((acc, curr) => acc + (curr.amount || 0), 0)}
-                                </p>
-                            </div>
-                        </div>
-
-                        <div className="bg-slate-800 p-6 rounded-2xl border border-slate-700 flex items-center gap-4">
-                            <div className="p-4 rounded-xl bg-yellow-500/20 text-yellow-400">
-                                <Gift size={32} />
-                            </div>
-                            <div>
-                                <h3 className="text-slate-400 text-sm">Gifted Plans</h3>
-                                <p className="text-3xl font-bold text-white">
-                                    {premiumUsers.filter(u => u.premiumType === 'gift').length}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                )}
-
-                {/* Premium Users Table */}
-                <div className="bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden">
-                    <div className="p-6 border-b border-slate-700 flex justify-between items-center">
-                        <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                            <Users size={20} className="text-indigo-400" /> Subscribers
-                        </h2>
-                    </div>
-                    <div className="overflow-x-auto">
-                        <table className="w-full text-left text-slate-300">
-                            <thead className="bg-slate-900/50 text-slate-400 uppercase text-xs">
-                                <tr>
-                                    <th className="p-4">User</th>
-                                    <th className="p-4">Plan Type</th>
-                                    <th className="p-4">Expires On</th>
-                                    <th className="p-4">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-slate-700">
-                                {premiumUsers.map(user => (
-                                    <tr key={user._id} className="hover:bg-slate-700/30">
-                                        <td className="p-4">
-                                            <div className="font-medium text-white">{user.name}</div>
-                                            <div className="text-xs text-slate-500">{user.email}</div>
-                                        </td>
-                                        <td className="p-4">
-                                            <span className={`px-2 py-1 rounded text-xs font-bold ${user.premiumType === 'gift' ? 'bg-purple-500/20 text-purple-400' : 'bg-emerald-500/20 text-emerald-400'
-                                                }`}>
-                                                {user.premiumType.toUpperCase()}
-                                            </span>
-                                        </td>
-                                        <td className="p-4">{formatDate(user.premiumExpiry)}</td>
-                                        <td className="p-4">
-                                            <button
-                                                onClick={() => handleRenew(user._id)}
-                                                className="px-3 py-1 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-sm flex items-center gap-2"
-                                            >
-                                                <Gift size={14} /> Gift Renew
-                                            </button>
-                                        </td>
-                                    </tr>
-                                ))}
-                                {premiumUsers.length === 0 && (
-                                    <tr>
-                                        <td colSpan={4} className="p-8 text-center text-slate-500">No premium subscribers yet.</td>
-                                    </tr>
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                {/* Transaction History */}
-                <div className="bg-slate-800 rounded-2xl border border-slate-700 overflow-hidden">
-                    <div className="p-6 border-b border-slate-700">
-                        <h2 className="text-xl font-bold text-white flex items-center gap-2">
-                            <CreditCard size={20} className="text-emerald-400" /> Transaction History
-                        </h2>
-                    </div>
-                    <div className="overflow-x-auto">
-                        <table className="w-full text-left text-slate-300">
-                            <thead className="bg-slate-900/50 text-slate-400 uppercase text-xs">
-                                <tr>
-                                    <th className="p-4">Date</th>
-                                    <th className="p-4">User</th>
-                                    <th className="p-4">Order ID</th>
-                                    <th className="p-4">Amount</th>
-                                    <th className="p-4">Status</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-slate-700">
-                                {payments.map(pay => (
-                                    <tr key={pay._id} className="hover:bg-slate-700/30">
-                                        <td className="p-4">{formatDate(pay.date)}</td>
-                                        <td className="p-4 text-white font-medium">{pay.userName}</td>
-                                        <td className="p-4 text-xs font-mono text-slate-500">{pay.orderId || 'N/A'}</td>
-                                        <td className="p-4 font-bold text-white">₹{pay.amount}</td>
-                                        <td className="p-4">
-                                            {pay.status === 'paid' ? (
-                                                <span className="flex items-center gap-1 text-emerald-400 text-xs font-bold">
-                                                    <CheckCircle size={14} /> PAID
-                                                </span>
-                                            ) : (
-                                                <span className="flex items-center gap-1 text-rose-400 text-xs font-bold">
-                                                    <XCircle size={14} /> FAILED
-                                                </span>
-                                            )}
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                {/* Page Access Control */}
-                <div className="bg-slate-800 rounded-2xl border border-slate-700 p-6">
-                    <h2 className="text-xl font-bold text-white mb-4 flex items-center gap-2">
-                        <Lock size={20} className="text-orange-400" /> Premium Content Control
-                    </h2>
-                    <p className="text-slate-400 mb-6">Toggle which pages require Premium access.</p>
-                    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                        {[
-                            { name: 'Heaven', path: '/heaven' },
-                            { name: 'Shops Global', path: '/shops' },
-                            { name: 'AI Diagnostics', path: '/make-it-real' }, // Assuming this corresponds to AI
-                            { name: 'Leaderboard', path: '/leaderboard' },
-                            { name: 'Nearby GPS', path: '/nearby' }
-                        ].map(page => {
-                            const isLocked = restrictedPages.includes(page.path);
-                            return (
-                                <div
-                                    key={page.path}
-                                    onClick={async () => {
-                                        const newList = isLocked
-                                            ? restrictedPages.filter(p => p !== page.path)
-                                            : [...restrictedPages, page.path];
-
-                                        // Update Local
-                                        setRestrictedPages(newList);
-
-                                        // Save to DB
-                                        try {
-                                            await fetch(`${API_URL}/admin/settings/restricted-pages`, {
-                                                method: 'POST',
-                                                headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
-                                                body: JSON.stringify({ pages: newList })
-                                            });
-                                            toast.success(`${page.name} is now ${isLocked ? 'Free' : 'Premium Only'}`);
-                                        } catch (e) {
-                                            toast.error("Failed to save setting");
-                                        }
-                                    }}
-                                    className={`p-4 rounded-xl flex justify-between items-center border cursor-pointer transition-all duration-200 ${isLocked
-                                        ? 'bg-slate-900 border-orange-500/50 shadow-[0_0_15px_rgba(249,115,22,0.1)]'
-                                        : 'bg-slate-800 border-slate-600 hover:border-emerald-500'
-                                        }`}
-                                >
-                                    <span className={isLocked ? "text-orange-400 font-bold" : "text-slate-300"}>{page.name}</span>
-                                    {isLocked ? <Lock size={18} className="text-orange-500" /> : <Unlock size={18} className="text-emerald-500" />}
+                    <>
+                        {/* Highlights Grid */}
+                        <div className={styles.statsGrid}>
+                            <div className={styles.statCard}>
+                                <div className={`${styles.statIconBox} ${styles.iconPurple}`}>
+                                    <Users size={32} />
                                 </div>
-                            );
-                        })}
-                    </div>
-                </div>
+                                <div className={styles.statContent}>
+                                    <h3>Active Subscribers</h3>
+                                    <div className={styles.statValue}>{premiumUsers.length}</div>
+                                </div>
+                                {/* Decorative orb */}
+                                <div style={{ position: 'absolute', right: -20, top: -20, width: 100, height: 100, background: 'rgba(168,85,247,0.1)', borderRadius: '50%', filter: 'blur(30px)' }}></div>
+                            </div>
 
+                            <div className={styles.statCard}>
+                                <div className={`${styles.statIconBox} ${styles.iconEmerald}`}>
+                                    <CreditCard size={32} />
+                                </div>
+                                <div className={styles.statContent}>
+                                    <h3>Total Revenue</h3>
+                                    <div className={styles.statValue}>
+                                        ₹{payments.reduce((acc, curr) => acc + (curr.amount || 0), 0)}
+                                    </div>
+                                </div>
+                                <div style={{ position: 'absolute', right: -20, top: -20, width: 100, height: 100, background: 'rgba(16,185,129,0.1)', borderRadius: '50%', filter: 'blur(30px)' }}></div>
+                            </div>
+
+                            <div className={styles.statCard}>
+                                <div className={`${styles.statIconBox} ${styles.iconAmber}`}>
+                                    <Gift size={32} />
+                                </div>
+                                <div className={styles.statContent}>
+                                    <h3>Gifted Plans</h3>
+                                    <div className={styles.statValue}>
+                                        {premiumUsers.filter(u => u.premiumType === 'gift').length}
+                                    </div>
+                                </div>
+                                <div style={{ position: 'absolute', right: -20, top: -20, width: 100, height: 100, background: 'rgba(245,158,11,0.1)', borderRadius: '50%', filter: 'blur(30px)' }}></div>
+                            </div>
+                        </div>
+
+                        {/* Control Deck */}
+                        <div className={styles.sectionPanel}>
+                            <div className={styles.panelHeader}>
+                                <h2 className={styles.panelTitle}>
+                                    <Lock size={20} className="text-orange-400" />
+                                    <span>Access Control Deck</span>
+                                </h2>
+                                <span style={{ fontSize: '0.85rem', color: '#94a3b8' }}>Click to toggle specific page restrictions</span>
+                            </div>
+
+                            <div className={styles.controlGrid}>
+                                {[
+                                    { name: 'Heaven', path: '/heaven' },
+                                    { name: 'Shops Global', path: '/shops' },
+                                    { name: 'AI Diagnostics', path: '/make-it-real' },
+                                    { name: 'Leaderboard', path: '/leaderboard' },
+                                    { name: 'Nearby GPS', path: '/nearby' }
+                                ].map(page => {
+                                    const isLocked = restrictedPages.includes(page.path);
+                                    return (
+                                        <div
+                                            key={page.path}
+                                            onClick={async () => {
+                                                const newList = isLocked
+                                                    ? restrictedPages.filter(p => p !== page.path)
+                                                    : [...restrictedPages, page.path];
+
+                                                setRestrictedPages(newList);
+                                                try {
+                                                    await fetch(`${API_URL}/admin/settings/restricted-pages`, {
+                                                        method: 'POST',
+                                                        headers: { 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' },
+                                                        body: JSON.stringify({ pages: newList })
+                                                    });
+                                                    toast.success(`${page.name} is now ${isLocked ? 'Unlocked' : 'Locked'}`);
+                                                } catch (e) {
+                                                    toast.error("Failed to save setting");
+                                                }
+                                            }}
+                                            className={`${styles.controlCard} ${isLocked ? styles.locked : ''}`}
+                                        >
+                                            <span className={styles.cardName}>{page.name}</span>
+                                            {isLocked
+                                                ? <Lock size={20} className="text-orange-500" />
+                                                : <Unlock size={20} className="text-emerald-500" />
+                                            }
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+
+                        {/* Recent Subscribers */}
+                        <div className={styles.sectionPanel}>
+                            <div className={styles.panelHeader}>
+                                <h2 className={styles.panelTitle}>
+                                    <Users size={20} className="text-indigo-400" />
+                                    <span>Premium Subscribers</span>
+                                </h2>
+                            </div>
+                            <div className={styles.tableContainer}>
+                                <table className={styles.table}>
+                                    <thead>
+                                        <tr>
+                                            <th>User</th>
+                                            <th>Plan Type</th>
+                                            <th>Expires</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {premiumUsers.map(user => (
+                                            <tr key={user._id}>
+                                                <td>
+                                                    <div className={styles.userCell}>
+                                                        <span className={styles.userName}>{user.name}</span>
+                                                        <span className={styles.userEmail}>{user.email}</span>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <span className={`${styles.badge} ${user.premiumType === 'gift' ? styles.badgeGift : styles.badgeStandard}`}>
+                                                        {user.premiumType}
+                                                    </span>
+                                                </td>
+                                                <td>{formatDate(user.premiumExpiry)}</td>
+                                                <td>
+                                                    <button onClick={() => handleRenew(user._id)} className={styles.actionBtn}>
+                                                        <Gift size={14} /> Gift Renew
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                        {premiumUsers.length === 0 && (
+                                            <tr>
+                                                <td colSpan={4} style={{ textAlign: 'center', padding: '3rem', color: '#64748b' }}>No active subscribers found.</td>
+                                            </tr>
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        {/* Transactions */}
+                        <div className={styles.sectionPanel}>
+                            <div className={styles.panelHeader}>
+                                <h2 className={styles.panelTitle}>
+                                    <CreditCard size={20} className="text-emerald-400" />
+                                    <span>Transaction History</span>
+                                </h2>
+                            </div>
+                            <div className={styles.tableContainer}>
+                                <table className={styles.table}>
+                                    <thead>
+                                        <tr>
+                                            <th>Date</th>
+                                            <th>User</th>
+                                            <th>Order ID</th>
+                                            <th>Amount</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {payments.map(pay => (
+                                            <tr key={pay._id}>
+                                                <td style={{ color: '#94a3b8' }}>{formatDate(pay.date)}</td>
+                                                <td style={{ fontWeight: 500 }}>{pay.userName}</td>
+                                                <td style={{ fontFamily: 'monospace', fontSize: '0.85rem', color: '#64748b' }}>{pay.orderId || 'PROMO-FREE'}</td>
+                                                <td style={{ fontWeight: 700, color: '#f1f5f9' }}>₹{pay.amount}</td>
+                                                <td>
+                                                    {pay.status === 'paid' ? (
+                                                        <span className={`${styles.badge} ${styles.badgePaid}`}>
+                                                            <CheckCircle size={12} /> PAID
+                                                        </span>
+                                                    ) : (
+                                                        <span className={`${styles.badge} ${styles.badgeFailed}`}>
+                                                            <XCircle size={12} /> FAILED
+                                                        </span>
+                                                    )}
+                                                </td>
+                                            </tr>
+                                        ))}
+                                        {payments.length === 0 && (
+                                            <tr>
+                                                <td colSpan={5} style={{ textAlign: 'center', padding: '3rem', color: '#64748b' }}>No transaction history available.</td>
+                                            </tr>
+                                        )}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </>
+                )}
             </div>
         </AdminLayout>
     );
