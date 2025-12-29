@@ -1,129 +1,227 @@
-import { useState } from 'react';
-import { ArrowLeft, Palette, Save, Share2, Layers } from 'lucide-react';
+import { useState, Suspense, useRef } from 'react';
+import { Canvas, useLoader } from '@react-three/fiber';
+import { OrbitControls, ContactShadows, Environment, Decal, useTexture } from '@react-three/drei';
+import { TextureLoader } from 'three';
+import { ArrowLeft, Upload, ShoppingBag, Palette, Maximize, Move, RotateCcw } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import styles from './PotDesigner.module.css';
 
+// --- 3D Components ---
+
+function Pot({ color, decalImage, decalProps }: { color: string, decalImage: string | null, decalProps: any }) {
+    // Standard simple pot geometry: Cylinder
+    // We can also use a LatheGeometry for more shape, but Cylinder is fine for a "Modern Pot"
+    const texture = useTexture('https://images.unsplash.com/photo-1614730341194-75c60740a2d3?q=80&w=2667&auto=format&fit=crop'); // Subtle concrete/ceramic noise
+
+    return (
+        <mesh position={[0, 0.5, 0]} castShadow receiveShadow>
+            {/* TopRadius, BottomRadius, Height, Segments */}
+            <cylinderGeometry args={[1.2, 0.9, 2.2, 64]} />
+            <meshStandardMaterial
+                color={color}
+                roughness={0.6}
+                metalness={0.1}
+                map={texture}
+                envMapIntensity={0.8}
+            />
+
+            {decalImage && (
+                <Decal
+                    position={[0, decalProps.y, 1.1]} // Z is front
+                    rotation={[0, 0, decalProps.rotation]}
+                    scale={[decalProps.scale, decalProps.scale, 1]}
+                >
+                    <meshBasicMaterial
+                        map={useLoader(TextureLoader, decalImage)}
+                        transparent
+                        polygonOffset
+                        polygonOffsetFactor={-1}
+                    />
+                </Decal>
+            )}
+        </mesh>
+    );
+}
+
+// --- Main Page Component ---
+
 export const PotDesigner = () => {
     const navigate = useNavigate();
-    const [selectedColor, setSelectedColor] = useState('#e2e8f0');
-    const [selectedPattern, setSelectedPattern] = useState('none');
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const patterns = [
-        { id: 'none', name: 'Smooth Matte' },
-        { id: 'dots', name: 'Polka Dots' },
-        { id: 'stripes', name: 'Modern Stripes' },
-        { id: 'marble', name: 'Marble Texture' },
-        { id: 'terrazzo', name: 'Terrazzo' }
-    ];
+    // State
+    const [color, setColor] = useState('#e2e8f0');
+    const [image, setImage] = useState<string | null>(null);
+    const [decalProps, setDecalProps] = useState({
+        y: 0,
+        scale: 1,
+        rotation: 0
+    });
 
     const colors = [
-        '#e2e8f0', '#94a3b8', '#475569', '#1e293b',
-        '#fca5a5', '#ef4444', '#b91c1c',
-        '#fbbf24', '#d97706',
-        '#86efac', '#22c55e', '#15803d',
-        '#93c5fd', '#3b82f6', '#1d4ed8',
-        '#d8b4fe', '#a855f7', '#7e22ce'
+        '#e2e8f0', '#94a3b8', '#64748b', '#0f172a', // Grayscale
+        '#fecaca', '#ef4444', '#991b1b', // Reds
+        '#fed7aa', '#f97316', '#c2410c', // Oranges
+        '#fde047', '#eab308', // Yellows
+        '#86efac', '#22c55e', '#166534', // Greens
+        '#93c5fd', '#3b82f6', '#1e40af', // Blues
+        '#d8b4fe', '#a855f7', '#6b21a8'  // Purples
     ];
 
-    const handleSave = () => {
-        toast.success("Design saved to your collection!");
-    };
-
-    const getPatternStyle = () => {
-        switch (selectedPattern) {
-            case 'dots': return { backgroundImage: 'radial-gradient(rgba(255,255,255,0.2) 2px, transparent 2.5px)', backgroundSize: '15px 15px' };
-            case 'stripes': return { backgroundImage: 'repeating-linear-gradient(45deg, rgba(255,255,255,0.05) 0px, rgba(255,255,255,0.05) 10px, transparent 10px, transparent 20px)' };
-            case 'marble': return { backgroundImage: 'url("https://www.transparenttextures.com/patterns/shattered-island.png")', backgroundBlendMode: 'overlay' };
-            case 'terrazzo': return { backgroundImage: 'url("https://www.transparenttextures.com/patterns/white-diamond-dark.png")' }; // Placeholder for terrazzo
-            default: return {};
+    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                setImage(event.target?.result as string);
+                toast.success("Art applied locally!");
+            };
+            reader.readAsDataURL(file);
         }
     };
 
-    return (
-        <div className={styles.container}>
-            {/* Header */}
-            <header className={styles.header}>
-                <button onClick={() => navigate('/heaven')} className="p-2 hover:bg-white/10 rounded-full transition-colors text-slate-300">
-                    <ArrowLeft size={24} />
-                </button>
-                <div className="flex items-center gap-2">
-                    <Palette className="text-indigo-400" size={24} />
-                    <h1 className={styles.title}>Ceramic Studio</h1>
-                </div>
-                <button className="p-2 hover:bg-white/10 rounded-full transition-colors text-slate-300">
-                    <Share2 size={24} />
-                </button>
-            </header>
+    const handleAddToCart = () => {
+        toast.success("Designed Pot added to cart!", { icon: '🛒' });
+        setTimeout(() => {
+            toast("Shipping functionality coming soon.", { icon: '🚚' });
+        }, 800);
+    };
 
-            <div className={styles.workspace}>
-                {/* 3D Preview Canvas */}
-                <div className={styles.canvas}>
-                    <div className={styles.gridPattern}></div>
-                    <div className={styles.previewArea}>
-                        {/* Plant Image (Layered) */}
-                        <img
-                            src="https://images.unsplash.com/photo-1597055181300-e249520535c7?w=800&auto=format&fit=crop&q=60"
-                            alt="Plant"
-                            className="absolute bottom-32 left-1/2 -translate-x-1/2 w-64 drop-shadow-2xl z-10 pointer-events-none"
-                        />
-                        {/* Styled Pot */}
-                        <div className={styles.potWrapper}>
-                            <div
-                                style={{
-                                    width: '100%',
-                                    height: '100%',
-                                    backgroundColor: selectedColor,
-                                    borderRadius: '10px 10px 60px 60px',
-                                    boxShadow: 'inset -20px -20px 40px rgba(0,0,0,0.3), inset 10px 10px 30px rgba(255,255,255,0.1), 0 20px 40px rgba(0,0,0,0.4)',
-                                    ...getPatternStyle()
-                                }}
-                            >
-                                <div className="absolute top-0 w-[110%] left-[-5%] h-6 bg-black/20 rounded-full blur-[1px]"></div>
-                            </div>
+    return (
+        <div className={styles.studioContainer}>
+            {/* 3D Canvas */}
+            <div className={styles.canvasArea}>
+                <Suspense fallback={<div className={styles.loaderOverlay}>Loading 3D Engine...</div>}>
+                    <Canvas shadows camera={{ position: [0, 2, 5], fov: 45 }}>
+                        <ambientLight intensity={0.7} />
+                        <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} shadow-mapSize={2048} castShadow />
+                        <Environment preset="city" />
+
+                        <Pot color={color} decalImage={image} decalProps={decalProps} />
+
+                        <ContactShadows position={[0, -0.6, 0]} opacity={0.4} scale={10} blur={2} far={4} />
+                        <OrbitControls minPolarAngle={Math.PI / 4} maxPolarAngle={Math.PI / 2} enablePan={false} minDistance={3} maxDistance={8} />
+                    </Canvas>
+                </Suspense>
+            </div>
+
+            {/* Controls Panel */}
+            <div className={styles.controlsPanel}>
+                <div className={styles.panelHeader}>
+                    <div className={styles.studioTitle}>
+                        <Palette size={20} className="text-sky-400" />
+                        Ceramic 3D Studio
+                    </div>
+                    <button onClick={() => navigate('/heaven')} className={styles.backBtn}>
+                        <ArrowLeft size={20} />
+                    </button>
+                </div>
+
+                <div className={styles.scrollContent}>
+                    {/* Visualizer Image Upload */}
+                    <div className={styles.sectionBlock}>
+                        <div className={styles.sectionLabel}>
+                            <Upload size={14} /> Custom Art Overlay
+                        </div>
+                        <div className={styles.uploadBox} onClick={() => fileInputRef.current?.click()}>
+                            <input
+                                ref={fileInputRef}
+                                type="file"
+                                accept="image/*"
+                                className={styles.fileInput}
+                                onChange={handleImageUpload}
+                            />
+                            <div className={styles.uploadText}>{image ? 'Change Artwork' : 'Upload Image'}</div>
+                            <div className={styles.uploadSub}>Supports JPG, PNG (Transparent recommended)</div>
                         </div>
                     </div>
-                </div>
 
-                {/* Controls */}
-                <aside className={styles.controls}>
-                    <div>
-                        <h3 className={styles.sectionTitle}>
-                            <Palette size={14} className="inline mr-2" /> Base Color
-                        </h3>
+                    {/* Image Controls (Only if image exists) */}
+                    {image && (
+                        <div className={styles.sectionBlock}>
+                            <div className={styles.sectionLabel}>
+                                <Move size={14} /> Refine Placement
+                            </div>
+
+                            {/* Scale */}
+                            <div className={styles.sliderGroup}>
+                                <div className={styles.sliderLabel}>
+                                    <span style={{ display: 'flex', gap: '4px', alignItems: 'center' }}><Maximize size={12} /> Scale</span> <span>{(decalProps.scale * 100).toFixed(0)}%</span>
+                                </div>
+                                <input
+                                    type="range"
+                                    min="0.2"
+                                    max="2"
+                                    step="0.1"
+                                    value={decalProps.scale}
+                                    onChange={(e) => setDecalProps(p => ({ ...p, scale: parseFloat(e.target.value) }))}
+                                    className={styles.rangeInput}
+                                />
+                            </div>
+
+                            {/* Position Y */}
+                            <div className={styles.sliderGroup}>
+                                <div className={styles.sliderLabel}>
+                                    <span>Height Placement</span>
+                                </div>
+                                <input
+                                    type="range"
+                                    min="-1"
+                                    max="1"
+                                    step="0.1"
+                                    value={decalProps.y}
+                                    onChange={(e) => setDecalProps(p => ({ ...p, y: parseFloat(e.target.value) }))}
+                                    className={styles.rangeInput}
+                                />
+                            </div>
+
+                            {/* Texture Rotation */}
+                            <div className={styles.sliderGroup}>
+                                <div className={styles.sliderLabel}>
+                                    <span style={{ display: 'flex', gap: '4px', alignItems: 'center' }}><RotateCcw size={12} /> Rotation</span> <span>{Math.round(decalProps.rotation * (180 / Math.PI))}°</span>
+                                </div>
+                                <input
+                                    type="range"
+                                    min={-Math.PI}
+                                    max={Math.PI}
+                                    step="0.1"
+                                    value={decalProps.rotation}
+                                    onChange={(e) => setDecalProps(p => ({ ...p, rotation: parseFloat(e.target.value) }))}
+                                    className={styles.rangeInput}
+                                />
+                            </div>
+
+                        </div>
+                    )}
+
+
+                    {/* Base Color Picker */}
+                    <div className={styles.sectionBlock}>
+                        <div className={styles.sectionLabel}>
+                            <Palette size={14} /> Base Glaze Color
+                        </div>
                         <div className={styles.colorGrid}>
-                            {colors.map(color => (
-                                <button
-                                    key={color}
-                                    onClick={() => setSelectedColor(color)}
-                                    className={`${styles.colorBtn} ${selectedColor === color ? styles.active : ''}`}
-                                    style={{ backgroundColor: color }}
+                            {colors.map(c => (
+                                <div
+                                    key={c}
+                                    className={`${styles.colorDot} ${color === c ? styles.colorDotActive : ''}`}
+                                    style={{ backgroundColor: c }}
+                                    onClick={() => setColor(c)}
                                 />
                             ))}
                         </div>
                     </div>
 
-                    <div>
-                        <h3 className={styles.sectionTitle}>
-                            <Layers size={14} className="inline mr-2" /> Surface Finish
-                        </h3>
-                        <div className={styles.patternList}>
-                            {patterns.map(pat => (
-                                <button
-                                    key={pat.id}
-                                    onClick={() => setSelectedPattern(pat.id)}
-                                    className={`${styles.patternBtn} ${selectedPattern === pat.id ? styles.active : ''}`}
-                                >
-                                    {pat.name}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
+                </div>
 
-                    <button onClick={handleSave} className={styles.saveBtn}>
-                        <Save size={20} /> Save Masterpiece
+                {/* Footer Action */}
+                <div className={styles.footerActions}>
+                    <button className={styles.addToCartBtn} onClick={handleAddToCart}>
+                        <ShoppingBag size={20} />
+                        Add to Cart &minus; Free Preview
                     </button>
-                </aside>
+                </div>
             </div>
         </div>
     );
