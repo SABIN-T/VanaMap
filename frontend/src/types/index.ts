@@ -88,4 +88,6 @@ export interface User {
     premiumType?: 'none' | 'trial' | 'monthly' | 'gift' | 'free_promo';
     premiumExpiry?: string;
     premiumStartDate?: string;
+    gameLevel?: number;
+    gamePoints?: number;
 }

@@ -22,19 +22,28 @@ export const ForestGame = () => {
     const [timeLeft, setTimeLeft] = useState(30);
     const [targets, setTargets] = useState<Target[]>([]);
     const [combo, setCombo] = useState(0);
+    const [showLevelUp, setShowLevelUp] = useState(false);
+    const [currentLevel, setCurrentLevel] = useState(1);
     const gameTimerRef = useRef<number | null>(null);
     const spawnTimerRef = useRef<number | null>(null);
+
+    // Load initial user data
+    useEffect(() => {
+        if (user) {
+            setCurrentLevel(user.gameLevel || 1);
+        }
+    }, [user]);
 
     const spawnTarget = useCallback(() => {
         const id = Date.now();
         const x = Math.random() * 80 + 10; // 10% to 90%
-        const y = Math.random() * 70 + 15; // 15% to 85%
+        const y = Math.random() * 60 + 15; // 15% to 75% (Keeping it higher for mobile visibility)
         const types: Target['type'][] = ['seed', 'leaf', 'flower'];
         const type = types[Math.floor(Math.random() * types.length)];
 
         setTargets(prev => [...prev, { id, x, y, type }]);
 
-        // Auto remove target after 2 seconds if not clicked
+        // Auto remove target
         setTimeout(() => {
             setTargets(prev => prev.filter(t => t.id !== id));
         }, 1800);
@@ -46,6 +55,7 @@ export const ForestGame = () => {
         setCombo(0);
         setGameState('playing');
         setTargets([]);
+        setShowLevelUp(false);
     };
 
     const endGame = useCallback(async () => {
@@ -53,22 +63,37 @@ export const ForestGame = () => {
         if (gameTimerRef.current) clearInterval(gameTimerRef.current);
         if (spawnTimerRef.current) clearInterval(spawnTimerRef.current);
 
-        // Award Chlorophyll Points (2 per game)
+        // Award Chlorophyll Points (10 per game)
         try {
-            await addPoints(2);
+            const POINTS_REWARD = 10;
+            await addPoints(POINTS_REWARD);
+
+            // Check for level up logic (every 100 points)
+            const newPoints = (user?.points || 0) + POINTS_REWARD;
+            const newLevel = Math.floor(newPoints / 100) + 1;
+
+            if (newLevel > currentLevel) {
+                setShowLevelUp(true);
+                setCurrentLevel(newLevel);
+                toast.success(`LEVEL UP! You are now Level ${newLevel}! 🌟`, { duration: 4000 });
+            }
+
             // Optimistically update UI
             if (user) {
-                updateUser({ points: (user.points || 0) + 2 });
+                updateUser({
+                    points: newPoints,
+                    gameLevel: newLevel
+                });
             }
-            toast.success("+2 Chlorophyll Points added! 🌿", { icon: '🧪' });
+            toast.success(`+${POINTS_REWARD} Chlorophyll Points added! 🌿`, { icon: '🧪' });
         } catch (e) {
             console.error("Points update failed");
         }
-    }, [user, updateUser]);
+    }, [user, updateUser, currentLevel]);
 
     useEffect(() => {
         if (gameState === 'playing') {
-            gameTimerRef.current = setInterval(() => {
+            gameTimerRef.current = window.setInterval(() => {
                 setTimeLeft(prev => {
                     if (prev <= 1) {
                         endGame();
@@ -78,7 +103,7 @@ export const ForestGame = () => {
                 });
             }, 1000);
 
-            spawnTimerRef.current = setInterval(() => {
+            spawnTimerRef.current = window.setInterval(() => {
                 spawnTarget();
             }, 800);
         }
@@ -99,6 +124,15 @@ export const ForestGame = () => {
         <div className={styles.container}>
             <div className={styles.overlay}></div>
 
+            {/* Level Up Modal */}
+            {showLevelUp && (
+                <div className={styles.levelModal}>
+                    <div className={styles.levelTitle}>LEVEL UP!</div>
+                    <div className={styles.levelSub}>Rank {currentLevel} achieved</div>
+                    <div className="text-4xl animate-bounce">⭐</div>
+                </div>
+            )}
+
             {/* Header: High Density */}
             <header className={styles.header}>
                 <button onClick={() => navigate('/heaven')} className={styles.backBtn}>
@@ -106,7 +140,10 @@ export const ForestGame = () => {
                 </button>
                 <div className={styles.statsGroup}>
                     <div className={styles.miniStat}>
-                        <Timer size={14} className={timeLeft < 10 ? styles.pulseRed : ''} />
+                        <span>Lvl {currentLevel}</span>
+                    </div>
+                    <div className={`${styles.miniStat} ${timeLeft < 10 ? styles.pulseRed : ''}`}>
+                        <Timer size={timeLeft < 10 ? 20 : 14} />
                         <span>{timeLeft}s</span>
                     </div>
                     <div className={styles.miniStat}>
@@ -137,7 +174,7 @@ export const ForestGame = () => {
                         <button onClick={startGame} className={styles.startBtn}>
                             <Play fill="currentColor" size={20} /> Deploy Seedlings
                         </button>
-                        <p className={styles.rewardNote}>🏆 Complete 1 session for 2 Chlorophyll Points</p>
+                        <p className={styles.rewardNote}>🏆 Complete 1 session for 10 Chlorophyll Points</p>
                     </div>
                 )}
 
@@ -147,7 +184,7 @@ export const ForestGame = () => {
                             <button
                                 key={t.id}
                                 className={styles.target}
-                                style={{ left: `${t.x}% `, top: `${t.y}% ` }}
+                                style={{ left: `${t.x}%`, top: `${t.y}%` }}
                                 onClick={() => handleTargetClick(t.id)}
                             >
                                 <div className={styles.targetGlow}></div>
@@ -172,7 +209,7 @@ export const ForestGame = () => {
                             </div>
                             <div className={styles.pointsEarned}>
                                 <span className={styles.label}>Chlorophyll Gained</span>
-                                <span className={styles.value}>+2 Points</span>
+                                <span className={styles.value}>+10 Points</span>
                             </div>
                         </div>
                         <div className={styles.btnGroup}>

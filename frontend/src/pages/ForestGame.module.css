@@ -119,9 +119,72 @@
     align-items: center;
     justify-content: center;
     padding: 1rem;
+    padding-bottom: 80px;
+    /* Safe area for mobile nav */
 }
 
-/* Cards */
+/* ... existing styles ... */
+
+.miniStat {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 0.4rem 0.8rem;
+    border-radius: 99px;
+    border: var(--glass-border);
+    backdrop-filter: blur(10px);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    transition: all 0.3s;
+}
+
+.pulseRed {
+    animation: pulseRed 0.8s infinite;
+    color: #ef4444;
+    transform: scale(1.2);
+    /* Enlarge timer */
+    font-size: 1.1rem;
+    /* Make text bigger */
+    padding: 0.5rem 1rem;
+    /* Add padding */
+    background: rgba(239, 68, 68, 0.2);
+    border-color: rgba(239, 68, 68, 0.4);
+}
+
+/* Level Up Modal */
+.levelModal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(16, 185, 129, 0.95);
+    padding: 2rem;
+    border-radius: 1.5rem;
+    z-index: 100;
+    text-align: center;
+    box-shadow: 0 0 50px rgba(16, 185, 129, 0.5);
+    animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    min-width: 300px;
+    border: 2px solid #fff;
+}
+
+.levelTitle {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: #fff;
+    text-shadow: 0 4px 0 rgba(0, 0, 0, 0.1);
+    margin-bottom: 0.5rem;
+}
+
+.levelSub {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #064e3b;
+    margin-bottom: 1.5rem;
+}
+
 .card {
     background: var(--card-bg);
     backdrop-filter: blur(20px);
