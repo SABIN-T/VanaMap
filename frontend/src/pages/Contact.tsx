@@ -33,6 +33,25 @@ export const Contact = () => {
             return;
         }
 
+        // Check if user is logged in
+        const userStr = localStorage.getItem('user');
+        if (!userStr) {
+            toast.error("Please login to send an inquiry", {
+                icon: '🔒',
+                duration: 5000,
+                style: {
+                    borderRadius: '1rem',
+                    background: '#0f172a',
+                    color: '#fff',
+                    border: '1px solid #f43f5e'
+                }
+            });
+            setTimeout(() => {
+                navigate('/auth');
+            }, 1500);
+            return;
+        }
+
         const form = e.target as HTMLFormElement;
         const name = (form.elements[0] as HTMLInputElement).value;
         const message = (form.elements[2] as HTMLTextAreaElement).value;
@@ -63,9 +82,11 @@ export const Contact = () => {
             setUserCaptcha('');
             generateCaptcha();
         } catch (error: any) {
-            console.error(error);
-            toast.error(error.message || "Failed to send. Please Login first.", {
+            console.error("Support Ticket Error:", error);
+            const errorMsg = error.message || "Failed to send ticket. Please try again.";
+            toast.error(errorMsg, {
                 id: toastId,
+                duration: 5000,
                 style: {
                     borderRadius: '1rem',
                     background: '#0f172a',

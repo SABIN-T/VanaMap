@@ -592,7 +592,10 @@ export const createSupportTicket = async (data: { subject: string, message: stri
         headers: getHeaders(),
         body: JSON.stringify(data)
     });
-    if (!res.ok) throw new Error("Failed to create ticket");
+    if (!res.ok) {
+        const errorData = await res.json().catch(() => ({ error: 'Failed to create ticket' }));
+        throw new Error(errorData.error || 'Failed to create ticket');
+    }
     return res.json();
 };
 
