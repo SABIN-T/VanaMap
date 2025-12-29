@@ -362,12 +362,11 @@ export const MakeItReal = () => {
 
         if (potImg) {
             // Draw Plant first (behind/inside pot rim)
-            const plantW = potW * 1.1; // Make it a bit bushier
+            const plantW = potW * 0.72; // Reduced from 1.1 for "Best Fit"
             const plantH = (plantImg.height / plantImg.width) * plantW;
 
-            // SHIFT: Place plant base exactly on the top rim level of the pot
-            // We shift it down so it overlaps the pot area
-            const plantY = y - plantH + (potH * 0.25);
+            // SHIFT: Sink it perfectly into the rim
+            const plantY = y - plantH + (potH * 0.22);
             ctx.drawImage(plantImg, x + (potW - plantW) / 2, plantY, plantW, plantH);
             ctx.drawImage(potImg, x, y, potW, potH);
         } else {
@@ -511,8 +510,9 @@ export const MakeItReal = () => {
                                 alt="Foliage"
                                 draggable={false}
                                 style={{
-                                    marginBottom: useStudioPot ? '-55px' : '0',
-                                    zIndex: 1
+                                    marginBottom: useStudioPot ? '-48px' : '0',
+                                    zIndex: 1,
+                                    transform: useStudioPot ? 'scale(0.85)' : 'none'
                                 }}
                             />
                             {/* Pot Overlay */}
