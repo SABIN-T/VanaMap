@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import type { Plant, Vendor } from '../types';
 import { fetchPlants, fetchVendors, logSearch } from '../services/api';
 import { Search, ShoppingBag, AlertCircle } from 'lucide-react';
@@ -70,18 +70,6 @@ export const Shops = () => {
         return () => clearTimeout(timer);
     }, [searchQuery]);
 
-    const filteredPlants = plants.filter(p => {
-        const matchesCategory = activeCategory === 'all' ? true : p.type === activeCategory;
-        const q = searchQuery.toLowerCase();
-        const matchesSearch = p.name.toLowerCase().includes(q) ||
-            (p.scientificName?.toLowerCase().includes(q) ?? false);
-
-        const { inStock } = getStockStatus(p);
-        const matchesStock = stockFilter === 'all' ? true : (stockFilter === 'inStock' ? inStock : !inStock);
-
-        return matchesCategory && matchesSearch && matchesStock;
-    });
-
     const getStockStatus = (plant: Plant) => {
         const selling = vendors.filter(v => v.inventory?.some(i => i.plantId === plant.id && i.inStock));
         let count = 0;
@@ -123,6 +111,20 @@ export const Shops = () => {
             count: 0
         };
     };
+
+    const filteredPlants = useMemo(() => {
+        return plants.filter(p => {
+            const matchesCategory = activeCategory === 'all' ? true : p.type === activeCategory;
+            const q = searchQuery.toLowerCase();
+            const matchesSearch = p.name.toLowerCase().includes(q) ||
+                (p.scientificName?.toLowerCase().includes(q) ?? false);
+
+            const { inStock } = getStockStatus(p);
+            const matchesStock = stockFilter === 'all' ? true : (stockFilter === 'inStock' ? inStock : !inStock);
+
+            return matchesCategory && matchesSearch && matchesStock;
+        });
+    }, [plants, activeCategory, searchQuery, stockFilter, vendors]);
 
     return (
         <div className={styles.shopContainer}>
