@@ -235,6 +235,38 @@ app.use(mongoSanitize()); // Data sanitization against NoSQL query injection
 app.use(xss()); // Data sanitization against XSS
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
+// --- MIDDLEWARES ---
+
+const auth = (req, res, next) => {
+    const token = req.header('Authorization')?.replace('Bearer ', '');
+    if (!token) return res.status(401).json({ error: 'Access denied. No token provided.' });
+
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET);
+        req.user = decoded;
+        next();
+    } catch (ex) {
+        res.status(400).json({ error: 'Invalid token.' });
+    }
+};
+
+const admin = (req, res, next) => {
+    if (req.user?.role !== 'admin') return res.status(403).json({ error: 'Access denied. Admin only.' });
+    next();
+};
+
+// Helper to normalize user for frontend (stripping sensitive data)
+const normalizeUser = (user) => {
+    if (!user) return null;
+    const obj = user.toObject ? user.toObject() : user;
+    const { password, __v, _id, ...rest } = obj;
+    return {
+        id: _id ? _id.toString() : (obj.id || ''),
+        ...rest
+    };
+};
+
+
 // --- RATE LIMITING ---
 const authLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, // 15 minutes
@@ -275,36 +307,7 @@ const connectDB = async () => {
 };
 connectDB();
 
-// --- MIDDLEWARES ---
 
-const auth = (req, res, next) => {
-    const token = req.header('Authorization')?.replace('Bearer ', '');
-    if (!token) return res.status(401).json({ error: 'Access denied. No token provided.' });
-
-    try {
-        const decoded = jwt.verify(token, JWT_SECRET);
-        req.user = decoded;
-        next();
-    } catch (ex) {
-        res.status(400).json({ error: 'Invalid token.' });
-    }
-};
-
-const admin = (req, res, next) => {
-    if (req.user?.role !== 'admin') return res.status(403).json({ error: 'Access denied. Admin only.' });
-    next();
-};
-
-// Helper to normalize user for frontend (stripping sensitive data)
-const normalizeUser = (user) => {
-    if (!user) return null;
-    const obj = user.toObject ? user.toObject() : user;
-    const { password, __v, _id, ...rest } = obj;
-    return {
-        id: _id ? _id.toString() : (obj.id || ''),
-        ...rest
-    };
-};
 
 // --- HELPER: Unified Alert System ---
 const broadcastAlert = async (type, message, details = {}, url = '/') => {
