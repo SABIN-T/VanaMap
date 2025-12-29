@@ -50,12 +50,18 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
 
                 if (needsHydration) {
                     try {
-                        const { fetchPlants } = await import('../services/api');
-                        const allPlants = await fetchPlants();
+                        const { fetchPlants, fetchMyCustomPots } = await import('../services/api');
+                        const [allPlants, myDesigns] = await Promise.all([
+                            fetchPlants(),
+                            fetchMyCustomPots().catch(() => []) // Fallback to empty if fails
+                        ]);
 
                         const hydratedItems: CartItem[] = (user.cart as any[]).map((item: any) => {
                             const raw = item as RawCartItem;
                             const targetId = raw.plantId || raw._id;
+                            if (!targetId) return null;
+
+                            // Try finding in standard plants
                             const fullPlant = allPlants.find(p => p.id === targetId);
                             if (fullPlant) {
                                 return {
@@ -65,6 +71,31 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
                                     vendorPrice: item.vendorPrice
                                 } as CartItem;
                             }
+
+                            // Try finding in user's custom designs
+                            const cleanId = targetId.replace('cp_', '');
+                            const customPot = myDesigns.find((d: any) => d._id === cleanId);
+                            if (customPot) {
+                                return {
+                                    plant: {
+                                        id: `cp_${customPot._id}`,
+                                        name: 'Your Custom Design',
+                                        scientificName: `Studio Ceramic (${customPot.potColor})`,
+                                        description: 'Handcrafted design from your VanaMap Studio session.',
+                                        imageUrl: customPot.potWithDesignUrl,
+                                        price: 299,
+                                        type: 'indoor',
+                                        medicinalValues: [],
+                                        advantages: ['Unique Style', 'High Quality'],
+                                        idealTempMin: 0, idealTempMax: 50, minHumidity: 0,
+                                        sunlight: 'Any', oxygenLevel: 'N/A'
+                                    },
+                                    quantity: item.quantity || 1,
+                                    vendorId: item.vendorId || 'vanamap',
+                                    vendorPrice: item.vendorPrice || 299
+                                } as CartItem;
+                            }
+
                             return null;
                         }).filter((i): i is CartItem => i !== null);
 

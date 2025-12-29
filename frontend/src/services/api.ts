@@ -528,6 +528,14 @@ export const saveCustomPot = async (customData: {
     }
 };
 
+export const fetchMyCustomPots = async () => {
+    const res = await fetch(`${API_URL}/custom-pots/my`, {
+        headers: getHeaders()
+    });
+    if (!res.ok) throw new Error("Failed to fetch your designs");
+    return await res.json();
+};
+
 export const fetchAdminCustomPots = async () => {
     const res = await fetch(`${API_URL}/admin/custom-pots`, {
         headers: getHeaders()

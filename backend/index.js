@@ -1893,10 +1893,19 @@ app.post('/api/custom-pots', auth, async (req, res) => {
             skipPush: true
         }).catch((e) => console.error("[STUDIO] Alert Broadcast Failed:", e.message));
 
-        res.status(201).json({ success: true, message: "Custom design saved to collection!" });
+        res.status(201).json({ success: true, message: "Custom design saved to collection!", design: customPot });
     } catch (err) {
         console.error("Custom Pot Save Error Details:", err);
         res.status(500).json({ error: "Studio Engine Error: " + err.message });
+    }
+});
+
+app.get('/api/custom-pots/my', auth, async (req, res) => {
+    try {
+        const pots = await CustomPot.find({ userId: req.user.id }).sort({ createdAt: -1 });
+        res.json(pots);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
     }
 });
 

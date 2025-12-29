@@ -135,16 +135,18 @@ export const PotDesigner = () => {
             }
 
             // 1. Save to Database
-            await saveCustomPot({
+            const design = await saveCustomPot({
                 potColor: color,
                 potWithDesignUrl,
                 rawDesignUrl: rawImageBase64 || '',
                 decalProps
             });
 
+            const stableId = design?.design?._id || Date.now().toString();
+
             // 2. Add to Shopping Cart
             addToCart({
-                id: `cp_${Date.now()}`,
+                id: `cp_${stableId}`,
                 name: 'Your Custom Pot Design',
                 scientificName: 'Handcrafted Ceramic',
                 description: 'A unique ceramic pot designed by you in the VanaMap Studio.',
