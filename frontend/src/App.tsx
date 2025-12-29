@@ -5,7 +5,7 @@ import { AuthProvider } from './context/AuthContext';
 import { Toaster } from 'react-hot-toast';
 import { InstallPrompt } from './components/common/InstallPrompt';
 import { MobileTabBar } from './components/layout/MobileTabBar';
-
+import { SwipeNavigator } from './components/layout/SwipeNavigator';
 
 import { AnimatedRoutes } from './components/layout/AnimatedRoutes';
 
@@ -46,7 +46,7 @@ function App() {
               />
               <Navbar />
               <MobileTabBar />
-              {/* SwipeNavigator removed per user request */}
+              <SwipeNavigator />
               <InstallPrompt />
 
               <AnimatedRoutes />

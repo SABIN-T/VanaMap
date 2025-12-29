@@ -11,7 +11,8 @@ export const SwipeNavigator = () => {
     const touchEndY = useRef<number | null>(null);
 
     // Navigation Order (Matches MobileTabBar)
-    const tabs = ['/', '/nearby', '/shops', '/contact', '/cart'];
+    // Navigation Order (Matches MobileTabBar)
+    const tabs = ['/', '/nearby', '/shops', '/leaderboard', '/heaven', '/cart'];
     const minSwipeDistance = 70; // px
 
     useEffect(() => {
