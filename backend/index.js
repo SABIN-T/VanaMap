@@ -1586,6 +1586,20 @@ app.patch('/api/user/game-progress', auth, async (req, res) => {
     }
 });
 
+app.post('/api/user/add-points', auth, async (req, res) => {
+    try {
+        const { amount } = req.body;
+        const user = await User.findById(req.user.id);
+        if (!user) return res.status(404).json({ error: "User not found" });
+
+        user.points = (user.points || 0) + (amount || 0);
+        await user.save();
+        res.json({ success: true, points: user.points });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 app.get('/api/admin/designs', auth, admin, async (req, res) => {
     try {
 

@@ -394,6 +394,16 @@ export const completePurchase = async (items: unknown[]) => {
     return res.json();
 };
 
+export const addPoints = async (amount: number) => {
+    const res = await fetch(`${API_URL}/user/add-points`, {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify({ amount })
+    });
+    if (!res.ok) throw new Error("Failed to add points");
+    return res.json();
+};
+
 export const updateUserPoints = async (userId: string, points: number) => {
     const res = await fetch(`${API_URL}/admin/users/${userId}/points`, {
         method: 'PATCH',

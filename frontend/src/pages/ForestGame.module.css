@@ -1,180 +1,390 @@
 /* ForestGame.module.css */
 .container {
-    --forest-green: #059669;
-    --emerald-light: #34d399;
-    --bg-dark: #022c22;
+    --bg-dark: #0f172a;
+    --primary: #10b981;
+    --accent: #facc15;
+    --card-bg: rgba(15, 23, 42, 0.8);
+    --glass-border: 1px solid rgba(255, 255, 255, 0.1);
 
     min-height: 100vh;
-    background: radial-gradient(circle at center, #064e3b 0%, var(--bg-dark) 100%);
+    background: radial-gradient(circle at center, #134e4a 0%, #020617 100%);
     color: white;
     font-family: 'Outfit', sans-serif;
     overflow: hidden;
     position: relative;
     user-select: none;
+    touch-action: none;
 }
 
 .overlay {
     position: absolute;
     inset: 0;
     pointer-events: none;
-    background: url('https://www.transparenttextures.com/patterns/cubes.png');
-    opacity: 0.1;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
 }
 
+.bgGlow {
+    position: absolute;
+    bottom: -20%;
+    left: 50%;
+    width: 80%;
+    height: 60%;
+    background: var(--primary);
+    filter: blur(150px);
+    opacity: 0.15;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* Header */
 .header {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    padding: 2rem;
+    padding: 1rem 1.5rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    z-index: 20;
+    z-index: 50;
+    /* High z-index */
 }
 
 .backBtn {
-    padding: 0.75rem;
+    padding: 0.6rem;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 50%;
-    backdrop-filter: blur(8px);
-    transition: 0.3s;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.backBtn:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: scale(1.1);
-}
-
-.scoreBoard {
+    backdrop-filter: blur(10px);
+    border: var(--glass-border);
+    transition: 0.2s;
+    cursor: pointer;
     display: flex;
     align-items: center;
+    justify-content: center;
+}
+
+.backBtn:active {
+    transform: scale(0.95);
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.statsGroup {
+    display: flex;
     gap: 0.75rem;
-    background: rgba(0, 0, 0, 0.3);
-    padding: 0.5rem 1.25rem;
-    border-radius: 100px;
-    border: 1px solid rgba(52, 211, 153, 0.3);
 }
 
-.scoreValue {
-    font-size: 1.5rem;
-    font-weight: 800;
-    color: var(--emerald-light);
-    font-variant-numeric: tabular-nums;
+.miniStat {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 0.4rem 0.8rem;
+    border-radius: 99px;
+    border: var(--glass-border);
+    backdrop-filter: blur(10px);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
 }
 
-/* --- Start Screen --- */
-.startScreen {
+.pulseRed {
+    animation: pulseRed 1s infinite;
+    color: #ef4444;
+}
+
+@keyframes pulseRed {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.5;
+    }
+}
+
+/* Main Content */
+.mainContent {
+    position: relative;
+    z-index: 10;
     height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+/* Cards */
+.card {
+    background: var(--card-bg);
+    backdrop-filter: blur(20px);
+    border: var(--glass-border);
+    padding: 2rem;
+    border-radius: 1.5rem;
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    position: relative;
-    z-index: 10;
+}
+
+.badge {
+    background: rgba(16, 185, 129, 0.15);
+    color: var(--primary);
+    font-size: 0.7rem;
+    font-weight: 800;
+    padding: 0.25rem 0.75rem;
+    border-radius: 99px;
+    margin-bottom: 1rem;
+    letter-spacing: 1px;
+    border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
 .gameTitle {
-    font-size: 4rem;
+    font-size: 2.5rem;
     font-weight: 900;
-    text-transform: uppercase;
-    background: linear-gradient(to bottom, #fff, var(--emerald-light));
+    line-height: 1;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #fff 0%, var(--primary) 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    margin-bottom: 1.5rem;
-    text-shadow: 0 10px 30px rgba(5, 150, 105, 0.4);
 }
 
-.startBtn {
-    background: var(--forest-green);
-    color: white;
-    padding: 1rem 3rem;
-    font-size: 1.5rem;
-    font-weight: 700;
-    border-radius: 16px;
-    border: none;
-    cursor: pointer;
-    box-shadow: 0 10px 0 #064e3b;
-    transition: all 0.2s;
-    display: flex;
-    align-items: center;
+.missionText {
+    font-size: 0.95rem;
+    color: #94a3b8;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+}
+
+.featureGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 1rem;
+    width: 100%;
+    margin-bottom: 2rem;
 }
 
-.startBtn:active {
-    transform: translateY(10px);
-    box-shadow: 0 0 0 #064e3b;
-}
-
-/* --- Game Area --- */
-.gameArea {
-    height: 100vh;
+.featureItem {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 1rem;
+    padding: 1rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    position: relative;
-    z-index: 10;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
-.treeBtn {
-    position: relative;
+.startBtn {
+    background: var(--primary);
+    color: #022c22;
+    padding: 0.9rem 2rem;
+    width: 100%;
+    border-radius: 1rem;
+    font-weight: 800;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    margin-bottom: 1rem;
+}
+
+.startBtn:active {
+    transform: scale(0.98);
+}
+
+.rewardNote {
+    font-size: 0.75rem;
+    color: #64748b;
+}
+
+/* Game Area */
+.gameArea {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+}
+
+.target {
+    position: absolute;
+    transform: translate(-50%, -50%);
     background: none;
     border: none;
     cursor: pointer;
-    transition: transform 0.1s;
+    padding: 0;
+    animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 20;
     outline: none;
+    /* Remove default focus outline */
+    -webkit-tap-highlight-color: transparent;
 }
 
-.treeBtn:active {
-    transform: scale(0.9);
+.target:active {
+    transform: translate(-50%, -50%) scale(0.9);
 }
 
-.treeIcon {
-    font-size: 10rem;
-    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5));
-    transition: filter 0.3s;
+.targetIcon {
+    filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.3));
+    color: var(--primary);
+    /* Default */
+    display: block;
 }
 
-.treeBtn:hover .treeIcon {
-    filter: drop-shadow(0 20px 60px rgba(52, 211, 153, 0.6)) brightness(1.1);
-}
-
-.glow {
+.targetGlow {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 300px;
-    height: 300px;
-    background: var(--emerald-light);
+    width: 60px;
+    height: 60px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, transparent 70%);
+    opacity: 0;
     border-radius: 50%;
-    filter: blur(80px);
-    opacity: 0.2;
-    z-index: -1;
     pointer-events: none;
+    animation: pulseGlow 1.5s infinite;
 }
 
-.tapHint {
-    margin-top: 3rem;
-    font-size: 1.25rem;
-    color: #6ee7b7;
-    opacity: 0.8;
-    animation: pulse 2s infinite;
+/* End Screen */
+.successIcon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    animation: bounce 1s infinite;
 }
 
-@keyframes pulse {
+.endTitle {
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+}
 
-    0%,
-    100% {
-        opacity: 0.4;
-        transform: scale(0.98);
+.scoreBreakdown {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.finalScore,
+.pointsEarned {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.pointsEarned {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+    color: var(--accent);
+}
+
+.label {
+    font-size: 0.9rem;
+    color: #94a3b8;
+}
+
+.value {
+    font-weight: 800;
+    font-size: 1.1rem;
+}
+
+.btnGroup {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+}
+
+.retryBtn,
+.exitBtn {
+    flex: 1;
+    padding: 0.8rem;
+    border-radius: 0.75rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.9rem;
+    border: none;
+}
+
+.retryBtn {
+    background: var(--primary);
+    color: #022c22;
+}
+
+.exitBtn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+/* Animations */
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes popIn {
+    from {
+        transform: translate(-50%, -50%) scale(0);
+    }
+
+    to {
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+@keyframes pulseGlow {
+    0% {
+        opacity: 0.3;
+        transform: translate(-50%, -50%) scale(0.8);
     }
 
     50% {
-        opacity: 1;
-        transform: scale(1);
+        opacity: 0.6;
+        transform: translate(-50%, -50%) scale(1.2);
+    }
+
+    100% {
+        opacity: 0.3;
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
     }
 }
