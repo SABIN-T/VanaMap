@@ -43,11 +43,12 @@
 /* --- HEADER --- */
 .header {
     flex-shrink: 0;
-    height: 70px;
+    height: 64px;
+    /* Slightly less tall */
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 1.5rem;
+    padding: 0 1rem;
     backdrop-filter: blur(20px);
     background: rgba(3, 7, 18, 0.6);
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
@@ -59,7 +60,8 @@
 .brand {
     font-family: 'Space Grotesk', sans-serif;
     font-weight: 700;
-    font-size: 1.25rem;
+    font-size: 1.15rem;
+    /* Compact brand */
     letter-spacing: -0.05em;
     background: linear-gradient(to right, #ffffff, #94a3b8);
     -webkit-background-clip: text;
@@ -71,10 +73,10 @@
 }
 
 .brandBadge {
-    font-size: 0.6rem;
+    font-size: 0.55rem;
     background: #34d399;
     color: #022c22;
-    padding: 2px 6px;
+    padding: 2px 5px;
     border-radius: 4px;
     font-weight: 800;
     letter-spacing: 0.05em;
@@ -86,28 +88,31 @@
     flex: 1;
     overflow-y: auto;
     overflow-x: hidden;
-    padding: 1.5rem;
-    padding-bottom: 180px;
-    /* Massive safe bottom for mobile tabs */
+    padding: 1rem;
+    /* Reduced padding */
+    padding-bottom: 120px;
+    /* Adjusted safe bottom */
     z-index: 10;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2rem;
+    gap: 1.5rem;
+    /* Tighter gap */
 }
 
 .heroSection {
     text-align: center;
     max-width: 600px;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 .heroTitle {
     font-family: 'Space Grotesk', sans-serif;
-    font-size: 2.5rem;
+    font-size: 2rem;
+    /* Compact title */
     font-weight: 700;
     line-height: 1.1;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     background: linear-gradient(135deg, #fff 0%, #cbd5e1 100%);
     -webkit-background-clip: text;
     background-clip: text;
@@ -116,8 +121,9 @@
 
 .heroText {
     color: #94a3b8;
-    line-height: 1.6;
-    font-size: 1rem;
+    line-height: 1.5;
+    font-size: 0.9rem;
+    /* Smaller text */
 }
 
 /* SEARCH BAR IMPL */
@@ -125,7 +131,7 @@
     width: 100%;
     max-width: 500px;
     position: relative;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 .searchInput {
@@ -133,9 +139,9 @@
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.1);
     color: white;
-    padding: 1rem 1rem 1rem 3rem;
-    border-radius: 16px;
-    font-size: 1rem;
+    padding: 0.8rem 1rem 0.8rem 2.75rem;
+    border-radius: 14px;
+    font-size: 0.95rem;
     transition: all 0.3s ease;
     backdrop-filter: blur(10px);
 }
@@ -149,17 +155,20 @@
 
 .searchIcon {
     position: absolute;
-    left: 1rem;
+    left: 0.9rem;
     top: 50%;
     transform: translateY(-50%);
     color: #64748b;
+    font-size: 1.1rem;
 }
 
 /* GRID */
 .plantGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(2, 1fr);
+    /* Force 2 columns mobile first */
+    gap: 0.75rem;
+    /* Tight gap */
     width: 100%;
     max-width: 1000px;
 }
@@ -167,18 +176,19 @@
 .plantCard {
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 20px;
+    border-radius: 16px;
+    /* Less round */
     overflow: hidden;
     cursor: pointer;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     position: relative;
-    aspect-ratio: 0.8;
+    aspect-ratio: 0.75;
+    /* Efficient aspect ratio */
 }
 
 .plantCard:hover {
-    transform: translateY(-8px);
+    transform: translateY(-5px);
     border-color: rgba(99, 102, 241, 0.5);
-    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5);
 }
 
 .cardImage {
@@ -189,7 +199,7 @@
 }
 
 .plantCard:hover .cardImage {
-    transform: scale(1.1);
+    transform: scale(1.05);
 }
 
 .cardOverlay {
@@ -197,25 +207,33 @@
     bottom: 0;
     left: 0;
     right: 0;
-    padding: 1.5rem 1rem 1rem;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.9), transparent);
+    padding: 2rem 0.75rem 0.75rem;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.7) 50%, transparent 100%);
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
 }
 
 .cardName {
-    font-weight: 600;
-    font-size: 1rem;
+    font-weight: 700;
+    font-size: 0.9rem;
+    /* Compact name */
     color: white;
     margin: 0;
+    margin-bottom: 0.1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .cardSci {
-    font-size: 0.75rem;
+    font-size: 0.65rem;
     color: #94a3b8;
     font-style: italic;
-    opacity: 0.8;
+    opacity: 0.9;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* --- LOADER --- */
@@ -276,7 +294,7 @@
 .loaderText {
     font-family: 'Space Grotesk', sans-serif;
     color: #34d399;
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     letter-spacing: 0.1em;
     text-transform: uppercase;
 }
@@ -329,8 +347,6 @@
     z-index: 100;
 }
 
-
-
 /* Review Page (Post-Capture) */
 .reviewPage {
     position: fixed;
@@ -343,7 +359,8 @@
 }
 
 .reviewHeader {
-    padding: 1.5rem 2rem;
+    padding: 1rem 1.5rem;
+    /* Compact Header */
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -355,27 +372,30 @@
 .reviewBrand {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    font-size: 1.25rem;
+    gap: 0.5rem;
+    font-size: 1.1rem;
     font-weight: 700;
     color: #fff;
 }
 
 .brandIcon {
     color: #facc15;
+    width: 20px;
+    height: 20px;
 }
 
 .exitBtn {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    padding: 0.6rem 1.2rem;
+    padding: 0.5rem 1rem;
     border-radius: 50px;
     background: rgba(255, 255, 255, 0.1);
     border: none;
     color: #fff;
     cursor: pointer;
     transition: 0.3s;
+    font-size: 0.85rem;
 }
 
 .exitBtn:hover {
@@ -394,16 +414,20 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 2rem;
+    padding: 1.5rem;
+    /* Reduced padding */
+    background: radial-gradient(circle at center, rgba(6, 78, 59, 0.3) 0%, #000 100%);
 }
 
 .designFrame {
     position: relative;
-    max-width: 90%;
-    max-height: 90%;
-    box-shadow: 0 50px 100px rgba(0, 0, 0, 0.8);
-    border: 8px solid #fff;
-    border-radius: 4px;
+    max-width: 100%;
+    /* Full width on mobile */
+    max-height: 80vh;
+    box-shadow: 0 50px 100px rgba(0, 0, 0, 0.9);
+    border: 4px solid #fff;
+    /* Thinner border */
+    border-radius: 2px;
 }
 
 .masterpiece {
@@ -417,42 +441,44 @@
     background: rgba(0, 0, 0, 0.4);
     backdrop-filter: blur(30px);
     border-left: 1px solid rgba(255, 255, 255, 0.05);
-    padding: 4rem 2.5rem;
+    padding: 2.5rem 1.5rem;
     display: flex;
     flex-direction: column;
-    gap: 3rem;
+    gap: 1.5rem;
 }
 
 .congratsTitle {
-    font-size: 2.5rem;
+    font-size: 1.75rem;
+    /* Mobile optimal */
     font-weight: 800;
+    line-height: 1.1;
     background: linear-gradient(to bottom right, #fff, #94a3b8);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
 }
 
 .congratsText {
     color: #94a3b8;
-    line-height: 1.6;
-    font-size: 1.1rem;
+    line-height: 1.5;
+    font-size: 0.95rem;
 }
 
 .actionGrid {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.75rem;
 }
 
 .mainAction {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
-    padding: 1.5rem;
+    gap: 1rem;
+    padding: 1rem;
     background: #10b981;
     border: none;
-    border-radius: 20px;
+    border-radius: 16px;
     color: #fff;
     cursor: pointer;
     text-align: left;
@@ -460,8 +486,8 @@
 }
 
 .mainAction:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 20px 40px rgba(16, 185, 129, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 15px 30px rgba(16, 185, 129, 0.25);
 }
 
 .actionLabels {
@@ -470,13 +496,13 @@
 }
 
 .primaryLabel {
-    font-size: 1.25rem;
+    font-size: 1rem;
     font-weight: 700;
 }
 
 .secondaryLabel {
-    font-size: 0.85rem;
-    opacity: 0.8;
+    font-size: 0.75rem;
+    opacity: 0.9;
 }
 
 .secondaryAction {
@@ -484,12 +510,13 @@
     align-items: center;
     justify-content: center;
     gap: 0.75rem;
-    padding: 1.2rem;
+    padding: 1rem;
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 20px;
+    border-radius: 16px;
     color: #fff;
     font-weight: 600;
+    font-size: 0.9rem;
     cursor: pointer;
     transition: 0.3s;
 }
@@ -502,25 +529,30 @@
     margin-top: auto;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
+    gap: 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 1rem;
+    border-radius: 12px;
 }
 
 .specItem {
     display: flex;
     flex-direction: column;
-    gap: 0.3rem;
+    gap: 0.2rem;
 }
 
 .specLabel {
-    font-size: 0.75rem;
+    font-size: 0.65rem;
     color: #64748b;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    font-weight: 700;
 }
 
 .specVal {
-    color: #fff;
+    color: #e2e8f0;
     font-weight: 600;
+    font-size: 0.9rem;
 }
 
 @keyframes slideUp {
@@ -536,12 +568,16 @@
 @media (max-width: 900px) {
     .reviewBody {
         grid-template-columns: 1fr;
+        grid-template-rows: 1fr auto;
+        /* Force control bottom */
         overflow-y: auto;
     }
 
     .reviewControls {
         border-left: none;
-        padding: 2.5rem 1.5rem;
+        padding: 1.5rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        background: #000;
     }
 }
 
@@ -554,7 +590,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 1.5rem;
+    padding: 1rem;
     padding-bottom: 120px;
     /* Safe space for mobile bot nav */
 }
@@ -570,8 +606,8 @@
     backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.1);
     color: white;
-    width: 44px;
-    height: 44px;
+    width: 40px;
+    height: 40px;
     border-radius: 12px;
     display: flex;
     align-items: center;
@@ -582,7 +618,6 @@
 
 .glassBtn:hover {
     background: rgba(255, 255, 255, 0.1);
-    transform: scale(1.05);
 }
 
 .arFooter {
@@ -591,20 +626,22 @@
     align-items: center;
     gap: 2rem;
     pointer-events: auto;
+    margin-bottom: 2rem;
+    /* Move up slightly */
 }
 
-.shutterBtn {
-    width: 80px;
-    height: 80px;
+.captureBtn {
+    width: 72px;
+    height: 72px;
     border-radius: 50%;
     border: 4px solid rgba(255, 255, 255, 0.8);
     background: transparent;
-    padding: 6px;
+    padding: 5px;
     cursor: pointer;
     transition: all 0.2s;
 }
 
-.shutterInner {
+.captureInner {
     width: 100%;
     height: 100%;
     background: white;
@@ -612,19 +649,24 @@
     transition: all 0.2s;
 }
 
-.shutterBtn:active .shutterInner {
+.captureBtn:active .captureInner {
     transform: scale(0.85);
     background: #f43f5e;
 }
 
 /* Mobile Adjustments */
-@media (max-width: 768px) {
+@media (max-width: 640px) {
     .plantGrid {
         grid-template-columns: repeat(2, 1fr);
-        gap: 1rem;
+        gap: 0.75rem;
     }
 
     .arPlant {
         max-width: 80%;
+    }
+
+    .container {
+        padding-top: 0;
+        /* Let header handle safe area */
     }
 }
