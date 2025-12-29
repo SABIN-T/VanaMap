@@ -26,7 +26,7 @@
     backdrop-filter: blur(16px);
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 2rem;
-    padding: 2.5rem;
+    padding: 2rem;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
@@ -35,15 +35,15 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 2.5rem;
+    margin-bottom: 2rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    padding-bottom: 1.5rem;
+    padding-bottom: 1rem;
 }
 
 .headerLeft {
     display: flex;
     align-items: center;
-    gap: 1.5rem;
+    gap: 1rem;
 }
 
 .backBtn {
@@ -81,7 +81,6 @@
 
 .titleIcon {
     color: #34d399;
-    /* Fallback */
 }
 
 .itemCount {
@@ -99,13 +98,13 @@
     background: rgba(56, 189, 248, 0.1);
     border: 1px dashed rgba(56, 189, 248, 0.3);
     color: #38bdf8;
-    padding: 1rem;
-    border-radius: 1rem;
+    padding: 0.75rem;
+    border-radius: 0.75rem;
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    margin-bottom: 2rem;
-    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.85rem;
 }
 
 /* Empty State */
@@ -149,7 +148,7 @@
     border-radius: 1.5rem;
     border: 1px solid rgba(255, 255, 255, 0.05);
     overflow: hidden;
-    margin-bottom: 2.5rem;
+    margin-bottom: 2rem;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -160,13 +159,13 @@
 
 .groupHeader {
     background: rgba(15, 23, 42, 0.6);
-    padding: 1.25rem 2rem;
+    padding: 1rem 1.5rem;
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     display: flex;
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    gap: 1.5rem;
+    gap: 1rem;
 }
 
 .vendorInfoWrapper {
@@ -176,22 +175,21 @@
 .vendorTitleRow {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 0.35rem;
+    gap: 0.6rem;
+    margin-bottom: 0.2rem;
 }
 
 .vendorName {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     font-weight: 700;
     color: #fff;
 }
 
-.officialBadge {
-    background: rgba(52, 211, 153, 0.15);
-    color: #34d399;
-    font-size: 0.7rem;
+.officialBadge,
+.partnerBadge {
+    font-size: 0.65rem;
     text-transform: uppercase;
-    padding: 0.15rem 0.5rem;
+    padding: 0.15rem 0.4rem;
     border-radius: 4px;
     font-weight: 700;
     letter-spacing: 0.05em;
@@ -200,33 +198,32 @@
     gap: 0.25rem;
 }
 
+.officialBadge {
+    background: rgba(52, 211, 153, 0.15);
+    color: #34d399;
+}
+
 .partnerBadge {
     background: rgba(251, 191, 36, 0.15);
     color: #fbbf24;
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    padding: 0.15rem 0.5rem;
-    border-radius: 4px;
-    font-weight: 700;
-    letter-spacing: 0.05em;
 }
 
 .vendorMeta {
     display: flex;
     align-items: center;
-    gap: 1.25rem;
-    font-size: 0.85rem;
+    gap: 1rem;
+    font-size: 0.8rem;
     color: #94a3b8;
 }
 
 .metaItem {
     display: flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: 0.3rem;
 }
 
 .headerRight {
-    min-width: 250px;
+    min-width: 200px;
     display: flex;
     justify-content: flex-end;
 }
@@ -235,12 +232,13 @@
     background: #25D366;
     color: white;
     border: none;
-    padding: 0.75rem 1.5rem;
+    padding: 0.6rem 1.25rem;
     border-radius: 0.75rem;
     font-weight: 600;
+    font-size: 0.9rem;
     display: flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.5rem;
     cursor: pointer;
     transition: all 0.2s ease;
     box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
@@ -266,18 +264,18 @@
 
 /* Items List */
 .itemsList {
-    padding: 1.5rem 2rem;
+    padding: 1rem 1.5rem;
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1rem;
 }
 
 .itemCard {
     display: flex;
-    gap: 1.25rem;
+    gap: 1rem;
     background: rgba(255, 255, 255, 0.02);
-    padding: 1rem;
-    border-radius: 1rem;
+    padding: 0.75rem;
+    border-radius: 0.75rem;
     transition: background 0.2s ease;
 }
 
@@ -286,9 +284,9 @@
 }
 
 .itemThumb {
-    width: 80px;
-    height: 80px;
-    border-radius: 0.75rem;
+    width: 70px;
+    height: 70px;
+    border-radius: 0.6rem;
     object-fit: cover;
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
@@ -307,7 +305,7 @@
 }
 
 .itemName {
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 600;
     color: #e2e8f0;
     margin: 0;
@@ -315,14 +313,14 @@
 
 .itemScientific {
     color: #64748b;
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     font-style: italic;
-    margin: 0.2rem 0 0;
+    margin: 0.15rem 0 0;
 }
 
 .itemPrice {
     font-family: 'JetBrains Mono', monospace;
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: #34d399;
     font-weight: 700;
 }
@@ -331,6 +329,7 @@
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
+    margin-top: 0.5rem;
 }
 
 .stepper {
@@ -338,13 +337,13 @@
     align-items: center;
     background: rgba(15, 23, 42, 0.6);
     border-radius: 0.5rem;
-    padding: 0.2rem;
+    padding: 0.15rem;
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .stepperBtn {
-    width: 28px;
-    height: 28px;
+    width: 24px;
+    height: 24px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -367,20 +366,21 @@
 }
 
 .quantityVal {
-    width: 32px;
+    width: 28px;
     text-align: center;
     font-weight: 600;
     font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9rem;
 }
 
 .removeBtn {
     background: transparent;
     border: none;
     color: #ef4444;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     display: flex;
     align-items: center;
-    gap: 0.35rem;
+    gap: 0.3rem;
     cursor: pointer;
     opacity: 0.7;
     transition: opacity 0.2s;
@@ -393,7 +393,7 @@
 
 /* Group Footer */
 .groupFooter {
-    padding: 1.25rem 2rem;
+    padding: 1rem 1.5rem;
     background: rgba(0, 0, 0, 0.2);
     border-top: 1px solid rgba(255, 255, 255, 0.05);
     display: flex;
@@ -404,11 +404,11 @@
 .subtotalLabel {
     color: #94a3b8;
     font-weight: 500;
-    font-size: 0.95rem;
+    font-size: 0.85rem;
 }
 
 .subtotalValue {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     font-weight: 800;
     color: #f8fafc;
     letter-spacing: 0.02em;
@@ -418,31 +418,85 @@
 .footerNote {
     text-align: center;
     color: #64748b;
-    font-size: 0.9rem;
-    margin-top: 3rem;
-    padding-top: 2rem;
+    font-size: 0.8rem;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
     border-top: 1px dashed rgba(255, 255, 255, 0.1);
 }
 
-/* Responsive */
+/* --- MOBILE OPTIMIZATION --- */
 @media (max-width: 768px) {
     .container {
+        padding: 1rem;
         padding-top: 5rem;
-        padding-bottom: 100px;
-        /* Space for Mobile Tab Bar */
+        padding-bottom: 90px;
+    }
+
+    .glassPanel {
+        padding: 1rem;
+        border-radius: 1.5rem;
+    }
+
+    .header {
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.75rem;
+    }
+
+    .titleMain {
+        font-size: 1.35rem;
+    }
+
+    .vendorGroup {
+        border-radius: 1rem;
+        margin-bottom: 1.5rem;
     }
 
     .groupHeader {
         flex-direction: column;
         align-items: stretch;
-        gap: 1rem;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
     }
 
     .headerRight {
         justify-content: stretch;
+        width: 100%;
     }
 
+    .whatsappBtn {
+        width: 100%;
+        justify-content: center;
+        padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+    }
 
+    .itemsList {
+        padding: 0.75rem 1rem;
+    }
+
+    .itemCard {
+        gap: 0.75rem;
+        padding: 0.75rem;
+    }
+
+    .itemThumb {
+        width: 60px;
+        height: 60px;
+        border-radius: 0.5rem;
+    }
+
+    .itemName {
+        font-size: 0.95rem;
+    }
+
+    .itemScientific {
+        display: none;
+        /* Hide on mobile for space */
+    }
+
+    .groupFooter {
+        padding: 0.75rem 1rem;
+    }
 }
 
 
@@ -454,16 +508,12 @@
     justify-content: center;
     align-items: center;
     padding: 1rem;
-    position: relative;
-    overflow: hidden;
-    /* ensure it takes full page */
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     z-index: 200;
     background: #0f172a;
-    /* Dark base fallback */
 }
 
 .lockOverlay {
@@ -477,7 +527,6 @@
     padding: 1rem;
 }
 
-/* Background Atmosphere reusing Heaven style concept */
 .sky {
     position: absolute;
     inset: 0;
@@ -506,9 +555,9 @@
     /* Emerald tint */
     backdrop-filter: blur(30px);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 4rem 3rem;
-    border-radius: 3rem;
-    max-width: 550px;
+    padding: 2.5rem 2rem;
+    border-radius: 2rem;
+    max-width: 500px;
     width: 100%;
     text-align: center;
     box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.6);
@@ -554,22 +603,22 @@
 
 .lockIcon {
     background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-    width: 80px;
-    height: 80px;
-    border-radius: 2rem;
+    width: 64px;
+    height: 64px;
+    border-radius: 1.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 auto 2rem;
+    margin: 0 auto 1.5rem;
     box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
     color: #fff;
     font-size: 2rem;
 }
 
 .lockTitle {
-    font-size: 2.5rem;
+    font-size: 2rem;
     font-weight: 800;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
     background: linear-gradient(135deg, #fff 0%, #cbd5e1 100%);
     -webkit-background-clip: text;
     background-clip: text;
@@ -580,36 +629,39 @@
 
 .lockDesc {
     color: #94a3b8;
-    font-size: 1.1rem;
-    line-height: 1.6;
-    margin-bottom: 2.5rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 2rem;
 }
 
 .featureList {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    margin-bottom: 2.5rem;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
     text-align: left;
     background: rgba(15, 23, 42, 0.4);
-    padding: 1.5rem;
-    border-radius: 1.5rem;
+    padding: 1.25rem;
+    border-radius: 1.25rem;
     border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .featureItem {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.75rem;
     color: #e2e8f0;
     font-weight: 500;
+    font-size: 0.9rem;
 }
 
 .featureIcon {
     color: #34d399;
     background: rgba(52, 211, 153, 0.1);
-    padding: 0.4rem;
-    border-radius: 0.6rem;
+    padding: 0.3rem;
+    border-radius: 0.5rem;
+    width: 28px;
+    height: 28px;
 }
 
 .authButtons {
@@ -618,53 +670,39 @@
     justify-content: center;
 }
 
-.loginBtn {
-    padding: 1rem 2.5rem;
+.loginBtn,
+.signupBtn {
+    padding: 0.8rem 1.5rem;
     border-radius: 99px;
-    background: #fff;
-    color: #020617;
     font-weight: 700;
     border: none;
     cursor: pointer;
     transition: all 0.2s;
-    font-size: 1rem;
+    font-size: 0.9rem;
     flex: 1;
 }
 
-.loginBtn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(255, 255, 255, 0.2);
+.loginBtn {
+    background: #fff;
+    color: #020617;
 }
 
 .signupBtn {
-    padding: 1rem 2.5rem;
-    border-radius: 99px;
     background: linear-gradient(135deg, #10b981 0%, #059669 100%);
     color: #fff;
-    font-weight: 700;
-    border: none;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-size: 1rem;
-    box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
-    flex: 1;
-}
-
-.signupBtn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 15px 30px rgba(16, 185, 129, 0.4);
 }
 
 @media (max-width: 640px) {
     .lockCard {
-        padding: 2rem 1.5rem;
+        padding: 1.5rem 1rem;
     }
 
     .lockTitle {
-        font-size: 2rem;
+        font-size: 1.75rem;
     }
 
     .authButtons {
         flex-direction: column;
+        gap: 0.75rem;
     }
 }
