@@ -536,3 +536,12 @@ export const fetchAdminCustomPots = async () => {
     return await res.json();
 };
 
+export const deleteAdminCustomPot = async (id: string) => {
+    const res = await fetch(`${API_URL}/admin/custom-pots/${id}`, {
+        method: 'DELETE',
+        headers: getHeaders()
+    });
+    if (!res.ok) throw new Error("Failed to delete custom pot");
+    return await res.json();
+};
+

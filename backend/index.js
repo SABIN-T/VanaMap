@@ -355,16 +355,18 @@ const broadcastAlert = async (type, message, details = {}, url = '/') => {
         // 1. Create DB Notification for Dashboard Tracking
         await Notification.create({ type, message, details, read: false });
 
-        // 2. Dispatch Web Push to all active subscribers
-        const pushPayload = {
-            title: details.title || `VanaMap ${type.charAt(0).toUpperCase() + type.slice(1)}`,
-            body: message,
-            url,
-            icon: '/logo.png'
-        };
-        await sendPushNotification(pushPayload);
+        // 2. Dispatch Web Push to all active subscribers (unless explicitly skipped)
+        if (!details.skipPush) {
+            const pushPayload = {
+                title: details.title || `VanaMap ${type.charAt(0).toUpperCase() + type.slice(1)}`,
+                body: message,
+                url,
+                icon: '/logo.png'
+            };
+            await sendPushNotification(pushPayload);
+        }
 
-        console.log(`[ALERT] Unified alert dispatched: ${type}`);
+        console.log(`[ALERT] Alert dispatched: ${type} (Push: ${!details.skipPush})`);
     } catch (err) {
         console.error(`[ALERT] Failed to broadcast ${type}:`, err.message);
     }
@@ -1887,7 +1889,8 @@ app.post('/api/custom-pots', auth, async (req, res) => {
         broadcastAlert('custom_pot', `New Ceramic Design by ${user.name}`, {
             userId: user._id,
             potColor,
-            title: "New Pot Artwork! 🏺"
+            title: "New Pot Artwork! 🏺",
+            skipPush: true
         }).catch((e) => console.error("[STUDIO] Alert Broadcast Failed:", e.message));
 
         res.status(201).json({ success: true, message: "Custom design saved to collection!" });
@@ -1901,6 +1904,16 @@ app.get('/api/admin/custom-pots', auth, admin, async (req, res) => {
     try {
         const pots = await CustomPot.find().sort({ createdAt: -1 });
         res.json(pots);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.delete('/api/admin/custom-pots/:id', auth, admin, async (req, res) => {
+    try {
+        const result = await CustomPot.findByIdAndDelete(req.params.id);
+        if (!result) return res.status(404).json({ error: "Design not found" });
+        res.json({ success: true, message: "Design removed from repository" });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }

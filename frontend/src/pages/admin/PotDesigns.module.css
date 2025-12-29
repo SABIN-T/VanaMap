@@ -246,6 +246,12 @@
     border-top: 1px solid rgba(255, 255, 255, 0.03);
 }
 
+.footerLeft {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
 .date {
     font-size: 0.55rem;
     color: #334155;
@@ -260,6 +266,26 @@
     padding: 2px 6px;
     background: rgba(16, 185, 129, 0.1);
     border-radius: 4px;
+}
+
+.deleteBtn {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.deleteBtn:hover {
+    background: #ef4444;
+    color: #fff;
+    transform: translateY(-1px);
 }
 
 .loading {

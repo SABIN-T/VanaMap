@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Download, Search, Package, Image as ImageIcon, Box } from 'lucide-react';
+import { Download, Search, Package, Image as ImageIcon, Box, Trash2 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import styles from './PotDesigns.module.css';
-import { fetchAdminCustomPots } from '../../services/api';
+import { fetchAdminCustomPots, deleteAdminCustomPot } from '../../services/api';
 
 interface CustomPot {
     _id: string;
@@ -35,6 +35,17 @@ export default function PotDesigns() {
             toast.error("Failed to load custom designs");
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleDelete = async (id: string) => {
+        if (!window.confirm("Are you sure you want to remove this design forever?")) return;
+        try {
+            await deleteAdminCustomPot(id);
+            toast.success("Design removed");
+            setPots(prev => prev.filter(p => p._id !== id));
+        } catch (e) {
+            toast.error("Delete failed");
         }
     };
 
@@ -141,8 +152,17 @@ export default function PotDesigns() {
                                 </div>
 
                                 <div className={styles.cardFooter}>
-                                    <span className={styles.date}>{new Date(pot.createdAt).toLocaleDateString()}</span>
-                                    <span className={styles.status}>{pot.status || 'NEW'}</span>
+                                    <div className={styles.footerLeft}>
+                                        <span className={styles.date}>{new Date(pot.createdAt).toLocaleDateString()}</span>
+                                        <span className={styles.status}>{pot.status || 'NEW'}</span>
+                                    </div>
+                                    <button
+                                        className={styles.deleteBtn}
+                                        onClick={() => handleDelete(pot._id)}
+                                        title="Remove Design"
+                                    >
+                                        <Trash2 size={14} />
+                                    </button>
                                 </div>
                             </div>
                         ))}

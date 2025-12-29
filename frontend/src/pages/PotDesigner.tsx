@@ -4,6 +4,7 @@ import { OrbitControls, ContactShadows, Decal, Float, PerspectiveCamera } from '
 import { TextureLoader } from 'three';
 import { ArrowLeft, Upload, Download, ShoppingBag, Palette, Move, RotateCcw, Box, Maximize } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useCart } from '../context/CartContext';
 import toast from 'react-hot-toast';
 import styles from './PotDesigner.module.css';
 import { saveCustomPot } from '../services/api';
@@ -68,6 +69,7 @@ function PotComposition({ color, image, decalProps }: any) {
 
 export const PotDesigner = () => {
     const navigate = useNavigate();
+    const { addToCart } = useCart();
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [color, setColor] = useState('#d97706'); // Terracotta
     const [image, setImage] = useState<string | null>(null);
@@ -132,6 +134,7 @@ export const PotDesigner = () => {
                 throw new Error("Design snapshot failed. Is the hardware accelerator active?");
             }
 
+            // 1. Save to Database
             await saveCustomPot({
                 potColor: color,
                 potWithDesignUrl,
@@ -139,8 +142,26 @@ export const PotDesigner = () => {
                 decalProps
             });
 
+            // 2. Add to Shopping Cart
+            addToCart({
+                id: `cp_${Date.now()}`,
+                name: 'Your Custom Pot Design',
+                scientificName: 'Handcrafted Ceramic',
+                description: 'A unique ceramic pot designed by you in the VanaMap Studio.',
+                imageUrl: potWithDesignUrl,
+                price: 299,
+                type: 'indoor',
+                medicinalValues: [],
+                advantages: ['Unique Aesthetic', 'Custom Fit', 'Studio Grade'],
+                idealTempMin: 0,
+                idealTempMax: 50,
+                minHumidity: 0,
+                sunlight: 'Direct/Indirect',
+                oxygenLevel: 'High'
+            }, 'vanamap', 299);
+
             toast.dismiss(loadingToast);
-            toast.success("Design saved to your collection!", {
+            toast.success("Design saved and added to cart!", {
                 icon: '🛍️',
                 style: { background: '#0f172a', color: '#fff', border: '1px solid #10b981' }
             });

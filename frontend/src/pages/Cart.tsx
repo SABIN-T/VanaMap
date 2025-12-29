@@ -225,52 +225,61 @@ export const Cart = () => {
 
                                     {/* Items */}
                                     <div className={styles.itemsList}>
-                                        {cartItems.map((item) => (
-                                            <div key={`${item.plant.id}-${vendorId}`} className={styles.itemCard}>
-                                                <img
-                                                    src={item.plant.imageUrl}
-                                                    className={styles.itemThumb}
-                                                    alt={item.plant.name}
-                                                />
-                                                <div className={styles.itemDetails}>
-                                                    <div className={styles.itemHeader}>
-                                                        <div>
-                                                            <h3 className={styles.itemName}>{item.plant.name}</h3>
-                                                            <p className={styles.itemScientific}>{item.plant.scientificName}</p>
-                                                        </div>
-                                                        <div className={styles.itemPrice}>
-                                                            {formatCurrency(item.vendorPrice || item.plant.price || 0)}
-                                                        </div>
-                                                    </div>
-
-                                                    <div className={styles.controlsRow}>
-                                                        <div className={styles.stepper}>
-                                                            <button
-                                                                onClick={() => updateQuantity(item.plant.id, item.quantity - 1, vendorId === 'vanamap' ? undefined : vendorId)}
-                                                                className={styles.stepperBtn}
-                                                            >
-                                                                <Minus size={14} />
-                                                            </button>
-                                                            <span className={styles.quantityVal}>{item.quantity}</span>
-                                                            <button
-                                                                onClick={() => updateQuantity(item.plant.id, item.quantity + 1, vendorId === 'vanamap' ? undefined : vendorId)}
-                                                                className={`${styles.stepperBtn} ${styles.add}`}
-                                                            >
-                                                                <Plus size={14} />
-                                                            </button>
+                                        {cartItems.map((item) => {
+                                            const isCustomPot = item.plant.id.startsWith('cp_');
+                                            return (
+                                                <div key={`${item.plant.id}-${vendorId}`} className={styles.itemCard}>
+                                                    <img
+                                                        src={item.plant.imageUrl}
+                                                        className={styles.itemThumb}
+                                                        alt={item.plant.name}
+                                                    />
+                                                    <div className={styles.itemDetails}>
+                                                        <div className={styles.itemHeader}>
+                                                            <div>
+                                                                <h3 className={styles.itemName}>{item.plant.name}</h3>
+                                                                <p className={styles.itemScientific}>{item.plant.scientificName}</p>
+                                                            </div>
+                                                            <div className={styles.itemPrice}>
+                                                                {formatCurrency(item.vendorPrice || item.plant.price || 0)}
+                                                            </div>
                                                         </div>
 
-                                                        <button
-                                                            onClick={() => removeFromCart(item.plant.id, vendorId === 'vanamap' ? undefined : vendorId)}
-                                                            className={styles.removeBtn}
-                                                            title="Remove"
-                                                        >
-                                                            <Trash2 size={16} /> Remove
-                                                        </button>
+                                                        {isCustomPot && (
+                                                            <div className={styles.comingSoonBadge}>
+                                                                <Info size={12} /> Stay tuned! This buying option is coming soon 🚀
+                                                            </div>
+                                                        )}
+
+                                                        <div className={styles.controlsRow}>
+                                                            <div className={styles.stepper}>
+                                                                <button
+                                                                    onClick={() => updateQuantity(item.plant.id, item.quantity - 1, vendorId === 'vanamap' ? undefined : vendorId)}
+                                                                    className={styles.stepperBtn}
+                                                                >
+                                                                    <Minus size={14} />
+                                                                </button>
+                                                                <span className={styles.quantityVal}>{item.quantity}</span>
+                                                                <button
+                                                                    onClick={() => updateQuantity(item.plant.id, item.quantity + 1, vendorId === 'vanamap' ? undefined : vendorId)}
+                                                                    className={`${styles.stepperBtn} ${styles.add}`}
+                                                                >
+                                                                    <Plus size={14} />
+                                                                </button>
+                                                            </div>
+
+                                                            <button
+                                                                onClick={() => removeFromCart(item.plant.id, vendorId === 'vanamap' ? undefined : vendorId)}
+                                                                className={styles.removeBtn}
+                                                                title="Remove"
+                                                            >
+                                                                <Trash2 size={16} /> Remove
+                                                            </button>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        ))}
+                                            );
+                                        })}
                                     </div>
 
                                     {/* Subtotal */}
