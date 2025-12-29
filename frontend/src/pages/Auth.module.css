@@ -343,6 +343,12 @@
 }
 
 @media(max-width: 600px) {
+    .authContainer {
+        padding-bottom: 8rem;
+        /* Protect against Mobile Tab Bar */
+        min-height: 100dvh;
+    }
+
     .authCard {
         padding: 2rem;
     }
