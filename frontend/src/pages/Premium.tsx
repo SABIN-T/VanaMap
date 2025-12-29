@@ -45,7 +45,8 @@ export const Premium = () => {
         // ... rest of logic
         // For now, let's just do the Free Activation call since it's the promo period.
         try {
-            const response = await fetch('http://localhost:5000/api/payments/activate-free', {
+            const API_URL = import.meta.env.VITE_API_URL || 'https://plantoxy.onrender.com/api';
+            const response = await fetch(`${API_URL}/payments/activate-free`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
