@@ -154,18 +154,25 @@ export const MakeItReal = () => {
                         const r = data[i], g = data[i + 1], b = data[i + 2];
                         const diff = Math.sqrt((r - bg.r) ** 2 + (g - bg.g) ** 2 + (b - bg.b) ** 2);
 
-                        // If it's the pot area or background white
-                        const isPotOrBg = (diff < 35) || (r > 200 && g > 200 && b > 200);
+                        // VIBRANCY ANALYSIS: Is this actually a plant leaf?
+                        // Plants are usually significantly more saturated than shadows/pots
+                        const saturation = Math.max(r, g, b) - Math.min(r, g, b);
+                        const isNeutral = saturation < 30; // Shadows, Pots, and Backgrounds are neutral
 
-                        if (isPotOrBg) {
+                        // If it matches background OR it's a neutral-colored pixel (shadow/pot)
+                        const isTargetToRemove = (diff < 45) || (r > 190 && g > 190 && b > 190) || (isNeutral && y > height * 0.5);
+
+                        if (isTargetToRemove) {
                             data[i + 3] = 0;
                         } else {
-                            // Update content bounds
-                            if (x < minX) minX = x;
-                            if (x > maxX) maxX = x;
-                            if (y < minY) minY = y;
-                            if (y > maxY) maxY = y;
-                            hasContent = true;
+                            // Update content bounds ONLY for colored/vibrant pixels (must be the plant)
+                            if (saturation > 25) {
+                                if (x < minX) minX = x;
+                                if (x > maxX) maxX = x;
+                                if (y < minY) minY = y;
+                                if (y > maxY) maxY = y;
+                                hasContent = true;
+                            }
                         }
                     }
                     ctx.putImageData(imageData, 0, 0);
@@ -360,7 +367,7 @@ export const MakeItReal = () => {
 
             // SHIFT: Place plant base exactly on the top rim level of the pot
             // We shift it down so it overlaps the pot area
-            const plantY = y - plantH + (potH * 0.2);
+            const plantY = y - plantH + (potH * 0.25);
             ctx.drawImage(plantImg, x + (potW - plantW) / 2, plantY, plantW, plantH);
             ctx.drawImage(potImg, x, y, potW, potH);
         } else {
@@ -504,7 +511,7 @@ export const MakeItReal = () => {
                                 alt="Foliage"
                                 draggable={false}
                                 style={{
-                                    marginBottom: useStudioPot ? '-40px' : '0',
+                                    marginBottom: useStudioPot ? '-55px' : '0',
                                     zIndex: 1
                                 }}
                             />
