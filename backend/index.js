@@ -13,6 +13,46 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const nodemailer = require('nodemailer');
 const svgCaptcha = require('svg-captcha');
+const cron = require('node-cron');
+
+// --- AUTOMATED PREMIUM CHECK (Daily at Midnight) ---
+cron.schedule('0 0 * * *', async () => {
+    console.log('[CRON] Checking for expired premium subscriptions...');
+    try {
+        const now = new Date();
+        const expiredUsers = await User.find({
+            isPremium: true,
+            premiumExpiry: { $lt: now }
+        });
+
+        if (expiredUsers.length > 0) {
+            console.log(`[CRON] Found ${expiredUsers.length} expired users.`);
+
+            for (const user of expiredUsers) {
+                user.isPremium = false;
+                user.premiumType = 'none';
+                await user.save();
+
+                // Notification
+                await broadcastAlert('premium_expired', `Your Premium Access has expired.`, {
+                    userId: user._id,
+                    title: "Subscription Ended ⏳",
+                    body: "Your premium benefits have ended. Renew now for just ₹10/mo to keep accessing Heaven!"
+                });
+
+                // Specific push for "last day" or expiry moment
+                sendPushNotification({
+                    title: "Premium Expired 🔴",
+                    body: "Your premium access ended today. Please renew to continue using features.",
+                    url: "/premium",
+                    icon: "/logo.png"
+                });
+            }
+        }
+    } catch (e) {
+        console.error("[CRON] Error checking expiry:", e);
+    }
+});
 
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
@@ -467,6 +507,11 @@ app.post('/api/payments/activate-free', auth, async (req, res) => {
 
         const user = await User.findById(req.user.id);
         if (user.isPremium) return res.status(400).json({ error: "Already Premium" });
+
+        // Enforce JAN 31, 2026 Deadline
+        if (new Date() > new Date('2026-02-01')) {
+            return res.status(403).json({ error: "Free Promo Ended. Premium is now ₹10/month." });
+        }
 
         user.isPremium = true;
         user.premiumType = 'trial';
