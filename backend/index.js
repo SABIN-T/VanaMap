@@ -1889,8 +1889,7 @@ app.post('/api/custom-pots', auth, async (req, res) => {
         broadcastAlert('custom_pot', `New Ceramic Design by ${user.name}`, {
             userId: user._id,
             potColor,
-            title: "New Pot Artwork! 🏺",
-            skipPush: true
+            title: "New Pot Artwork! 🏺"
         }).catch((e) => console.error("[STUDIO] Alert Broadcast Failed:", e.message));
 
         res.status(201).json({ success: true, message: "Custom design saved to collection!", design: customPot });
