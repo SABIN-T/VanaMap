@@ -354,23 +354,24 @@ export const MakeItReal = () => {
         ]);
 
         // 3. Draw Pot (if enabled)
-        const scale = 0.55;
-        const potW = canvas.width * scale;
+        // Match the visual scale from CSS/Preview
+        const potW = canvas.width * 0.45; // Match 200px equivalent on real video
         const potH = (potImg ? (potImg.height / potImg.width) : 1) * potW;
         const x = (pos.x / 100) * canvas.width - (potW / 2);
         const y = (pos.y / 100) * canvas.height - (potH / 2);
 
         if (potImg) {
-            // Draw Plant first (behind/inside pot rim)
-            const plantW = potW * 0.72; // Reduced from 1.1 for "Best Fit"
+            // Match the "Best Fit" proportions (0.85 scale and perfect seating)
+            const plantW = potW * 0.72; // Proportional width
             const plantH = (plantImg.height / plantImg.width) * plantW;
 
-            // SHIFT: Sink it perfectly into the rim
-            const plantY = y - plantH + (potH * 0.22);
+            // Exact Seating Match: Align plant with rim
+            const plantY = y - (plantH * 0.85) + (potH * 0.12);
             ctx.drawImage(plantImg, x + (potW - plantW) / 2, plantY, plantW, plantH);
             ctx.drawImage(potImg, x, y, potW, potH);
         } else {
-            const imgW = canvas.width * scale;
+            // If no pot, use the same scale as the pot for the plant
+            const imgW = potW; // Use the pot's calculated width for the plant
             const imgH = (plantImg.height / plantImg.width) * imgW;
             ctx.drawImage(plantImg, x, y, imgW, imgH);
         }
