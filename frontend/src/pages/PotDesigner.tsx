@@ -1,6 +1,6 @@
 import { useState, Suspense, useRef } from 'react';
 import { Canvas, useLoader } from '@react-three/fiber';
-import { OrbitControls, ContactShadows, Environment, Decal, useTexture } from '@react-three/drei';
+import { OrbitControls, ContactShadows, Decal, useTexture } from '@react-three/drei';
 import { TextureLoader } from 'three';
 import { ArrowLeft, Upload, ShoppingBag, Palette, Maximize, Move, RotateCcw } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -12,7 +12,7 @@ import styles from './PotDesigner.module.css';
 function StandardPot({ color }: { color: string }) {
     // We use a separate component for the base pot to keep its texture loading isolated if needed
     // But usually standard textures are fine.
-    const texture = useTexture('https://images.unsplash.com/photo-1614730341194-75c60740a2d3?q=80&w=2667&auto=format&fit=crop');
+    const texture = useTexture('https://images.unsplash.com/photo-1614730341194-75c60740a2d3?q=80&w=1024&auto=format&fit=crop');
 
     return (
         <mesh position={[0, 0.5, 0]} castShadow receiveShadow>
@@ -107,7 +107,11 @@ export const PotDesigner = () => {
                     <Canvas shadows camera={{ position: [0, 2, 5], fov: 45 }}>
                         <ambientLight intensity={0.7} />
                         <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} shadow-mapSize={2048} castShadow />
-                        <Environment preset="studio" />
+                        {/* Manual Lighting Setup - Robust & Crash-Proof */}
+                        <ambientLight intensity={0.6} />
+                        <directionalLight position={[5, 10, 7]} intensity={1.2} castShadow shadow-bias={-0.0001} />
+                        <pointLight position={[-5, 5, -5]} intensity={0.8} color="#e0f2fe" />
+                        <pointLight position={[0, -5, 5]} intensity={0.4} />
 
                         {/* Pot Composition includes texture loading, so we wrap it in internal Suspense? 
                             Canvas usually handles it, but explicit boundary helps debug. */}
