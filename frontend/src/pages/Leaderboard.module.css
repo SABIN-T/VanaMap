@@ -1,94 +1,118 @@
+/* Global Main Container */
 .container {
-    padding: 2rem;
+    min-height: 100vh;
+    padding: 2rem 1rem;
+    padding-bottom: 7rem;
+    /* Space for mobile nav */
     max-width: 1200px;
     margin: 0 auto;
-    min-height: 100vh;
-    background: radial-gradient(circle at top right, rgba(16, 185, 129, 0.05), transparent),
-        radial-gradient(circle at bottom left, rgba(59, 130, 246, 0.05), transparent);
+    font-family: 'Outfit', 'Inter', sans-serif;
+    color: #f1f5f9;
 }
 
 .header {
     text-align: center;
     margin-bottom: 4rem;
-    padding-top: 2rem;
+    position: relative;
 }
 
 .badge {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
+    padding: 0.5rem 1rem;
     background: rgba(16, 185, 129, 0.1);
-    color: #10b981;
-    padding: 0.5rem 1.25rem;
-    border-radius: 99px;
-    font-size: 0.85rem;
-    font-weight: 700;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    margin-bottom: 1.5rem;
     border: 1px solid rgba(16, 185, 129, 0.2);
+    border-radius: 2rem;
+    color: #34d399;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1.5rem;
+    backdrop-filter: blur(8px);
 }
 
 .title {
-    font-size: clamp(2.5rem, 5vw, 4rem);
-    font-weight: 900;
-    color: white;
-    margin-bottom: 1rem;
-    line-height: 1.1;
-    background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+    font-size: 4rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #fff 0%, #cbd5e1 100%);
     -webkit-background-clip: text;
-    background-clip: text;
     -webkit-text-fill-color: transparent;
+    margin: 0 0 1rem;
+    letter-spacing: -0.02em;
 }
 
 .subtitle {
     color: #94a3b8;
-    font-size: 1.1rem;
     max-width: 600px;
     margin: 0 auto;
+    font-size: 1.1rem;
+    line-height: 1.6;
 }
 
 /* PODIUM SECTION */
 .podium {
-    display: grid;
-    grid-template-columns: 1fr 1.2fr 1fr;
-    gap: 1.5rem;
+    display: flex;
+    justify-content: center;
     align-items: flex-end;
+    gap: 1.5rem;
     margin-bottom: 5rem;
-    padding: 0 1rem;
+    padding-top: 3rem;
+    /* Space for crown */
 }
 
 .podiumCard {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 2rem;
-    padding: 2.5rem 1.5rem;
+    background: rgba(30, 41, 59, 0.4);
+    backdrop-filter: blur(12px);
+    border-radius: 1.5rem 1.5rem 0 0;
+    /* Flat bottom? No, simpler to be cards floating */
+    border-radius: 1.5rem;
+    padding: 2rem;
     text-align: center;
     position: relative;
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 260px;
 }
 
 .podiumCard:hover {
     transform: translateY(-10px);
-    background: rgba(255, 255, 255, 0.05);
-    border-color: rgba(255, 255, 255, 0.1);
 }
 
+/* Specific Positions */
 .gold {
-    height: 380px;
-    border-color: rgba(250, 204, 21, 0.3);
-    background: linear-gradient(180deg, rgba(250, 204, 21, 0.05) 0%, rgba(250, 204, 21, 0) 100%);
+    background: linear-gradient(180deg, rgba(234, 179, 8, 0.15) 0%, rgba(30, 41, 59, 0.6) 100%);
+    border: 1px solid rgba(234, 179, 8, 0.3);
+    height: 420px;
+    order: 2;
+    /* Middle visual */
+    z-index: 10;
+    box-shadow: 0 20px 50px -12px rgba(234, 179, 8, 0.15);
 }
 
 .silver {
-    height: 320px;
-    border-color: rgba(148, 163, 184, 0.3);
+    background: linear-gradient(180deg, rgba(148, 163, 184, 0.15) 0%, rgba(30, 41, 59, 0.6) 100%);
+    border: 1px solid rgba(148, 163, 184, 0.3);
+    height: 360px;
+    order: 1;
 }
 
 .bronze {
-    height: 280px;
-    border-color: rgba(180, 83, 9, 0.3);
+    background: linear-gradient(180deg, rgba(217, 119, 6, 0.15) 0%, rgba(30, 41, 59, 0.6) 100%);
+    border: 1px solid rgba(217, 119, 6, 0.3);
+    height: 340px;
+    order: 3;
+}
+
+.crow {
+    position: absolute;
+    top: -40px;
+    color: #fbbf24;
+    filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.5));
 }
 
 .avatar {
@@ -96,160 +120,175 @@
     height: 80px;
     background: #1e293b;
     border-radius: 50%;
-    margin: 0 auto 1.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 2rem;
-    font-weight: 800;
+    font-weight: 700;
     color: white;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-    position: relative;
+    margin-bottom: 1.5rem;
+    border: 3px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
 .gold .avatar {
-    border: 4px solid #facc15;
+    border-color: #fbbf24;
+    background: linear-gradient(135deg, #fbbf24, #d97706);
 }
 
 .silver .avatar {
-    border: 4px solid #94a3b8;
+    border-color: #cbd5e1;
+    background: linear-gradient(135deg, #e2e8f0, #94a3b8);
+    color: #0f172a;
 }
 
 .bronze .avatar {
-    border: 4px solid #b45309;
-}
-
-.crown {
-    position: absolute;
-    top: -20px;
-    left: 50%;
-    transform: translateX(-50%);
-    color: #facc15;
-    filter: drop-shadow(0 0 10px rgba(250, 204, 21, 0.5));
+    border-color: #d97706;
+    background: linear-gradient(135deg, #d97706, #92400e);
 }
 
 .userName {
-    font-size: 1.5rem;
+    font-size: 1.25rem;
     font-weight: 700;
-    color: white;
     margin-bottom: 0.5rem;
+    color: #fff;
 }
 
 .userPoints {
     font-size: 2.5rem;
-    font-weight: 900;
-    color: #10b981;
+    font-weight: 800;
+    line-height: 1;
     margin-bottom: 0.25rem;
+    font-variant-numeric: tabular-nums;
+}
+
+.gold .userPoints {
+    color: #fbbf24;
+    text-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
+}
+
+.silver .userPoints {
+    color: #f1f5f9;
+}
+
+.bronze .userPoints {
+    color: #fb923c;
 }
 
 .pointsLabel {
-    color: #64748b;
     font-size: 0.8rem;
     text-transform: uppercase;
-    font-weight: 700;
     letter-spacing: 0.1em;
+    color: #64748b;
+    margin-bottom: 1.5rem;
 }
 
 .location {
-    margin-top: 1.5rem;
-    display: inline-flex;
+    margin-top: auto;
+    display: flex;
     align-items: center;
-    gap: 0.4rem;
-    color: #94a3b8;
+    gap: 0.5rem;
     font-size: 0.9rem;
+    color: #64748b;
+    padding: 0.5rem 1rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 2rem;
 }
 
-/* LIST SECTION */
+
+/* TABLE SECTIONS */
+.sectionHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin: 4rem 0 2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 1rem;
+}
+
+.sectionTitle {
+    font-size: 2rem;
+    font-weight: 700;
+    color: white;
+}
+
+/* User List Table */
 .tableContainer {
-    background: rgba(15, 23, 42, 0.4);
+    background: rgba(15, 23, 42, 0.6);
+    border-radius: 1.5rem;
+    padding: 0.5rem;
     border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 2rem;
-    overflow: hidden;
-    backdrop-filter: blur(20px);
 }
 
 .row {
     display: grid;
-    grid-template-columns: 80px 1fr 120px 180px;
+    grid-template-columns: 60px 2fr 1.5fr 100px 100px;
     align-items: center;
-    padding: 1.5rem 2rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-    transition: all 0.2s ease;
+    padding: 1rem 1.5rem;
+    border-radius: 1rem;
+    transition: background 0.2s;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+.row:last-child {
+    border-bottom: none;
 }
 
 .row:hover {
-    background: rgba(255, 255, 255, 0.02);
+    background: rgba(255, 255, 255, 0.03);
 }
 
 .rankNumber {
-    font-size: 1.25rem;
-    font-weight: 800;
-    color: #475569;
+    font-weight: 700;
+    color: #64748b;
+    font-family: monospace;
 }
 
 .userInfo {
     display: flex;
     align-items: center;
-    gap: 1.25rem;
+    gap: 1rem;
 }
 
 .smallAvatar {
-    width: 44px;
-    height: 44px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
+    width: 36px;
+    height: 36px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
-    font-weight: 700;
+    font-weight: 600;
+    font-size: 0.9rem;
 }
 
 .name {
     font-weight: 600;
-    color: white;
-    font-size: 1.1rem;
+    color: #e2e8f0;
 }
 
 .rowLocation {
-    color: #64748b;
-    font-size: 0.9rem;
+    color: #94a3b8;
 }
 
 .rowPoints {
-    text-align: right;
-    font-weight: 800;
+    font-weight: 700;
     color: #10b981;
-    font-size: 1.2rem;
+    text-align: right;
 }
 
-/* NEIGHBORHOODS */
-.sectionHeader {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin: 6rem 0 2rem;
-}
-
-.sectionTitle {
-    font-size: 2rem;
-    font-weight: 800;
-    color: white;
-}
-
+/* CITY GRID */
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 1.5rem;
-    margin-bottom: 4rem;
 }
 
 .cityCard {
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(30, 41, 59, 0.4);
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 1.5rem;
-    padding: 2rem;
+    padding: 1.5rem;
     display: flex;
     align-items: center;
     gap: 1.5rem;
@@ -257,21 +296,21 @@
 }
 
 .cityCard:hover {
-    transform: scale(1.02);
+    background: rgba(30, 41, 59, 0.8);
     border-color: rgba(16, 185, 129, 0.3);
-    background: rgba(16, 185, 129, 0.02);
+    transform: translateY(-5px);
 }
 
 .cityIcon {
-    width: 64px;
-    height: 64px;
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(6, 95, 70, 0.2));
+    color: #34d399;
     border-radius: 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: white;
-    box-shadow: 0 10px 20px rgba(16, 185, 129, 0.2);
+    flex-shrink: 0;
 }
 
 .cityInfo {
@@ -279,16 +318,18 @@
 }
 
 .cityName {
-    font-size: 1.25rem;
+    display: block;
+    font-size: 1.1rem;
     font-weight: 700;
     color: white;
     margin-bottom: 0.25rem;
-    display: block;
 }
 
 .cityMeta {
-    color: #64748b;
     font-size: 0.85rem;
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
 }
 
 .cityPoints {
@@ -296,46 +337,47 @@
 }
 
 .cityPointsValue {
-    font-size: 1.5rem;
-    font-weight: 900;
-    color: #10b981;
     display: block;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #10b981;
 }
 
 .cityPointsLabel {
     font-size: 0.7rem;
-    color: #64748b;
     text-transform: uppercase;
-    font-weight: 700;
+    color: #64748b;
+    letter-spacing: 0.05em;
 }
 
+/* MOBILE RESPONSIVENESS */
 @media (max-width: 768px) {
-    .container {
-        padding: 1rem;
-        padding-bottom: 100px;
-        /* Space for Mobile Tab Bar */
+    .title {
+        font-size: 2.5rem;
     }
 
     .podium {
-        grid-template-columns: 1fr;
-        align-items: stretch;
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
     }
 
-    .gold,
-    .silver,
-    .bronze {
-        height: auto;
+    .podiumCard {
+        width: 100%;
+        max-width: 300px;
+        height: auto !important;
+        order: unset !important;
+        /* Stack naturally */
     }
 
     .row {
-        grid-template-columns: 60px 1fr 100px;
+        grid-template-columns: 40px 1fr 80px;
+        gap: 0.5rem;
     }
 
-    .rowLocation {
+    /* Hide extended columns on mobile */
+    .rowLocation,
+    .levelBadge {
         display: none;
-    }
-
-    .grid {
-        grid-template-columns: 1fr;
     }
 }

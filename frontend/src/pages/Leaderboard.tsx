@@ -27,7 +27,16 @@ export const Leaderboard = () => {
     }, []);
 
     if (loading) {
-        return <div style={{ display: 'flex', height: '100vh', alignItems: 'center', justifyContent: 'center', color: 'white' }}>Analyzing Ecosystem Rankings...</div>;
+        return (
+            <div style={{
+                display: 'flex', height: '100vh', alignItems: 'center', justifyContent: 'center',
+                color: '#94a3b8', flexDirection: 'column', gap: '1rem'
+            }}>
+                <div style={{ width: 40, height: 40, border: '3px solid #10b981', borderTopColor: 'transparent', borderRadius: '50%', animation: 'spin 1s linear infinite' }}></div>
+                Analyzing Ecosystem Rankings...
+                <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+            </div>
+        );
     }
 
     // Sort top 3 for podium
@@ -47,7 +56,7 @@ export const Leaderboard = () => {
                 </p>
             </header>
 
-            {/* PODIUM */}
+            {/* PODIUM SECTION */}
             <div className={styles.podium}>
                 {/* 2nd Place */}
                 {top3[1] && (
@@ -65,7 +74,7 @@ export const Leaderboard = () => {
                 {/* 1st Place */}
                 {top3[0] && (
                     <div className={`${styles.podiumCard} ${styles.gold}`}>
-                        <Crown className={styles.crown} size={48} />
+                        <Crown className={styles.crow} size={48} />
                         <div className={styles.avatar}>{top3[0].name.charAt(0)}</div>
                         <h3 className={styles.userName}>{top3[0].name}</h3>
                         <div className={styles.userPoints}>{top3[0].points.toLocaleString()}</div>
@@ -90,7 +99,12 @@ export const Leaderboard = () => {
                 )}
             </div>
 
-            {/* FULL RANKINGS */}
+            {/* TABLE: GLOBAL RANKINGS */}
+            <div className={styles.sectionHeader}>
+                <h2 className={styles.sectionTitle}>Global Elite</h2>
+                <div style={{ color: '#64748b', fontSize: '0.9rem' }}>Top contributors worldwide</div>
+            </div>
+
             <div className={styles.tableContainer}>
                 {rest.map((user, idx) => (
                     <div key={idx} className={styles.row}>
@@ -100,19 +114,22 @@ export const Leaderboard = () => {
                             <span className={styles.name}>{user.name}</span>
                         </div>
                         <span className={styles.rowLocation}>{user.city || 'Global'}</span>
-                        <div className={styles.levelBadge} style={{ marginRight: '1rem', display: 'flex', alignItems: 'center', gap: '4px', background: '#334155', padding: '4px 8px', borderRadius: '8px', fontSize: '0.8rem', color: '#fbbf24' }}>
+                        <div className={styles.levelBadge} style={{ display: 'flex', alignItems: 'center', gap: '4px', background: 'rgba(255,255,255,0.05)', padding: '4px 8px', borderRadius: '8px', fontSize: '0.8rem', color: '#fbbf24' }}>
                             <Sprout size={12} /> Lvl {user.gameLevel || 1}
                         </div>
                         <div className={styles.rowPoints}>{user.points.toLocaleString()} CP</div>
                     </div>
                 ))}
+                {rest.length === 0 && (
+                    <div style={{ textAlign: 'center', padding: '2rem', color: '#64748b' }}>No otther rankings yet. Add plants to join the leaderboard!</div>
+                )}
             </div>
 
-            {/* CITY RANKINGS */}
+            {/* TABLE: NEIGHBORHOOD RANKINGS */}
             <div className={styles.sectionHeader}>
                 <h2 className={styles.sectionTitle}>Neighborhood Rankings</h2>
                 <div style={{ color: '#64748b', fontSize: '0.9rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <TrendingUp size={16} /> Updated 1h ago
+                    <TrendingUp size={16} /> Top Green Zones
                 </div>
             </div>
 
@@ -147,9 +164,10 @@ export const Leaderboard = () => {
                 borderRadius: '2rem',
                 textAlign: 'center',
                 marginTop: '4rem',
+                marginBottom: '4rem',
                 border: '1px solid rgba(255, 255, 255, 0.05)'
             }}>
-                <Sprout size={48} color="#10b981" style={{ marginBottom: '1.5rem' }} />
+                <Sprout size={48} color="#10b981" style={{ marginBottom: '1.5rem', display: 'inline-block' }} />
                 <h2 style={{ color: 'white', fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.75rem' }}>Increase Your Contribution</h2>
                 <p style={{ color: '#94a3b8', maxWidth: '500px', margin: '0 auto 2rem' }}>
                     Every plant you add to your dashboard increases your home's air quality and moves your neighborhood up the charts.
@@ -163,8 +181,11 @@ export const Leaderboard = () => {
                         border: 'none',
                         borderRadius: '1rem',
                         fontWeight: 700,
-                        cursor: 'pointer'
+                        cursor: 'pointer',
+                        transition: 'transform 0.2s'
                     }}
+                    onMouseOver={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+                    onMouseOut={(e) => e.currentTarget.style.transform = 'scale(1)'}
                 >
                     Explore Marketplace
                 </button>
