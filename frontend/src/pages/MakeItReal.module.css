@@ -294,6 +294,8 @@
     height: 100%;
     object-fit: cover;
     opacity: 1;
+    filter: brightness(1.04) contrast(1.02);
+    /* Professional camera enhancement */
     /* Maximum clarity for AR */
     background: #000;
 }

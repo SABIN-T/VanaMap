@@ -373,64 +373,80 @@ export const MakeItReal = () => {
         ]);
 
         // 3. Setup Composition Offscreen for Lighting Pass
-        const potW = canvas.width * 0.40;
+        // CRITICAL SYNC: Pot width on screen is 200px. Calculate its relative width for the canvas.
+        const potWidthOnScreen = 200;
+        const potW = (potWidthOnScreen / window.innerWidth) * canvas.width;
         const potH = (potImg ? (potImg.height / potImg.width) : 1) * potW;
+
         const compCanvas = document.createElement('canvas');
-        compCanvas.width = potW * 2; compCanvas.height = (potH + 500);
+        compCanvas.width = potW * 2;
+        compCanvas.height = potW * 3; // Enough room for tall plants
         const cCtx = compCanvas.getContext('2d');
         if (!cCtx) return;
 
-        // Draw Composition to offscreen first
-        let plantW = potW * 0.72;
+        // Draw Composition to offscreen first (Exactly matching CSS alignment)
+        // 0.85 is the scale used in the preview CSS for foliage
+        let plantW = potW * 0.85;
         let plantH = (plantImg.height / plantImg.width) * plantW;
-        let cX = potW, cY = compCanvas.height - potH;
+
+        let cCenter = compCanvas.width / 2;
+        let cBase = compCanvas.height / 2; // This will be the drag center (pos.x, pos.y)
 
         if (potImg) {
-            const plantY = cY - (plantH * 0.85) + (potH * 0.12);
-            cCtx.drawImage(plantImg, cX - (plantW / 2), plantY, plantW, plantH);
-            cCtx.drawImage(potImg, cX - (potW / 2), cY, potW, potH);
+            // Seating math: Match the -48px marginBottom precisely
+            // Shift is (48/200) * potW
+            const seatOffset = (48 / 200) * potW;
+            const potY = cBase - (potH / 2);
+            const plantBottomY = potY + seatOffset;
+
+            cCtx.drawImage(plantImg, cCenter - (plantW / 2), plantBottomY - plantH, plantW, plantH);
+            cCtx.drawImage(potImg, cCenter - (potW / 2), potY, potW, potH);
         } else {
-            cCtx.drawImage(plantImg, cX - (potW / 2), cY, potW, (plantImg.height / plantImg.width) * potW);
+            cCtx.drawImage(plantImg, cCenter - (potW / 2), cBase - ((plantImg.height / plantImg.width) * potW / 2), potW, (plantImg.height / plantImg.width) * potW);
         }
 
         // 4. NEURAL LIGHTING: Sample Local Environment
-        const sampleX = Math.max(0, (pos.x / 100) * canvas.width - 100);
-        const sampleY = Math.max(0, (pos.y / 100) * canvas.height - 100);
-        const envData = ctx.getImageData(sampleX, sampleY, 200, 200).data;
+        // Sample area precisely where the pot is placed
+        const sampleX = Math.max(0, (pos.x / 100) * canvas.width - (potW / 2));
+        const sampleY = Math.max(0, (pos.y / 100) * canvas.height);
+        const envData = ctx.getImageData(sampleX, sampleY, Math.min(potW, 200), 50).data;
         let lR = 0, lG = 0, lB = 0;
         for (let j = 0; j < envData.length; j += 16) {
             lR += envData[j]; lG += envData[j + 1]; lB += envData[j + 2];
         }
-        const lCount = envData.length / 16;
+        const lCount = Math.max(1, envData.length / 16);
         const envR = lR / lCount, envG = lG / lCount, envB = lB / lCount;
 
         // Apply Light Adaptation to Composition
         cCtx.globalCompositeOperation = 'source-atop';
         cCtx.fillStyle = `rgb(${envR}, ${envG}, ${envB})`;
-        cCtx.globalAlpha = 0.2; // Blend with environment
+        cCtx.globalAlpha = 0.15; // Subtle environment blend
         cCtx.fillRect(0, 0, compCanvas.width, compCanvas.height);
 
-        // Final Color Correction (Match brightness/contrast of room)
+        // Final Color Correction
         const luminance = (envR + envG + envB) / 3;
-        const brightness = 0.8 + (luminance / 255) * 0.4;
-        cCtx.filter = `brightness(${brightness}) contrast(1.1)`;
-        cCtx.drawImage(compCanvas, 0, 0);
+        const brightness = 0.9 + (luminance / 255) * 0.2;
+        cCtx.filter = `brightness(${brightness}) contrast(1.05) saturate(1.05)`;
+        const finalComp = document.createElement('canvas');
+        finalComp.width = compCanvas.width; finalComp.height = compCanvas.height;
+        finalComp.getContext('2d')?.drawImage(compCanvas, 0, 0);
 
-        // 5. Final Assembly with Ground Shadow
+        // 5. Final Assembly
         ctx.save();
         const drawX = (pos.x / 100) * canvas.width;
         const drawY = (pos.y / 100) * canvas.height;
 
-        // Calculate the "Visual Center" of the composition to match CSS translate(-50%, -50%)
-        // The composition is drawn on an offscreen canvas and then centered on the final frame.
+        // Ground Shadow (Ambient Occlusion)
+        ctx.shadowBlur = potW * 0.2;
+        ctx.shadowColor = 'rgba(0,0,0,0.5)';
+        ctx.shadowOffsetY = 10;
 
-        // Fake Ground Shadow for Realism
-        ctx.shadowBlur = 40;
-        ctx.shadowColor = 'rgba(0,0,0,0.4)';
-        ctx.shadowOffsetY = 15;
-
-        ctx.drawImage(compCanvas, drawX - cX, drawY - (compCanvas.height / 2));
+        ctx.drawImage(finalComp, drawX - cCenter, drawY - cBase);
         ctx.restore();
+
+        // High-end post-process on the entire frame
+        ctx.filter = 'contrast(1.02) saturate(1.02) brightness(1.01)';
+        ctx.drawImage(canvas, 0, 0);
 
         // 6. Output Perfect Sync
         const finalImage = canvas.toDataURL('image/jpeg', 0.98);
