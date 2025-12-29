@@ -106,17 +106,17 @@
 .heroBadge {
     display: inline-flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.4rem;
     background: rgba(16, 185, 129, 0.1);
     color: #10b981;
-    padding: 0.6rem 1.25rem;
+    padding: 0.4rem 0.8rem;
     border-radius: 999px;
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     font-weight: 800;
     margin-bottom: 2rem;
     border: 1px solid rgba(16, 185, 129, 0.2);
     text-transform: uppercase;
-    letter-spacing: 1.5px;
+    letter-spacing: 1px;
     backdrop-filter: blur(8px);
     transition: all 0.3s ease;
 }
@@ -132,9 +132,9 @@
     font-size: clamp(2.5rem, 8vw, 5rem);
     font-weight: 900;
     line-height: 1;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     color: var(--color-text-main);
-    letter-spacing: -3px;
+    letter-spacing: -1.5px;
     background: linear-gradient(135deg, var(--color-text-main) 0%, var(--color-text-muted) 100%);
     -webkit-background-clip: text;
     background-clip: text;
@@ -149,10 +149,10 @@
 }
 
 .heroSubtitle {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     color: var(--color-text-muted);
-    line-height: 1.6;
-    margin-bottom: 3.5rem;
+    line-height: 1.5;
+    margin-bottom: 2.5rem;
     max-width: 700px;
     margin-inline: auto;
 }
@@ -172,37 +172,37 @@
     max-width: 650px;
     display: flex;
     flex-direction: column;
-    gap: 2.5rem;
+    gap: 1.5rem;
     background: var(--glass-bg);
-    padding: 2rem;
-    border-radius: 2.5rem;
+    padding: 1.5rem;
+    border-radius: 2rem;
     border: 1px solid rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(40px);
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
 .heroMainStack {
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
 }
 
 /* HIGH END PREMIUM BUTTONS */
 .gpsBtn {
     width: 100%;
-    height: 56px;
+    height: 52px;
     padding: 0 1.5rem !important;
     border-radius: 999px !important;
     /* Full pill shape */
     font-weight: 800 !important;
     font-size: 0.85rem !important;
     text-transform: uppercase;
-    letter-spacing: 1.2px;
+    letter-spacing: 1px;
     background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
     color: white !important;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 8px;
     position: relative;
     overflow: hidden;
     box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3) !important;
@@ -248,7 +248,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 1.5rem;
+    gap: 1rem;
     width: 100%;
 }
 
@@ -256,7 +256,7 @@
     color: #64748b;
     font-size: 0.7rem;
     font-weight: 800;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
     white-space: nowrap;
     opacity: 0.8;
 }
@@ -271,17 +271,17 @@
 
 .searchBox {
     width: 100%;
-    height: 56px;
+    height: 48px;
     /* Taller touch target */
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.08);
     /* Subtle glass border */
     border-radius: 999px;
     /* Pill shape */
-    padding: 0 1.5rem;
+    padding: 0 1.25rem;
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     backdrop-filter: blur(12px);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -296,12 +296,12 @@
 
 .ghostBtn {
     width: 100%;
-    height: 48px;
+    height: 42px;
     background: transparent !important;
     border: 1px solid rgba(255, 255, 255, 0.05) !important;
     color: #94a3b8 !important;
     border-radius: 1rem !important;
-    font-size: 0.85rem !important;
+    font-size: 0.8rem !important;
     font-weight: 700 !important;
     display: flex;
     align-items: center;
@@ -326,7 +326,7 @@
 
     border: none;
     color: var(--color-text-main);
-    font-size: 1rem;
+    font-size: 0.95rem;
     padding: 0.6rem 0;
     outline: none;
 }
@@ -337,35 +337,35 @@
 
 /* --- WEATHER DASHBOARD --- */
 .intelligenceSection {
-    padding: 4rem 2rem;
+    padding: 3rem 1.5rem;
     background: var(--color-bg);
 }
 
 .sectionHeader {
     text-align: center;
-    margin-bottom: 4rem;
+    margin-bottom: 3rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1rem;
+    gap: 0.75rem;
 }
 
 .sectionBadge {
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     font-weight: 800;
     color: #38bdf8;
     background: rgba(56, 189, 248, 0.1);
-    padding: 0.4rem 1rem;
+    padding: 0.3rem 0.8rem;
     border-radius: 99px;
-    letter-spacing: 2px;
+    letter-spacing: 1px;
 }
 
 .sectionTitle {
-    font-size: 2.5rem;
+    font-size: 2rem;
     font-weight: 900;
     color: var(--color-text-main);
-    letter-spacing: -1.5px;
-    margin-bottom: 0.5rem;
+    letter-spacing: -1px;
+    margin-bottom: 0.25rem;
 }
 
 @media (min-width: 1024px) {
@@ -376,14 +376,14 @@
 
 .sectionSubtitle {
     color: var(--color-text-muted);
-    font-size: 1.1rem;
+    font-size: 1rem;
     max-width: 600px;
 }
 
 .weatherDashboard {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 2.5rem;
+    gap: 1.5rem;
     max-width: 1400px;
     margin: 0 auto;
     width: 100%;
@@ -422,30 +422,30 @@
 .weatherCard {
     background: var(--glass-bg);
     border: var(--glass-border);
-    border-radius: 2rem;
-    padding: 1.5rem 1.25rem;
+    border-radius: 1.5rem;
+    padding: 1.25rem;
     text-align: center;
     backdrop-filter: blur(20px);
     transition: all 0.4s ease;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1.25rem;
-    min-height: 160px;
+    gap: 1rem;
+    min-height: 140px;
     position: relative;
     width: 100%;
     box-shadow: var(--card-shadow);
 }
 
 .weatherCard:hover {
-    transform: translateY(-8px);
+    transform: translateY(-4px);
     background: var(--color-bg-card);
     border-color: var(--color-primary);
 }
 
 .statIcon {
-    width: 48px;
-    height: 48px;
+    width: 42px;
+    height: 42px;
     border-radius: 1rem;
     display: flex;
     align-items: center;
@@ -457,11 +457,11 @@
     font-size: 0.7rem;
     font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 1.2px;
+    letter-spacing: 1px;
 }
 
 .statValue {
-    font-size: 1.25rem;
+    font-size: 1.15rem;
     font-weight: 900;
     color: var(--color-text-main);
 }
@@ -476,7 +476,7 @@
     background: transparent;
     border: none;
     color: #38bdf8;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     cursor: pointer;
     text-decoration: underline;
     align-self: flex-start;
@@ -492,21 +492,21 @@
 
 /* --- DISCOVERY HUB --- */
 .discoverySection {
-    padding: 4rem 2rem;
+    padding: 3rem 1.5rem;
     background: linear-gradient(to bottom, var(--color-bg), var(--color-bg-alt));
 }
 
 .filterWrapper {
     max-width: 1200px;
-    margin: 2rem auto;
+    margin: 1.5rem auto;
 }
 
 .filterDiscoverySection {
-    margin-bottom: 5rem;
+    margin-bottom: 3rem;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 3rem;
+    gap: 2rem;
     width: 100%;
 }
 
@@ -522,11 +522,11 @@
     position: relative;
     background: var(--glass-bg);
     border: var(--glass-border);
-    border-radius: 1.5rem;
-    padding: 0.5rem 1.25rem;
+    border-radius: 1.25rem;
+    padding: 0.5rem 1rem;
     display: flex;
     align-items: center;
-    gap: 1.25rem;
+    gap: 1rem;
     box-shadow: var(--card-shadow);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     backdrop-filter: blur(12px);
@@ -544,9 +544,9 @@
     background: transparent;
     border: none;
     color: var(--color-text-main);
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 500;
-    padding: 0.75rem 0;
+    padding: 0.5rem 0;
     outline: none;
 }
 
@@ -556,18 +556,18 @@
 }
 
 .filterQuestion {
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 700;
     color: var(--color-text-main);
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
     text-align: center;
 }
 
 .categorySelectionList {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 3rem;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
 }
 
 @media (min-width: 1024px) {
@@ -580,15 +580,15 @@
 .categoryCard {
     background: var(--glass-bg);
     border: var(--glass-border);
-    border-radius: 1.5rem;
-    padding: 1.5rem;
+    border-radius: 1.25rem;
+    padding: 1.25rem;
     cursor: pointer;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    gap: 1.5rem;
+    gap: 1rem;
     box-shadow: var(--card-shadow);
 }
 
@@ -605,20 +605,20 @@
 }
 
 .categoryIcon {
-    font-size: 1.75rem;
+    font-size: 1.5rem;
 }
 
 .categoryName {
-    font-size: 1.1rem;
+    font-size: 1rem;
     font-weight: 800;
     color: var(--color-text-main);
-    margin-bottom: 0.35rem;
+    margin-bottom: 0.25rem;
 }
 
 .categoryDesc {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: var(--color-text-muted);
-    line-height: 1.4;
+    line-height: 1.3;
 }
 
 /* --- PLANT GRID --- */
@@ -626,9 +626,9 @@
     display: grid;
     /* Smart auto-fill for all screen sizes */
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 2rem;
+    gap: 1.5rem;
     max-width: 1400px;
-    margin: 4rem auto;
+    margin: 3rem auto;
     padding: 0 2rem;
 }
 
@@ -643,9 +643,9 @@
     .grid {
         /* Reduce min-width to fit 2 columns on most phones (~360px+) */
         grid-template-columns: repeat(2, 1fr);
-        gap: 0.75rem;
-        padding: 0 1rem;
-        margin: 2rem auto;
+        gap: 0.5rem;
+        padding: 0 0.75rem;
+        margin: 1.5rem auto;
     }
 }
 
@@ -654,17 +654,17 @@
     .grid {
         grid-template-columns: 1fr;
         /* Force single column for tiny screens to prevent overflow */
-        padding: 0 1.5rem;
+        padding: 0 1rem;
     }
 }
 
 /* --- FOOTER & CTAS --- */
 .sponsorCTA {
-    margin: 8rem 2rem 0;
-    padding: 4rem;
+    margin: 6rem 1.5rem 0;
+    padding: 3rem 2rem;
     background: var(--glass-bg);
     border: 1px solid rgba(250, 204, 21, 0.3);
-    border-radius: 3rem;
+    border-radius: 2.5rem;
     backdrop-filter: blur(20px);
     text-align: center;
     position: relative;
@@ -678,39 +678,39 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 2rem;
+    gap: 1.5rem;
 }
 
 .sponsorIcon {
-    width: 64px;
-    height: 64px;
+    width: 56px;
+    height: 56px;
     background: rgba(250, 204, 21, 0.1);
-    border-radius: 1.5rem;
+    border-radius: 1.25rem;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .sponsorText h3 {
-    font-size: 2rem;
+    font-size: 1.75rem;
     font-weight: 900;
     color: var(--color-text-main);
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
 }
 
 .sponsorButton {
     background: linear-gradient(135deg, #facc15 0%, #ca8a04 100%) !important;
     color: #000 !important;
     font-weight: 900 !important;
-    border-radius: 1rem !important;
-    padding: 0.85rem 2rem !important;
-    font-size: 0.95rem !important;
+    border-radius: 0.75rem !important;
+    padding: 0.75rem 1.75rem !important;
+    font-size: 0.9rem !important;
 }
 
 .suggestionButtonSection {
-    margin-top: 4rem;
+    margin-top: 3rem;
     text-align: center;
-    padding: 2rem;
+    padding: 1.5rem;
 }
 
 .suggestionBtn {
@@ -718,8 +718,8 @@
     border: 1px solid var(--color-border) !important;
     color: var(--color-text-muted) !important;
     border-radius: 0.75rem !important;
-    padding: 0.75rem 1.5rem !important;
-    font-size: 0.85rem !important;
+    padding: 0.6rem 1.25rem !important;
+    font-size: 0.8rem !important;
 }
 
 .suggestionBtn:hover {
@@ -745,48 +745,93 @@
 
 @media (max-width: 640px) {
     .homeContainer {
-        padding-bottom: 100px;
+        padding-bottom: 80px;
         /* Space for Mobile Tab Bar */
     }
 
     .heroTitle {
-        font-size: 2.5rem;
+        font-size: 2.25rem;
     }
 
     .heroSubtitle {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         margin-bottom: 2rem;
     }
 
     .sponsorCTA {
-        padding: 2.5rem 1.5rem;
-        margin: 4rem 1rem 0;
+        padding: 2rem 1rem;
+        margin: 3rem 1rem 0;
     }
 
     .sponsorText h3 {
-        font-size: 1.5rem;
+        font-size: 1.4rem;
     }
 
     .categoryCard {
-        flex-direction: column;
-        text-align: center;
-        gap: 1rem;
+        flex-direction: row;
+        /* Horizontal compact on mobile */
+        text-align: left;
+        gap: 0.75rem;
+        padding: 1rem;
+        align-items: center;
+    }
+
+    .categoryIcon {
+        font-size: 1.25rem;
+        background: rgba(255, 255, 255, 0.05);
+        width: 40px;
+        height: 40px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        border-radius: 50%;
+    }
+
+    .categoryText {
+        flex: 1;
+    }
+
+    .categoryName {
+        margin: 0;
+        font-size: 0.95rem;
+    }
+
+    .categoryDesc {
+        display: none;
+        /* Hide desc for density */
     }
 
     /* Weather Dashboard Mobile Optimization */
     .weatherDashboard {
         display: flex;
         flex-direction: column;
-        gap: 1.5rem;
-        padding: 0 1rem;
+        gap: 1rem;
+        padding: 0 0.5rem;
     }
 
     .weatherCard {
-        padding: 2rem;
+        padding: 1rem;
         min-height: auto;
-        border-radius: 1.5rem;
+        border-radius: 1.25rem;
         text-align: center;
         align-items: center;
+        flex-direction: row;
+        /* Horizontal */
+        text-align: left;
+    }
+
+    .statIcon {
+        width: 36px;
+        height: 36px;
+        border-radius: 0.75rem;
+    }
+
+    .statValue {
+        font-size: 1rem;
+    }
+
+    .statInfo {
+        align-items: flex-start;
     }
 }
 
@@ -794,281 +839,71 @@
 .capabilityCard {
     background: var(--glass-bg);
     border: var(--glass-border);
-    border-radius: 2rem;
-    padding: 2.5rem;
+    border-radius: 1.5rem;
+    padding: 1.5rem;
     backdrop-filter: blur(20px);
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    text-align: left;
-    gap: 1.5rem;
-    box-shadow: var(--card-shadow);
+    gap: 1rem;
 }
 
-.capabilityCard:hover {
-    transform: translateY(-8px);
-    background: var(--color-bg-card);
-    border-color: var(--color-primary);
-    box-shadow: var(--glass-shadow);
-}
-
-.capabilityCard h3 {
-    font-size: 1.25rem;
-    font-weight: 800;
-    color: var(--color-text-main);
-}
-
-.capabilityCard p {
-    font-size: 0.95rem;
-    color: var(--color-text-muted);
-    line-height: 1.6;
-}
-
-@media (min-width: 1024px) {
-    .capabilityCard {
-        padding: 2.5rem;
-        gap: 1.5rem;
-    }
-
-    .capabilityCard h3 {
-        font-size: 1.75rem;
-    }
-
-    .capabilityCard p {
-        font-size: 1.1rem;
-    }
-}
-
-/* Onboarding Hub Updates */
 .onboardingSection {
-    padding: 6rem 2rem;
-    background: linear-gradient(to bottom, var(--color-bg), var(--color-bg-alt));
+    padding: 3rem 1.5rem;
+    background: var(--color-bg-alt);
 }
 
 .onboardingGrid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 2rem;
+    gap: 1.5rem;
     max-width: 1200px;
-    margin: 0 auto;
-}
-
-@media (min-width: 1024px) {
-    .onboardingGrid {
-        grid-template-columns: repeat(3, 1fr);
-    }
+    margin: 3rem auto 0;
 }
 
 .onboardingCard {
-    background: var(--glass-bg);
+    background: var(--color-bg);
     border: var(--glass-border);
-    border-radius: 2rem;
-    padding: 2rem;
-    backdrop-filter: blur(20px);
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    cursor: default;
     box-shadow: var(--card-shadow);
 }
 
 .onboardingCard:hover {
-    transform: translateY(-8px);
-    background: var(--color-bg-card);
-    border-color: var(--color-accent);
-    box-shadow: var(--glass-shadow);
+    transform: translateY(-5px);
+    border-color: var(--color-primary);
 }
 
 .onboardingIcon {
-    width: 64px;
-    height: 64px;
-    border-radius: 1.25rem;
+    width: 48px;
+    height: 48px;
+    border-radius: 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 1.5rem;
-    transition: transform 0.3s ease;
-}
-
-.onboardingCard:hover .onboardingIcon {
-    transform: scale(1.1) rotate(5deg);
+    margin-bottom: 1rem;
 }
 
 .onboardingCard h3 {
-    font-size: 1.5rem;
+    font-size: 1.1rem;
     font-weight: 800;
     color: var(--color-text-main);
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
 }
 
 .onboardingCard p {
+    font-size: 0.85rem;
     color: var(--color-text-muted);
-    font-size: 1.05rem;
-    line-height: 1.6;
-    margin-bottom: 1.5rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
 }
 
 .onboardingMeta {
     font-size: 0.7rem;
-    font-weight: 800;
-    color: var(--color-text-dim);
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 2px;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--color-border);
-    width: 100%;
-}
-
-@media (max-width: 768px) {
-    .onboardingSection {
-        padding: 4rem 1rem;
-    }
-
-    /* Collapsible Logic for Mobile */
-    .capabilityCard,
-    .onboardingCard {
-        cursor: pointer;
-        padding: 1.25rem !important;
-        border-radius: 1.25rem !important;
-        min-height: auto;
-        justify-content: center;
-        gap: 0.5rem;
-        /* Minimal gap when closed */
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .onboardingCard:active,
-    .capabilityCard:active {
-        transform: scale(0.98);
-    }
-
-    /* Closed State: Hide Details */
-    .capabilityCard p,
-    .onboardingCard p,
-    .onboardingMeta {
-        display: none;
-    }
-
-    /* Closed State: Small Icons & Titles */
-    .onboardingIcon {
-        width: 36px;
-        height: 36px;
-        border-radius: 0.75rem;
-        margin-bottom: 0.5rem;
-    }
-
-    .onboardingIcon svg {
-        width: 18px;
-        height: 18px;
-    }
-
-    .capabilityCard h3,
-    .onboardingCard h3 {
-        font-size: 1rem !important;
-        margin-bottom: 0;
-    }
-
-    /* --- EXPANDED STATE --- */
-    .cardExpanded {
-        padding: 2rem !important;
-        gap: 1rem;
-        background: var(--color-bg-card);
-        border-color: var(--color-primary);
-        box-shadow: var(--glass-shadow);
-    }
-
-    .cardExpanded p {
-        display: block;
-        animation: fadeIn 0.4s ease;
-        margin-top: 0.5rem;
-        color: var(--color-text-muted);
-        font-size: 0.95rem;
-    }
-
-    .cardExpanded .onboardingMeta {
-        display: block;
-        animation: fadeIn 0.4s ease;
-        margin-top: 1.5rem;
-    }
-
-    .cardExpanded .onboardingIcon {
-        width: 56px;
-        height: 56px;
-        border-radius: 1.25rem;
-        margin-bottom: 1rem;
-    }
-
-    .cardExpanded .onboardingIcon svg {
-        width: 28px;
-        height: 28px;
-    }
-
-    .cardExpanded h3 {
-        font-size: 1.35rem !important;
-        margin-bottom: 0.5rem;
-        color: var(--color-primary);
-    }
-}
-
-/* Animations */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.fadeIn {
-    animation: fadeIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-}
-
-.pulseBtn {
-    animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-    0% {
-        transform: scale(1);
-    }
-
-    50% {
-        transform: scale(1.02);
-    }
-
-    100% {
-        transform: scale(1);
-    }
-}
-
-.suggestionsList {
-    position: absolute;
-    top: 105%;
-    left: 0;
-    right: 0;
-    background: var(--color-bg-card);
-    border: var(--glass-border);
-    border-radius: 1rem;
-    overflow: hidden;
-    z-index: 100;
-    box-shadow: var(--glass-shadow);
-}
-
-.suggestionItem {
-    padding: 1rem;
-    cursor: pointer;
-    transition: 0.2s;
-    border-bottom: 1px solid var(--color-border);
-}
-
-.suggestionItem:hover {
-    background: rgba(16, 185, 129, 0.1);
+    color: var(--color-text-dim);
+    letter-spacing: 1px;
 }
