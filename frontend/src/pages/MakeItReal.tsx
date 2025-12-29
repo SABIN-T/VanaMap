@@ -384,29 +384,35 @@ export const MakeItReal = () => {
         const cCtx = compCanvas.getContext('2d');
         if (!cCtx) return;
 
-        // Draw Composition to offscreen first (Exactly matching CSS alignment)
-        // 0.85 is the scale used in the preview CSS for foliage
-        let plantW = potW * 0.85;
+        // Draw Composition (Matching CSS Logic)
+        let plantW = potW * 0.75;
         let plantH = (plantImg.height / plantImg.width) * plantW;
 
         let cCenter = compCanvas.width / 2;
-        let cBase = compCanvas.height / 2; // This will be the drag center (pos.x, pos.y)
+        let cBase = compCanvas.height / 2;
+
+        let centerShiftY = 0;
 
         if (potImg) {
-            // Seating math: Match the -48px marginBottom precisely
-            // Shift is (48/200) * potW
-            const seatOffset = (48 / 200) * potW;
+            const overlapPx = (48 / 200) * potW;
             const potY = cBase - (potH / 2);
-            const plantBottomY = potY + seatOffset;
+            const plantBottomY = potY + overlapPx;
 
             cCtx.drawImage(plantImg, cCenter - (plantW / 2), plantBottomY - plantH, plantW, plantH);
             cCtx.drawImage(potImg, cCenter - (potW / 2), potY, potW, potH);
+
+            // CENTER CORRECTION: align Visual Center to Draw Point
+            const visTop = plantBottomY - plantH;
+            const visBottom = potY + potH;
+            const visCenterY = visTop + (visBottom - visTop) / 2;
+            const potCenterY = cBase;
+            centerShiftY = visCenterY - potCenterY;
+
         } else {
             cCtx.drawImage(plantImg, cCenter - (potW / 2), cBase - ((plantImg.height / plantImg.width) * potW / 2), potW, (plantImg.height / plantImg.width) * potW);
         }
 
         // 4. NEURAL LIGHTING: Sample Local Environment
-        // Sample area precisely where the pot is placed
         const sampleX = Math.max(0, (pos.x / 100) * canvas.width - (potW / 2));
         const sampleY = Math.max(0, (pos.y / 100) * canvas.height);
         const envData = ctx.getImageData(sampleX, sampleY, Math.min(potW, 200), 50).data;
@@ -417,10 +423,10 @@ export const MakeItReal = () => {
         const lCount = Math.max(1, envData.length / 16);
         const envR = lR / lCount, envG = lG / lCount, envB = lB / lCount;
 
-        // Apply Light Adaptation to Composition
+        // Apply Light Adaptation
         cCtx.globalCompositeOperation = 'source-atop';
         cCtx.fillStyle = `rgb(${envR}, ${envG}, ${envB})`;
-        cCtx.globalAlpha = 0.15; // Subtle environment blend
+        cCtx.globalAlpha = 0.15;
         cCtx.fillRect(0, 0, compCanvas.width, compCanvas.height);
 
         // Final Color Correction
@@ -436,12 +442,13 @@ export const MakeItReal = () => {
         const drawX = (pos.x / 100) * canvas.width;
         const drawY = (pos.y / 100) * canvas.height;
 
-        // Ground Shadow (Ambient Occlusion)
-        ctx.shadowBlur = potW * 0.2;
-        ctx.shadowColor = 'rgba(0,0,0,0.5)';
-        ctx.shadowOffsetY = 10;
+        // Ground Shadow
+        ctx.shadowBlur = potW * 0.25;
+        ctx.shadowColor = 'rgba(0,0,0,0.6)';
+        ctx.shadowOffsetY = potW * 0.08;
 
-        ctx.drawImage(finalComp, drawX - cCenter, drawY - cBase);
+        // Apply Center Shift Correction
+        ctx.drawImage(finalComp, drawX - cCenter, drawY - cBase - centerShiftY);
         ctx.restore();
 
         // High-end post-process on the entire frame
