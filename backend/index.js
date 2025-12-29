@@ -1856,10 +1856,14 @@ app.post('/api/admin/seed-real-data', async (req, res) => {
     }
 });
 
-// --- CUSTOM POT ROUTES ---
 app.post('/api/custom-pots', auth, async (req, res) => {
     try {
         const { potColor, potWithDesignUrl, rawDesignUrl, decalProps } = req.body;
+
+        // Log payload size for debugging
+        const sizeKB = Math.round(JSON.stringify(req.body).length / 1024);
+        console.log(`[STUDIO] Received new design. Size: ${sizeKB}KB. Artist: ${req.user.id}`);
+
         const user = await User.findById(req.user.id);
         if (!user) return res.status(401).json({ error: "User session invalid" });
 
@@ -1875,15 +1879,18 @@ app.post('/api/custom-pots', auth, async (req, res) => {
 
         await customPot.save();
 
-        broadcastAlert('custom_pot', `New Design by ${user.name}`, {
+        broadcastAlert('custom_pot', `New Ceramic Design by ${user.name}`, {
             userId: user._id,
-            potColor
+            potColor,
+            title: "New Pot Artwork! 🏺"
         }).catch(() => { });
 
         res.status(201).json({ success: true, message: "Custom design saved to collection!" });
     } catch (err) {
         console.error("Custom Pot Save Error:", err);
-        res.status(500).json({ error: err.message });
+        // If it's a payload error handled by express, it might not even reach here, 
+        // but if it's a DB error (like doc too large), we catch it here.
+        res.status(500).json({ error: "Database save failed: " + err.message });
     }
 });
 

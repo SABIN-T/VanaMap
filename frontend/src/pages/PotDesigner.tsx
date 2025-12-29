@@ -2,7 +2,7 @@ import { useState, Suspense, useRef } from 'react';
 import { Canvas, useLoader } from '@react-three/fiber';
 import { OrbitControls, ContactShadows, Decal, Float, PerspectiveCamera } from '@react-three/drei';
 import { TextureLoader } from 'three';
-import { ArrowLeft, Upload, ShoppingBag, Palette, Move, RotateCcw, Box, Maximize } from 'lucide-react';
+import { ArrowLeft, Upload, Download, ShoppingBag, Palette, Move, RotateCcw, Box, Maximize } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import styles from './PotDesigner.module.css';
@@ -112,23 +112,23 @@ export const PotDesigner = () => {
             return;
         }
 
-        const loadingToast = toast.loading("Capturing your design...");
+        const loadingToast = toast.loading("Capturing and saving your design...");
 
         try {
             // Capture the 3D Snapshots
             const canvas = canvasRef.current;
             if (!canvas) throw new Error("3D Engine not ready. Please try again in a moment.");
 
-            // Generate snapshot
+            // Generate snapshot - Use JPEG for smaller size (saves DB space)
             let potWithDesignUrl = '';
             try {
-                potWithDesignUrl = canvas.toDataURL('image/png', 0.8);
+                potWithDesignUrl = canvas.toDataURL('image/jpeg', 0.8);
             } catch (e) {
                 console.error("Canvas capture failed", e);
                 throw new Error("Unable to capture image from 3D view.");
             }
 
-            if (!potWithDesignUrl || potWithDesignUrl.length < 100) {
+            if (!potWithDesignUrl || potWithDesignUrl.length < 50) {
                 throw new Error("Design snapshot failed. Is the hardware accelerator active?");
             }
 
@@ -156,7 +156,32 @@ export const PotDesigner = () => {
         } catch (err: any) {
             toast.dismiss(loadingToast);
             console.error("Collection Save Error:", err);
-            toast.error(err.message || "Failed to save design. Network interruption?");
+            // Better error message if payload might be too large
+            const msg = err.message?.includes("Payload Too Large")
+                ? "Image too large! Use a smaller file (max 2MB)."
+                : (err.message || "Failed to save design. Network interruption?");
+            toast.error(msg);
+        }
+    };
+
+    const handleDownload = () => {
+        const canvas = canvasRef.current;
+        if (!canvas) {
+            toast.error("3D Engine not ready for download.");
+            return;
+        }
+        try {
+            const dataUrl = canvas.toDataURL('image/jpeg', 0.9);
+            const link = document.createElement('a');
+            link.href = dataUrl;
+            link.download = `Vana_Custom_Pot_${new Date().getTime()}.jpg`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            toast.success("Design downloaded! 📁");
+        } catch (e) {
+            console.error("Download failed", e);
+            toast.error("Failed to generate download file.");
         }
     };
 
@@ -306,7 +331,10 @@ export const PotDesigner = () => {
                         <div style={{ height: '40px' }} /> {/* Margin spacer */}
                     </div>
 
-                    <div className={styles.footer}>
+                    <div className={styles.footer} style={{ display: 'flex', gap: '8.1px' }}>
+                        <button className={styles.downloadBtn} onClick={handleDownload} title="Download Locally">
+                            <Download size={18} />
+                        </button>
                         <button className={styles.checkoutBtn} onClick={handleAddToCart}>
                             <ShoppingBag size={18} /> ADD TO COLLECTION
                         </button>
