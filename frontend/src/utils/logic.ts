@@ -97,10 +97,11 @@ export const calculateAptness = (
     aqi: number = 20,
     avgHumidity: number = 50,
     normalizationBase?: number,
-    isAbsolute?: boolean
+    isAbsolute?: boolean,
+    iterations?: number
 ): number => {
     // We now point calculateAptness to the MC version for robustness
-    const mcScore = calculateAptnessMC(plant, currentTemp, aqi, avgHumidity);
+    const mcScore = calculateAptnessMC(plant, currentTemp, aqi, avgHumidity, iterations);
 
     // If absolute mode is requested, return raw score regardless of normalizationBase
     if (isAbsolute) return mcScore;

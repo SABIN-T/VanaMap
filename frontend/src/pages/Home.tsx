@@ -131,7 +131,7 @@ export const Home = () => {
 
     useEffect(() => {
         const timer = setTimeout(async () => {
-            if (citySearch.length > 2 && !weather && showSuggestions) {
+            if (citySearch.length > 2 && showSuggestions) {
                 try {
                     const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(citySearch)}&limit=5`);
                     const data = await response.json();
@@ -145,7 +145,7 @@ export const Home = () => {
         }, 500);
 
         return () => clearTimeout(timer);
-    }, [citySearch, weather, showSuggestions]);
+    }, [citySearch, showSuggestions]);
 
     const handleCitySearch = async (overrideCity?: string) => {
         const query = overrideCity || citySearch;
@@ -264,7 +264,7 @@ export const Home = () => {
             .map(p => {
                 if (!weather) return { ...p, score: 0 };
                 // Get absolute score first
-                return { ...p, score: calculateAptness(p, weather.avgTemp30Days, weather.air_quality?.aqi, weather.avgHumidity30Days, undefined, true) };
+                return { ...p, score: calculateAptness(p, weather.avgTemp30Days, weather.air_quality?.aqi, weather.avgHumidity30Days, undefined, true, 50) };
             })
             .sort((a, b) => (weather ? (b.score || 0) - (a.score || 0) : 0));
 
