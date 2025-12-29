@@ -331,15 +331,33 @@ export const MakeItReal = () => {
         if (!videoRef.current || !cutoutUrl) return;
 
         const video = videoRef.current;
+
+        // 1. Calculate aspect ratio fitting (matching object-fit: cover)
+        const windowRatio = window.innerWidth / window.innerHeight;
+        const videoRatio = video.videoWidth / video.videoHeight;
+
+        let startX = 0, startY = 0, drawWidth = video.videoWidth, drawHeight = video.videoHeight;
+
+        if (videoRatio > windowRatio) {
+            // Video is wider than screen: Crop sides
+            drawWidth = video.videoHeight * windowRatio;
+            startX = (video.videoWidth - drawWidth) / 2;
+        } else {
+            // Video is taller than screen: Crop top/bottom
+            drawHeight = video.videoWidth / windowRatio;
+            startY = (video.videoHeight - drawHeight) / 2;
+        }
+
         const canvas = document.createElement('canvas');
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
+        // Use high-res but keep preview aspect ratio
+        canvas.width = 1200;
+        canvas.height = 1200 / windowRatio;
 
         const ctx = canvas.getContext('2d');
         if (!ctx) return;
 
-        // 1. Draw Video Frame
-        ctx.drawImage(video, 0, 0);
+        // 1. Draw Video Frame (Exactly as seen on screen)
+        ctx.drawImage(video, startX, startY, drawWidth, drawHeight, 0, 0, canvas.width, canvas.height);
 
         // 2. Load Images
         const [plantImg, potImg] = await Promise.all([
@@ -353,36 +371,73 @@ export const MakeItReal = () => {
             }) : Promise.resolve(null)
         ]);
 
-        // 3. Draw Pot (if enabled)
-        // Match the visual scale from CSS/Preview
-        const potW = canvas.width * 0.45; // Match 200px equivalent on real video
+        // 3. Setup Composition Offscreen for Lighting Pass
+        const potW = canvas.width * 0.40;
         const potH = (potImg ? (potImg.height / potImg.width) : 1) * potW;
-        const x = (pos.x / 100) * canvas.width - (potW / 2);
-        const y = (pos.y / 100) * canvas.height - (potH / 2);
+        const compCanvas = document.createElement('canvas');
+        compCanvas.width = potW * 2; compCanvas.height = (potH + 500);
+        const cCtx = compCanvas.getContext('2d');
+        if (!cCtx) return;
+
+        // Draw Composition to offscreen first
+        let plantW = potW * 0.72;
+        let plantH = (plantImg.height / plantImg.width) * plantW;
+        let cX = potW, cY = compCanvas.height - potH;
 
         if (potImg) {
-            // Match the "Best Fit" proportions (0.85 scale and perfect seating)
-            const plantW = potW * 0.72; // Proportional width
-            const plantH = (plantImg.height / plantImg.width) * plantW;
-
-            // Exact Seating Match: Align plant with rim
-            const plantY = y - (plantH * 0.85) + (potH * 0.12);
-            ctx.drawImage(plantImg, x + (potW - plantW) / 2, plantY, plantW, plantH);
-            ctx.drawImage(potImg, x, y, potW, potH);
+            const plantY = cY - (plantH * 0.85) + (potH * 0.12);
+            cCtx.drawImage(plantImg, cX - (plantW / 2), plantY, plantW, plantH);
+            cCtx.drawImage(potImg, cX - (potW / 2), cY, potW, potH);
         } else {
-            // If no pot, use the same scale as the pot for the plant
-            const imgW = potW; // Use the pot's calculated width for the plant
-            const imgH = (plantImg.height / plantImg.width) * imgW;
-            ctx.drawImage(plantImg, x, y, imgW, imgH);
+            cCtx.drawImage(plantImg, cX - (potW / 2), cY, potW, (plantImg.height / plantImg.width) * potW);
         }
 
-        // 4. Save
-        const finalImage = canvas.toDataURL('image/png');
+        // 4. NEURAL LIGHTING: Sample Local Environment
+        const sampleX = Math.max(0, (pos.x / 100) * canvas.width - 100);
+        const sampleY = Math.max(0, (pos.y / 100) * canvas.height - 100);
+        const envData = ctx.getImageData(sampleX, sampleY, 200, 200).data;
+        let lR = 0, lG = 0, lB = 0;
+        for (let j = 0; j < envData.length; j += 16) {
+            lR += envData[j]; lG += envData[j + 1]; lB += envData[j + 2];
+        }
+        const lCount = envData.length / 16;
+        const envR = lR / lCount, envG = lG / lCount, envB = lB / lCount;
+
+        // Apply Light Adaptation to Composition
+        cCtx.globalCompositeOperation = 'source-atop';
+        cCtx.fillStyle = `rgb(${envR}, ${envG}, ${envB})`;
+        cCtx.globalAlpha = 0.2; // Blend with environment
+        cCtx.fillRect(0, 0, compCanvas.width, compCanvas.height);
+
+        // Final Color Correction (Match brightness/contrast of room)
+        const luminance = (envR + envG + envB) / 3;
+        const brightness = 0.8 + (luminance / 255) * 0.4;
+        cCtx.filter = `brightness(${brightness}) contrast(1.1)`;
+        cCtx.drawImage(compCanvas, 0, 0);
+
+        // 5. Final Assembly with Ground Shadow
+        ctx.save();
+        const drawX = (pos.x / 100) * canvas.width;
+        const drawY = (pos.y / 100) * canvas.height;
+
+        // Calculate the "Visual Center" of the composition to match CSS translate(-50%, -50%)
+        // The composition is drawn on an offscreen canvas and then centered on the final frame.
+
+        // Fake Ground Shadow for Realism
+        ctx.shadowBlur = 40;
+        ctx.shadowColor = 'rgba(0,0,0,0.4)';
+        ctx.shadowOffsetY = 15;
+
+        ctx.drawImage(compCanvas, drawX - cX, drawY - (compCanvas.height / 2));
+        ctx.restore();
+
+        // 6. Output Perfect Sync
+        const finalImage = canvas.toDataURL('image/jpeg', 0.98);
         const link = document.createElement('a');
-        link.download = `vanamap-design-${Date.now()}.png`;
+        link.download = `VanaMap_LiveShot_${Date.now()}.jpg`;
         link.href = finalImage;
         link.click();
-        toast.success("Masterpiece Saved!", { icon: '🏆' });
+        toast.success("Final Masterpiece Saved!", { icon: '✨' });
     };
 
     // --- INTERACTION LOGIC ---
