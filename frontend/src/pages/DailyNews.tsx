@@ -1,9 +1,28 @@
 import styles from './DailyNews.module.css';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 export const DailyNews = () => {
     const navigate = useNavigate();
+
+    useEffect(() => {
+        // Quest Check: Wise Reader (Action: read)
+        const activeQuest = sessionStorage.getItem('active_quest');
+        if (activeQuest) {
+            const quest = JSON.parse(activeQuest);
+            if (quest.action === 'read') {
+                import('../services/api').then(({ addPoints }) => {
+                    addPoints(quest.points).then(() => {
+                        import('react-hot-toast').then(({ default: toast }) => {
+                            toast.success(`Quest Complete: ${quest.title}! +${quest.points} CP`, { icon: '🏆', duration: 5000 });
+                        });
+                        sessionStorage.removeItem('active_quest');
+                    }).catch(console.error);
+                });
+            }
+        }
+    }, []);
 
     const newsItems = [
         {

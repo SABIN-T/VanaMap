@@ -32,6 +32,23 @@ export const ForestGame = () => {
         if (user) {
             setCurrentLevel(user.gameLevel || 1);
         }
+
+        // Quest Check: Forest Hero (Action: game)
+        const activeQuest = sessionStorage.getItem('active_quest');
+        if (activeQuest) {
+            const quest = JSON.parse(activeQuest);
+            if (quest.action === 'game') {
+                // Wait a bit to ensure they actually see the game first
+                setTimeout(() => {
+                    import('../services/api').then(({ addPoints }) => {
+                        addPoints(quest.points).then(() => {
+                            toast.success(`Quest Complete: ${quest.title}! +${quest.points} CP`, { icon: '🏆', duration: 5000 });
+                            sessionStorage.removeItem('active_quest');
+                        }).catch(console.error);
+                    });
+                }, 2000);
+            }
+        }
     }, [user]);
 
     const spawnTarget = useCallback(() => {

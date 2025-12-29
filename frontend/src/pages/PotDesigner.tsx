@@ -1,4 +1,4 @@
-import { useState, Suspense, useRef } from 'react';
+import { useState, Suspense, useRef, useEffect } from 'react';
 import { Canvas, useLoader } from '@react-three/fiber';
 import { OrbitControls, ContactShadows, Decal, Float, PerspectiveCamera } from '@react-three/drei';
 import { TextureLoader } from 'three';
@@ -79,6 +79,26 @@ export const PotDesigner = () => {
         y: 0.5,
         rotation: 0
     });
+
+    useEffect(() => {
+        // Quest Check: Pot Designer (Action: design)
+        const activeQuest = sessionStorage.getItem('active_quest');
+        if (activeQuest) {
+            const quest = JSON.parse(activeQuest);
+            if (quest.action === 'design') {
+                setTimeout(() => {
+                    import('../services/api').then(({ addPoints }) => {
+                        addPoints(quest.points).then(() => {
+                            import('react-hot-toast').then(({ default: toast }) => {
+                                toast.success(`Quest Complete: ${quest.title}! +${quest.points} CP`, { icon: '🏆', duration: 5000 });
+                            });
+                            sessionStorage.removeItem('active_quest');
+                        }).catch(console.error);
+                    });
+                }, 1500);
+            }
+        }
+    }, []);
 
     const potColors = [
         { name: 'Terracotta', value: '#d97706' },

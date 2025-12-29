@@ -59,6 +59,22 @@ export const Shops = () => {
 
     useEffect(() => {
         loadData();
+
+        // Quest Check: Green Shopper (Action: shop)
+        const activeQuest = sessionStorage.getItem('active_quest');
+        if (activeQuest) {
+            const quest = JSON.parse(activeQuest);
+            if (quest.action === 'shop') {
+                import('../services/api').then(({ addPoints }) => {
+                    addPoints(quest.points).then(() => {
+                        import('react-hot-toast').then(({ default: toast }) => {
+                            toast.success(`Quest Complete: ${quest.title}! +${quest.points} CP`, { icon: '🏆', duration: 5000 });
+                        });
+                        sessionStorage.removeItem('active_quest'); // Clear quest
+                    }).catch(console.error);
+                });
+            }
+        }
     }, []);
 
     // Log search with debounce
