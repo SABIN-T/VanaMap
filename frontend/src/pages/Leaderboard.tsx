@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Trophy, Crown, MapPin, Building, Sprout, TrendingUp, Users, ArrowRight } from 'lucide-react';
+import { Crown, MapPin, Building, Sprout, TrendingUp, Users, ArrowRight } from 'lucide-react';
 import { fetchLeaderboard } from '../services/api';
 import styles from './Leaderboard.module.css';
 
