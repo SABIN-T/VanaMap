@@ -183,5 +183,16 @@ module.exports = {
         key: { type: String, unique: true, required: true },
         value: mongoose.Schema.Types.Mixed,
         description: String
+    })),
+    CustomPot: mongoose.model('CustomPot', new mongoose.Schema({
+        userId: { type: String, required: true },
+        userName: { type: String, required: true },
+        userEmail: { type: String, required: true },
+        potColor: String,
+        potWithDesignUrl: String, // Base64 or URL of the 3D snapshot
+        rawDesignUrl: String, // Base64 or URL of the raw uploaded design
+        decalProps: mongoose.Schema.Types.Mixed,
+        status: { type: String, enum: ['unprocessed', 'processed'], default: 'unprocessed' },
+        createdAt: { type: Date, default: Date.now }
     }))
 };

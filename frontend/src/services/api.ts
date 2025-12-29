@@ -506,3 +506,27 @@ export const deleteSeedPlant = async (id: string) => {
     if (!res.ok) throw new Error("Failed to delete plant from seed bank");
     return res.json();
 };
+
+export const saveCustomPot = async (customData: {
+    potColor: string;
+    potWithDesignUrl: string;
+    rawDesignUrl: string;
+    decalProps: any;
+}) => {
+    const res = await fetch(`${API_URL}/custom-pots`, {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify(customData)
+    });
+    if (!res.ok) throw new Error("Failed to save custom design");
+    return res.json();
+};
+
+export const fetchAdminCustomPots = async () => {
+    const res = await fetch(`${API_URL}/admin/custom-pots`, {
+        headers: getHeaders()
+    });
+    if (!res.ok) throw new Error("Failed to fetch custom pots");
+    return await res.json();
+};
+

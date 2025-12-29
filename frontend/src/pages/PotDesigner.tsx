@@ -1,4 +1,4 @@
-import { useState, Suspense } from 'react';
+import { useState, Suspense, useRef } from 'react';
 import { Canvas, useLoader } from '@react-three/fiber';
 import { OrbitControls, ContactShadows, Decal, Float, PerspectiveCamera } from '@react-three/drei';
 import { TextureLoader } from 'three';
@@ -6,6 +6,7 @@ import { ArrowLeft, Upload, ShoppingBag, Palette, Move, RotateCcw, Box, Maximize
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import styles from './PotDesigner.module.css';
+import { saveCustomPot } from '../services/api';
 
 // ==========================================
 // 3D COMPONENTS
@@ -67,8 +68,10 @@ function PotComposition({ color, image, decalProps }: any) {
 
 export const PotDesigner = () => {
     const navigate = useNavigate();
+    const canvasRef = useRef<HTMLCanvasElement>(null);
     const [color, setColor] = useState('#d97706'); // Terracotta
     const [image, setImage] = useState<string | null>(null);
+    const [rawImageBase64, setRawImageBase64] = useState<string | null>(null);
     const [decalProps, setDecalProps] = useState({
         scale: 1,
         y: 0.5,
@@ -91,18 +94,60 @@ export const PotDesigner = () => {
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
-            const url = URL.createObjectURL(file);
-            setImage(url);
-            toast.success("Design Applied! Adjust the sliders below.");
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setRawImageBase64(reader.result as string);
+                setImage(URL.createObjectURL(file));
+                toast.success("Design Applied! Adjust the sliders below.");
+            };
+            reader.readAsDataURL(file);
         }
     };
 
-    const handleAddToCart = () => {
-        toast.success("Pot design saved to cart!", {
-            icon: '🛍️',
-            style: { background: '#0f172a', color: '#fff', border: '1px solid #10b981' }
-        });
-        setTimeout(() => toast("Ordering coming soon!", { icon: '📦' }), 800);
+    const handleAddToCart = async () => {
+        const userStr = localStorage.getItem('user');
+        if (!userStr) {
+            toast.error("Please login to save your design!");
+            navigate('/login');
+            return;
+        }
+
+        const loadingToast = toast.loading("Capturing your design...");
+
+        try {
+            // Capture the 3D Snapshots
+            // We need use gl.domElement or similar.
+            // In R3F, we can get it via a ref to the Canvas.
+            const canvas = canvasRef.current;
+            if (!canvas) throw new Error("Canvas not found");
+
+            const potWithDesignUrl = canvas.toDataURL('image/png');
+
+            await saveCustomPot({
+                potColor: color,
+                potWithDesignUrl,
+                rawDesignUrl: rawImageBase64 || '',
+                decalProps
+            });
+
+            toast.dismiss(loadingToast);
+            toast.success("Design saved to your collection!", {
+                icon: '🛍️',
+                style: { background: '#0f172a', color: '#fff', border: '1px solid #10b981' }
+            });
+
+            setTimeout(() => {
+                toast("Buying option is coming soon! Stay tuned! 🌿", {
+                    icon: '🚀',
+                    duration: 5000,
+                    style: { background: '#020617', color: '#10b981', border: '1px solid #10b981' }
+                });
+            }, 1000);
+
+        } catch (err: any) {
+            toast.dismiss(loadingToast);
+            toast.error(err.message || "Failed to save design");
+        }
     };
 
     return (
@@ -126,7 +171,15 @@ export const PotDesigner = () => {
                         </div>
                     }>
                         <div className={styles.canvasWrapper}>
-                            <Canvas shadows>
+                            {/* gl={{ preserveDrawingBuffer: true }} is CRITICAL for toDataURL to work */}
+                            <Canvas
+                                shadows
+                                gl={{ preserveDrawingBuffer: true }}
+                                onCreated={({ gl }) => {
+                                    // Make the canvas available via ref
+                                    (canvasRef as any).current = gl.domElement;
+                                }}
+                            >
                                 <PerspectiveCamera makeDefault position={[0, 2, 5]} fov={35} />
 
                                 <ambientLight intensity={0.6} />

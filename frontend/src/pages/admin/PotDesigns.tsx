@@ -1,125 +1,76 @@
 import { useEffect, useState } from 'react';
-import { Download, Search, Package, ToggleLeft, ToggleRight } from 'lucide-react';
+import { Download, Search, Package, Image as ImageIcon, Box } from 'lucide-react';
 import toast from 'react-hot-toast';
 import styles from './PotDesigns.module.css';
+import { fetchAdminCustomPots } from '../../services/api';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-
-interface Design {
-    id: string;
-    imageUrl: string;
-    shape: string;
-    size: string;
+interface CustomPot {
+    _id: string;
+    userId: string;
+    userName: string;
+    userEmail: string;
+    potColor: string;
+    potWithDesignUrl: string;
+    rawDesignUrl: string;
+    decalProps: any;
+    status: string;
     createdAt: string;
 }
 
-interface UserWithDesigns {
-    _id: string;
-    name: string;
-    email: string;
-    designs: Design[];
-}
-
 export default function PotDesigns() {
-    const [users, setUsers] = useState<UserWithDesigns[]>([]);
+    const [pots, setPots] = useState<CustomPot[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchTerm, setSearchTerm] = useState('');
-    const [autoSaveOn, setAutoSaveOn] = useState(true);
 
     useEffect(() => {
-        fetchDesigns();
-        fetchSettings();
+        loadPots();
     }, []);
 
-    const fetchSettings = async () => {
+    const loadPots = async () => {
         try {
-            const res = await fetch(`${API_URL}/settings/pot_save_on_buy`);
-            const data = await res.json();
-            if (data.key) setAutoSaveOn(data.value);
-        } catch (e) { console.error(e); }
-    };
-
-    const toggleAutoSave = async () => {
-        const newValue = !autoSaveOn;
-        try {
-            const token = localStorage.getItem('token');
-            const res = await fetch(`${API_URL}/admin/settings`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: JSON.stringify({ key: 'pot_save_on_buy', value: newValue })
-            });
-            if (res.ok) {
-                setAutoSaveOn(newValue);
-                toast.success(`Auto-save: ${newValue ? 'ON' : 'OFF'}`);
-            }
-        } catch (e) { toast.error("Failed to update setting"); }
-    };
-
-    const fetchDesigns = async () => {
-        try {
-            const token = localStorage.getItem('token');
-            // We need a new endpoint generally, but for now let's assume we can fetch all users or a specific designs endpoint.
-            // Since we don't have a specific "get all designs" admin endpoint, I'll create one shortly.
-            // For now, I'll stub the fetch and assume the endpoint /api/admin/designs will exist.
-            const res = await fetch(`${API_URL}/admin/designs`, {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            if (res.ok) {
-                const data = await res.json();
-                setUsers(data);
-            } else {
-                toast.error("Failed to load designs");
-            }
+            const data = await fetchAdminCustomPots();
+            setPots(data);
         } catch (error) {
             console.error(error);
-            toast.error("Connection error");
+            toast.error("Failed to load custom designs");
         } finally {
             setLoading(false);
         }
     };
 
-    const handleDownload = (imageUrl: string, userName: string, designId: string) => {
+    const handleDownload = (imageUrl: string, fileName: string) => {
+        if (!imageUrl) {
+            toast.error("Image data missing");
+            return;
+        }
         const link = document.createElement('a');
         link.href = imageUrl;
-        link.download = `VanaMap_Pot_${userName}_${designId}.png`;
+        link.download = fileName;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
         toast.success("Download started");
     };
 
-    const filteredUsers = users.filter(user =>
-        user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.email.toLowerCase().includes(searchTerm.toLowerCase())
+    const filteredPots = pots.filter(pot =>
+        pot.userName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        pot.userEmail.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        pot.potColor.toLowerCase().includes(searchTerm.toLowerCase())
     );
-
-    // Flatten logic for grid display if desired, or keep grouped by user.
-    // Let's Group by User for better admin context.
 
     return (
         <div className={styles.container}>
             <div className={styles.header}>
                 <div className={styles.titleInfo}>
-                    <h1><Package className={styles.icon} /> User Pot Designs</h1>
-                    <p>Review and download custom pot creations</p>
+                    <h1><Package className={styles.icon} /> Custom Pot Collection</h1>
+                    <p>Review and download user-designed pot artwork & snapshots</p>
                 </div>
                 <div className={styles.headerRight}>
-                    <div className={styles.toggleWrapper} onClick={toggleAutoSave}>
-                        <span>Auto-Save on Buy:</span>
-                        {autoSaveOn ? (
-                            <ToggleRight size={32} color="#10b981" className={styles.toggleIcon} />
-                        ) : (
-                            <ToggleLeft size={32} color="#64748b" className={styles.toggleIcon} />
-                        )}
-                    </div>
                     <div className={styles.searchBar}>
                         <Search size={18} />
                         <input
                             type="text"
-                            placeholder="Search by user..."
+                            placeholder="Search by user or color..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
@@ -128,51 +79,77 @@ export default function PotDesigns() {
             </div>
 
             {loading ? (
-                <div className={styles.loading}>Loading designs...</div>
+                <div className={styles.loading}>
+                    <div className="pre-loader-pulse"></div>
+                    <p>Fetching design data...</p>
+                </div>
             ) : (
                 <div className={styles.content}>
-                    {filteredUsers.map(user => (
-                        <div key={user._id} className={styles.userSection}>
-                            <div className={styles.userHeader}>
-                                <div className={styles.userInfo}>
-                                    <div className={styles.avatar}>{user.name[0]}</div>
-                                    <div>
-                                        <h3>{user.name}</h3>
-                                        <span>{user.email}</span>
+                    <div className={styles.grid}>
+                        {filteredPots.map((pot) => (
+                            <div key={pot._id} className={styles.card}>
+                                <div className={styles.cardHeader}>
+                                    <div className={styles.userInfo}>
+                                        <div className={styles.avatar}>{pot.userName[0]}</div>
+                                        <div>
+                                            <h3>{pot.userName}</h3>
+                                            <span>{pot.userEmail}</span>
+                                        </div>
+                                    </div>
+                                    <div className={styles.colorBadge} style={{ background: pot.potColor }}>
+                                        {pot.potColor}
                                     </div>
                                 </div>
-                                <div className={styles.designCount}>
-                                    {user.designs.length} Designs
-                                </div>
-                            </div>
 
-                            <div className={styles.grid}>
-                                {user.designs.map((design) => (
-                                    <div key={design.id} className={styles.card}>
-                                        <div className={styles.imageWrapper}>
-                                            <img src={design.imageUrl} alt="Pot Design" loading="lazy" />
-                                            <div className={styles.overlay}>
-                                                <button
-                                                    onClick={() => handleDownload(design.imageUrl, user.name, design.id)}
-                                                    className={styles.downloadBtn}
-                                                >
-                                                    <Download size={20} /> Download
-                                                </button>
-                                            </div>
+                                <div className={styles.imageDisplay}>
+                                    <div className={styles.imageGroup}>
+                                        <span className={styles.imageLabel}><Box size={12} /> 3D Snap</span>
+                                        <div className={styles.imageBox}>
+                                            {pot.potWithDesignUrl ? (
+                                                <img src={pot.potWithDesignUrl} alt="3D View" />
+                                            ) : (
+                                                <div className={styles.noImage}>No 3D Snap</div>
+                                            )}
                                         </div>
-                                        <div className={styles.cardInfo}>
-                                            <span className={styles.badge}>{design.shape}</span>
-                                            <span className={styles.badge}>{design.size}</span>
-                                            <span className={styles.date}>{new Date(design.createdAt).toLocaleDateString()}</span>
-                                        </div>
+                                        <button
+                                            className={styles.actionBtn}
+                                            onClick={() => handleDownload(pot.potWithDesignUrl, `Vana_3D_${pot.userName}_${pot._id}.png`)}
+                                        >
+                                            <Download size={14} /> Download 3D
+                                        </button>
                                     </div>
-                                ))}
+
+                                    <div className={styles.imageGroup}>
+                                        <span className={styles.imageLabel}><ImageIcon size={12} /> Raw Art</span>
+                                        <div className={styles.imageBox}>
+                                            {pot.rawDesignUrl ? (
+                                                <img src={pot.rawDesignUrl} alt="Raw Art" />
+                                            ) : (
+                                                <div className={styles.noImage}>No Raw Artwork</div>
+                                            )}
+                                        </div>
+                                        <button
+                                            className={`${styles.actionBtn} ${styles.actionBtnRaw}`}
+                                            onClick={() => handleDownload(pot.rawDesignUrl, `Vana_Raw_${pot.userName}_${pot._id}.png`)}
+                                        >
+                                            <Download size={14} /> Download Raw
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <div className={styles.cardFooter}>
+                                    <span className={styles.date}>{new Date(pot.createdAt).toLocaleString()}</span>
+                                    <span className={styles.status}>{pot.status.toUpperCase()}</span>
+                                </div>
                             </div>
+                        ))}
+                    </div>
+
+                    {filteredPots.length === 0 && !loading && (
+                        <div className={styles.empty}>
+                            <ImageIcon size={48} opacity={0.3} />
+                            <p>No designs found in the repository.</p>
                         </div>
-                    ))}
-
-                    {filteredUsers.length === 0 && !loading && (
-                        <div className={styles.empty}>No designs found matching your search.</div>
                     )}
                 </div>
             )}

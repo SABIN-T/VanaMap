@@ -3,7 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
-const { Plant, Vendor, User, Payment, Notification, Chat, PlantSuggestion, SearchLog, PushSubscription, SystemSettings } = require('./models');
+const { Plant, Vendor, User, Payment, Notification, Chat, PlantSuggestion, SearchLog, PushSubscription, SystemSettings, CustomPot } = require('./models');
 const Razorpay = require('razorpay');
 const webpush = require('web-push');
 const helmet = require('helmet');
@@ -1856,7 +1856,46 @@ app.post('/api/admin/seed-real-data', async (req, res) => {
     }
 });
 
-app.get('/', (req, res) => res.send('VanaMap API v3.0 - Secure & Fast'));
+// --- CUSTOM POT ROUTES ---
+app.post('/api/custom-pots', auth, async (req, res) => {
+    try {
+        const { potColor, potWithDesignUrl, rawDesignUrl, decalProps } = req.body;
+        const user = await User.findById(req.user.id);
+
+        const customPot = new CustomPot({
+            userId: user._id,
+            userName: user.name,
+            userEmail: user.email,
+            potColor,
+            potWithDesignUrl,
+            rawDesignUrl,
+            decalProps
+        });
+
+        await customPot.save();
+
+        // Notify Admin
+        await broadcastAlert('custom_pot', `New Custom Pot Design by ${user.name}`, {
+            userId: user._id,
+            potColor
+        });
+
+        res.status(201).json({ success: true, message: "Custom design saved to collection!" });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.get('/api/admin/custom-pots', auth, admin, async (req, res) => {
+    try {
+        const pots = await CustomPot.find().sort({ createdAt: -1 });
+        res.json(pots);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+app.get('/', (req, res) => res.send('VanaMap API v3.0 - Full Power Simulation Active'));
 
 const PORT = process.env.PORT || 5000;
 
