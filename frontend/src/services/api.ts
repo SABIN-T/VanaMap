@@ -572,5 +572,18 @@ export const giftPremium = async (userId: string) => {
     return res.json();
 };
 
+export const fetchDailyNews = async () => {
+    try {
+        const res = await fetch(`${API_URL}/news`, {
+            headers: getHeaders() // Optional depending on if we want public access, but good for rate limiting
+        });
+        if (!res.ok) return [];
+        return await res.json();
+    } catch (e) {
+        console.error("Failed to fetch news", e);
+        return [];
+    }
+};
+
 
 

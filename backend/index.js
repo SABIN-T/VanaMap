@@ -14,6 +14,8 @@ const xss = require('xss-clean');
 const nodemailer = require('nodemailer');
 const svgCaptcha = require('svg-captcha');
 const cron = require('node-cron');
+const Parser = require('rss-parser');
+const parser = new Parser();
 
 // --- AUTOMATED PREMIUM CHECK (Daily at Midnight) ---
 cron.schedule('0 0 * * *', async () => {
@@ -1963,6 +1965,45 @@ app.delete('/api/admin/custom-pots/:id', auth, admin, async (req, res) => {
         res.json({ success: true, message: "Design removed from repository" });
     } catch (err) {
         res.status(500).json({ error: err.message });
+    }
+});
+
+// --- NEWS API ENDPOINT ---
+app.get('/api/news', async (req, res) => {
+    try {
+        // Fetch from Google News RSS for reliable, free, real-time data
+        const feed = await parser.parseURL('https://news.google.com/rss/search?q=botany+plants+environment+science+nature&hl=en-US&gl=US&ceid=US:en');
+
+        const newsItems = feed.items.map((item, index) => {
+            const placeholders = [
+                "https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?w=800&q=80",
+                "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&q=80",
+                "https://images.unsplash.com/photo-1501854140884-074bf6b24363?w=800&q=80",
+                "https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?w=800&q=80",
+                "https://images.unsplash.com/photo-1470058869958-2a77ade41c02?w=800&q=80"
+            ];
+
+            // Try to find an image in content content:encoded if possible, else random
+            // Google RSS content snippet is usually HTML-escaped description
+
+            return {
+                id: index,
+                title: item.title,
+                link: item.link,
+                pubDate: item.pubDate,
+                content: item.contentSnippet || item.content,
+                source: item.source || "Google News",
+                image: placeholders[index % placeholders.length]
+            };
+        });
+
+        res.json(newsItems.slice(0, 15));
+    } catch (error) {
+        console.error("News Fetch Error:", error);
+        // Fallback fake news if RSS fails (e.g. rate limit)
+        res.json([
+            { id: 1, title: 'Server connectivity issue: Showing cached data', pubDate: new Date(), image: "https://images.unsplash.com/photo-1470058869958-2a77ade41c02?w=800&q=80", content: "We couldn't reach the live news server. Please try again later." }
+        ]);
     }
 });
 
