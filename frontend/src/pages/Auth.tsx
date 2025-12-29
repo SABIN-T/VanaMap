@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import { Button } from '../components/common/Button';
 import { User, ArrowLeft, Store, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
@@ -9,6 +9,7 @@ import styles from './Auth.module.css';
 
 export const Auth = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const [searchParams] = useSearchParams();
     const { login, signup, user, verify } = useAuth();
 
@@ -72,6 +73,13 @@ export const Auth = () => {
 
     useEffect(() => {
         if (user) {
+            // Check if there is a pending redirect from a protected route
+            const origin = location.state?.from?.pathname || location.state?.from;
+
+            if (origin) {
+                navigate(origin, { replace: true });
+                return;
+            }
 
             if (user.role === 'admin') {
                 localStorage.setItem('adminAuthenticated', 'true');
@@ -82,7 +90,7 @@ export const Auth = () => {
                 navigate('/dashboard', { replace: true });
             }
         }
-    }, [user, navigate]);
+    }, [user, navigate, location]);
 
     const handleNudge = async () => {
         if (!email) { toast.error("Please enter your email address first"); return; }
@@ -568,4 +576,3 @@ export const Auth = () => {
         </div >
     );
 };
-

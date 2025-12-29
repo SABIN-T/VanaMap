@@ -36,27 +36,15 @@ export const Premium = () => {
     }, [user, canView, navigate]);
 
     const handlePayment = async () => {
+        if (!user) {
+            navigate('/auth', { state: { from: '/premium' } });
+            return;
+        }
+
         setLoading(true);
-        // const res = await loadRazorpay(); // Not needed for free activation logic below
-
-        // if (!res) {
-        //     toast.error('Razorpay SDK failed to load. Are you online?');
-        //     setLoading(false);
-        //     return;
-        // }
-
-        // Logic for "Free until Jan 2026"
-        // Let's treat it as a "Free Activation" for now based on the prompt "premium is now free purchase".
-        // If we want to simulate the real payment flow for "after that 10rs", we can do a 1 rupee auth or just free activation.
-        // Prompt: "purchase by for 2026 jan 1 -31 after that you should pay 10rs per month"
-        // I will implement the FREE activation now since we are in 2025 (according to metadata? wait metadata says 2025-12-29).
-        // Wow, logic: Current date: Dec 29, 2025.
-        // Prompt says "free purchase by for 2026 jan 1 -31". 
-        // We are close to Jan 1 2026. 
-        // I'll implement a button "Claim Free Premium (Valid till Jan 2026)" and a "Subscribe (₹10/mo)"
-
+        // ... rest of logic
+        // For now, let's just do the Free Activation call since it's the promo period.
         try {
-            // For now, let's just do the Free Activation call since it's the promo period.
             const response = await fetch('http://localhost:5000/api/payments/activate-free', {
                 method: 'POST',
                 headers: {
@@ -80,6 +68,16 @@ export const Premium = () => {
             setLoading(false);
         }
     };
+
+    // ...
+
+    <button
+        onClick={handlePayment}
+        disabled={loading || user?.isPremium}
+        className={`${styles.button} ${user?.isPremium ? styles.btnActive : styles.btnPremium}`}
+    >
+        {loading ? 'Processing...' : (user?.isPremium ? 'Premium Active' : (!user ? 'Login to Claim Free Access' : 'Claim Free Access Now'))}
+    </button>
 
     // Alternative: Real Razorpay Flow (Hidden/Secondary if Free is active)
     // Alternative: Real Razorpay Flow (Hidden/Secondary if Free is active)
@@ -235,13 +233,7 @@ export const Premium = () => {
                             </li>
                         </ul>
 
-                        <button
-                            onClick={handlePayment}
-                            disabled={loading || user?.isPremium}
-                            className={`${styles.button} ${user?.isPremium ? styles.btnActive : styles.btnPremium}`}
-                        >
-                            {loading ? 'Processing...' : (user?.isPremium ? 'Premium Active' : 'Claim Free Access Now')}
-                        </button>
+
                     </div>
                 </div>
 

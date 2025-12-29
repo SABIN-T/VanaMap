@@ -9,13 +9,14 @@ export const Heaven = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (user && !user.isPremium && user.role !== 'admin') {
+        // Redirect if not logged in OR if logged in but not premium/admin
+        if (!user || (!user.isPremium && user.role !== 'admin')) {
             navigate('/premium');
         }
     }, [user, navigate]);
 
     if (!user || (!user.isPremium && user.role !== 'admin')) {
-        return <div className="min-h-screen bg-slate-900" />; // Or redirect handled by effect
+        return null;
     }
 
     return (
