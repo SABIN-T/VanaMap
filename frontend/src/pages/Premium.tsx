@@ -5,16 +5,16 @@ import { Crown, Check, Shield, Zap, Heart } from 'lucide-react';
 import toast from 'react-hot-toast';
 import styles from './Premium.module.css';
 
-// Load Razorpay Script
-const loadRazorpay = () => {
-    return new Promise((resolve) => {
-        const script = document.createElement('script');
-        script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-        script.onload = () => resolve(true);
-        script.onerror = () => resolve(false);
-        document.body.appendChild(script);
-    });
-};
+// Load Razorpay Script (Commented out until paid flow is restored)
+// const loadRazorpay = () => {
+//     return new Promise((resolve) => {
+//         const script = document.createElement('script');
+//         script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+//         script.onload = () => resolve(true);
+//         script.onerror = () => resolve(false);
+//         document.body.appendChild(script);
+//     });
+// };
 
 export const Premium = () => {
     const { user, refreshUser } = useAuth();
@@ -37,13 +37,13 @@ export const Premium = () => {
 
     const handlePayment = async () => {
         setLoading(true);
-        const res = await loadRazorpay();
+        // const res = await loadRazorpay(); // Not needed for free activation logic below
 
-        if (!res) {
-            toast.error('Razorpay SDK failed to load. Are you online?');
-            setLoading(false);
-            return;
-        }
+        // if (!res) {
+        //     toast.error('Razorpay SDK failed to load. Are you online?');
+        //     setLoading(false);
+        //     return;
+        // }
 
         // Logic for "Free until Jan 2026"
         // Let's treat it as a "Free Activation" for now based on the prompt "premium is now free purchase".
