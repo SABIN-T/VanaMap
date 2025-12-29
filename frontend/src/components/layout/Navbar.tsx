@@ -53,9 +53,11 @@ export const Navbar = () => {
                 <Link id="nav-leaderboard" to="/leaderboard" className={styles.navLink}>
                     <Trophy size={18} /> Ranking
                 </Link>
-                <Link to="/premium" className={styles.navLink} style={{ color: '#facc15' }}>
-                    <Crown size={18} /> Premium
-                </Link>
+                {(user && (user.favorites?.length > 3 || user.isPremium || user.role === 'admin')) && (
+                    <Link to="/premium" className={styles.navLink} style={{ color: '#facc15' }}>
+                        <Crown size={18} /> Premium
+                    </Link>
+                )}
             </div>
 
             <div className={styles.actions}>

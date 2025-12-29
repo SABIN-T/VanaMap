@@ -73,6 +73,7 @@ export interface User {
     _id?: string;
     name: string;
     email: string;
+    phone?: string;
     role: UserRole;
     favorites: string[]; // Plant IDs
     cart: { plantId: string; quantity: number; vendorId?: string; vendorPrice?: number; }[];
@@ -83,4 +84,8 @@ export interface User {
         requestDate: string;
     };
     points?: number;
+    isPremium?: boolean;
+    premiumType?: 'none' | 'trial' | 'monthly' | 'gift' | 'free_promo';
+    premiumExpiry?: string;
+    premiumStartDate?: string;
 }

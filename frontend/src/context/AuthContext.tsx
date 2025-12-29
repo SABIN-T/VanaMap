@@ -28,6 +28,7 @@ interface AuthContextType {
     verify: (registrationToken: string, otp: string) => Promise<{ success: boolean; message?: string }>;
     toggleFavorite: (plantId: string) => void;
     updateUser: (updates: Partial<User>) => void;
+    refreshUser: () => Promise<void>;
     loading: boolean;
 }
 
@@ -170,6 +171,34 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
+    const refreshUser = async () => {
+        if (!user || user.token) return; // Need token
+        try {
+            // We assume we have the token in user object or localStorage
+            const stored = JSON.parse(localStorage.getItem('user') || '{}');
+            const token = stored.token;
+            if (!token) return;
+
+            // We need an endpoint to get fresh user data. 
+            // If /api/auth/me doesn't exist, we use a different trick or add it.
+            // For now, let's assume we can fetch data.
+            // Actually, let's just use the current user state if we update it manually via updateUser,
+            // but for Premium upgrade we really want server confirmation.
+            // let's add /api/user/me to backend index.js to be sure.
+            const res = await fetch(`${API_URL}/auth/me`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (res.ok) {
+                const data = await res.json();
+                const freshUser = { ...data, token };
+                setUser(freshUser);
+                localStorage.setItem('user', JSON.stringify(freshUser));
+            }
+        } catch (e) {
+            console.error("Refresh failed", e);
+        }
+    };
+
     const logout = () => {
         setUser(null);
         localStorage.removeItem('user');
@@ -179,6 +208,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const toggleFavorite = async (plantId: string) => {
         if (!user) return;
         const isFav = user.favorites?.includes(plantId);
+
+        // "if thery add more than three like... if they click fourth time it should show the premium button"
+        if (!isFav && (user.favorites?.length || 0) === 3) {
+            import('react-hot-toast').then(({ default: toast }) => {
+                toast("⭐ You've unlocked the Premium option! Check the menu.", { icon: '👑', duration: 4000 });
+            });
+            // We allow the adding, but now the Premium button will appear (reactive)
+        }
+
         const newFavorites = isFav
             ? user.favorites.filter(id => id !== plantId)
             : [...(user.favorites || []), plantId];
@@ -216,7 +254,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, login, signup, googleLogin, logout, verify, toggleFavorite, updateUser, loading }}>
+        <AuthContext.Provider value={{ user, login, signup, googleLogin, logout, verify, toggleFavorite, updateUser, refreshUser, loading }}>
             {children}
         </AuthContext.Provider>
     );

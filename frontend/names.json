@@ -1,0 +1,1554 @@
+[
+  {
+    "scientific": "Sansevieria trifasciata",
+    "common": "Snake Plant"
+  },
+  {
+    "scientific": "Chlorophytum comosum",
+    "common": "Spider Plant"
+  },
+  {
+    "scientific": "Spathiphyllum wallisii",
+    "common": "Peace Lily"
+  },
+  {
+    "scientific": "Aloe barbadensis",
+    "common": "Aloe Vera"
+  },
+  {
+    "scientific": "Epipremnum aureum",
+    "common": "Pothos"
+  },
+  {
+    "scientific": "Ficus elastica",
+    "common": "Rubber Plant"
+  },
+  {
+    "scientific": "Monstera deliciosa",
+    "common": "Monstera"
+  },
+  {
+    "scientific": "Zamioculcas zamiifolia",
+    "common": "ZZ Plant"
+  },
+  {
+    "scientific": "Nephrolepis exaltata",
+    "common": "Boston Fern"
+  },
+  {
+    "scientific": "Hedera helix",
+    "common": "English Ivy"
+  },
+  {
+    "scientific": "Dypsis lutescens",
+    "common": "Areca Palm"
+  },
+  {
+    "scientific": "Ficus lyrata",
+    "common": "Fiddle Leaf Fig"
+  },
+  {
+    "scientific": "Crassula ovata",
+    "common": "Jade Plant"
+  },
+  {
+    "scientific": "Pilea peperomioides",
+    "common": "Chinese Money Plant"
+  },
+  {
+    "scientific": "Strelitzia reginae",
+    "common": "Bird of Paradise"
+  },
+  {
+    "scientific": "Dieffenbachia seguine",
+    "common": "Dumb Cane"
+  },
+  {
+    "scientific": "Maranta leuconeura",
+    "common": "Prayer Plant"
+  },
+  {
+    "scientific": "Senecio rowleyanus",
+    "common": "String of Pearls"
+  },
+  {
+    "scientific": "Philodendron hederaceum",
+    "common": "Philodendron"
+  },
+  {
+    "scientific": "Anthurium andraeanum",
+    "common": "Anthurium"
+  },
+  {
+    "scientific": "Lavandula angustifolia",
+    "common": "Lavender"
+  },
+  {
+    "scientific": "Helianthus annuus",
+    "common": "Sunflower"
+  },
+  {
+    "scientific": "Rosa",
+    "common": "Rose"
+  },
+  {
+    "scientific": "Tagetes",
+    "common": "Marigold"
+  },
+  {
+    "scientific": "Ocimum basilicum",
+    "common": "Basil"
+  },
+  {
+    "scientific": "Mentha",
+    "common": "Mint"
+  },
+  {
+    "scientific": "Salvia rosmarinus",
+    "common": "Rosemary"
+  },
+  {
+    "scientific": "Tulipa",
+    "common": "Tulip"
+  },
+  {
+    "scientific": "Narcissus",
+    "common": "Daffodil"
+  },
+  {
+    "scientific": "Hydrangea macrophylla",
+    "common": "Hydrangea"
+  },
+  {
+    "scientific": "Paeonia",
+    "common": "Peony"
+  },
+  {
+    "scientific": "Chrysanthemum",
+    "common": "Chrysanthemum"
+  },
+  {
+    "scientific": "Pelargonium",
+    "common": "Geranium"
+  },
+  {
+    "scientific": "Hibiscus rosa-sinensis",
+    "common": "Hibiscus"
+  },
+  {
+    "scientific": "Jasminum",
+    "common": "Jasmine"
+  },
+  {
+    "scientific": "Rhododendron",
+    "common": "Azalea"
+  },
+  {
+    "scientific": "Magnolia grandiflora",
+    "common": "Magnolia"
+  },
+  {
+    "scientific": "Syringa vulgaris",
+    "common": "Lilac"
+  },
+  {
+    "scientific": "Buxus",
+    "common": "Boxwood"
+  },
+  {
+    "scientific": "Viola tricolor",
+    "common": "Pansy"
+  },
+  {
+    "scientific": "Ocimum tenuiflorum",
+    "common": "Tulsi (Holy Basil)"
+  },
+  {
+    "scientific": "Murraya koenigii",
+    "common": "Curry Leaf (Potted)"
+  },
+  {
+    "scientific": "Chamaedorea seifrizii",
+    "common": "Bamboo Palm"
+  },
+  {
+    "scientific": "Rhapis excelsa",
+    "common": "Lady Palm"
+  },
+  {
+    "scientific": "Aglaonema commutatum",
+    "common": "Aglaonema (Chinese Evergreen)"
+  },
+  {
+    "scientific": "Syngonium podophyllum",
+    "common": "Arrowhead Plant"
+  },
+  {
+    "scientific": "Dracaena marginata",
+    "common": "Dragon Tree"
+  },
+  {
+    "scientific": "Dracaena fragrans",
+    "common": "Corn Plant"
+  },
+  {
+    "scientific": "Dracaena reflexa",
+    "common": "Song of India"
+  },
+  {
+    "scientific": "Dracaena sanderiana",
+    "common": "Lucky Bamboo"
+  },
+  {
+    "scientific": "Codiaeum variegatum",
+    "common": "Croton"
+  },
+  {
+    "scientific": "Plectranthus scutellarioides",
+    "common": "Coleus"
+  },
+  {
+    "scientific": "Ficus benjamina",
+    "common": "Weeping Fig"
+  },
+  {
+    "scientific": "Scindapsus pictus",
+    "common": "Satin Pothos"
+  },
+  {
+    "scientific": "Philodendron 'Birkin'",
+    "common": "Philodendron Birkin"
+  },
+  {
+    "scientific": "Thaumatophyllum xanadu",
+    "common": "Philodendron Xanadu"
+  },
+  {
+    "scientific": "Philodendron erubescens",
+    "common": "Pink Princess"
+  },
+  {
+    "scientific": "Monstera adansonii",
+    "common": "Monstera Adansonii"
+  },
+  {
+    "scientific": "Rhaphidophora tetrasperma",
+    "common": "Mini Monstera"
+  },
+  {
+    "scientific": "Begonia rex-cultorum",
+    "common": "Begonia Rex"
+  },
+  {
+    "scientific": "Begonia maculata",
+    "common": "Polka Dot Begonia"
+  },
+  {
+    "scientific": "Fittonia albivenis",
+    "common": "Nerve Plant"
+  },
+  {
+    "scientific": "Hypoestes phyllostachya",
+    "common": "Polka Dot Plant"
+  },
+  {
+    "scientific": "Peperomia obtusifolia",
+    "common": "Baby Rubber Plant"
+  },
+  {
+    "scientific": "Peperomia argyreia",
+    "common": "Watermelon Peperomia"
+  },
+  {
+    "scientific": "Peperomia prostrata",
+    "common": "String of Turtles"
+  },
+  {
+    "scientific": "Ceropegia woodii",
+    "common": "String of Hearts"
+  },
+  {
+    "scientific": "Tradescantia zebrina",
+    "common": "Wandering Jew"
+  },
+  {
+    "scientific": "Tradescantia pallida",
+    "common": "Purple Heart"
+  },
+  {
+    "scientific": "Aspidistra elatior",
+    "common": "Cast Iron Plant"
+  },
+  {
+    "scientific": "Asparagus setaceus",
+    "common": "Asparagus Fern"
+  },
+  {
+    "scientific": "Asparagus densiflorus",
+    "common": "Foxtail Fern"
+  },
+  {
+    "scientific": "Chamaedorea elegans",
+    "common": "Parlor Palm"
+  },
+  {
+    "scientific": "Caryota mitis",
+    "common": "Fishtail Palm"
+  },
+  {
+    "scientific": "Beaucarnea recurvata",
+    "common": "Ponytail Palm"
+  },
+  {
+    "scientific": "Cycas revoluta",
+    "common": "Sago Palm"
+  },
+  {
+    "scientific": "Yucca elephantipes",
+    "common": "Yucca Cane"
+  },
+  {
+    "scientific": "Aphelandra squarrosa",
+    "common": "Zebra Plant"
+  },
+  {
+    "scientific": "Goeppertia roseopicta",
+    "common": "Calathea Roseopicta"
+  },
+  {
+    "scientific": "Goeppertia insignis",
+    "common": "Rattlesnake Plant"
+  },
+  {
+    "scientific": "Stromanthe sanguinea",
+    "common": "Stromanthe Triostar"
+  },
+  {
+    "scientific": "Pachira aquatica",
+    "common": "Money Tree"
+  },
+  {
+    "scientific": "Colocasia esculenta",
+    "common": "Elephant Ear"
+  },
+  {
+    "scientific": "Hoya kerrii",
+    "common": "Sweetheart Hoya"
+  },
+  {
+    "scientific": "Hoya carnosa",
+    "common": "Wax Plant"
+  },
+  {
+    "scientific": "Saintpaulia ionantha",
+    "common": "African Violet"
+  },
+  {
+    "scientific": "Kalanchoe blossfeldiana",
+    "common": "Kalanchoe"
+  },
+  {
+    "scientific": "Euphorbia milii",
+    "common": "Crown of Thorns"
+  },
+  {
+    "scientific": "Euphorbia tirucalli",
+    "common": "Pencil Cactus"
+  },
+  {
+    "scientific": "Azadirachta indica",
+    "common": "Neem"
+  },
+  {
+    "scientific": "Saraca asoca",
+    "common": "Ashoka Tree"
+  },
+  {
+    "scientific": "Delonix regia",
+    "common": "Gulmohar (Flame of Forest)"
+  },
+  {
+    "scientific": "Ficus religiosa",
+    "common": "Peepal (Bodhi Tree)"
+  },
+  {
+    "scientific": "Ficus benghalensis",
+    "common": "Banyan"
+  },
+  {
+    "scientific": "Mangifera indica",
+    "common": "Mango"
+  },
+  {
+    "scientific": "Psidium guajava",
+    "common": "Guava"
+  },
+  {
+    "scientific": "Punica granatum",
+    "common": "Pomegranate"
+  },
+  {
+    "scientific": "Citrus limon",
+    "common": "Lemon"
+  },
+  {
+    "scientific": "Carica papaya",
+    "common": "Papaya"
+  },
+  {
+    "scientific": "Musa acominata",
+    "common": "Banana"
+  },
+  {
+    "scientific": "Cocos nucifera",
+    "common": "Coconut"
+  },
+  {
+    "scientific": "Plumeria rubra",
+    "common": "Champa (Plumeria)"
+  },
+  {
+    "scientific": "Nyctanthes arbor-tristis",
+    "common": "Parijat (Night Jasmine)"
+  },
+  {
+    "scientific": "Cestrum nocturnum",
+    "common": "Raat Ki Rani"
+  },
+  {
+    "scientific": "Jasminum sambac",
+    "common": "Mogra (Arabian Jasmine)"
+  },
+  {
+    "scientific": "Catharanthus roseus",
+    "common": "Vinca (Sadabahar)"
+  },
+  {
+    "scientific": "Nerium oleander",
+    "common": "Oleander (Kaner)"
+  },
+  {
+    "scientific": "Bougainvillea spectabilis",
+    "common": "Bougainvillea"
+  },
+  {
+    "scientific": "Combretum indicum",
+    "common": "Rangoon Creeper"
+  },
+  {
+    "scientific": "Clitoria ternatea",
+    "common": "Aparajita (Butterfly Pea)"
+  },
+  {
+    "scientific": "Ixora coccinea",
+    "common": "Ixora (Rugmini)"
+  },
+  {
+    "scientific": "Hibiscus rosa-sinensis",
+    "common": "Red Hibiscus"
+  },
+  {
+    "scientific": "Allamanda cathartica",
+    "common": "Allamanda"
+  },
+  {
+    "scientific": "Tecoma stans",
+    "common": "Tecoma (Yellow Bells)"
+  },
+  {
+    "scientific": "Polianthes tuberosa",
+    "common": "Rajnigandha (Tuberose)"
+  },
+  {
+    "scientific": "Canna indica",
+    "common": "Canna Lily"
+  },
+  {
+    "scientific": "Hymenocallis littoralis",
+    "common": "Spider Lily"
+  },
+  {
+    "scientific": "Zephyranthes",
+    "common": "Rain Lily"
+  },
+  {
+    "scientific": "Vernonia elaeagnifolia",
+    "common": "Curtain Creeper"
+  },
+  {
+    "scientific": "Passiflora incarnata",
+    "common": "Passion Flower (Krishna Kamal)"
+  },
+  {
+    "scientific": "Duranta erecta",
+    "common": "Duranta (Golden Dewdrop)"
+  },
+  {
+    "scientific": "Lantana camara",
+    "common": "Lantana"
+  },
+  {
+    "scientific": "Portulaca grandiflora",
+    "common": "Portulaca (9 O'Clock)"
+  },
+  {
+    "scientific": "Impatiens balsamina",
+    "common": "Balsam"
+  },
+  {
+    "scientific": "Gomphrena globosa",
+    "common": "Gomphrena"
+  },
+  {
+    "scientific": "Celosia argentea",
+    "common": "Cockscomb"
+  },
+  {
+    "scientific": "Bassia scoparia",
+    "common": "Kochia"
+  },
+  {
+    "scientific": "Ipomoea purpurea",
+    "common": "Morning Glory"
+  },
+  {
+    "scientific": "Ipomoea quamoclit",
+    "common": "Cypress Vine"
+  },
+  {
+    "scientific": "Clerodendrum thomsoniae",
+    "common": "Bleeding Heart Vine"
+  },
+  {
+    "scientific": "Callistemon",
+    "common": "Bottle Brush"
+  },
+  {
+    "scientific": "Terminalia catappa",
+    "common": "Indian Almond"
+  },
+  {
+    "scientific": "Artocarpus heterophyllus",
+    "common": "Jackfruit"
+  },
+  {
+    "scientific": "Cassia fistula",
+    "common": "Amaltas (Golden Shower)"
+  },
+  {
+    "scientific": "Lagerstroemia speciosa",
+    "common": "Pride of India"
+  },
+  {
+    "scientific": "Annona squamosa",
+    "common": "Sitaphal (Custard Apple)"
+  },
+  {
+    "scientific": "Manilkara zapota",
+    "common": "Chiku (Sapodilla)"
+  },
+  {
+    "scientific": "Moringa oleifera",
+    "common": "Drumstick (Moringa)"
+  },
+  {
+    "scientific": "Goeppertia orbifolia",
+    "common": "Calathea Orbifolia"
+  },
+  {
+    "scientific": "Asplenium nidus",
+    "common": "Bird's Nest Fern"
+  },
+  {
+    "scientific": "Platycerium",
+    "common": "Staghorn Fern"
+  },
+  {
+    "scientific": "Adiantum",
+    "common": "Maidenhair Fern"
+  },
+  {
+    "scientific": "Hoya carnosa 'Compacta'",
+    "common": "Hoya Hindu Rope"
+  },
+  {
+    "scientific": "Aeschynanthus radicans",
+    "common": "Lipstick Plant"
+  },
+  {
+    "scientific": "Columnea gloriosa",
+    "common": "Goldfish Plant"
+  },
+  {
+    "scientific": "Haworthiopsis fasciata",
+    "common": "Zebra Haworthia"
+  },
+  {
+    "scientific": "Sedum morganianum",
+    "common": "Burro's Tail"
+  },
+  {
+    "scientific": "Kalanchoe tomentosa",
+    "common": "Panda Plant"
+  },
+  {
+    "scientific": "Lithops",
+    "common": "Lithops (Living Stone)"
+  },
+  {
+    "scientific": "Pilea glauca",
+    "common": "Pilea Glauca"
+  },
+  {
+    "scientific": "Pilea cadierei",
+    "common": "Aluminum Plant"
+  },
+  {
+    "scientific": "Pilea involucrata",
+    "common": "Friendship Plant"
+  },
+  {
+    "scientific": "Saxifraga stolonifera",
+    "common": "Strawberry Begonia"
+  },
+  {
+    "scientific": "Plerandra elegantissima",
+    "common": "False Aralia"
+  },
+  {
+    "scientific": "Polyscias fruticosa",
+    "common": "Ming Aralia"
+  },
+  {
+    "scientific": "Anthurium scherzerianum",
+    "common": "Flamingo Flower"
+  },
+  {
+    "scientific": "Anthurium clarinervium",
+    "common": "Velvet Anthurium"
+  },
+  {
+    "scientific": "Anthurium crystallinum",
+    "common": "Crystal Anthurium"
+  },
+  {
+    "scientific": "Davallia fejeensis",
+    "common": "Rabbit's Foot Fern"
+  },
+  {
+    "scientific": "Pellaea rotundifolia",
+    "common": "Button Fern"
+  },
+  {
+    "scientific": "Phlebodium aureum",
+    "common": "Blue Star Fern"
+  },
+  {
+    "scientific": "Microsorum musifolium",
+    "common": "Crocodile Fern"
+  },
+  {
+    "scientific": "Nephrolepis cordifolia",
+    "common": "Lemon Button Fern"
+  },
+  {
+    "scientific": "Phalaenopsis",
+    "common": "Moth Orchid"
+  },
+  {
+    "scientific": "Dendrobium",
+    "common": "Dendrobium Orchid"
+  },
+  {
+    "scientific": "Cattleya",
+    "common": "Cattleya Orchid"
+  },
+  {
+    "scientific": "Oncidium",
+    "common": "Oncidium (Dancing Lady)"
+  },
+  {
+    "scientific": "Vanilla planifolia",
+    "common": "Vanilla Orchid"
+  },
+  {
+    "scientific": "Guzmania",
+    "common": "Bromeliad Guzmania"
+  },
+  {
+    "scientific": "Aechmea fasciata",
+    "common": "Bromeliad Aechmea"
+  },
+  {
+    "scientific": "Tillandsia xerographica",
+    "common": "Air Plant (Xerographica)"
+  },
+  {
+    "scientific": "Tillandsia ionantha",
+    "common": "Air Plant (Ionantha)"
+  },
+  {
+    "scientific": "Tillandsia usneoides",
+    "common": "Spanish Moss"
+  },
+  {
+    "scientific": "Mimosa pudica",
+    "common": "Sensitive Plant"
+  },
+  {
+    "scientific": "Oxalis triangularis",
+    "common": "Purple Shamrock"
+  },
+  {
+    "scientific": "Cyrtomium falcatum",
+    "common": "Fishtail Fern"
+  },
+  {
+    "scientific": "Microsorum diversifolium",
+    "common": "Kangaroo Paw Fern"
+  },
+  {
+    "scientific": "Didymochlaena truncatula",
+    "common": "Mahogany Fern"
+  },
+  {
+    "scientific": "Pteris ensiformis",
+    "common": "Silver Brake Fern"
+  },
+  {
+    "scientific": "Dryopteris erythrosora",
+    "common": "Autumn Fern"
+  },
+  {
+    "scientific": "Coffea arabica",
+    "common": "Coffee Plant"
+  },
+  {
+    "scientific": "Camellia sinensis",
+    "common": "Tea Plant"
+  },
+  {
+    "scientific": "Elettaria cardamomum",
+    "common": "Cardamom"
+  },
+  {
+    "scientific": "Zingiber officinale",
+    "common": "Ginger"
+  },
+  {
+    "scientific": "Curcuma longa",
+    "common": "Turmeric"
+  },
+  {
+    "scientific": "Pogostemon cablin",
+    "common": "Patchouli"
+  },
+  {
+    "scientific": "Stevia rebaudiana",
+    "common": "Stevia"
+  },
+  {
+    "scientific": "Centella asiatica",
+    "common": "Gotu Kola"
+  },
+  {
+    "scientific": "Wisteria sinensis",
+    "common": "Wisteria"
+  },
+  {
+    "scientific": "Clematis",
+    "common": "Clematis"
+  },
+  {
+    "scientific": "Lonicera",
+    "common": "Honeysuckle"
+  },
+  {
+    "scientific": "Rudbeckia hirta",
+    "common": "Black Eyed Susan"
+  },
+  {
+    "scientific": "Echinacea purpurea",
+    "common": "Coneflower"
+  },
+  {
+    "scientific": "Lamprocapnos spectabilis",
+    "common": "Bleeding Heart"
+  },
+  {
+    "scientific": "Astilbe",
+    "common": "Astilbe"
+  },
+  {
+    "scientific": "Hosta",
+    "common": "Hosta"
+  },
+  {
+    "scientific": "Heuchera",
+    "common": "Coral Bells"
+  },
+  {
+    "scientific": "Digitalis purpurea",
+    "common": "Foxglove"
+  },
+  {
+    "scientific": "Delphinium",
+    "common": "Delphinium"
+  },
+  {
+    "scientific": "Antirrhinum majus",
+    "common": "Snapdragon"
+  },
+  {
+    "scientific": "Zinnia elegans",
+    "common": "Zinnia"
+  },
+  {
+    "scientific": "Cosmos bipinnatus",
+    "common": "Cosmos"
+  },
+  {
+    "scientific": "Lathyrus odoratus",
+    "common": "Sweet Pea"
+  },
+  {
+    "scientific": "Tropaeolum majus",
+    "common": "Nasturtium"
+  },
+  {
+    "scientific": "Dahlia pinnata",
+    "common": "Dahlia"
+  },
+  {
+    "scientific": "Gladiolus",
+    "common": "Gladiolus"
+  },
+  {
+    "scientific": "Zantedeschia aethiopica",
+    "common": "Calla Lily"
+  },
+  {
+    "scientific": "Hemerocallis",
+    "common": "Daylily"
+  },
+  {
+    "scientific": "Iris germanica",
+    "common": "Iris"
+  },
+  {
+    "scientific": "Camellia japonica",
+    "common": "Camellia"
+  },
+  {
+    "scientific": "Gardenia jasminoides",
+    "common": "Gardenia"
+  },
+  {
+    "scientific": "Rhododendron ferrugineum",
+    "common": "Rhododendron"
+  },
+  {
+    "scientific": "Forsythia suspensa",
+    "common": "Forsythia"
+  },
+  {
+    "scientific": "Weigela florida",
+    "common": "Weigela"
+  },
+  {
+    "scientific": "Spiraea japonica",
+    "common": "Spirea"
+  },
+  {
+    "scientific": "Ilex aquifolium",
+    "common": "Holly"
+  },
+  {
+    "scientific": "Juniperus communis",
+    "common": "Juniper"
+  },
+  {
+    "scientific": "Taxus baccata",
+    "common": "Yew"
+  },
+  {
+    "scientific": "Thuja occidentalis",
+    "common": "Arborvitae"
+  },
+  {
+    "scientific": "Acer palmatum",
+    "common": "Japanese Maple"
+  },
+  {
+    "scientific": "Cornus florida",
+    "common": "Dogwood"
+  },
+  {
+    "scientific": "Cercis canadensis",
+    "common": "Redbud"
+  },
+  {
+    "scientific": "Lagerstroemia indica",
+    "common": "Crape Myrtle"
+  },
+  {
+    "scientific": "Ginkgo biloba",
+    "common": "Ginkgo"
+  },
+  {
+    "scientific": "Betula pendula",
+    "common": "Birch"
+  },
+  {
+    "scientific": "Salix babylonica",
+    "common": "Willow"
+  },
+  {
+    "scientific": "Quercus robur",
+    "common": "Oak"
+  },
+  {
+    "scientific": "Acer saccharum",
+    "common": "Maple"
+  },
+  {
+    "scientific": "Pinus strobus",
+    "common": "Pine"
+  },
+  {
+    "scientific": "Washingtonia robusta",
+    "common": "Palm (Fan)"
+  },
+  {
+    "scientific": "Olea europaea",
+    "common": "Olive"
+  },
+  {
+    "scientific": "Ficus carica",
+    "common": "Fig"
+  },
+  {
+    "scientific": "Vitis vinifera",
+    "common": "Grapevine"
+  },
+  {
+    "scientific": "Fragaria x ananassa",
+    "common": "Strawberry"
+  },
+  {
+    "scientific": "Vaccinium corymbosum",
+    "common": "Blueberry"
+  },
+  {
+    "scientific": "Rubus idaeus",
+    "common": "Raspberry"
+  },
+  {
+    "scientific": "Rubus fruticosus",
+    "common": "Blackberry"
+  },
+  {
+    "scientific": "Helianthus giganteus",
+    "common": "Sunflower (Giant)"
+  },
+  {
+    "scientific": "Alocasia amazonica",
+    "common": "Alocasia Polly"
+  },
+  {
+    "scientific": "Alocasia reginula",
+    "common": "Black Velvet Alocasia"
+  },
+  {
+    "scientific": "Alocasia baginda",
+    "common": "Dragon Scale Alocasia"
+  },
+  {
+    "scientific": "Alocasia zebrina",
+    "common": "Zebrina Alocasia"
+  },
+  {
+    "scientific": "Alocasia micholitziana",
+    "common": "Frydek Alocasia"
+  },
+  {
+    "scientific": "Alocasia macrorrhizos",
+    "common": "Stingray Alocasia"
+  },
+  {
+    "scientific": "Ludisia discolor",
+    "common": "Jewel Orchid"
+  },
+  {
+    "scientific": "Macodes petola",
+    "common": "Lightning Bolt Orchid"
+  },
+  {
+    "scientific": "Medinilla magnifica",
+    "common": "Medinilla Magnifica"
+  },
+  {
+    "scientific": "Tacca chantrieri",
+    "common": "Bat Flower"
+  },
+  {
+    "scientific": "Amorphophallus titanium",
+    "common": "Corpse Flower (Amorphophallus)"
+  },
+  {
+    "scientific": "Sauromatum venosum",
+    "common": "Voodoo Lily"
+  },
+  {
+    "scientific": "Nepenthes",
+    "common": "Monkey Cup (Pitcher Plant)"
+  },
+  {
+    "scientific": "Dionaea muscipula",
+    "common": "Venus Flytrap"
+  },
+  {
+    "scientific": "Drosera",
+    "common": "Sundew"
+  },
+  {
+    "scientific": "Pinguicula",
+    "common": "Butterwort"
+  },
+  {
+    "scientific": "Darlingtonia californica",
+    "common": "Cobra Lily"
+  },
+  {
+    "scientific": "Opuntia microdasys",
+    "common": "Bunny Ear Cactus"
+  },
+  {
+    "scientific": "Cephalocereus senilis",
+    "common": "Old Man Cactus"
+  },
+  {
+    "scientific": "Echinocactus grusonii",
+    "common": "Golden Barrel Cactus"
+  },
+  {
+    "scientific": "Disocactus anguliger",
+    "common": "Fishbone Cactus"
+  },
+  {
+    "scientific": "Gymnocalycium mihanovichii",
+    "common": "Moon Cactus"
+  },
+  {
+    "scientific": "Aporocactus flagelliformis",
+    "common": "Rat Tail Cactus"
+  },
+  {
+    "scientific": "Senecio peregrinus",
+    "common": "String of Dolphins"
+  },
+  {
+    "scientific": "Senecio radicans",
+    "common": "String of Bananas"
+  },
+  {
+    "scientific": "Curio herreanus",
+    "common": "String of Melons"
+  },
+  {
+    "scientific": "Delosperma echinatum",
+    "common": "Pickle Plant"
+  },
+  {
+    "scientific": "Cotyledon tomentosa",
+    "common": "Bear's Paw"
+  },
+  {
+    "scientific": "Crassula ovata 'Gollum'",
+    "common": "Gollum Jade"
+  },
+  {
+    "scientific": "Crassula falcata",
+    "common": "Propeller Plant"
+  },
+  {
+    "scientific": "Crassula muscosa",
+    "common": "Watch Chain"
+  },
+  {
+    "scientific": "Aloe polyphylla",
+    "common": "Spiral Aloe"
+  },
+  {
+    "scientific": "Aloiampelos ciliaris",
+    "common": "Climbing Aloe"
+  },
+  {
+    "scientific": "Agave americana",
+    "common": "Agave (Century Plant)"
+  },
+  {
+    "scientific": "Agave victoriae-reginae",
+    "common": "Queen Victoria Agave"
+  },
+  {
+    "scientific": "Beaucarnea recurvata 'Variegata'",
+    "common": "Ponytail Palm (Variegated)"
+  },
+  {
+    "scientific": "Codiaeum variegatum 'Banana'",
+    "common": "Banana Croton"
+  },
+  {
+    "scientific": "Codiaeum variegatum 'Mammy'",
+    "common": "Mammy Croton"
+  },
+  {
+    "scientific": "Dracaena surculosa",
+    "common": "Gold Dust Dracaena"
+  },
+  {
+    "scientific": "Dracaena deremensis",
+    "common": "Janet Craig Dracaena"
+  },
+  {
+    "scientific": "Dracaena warneckii",
+    "common": "Lemon Lime Dracaena"
+  },
+  {
+    "scientific": "Cordyline fruticosa",
+    "common": "Hawaiian Ti Plant"
+  },
+  {
+    "scientific": "Pellionia pulchra",
+    "common": "Polynesian Ivy"
+  },
+  {
+    "scientific": "Ficus pumila",
+    "common": "Creeping Fig"
+  },
+  {
+    "scientific": "Cissus rhombifolia",
+    "common": "Oakleaf Ivy"
+  },
+  {
+    "scientific": "Begonia 'Escargot'",
+    "common": "Rex Begonia Escargot"
+  },
+  {
+    "scientific": "Begonia masoniana",
+    "common": "Iron Cross Begonia"
+  },
+  {
+    "scientific": "Begonia pavonina",
+    "common": "Peacock Begonia"
+  },
+  {
+    "scientific": "Begonia coccinea",
+    "common": "Angel Wing Begonia"
+  },
+  {
+    "scientific": "Begonia bowerae",
+    "common": "Eyelash Begonia"
+  },
+  {
+    "scientific": "Rafflesia arnoldii",
+    "common": "Corpse Flower (Giant)"
+  },
+  {
+    "scientific": "Strongylodon macrobotrys",
+    "common": "Jade Vine"
+  },
+  {
+    "scientific": "Dendrophylax lindenii",
+    "common": "Ghost Orchid"
+  },
+  {
+    "scientific": "Cosmos atrosanguineus",
+    "common": "Chocolate Cosmos"
+  },
+  {
+    "scientific": "Victoria amazonica",
+    "common": "Giant Water Lily"
+  },
+  {
+    "scientific": "Lotus berthelotii",
+    "common": "Parrot's Beak"
+  },
+  {
+    "scientific": "Anigozanthos flavidus",
+    "common": "Kangaroo Paw"
+  },
+  {
+    "scientific": "Protea cynaroides",
+    "common": "Protea King"
+  },
+  {
+    "scientific": "Banksia",
+    "common": "Banksia"
+  },
+  {
+    "scientific": "Telopea speciosissima",
+    "common": "Waratah"
+  },
+  {
+    "scientific": "Strelitzia nicolai",
+    "common": "Bird of Paradise (Giant)"
+  },
+  {
+    "scientific": "Ravenala madagascariensis",
+    "common": "Traveler's Palm"
+  },
+  {
+    "scientific": "Adansonia",
+    "common": "Baobab"
+  },
+  {
+    "scientific": "Dracaena cinnabari",
+    "common": "Dragon Blood Tree"
+  },
+  {
+    "scientific": "Eucalyptus deglupta",
+    "common": "Rainbow Eucalyptus"
+  },
+  {
+    "scientific": "Jacaranda mimosifolia",
+    "common": "Jacaranda"
+  },
+  {
+    "scientific": "Wollemia nobilis",
+    "common": "Wollemi Pine"
+  },
+  {
+    "scientific": "Araucaria araucana",
+    "common": "Monkey Puzzle Tree"
+  },
+  {
+    "scientific": "Sequoia sempervirens",
+    "common": "Coast Redwood"
+  },
+  {
+    "scientific": "Sequoiadendron giganteum",
+    "common": "Giant Sequoia"
+  },
+  {
+    "scientific": "Pinus longaeva",
+    "common": "Bristlecone Pine"
+  },
+  {
+    "scientific": "Populus tremuloides",
+    "common": "Quaking Aspen"
+  },
+  {
+    "scientific": "Franklinia alatamaha",
+    "common": "Franklin Tree"
+  },
+  {
+    "scientific": "Metasequoia glyptostroboides",
+    "common": "Dawn Redwood"
+  },
+  {
+    "scientific": "Laburnum anagyroides",
+    "common": "Golden Chain Tree"
+  },
+  {
+    "scientific": "Brugmansia",
+    "common": "Angel's Trumpet"
+  },
+  {
+    "scientific": "Passiflora edulis",
+    "common": "Passion Fruit Vine"
+  },
+  {
+    "scientific": "Actinidia deliciosa",
+    "common": "Kiwi Vine"
+  },
+  {
+    "scientific": "Humulus lupulus",
+    "common": "Hops"
+  },
+  {
+    "scientific": "Parthenocissus quinquefolia",
+    "common": "Virginia Creeper"
+  },
+  {
+    "scientific": "Parthenocissus tricuspidata",
+    "common": "Boston Ivy"
+  },
+  {
+    "scientific": "Agapanthus africanus",
+    "common": "Agapanthus"
+  },
+  {
+    "scientific": "Kniphofia",
+    "common": "Red Hot Poker"
+  },
+  {
+    "scientific": "Eryngium",
+    "common": "Sea Holly"
+  },
+  {
+    "scientific": "Echinops",
+    "common": "Globe Thistle"
+  },
+  {
+    "scientific": "Perovskia atriplicifolia",
+    "common": "Russian Sage"
+  },
+  {
+    "scientific": "Buddleja davidii",
+    "common": "Butterfly Bush"
+  },
+  {
+    "scientific": "Cotinus coggygria",
+    "common": "Smoke Bush"
+  },
+  {
+    "scientific": "Callicarpa",
+    "common": "Beautyberry"
+  },
+  {
+    "scientific": "Hamamelis",
+    "common": "Witch Hazel"
+  },
+  {
+    "scientific": "Chimonanthus praecox",
+    "common": "Winter Sweet"
+  },
+  {
+    "scientific": "Edgeworthia chrysantha",
+    "common": "Edgeworthia (Paper Bush)"
+  },
+  {
+    "scientific": "Corylus avellana 'Contorta'",
+    "common": "Harry Lauder's Walking Stick"
+  },
+  {
+    "scientific": "Salix discolor",
+    "common": "Pussy Willow"
+  },
+  {
+    "scientific": "Albizia julibrissin",
+    "common": "Mimosa Tree (Silk Tree)"
+  },
+  {
+    "scientific": "Paulownia tomentosa",
+    "common": "Empress Tree"
+  },
+  {
+    "scientific": "Dicksonia antarctica",
+    "common": "Tree Fern"
+  },
+  {
+    "scientific": "Gunnera manicata",
+    "common": "Gunnera (Dino Food)"
+  },
+  {
+    "scientific": "Rheum rhabarbarum",
+    "common": "Rhubarb"
+  },
+  {
+    "scientific": "Cynara cardunculus",
+    "common": "Artichoke"
+  },
+  {
+    "scientific": "Maranta leuconeura",
+    "common": "Prayer Plant"
+  },
+  {
+    "scientific": "Ctenanthe burle-marxii",
+    "common": "Fishbone Prayer Plant"
+  },
+  {
+    "scientific": "Stromanthe sanguinea",
+    "common": "Triostar"
+  },
+  {
+    "scientific": "Peperomia argyreia",
+    "common": "Watermelon Peperomia"
+  },
+  {
+    "scientific": "Pilea peperomioides",
+    "common": "Chinese Money Plant"
+  },
+  {
+    "scientific": "Tradescantia zebrina",
+    "common": "Inch Plant"
+  },
+  {
+    "scientific": "Aspidistra elatior",
+    "common": "Cast Iron Plant"
+  },
+  {
+    "scientific": "Zamioculcas zamiifolia 'Raven'",
+    "common": "Raven ZZ"
+  },
+  {
+    "scientific": "Aglaonema modestum",
+    "common": "Chinese Evergreen"
+  },
+  {
+    "scientific": "Dieffenbachia seguine",
+    "common": "Dumb Cane"
+  },
+  {
+    "scientific": "Philodendron 'Birkin'",
+    "common": "Philodendron Birkin"
+  },
+  {
+    "scientific": "Philodendron micans",
+    "common": "Velvet Leaf Philodendron"
+  },
+  {
+    "scientific": "Epipremnum aureum 'Neon'",
+    "common": "Neon Pothos"
+  },
+  {
+    "scientific": "Scindapsus pictus",
+    "common": "Satin Pothos"
+  },
+  {
+    "scientific": "Ficus benjamina",
+    "common": "Weeping Fig"
+  },
+  {
+    "scientific": "Ficus elastica 'Ruby'",
+    "common": "Ruby Rubber Plant"
+  },
+  {
+    "scientific": "Dracaena marginata",
+    "common": "Dragon Tree"
+  },
+  {
+    "scientific": "Dracaena fragrans",
+    "common": "Corn Plant"
+  },
+  {
+    "scientific": "Beaucarnea recurvata",
+    "common": "Ponytail Palm"
+  },
+  {
+    "scientific": "Yucca elephantipes",
+    "common": "Spineless Yucca"
+  },
+  {
+    "scientific": "Araucaria heterophylla",
+    "common": "Norfolk Island Pine"
+  },
+  {
+    "scientific": "Schlumbergera truncata",
+    "common": "Thanksgiving Cactus"
+  },
+  {
+    "scientific": "Hoya carnosa",
+    "common": "Wax Plant"
+  },
+  {
+    "scientific": "Senecio rowleyanus",
+    "common": "String of Pearls"
+  },
+  {
+    "scientific": "Sedum morganianum",
+    "common": "Burro's Tail"
+  },
+  {
+    "scientific": "Acer palmatum",
+    "common": "Japanese Maple"
+  },
+  {
+    "scientific": "Cercis canadensis",
+    "common": "Eastern Redbud"
+  },
+  {
+    "scientific": "Cornus florida",
+    "common": "Flowering Dogwood"
+  },
+  {
+    "scientific": "Magnolia grandiflora",
+    "common": "Southern Magnolia"
+  },
+  {
+    "scientific": "Liriodendron tulipifera",
+    "common": "Tulip Poplar"
+  },
+  {
+    "scientific": "Quercus virginiana",
+    "common": "Live Oak"
+  },
+  {
+    "scientific": "Pinus palustris",
+    "common": "Longleaf Pine"
+  },
+  {
+    "scientific": "Taxodium distichum",
+    "common": "Bald Cypress"
+  },
+  {
+    "scientific": "Ginkgo biloba",
+    "common": "Maidenhair Tree"
+  },
+  {
+    "scientific": "Metasequoia glyptostroboides",
+    "common": "Dawn Redwood"
+  },
+  {
+    "scientific": "Betula nigra",
+    "common": "River Birch"
+  },
+  {
+    "scientific": "Salix babylonica",
+    "common": "Weeping Willow"
+  },
+  {
+    "scientific": "Juniperus virginiana",
+    "common": "Eastern Red Cedar"
+  },
+  {
+    "scientific": "Ilex opaca",
+    "common": "American Holly"
+  },
+  {
+    "scientific": "Hydrangea macrophylla",
+    "common": "Bigleaf Hydrangea"
+  },
+  {
+    "scientific": "Hydrangea quercifolia",
+    "common": "Oakleaf Hydrangea"
+  },
+  {
+    "scientific": "Rhododendron indicum",
+    "common": "Southern Azalea"
+  },
+  {
+    "scientific": "Camellia japonica",
+    "common": "Camellia"
+  },
+  {
+    "scientific": "Gardenia jasminoides",
+    "common": "Gardenia"
+  },
+  {
+    "scientific": "Lagerstroemia indica",
+    "common": "Crape Myrtle"
+  },
+  {
+    "scientific": "Wisteria sinensis",
+    "common": "Chinese Wisteria"
+  },
+  {
+    "scientific": "Passiflora incarnata",
+    "common": "Passion Flower"
+  },
+  {
+    "scientific": "Lonicera sempervirens",
+    "common": "Coral Honeysuckle"
+  },
+  {
+    "scientific": "Gelsemium sempervirens",
+    "common": "Carolina Jessamine"
+  },
+  {
+    "scientific": "Echinacea purpurea",
+    "common": "Purple Coneflower"
+  }
+]

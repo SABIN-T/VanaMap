@@ -58,6 +58,12 @@ const UserSchema = new mongoose.Schema({
     name: { type: String, required: true },
     role: { type: String, enum: ['user', 'vendor', 'admin'], default: 'user' },
     favorites: [String],
+    isPremium: { type: Boolean, default: false },
+    premiumType: { type: String, enum: ['none', 'trial', 'monthly', 'gift'], default: 'none' },
+    premiumExpiry: { type: Date },
+    premiumStartDate: { type: Date },
+    lastPurchaseDate: { type: Date },
+    favoritesCount: { type: Number, default: 0 }, // To track total likes behavior
     cart: [{ plantId: String, quantity: Number, vendorId: String, vendorPrice: Number }],
     points: { type: Number, default: 0 },
     city: String,
@@ -125,7 +131,21 @@ const PlantSuggestionSchema = new mongoose.Schema({
     plantName: { type: String, required: true },
     description: { type: String, required: true },
     status: { type: String, enum: ['pending', 'approved', 'rejected'], default: 'pending' },
-    submittedAt: { type: Date, default: Date.now }
+    submittedAt: { type: Date, default: Date.now },
+    searchCount: { type: Number, default: 1 } // Track frequency
+});
+
+const PaymentSchema = new mongoose.Schema({
+    userId: { type: String, required: true },
+    userName: String,
+    amount: Number,
+    currency: String,
+    orderId: String,
+    paymentId: String,
+    signature: String,
+    status: { type: String, enum: ['created', 'paid', 'failed'], default: 'created' },
+    plan: String,
+    date: { type: Date, default: Date.now }
 });
 
 // --- INDEXES FOR PERFORMANCE ---
@@ -144,6 +164,8 @@ module.exports = {
     Plant: mongoose.model('Plant', PlantSchema),
     Vendor: mongoose.model('Vendor', VendorSchema),
     User: mongoose.model('User', UserSchema),
+    Payment: mongoose.model('Payment', PaymentSchema),
+    Notification: mongoose.model('Notification', NotificationSchema),
     Notification: mongoose.model('Notification', NotificationSchema),
     Chat: mongoose.model('Chat', ChatSchema),
     PlantSuggestion: mongoose.model('PlantSuggestion', PlantSuggestionSchema),

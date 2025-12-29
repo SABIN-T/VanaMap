@@ -14,6 +14,7 @@ const Shops = lazy(() => import('../../pages/Shops').then(m => ({ default: m.Sho
 const Support = lazy(() => import('../../pages/Support').then(m => ({ default: m.Support })));
 const Sponsor = lazy(() => import('../../pages/Sponsor').then(m => ({ default: m.Sponsor })));
 const Heaven = lazy(() => import('../../pages/Heaven').then(m => ({ default: m.Heaven })));
+import { RestrictedRoute } from '../common/RestrictedRoute';
 const AddPlant = lazy(() => import('../../pages/admin/AddPlant').then(m => ({ default: m.AddPlant })));
 const AddVendor = lazy(() => import('../../pages/admin/AddVendor').then(m => ({ default: m.AddVendor })));
 const ManagePlants = lazy(() => import('../../pages/admin/ManagePlants').then(m => ({ default: m.ManagePlants })));
@@ -85,7 +86,11 @@ export const AnimatedRoutes = () => {
                         <Route path="/" element={<Home />} />
                         <Route path="/about" element={<About />} />
                         <Route path="/dashboard" element={<UserDashboard />} />
-                        <Route path="/nearby" element={<Nearby />} />
+                        <Route path="/nearby" element={
+                            <RestrictedRoute path="/nearby">
+                                <Nearby />
+                            </RestrictedRoute>
+                        } />
                         <Route path="/vendor" element={<VendorPortal />} />
                         <Route path="/auth" element={<Auth />} />
                         <Route path="/cart" element={<Cart />} />
@@ -115,10 +120,26 @@ export const AnimatedRoutes = () => {
                         <Route path="/contact" element={<Contact />} />
                         <Route path="/support" element={<Support />} />
                         <Route path="/sponsor" element={<Sponsor />} />
-                        <Route path="/shops" element={<Shops />} />
-                        <Route path="/leaderboard" element={<Leaderboard />} />
-                        <Route path="/heaven" element={<Heaven />} />
-                        <Route path="/make-it-real" element={<MakeItReal />} />
+                        <Route path="/shops" element={
+                            <RestrictedRoute path="/shops">
+                                <Shops />
+                            </RestrictedRoute>
+                        } />
+                        <Route path="/leaderboard" element={
+                            <RestrictedRoute path="/leaderboard">
+                                <Leaderboard />
+                            </RestrictedRoute>
+                        } />
+                        <Route path="/heaven" element={
+                            <RestrictedRoute path="/heaven">
+                                <Heaven />
+                            </RestrictedRoute>
+                        } />
+                        <Route path="/make-it-real" element={
+                            <RestrictedRoute path="/make-it-real">
+                                <MakeItReal />
+                            </RestrictedRoute>
+                        } />
                         <Route path="/premium" element={<PublicPremium />} />
                     </Routes>
                 </div>
