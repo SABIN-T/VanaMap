@@ -103,11 +103,18 @@ export const Cart = () => {
         let msg = `Hi, I am ${user.name}. I found your shop on VanaMap and would like to place an order.\n\n*Order Details:*\n`;
         let total = 0;
         vItems.forEach(i => {
-            const price = i.vendorPrice || i.plant.price || 0;
-            msg += `- ${i.plant.name} (Qty: ${i.quantity}) @ ${formatCurrency(price)}\n`;
-            total += price * i.quantity;
+            const isCustomPot = i.plant.id.startsWith('cp_');
+            if (!isCustomPot) {
+                const price = i.vendorPrice || i.plant.price || 0;
+                msg += `- ${i.plant.name} (Qty: ${i.quantity}) @ ${formatCurrency(price)}\n`;
+                total += price * i.quantity;
+            } else {
+                msg += `- ${i.plant.name} (Qty: ${i.quantity}) [Price TBD]\n`;
+            }
         });
-        msg += `\n*Total Estimated Value: ${formatCurrency(total)}*\n`;
+        if (total > 0) {
+            msg += `\n*Total Estimated Value: ${formatCurrency(total)}*\n`;
+        }
         msg += `\nPlease confirm stock availability and delivery timeline.`;
 
         // Open WhatsApp
@@ -169,7 +176,11 @@ export const Cart = () => {
                         {Object.entries(groupedItems).map(([vendorId, cartItems]) => {
                             const isVanaMap = vendorId === 'vanamap';
                             const vendor = vendors[vendorId];
-                            const totalPrice = cartItems.reduce((sum, i) => sum + ((i.vendorPrice || i.plant.price || 0) * i.quantity), 0);
+                            const totalPrice = cartItems.reduce((sum, i) => {
+                                const isCustomPot = i.plant.id.startsWith('cp_');
+                                if (isCustomPot) return sum;
+                                return sum + ((i.vendorPrice || i.plant.price || 0) * i.quantity);
+                            }, 0);
 
                             // If vendor data is missing (async load), show skeleton or placeholder
                             const vendorName = isVanaMap ? 'VanaMap Official' : (vendor?.name || 'Loading Vendor...');

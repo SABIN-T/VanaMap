@@ -709,7 +709,7 @@ app.post('/api/tracking/vendor-contact', async (req, res) => {
     try {
         const { vendorId, vendorName, userEmail, contactType } = req.body;
         const msg = `User ${userEmail} contacted Vendor ${vendorName} via ${contactType}`;
-        await broadcastAlert('vendor_contact', msg, { vendorId, userEmail, contactType });
+        await broadcastAlert('vendor_contact', msg, { vendorId, userEmail, contactType, skipPush: true });
         res.json({ success: true });
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -1889,7 +1889,8 @@ app.post('/api/custom-pots', auth, async (req, res) => {
         broadcastAlert('custom_pot', `New Ceramic Design by ${user.name}`, {
             userId: user._id,
             potColor,
-            title: "New Pot Artwork! 🏺"
+            title: "New Pot Artwork! 🏺",
+            skipPush: true
         }).catch((e) => console.error("[STUDIO] Alert Broadcast Failed:", e.message));
 
         res.status(201).json({ success: true, message: "Custom design saved to collection!", design: customPot });
