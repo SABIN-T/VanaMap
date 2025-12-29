@@ -32,6 +32,9 @@ export const Premium = () => {
         if (user && !canView && user.role !== 'admin') {
             toast("Add more than 3 plants to favorites to unlock Premium!", { icon: '🔒' });
             navigate('/');
+        } else if (user?.isPremium) {
+            // If already premium, go to Heaven automatically
+            navigate('/heaven');
         }
     }, [user, canView, navigate]);
 

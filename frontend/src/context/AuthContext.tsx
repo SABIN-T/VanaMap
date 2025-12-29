@@ -172,12 +172,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
 
     const refreshUser = async () => {
-        if (!user || user.token) return; // Need token
+        // Guard: Need user and a way to get token
+        const stored = JSON.parse(localStorage.getItem('user') || '{}');
+        const token = user?.token || stored.token;
+
+        if (!token) return;
+
         try {
-            // We assume we have the token in user object or localStorage
-            const stored = JSON.parse(localStorage.getItem('user') || '{}');
-            const token = stored.token;
-            if (!token) return;
 
             // We need an endpoint to get fresh user data. 
             // If /api/auth/me doesn't exist, we use a different trick or add it.
