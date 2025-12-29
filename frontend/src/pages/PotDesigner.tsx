@@ -107,7 +107,7 @@ export const PotDesigner = () => {
                     <Canvas shadows camera={{ position: [0, 2, 5], fov: 45 }}>
                         <ambientLight intensity={0.7} />
                         <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} shadow-mapSize={2048} castShadow />
-                        <Environment preset="city" />
+                        <Environment preset="studio" />
 
                         {/* Pot Composition includes texture loading, so we wrap it in internal Suspense? 
                             Canvas usually handles it, but explicit boundary helps debug. */}
