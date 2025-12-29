@@ -27,6 +27,7 @@ export const MakeItReal = () => {
 
     // Plant Transform State (Draggable)
     const [useStudioPot, setUseStudioPot] = useState(true);
+    const [capturedImage, setCapturedImage] = useState<string | null>(null);
     const [pos, setPos] = useState({ x: 50, y: 50 });
     const [dragging, setDragging] = useState(false);
 
@@ -433,11 +434,17 @@ export const MakeItReal = () => {
 
         // 6. Output Perfect Sync
         const finalImage = canvas.toDataURL('image/jpeg', 0.98);
+        setCapturedImage(finalImage);
+        toast.success("Design Perfected!", { icon: '✨' });
+    };
+
+    const handleDownload = () => {
+        if (!capturedImage) return;
         const link = document.createElement('a');
         link.download = `VanaMap_LiveShot_${Date.now()}.jpg`;
-        link.href = finalImage;
+        link.href = capturedImage;
         link.click();
-        toast.success("Final Masterpiece Saved!", { icon: '✨' });
+        toast.success("Saved to Gallery!", { icon: '📥' });
     };
 
     // --- INTERACTION LOGIC ---
@@ -530,7 +537,7 @@ export const MakeItReal = () => {
             )}
 
             {/* --- VIEW 2: AR STUDIO --- */}
-            {viewMode === 'STUDIO' && (
+            {viewMode === 'STUDIO' && !capturedImage && (
                 <div
                     className={styles.arView}
                     onTouchMove={handleTouchMove}
@@ -604,9 +611,68 @@ export const MakeItReal = () => {
                         </div>
 
                         <div className={styles.arFooter}>
-                            <button className={styles.shutterBtn} onClick={captureScene}>
-                                <div className={styles.shutterInner} />
+                            <button className={styles.captureBtn} onClick={captureScene} title="Take Photo">
+                                <div className={styles.captureInner} />
                             </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* 5. Review Page (High-End UX) */}
+            {capturedImage && (
+                <div className={styles.reviewPage}>
+                    <div className={styles.reviewHeader}>
+                        <div className={styles.reviewBrand}>
+                            <Sparkles size={24} className={styles.brandIcon} />
+                            <span>VanaDesign Studio</span>
+                        </div>
+                        <button className={styles.exitBtn} onClick={() => setCapturedImage(null)}>
+                            <ArrowLeft size={20} /> Retake
+                        </button>
+                    </div>
+
+                    <div className={styles.reviewBody}>
+                        <div className={styles.canvasContainer}>
+                            <div className={styles.designFrame}>
+                                <img src={capturedImage} alt="AR Masterpiece" className={styles.masterpiece} />
+                                <div className={styles.frameDecoration} />
+                            </div>
+                        </div>
+
+                        <div className={styles.reviewControls}>
+                            <div className={styles.congratsSection}>
+                                <h1 className={styles.congratsTitle}>Masterpiece Perfected</h1>
+                                <p className={styles.congratsText}>
+                                    Your plant has been synthetically integrated into the room using Neural Studio V3.
+                                </p>
+                            </div>
+
+                            <div className={styles.actionGrid}>
+                                <button className={styles.mainAction} onClick={handleDownload}>
+                                    <ScanLine size={24} />
+                                    <div className={styles.actionLabels}>
+                                        <span className={styles.primaryLabel}>Download HD</span>
+                                        <span className={styles.secondaryLabel}>High Resolution JPG</span>
+                                    </div>
+                                </button>
+
+                                <button className={styles.secondaryAction} onClick={() => setCapturedImage(null)}>
+                                    <ArrowLeft size={20} />
+                                    <span>Try New Setup</span>
+                                </button>
+                            </div>
+
+                            <div className={styles.techSpecs}>
+                                <div className={styles.specItem}>
+                                    <span className={styles.specLabel}>Lighting</span>
+                                    <span className={styles.specVal}>Neural Adaptive (v3)</span>
+                                </div>
+                                <div className={styles.specItem}>
+                                    <span className={styles.specLabel}>Resolution</span>
+                                    <span className={styles.specVal}>1200xHD</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>

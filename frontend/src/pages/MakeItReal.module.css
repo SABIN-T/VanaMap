@@ -328,6 +328,220 @@
 
 
 
+/* Review Page (Post-Capture) */
+.reviewPage {
+    position: fixed;
+    inset: 0;
+    background: #000;
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reviewHeader {
+    padding: 1.5rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.reviewBrand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.brandIcon {
+    color: #facc15;
+}
+
+.exitBtn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.2rem;
+    border-radius: 50px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.exitBtn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.reviewBody {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    background: radial-gradient(circle at 70% 30%, #064e3b 0%, #000 70%);
+    overflow: hidden;
+}
+
+.canvasContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+}
+
+.designFrame {
+    position: relative;
+    max-width: 90%;
+    max-height: 90%;
+    box-shadow: 0 50px 100px rgba(0, 0, 0, 0.8);
+    border: 8px solid #fff;
+    border-radius: 4px;
+}
+
+.masterpiece {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+.reviewControls {
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(30px);
+    border-left: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 4rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+.congratsTitle {
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: linear-gradient(to bottom right, #fff, #94a3b8);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 1rem;
+}
+
+.congratsText {
+    color: #94a3b8;
+    line-height: 1.6;
+    font-size: 1.1rem;
+}
+
+.actionGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.mainAction {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background: #10b981;
+    border: none;
+    border-radius: 20px;
+    color: #fff;
+    cursor: pointer;
+    text-align: left;
+    transition: 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mainAction:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(16, 185, 129, 0.3);
+}
+
+.actionLabels {
+    display: flex;
+    flex-direction: column;
+}
+
+.primaryLabel {
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.secondaryLabel {
+    font-size: 0.85rem;
+    opacity: 0.8;
+}
+
+.secondaryAction {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 1.2rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.secondaryAction:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.techSpecs {
+    margin-top: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.specItem {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.specLabel {
+    font-size: 0.75rem;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.specVal {
+    color: #fff;
+    font-weight: 600;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+    }
+
+    to {
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 900px) {
+    .reviewBody {
+        grid-template-columns: 1fr;
+        overflow-y: auto;
+    }
+
+    .reviewControls {
+        border-left: none;
+        padding: 2.5rem 1.5rem;
+    }
+}
+
 /* AR UI Overlay */
 .arOverlay {
     position: absolute;
