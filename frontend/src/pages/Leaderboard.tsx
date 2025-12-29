@@ -13,25 +13,38 @@ export const Leaderboard = () => {
     const [loading, setLoading] = useState(true);
     const [showPromo, setShowPromo] = useState(false);
 
+    const [error, setError] = useState<string | null>(null);
+
     useEffect(() => {
+        let isMounted = true;
         const load = async () => {
             try {
-                const res = await fetchLeaderboard();
-                setData(res);
-            } catch (e) {
+                // Safety timeout: If fetch hangs for >10s, stop loading
+                const timeoutPromise = new Promise((_, reject) =>
+                    setTimeout(() => reject(new Error("Request timeout")), 10000)
+                );
+
+                const dataPromise = fetchLeaderboard();
+                const res = await Promise.race([dataPromise, timeoutPromise]) as LeaderboardData;
+
+                if (isMounted) setData(res);
+            } catch (e: any) {
                 console.error("Leaderboard load failed", e);
+                if (isMounted) setError(e.message || "Failed to load rankings");
             } finally {
-                setLoading(false);
+                if (isMounted) setLoading(false);
             }
         };
         load();
 
-        // Show Promo if first visit this session (using simple session storage logic or just set true for now)
+        // Show Promo
         const hasSeenPromo = sessionStorage.getItem('seenLeaderboardPromo');
         if (!hasSeenPromo) {
             setShowPromo(true);
             sessionStorage.setItem('seenLeaderboardPromo', 'true');
         }
+
+        return () => { isMounted = false; };
     }, []);
 
     const quests = [
@@ -51,6 +64,11 @@ export const Leaderboard = () => {
                 <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
             </div>
         );
+    }
+
+    if (error) {
+        // Show partial state or error view, but here we just render the structure with empty data to avoid blocking user
+        // Or we can show a toast. For now, let's just proceed with empty data as fallback is handled in UI.
     }
 
     // Sort top 3 for podium
