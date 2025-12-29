@@ -1,5 +1,5 @@
 import { Routes, Route, useLocation } from 'react-router-dom';
-import { lazy, Suspense } from 'react';
+import { lazy, Suspense, useState, useEffect } from 'react';
 
 // Lazy Load Pages
 const Home = lazy(() => import('../../pages/Home').then(m => ({ default: m.Home })));
@@ -9,6 +9,7 @@ const VendorPortal = lazy(() => import('../../pages/VendorPortal').then(m => ({ 
 const Auth = lazy(() => import('../../pages/Auth').then(m => ({ default: m.Auth })));
 const Cart = lazy(() => import('../../pages/Cart').then(m => ({ default: m.Cart })));
 const Admin = lazy(() => import('../../pages/Admin').then(m => ({ default: m.Admin })));
+const About = lazy(() => import('../../pages/About').then(module => ({ default: module.About })));
 const Contact = lazy(() => import('../../pages/Contact').then(m => ({ default: m.Contact })));
 const Shops = lazy(() => import('../../pages/Shops').then(m => ({ default: m.Shops })));
 const Support = lazy(() => import('../../pages/Support').then(m => ({ default: m.Support })));
@@ -41,16 +42,37 @@ const PotDesigner = lazy(() => import('../../pages/PotDesigner').then(m => ({ de
 const DailyNews = lazy(() => import('../../pages/DailyNews').then(m => ({ default: m.DailyNews })));
 
 
-const LoadingScreen = () => (
-    <div style={{
-        height: '100vh', width: '100vw', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0f172a'
-    }}>
-        <div className="pulse"></div>
-    </div>
-);
+// Enhanced Loading Screen with timeout feedback
+const LoadingScreen = () => {
+    const [showText, setShowText] = useState(false);
 
-// About Page - Corrected Path
-const About = lazy(() => import('../../pages/About').then(module => ({ default: module.About })));
+    useEffect(() => {
+        const timer = setTimeout(() => setShowText(true), 5000); // Show help text after 5s
+        return () => clearTimeout(timer);
+    }, []);
+
+    return (
+        <div style={{
+            height: '100vh', width: '100vw', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', background: '#0f172a', gap: '1.5rem'
+        }}>
+            <div className="pulse"></div>
+            {showText && (
+                <div style={{ textAlign: 'center', color: '#64748b', fontSize: '0.9rem', animation: 'fadeIn 0.5s', maxWidth: '80%' }}>
+                    <p>Connecting to ecosystem...</p>
+                    <button
+                        onClick={() => window.location.reload()}
+                        style={{ marginTop: '0.5rem', background: 'transparent', border: '1px solid #334155', color: '#94a3b8', padding: '0.4rem 1rem', borderRadius: '0.5rem', cursor: 'pointer' }}
+                    >
+                        Tap to Refresh
+                    </button>
+                    <style>{`@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }`}</style>
+                </div>
+            )}
+        </div>
+    );
+};
+
+// ...
 
 export const AnimatedRoutes = () => {
     const location = useLocation();
@@ -58,6 +80,7 @@ export const AnimatedRoutes = () => {
     return (
         <>
             <style>{`
+                /* ... existing styles ... */
                 .page-enter {
                     animation: pageFadeIn 0.4s ease-out;
                 }
