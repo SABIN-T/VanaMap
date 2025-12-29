@@ -466,7 +466,7 @@ app.post('/api/payments/activate-free', auth, async (req, res) => {
         if (user.isPremium) return res.status(400).json({ error: "Already Premium" });
 
         user.isPremium = true;
-        user.premiumType = 'free_promo';
+        user.premiumType = 'trial';
         user.premiumStartDate = new Date();
         // Sets expiry to very long or 1 month? "after that you should pay 10rs per month".
         // Maybe indefinite until 2026? Or just 1 month free? 
