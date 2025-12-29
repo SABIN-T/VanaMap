@@ -1,235 +1,258 @@
-import { useState, Suspense, useRef } from 'react';
+import { useState, Suspense } from 'react';
 import { Canvas, useLoader } from '@react-three/fiber';
-import { OrbitControls, ContactShadows, Decal, useTexture } from '@react-three/drei';
+import { OrbitControls, ContactShadows, Decal, Float, PerspectiveCamera } from '@react-three/drei';
 import { TextureLoader } from 'three';
-import { ArrowLeft, Upload, ShoppingBag, Palette, Maximize, Move, RotateCcw } from 'lucide-react';
+import { ArrowLeft, Upload, ShoppingBag, Palette, Move, RotateCcw, Box, Maximize } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import styles from './PotDesigner.module.css';
 
-// --- Separate 3D Components to separate suspense bounds ---
+// ==========================================
+// 3D COMPONENTS
+// ==========================================
 
 function StandardPot({ color }: { color: string }) {
-    // We use a separate component for the base pot to keep its texture loading isolated if needed
-    // But usually standard textures are fine.
-    const texture = useTexture('https://images.unsplash.com/photo-1614730341194-75c60740a2d3?q=80&w=1024&auto=format&fit=crop');
-
     return (
         <mesh position={[0, 0.5, 0]} castShadow receiveShadow>
-            <cylinderGeometry args={[1.2, 0.9, 2.2, 64]} />
+            <cylinderGeometry args={[1, 0.7, 2, 64]} />
             <meshStandardMaterial
                 color={color}
-                roughness={0.6}
+                roughness={0.4}
                 metalness={0.1}
-                map={texture}
-                envMapIntensity={0.8}
+                envMapIntensity={1}
             />
         </mesh>
     );
 }
 
-// Separate Decal component to handle conditional loading safely
 function ArtDecal({ image, decalProps }: { image: string, decalProps: any }) {
-    const decalTexture = useLoader(TextureLoader, image); // unconditional here! (component only mounted when image exists)
+    // Isolated loader component to prevent main crash
+    const decalTexture = useLoader(TextureLoader, image);
 
     return (
         <Decal
-            position={[0, decalProps.y, 1.1]}
+            position={[0, decalProps.y, 0.95]}
             rotation={[0, 0, decalProps.rotation]}
             scale={[decalProps.scale, decalProps.scale, 1]}
         >
-            <meshBasicMaterial
+            <meshStandardMaterial
                 map={decalTexture}
                 transparent
                 polygonOffset
-                polygonOffsetFactor={-1}
+                polygonOffsetFactor={-10}
+                roughness={0.5}
             />
         </Decal>
     );
 }
 
-// Wrapper for the Pot Composition
 function PotComposition({ color, image, decalProps }: any) {
     return (
-        <group>
-            <StandardPot color={color} />
-            {image && <ArtDecal image={image} decalProps={decalProps} />}
-        </group>
+        <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.5}>
+            <group>
+                <StandardPot color={color} />
+                {image && (
+                    <Suspense fallback={null}>
+                        <ArtDecal image={image} decalProps={decalProps} />
+                    </Suspense>
+                )}
+            </group>
+        </Float>
     );
 }
 
-// --- Main Page Component ---
+// ==========================================
+// MAIN PAGE COMPONENT
+// ==========================================
+
 export const PotDesigner = () => {
     const navigate = useNavigate();
-    const fileInputRef = useRef<HTMLInputElement>(null);
-
-    const [color, setColor] = useState('#e2e8f0');
+    const [color, setColor] = useState('#d97706'); // Terracotta
     const [image, setImage] = useState<string | null>(null);
     const [decalProps, setDecalProps] = useState({
-        y: 0,
         scale: 1,
+        y: 0.5,
         rotation: 0
     });
 
-    const colors = [
-        '#e2e8f0', '#94a3b8', '#64748b', '#0f172a',
-        '#fecaca', '#ef4444', '#991b1b',
-        '#fed7aa', '#f97316', '#c2410c',
-        '#fde047', '#eab308',
-        '#86efac', '#22c55e', '#166534',
-        '#93c5fd', '#3b82f6', '#1e40af',
-        '#d8b4fe', '#a855f7', '#6b21a8'
+    const potColors = [
+        { name: 'Terracotta', value: '#d97706' },
+        { name: 'Pure White', value: '#f8fafc' },
+        { name: 'Midnight', value: '#1e293b' },
+        { name: 'Sage', value: '#10b981' },
+        { name: 'Ocean', value: '#3b82f6' },
+        { name: 'Rose', value: '#fb7185' },
+        { name: 'Basalt', value: '#334155' },
+        { name: 'Clay', value: '#a8a29e' },
+        { name: 'Teal', value: '#0d9488' },
+        { name: 'Lemon', value: '#eab308' },
     ];
 
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
-            const reader = new FileReader();
-            reader.onload = (event) => {
-                setImage(event.target?.result as string);
-                toast.success("Art applied locally!");
-            };
-            reader.readAsDataURL(file);
+            const url = URL.createObjectURL(file);
+            setImage(url);
+            toast.success("Design Applied! Adjust the sliders below.");
         }
     };
 
     const handleAddToCart = () => {
-        toast.success("Designed Pot added to cart!", { icon: '🛒' });
-        setTimeout(() => {
-            toast("Shipping functionality coming soon.", { icon: '🚚' });
-        }, 800);
+        toast.success("Pot design saved to cart!", {
+            icon: '🛍️',
+            style: { background: '#0f172a', color: '#fff', border: '1px solid #10b981' }
+        });
+        setTimeout(() => toast("Ordering coming soon!", { icon: '📦' }), 800);
     };
 
     return (
-        <div className={styles.studioContainer}>
-            <div className={styles.canvasArea}>
-                <Suspense fallback={<div className={styles.loaderOverlay}>Loading 3D Engine...</div>}>
-                    <Canvas shadows camera={{ position: [0, 2, 5], fov: 45 }}>
-                        <ambientLight intensity={0.7} />
-                        <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} shadow-mapSize={2048} castShadow />
-                        {/* Manual Lighting Setup - Robust & Crash-Proof */}
-                        <ambientLight intensity={0.6} />
-                        <directionalLight position={[5, 10, 7]} intensity={1.2} castShadow shadow-bias={-0.0001} />
-                        <pointLight position={[-5, 5, -5]} intensity={0.8} color="#e0f2fe" />
-                        <pointLight position={[0, -5, 5]} intensity={0.4} />
+        <div className={styles.designerContainer}>
+            {/* Top Bar */}
+            <header className={styles.header}>
+                <button className={styles.backBtn} onClick={() => navigate(-1)}>
+                    <ArrowLeft size={20} /> <span className="hidden sm:inline">EXIT STUDIO</span>
+                </button>
+                <div className={styles.title}>VANA STUDIO • 3D CONFIGURATOR</div>
+                <div style={{ width: 100 }} className="hidden sm:block"></div>
+            </header>
 
-                        {/* Pot Composition includes texture loading, so we wrap it in internal Suspense? 
-                            Canvas usually handles it, but explicit boundary helps debug. */}
-                        <PotComposition color={color} image={image} decalProps={decalProps} />
+            <main className={styles.mainLayout}>
+                {/* 3D Canvas Area */}
+                <div className={styles.canvasWrapper}>
+                    <Suspense fallback={
+                        <div className={styles.loadingOverlay}>
+                            <div className={styles.spinner} />
+                            <p>Initializing Environment...</p>
+                        </div>
+                    }>
+                        <Canvas shadows>
+                            <PerspectiveCamera makeDefault position={[0, 2, 5]} fov={40} />
 
-                        <ContactShadows position={[0, -0.6, 0]} opacity={0.4} scale={10} blur={2} far={4} />
-                        <OrbitControls minPolarAngle={Math.PI / 4} maxPolarAngle={Math.PI / 2} enablePan={false} minDistance={3} maxDistance={8} />
-                    </Canvas>
-                </Suspense>
-            </div>
+                            {/* Pro Lighting Setup */}
+                            <ambientLight intensity={0.5} />
+                            <spotLight position={[10, 15, 10]} angle={0.3} penumbra={1} intensity={2} castShadow />
+                            <directionalLight position={[-5, 5, -5]} intensity={1} color="#3b82f6" />
+                            <pointLight position={[0, -2, 5]} intensity={0.5} color="#10b981" />
 
-            <div className={styles.controlsPanel}>
-                <div className={styles.panelHeader}>
-                    <div className={styles.studioTitle}>
-                        <Palette size={20} className="text-sky-400" />
-                        Ceramic 3D Studio
+                            <PotComposition color={color} image={image} decalProps={decalProps} />
+
+                            <ContactShadows position={[0, -0.5, 0]} opacity={0.4} scale={10} blur={2} far={4.5} />
+                            <OrbitControls
+                                enablePan={false}
+                                minPolarAngle={Math.PI / 4}
+                                maxPolarAngle={Math.PI / 1.5}
+                                autoRotate={!image}
+                                autoRotateSpeed={0.5}
+                            />
+                        </Canvas>
+                    </Suspense>
+
+                    {/* Quick Tips Overlay */}
+                    <div style={{ position: 'absolute', bottom: '2rem', left: '2rem', display: 'flex', gap: '1rem' }} className="hidden sm:flex">
+                        <div style={{ background: 'rgba(0,0,0,0.5)', padding: '0.5rem 1rem', borderRadius: '99px', fontSize: '0.75rem', fontWeight: 600, backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.1)' }}>
+                            🖱️ Drag to Rotate
+                        </div>
+                        <div style={{ background: 'rgba(0,0,0,0.5)', padding: '0.5rem 1rem', borderRadius: '99px', fontSize: '0.75rem', fontWeight: 600, backdropFilter: 'blur(8px)', border: '1px solid rgba(255,255,255,0.1)' }}>
+                            🔍 Scroll to Zoom
+                        </div>
                     </div>
-                    <button onClick={() => navigate('/heaven')} className={styles.backBtn}>
-                        <ArrowLeft size={20} />
-                    </button>
                 </div>
 
-                <div className={styles.scrollContent}>
-                    <div className={styles.sectionBlock}>
-                        <div className={styles.sectionLabel}>
-                            <Upload size={14} /> Custom Art Overlay
-                        </div>
-                        <div className={styles.uploadBox} onClick={() => fileInputRef.current?.click()}>
+                {/* Controls Sidebar */}
+                <aside className={styles.controlsSidebar}>
+                    <div className={styles.sidebarContent}>
+                        {/* Section 1: Color */}
+                        <section className={styles.section}>
+                            <div className={styles.sectionHeader}>
+                                <Palette size={18} />
+                                <h3>Base Finish</h3>
+                            </div>
+                            <div className={styles.colorGrid}>
+                                {potColors.map((c) => (
+                                    <div
+                                        key={c.value}
+                                        className={`${styles.colorCircle} ${color === c.value ? styles.colorCircleActive : ''}`}
+                                        style={{ backgroundColor: c.value }}
+                                        onClick={() => setColor(c.value)}
+                                        title={c.name}
+                                    />
+                                ))}
+                            </div>
+                        </section>
+
+                        {/* Section 2: Decal */}
+                        <section className={styles.section}>
+                            <div className={styles.sectionHeader}>
+                                <Box size={18} />
+                                <h3>Custom Art</h3>
+                            </div>
+
                             <input
-                                ref={fileInputRef}
                                 type="file"
+                                id="pot-art-upload"
+                                hidden
                                 accept="image/*"
-                                className={styles.fileInput}
                                 onChange={handleImageUpload}
                             />
-                            <div className={styles.uploadText}>{image ? 'Change Artwork' : 'Upload Image'}</div>
-                            <div className={styles.uploadSub}>Supports JPG, PNG (Transparent recommended)</div>
-                        </div>
+                            <label htmlFor="pot-art-upload" className={styles.uploadArea}>
+                                <div className={styles.uploadLabel}>
+                                    <Upload size={32} color={image ? '#10b981' : '#64748b'} />
+                                    <span>{image ? <b>Change Artwork</b> : <>Click to <b>Upload Artwork</b></>}</span>
+                                </div>
+                            </label>
+
+                            {image && (
+                                <div className={styles.adjustmentGroup}>
+                                    <div className={styles.sliderBox}>
+                                        <div className={styles.sliderLabel}>
+                                            <span><Maximize size={12} /> SCALE</span>
+                                            <span>{Math.round(decalProps.scale * 100)}%</span>
+                                        </div>
+                                        <input
+                                            type="range" min="0.5" max="2" step="0.01"
+                                            value={decalProps.scale}
+                                            onChange={(e) => setDecalProps(p => ({ ...p, scale: parseFloat(e.target.value) }))}
+                                            className={styles.rangeInput}
+                                        />
+                                    </div>
+
+                                    <div className={styles.sliderBox}>
+                                        <div className={styles.sliderLabel}>
+                                            <span><Move size={12} /> POSITION</span>
+                                            <span>{Math.round(decalProps.y * 100)}</span>
+                                        </div>
+                                        <input
+                                            type="range" min="-0.5" max="1.5" step="0.01"
+                                            value={decalProps.y}
+                                            onChange={(e) => setDecalProps(p => ({ ...p, y: parseFloat(e.target.value) }))}
+                                            className={styles.rangeInput}
+                                        />
+                                    </div>
+
+                                    <div className={styles.sliderBox}>
+                                        <div className={styles.sliderLabel}>
+                                            <span><RotateCcw size={12} /> ROTATION</span>
+                                            <span>{Math.round(decalProps.rotation * 57.3)}°</span>
+                                        </div>
+                                        <input
+                                            type="range" min="-3.14" max="3.14" step="0.01"
+                                            value={decalProps.rotation}
+                                            onChange={(e) => setDecalProps(p => ({ ...p, rotation: parseFloat(e.target.value) }))}
+                                            className={styles.rangeInput}
+                                        />
+                                    </div>
+                                </div>
+                            )}
+                        </section>
                     </div>
 
-                    {image && (
-                        <div className={styles.sectionBlock}>
-                            <div className={styles.sectionLabel}>
-                                <Move size={14} /> Refine Placement
-                            </div>
-
-                            <div className={styles.sliderGroup}>
-                                <div className={styles.sliderLabel}>
-                                    <span style={{ display: 'flex', gap: '4px', alignItems: 'center' }}><Maximize size={12} /> Scale</span> <span>{(decalProps.scale * 100).toFixed(0)}%</span>
-                                </div>
-                                <input
-                                    type="range"
-                                    min="0.2"
-                                    max="2"
-                                    step="0.1"
-                                    value={decalProps.scale}
-                                    onChange={(e) => setDecalProps(p => ({ ...p, scale: parseFloat(e.target.value) }))}
-                                    className={styles.rangeInput}
-                                />
-                            </div>
-
-                            <div className={styles.sliderGroup}>
-                                <div className={styles.sliderLabel}>
-                                    <span>Height Placement</span>
-                                </div>
-                                <input
-                                    type="range"
-                                    min="-1"
-                                    max="1"
-                                    step="0.1"
-                                    value={decalProps.y}
-                                    onChange={(e) => setDecalProps(p => ({ ...p, y: parseFloat(e.target.value) }))}
-                                    className={styles.rangeInput}
-                                />
-                            </div>
-
-                            <div className={styles.sliderGroup}>
-                                <div className={styles.sliderLabel}>
-                                    <span style={{ display: 'flex', gap: '4px', alignItems: 'center' }}><RotateCcw size={12} /> Rotation</span> <span>{Math.round(decalProps.rotation * (180 / Math.PI))}°</span>
-                                </div>
-                                <input
-                                    type="range"
-                                    min={-Math.PI}
-                                    max={Math.PI}
-                                    step="0.1"
-                                    value={decalProps.rotation}
-                                    onChange={(e) => setDecalProps(p => ({ ...p, rotation: parseFloat(e.target.value) }))}
-                                    className={styles.rangeInput}
-                                />
-                            </div>
-
-                        </div>
-                    )}
-
-                    <div className={styles.sectionBlock}>
-                        <div className={styles.sectionLabel}>
-                            <Palette size={14} /> Base Glaze Color
-                        </div>
-                        <div className={styles.colorGrid}>
-                            {colors.map(c => (
-                                <div
-                                    key={c}
-                                    className={`${styles.colorDot} ${color === c ? styles.colorDotActive : ''}`}
-                                    style={{ backgroundColor: c }}
-                                    onClick={() => setColor(c)}
-                                />
-                            ))}
-                        </div>
+                    <div className={styles.actionArea}>
+                        <button className={styles.buyBtn} onClick={handleAddToCart}>
+                            <ShoppingBag size={20} /> ADD DESIGNED POT TO CART
+                        </button>
                     </div>
-                </div>
-
-                <div className={styles.footerActions}>
-                    <button className={styles.addToCartBtn} onClick={handleAddToCart}>
-                        <ShoppingBag size={20} />
-                        Add to Cart &minus; Free Preview
-                    </button>
-                </div>
-            </div>
+                </aside>
+            </main>
         </div>
     );
 };
