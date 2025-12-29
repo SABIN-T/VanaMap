@@ -17,6 +17,7 @@ export const SwipeNavigator = () => {
 
     useEffect(() => {
         const handleTouchStart = (e: TouchEvent) => {
+            if (window.location.pathname === '/pot-designer') return;
             touchEndX.current = null;
             touchEndY.current = null;
             touchStartX.current = e.targetTouches[0].clientX;

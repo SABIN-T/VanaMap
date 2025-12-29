@@ -1,4 +1,7 @@
 .designerContainer {
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100vw;
     height: 100vh;
     background: #020617;
@@ -7,6 +10,8 @@
     flex-direction: column;
     overflow: hidden;
     font-family: 'Outfit', 'Inter', sans-serif;
+    z-index: 900;
+    /* High enough but not covering toast */
 }
 
 .header {

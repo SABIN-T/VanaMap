@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { ShoppingCart, User as UserIcon, LogOut, Leaf, Sun, Moon, Menu, X, ChevronRight, Download, Shield, ShoppingBag, Trophy, Gamepad2, Crown } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
@@ -12,6 +12,10 @@ export const Navbar = () => {
     const { theme, toggleTheme, isPremium } = useTheme();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation();
+
+    // Hide navbar on full-screen designer
+    if (location.pathname === '/pot-designer') return null;
 
     const handleLogout = () => {
         logout();

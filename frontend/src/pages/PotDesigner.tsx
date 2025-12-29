@@ -106,7 +106,7 @@ export const PotDesigner = () => {
     };
 
     return (
-        <div className={styles.designerContainer}>
+        <div className={`${styles.designerContainer} no-swipe`}>
             {/* Top Bar */}
             <header className={styles.header}>
                 <button className={styles.backBtn} onClick={() => navigate(-1)}>

@@ -14,7 +14,7 @@ export const MobileTabBar = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    if (!isMobile) return null;
+    if (!isMobile || location.pathname === '/pot-designer') return null;
 
     const tabs = [
         { path: '/', icon: Home, label: 'Home' },
