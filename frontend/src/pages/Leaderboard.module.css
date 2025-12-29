@@ -1,10 +1,11 @@
 /* Global Main Container */
 .container {
     min-height: 100vh;
-    padding: 2rem 1rem;
-    padding-bottom: 7rem;
-    /* Space for mobile nav */
-    max-width: 1200px;
+    padding: 1rem;
+    /* Reduced padding */
+    padding-bottom: 6rem;
+    max-width: 1000px;
+    /* Reduced max-width for tighter layout */
     margin: 0 auto;
     font-family: 'Outfit', 'Inter', sans-serif;
     color: #f1f5f9;
@@ -12,159 +13,177 @@
 
 .header {
     text-align: center;
-    margin-bottom: 4rem;
+    margin-bottom: 2rem;
+    /* Reduced margin */
     position: relative;
+    padding-top: 1rem;
 }
 
 .badge {
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1rem;
+    gap: 0.4rem;
+    padding: 0.4rem 0.8rem;
     background: rgba(16, 185, 129, 0.1);
     border: 1px solid rgba(16, 185, 129, 0.2);
-    border-radius: 2rem;
+    border-radius: 99px;
     color: #34d399;
-    font-size: 0.85rem;
-    font-weight: 600;
+    font-size: 0.75rem;
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.75rem;
     backdrop-filter: blur(8px);
 }
 
 .title {
-    font-size: 4rem;
+    font-size: 2.5rem;
+    /* Reduced size */
     font-weight: 800;
     background: linear-gradient(135deg, #fff 0%, #cbd5e1 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    margin: 0 0 1rem;
-    letter-spacing: -0.02em;
+    margin: 0 0 0.5rem;
+    letter-spacing: -0.03em;
 }
 
 .subtitle {
     color: #94a3b8;
-    max-width: 600px;
+    max-width: 500px;
     margin: 0 auto;
-    font-size: 1.1rem;
-    line-height: 1.6;
+    font-size: 0.95rem;
+    line-height: 1.5;
 }
 
-/* PODIUM SECTION */
+/* PODIUM SECTION - COMPACT REWORK */
 .podium {
     display: flex;
     justify-content: center;
     align-items: flex-end;
-    gap: 1.5rem;
-    margin-bottom: 5rem;
-    padding-top: 3rem;
-    /* Space for crown */
+    gap: 1rem;
+    /* Tighter gap */
+    margin-bottom: 3rem;
+    padding-top: 2rem;
+    height: 300px;
+    /* Fixed height for container */
 }
 
 .podiumCard {
-    background: rgba(30, 41, 59, 0.4);
-    backdrop-filter: blur(12px);
-    border-radius: 1.5rem 1.5rem 0 0;
-    /* Flat bottom? No, simpler to be cards floating */
-    border-radius: 1.5rem;
-    padding: 2rem;
+    background: rgba(30, 41, 59, 0.6);
+    backdrop-filter: blur(16px);
+    border-radius: 1.25rem;
+    padding: 1.5rem 1rem;
+    /* Compact padding */
     text-align: center;
     position: relative;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 260px;
+    width: 140px;
+    /* Much smaller width */
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.podiumCard:hover {
-    transform: translateY(-10px);
-}
-
-/* Specific Positions */
+/* Specific Positions - Reduced Heights */
 .gold {
-    background: linear-gradient(180deg, rgba(234, 179, 8, 0.15) 0%, rgba(30, 41, 59, 0.6) 100%);
-    border: 1px solid rgba(234, 179, 8, 0.3);
-    height: 420px;
+    background: linear-gradient(180deg, rgba(234, 179, 8, 0.15) 0%, rgba(30, 41, 59, 0.8) 100%);
+    border: 1px solid rgba(234, 179, 8, 0.4);
+    height: 240px;
     order: 2;
-    /* Middle visual */
     z-index: 10;
-    box-shadow: 0 20px 50px -12px rgba(234, 179, 8, 0.15);
+    box-shadow: 0 10px 40px -10px rgba(234, 179, 8, 0.2);
+    transform: scale(1.05);
+    /* Slight emphasis */
 }
 
 .silver {
-    background: linear-gradient(180deg, rgba(148, 163, 184, 0.15) 0%, rgba(30, 41, 59, 0.6) 100%);
-    border: 1px solid rgba(148, 163, 184, 0.3);
-    height: 360px;
+    background: linear-gradient(180deg, rgba(148, 163, 184, 0.15) 0%, rgba(30, 41, 59, 0.8) 100%);
+    border: 1px solid rgba(148, 163, 184, 0.4);
+    height: 200px;
     order: 1;
 }
 
 .bronze {
-    background: linear-gradient(180deg, rgba(217, 119, 6, 0.15) 0%, rgba(30, 41, 59, 0.6) 100%);
-    border: 1px solid rgba(217, 119, 6, 0.3);
-    height: 340px;
+    background: linear-gradient(180deg, rgba(217, 119, 6, 0.15) 0%, rgba(30, 41, 59, 0.8) 100%);
+    border: 1px solid rgba(217, 119, 6, 0.4);
+    height: 180px;
     order: 3;
 }
 
 .crow {
     position: absolute;
-    top: -40px;
+    top: -28px;
     color: #fbbf24;
-    filter: drop-shadow(0 0 15px rgba(251, 191, 36, 0.5));
+    filter: drop-shadow(0 0 10px rgba(251, 191, 36, 0.6));
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
 }
 
 .avatar {
-    width: 80px;
-    height: 80px;
-    background: #1e293b;
+    width: 56px;
+    /* Smaller avatar */
+    height: 56px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2rem;
+    font-size: 1.5rem;
     font-weight: 700;
     color: white;
-    margin-bottom: 1.5rem;
-    border: 3px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    margin-bottom: 0.75rem;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
 .gold .avatar {
     border-color: #fbbf24;
-    background: linear-gradient(135deg, #fbbf24, #d97706);
+    background: linear-gradient(135deg, #fbbf24, #b45309);
 }
 
 .silver .avatar {
-    border-color: #cbd5e1;
-    background: linear-gradient(135deg, #e2e8f0, #94a3b8);
-    color: #0f172a;
+    border-color: #e2e8f0;
+    background: linear-gradient(135deg, #cbd5e1, #64748b);
+    color: #1e293b;
 }
 
 .bronze .avatar {
-    border-color: #d97706;
-    background: linear-gradient(135deg, #d97706, #92400e);
+    border-color: #fb923c;
+    background: linear-gradient(135deg, #fbbf24, #78350f);
 }
 
 .userName {
-    font-size: 1.25rem;
+    font-size: 0.95rem;
+    /* Smaller text */
     font-weight: 700;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.25rem;
     color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
 }
 
 .userPoints {
-    font-size: 2.5rem;
+    font-size: 1.25rem;
     font-weight: 800;
     line-height: 1;
-    margin-bottom: 0.25rem;
-    font-variant-numeric: tabular-nums;
+    margin-bottom: 0.1rem;
 }
 
 .gold .userPoints {
     color: #fbbf24;
-    text-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
 }
 
 .silver .userPoints {
@@ -176,137 +195,146 @@
 }
 
 .pointsLabel {
-    font-size: 0.8rem;
+    font-size: 0.65rem;
     text-transform: uppercase;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.05em;
     color: #64748b;
-    margin-bottom: 1.5rem;
+    margin-bottom: 0.75rem;
 }
 
 .location {
     margin-top: auto;
     display: flex;
     align-items: center;
-    gap: 0.5rem;
-    font-size: 0.9rem;
-    color: #64748b;
-    padding: 0.5rem 1rem;
-    background: rgba(0, 0, 0, 0.2);
-    border-radius: 2rem;
+    gap: 0.25rem;
+    font-size: 0.75rem;
+    color: #94a3b8;
+    padding: 0.25rem 0.5rem;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 99px;
+    max-width: 100%;
+}
+
+.location span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 
-/* TABLE SECTIONS */
-.sectionHeader {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-    margin: 4rem 0 2rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    padding-bottom: 1rem;
+/* CONTENT GRID */
+/* Desktop: Side by Side tables. Mobile: Stacked */
+.contentGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
 }
 
 .sectionTitle {
-    font-size: 2rem;
+    font-size: 1.25rem;
     font-weight: 700;
     color: white;
+    margin-bottom: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
-/* User List Table */
+/* User Table */
 .tableContainer {
-    background: rgba(15, 23, 42, 0.6);
-    border-radius: 1.5rem;
-    padding: 0.5rem;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
 .row {
+    background: rgba(15, 23, 42, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    border-radius: 0.75rem;
+    padding: 0.75rem 1rem;
     display: grid;
-    grid-template-columns: 60px 2fr 1.5fr 100px 100px;
+    grid-template-columns: 30px auto 1fr auto;
     align-items: center;
-    padding: 1rem 1.5rem;
-    border-radius: 1rem;
-    transition: background 0.2s;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.02);
-}
-
-.row:last-child {
-    border-bottom: none;
+    gap: 0.75rem;
+    transition: all 0.2s;
 }
 
 .row:hover {
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(30, 41, 59, 0.8);
+    transform: translateX(5px);
+    border-color: rgba(255, 255, 255, 0.1);
 }
 
 .rankNumber {
+    font-size: 0.85rem;
     font-weight: 700;
     color: #64748b;
     font-family: monospace;
 }
 
-.userInfo {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-}
-
 .smallAvatar {
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 600;
-    font-size: 0.9rem;
-}
-
-.name {
-    font-weight: 600;
+    font-weight: 700;
+    font-size: 0.8rem;
     color: #e2e8f0;
 }
 
-.rowLocation {
-    color: #94a3b8;
+.userInfo {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #e2e8f0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.levelText {
+    font-size: 0.7rem;
+    color: #64748b;
 }
 
 .rowPoints {
     font-weight: 700;
     color: #10b981;
-    text-align: right;
+    font-size: 0.95rem;
 }
 
-/* CITY GRID */
-.grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1.5rem;
-}
-
+/* City Cards Compact */
 .cityCard {
-    background: rgba(30, 41, 59, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    border-radius: 1.5rem;
-    padding: 1.5rem;
+    background: rgba(15, 23, 42, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    border-radius: 0.75rem;
+    padding: 1rem;
     display: flex;
     align-items: center;
-    gap: 1.5rem;
-    transition: all 0.3s ease;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+    transition: all 0.2s;
 }
 
 .cityCard:hover {
     background: rgba(30, 41, 59, 0.8);
     border-color: rgba(16, 185, 129, 0.3);
-    transform: translateY(-5px);
 }
 
 .cityIcon {
-    width: 60px;
-    height: 60px;
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(6, 95, 70, 0.2));
+    width: 40px;
+    height: 40px;
+    background: rgba(16, 185, 129, 0.15);
     color: #34d399;
-    border-radius: 1rem;
+    border-radius: 0.75rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -318,66 +346,116 @@
 }
 
 .cityName {
-    display: block;
-    font-size: 1.1rem;
+    font-size: 0.95rem;
     font-weight: 700;
-    color: white;
-    margin-bottom: 0.25rem;
+    color: #e2e8f0;
+    display: block;
 }
 
 .cityMeta {
-    font-size: 0.85rem;
+    font-size: 0.75rem;
     color: #94a3b8;
-    display: flex;
-    align-items: center;
-}
-
-.cityPoints {
-    text-align: right;
 }
 
 .cityPointsValue {
-    display: block;
-    font-size: 1.4rem;
+    font-size: 1rem;
     font-weight: 700;
     color: #10b981;
+    display: block;
+    text-align: right;
 }
 
-.cityPointsLabel {
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    color: #64748b;
-    letter-spacing: 0.05em;
+/* Call to Action - Compact */
+.ctaBox {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(30, 41, 59, 0.5) 100%);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    text-align: center;
+    margin-top: 3rem;
 }
 
-/* MOBILE RESPONSIVENESS */
+.ctaBtn {
+    background: #f1f5f9;
+    color: #0f172a;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.5rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    margin-top: 1rem;
+}
+
+/* MOBILE OPTIMIZATIONS */
 @media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+        padding-bottom: 6rem;
+    }
+
     .title {
-        font-size: 2.5rem;
+        font-size: 1.75rem;
     }
 
     .podium {
-        flex-direction: column;
-        align-items: center;
-        gap: 2rem;
+        gap: 0.5rem;
+        height: auto;
+        margin-bottom: 2rem;
     }
 
     .podiumCard {
-        width: 100%;
-        max-width: 300px;
-        height: auto !important;
-        order: unset !important;
-        /* Stack naturally */
+        width: 30%;
+        /* Fit 3 in a row */
+        padding: 1rem 0.25rem;
+        border-radius: 0.75rem;
     }
 
-    .row {
-        grid-template-columns: 40px 1fr 80px;
-        gap: 0.5rem;
+    .gold {
+        height: 180px;
     }
 
-    /* Hide extended columns on mobile */
-    .rowLocation,
-    .levelBadge {
+    .silver {
+        height: 150px;
+    }
+
+    .bronze {
+        height: 140px;
+    }
+
+    .avatar {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .crow {
+        top: -24px;
+        width: 32px !important;
+        height: 32px !important;
+    }
+
+    .userName {
+        font-size: 0.8rem;
+    }
+
+    .userPoints {
+        font-size: 1rem;
+    }
+
+    .location {
         display: none;
+    }
+
+    /* Hide location on tiny cards */
+    .pointsLabel {
+        display: none;
+    }
+
+    .contentGrid {
+        grid-template-columns: 1fr;
+        /* Stack tables */
+        gap: 2rem;
     }
 }
