@@ -66,9 +66,10 @@ export const Leaderboard = () => {
         );
     }
 
+    // In case of error, we just render with empty/initial data, but maybe log it.
+    // The user will see empty leaderboard but at least the UI loads.
     if (error) {
-        // Show partial state or error view, but here we just render the structure with empty data to avoid blocking user
-        // Or we can show a toast. For now, let's just proceed with empty data as fallback is handled in UI.
+        console.warn("Rendering Leaderboard in fallback state due to error:", error);
     }
 
     // Sort top 3 for podium
