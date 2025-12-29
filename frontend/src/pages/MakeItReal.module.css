@@ -576,6 +576,8 @@
     .reviewControls {
         border-left: none;
         padding: 1.5rem;
+        padding-bottom: 120px;
+        /* Safe space for mobile bot nav */
         border-top: 1px solid rgba(255, 255, 255, 0.1);
         background: #000;
     }
