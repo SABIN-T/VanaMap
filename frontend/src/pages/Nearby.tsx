@@ -467,43 +467,40 @@ out skel qt;
                             <div className={styles.vendorGrid}>
                                 {displayVendors.map(vendor => (
                                     <div key={vendor.id} className={`${styles.vendorCard} ${vendor.highlyRecommended ? styles.premiumCard : ''}`}>
+                                        <div className={styles.cardContentWrapper}>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.2rem' }}>
+                                                <h4 className={styles.vendorName}>{vendor.name} {vendor.verified && <Star size={14} fill="var(--color-primary)" color="var(--color-primary)" style={{ display: 'inline', verticalAlign: 'text-bottom' }} />}</h4>
+                                            </div>
+                                            <div className={styles.vendorMeta}>
+                                                <div className={styles.vendorDist}>{formatDistance((vendor.distance || 0) * 1000)} away</div>
+                                                {vendor.category && <div className={styles.categoryTag}>{vendor.category}</div>}
+                                            </div>
+                                            <p className={styles.vendorAddr}>{vendor.address}</p>
+                                        </div>
+
                                         {vendor.highlyRecommended && <div className={styles.premiumBadge}>Partner</div>}
-                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '0.5rem' }}>
-                                            <h4 className={styles.vendorName}>{vendor.name}</h4>
-                                            {vendor.verified && <Star size={18} fill="var(--color-primary)" color="var(--color-primary)" />}
-                                        </div>
-                                        <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', marginBottom: '1rem' }}>
-                                            <div className={styles.vendorDist}>{formatDistance((vendor.distance || 0) * 1000)} away</div>
-                                            {vendor.category && <div className={styles.categoryTag}>{vendor.category}</div>}
-                                        </div>
-                                        <p className={styles.vendorAddr}>{vendor.address}</p>
 
                                         <div className={styles.cardActions}>
                                             <Button variant="outline" size="sm" className={styles.actionBtn} onClick={() => window.open(`https://www.google.com/maps/dir/?api=1&destination=${vendor.latitude},${vendor.longitude}`)}>
-                                                <ExternalLink size={14} /> Navigate
+                                                <ExternalLink size={14} /> <span className="hidden sm:inline">Navigate</span>
                                             </Button>
                                             <Button variant="outline" size="sm" className={styles.actionBtn} onClick={() => window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(vendor.name)}&query_place_id=${vendor.latitude},${vendor.longitude}`)}>
-                                                <MapPin size={14} /> Google Places
+                                                <MapPin size={14} /> <span className="hidden sm:inline">Map</span>
                                             </Button>
                                             {(vendor.whatsapp || vendor.phone !== 'N/A') && (
                                                 <Button size="sm" className={styles.actionBtn} style={{ background: '#25D366', color: '#fff', border: 'none' }} onClick={() => {
                                                     logVendorContact({ vendorId: vendor.id, vendorName: vendor.name, userEmail: user?.email || 'guest', contactType: 'whatsapp' });
-
-                                                    // Generate Message from Cart
                                                     let message = `Hi ${vendor.name},`;
                                                     if (items.length > 0) {
                                                         message += ` I am interested in checking availability for:\n`;
-                                                        items.forEach(item => {
-                                                            message += `- ${item.plant.name} (x${item.quantity})\n`;
-                                                        });
+                                                        items.forEach(item => message += `- ${item.plant.name} (x${item.quantity})\n`);
                                                         message += `\nDo you have these in stock?`;
                                                     } else {
-                                                        message += ` I saw your shop on VanaMap. Do you have [Plant Name] in stock?`;
+                                                        message += ` I saw your shop on VanaMap. Do you have stock?`;
                                                     }
-
                                                     window.open(`https://wa.me/${(vendor.whatsapp || vendor.phone).replace(/[^0-9]/g, '')}?text=${encodeURIComponent(message)}`, '_blank');
                                                 }}>
-                                                    <MessageCircle size={14} /> {(vendor.whatsapp || vendor.phone)}
+                                                    <MessageCircle size={14} /> <span className="hidden sm:inline">Chat</span>
                                                 </Button>
                                             )}
                                         </div>
