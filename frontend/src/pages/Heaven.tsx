@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Crown, Zap, ArrowRight, Star, Palette, Gamepad as GamepadIcon, Newspaper } from 'lucide-react';
+import { Crown, Zap, ArrowRight, Star, Palette, Gamepad as GamepadIcon, Newspaper, Bot } from 'lucide-react';
 import { useEffect } from 'react';
 import styles from './Heaven.module.css';
 
@@ -104,17 +104,33 @@ export const Heaven = () => {
 
                     {/* Daily News */}
                     <div className={styles.card} onClick={() => navigate('/daily-news')}>
-                        <div className={styles.exclusiveBadge}>New</div>
+                        <div className={styles.exclusiveBadge}>Fresh</div>
                         <div className={styles.cardIconBox}>
                             <Newspaper size={32} />
                         </div>
-                        <h3 className={styles.cardTitle}>Daily Botanist</h3>
+                        <h3 className={styles.cardTitle}>Botanical Digest</h3>
                         <p className={styles.cardText}>
-                            Stay updated with breakthrough discoveries, care tips, and
-                            global plant conservation news.
+                            Stay updated with the latest in plant science, gardening trends,
+                            and environmental news.
                         </p>
                         <button className={styles.cardAction}>
-                            Read Today <ArrowRight size={16} />
+                            Read News <ArrowRight size={16} />
+                        </button>
+                    </div>
+
+                    {/* AI Plant Doctor - NEW */}
+                    <div className={styles.card} onClick={() => navigate('/ai-doctor')}>
+                        <div className={styles.exclusiveBadge}>AI-Powered</div>
+                        <div className={styles.cardIconBox}>
+                            <Bot size={32} />
+                        </div>
+                        <h3 className={styles.cardTitle}>AI Plant Doctor</h3>
+                        <p className={styles.cardText}>
+                            Chat with Dr. Flora, your AI botanical expert. Get instant advice on
+                            plant care, diseases, and treatments.
+                        </p>
+                        <button className={styles.cardAction}>
+                            Consult Now <ArrowRight size={16} />
                         </button>
                     </div>
                 </div>

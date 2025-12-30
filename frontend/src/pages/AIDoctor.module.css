@@ -354,6 +354,11 @@
 
 /* Responsive */
 @media (max-width: 768px) {
+    .container {
+        padding-bottom: 5rem;
+        /* Space for mobile tab bar */
+    }
+
     .header {
         padding: 1rem 1.5rem;
     }
@@ -378,6 +383,8 @@
 
     .inputContainer {
         padding: 1rem 1.5rem;
+        padding-bottom: 1.5rem;
+        /* Extra padding for mobile nav */
     }
 
     .input {

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Send, Sparkles, Leaf, Bot, User, Trash2, Download } from 'lucide-react';
-import { fetchPlants } from '../../services/api';
+import { fetchPlants } from '../services/api';
 import toast from 'react-hot-toast';
 import styles from './AIDoctor.module.css';
 
