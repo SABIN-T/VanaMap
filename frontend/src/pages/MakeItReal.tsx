@@ -205,14 +205,89 @@ export const MakeItReal = () => {
 
     // --- STRATEGIES ---
 
-    // 1. Remove.bg (Best Quality, requires Key)
+    // 1. Replicate API (RMBG-2.0 - Best Free Option)
+    const removeBackgroundReplicate = async (blob: Blob): Promise<string> => {
+        const REPLICATE_TOKEN = import.meta.env.VITE_REPLICATE_TOKEN;
+        if (!REPLICATE_TOKEN) throw new Error("No Replicate Token");
+
+        // Convert blob to base64
+        const base64 = await new Promise<string>((resolve) => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result as string);
+            reader.readAsDataURL(blob);
+        });
+
+        const res = await fetch('https://api.replicate.com/v1/predictions', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Token ${REPLICATE_TOKEN}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                version: "fb8af171cfa1616ddcf1242c093f9c46bcada5ad4cf6f2fbe8b81b330ec5c003",
+                input: { image: base64 }
+            })
+        });
+
+        if (!res.ok) throw new Error(`Replicate Error: ${res.status}`);
+        const prediction = await res.json();
+
+        // Poll for result
+        let result = prediction;
+        while (result.status !== 'succeeded' && result.status !== 'failed') {
+            await new Promise(r => setTimeout(r, 500));
+            const pollRes = await fetch(`https://api.replicate.com/v1/predictions/${result.id}`, {
+                headers: { 'Authorization': `Token ${REPLICATE_TOKEN}` }
+            });
+            result = await pollRes.json();
+        }
+
+        if (result.status === 'failed') throw new Error('Replicate processing failed');
+
+        const outputBlob = await fetch(result.output).then(r => r.blob());
+        return URL.createObjectURL(outputBlob);
+    };
+
+    // 2. Hugging Face Inference API (RMBG-2.0 - Better Model)
+    const removeBackgroundHF = async (blob: Blob): Promise<string> => {
+        // Try RMBG-2.0 first (better quality), fallback to RMBG-1.4
+        const models = ["briaai/RMBG-2.0", "briaai/RMBG-1.4"];
+        const HF_TOKEN = import.meta.env.VITE_HF_TOKEN;
+
+        for (const MODEL_ID of models) {
+            try {
+                const headers: Record<string, string> = { 'Content-Type': 'application/octet-stream' };
+                if (HF_TOKEN) headers['Authorization'] = `Bearer ${HF_TOKEN}`;
+
+                const res = await fetch(`https://api-inference.huggingface.co/models/${MODEL_ID}`, {
+                    method: "POST",
+                    headers,
+                    body: blob,
+                });
+
+                if (res.ok) {
+                    const resBlob = await res.blob();
+                    // Verify it's a valid image
+                    if (resBlob.size > 1000) {
+                        return URL.createObjectURL(resBlob);
+                    }
+                }
+            } catch (e) {
+                console.warn(`HF Model ${MODEL_ID} failed:`, e);
+            }
+        }
+        throw new Error("All HF models failed");
+    };
+
+    // 3. Remove.bg (Commercial - Fallback)
     const removeBackgroundRemoveBg = async (blob: Blob): Promise<string> => {
-        const apiKey = import.meta.env.VITE_REMOVE_BG_API_KEY || "kW5A7cdmPKAgNwGJVD8AuKuV";
-        if (!apiKey) throw new Error("No API Key");
+        const apiKey = import.meta.env.VITE_REMOVE_BG_API_KEY;
+        if (!apiKey) throw new Error("No Remove.bg API Key");
 
         const formData = new FormData();
         formData.append('image_file', blob);
-        formData.append('size', 'preview'); // Fast & Good for AR
+        formData.append('size', 'auto');
+        formData.append('type', 'product'); // Better for plants
 
         const res = await fetch('https://api.remove.bg/v1.0/removebg', {
             method: 'POST',
@@ -225,46 +300,22 @@ export const MakeItReal = () => {
         return URL.createObjectURL(resBlob);
     };
 
-    // 2. Hugging Face Inference API (RMBG-1.4 / U2-Net)
-    const removeBackgroundHF = async (blob: Blob): Promise<string> => {
-        // Uses briaai/RMBG-1.4 (State of the art open model)
-        const MODEL_ID = "briaai/RMBG-1.4";
-        const HF_TOKEN = import.meta.env.VITE_HF_TOKEN; // Optional but recommended
-
-        const headers: Record<string, string> = {};
-        if (HF_TOKEN) headers['Authorization'] = `Bearer ${HF_TOKEN}`;
-
-        const res = await fetch(`https://api-inference.huggingface.co/models/${MODEL_ID}`, {
-            method: "POST",
-            headers,
-            body: blob,
-        });
-
-        if (!res.ok) throw new Error(`HF API Error: ${res.status}`);
-        const resBlob = await res.blob();
-        return URL.createObjectURL(resBlob);
-    };
-
-    // 3. Self-Hosted Python Service (U2-Net / Rembg)
+    // 4. Self-Hosted Python Service (U2-Net / Rembg)
     const removeBackgroundPython = async (blob: Blob): Promise<string> => {
-        // Fallback to localhost if no production URL is set
         const baseUrl = import.meta.env.VITE_AI_API_URL || 'http://localhost:8000';
 
         const formData = new FormData();
         formData.append('file', blob, 'plant.jpg');
 
-        try {
-            const res = await fetch(`${baseUrl}/remove-bg`, {
-                method: 'POST',
-                body: formData
-            });
-            if (!res.ok) throw new Error(`Python API Error: ${res.status}`);
-            const resBlob = await res.blob();
-            return URL.createObjectURL(resBlob);
-        } catch {
-            // Throwing triggers the next strategy
-            throw new Error(`Python Service Unreachable at ${baseUrl}`);
-        }
+        const res = await fetch(`${baseUrl}/remove-bg`, {
+            method: 'POST',
+            body: formData,
+            signal: AbortSignal.timeout(15000) // 15s timeout
+        });
+
+        if (!res.ok) throw new Error(`Python API Error: ${res.status}`);
+        const resBlob = await res.blob();
+        return URL.createObjectURL(resBlob);
     };
 
     // --- MAIN PROCESSOR ---
@@ -273,45 +324,67 @@ export const MakeItReal = () => {
         setSelectedPlant(plant);
 
         try {
-            // 1. Optimize Image (Resize to 1000px for good balance)
-            const resizedBlob = await resizeImage(plant.imageUrl, 1000);
+            // 1. Optimize Image (Resize to 1024px for best quality/speed balance)
+            const resizedBlob = await resizeImage(plant.imageUrl, 1024);
 
-            // 2. Try Strategies in Order
+            // 2. Try Strategies in Order (Best Free Options First)
             let resultUrl: string | null = null;
             let successStrategy = "";
 
-            // Strategy A: Remove.bg (Commercial / Key)
+            // Strategy A: Hugging Face RMBG-2.0 (FREE - Best Quality)
             if (!resultUrl) {
                 try {
-                    resultUrl = await removeBackgroundRemoveBg(resizedBlob);
-                    successStrategy = "Remove.bg";
-                } catch (e) { console.warn("Strategy A (Remove.bg) failed:", e); }
-            }
-
-            // Strategy B: Hugging Face (Public AI)
-            if (!resultUrl) {
-                try {
+                    toast.loading("Processing with AI (Hugging Face)...", { id: 'bg-remove' });
                     resultUrl = await removeBackgroundHF(resizedBlob);
-                    successStrategy = "Hugging Face";
-                } catch (e) { console.warn("Strategy B (Hugging Face) failed:", e); }
+                    successStrategy = "Hugging Face RMBG-2.0";
+                } catch (e) {
+                    console.warn("Strategy A (Hugging Face) failed:", e);
+                }
             }
 
-            // Strategy C: Python Service (Local/Render)
+            // Strategy B: Replicate API (FREE with token)
             if (!resultUrl) {
                 try {
+                    toast.loading("Processing with AI (Replicate)...", { id: 'bg-remove' });
+                    resultUrl = await removeBackgroundReplicate(resizedBlob);
+                    successStrategy = "Replicate RMBG-2.0";
+                } catch (e) {
+                    console.warn("Strategy B (Replicate) failed:", e);
+                }
+            }
+
+            // Strategy C: Python Service (Self-hosted)
+            if (!resultUrl) {
+                try {
+                    toast.loading("Processing with local AI...", { id: 'bg-remove' });
                     resultUrl = await removeBackgroundPython(resizedBlob);
                     successStrategy = "Python Service";
-                } catch (e) { console.warn("Strategy C (Python) failed:", e); }
+                } catch (e) {
+                    console.warn("Strategy C (Python) failed:", e);
+                }
             }
 
-            // Strategy D: Local Fallback (Improved Canvas)
+            // Strategy D: Remove.bg (Paid - Last resort)
             if (!resultUrl) {
+                try {
+                    toast.loading("Processing with Remove.bg...", { id: 'bg-remove' });
+                    resultUrl = await removeBackgroundRemoveBg(resizedBlob);
+                    successStrategy = "Remove.bg";
+                } catch (e) {
+                    console.warn("Strategy D (Remove.bg) failed:", e);
+                }
+            }
+
+            // Strategy E: Local Fallback (Always works)
+            if (!resultUrl) {
+                toast.loading("Using local processing...", { id: 'bg-remove' });
                 resultUrl = await removeBackgroundSimple(plant.imageUrl);
-                successStrategy = "Edge Detection";
-                toast("AI Latency High. Using Studio Mode.", { icon: '⚙️' });
+                successStrategy = "Local Edge Detection";
+                toast.success("Processed locally - Plant ready!", { id: 'bg-remove', icon: '⚙️' });
             } else {
-                toast.success(`Neural Processing: ${successStrategy}`, {
-                    position: 'bottom-center',
+                toast.success(`✨ ${successStrategy} - Perfect cutout!`, {
+                    id: 'bg-remove',
+                    duration: 3000,
                     style: { background: '#022c22', color: '#10b981', border: '1px solid #064e3b' }
                 });
             }
@@ -321,7 +394,7 @@ export const MakeItReal = () => {
 
         } catch (error) {
             console.error("All bg removal strategies failed", error);
-            toast.error("Could not process image");
+            toast.error("Could not process image. Please try another plant.", { id: 'bg-remove' });
         } finally {
             setIsProcessing(false);
         }
