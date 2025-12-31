@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
 
-/* AIDoctor.module.css - FINAL DESKTOP FIX */
+/* AIDoctor.module.css - COMPACT HIGH DENSITY DESKTOP EDITION */
 
 /* =========================================
    GLOBAL RESET FOR THIS PAGE
@@ -9,25 +9,21 @@
 .container {
     /* Fixed Positioning Strategy */
     position: fixed;
-    /* Force fixed to prevent any scrolling beyond viewport */
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    /* Strict 100% height */
-    padding-top: 80px;
-    /* Space for Navbar */
+    padding-top: 65px;
+    /* Tighter Navbar Offset */
 
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    /* No outer scrollbars */
 
     background-color: #030712;
     color: #f8fafc;
     font-family: 'Outfit', sans-serif;
     z-index: 10;
-    /* Ensure above basic elements but below navbar modals */
 }
 
 /* =========================================
@@ -35,8 +31,8 @@
    ========================================= */
 .header {
     flex-shrink: 0;
-    height: 70px;
-    /* Fixed height header */
+    height: 60px;
+    /* Reduced specific height */
     background: rgba(3, 7, 18, 0.95);
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     padding: 0 1.5rem;
@@ -46,7 +42,8 @@
 }
 
 .headerContent {
-    max-width: 1200px;
+    max-width: 1000px;
+    /* More compact width */
     width: 100%;
     margin: 0 auto;
     display: flex;
@@ -57,13 +54,14 @@
 .logoSection {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 0.75rem;
 }
 
 .logoIcon {
-    width: 40px;
-    height: 40px;
-    border-radius: 10px;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    /* Smaller icon */
     background: rgba(16, 185, 129, 0.1);
     color: #10b981;
     display: flex;
@@ -73,30 +71,36 @@
 }
 
 .title {
-    font-size: 1.1rem;
-    font-weight: 700;
+    font-size: 1rem;
+    font-weight: 600;
     color: #fff;
     margin: 0;
 }
 
 .subtitle {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
     color: #94a3b8;
-    margin: 2px 0 0 0;
+    margin: 0 0 0 1rem;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    padding-left: 1rem;
+    height: 16px;
+    display: flex;
+    align-items: center;
 }
 
+/* Inline subtitle for compactness */
 .actions {
     display: flex;
     gap: 0.5rem;
 }
 
 .actionBtn {
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 8px;
+    border-radius: 6px;
     background: transparent;
     color: #94a3b8;
     border: 1px solid rgba(255, 255, 255, 0.05);
@@ -108,28 +112,28 @@
    ========================================= */
 .chatContainer {
     flex: 1;
-    /* Takes all available space between header and input */
     overflow-y: auto;
-    /* Scrollable content */
     scroll-behavior: smooth;
-    padding-bottom: 2rem;
-    /* Buffer for scrolling */
+    padding-bottom: 1rem;
 }
 
 .messagesWrapper {
     width: 100%;
-    max-width: 900px;
+    max-width: 800px;
+    /* Tighter reading column */
     margin: 0 auto;
-    padding: 1.5rem;
+    padding: 1rem;
+    /* Reduced padding */
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1rem;
+    /* Tighter gap between messages */
 }
 
-/* Messages Styles (Same as before) */
+/* Messages Styles */
 .message {
     display: flex;
-    gap: 1rem;
+    gap: 0.75rem;
     animation: fadeIn 0.3s ease-out;
 }
 
@@ -138,14 +142,15 @@
 }
 
 .messageIcon {
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
+    /* Smaller avatars */
     flex-shrink: 0;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
 }
 
 .assistantMessage .messageIcon {
@@ -160,10 +165,10 @@
 }
 
 .messageContent {
-    max-width: 85%;
+    max-width: 90%;
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: 0.15rem;
 }
 
 .userMessage .messageContent {
@@ -174,7 +179,7 @@
     display: flex;
     gap: 0.5rem;
     align-items: center;
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     color: #64748b;
 }
 
@@ -185,10 +190,13 @@
 }
 
 .messageText {
-    padding: 1rem 1.25rem;
-    border-radius: 1rem;
-    font-size: 0.95rem;
-    line-height: 1.6;
+    padding: 0.75rem 1rem;
+    /* Tighter text padding */
+    border-radius: 0.75rem;
+    font-size: 0.9rem;
+    /* Slightly smaller font */
+    line-height: 1.5;
+    /* Tighter line height */
     word-wrap: break-word;
     color: #e2e8f0;
 }
@@ -206,13 +214,13 @@
 
 .typing {
     display: flex;
-    gap: 4px;
-    padding: 0.25rem 0;
+    gap: 3px;
+    padding: 0.2rem 0;
 }
 
 .typing span {
-    width: 6px;
-    height: 6px;
+    width: 5px;
+    height: 5px;
     background: #10b981;
     border-radius: 50%;
     animation: bounce 1.4s infinite ease-in-out both;
@@ -253,31 +261,29 @@
 
 
 /* =========================================
-   INPUT AREA - THE CRITICAL FIX
+   INPUT AREA - COMPACT
    ========================================= */
 .inputContainer {
     flex-shrink: 0;
     width: 100%;
     background: transparent;
-
-    /* DESKTOP DEFAULTS (ZERO PADDING BOTTOM) */
-    padding: 1rem 1.5rem 0.5rem 1.5rem;
-    /* Visual padding for aesthetics */
+    padding: 0.75rem 1rem 0.5rem 1rem;
+    /* Very compact padding */
     margin-bottom: 0px;
-    /* Force flush to bottom */
-
     display: flex;
     justify-content: center;
 }
 
 .inputWrapper {
     width: 100%;
-    max-width: 900px;
+    max-width: 800px;
     background: #1e293b;
-    border-radius: 1rem;
-    padding: 0.4rem 0.75rem;
+    border-radius: 0.75rem;
+    /* Tighter radius */
+    padding: 0.35rem 0.5rem;
+    /* Compact wrapper padding */
     display: flex;
-    gap: 0.75rem;
+    gap: 0.5rem;
     align-items: flex-end;
     border: 1px solid rgba(255, 255, 255, 0.05);
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
@@ -292,11 +298,11 @@
     flex: 1;
     background: transparent;
     border: none;
-    padding: 0.75rem 1rem;
-    font-size: 0.95rem;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
     color: #fff;
-    min-height: 24px;
-    max-height: 120px;
+    min-height: 20px;
+    max-height: 100px;
     resize: none;
     font-family: inherit;
 }
@@ -306,9 +312,10 @@
 }
 
 .sendBtn {
-    width: 40px;
-    height: 40px;
-    border-radius: 12px;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    /* Smaller button */
     background: #10b981;
     color: #fff;
     border: none;
@@ -334,41 +341,92 @@
     display: none;
 }
 
-/* Ensure hidden */
-
 
 /* =========================================
-   MOBILE OVERRIDES (Keep strict separation)
+   MOBILE OVERRIDES (Restoring original Touch-Friendly sizes)
    ========================================= */
 @media (max-width: 768px) {
     .container {
         position: relative;
-        /* On mobile, relative often behaves better with viewport units */
         height: 100dvh;
-        /* Dynamic viewport height */
         padding-top: 70px;
     }
 
+    .header {
+        height: auto;
+        padding: 0.75rem 1rem;
+    }
+
+    .headerContent {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.25rem;
+    }
+
+    .subtitle {
+        margin: 0;
+        border: none;
+        padding: 0;
+    }
+
+    .logoSection {
+        gap: 1rem;
+    }
+
+    .logoIcon {
+        width: 40px;
+        height: 40px;
+    }
+
+    /* Restore larger mobile icon */
+
     .chatContainer {
         padding-bottom: 0;
-        /* Let input push it up naturally */
     }
 
     .inputContainer {
-        /* Restore the safe-area padding ONLY for mobile */
         background: rgba(3, 7, 18, 0.95);
-        /* Add background back for mobile protection */
         border-top: 1px solid rgba(255, 255, 255, 0.05);
-
         position: sticky;
-        /* Stick to bottom of flex container */
         bottom: 0;
-
         padding: 1rem;
         padding-bottom: max(1rem, env(safe-area-inset-bottom));
     }
 
+    .inputWrapper {
+        max-width: 100%;
+        padding: 0.5rem;
+        border-radius: 1.25rem;
+        /* Larger border radius for mobile touch */
+    }
+
+    .input {
+        padding: 0.75rem 1rem;
+        font-size: 0.95rem;
+    }
+
+    /* Larger font for mobile inputs */
+    .sendBtn {
+        width: 40px;
+        height: 40px;
+    }
+
+    /* Larger touch target */
+
     .messagesWrapper {
         padding: 1rem;
+        gap: 1rem;
+    }
+
+    .messageIcon {
+        width: 32px;
+        height: 32px;
+        font-size: 0.9rem;
+    }
+
+    .messageText {
+        font-size: 0.95rem;
+        padding: 1rem 1.25rem;
     }
 }
