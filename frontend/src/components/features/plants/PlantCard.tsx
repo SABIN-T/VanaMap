@@ -69,12 +69,12 @@ export const PlantCard = ({ plant, score, isTopMatch, priority = false, onAdd, s
                             onClick={(e) => {
                                 e.stopPropagation();
                                 toast(
-                                    `🌱 ${score}% Aptness: Calculated via a 168-hour Monte Carlo simulation. Analyzes biological survival probability against stochastic temperature and humidity fluctuations.`,
+                                    `🌱 ${score}% Aptness: Absolute biological fit score simulated over a 168-hour stochastic window. No relative normalization applied.`,
                                     { duration: 5000, style: { background: '#0f172a', color: '#fff', border: '1px solid rgba(255,255,255,0.1)' } }
                                 );
                             }}
                         >
-                            {score}% APTNESS <HelpCircle size={10} />
+                            {score.toFixed(1)}% APTNESS <HelpCircle size={10} />
                         </div>
                     )}
                     <button onClick={handleHeartClick} className={styles.favBtn} aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}>
