@@ -683,7 +683,36 @@ export const Home = () => {
                     </div>
                 </div>
 
-
+                {/* Aptness Explanation Panel - Premium Glassmorphic Design */}
+                <div className={styles.aptnessExplainer}>
+                    <div className={styles.explainerGlass}>
+                        <div className={styles.explainerHeader}>
+                            <Sparkles size={16} className={styles.explainerIcon} />
+                            <span className={styles.explainerTitle}>Understanding Aptness Scores</span>
+                        </div>
+                        <p className={styles.explainerText}>
+                            Aptness is a <strong>scientifically-calibrated biological compatibility metric</strong> derived from a 168-hour Monte Carlo simulation of your unique 30-day ecosystem profile. The top-ranked species is normalized to <strong>100%</strong>, with all others scaled proportionally based on temperature tolerance, humidity requirements, and metabolic efficiency under your local conditions.
+                        </p>
+                        <div className={styles.explainerLegend}>
+                            <div className={styles.legendItem}>
+                                <div className={styles.legendDot} style={{ background: 'linear-gradient(135deg, #10b981, #059669)' }}></div>
+                                <span>90-100%: Optimal Match</span>
+                            </div>
+                            <div className={styles.legendItem}>
+                                <div className={styles.legendDot} style={{ background: 'linear-gradient(135deg, #38bdf8, #0284c7)' }}></div>
+                                <span>75-89%: Resilient Fit</span>
+                            </div>
+                            <div className={styles.legendItem}>
+                                <div className={styles.legendDot} style={{ background: 'linear-gradient(135deg, #fb923c, #f97316)' }}></div>
+                                <span>50-74%: Moderate Stress</span>
+                            </div>
+                            <div className={styles.legendItem}>
+                                <div className={styles.legendDot} style={{ background: 'linear-gradient(135deg, #f87171, #ef4444)' }}></div>
+                                <span>&lt;50%: Non-Viable</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
 
                 <div className={styles.searchBarWrapper} style={{ margin: '0 auto 3rem auto' }}>
                     <Search className={styles.searchIcon} size={22} />
