@@ -1,14 +1,15 @@
 // Image Recognition Service for Plant Diagnosis
-// Uses Google Vision API and Plant.id API
+// Uses Google Gemini 1.5 Flash (Free Tier) for multimodal analysis
 import { useState } from 'react';
 
+// Interfaces
 export interface PlantDiagnosis {
-    disease?: string;
-    pest?: string;
+    identification?: PlantIdentification;
     healthScore: number;
     issues: DiagnosisIssue[];
     recommendations: string[];
     confidence: number;
+    isHealthy: boolean;
 }
 
 export interface DiagnosisIssue {
@@ -26,6 +27,7 @@ export interface PlantIdentification {
     commonNames: string[];
     confidence: number;
     description?: string;
+    internalId?: string; // ID from our own database if found
     careInfo?: {
         water: string;
         light: string;
@@ -36,171 +38,112 @@ export interface PlantIdentification {
 
 export class ImageRecognitionService {
 
-    // Compress image for upload
-    static async compressImage(file: File, maxWidth: number = 1024): Promise<Blob> {
+    private static readonly API_KEY = import.meta.env.VITE_GEMINI_API_KEY || '';
+    private static readonly API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${import.meta.env.VITE_GEMINI_API_KEY}`;
+
+    // Helper: Convert file to Base64
+    static async fileToGenerativePart(file: File): Promise<{ inlineData: { data: string, mimeType: string } }> {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = (event) => {
-                const img = new Image();
-                img.src = event.target?.result as string;
-                img.onload = () => {
-                    const canvas = document.createElement('canvas');
-                    let width = img.width;
-                    let height = img.height;
-
-                    if (width > maxWidth) {
-                        height = (height * maxWidth) / width;
-                        width = maxWidth;
+            reader.onloadend = () => {
+                const base64String = (reader.result as string).split(',')[1];
+                resolve({
+                    inlineData: {
+                        data: base64String,
+                        mimeType: file.type
                     }
-
-                    canvas.width = width;
-                    canvas.height = height;
-                    const ctx = canvas.getContext('2d');
-                    ctx?.drawImage(img, 0, 0, width, height);
-
-                    canvas.toBlob((blob) => {
-                        if (blob) {
-                            resolve(blob);
-                        } else {
-                            reject(new Error('Failed to compress image'));
-                        }
-                    }, 'image/jpeg', 0.8);
-                };
+                });
             };
             reader.onerror = reject;
-        });
-    }
-
-    // Convert image to base64
-    static async imageToBase64(file: File): Promise<string> {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
             reader.readAsDataURL(file);
-            reader.onload = () => {
-                const base64 = (reader.result as string).split(',')[1];
-                resolve(base64);
-            };
-            reader.onerror = reject;
         });
     }
 
-    // Diagnose plant from image using Plant.id API
-    static async diagnosePlant(imageFile: File): Promise<PlantDiagnosis> {
+    // Main Analysis Function
+    static async analyzeImage(imageFile: File, knownPlants: { _id: string, name: string }[] = []): Promise<PlantDiagnosis> {
         try {
-            // Compress image first
-            const compressed = await this.compressImage(imageFile);
-            const base64 = await this.imageToBase64(new File([compressed], 'plant.jpg'));
-
-            // Using Plant.id API (free tier available)
-            const response = await fetch('https://api.plant.id/v2/health_assessment', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Api-Key': 'YOUR_PLANT_ID_API_KEY' // Get free key from plant.id
-                },
-                body: JSON.stringify({
-                    images: [base64],
-                    modifiers: ['similar_images'],
-                    disease_details: ['description', 'treatment']
-                })
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                return this.parsePlantIdResponse(data);
+            if (!this.API_KEY) {
+                console.warn("Missing Gemini API Key. Please set VITE_GEMINI_API_KEY in .env");
+                // Return a mock if no key, ensuring the app handles it somewhat gracefully
+                return this.basicImageAnalysis(imageFile);
             }
-        } catch (error) {
-            console.error('Plant diagnosis error:', error);
-        }
 
-        // Fallback: basic analysis
-        return this.basicImageAnalysis(imageFile);
-    }
+            const imagePart = await this.fileToGenerativePart(imageFile);
 
-    // Identify plant from image
-    static async identifyPlant(imageFile: File): Promise<PlantIdentification | null> {
-        try {
-            const compressed = await this.compressImage(imageFile);
-            const base64 = await this.imageToBase64(new File([compressed], 'plant.jpg'));
+            // Construct context from internal DB
+            // Limit to top 50 matches or just send names to avoid context overflow if list is huge
+            // For now, assuming manageable list size < 100 items
+            const plantListString = knownPlants.map(p => `${p.name} (ID: ${p._id})`).join(', ');
 
-            const response = await fetch('https://api.plant.id/v2/identify', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Api-Key': 'YOUR_PLANT_ID_API_KEY'
-                },
-                body: JSON.stringify({
-                    images: [base64],
-                    modifiers: ['similar_images'],
-                    plant_details: ['common_names', 'taxonomy', 'wiki_description']
-                })
-            });
+            const prompt = `
+                You are Dr. Flora, an expert botanist AI. Analyze this plant image carefully.
+                
+                Task 1: Identify the plant.
+                - Check against this list of known plants from our database: [${plantListString}].
+                - If the image matches one of these plants with high confidence (>80%), include its "internalId" and set name to the DB name.
+                - If not, identify it accurately using your own knowledge.
+                
+                Task 2: Diagnose its health.
+                - Estimate a health score (0-100).
+                - Identify any visible diseases, pests, or nutrient issues.
+                - Provide specific care recommendations.
 
-            if (response.ok) {
-                const data = await response.json();
-                return this.parsePlantIdentification(data);
-            }
-        } catch (error) {
-            console.error('Plant identification error:', error);
-        }
-
-        return null;
-    }
-
-    // Parse Plant.id diagnosis response
-    private static parsePlantIdResponse(data: any): PlantDiagnosis {
-        const issues: DiagnosisIssue[] = [];
-
-        if (data.health_assessment?.diseases) {
-            data.health_assessment.diseases.forEach((disease: any) => {
-                if (disease.probability > 0.3) {
-                    issues.push({
-                        type: 'disease',
-                        name: disease.name,
-                        severity: disease.probability > 0.7 ? 'high' : disease.probability > 0.5 ? 'medium' : 'low',
-                        description: disease.description || '',
-                        treatment: disease.treatment?.biological?.[0] || disease.treatment?.chemical?.[0] || '',
-                        confidence: disease.probability
-                    });
+                Return ONLY a JSON object with this exact structure (no markdown):
+                {
+                    "identification": {
+                        "name": "Common Name",
+                        "scientificName": "Scientific Name",
+                        "internalId": "ID_FROM_LIST_OR_NULL",
+                        "confidence": 0.95,
+                        "description": "Brief description",
+                        "careInfo": { "water": "...", "light": "...", "temperature": "...", "humidity": "..." }
+                    },
+                    "healthScore": 85,
+                    "isHealthy": true,
+                    "issues": [
+                        { "type": "disease", "name": "...", "severity": "low", "description": "...", "treatment": "...", "confidence": 0.9 }
+                    ],
+                    "recommendations": ["Tip 1", "Tip 2"]
                 }
+            `;
+
+            const response = await fetch(this.API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{
+                        parts: [
+                            { text: prompt },
+                            imagePart
+                        ]
+                    }]
+                })
             });
-        }
 
-        const healthScore = data.health_assessment?.is_healthy_probability || 0.5;
-
-        return {
-            healthScore: healthScore * 100,
-            issues,
-            recommendations: this.generateRecommendations(issues),
-            confidence: healthScore
-        };
-    }
-
-    // Parse plant identification response
-    private static parsePlantIdentification(data: any): PlantIdentification | null {
-        if (!data.suggestions || data.suggestions.length === 0) {
-            return null;
-        }
-
-        const top = data.suggestions[0];
-
-        return {
-            name: top.plant_name,
-            scientificName: top.plant_details?.scientific_name || top.plant_name,
-            commonNames: top.plant_details?.common_names || [],
-            confidence: top.probability,
-            description: top.plant_details?.wiki_description?.value,
-            careInfo: {
-                water: 'Moderate',
-                light: 'Bright indirect',
-                temperature: '18-28°C',
-                humidity: '40-60%'
+            if (!response.ok) {
+                // If 403 or 400, fallback
+                throw new Error(`Gemini API Error: ${response.statusText}`);
             }
-        };
+
+            const data = await response.json();
+            const candidate = data.candidates?.[0];
+            if (!candidate) throw new Error("No candidates returned from Gemini");
+
+            const textResponse = candidate.content.parts[0].text;
+
+            // Clean markdown if present
+            const jsonStr = textResponse.replace(/```json/g, '').replace(/```/g, '').trim();
+            const result = JSON.parse(jsonStr);
+
+            return result;
+
+        } catch (error) {
+            console.error('Gemini Vision Analysis Failed:', error);
+            return this.basicImageAnalysis(imageFile);
+        }
     }
 
-    // Basic image analysis (fallback)
+    // Fallback: Basic Analysis (if API fails)
     private static async basicImageAnalysis(imageFile: File): Promise<PlantDiagnosis> {
         // Analyze image colors and patterns (basic)
         const canvas = document.createElement('canvas');
@@ -216,24 +159,22 @@ export class ImageRecognitionService {
                     canvas.height = img.height;
                     ctx?.drawImage(img, 0, 0);
 
-                    // Basic color analysis
-                    const imageData = ctx?.getImageData(0, 0, canvas.width, canvas.height);
-                    const colors = this.analyzeColors(imageData);
-
                     resolve({
-                        healthScore: colors.greenRatio > 0.3 ? 75 : 50,
-                        issues: colors.yellowRatio > 0.2 ? [{
-                            type: 'nutrient',
-                            name: 'Possible Nutrient Deficiency',
-                            severity: 'medium',
-                            description: 'Yellowing detected in leaves',
-                            treatment: 'Check soil nutrients and consider fertilizing',
-                            confidence: 0.6
-                        }] : [],
+                        identification: {
+                            name: "Unknown Plant",
+                            scientificName: "Unknown",
+                            commonNames: [],
+                            confidence: 0,
+                            description: "Could not identify with AI. Please try again or check your API Key.",
+                            careInfo: { water: "Check soil", light: "Indirect", temperature: "Average", humidity: "Average" }
+                        },
+                        healthScore: 50,
+                        isHealthy: true,
+                        issues: [],
                         recommendations: [
-                            'Upload a clearer photo for better analysis',
-                            'Ensure good lighting when taking photos',
-                            'Focus on affected areas'
+                            'Ensure good lighting',
+                            'Check soil moisture before watering',
+                            'Wipe leaves to remove dust'
                         ],
                         confidence: 0.5
                     });
@@ -243,57 +184,14 @@ export class ImageRecognitionService {
         });
     }
 
-    // Analyze image colors
-    private static analyzeColors(imageData: ImageData | undefined): any {
-        if (!imageData) return { greenRatio: 0, yellowRatio: 0, brownRatio: 0 };
-
-        let greenPixels = 0;
-        let yellowPixels = 0;
-        let brownPixels = 0;
-        const totalPixels = imageData.width * imageData.height;
-
-        for (let i = 0; i < imageData.data.length; i += 4) {
-            const r = imageData.data[i];
-            const g = imageData.data[i + 1];
-            const b = imageData.data[i + 2];
-
-            // Green detection
-            if (g > r && g > b && g > 100) greenPixels++;
-            // Yellow detection
-            if (r > 150 && g > 150 && b < 100) yellowPixels++;
-            // Brown detection
-            if (r > 100 && g > 50 && g < 150 && b < 100) brownPixels++;
-        }
-
-        return {
-            greenRatio: greenPixels / totalPixels,
-            yellowRatio: yellowPixels / totalPixels,
-            brownRatio: brownPixels / totalPixels
-        };
+    // Proxy methods to match existing interface usage
+    static async diagnosePlant(imageFile: File, knownPlants: any[] = []): Promise<PlantDiagnosis> {
+        return this.analyzeImage(imageFile, knownPlants);
     }
 
-    // Generate recommendations based on issues
-    private static generateRecommendations(issues: DiagnosisIssue[]): string[] {
-        const recommendations: string[] = [];
-
-        issues.forEach(issue => {
-            if (issue.type === 'disease') {
-                recommendations.push(`Treat ${issue.name} with appropriate fungicide`);
-                recommendations.push('Isolate affected plant to prevent spread');
-            } else if (issue.type === 'pest') {
-                recommendations.push(`Remove ${issue.name} manually or with insecticidal soap`);
-                recommendations.push('Check other plants for infestation');
-            } else if (issue.type === 'nutrient') {
-                recommendations.push('Apply balanced fertilizer');
-                recommendations.push('Check soil pH levels');
-            }
-        });
-
-        if (recommendations.length === 0) {
-            recommendations.push('Plant appears healthy! Continue current care routine');
-        }
-
-        return recommendations;
+    static async identifyPlant(imageFile: File, knownPlants: any[] = []): Promise<PlantIdentification | null> {
+        const result = await this.analyzeImage(imageFile, knownPlants);
+        return result.identification || null;
     }
 }
 
@@ -303,10 +201,10 @@ export function useImageRecognition() {
     const [diagnosis, setDiagnosis] = useState<PlantDiagnosis | null>(null);
     const [identification, setIdentification] = useState<PlantIdentification | null>(null);
 
-    const diagnosePlant = async (imageFile: File) => {
+    const diagnosePlant = async (imageFile: File, knownPlants: any[] = []) => {
         setIsProcessing(true);
         try {
-            const result = await ImageRecognitionService.diagnosePlant(imageFile);
+            const result = await ImageRecognitionService.diagnosePlant(imageFile, knownPlants);
             setDiagnosis(result);
             return result;
         } finally {
@@ -314,10 +212,10 @@ export function useImageRecognition() {
         }
     };
 
-    const identifyPlant = async (imageFile: File) => {
+    const identifyPlant = async (imageFile: File, knownPlants: any[] = []) => {
         setIsProcessing(true);
         try {
-            const result = await ImageRecognitionService.identifyPlant(imageFile);
+            const result = await ImageRecognitionService.identifyPlant(imageFile, knownPlants);
             setIdentification(result);
             return result;
         } finally {

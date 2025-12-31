@@ -1,9 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+/* Cortex Theme */
 .pageContainer {
+    --cortex-cyan: #00f0ff;
+    --cortex-mint: #00ffa3;
+    --cortex-void: #050505;
+    --cortex-glass: rgba(10, 15, 20, 0.7);
+    --cortex-border: rgba(0, 240, 255, 0.15);
+
     display: flex;
     flex-direction: column;
     min-height: 100vh;
     gap: 2rem;
     padding-bottom: 4rem;
+    font-family: 'Outfit', sans-serif;
+    background-color: transparent;
 }
 
 @media (max-width: 768px) {
@@ -29,8 +40,8 @@
 /* --- Left Panel: Preview --- */
 .previewPanel {
     position: relative;
-    background: rgba(15, 23, 42, 0.6);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: var(--cortex-glass);
+    border: 1px solid var(--cortex-border);
     border-radius: 24px;
     overflow: hidden;
     min-height: 600px;
@@ -39,13 +50,12 @@
     align-items: center;
     justify-content: center;
     backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .previewPanel:hover {
-    border-color: rgba(16, 185, 129, 0.3);
-    box-shadow: 0 0 40px -10px rgba(16, 185, 129, 0.2);
+    border-color: var(--cortex-cyan);
+    box-shadow: 0 0 40px -10px rgba(0, 240, 255, 0.2);
 }
 
 .previewBg {
@@ -82,11 +92,14 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: rgba(0, 0, 0, 0.75);
+    background: rgba(5, 5, 5, 0.85);
     backdrop-filter: blur(4px);
     opacity: 0;
     transition: opacity 0.3s ease;
     z-index: 20;
+    border: 2px dashed var(--cortex-cyan);
+    margin: 1rem;
+    border-radius: 20px;
 }
 
 .previewPanel:hover .uploadOverlay {
@@ -95,11 +108,12 @@
 
 /* --- Right Panel: Form --- */
 .formPanel {
-    background: rgba(30, 41, 59, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--cortex-glass);
+    border: 1px solid var(--cortex-border);
     border-radius: 24px;
     padding: 2.5rem;
     backdrop-filter: blur(10px);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
 }
 
 .sectionTitle {
@@ -107,12 +121,12 @@
     text-transform: uppercase;
     letter-spacing: 0.1em;
     font-weight: 700;
-    color: #10b981;
-    /* Emerald 500 */
+    color: var(--cortex-cyan);
     margin-bottom: 1rem;
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    font-family: 'JetBrains Mono', monospace;
 }
 
 .inputGroup {
@@ -125,9 +139,9 @@
     text-transform: uppercase;
     font-weight: 600;
     color: #94a3b8;
-    /* Slate 400 */
     margin-bottom: 0.5rem;
     letter-spacing: 0.05em;
+    font-family: 'JetBrains Mono', monospace;
 }
 
 /* Glass Inputs */
@@ -135,7 +149,7 @@
 .glassSelect,
 .glassTextarea {
     width: 100%;
-    background: rgba(15, 23, 42, 0.6);
+    background: rgba(0, 0, 0, 0.4);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 12px;
     padding: 0.875rem 1rem;
@@ -143,14 +157,15 @@
     font-size: 0.95rem;
     transition: all 0.3s ease;
     outline: none;
+    font-family: 'JetBrains Mono', monospace;
 }
 
 .glassInput:focus,
 .glassSelect:focus,
 .glassTextarea:focus {
-    background: rgba(15, 23, 42, 0.9);
-    border-color: #10b981;
-    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
+    background: rgba(0, 0, 0, 0.6);
+    border-color: var(--cortex-cyan);
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.15);
 }
 
 .glassInput::placeholder,
@@ -180,10 +195,12 @@
     color: white;
     transition: all 0.3s ease;
     outline: none;
+    font-family: 'JetBrains Mono', monospace;
 }
 
 .smartSearchInput:focus {
-    border-color: #10b981;
+    border-color: var(--cortex-cyan);
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
 }
 
 .smartSearchIcon {
@@ -196,7 +213,7 @@
 }
 
 .smartSearchInput:focus~.smartSearchIcon {
-    color: #10b981;
+    color: var(--cortex-cyan);
 }
 
 /* Custom Range Slider */
@@ -211,7 +228,7 @@
     -webkit-appearance: none;
     appearance: none;
     width: 100%;
-    height: 6px;
+    height: 4px;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 3px;
     outline: none;
@@ -219,25 +236,24 @@
 
 .rangeInput::-webkit-slider-thumb {
     -webkit-appearance: none;
-    width: 20px;
-    height: 20px;
-    background: #3b82f6;
-    border: 2px solid #1e293b;
+    width: 16px;
+    height: 16px;
+    background: var(--cortex-cyan);
+    border: 2px solid #000;
     border-radius: 50%;
     cursor: pointer;
     transition: all 0.2s ease;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 0 10px var(--cortex-cyan);
 }
 
 .rangeInput::-webkit-slider-thumb:hover {
-    transform: scale(1.1);
-    background: #60a5fa;
+    transform: scale(1.2);
 }
 
 /* Segmented Control */
 .segmentedControl {
     display: flex;
-    background: rgba(15, 23, 42, 0.6);
+    background: rgba(0, 0, 0, 0.4);
     padding: 4px;
     border-radius: 12px;
     border: 1px solid rgba(255, 255, 255, 0.05);
@@ -253,13 +269,14 @@
     color: #64748b;
     border-radius: 8px;
     transition: all 0.3s ease;
+    font-family: 'JetBrains Mono', monospace;
 }
 
 .segmentBtnActive {
-    background: #f59e0b;
-    /* Amber 500 */
-    color: #0f172a;
-    box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+    background: rgba(0, 240, 255, 0.1);
+    color: var(--cortex-cyan);
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.1);
+    border: 1px solid var(--cortex-cyan);
 }
 
 .segmentBtn:not(.segmentBtnActive):hover {
@@ -278,10 +295,10 @@
     letter-spacing: 0.15em;
     padding: 1rem 3rem;
     border-radius: 100px;
-    /* Pill shape */
     transition: all 0.4s ease;
     border: none;
     z-index: 1;
+    font-family: 'JetBrains Mono', monospace;
 }
 
 .submitBtn::before {
@@ -291,16 +308,16 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, #10b981, #3b82f6);
+    background: linear-gradient(90deg, var(--cortex-mint), var(--cortex-cyan));
     opacity: 0;
     z-index: -1;
     transition: opacity 0.4s ease;
 }
 
 .submitBtn:hover {
-    color: white;
+    color: black;
     transform: translateY(-2px);
-    box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4);
+    box-shadow: 0 0 30px rgba(0, 240, 255, 0.4);
 }
 
 .submitBtn:hover::before {

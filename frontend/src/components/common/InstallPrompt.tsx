@@ -124,75 +124,95 @@ export const InstallPrompt = () => {
     return (
         <div style={{
             position: 'fixed',
-            bottom: isMobile ? '90px' : '40px', // Sit above the 75px MobileTabBar
+            bottom: isMobile ? '90px' : '40px',
             left: isMobile ? '50%' : 'auto',
             right: isMobile ? 'auto' : '40px',
             transform: isMobile ? 'translateX(-50%)' : 'none',
             zIndex: 10000,
-            width: isMobile ? 'calc(100% - 32px)' : '420px',
+            width: isMobile ? 'calc(100% - 32px)' : '400px',
             maxWidth: '450px',
             perspective: '1000px',
-            animation: 'slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1)'
+            animation: 'cortexFadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1)'
         }}>
             <style>{`
-                @keyframes slideUpFade {
-                    from { opacity: 0; transform: ${isMobile ? 'translate(-50%, 50px)' : 'translateY(50px)'}; }
+                @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+                
+                @keyframes cortexFadeUp {
+                    from { opacity: 0; transform: ${isMobile ? 'translate(-50%, 40px)' : 'translateY(40px)'}; }
                     to { opacity: 1; transform: ${isMobile ? 'translate(-50%, 0)' : 'translateY(0)'}; }
                 }
-                .glass-panel {
-                    background: rgba(15, 23, 42, 0.85); /* Slate 900 with opacity */
-                    backdrop-filter: blur(20px);
-                    -webkit-backdrop-filter: blur(20px);
-                    border: 1px solid rgba(255, 255, 255, 0.08);
-                    box-shadow: 
-                        0 20px 40px -5px rgba(0, 0, 0, 0.4),
-                        0 10px 20px -5px rgba(0, 0, 0, 0.3),
-                        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+                @keyframes brainPulse {
+                    0% { box-shadow: 0 0 20px rgba(0, 240, 255, 0.1); }
+                    50% { box-shadow: 0 0 40px rgba(0, 240, 255, 0.2); }
+                    100% { box-shadow: 0 0 20px rgba(0, 240, 255, 0.1); }
                 }
+                .cortex-install-card {
+                    background: rgba(5, 5, 5, 0.9);
+                    backdrop-filter: blur(24px);
+                    -webkit-backdrop-filter: blur(24px);
+                    border: 1px solid rgba(0, 240, 255, 0.2);
+                    border-radius: 20px;
+                    padding: 24px;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 20px;
+                    color: white;
+                    position: relative;
+                    overflow: hidden;
+                    animation: brainPulse 4s infinite ease-in-out;
+                }
+                .cortex-btn-primary {
+                    background: linear-gradient(135deg, #00ffa3 0%, #00f0ff 100%);
+                    color: #000;
+                    font-weight: 800;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                    font-family: 'JetBrains Mono', monospace;
+                    box-shadow: 0 0 20px rgba(0, 255, 163, 0.4);
+                }
+                .cortex-btn-primary:active { transform: scale(0.98); }
             `}</style>
 
-            <div className="glass-panel" style={{
-                borderRadius: '24px',
-                padding: '24px',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '20px',
-                color: 'white',
-                position: 'relative',
-                overflow: 'hidden'
-            }}>
-                {/* Background Glow Effect */}
+            <div className="cortex-install-card">
+                {/* Scanner Line Effect */}
                 <div style={{
                     position: 'absolute',
-                    top: '-50%',
-                    left: '-20%',
-                    width: '150%',
-                    height: '200%',
-                    background: 'radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.08), transparent 60%)',
-                    pointerEvents: 'none',
-                    zIndex: 0
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '2px',
+                    background: 'linear-gradient(90deg, transparent, #00f0ff, transparent)',
+                    opacity: 0.5,
+                    animation: 'scanLine 3s infinite',
                 }} />
+                <style>{`
+                    @keyframes scanLine {
+                        0% { top: -2px; }
+                        100% { top: 100%; }
+                    }
+                `}</style>
 
                 <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', zIndex: 1, gap: '16px' }}>
                     <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
                         <div style={{
-                            width: '56px',
-                            height: '56px',
-                            background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-                            borderRadius: '16px',
+                            width: '50px',
+                            height: '50px',
+                            background: 'rgba(0, 240, 255, 0.1)',
+                            border: '1px solid rgba(0, 240, 255, 0.3)',
+                            borderRadius: '12px',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
-                            boxShadow: '0 8px 16px -4px rgba(16, 185, 129, 0.3), inset 0 2px 4px rgba(255,255,255,0.2)'
+                            boxShadow: '0 0 15px rgba(0, 240, 255, 0.2)'
                         }}>
-                            <Smartphone size={28} color="white" strokeWidth={2} />
+                            <Smartphone size={24} color="#00f0ff" strokeWidth={2} />
                         </div>
                         <div>
-                            <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 700, letterSpacing: '-0.02em', lineHeight: 1.2 }}>
-                                Get the VanaMap App
+                            <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                                System Initialize
                             </h3>
-                            <p style={{ margin: '4px 0 0', fontSize: '0.9rem', color: '#94a3b8', lineHeight: 1.4 }}>
-                                Browse 2x faster with the native experience.
+                            <p style={{ margin: '4px 0 0', fontSize: '0.8rem', color: '#94a3b8', fontFamily: 'JetBrains Mono, monospace' }}>
+                                Deploy VanaMap to Home Screen for 2x neural speed.
                             </p>
                         </div>
                     </div>
@@ -202,60 +222,57 @@ export const InstallPrompt = () => {
                         style={{
                             background: 'rgba(255,255,255,0.05)',
                             border: 'none',
-                            color: '#94a3b8',
+                            color: '#64748b',
                             cursor: 'pointer',
-                            borderRadius: '50%',
-                            width: '32px',
-                            height: '32px',
+                            borderRadius: '6px',
+                            width: '28px',
+                            height: '28px',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
                             transition: 'all 0.2s'
                         }}
                     >
-                        <X size={18} />
+                        <X size={16} />
                     </button>
                 </div>
 
-                {/* Content Body */}
                 <div style={{ zIndex: 1 }}>
                     {!isIOS ? (
                         <button
                             onClick={handleInstallClick}
+                            className="cortex-btn-primary"
                             style={{
                                 width: '100%',
-                                background: 'linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%)',
-                                color: 'white',
                                 border: 'none',
-                                borderRadius: '16px',
-                                padding: '16px',
-                                fontSize: '1rem',
-                                fontWeight: 700,
+                                borderRadius: '12px',
+                                padding: '14px',
+                                fontSize: '0.9rem',
                                 cursor: 'pointer',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
                                 gap: '10px',
-                                boxShadow: '0 8px 20px -4px rgba(14, 165, 233, 0.4), inset 0 1px 2px rgba(255,255,255,0.2)',
-                                transition: 'transform 0.2s active'
+                                transition: 'all 0.2s'
                             }}
                         >
-                            <Download size={20} className="animate-bounce" /> Install Now
+                            <Download size={18} /> INSTALL PROTOCOL
                         </button>
                     ) : (
                         <div style={{
                             background: 'rgba(255,255,255,0.03)',
-                            borderRadius: '16px',
+                            borderRadius: '12px',
                             padding: '16px',
-                            border: '1px solid rgba(255,255,255,0.05)'
+                            border: '1px solid rgba(255,255,255,0.05)',
+                            fontFamily: 'JetBrains Mono, monospace'
                         }}>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px', fontSize: '0.95rem', color: '#cbd5e1' }}>
-                                <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: '8px', padding: '6px' }}><Share size={16} /></div>
-                                <span>1. Tap simple <strong style={{ color: '#38bdf8' }}>Share</strong> button below</span>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '10px', fontSize: '0.8rem', color: '#cbd5e1' }}>
+                                <div style={{ background: 'rgba(0, 240, 255, 0.1)', borderRadius: '6px', padding: '6px', border: '1px solid rgba(0, 240, 255, 0.2)' }}><Share size={14} color="#00f0ff" /></div>
+                                <span>1. COMMAND <strong style={{ color: '#00f0ff' }}>SHARE</strong></span>
                             </div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '0.95rem', color: '#cbd5e1' }}>
-                                <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: '8px', padding: '6px' }}><PlusSquare size={16} /></div>
-                                <span>2. Select <strong style={{ color: '#38bdf8' }}>Add to Home Screen</strong></span>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '0.8rem', color: '#cbd5e1' }}>
+                                <div style={{ background: 'rgba(0, 255, 163, 0.1)', borderRadius: '6px', padding: '6px', border: '1px solid rgba(0, 255, 163, 0.2)' }}><PlusSquare size={14} color="#00ffa3" /></div>
+                                <span>2. ACTION <strong style={{ color: '#00ffa3' }}>ADD TO HOME</strong></span>
                             </div>
                         </div>
                     )}

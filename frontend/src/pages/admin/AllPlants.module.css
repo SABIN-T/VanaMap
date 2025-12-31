@@ -1,7 +1,16 @@
-/* Page Container */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+/* Cortex Theme Variables */
 .pageContainer {
-    animation: fadeIn 0.6s ease-out;
+    --cortex-cyan: #00f0ff;
+    --cortex-mint: #00ffa3;
+    --cortex-void: #050505;
+    --cortex-glass: rgba(10, 15, 20, 0.7);
+    --cortex-border: rgba(0, 240, 255, 0.15);
+
     padding-bottom: 4rem;
+    animation: fadeIn 0.6s ease-out;
+    font-family: 'Outfit', sans-serif;
 }
 
 @keyframes fadeIn {
@@ -22,12 +31,13 @@
     position: relative;
     overflow: hidden;
     border-radius: 1.5rem;
-    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(6, 78, 59, 0.2) 100%);
-    border: 1px solid rgba(16, 185, 129, 0.2);
+    background: linear-gradient(135deg, rgba(0, 240, 255, 0.05) 0%, rgba(5, 5, 5, 0.8) 100%);
+    border: 1px solid var(--cortex-border);
     padding: 2.5rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
 }
 
 .heroContent {
@@ -39,26 +49,29 @@
     font-size: 2.5rem;
     font-weight: 800;
     margin-bottom: 0.5rem;
-    background: linear-gradient(to right, #ffffff, #a7f3d0);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
 }
 
 .heroSubtitle {
-    color: #d1fae5;
-    font-size: 1.1rem;
+    color: var(--cortex-cyan);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9rem;
     max-width: 600px;
     line-height: 1.5;
+    opacity: 0.8;
 }
 
 .heroStats {
     display: flex;
     gap: 2rem;
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.4);
     padding: 1rem 1.5rem;
     border-radius: 1rem;
     backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--cortex-border);
 }
 
 .statItem {
@@ -69,15 +82,17 @@
     font-size: 1.5rem;
     font-weight: 700;
     color: white;
-    font-family: 'Geist Mono', monospace;
+    font-family: 'JetBrains Mono', monospace;
+    text-shadow: 0 0 10px rgba(0, 255, 163, 0.5);
 }
 
 .statLabel {
-    font-size: 0.75rem;
-    color: #9ca3af;
+    font-size: 0.7rem;
+    color: #94a3b8;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 1px;
     margin-top: 0.25rem;
+    font-family: 'JetBrains Mono', monospace;
 }
 
 /* Grid Layout */
@@ -90,9 +105,9 @@
 
 /* Plant Card */
 .plantCard {
-    background: rgba(30, 41, 59, 0.6);
+    background: var(--cortex-glass);
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--cortex-border);
     border-radius: 1.25rem;
     overflow: hidden;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -104,8 +119,8 @@
 
 .plantCard:hover {
     transform: translateY(-5px);
-    border-color: rgba(16, 185, 129, 0.3);
-    box-shadow: 0 20px 40px -5px rgba(0, 0, 0, 0.3);
+    border-color: var(--cortex-cyan);
+    box-shadow: 0 0 25px rgba(0, 240, 255, 0.15);
 }
 
 .imageWrapper {
@@ -113,6 +128,7 @@
     width: 100%;
     position: relative;
     overflow: hidden;
+    border-bottom: 1px solid var(--cortex-border);
 }
 
 .plantImage {
@@ -120,16 +136,18 @@
     height: 100%;
     object-fit: cover;
     transition: transform 0.5s ease;
+    filter: brightness(0.9) contrast(1.1);
 }
 
 .plantCard:hover .plantImage {
     transform: scale(1.05);
+    filter: brightness(1);
 }
 
 .overlay {
     position: absolute;
     inset: 0;
-    background: linear-gradient(to top, rgba(15, 23, 42, 0.9), transparent);
+    background: linear-gradient(to top, rgba(5, 5, 5, 0.9), transparent);
     z-index: 1;
 }
 
@@ -137,28 +155,29 @@
     position: absolute;
     top: 1rem;
     right: 1rem;
-    background: rgba(0, 0, 0, 0.6);
+    background: rgba(0, 0, 0, 0.8);
     backdrop-filter: blur(4px);
     padding: 0.35rem 0.75rem;
-    border-radius: 999px;
+    border-radius: 4px;
     font-size: 0.7rem;
     font-weight: 600;
     color: white;
     text-transform: uppercase;
     z-index: 2;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--cortex-border);
+    font-family: 'JetBrains Mono', monospace;
 }
 
 .badges-indoor {
-    background: rgba(59, 130, 246, 0.2);
-    color: #93c5fd;
-    border-color: rgba(59, 130, 246, 0.3);
+    border-color: var(--cortex-cyan);
+    color: var(--cortex-cyan);
+    background: rgba(0, 240, 255, 0.1);
 }
 
 .badges-outdoor {
-    background: rgba(245, 158, 11, 0.2);
-    color: #fcd34d;
-    border-color: rgba(245, 158, 11, 0.3);
+    border-color: #facc15;
+    color: #facc15;
+    background: rgba(250, 204, 21, 0.1);
 }
 
 .cardContent {
@@ -176,14 +195,16 @@
     color: white;
     margin-bottom: 0.25rem;
     line-height: 1.3;
+    letter-spacing: 0.5px;
 }
 
 .scientificName {
     font-family: 'Times New Roman', serif;
     font-style: italic;
-    color: #94a3b8;
+    color: var(--cortex-cyan);
     font-size: 0.9rem;
     margin-bottom: 1rem;
+    opacity: 0.8;
 }
 
 .tags {
@@ -194,22 +215,25 @@
 }
 
 .tag {
-    font-size: 0.7rem;
+    font-size: 0.65rem;
     color: #cbd5e1;
     background: rgba(255, 255, 255, 0.05);
     padding: 0.25rem 0.5rem;
-    border-radius: 0.5rem;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .priceTag {
     position: absolute;
     bottom: 1rem;
     left: 1rem;
-    color: white;
+    color: var(--cortex-mint);
     font-weight: 700;
     font-size: 1.25rem;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    font-family: 'JetBrains Mono', monospace;
     z-index: 2;
+    text-shadow: 0 0 10px rgba(0, 255, 163, 0.5);
 }
 
 /* Loading State */
@@ -217,5 +241,6 @@
     display: grid;
     place-items: center;
     min-height: 400px;
-    color: #64748b;
+    color: var(--cortex-cyan);
+    font-family: 'JetBrains Mono', monospace;
 }

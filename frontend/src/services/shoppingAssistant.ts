@@ -242,12 +242,15 @@ export function useShoppingAssistant() {
         try {
             const deals = await ShoppingAssistantService.getBestDeals(category);
             setBestDeals(deals);
+            return deals;
         } catch (err) {
             setError('Failed to load deals');
+            return [];
         } finally {
             setIsLoading(false);
         }
     };
+
 
     const comparePrices = async (productName: string) => {
         setIsLoading(true);

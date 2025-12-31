@@ -1,7 +1,16 @@
-/* Page Container */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
+
+/* Cortex Theme Variables */
 .pageContainer {
+    --cortex-cyan: #00f0ff;
+    --cortex-mint: #00ffa3;
+    --cortex-void: #050505;
+    --cortex-glass: rgba(10, 15, 20, 0.7);
+    --cortex-border: rgba(0, 240, 255, 0.15);
+
     padding-bottom: 4rem;
     animation: fadeIn 0.6s ease-out;
+    font-family: 'Outfit', sans-serif;
 }
 
 @keyframes fadeIn {
@@ -32,17 +41,21 @@
     }
 }
 
-/* Sidebar Navigation (Future proofing) */
+/* Sidebar Navigation */
 .settingsNav {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    background: var(--cortex-glass);
+    padding: 0.75rem;
+    border-radius: 1.25rem;
+    border: 1px solid var(--cortex-border);
 }
 
 .navItem {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
+    gap: 1rem;
     padding: 1rem;
     border-radius: 0.75rem;
     color: #94a3b8;
@@ -52,18 +65,22 @@
     background: transparent;
     width: 100%;
     text-align: left;
-    border: none;
+    border: 1px solid transparent;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    text-transform: uppercase;
 }
 
-.navItem:hover,
-.navItemActive {
+.navItem:hover {
     background: rgba(255, 255, 255, 0.05);
     color: white;
 }
 
 .navItemActive {
-    background: rgba(99, 102, 241, 0.1);
-    color: #818cf8;
+    background: rgba(0, 240, 255, 0.1);
+    color: var(--cortex-cyan);
+    border-color: var(--cortex-cyan);
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.1);
 }
 
 /* Main Content Area */
@@ -75,9 +92,9 @@
 
 /* Card Styles */
 .card {
-    background: rgba(30, 41, 59, 0.4);
+    background: var(--cortex-glass);
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--cortex-border);
     border-radius: 1.5rem;
     padding: 2rem;
     transition: all 0.3s ease;
@@ -86,19 +103,23 @@
 .cardHeader {
     margin-bottom: 2rem;
     padding-bottom: 1rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid var(--cortex-border);
 }
 
 .cardTitle {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     font-weight: 700;
     color: white;
     margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-family: 'JetBrains Mono', monospace;
 }
 
 .cardDesc {
     color: #94a3b8;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    font-family: 'JetBrains Mono', monospace;
 }
 
 /* Toggle Control Row */
@@ -116,8 +137,8 @@
 
 .settingInfo {
     display: flex;
-    align-items: flex-start;
-    gap: 1rem;
+    align-items: center;
+    gap: 1.25rem;
 }
 
 .iconBox {
@@ -128,7 +149,8 @@
     align-items: center;
     justify-content: center;
     background: rgba(255, 255, 255, 0.03);
-    color: #94a3b8;
+    border: 1px solid var(--cortex-border);
+    color: var(--cortex-cyan);
 }
 
 .settingDetails {
@@ -143,60 +165,63 @@
 }
 
 .settingHelper {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: #64748b;
     margin-top: 0.25rem;
+    font-family: 'JetBrains Mono', monospace;
 }
 
 /* Toggle Switch */
 .toggle {
     width: 48px;
-    height: 28px;
+    height: 24px;
     border-radius: 999px;
     position: relative;
     cursor: pointer;
-    transition: background 0.3s ease;
-    background: #334155;
+    transition: all 0.3s ease;
+    background: #1e293b;
+    border: 1px solid var(--cortex-border);
 }
 
 .toggle[data-active="true"] {
-    background: #6366f1;
-    /* Indigo 500 */
-    box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+    background: rgba(0, 240, 255, 0.2);
+    border-color: var(--cortex-cyan);
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
 }
 
 .toggleKnob {
-    width: 20px;
-    height: 20px;
-    background: white;
+    width: 16px;
+    height: 16px;
+    background: #94a3b8;
     border-radius: 50%;
     position: absolute;
-    top: 4px;
+    top: 3px;
     left: 4px;
     transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .toggle[data-active="true"] .toggleKnob {
-    transform: translateX(20px);
+    transform: translateX(24px);
+    background: var(--cortex-cyan);
+    box-shadow: 0 0 10px var(--cortex-cyan);
 }
 
 /* Danger Zone */
 .dangerCard {
-    background: rgba(244, 63, 94, 0.05);
-    /* Rose tint */
-    border-color: rgba(244, 63, 94, 0.1);
+    background: rgba(239, 68, 68, 0.05);
+    border-color: rgba(239, 68, 68, 0.2);
 }
 
 .dangerTitle {
-    color: #fb7185;
+    color: #ef4444;
     display: flex;
     align-items: center;
     gap: 0.75rem;
 }
 
 .dangerDesc {
-    color: rgba(253, 164, 175, 0.7);
+    color: #f87171;
+    opacity: 0.8;
 }
 
 .dangerActions {
@@ -206,87 +231,96 @@
 }
 
 .dangerBtn {
-    background: transparent;
-    border: 1px solid rgba(244, 63, 94, 0.2);
-    color: #fb7185;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #fca5a5;
     padding: 0.75rem 1.5rem;
     border-radius: 0.75rem;
-    font-weight: 600;
+    font-weight: 700;
     cursor: pointer;
     transition: all 0.2s;
+    font-family: 'JetBrains Mono', monospace;
+    text-transform: uppercase;
+    font-size: 0.75rem;
 }
 
 .dangerBtn:hover {
-    background: rgba(244, 63, 94, 0.1);
-    border-color: rgba(244, 63, 94, 0.4);
-    transform: translateY(-1px);
+    background: #ef4444;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
 }
 
 /* Action Buttons */
 .actionBtnOutline {
     background: transparent;
-    border: 1px solid rgba(99, 102, 241, 0.3);
-    color: #818cf8;
+    border: 1px solid var(--cortex-cyan);
+    color: var(--cortex-cyan);
     padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    font-size: 0.85rem;
-    font-weight: 600;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
     cursor: pointer;
     transition: all 0.2s;
+    font-family: 'JetBrains Mono', monospace;
 }
 
 .actionBtnOutline:hover {
-    background: rgba(99, 102, 241, 0.1);
-    border-color: #818cf8;
+    background: rgba(0, 240, 255, 0.1);
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
 }
 
 /* API Key Section */
 .apiKeyContainer {
-    background: rgba(15, 23, 42, 0.6);
+    background: rgba(0, 0, 0, 0.4);
     border-radius: 1rem;
     padding: 1.5rem;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--cortex-border);
 }
 
 .apiKeyLabel {
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     text-transform: uppercase;
     font-weight: 700;
-    letter-spacing: 0.05em;
+    letter-spacing: 1px;
     color: #94a3b8;
     margin-bottom: 0.75rem;
+    font-family: 'JetBrains Mono', monospace;
 }
 
 .apiKeyBox {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: #0f172a;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: #020408;
+    border: 1px solid var(--cortex-border);
     padding: 0.75rem 1rem;
     border-radius: 0.75rem;
     margin-bottom: 0.5rem;
 }
 
 .apiKeyBox code {
-    font-family: 'Geist Mono', monospace;
-    color: #e2e8f0;
-    font-size: 0.9rem;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--cortex-cyan);
+    font-size: 0.85rem;
 }
 
 .copyBtn {
     background: rgba(255, 255, 255, 0.1);
     color: white;
     border: none;
-    padding: 0.25rem 0.75rem;
-    border-radius: 0.5rem;
-    font-size: 0.8rem;
+    padding: 0.3rem 0.75rem;
+    border-radius: 4px;
+    font-size: 0.7rem;
     cursor: pointer;
-    transition: background 0.2s;
+    font-family: 'JetBrains Mono', monospace;
+    text-transform: uppercase;
 }
 
 .copyBtn:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: var(--cortex-cyan);
+    color: #000;
 }
 
 /* Team Management */
@@ -302,41 +336,46 @@
     gap: 1rem;
     padding: 1rem;
     background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--cortex-border);
     border-radius: 1rem;
 }
 
 .avatar {
     width: 40px;
     height: 40px;
-    border-radius: 50%;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
     font-weight: 700;
     font-size: 1.1rem;
+    font-family: 'JetBrains Mono', monospace;
 }
 
 .roleBadge {
-    padding: 0.25rem 0.75rem;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 999px;
-    font-size: 0.75rem;
-    color: #cbd5e1;
-    font-weight: 600;
+    padding: 0.2rem 0.6rem;
+    background: rgba(0, 240, 255, 0.1);
+    border-radius: 4px;
+    font-size: 0.65rem;
+    color: var(--cortex-cyan);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-family: 'JetBrains Mono', monospace;
 }
 
 .removeBtn {
     color: #ef4444;
-    font-size: 0.8rem;
-    font-weight: 600;
+    font-size: 0.75rem;
+    font-weight: 700;
     background: transparent;
     border: none;
     cursor: pointer;
     padding: 0.5rem;
-    opacity: 0;
-    transition: opacity 0.2s;
+    opacity: 0.3;
+    transition: all 0.2s;
+    text-transform: uppercase;
+    font-family: 'JetBrains Mono', monospace;
 }
 
 .teamMember:hover .removeBtn {
@@ -346,21 +385,25 @@
 .inviteBtn {
     width: 100%;
     padding: 1rem;
-    border: 1px dashed rgba(255, 255, 255, 0.2);
+    border: 1px dashed var(--cortex-border);
     border-radius: 1rem;
     background: transparent;
     color: #94a3b8;
-    font-weight: 600;
+    font-weight: 700;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
     cursor: pointer;
     transition: all 0.2s;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    font-family: 'JetBrains Mono', monospace;
 }
 
 .inviteBtn:hover {
-    border-color: #6366f1;
-    color: #818cf8;
-    background: rgba(99, 102, 241, 0.05);
+    border-style: solid;
+    border-color: var(--cortex-cyan);
+    color: var(--cortex-cyan);
+    background: rgba(0, 240, 255, 0.05);
 }
