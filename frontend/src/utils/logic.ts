@@ -98,7 +98,7 @@ export const calculateAptnessMC = (
     if (aqi > 100) modifier += isPurifier ? 10 : -15;
     else if (isPurifier) modifier += 5;
 
-    return Math.max(0, Math.min(100, Math.round(avgScore + modifier)));
+    return Math.max(0, Math.min(100, avgScore + modifier));
 };
 
 export const calculateAptness = (
@@ -118,7 +118,7 @@ export const calculateAptness = (
     if (normalizationBase && normalizationBase > 0) {
         // Normalization fix: Ensure we can reach 100% relative match
         // if the normalizationBase represents the "Ideal" score of the set
-        return Math.round((mcScore / normalizationBase) * 100);
+        return (mcScore / normalizationBase) * 100;
     }
 
     return mcScore;

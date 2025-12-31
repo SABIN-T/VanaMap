@@ -278,8 +278,8 @@ export const Home = () => {
             })
             .map(p => {
                 if (!weather) return { ...p, score: 0 };
-                // Get absolute score first
-                return { ...p, score: calculateAptness(p, weather.avgTemp30Days, weather.air_quality?.aqi, weather.avgHumidity30Days, undefined, true, 50) };
+                // Get absolute high-precision score
+                return { ...p, score: calculateAptness(p, weather.avgTemp30Days, weather.air_quality?.aqi, weather.avgHumidity30Days, undefined, true, 150) };
             })
             .sort((a, b) => (weather ? (b.score || 0) - (a.score || 0) : 0));
 
