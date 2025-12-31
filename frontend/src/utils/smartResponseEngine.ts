@@ -32,7 +32,6 @@ export class SmartResponseEngine {
 
         if (analysis.needsPlantInfo) {
             return await this.handlePlantQuery(
-                userQuestion,
                 analysis.plantName,
                 internalPlants,
                 webSearchFn
@@ -137,7 +136,6 @@ export class SmartResponseEngine {
 
     // Handle plant-specific queries
     private static async handlePlantQuery(
-        question: string,
         plantName: string | null,
         internalPlants: Plant[],
         webSearchFn: (query: string) => Promise<string | null>
