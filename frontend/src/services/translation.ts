@@ -1,5 +1,6 @@
 // Multi-Language Translation Service
 // Supports 50+ languages including all major Indian languages
+import { useState, useEffect } from 'react';
 
 export type SupportedLanguage =
     // English

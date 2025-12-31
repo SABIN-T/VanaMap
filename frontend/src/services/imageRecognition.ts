@@ -1,5 +1,6 @@
 // Image Recognition Service for Plant Diagnosis
 // Uses Google Vision API and Plant.id API
+import { useState } from 'react';
 
 export interface PlantDiagnosis {
     disease?: string;
