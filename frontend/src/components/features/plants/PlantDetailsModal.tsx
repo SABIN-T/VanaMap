@@ -1,4 +1,4 @@
-import { X, Sun, Wind, Droplet, Leaf, Lightbulb, Fan, AlertTriangle, Sparkles, Stethoscope, BookOpen, GraduationCap, Hourglass, ShoppingBag, HelpCircle } from 'lucide-react';
+import { X, Sun, Wind, Droplet, Leaf, Lightbulb, Fan, AlertTriangle, Sparkles, Stethoscope, BookOpen, GraduationCap, Hourglass, ShoppingBag, HelpCircle, Activity } from 'lucide-react';
 import type { Plant } from '../../../types';
 import styles from './PlantDetailsModal.module.css';
 import { useState, useMemo, useEffect } from 'react';
@@ -8,6 +8,7 @@ import { runRoomSimulationMC } from '../../../utils/logic';
 
 interface PlantDetailsModalProps {
     plant: Plant;
+    score?: number;
     weather: {
         avgTemp30Days?: number;
         avgHumidity30Days?: number;
@@ -17,7 +18,7 @@ interface PlantDetailsModalProps {
     onBuy?: () => void;
 }
 
-export const PlantDetailsModal = ({ plant, weather, onClose, onBuy }: PlantDetailsModalProps) => {
+export const PlantDetailsModal = ({ plant, score = 0, weather, onClose, onBuy }: PlantDetailsModalProps) => {
     const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
 
     useEffect(() => {
@@ -70,6 +71,67 @@ export const PlantDetailsModal = ({ plant, weather, onClose, onBuy }: PlantDetai
     // ==========================================
     // SHARED COMPONENTS
     // ==========================================
+
+    const renderGrowthVerdict = () => {
+        const getVerdict = () => {
+            if (score >= 90) return { label: 'Optimal Match', color: '#10b981', desc: 'Condition analysis complete. This specimen will thrive and reach peak physiological potential in your current climate.' };
+            if (score >= 75) return { label: 'Resilient Fit', color: '#38bdf8', desc: 'Biological compatibility is high. Expect steady growth with standard maintenance protocols.' };
+            if (score >= 50) return { label: 'Struggling Match', color: '#fb923c', desc: 'Climate stress detected. This species may require supplemental humidity or shade to avoid biological fatigue.' };
+            return { label: 'Non-Viable', color: '#f87171', desc: 'Severe ecosystem mismatch. Vitality levels are predicted to drop rapidly in these conditions.' };
+        };
+
+        const verdict = getVerdict();
+        const circumference = 2 * Math.PI * 45;
+        const offset = circumference - (score / 100) * circumference;
+
+        return (
+            <div className={styles.verdictSection}>
+                <div className={styles.verdictHeader}>
+                    <div className={styles.verdictTitle}><Activity size={18} /> Ecosystem Viability Analysis</div>
+                    <div className="text-[10px] font-mono opacity-50">SCAN_ENGINE_V4.2</div>
+                </div>
+
+                <div className={styles.analysisScanner}>
+                    <div className={styles.scannerRing}>
+                        <svg className={styles.svgRing} width="110" height="110">
+                            <circle className={styles.ringBg} cx="55" cy="55" r="45" />
+                            <circle
+                                className={styles.ringFill}
+                                cx="55" cy="55" r="45"
+                                style={{
+                                    strokeDasharray: circumference,
+                                    strokeDashoffset: offset,
+                                    stroke: verdict.color
+                                }}
+                            />
+                        </svg>
+                        <div className={styles.scoreCounter}>
+                            <span className={styles.scoreLarge}>{score.toFixed(1)}</span>
+                            <span className={styles.scorePct}>APTNESS</span>
+                        </div>
+                    </div>
+
+                    <div className={styles.scannerData}>
+                        <div className={styles.verdictBadge} style={{ background: `${verdict.color}20`, color: verdict.color }}>
+                            {verdict.label}
+                        </div>
+                        <p className={styles.growthVerdictText}>{verdict.desc}</p>
+                    </div>
+                </div>
+
+                <div className={styles.tipsGrid}>
+                    <div className={styles.tipCard} style={{ borderColor: verdict.color }}>
+                        <h5>Growth Prediction</h5>
+                        <p>{score >= 75 ? 'Rapid leaf scaling and root development expected.' : 'Slower growth cycles; monitor leaf tips for dehydration.'}</p>
+                    </div>
+                    <div className={styles.tipCard} style={{ borderColor: '#38bdf8' }}>
+                        <h5>Environment Tip</h5>
+                        <p>{plant.type === 'indoor' ? 'Keep away from direct AC drafts.' : 'Ensure morning sunlight for at least 3 hours.'}</p>
+                    </div>
+                </div>
+            </div>
+        );
+    };
 
     const renderControls = () => (
         <div className={styles.mobileControlsContainer}>
@@ -230,7 +292,10 @@ export const PlantDetailsModal = ({ plant, weather, onClose, onBuy }: PlantDetai
 
                     <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '2rem' }}>
                         <div className={styles.overviewContainer}>
-                            <h3 style={{ fontSize: '1.2rem', color: 'white', marginBottom: '0.5rem' }}>Overview</h3>
+                            <h3 style={{ fontSize: '1.2rem', color: 'white', marginBottom: '0.5rem' }}>Ecosystem Status</h3>
+                            {renderGrowthVerdict()}
+
+                            <h3 style={{ fontSize: '1.2rem', color: 'white', marginBottom: '0.5rem', marginTop: '2rem' }}>Overview</h3>
                             <p className={styles.descriptionText}>{plant.description}</p>
 
                             {/* Mobile Advantages & Medicine */}
@@ -359,6 +424,10 @@ export const PlantDetailsModal = ({ plant, weather, onClose, onBuy }: PlantDetai
                         <div style={{ flex: 1, overflowY: 'auto', padding: '3rem' }}>
                             {activeTab === 'overview' ? (
                                 <div className={`${styles.overviewContainer} animate-fade-in`}>
+                                    <h3 style={{ fontSize: '1.5rem', color: 'white', marginBottom: '1.5rem' }}>Ecosystem Status</h3>
+                                    {renderGrowthVerdict()}
+
+                                    <h3 style={{ fontSize: '1.5rem', color: 'white', marginBottom: '1.5rem', marginTop: '3rem' }}>Botanical Overview</h3>
                                     <p className={styles.descriptionText}>{plant.description}</p>
 
                                     {/* Desktop Advantages & Medicine */}

@@ -300,6 +300,7 @@ export const Home = () => {
                 <Suspense fallback={<div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2000, backdropFilter: 'blur(10px)' }}>Starting Simulation...</div>}>
                     <PlantDetailsModal
                         plant={selectedPlant}
+                        score={selectedPlant.score}
                         weather={weather}
                         onClose={() => window.history.back()}
                         onBuy={() => handleAddToCart(selectedPlant)}
