@@ -69,7 +69,7 @@ export const PlantCard = ({ plant, score, isTopMatch, priority = false, onAdd, s
                             onClick={(e) => {
                                 e.stopPropagation();
                                 toast(
-                                    `🌱 ${score}% Aptness: Based on 200 scientific mini-simulations. This plant is scored on its biological stability in your local temperature, humidity, and air quality.`,
+                                    `🌱 ${score}% Aptness: Calculated via a 168-hour Monte Carlo simulation. Analyzes biological survival probability against stochastic temperature and humidity fluctuations.`,
                                     { duration: 5000, style: { background: '#0f172a', color: '#fff', border: '1px solid rgba(255,255,255,0.1)' } }
                                 );
                             }}

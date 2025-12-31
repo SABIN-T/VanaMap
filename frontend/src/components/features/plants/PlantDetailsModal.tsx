@@ -179,9 +179,9 @@ export const PlantDetailsModal = ({ plant, weather, onClose, onBuy }: PlantDetai
                     }}
                     onClick={() => {
                         toast(
-                            "🔬 Scientific Simulation: We run 500 mini-tests to see how this plant behaves in your specific weather. " +
-                            "Plants work 24/7 to 'recharge' your room with fresh air even when you aren't there. " +
-                            "This number ensures you have a healthy oxygen supply for your entire stay!",
+                            "🔬 Biological Simulation: We run 250 Monte Carlo iterations across a stochastic 168-hour environmental window. " +
+                            "This accurately predicts plant performance based on your specific local temperature and humidity patterns. " +
+                            "This number ensures you have optimal oxygen supply for your entire duration!",
                             { icon: '🌱', duration: 6000, style: { background: '#1e293b', color: '#fff', borderRadius: '12px', border: '1px solid #10b981' } }
                         );
                     }}

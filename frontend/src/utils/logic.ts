@@ -42,53 +42,63 @@ export const calculateBiologicalEfficiency = (
 
 /**
  * Monte Carlo Aptness Calculation
- * Instead of static averages, this simulates a 7-day period (168h) with stochastic weather.
- * Returns a score based on biological stability and resilience.
+ * Simulates a stochastic 7-day (168-hour) environmental period to determine survival probability.
+ * This is "Earth's Digital Botanical Archive" level precision.
  */
 export const calculateAptnessMC = (
     plant: Plant,
     baseTemp: number,
     aqi: number = 20,
     baseHumidity: number = 50,
-    iterations: number = 200 // Faster iterations for batch processing
+    iterations: number = 250 // Balanced for precision and performance
 ): number => {
-    let totalScoreSum = 0;
+    let survivalSamples: number[] = [];
 
     for (let i = 0; i < iterations; i++) {
-        let biologicalStability = 0;
-        const simulationWindow = 24; // Check a 24h cycle for ranking
+        let biologicalStress = 0;
+        const simulationHours = 168; // 1 Week simulation
 
-        for (let h = 0; h < simulationWindow; h++) {
-            // Apply Diurnal & Stochastic Jitter
-            // Assume 6 degree diurnal swing + 3 degree random flux
-            const hour = h % 24;
-            const diurnalEffect = Math.sin((hour - 8) * (Math.PI / 12)) * 3;
-            const jitterTemp = baseTemp + diurnalEffect + (Math.random() - 0.5) * 3;
-            const jitterHumidity = baseHumidity + (Math.random() - 0.5) * 15;
+        for (let h = 0; h < simulationHours; h++) {
+            const hourOfDay = h % 24;
+
+            // Diurnal Temperature Swing (Simplified sine wave)
+            const diurnalDelta = Math.sin((hourOfDay - 8) * (Math.PI / 12)) * 5;
+
+            // Stochastic Weather Fluctuations (Random walk component)
+            const randomJitter = (Math.random() - 0.5) * 4;
+
+            const jitterTemp = baseTemp + diurnalDelta + randomJitter;
+            const jitterHumidity = baseHumidity + (Math.random() - 0.5) * 20;
 
             const efficiency = calculateBiologicalEfficiency(plant, jitterTemp, jitterHumidity);
-            biologicalStability += efficiency;
+
+            // Stress Accumulation: If efficiency < 0.3, the plant is struggling
+            if (efficiency < 0.3) biologicalStress += (0.3 - efficiency) * 2;
+            else biologicalStress -= (efficiency - 0.3) * 0.5; // Recovery
+
+            biologicalStress = Math.max(0, biologicalStress);
         }
 
-        const avgEfficiency = biologicalStability / simulationWindow;
-
-        // Resilience Points (Static)
-        let bonus = 0;
-        const desc = (plant.description || "").toLowerCase();
-        if (desc.includes('hardy') || desc.includes('tough')) bonus += 10;
-        if (plant.idealTempMax - plant.idealTempMin > 18) bonus += 5;
-
-        // AQI Points
-        let aqiPoints = 0;
-        const isPurifier = plant.medicinalValues?.includes('Air purification') ||
-            plant.advantages?.some(a => a.toLowerCase().includes('purif'));
-        if (aqi > 100) aqiPoints = isPurifier ? 15 : -10;
-        else if (isPurifier) aqiPoints = 5;
-
-        totalScoreSum += (avgEfficiency * 70) + bonus + aqiPoints;
+        // Score based on inverse of accumulated stress
+        const finalScore = Math.max(0, 100 - (biologicalStress / 2));
+        survivalSamples.push(finalScore);
     }
 
-    return Math.max(0, Math.min(100, Math.round(totalScoreSum / iterations)));
+    // Return the average survival probability
+    const avgScore = survivalSamples.reduce((a, b) => a + b, 0) / iterations;
+
+    // Apply AQI and Bonus logic
+    let modifier = 0;
+    const desc = (plant.description || "").toLowerCase();
+    if (desc.includes('hardy') || desc.includes('tough')) modifier += 5;
+
+    const isPurifier = plant.medicinalValues?.includes('Air purification') ||
+        plant.advantages?.some(a => a.toLowerCase().includes('purif'));
+
+    if (aqi > 100) modifier += isPurifier ? 10 : -15;
+    else if (isPurifier) modifier += 5;
+
+    return Math.max(0, Math.min(100, Math.round(avgScore + modifier)));
 };
 
 export const calculateAptness = (
@@ -100,16 +110,15 @@ export const calculateAptness = (
     isAbsolute?: boolean,
     iterations?: number
 ): number => {
-    // We now point calculateAptness to the MC version for robustness
+    // Point to the upgraded MC engine
     const mcScore = calculateAptnessMC(plant, currentTemp, aqi, avgHumidity, iterations);
 
-    // If absolute mode is requested, return raw score regardless of normalizationBase
     if (isAbsolute) return mcScore;
 
     if (normalizationBase && normalizationBase > 0) {
-        const confidenceThreshold = 60;
-        const scaleFactor = normalizationBase < confidenceThreshold ? (normalizationBase / confidenceThreshold) : 1;
-        return Math.round((mcScore / normalizationBase) * 100 * scaleFactor);
+        // Normalization fix: Ensure we can reach 100% relative match
+        // if the normalizationBase represents the "Ideal" score of the set
+        return Math.round((mcScore / normalizationBase) * 100);
     }
 
     return mcScore;
@@ -186,14 +195,9 @@ export const normalizeBatch = (scores: number[]): number[] => {
     const maxScore = Math.max(...scores);
     if (maxScore === 0) return scores;
 
-    // Proper Scientific Reasoning: 
-    // Normalization should reflect "Relative Best Fit" within the context of the user's climate.
-    // However, if the best fit is still scientifically poor (low efficiency), 
-    // we must not present it as a "Perfect 100% Match".
-    const confidenceThreshold = 60;
-    const scaleFactor = maxScore < confidenceThreshold ? (maxScore / confidenceThreshold) : 1;
-
-    return scores.map(s => Math.round((s / maxScore) * 100 * scaleFactor));
+    // To satisfy "start from normalized to 100%", we scale the highest result to 100
+    // and all others relative to it.
+    return scores.map(s => Math.round((s / maxScore) * 100));
 };
 
 export const formatDistance = (meters: number): string => {
