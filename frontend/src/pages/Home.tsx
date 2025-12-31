@@ -7,7 +7,7 @@ import { fetchPlants, fetchVendors } from '../services/api';
 import { getWeather, geocodeCity, reverseGeocode } from '../services/weather';
 import { calculateAptness, normalizeBatch } from '../utils/logic';
 import type { Plant, Vendor } from '../types';
-import { Sprout, MapPin, Thermometer, Wind, ArrowDown, Sparkles, Search, AlertCircle, Heart, Sun, Activity, GraduationCap, ShoppingBag, PlusCircle, MoveRight, MessageCircle } from 'lucide-react';
+import { Sprout, MapPin, Thermometer, Wind, ArrowDown, Sparkles, Search, AlertCircle, Heart, Sun, Activity, GraduationCap, ShoppingBag, PlusCircle, MoveRight, MessageCircle, Droplets } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 // Lazy load modal for performance
 const PlantDetailsModal = lazy(() => import('../components/features/plants/PlantDetailsModal').then(module => ({ default: module.PlantDetailsModal })));
@@ -528,11 +528,24 @@ export const Home = () => {
                                     <Thermometer size={24} />
                                 </div>
                                 <div className={styles.statInfo}>
-                                    <span className={styles.statLabel}>AVG TEMPERATURE</span>
+                                    <span className={styles.statLabel}>LIVE TEMPERATURE</span>
                                     <div className={styles.statValue}>
                                         {typeof weather.avgTemp30Days === 'number' ? weather.avgTemp30Days.toFixed(1) : '--'}°C
                                     </div>
-                                    <span style={{ color: '#94a3b8', fontSize: '0.7rem' }}>30-Day Mean</span>
+                                    <span style={{ color: '#94a3b8', fontSize: '0.7rem' }}>30-Day Simulation Base</span>
+                                </div>
+                            </div>
+
+                            <div className={styles.weatherCard}>
+                                <div className={styles.statIcon} style={{ background: 'rgba(139, 92, 246, 0.1)', color: '#8b5cf6' }}>
+                                    <Droplets size={24} />
+                                </div>
+                                <div className={styles.statInfo}>
+                                    <span className={styles.statLabel}>LIVE HUMIDITY</span>
+                                    <div className={styles.statValue}>
+                                        {typeof weather.humidity === 'number' ? weather.humidity.toFixed(0) : '--'}%
+                                    </div>
+                                    <span style={{ color: '#94a3b8', fontSize: '0.7rem' }}>Current Moisture Level</span>
                                 </div>
                             </div>
 
