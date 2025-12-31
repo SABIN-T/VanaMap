@@ -278,9 +278,13 @@ export const Home = () => {
 
         if (!weather) return filtered.map(p => ({ ...p, score: 0 }));
 
+        // Mobile optimization: Reduce iterations for faster performance
+        const isMobile = window.innerWidth < 768;
+        const iterations = isMobile ? 75 : 150;
+
         // 1. Calculate raw high-precision absolute scores
         const scoredRaw = filtered.map(p => {
-            const rawScore = calculateAptness(p, weather.avgTemp30Days, weather.air_quality?.aqi, weather.avgHumidity30Days, undefined, true, 150);
+            const rawScore = calculateAptness(p, weather.avgTemp30Days, weather.air_quality?.aqi, weather.avgHumidity30Days, undefined, true, iterations);
             return { ...p, rawScore };
         });
 
