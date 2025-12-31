@@ -1739,3 +1739,49 @@
         scroll-behavior: auto !important;
     }
 }
+/* ULTRA-FAST Mobile Performance - Additional Optimizations */
+@media (max-width: 768px) {
+
+    /* Completely disable all transitions and animations */
+    * {
+        transition: none !important;
+        animation: none !important;
+    }
+
+    /* Remove all filters for instant rendering */
+    .explainerGlass,
+    .typeFilterCard,
+    .weatherCard,
+    .categoryCard {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        background: rgba(15, 23, 42, 0.8) !important;
+    }
+
+    /* Simplify shadows */
+    .weatherCard,
+    .typeFilterCard,
+    .explainerGlass {
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+    }
+
+    /* Disable transform effects */
+    .typeFilterCard:active,
+    .legendItem:active {
+        transform: none !important;
+    }
+
+    /* Optimize images */
+    img {
+        image-rendering: -webkit-optimize-contrast;
+        image-rendering: crisp-edges;
+    }
+
+    /* Force hardware acceleration */
+    .grid,
+    .weatherDashboard,
+    .explainerGlass {
+        transform: translateZ(0);
+        will-change: transform;
+    }
+}

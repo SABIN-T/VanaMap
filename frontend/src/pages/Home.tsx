@@ -278,9 +278,9 @@ export const Home = () => {
 
         if (!weather) return filtered.map(p => ({ ...p, score: 0 }));
 
-        // Mobile optimization: Reduce iterations for faster performance
+        // ULTRA-FAST Mobile optimization: 5x faster on mobile
         const isMobile = window.innerWidth < 768;
-        const iterations = isMobile ? 75 : 150;
+        const iterations = isMobile ? 30 : 150;
 
         // 1. Calculate raw high-precision absolute scores
         const scoredRaw = filtered.map(p => {
@@ -774,7 +774,7 @@ export const Home = () => {
                                     onAdd={handleAddToCart}
                                     score={weather ? plant.score : undefined}
                                     isTopMatch={weather ? (plant.score || 0) >= 100 : false}
-                                    priority={index < 2}
+                                    priority={index < (window.innerWidth < 768 ? 4 : 6)}
                                     stockStatus={getVendorStats(plant.id)}
                                     hideBuyBtn={true}
                                     hideStockBadge={true}
