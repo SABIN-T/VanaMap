@@ -1,19 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
-
-/* Cortex Theme Variables */
+/* Page Container */
 .pageContainer {
-    --cortex-cyan: #00f0ff;
-    --cortex-mint: #00ffa3;
-    --cortex-void: #050505;
-    --cortex-glass: rgba(10, 15, 20, 0.7);
-    --cortex-border: rgba(0, 240, 255, 0.15);
-
     padding-bottom: 4rem;
     animation: fadeIn 0.6s ease-out;
-    /* font-family inherited from global or defined here */
 }
 
-/* Animations */
+@media (max-width: 768px) {
+    .pageContainer {
+        padding-bottom: 100px;
+    }
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -42,15 +38,15 @@
 
 @keyframes glow {
     0% {
-        box-shadow: 0 0 5px rgba(0, 255, 163, 0.2);
+        box-shadow: 0 0 5px rgba(16, 185, 129, 0.2);
     }
 
     50% {
-        box-shadow: 0 0 20px rgba(0, 255, 163, 0.6);
+        box-shadow: 0 0 20px rgba(16, 185, 129, 0.6);
     }
 
     100% {
-        box-shadow: 0 0 5px rgba(0, 255, 163, 0.2);
+        box-shadow: 0 0 5px rgba(16, 185, 129, 0.2);
     }
 }
 
@@ -69,21 +65,21 @@
 
 /* Metric Cards */
 .card {
-    background: var(--cortex-glass);
+    background: rgba(30, 41, 59, 0.4);
     backdrop-filter: blur(12px);
-    border: 1px solid var(--cortex-border);
-    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 1.25rem;
     padding: 1.5rem;
+    transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
 
 .card:hover {
-    border-color: var(--cortex-cyan);
-    box-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
+    background: rgba(30, 41, 59, 0.6);
+    border-color: rgba(255, 255, 255, 0.1);
     transform: translateY(-2px);
+    box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.3);
 }
 
 .header {
@@ -97,49 +93,45 @@
 
 .iconWrapper {
     padding: 0.75rem;
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid var(--cortex-border);
+    border-radius: 0.75rem;
+    background: rgba(255, 255, 255, 0.05);
+    color: #94a3b8;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .iconApi {
-    color: var(--cortex-cyan);
-    background: rgba(0, 240, 255, 0.05);
+    background: rgba(59, 130, 246, 0.1);
+    color: #60a5fa;
 }
 
 .iconDb {
-    color: var(--cortex-mint);
-    background: rgba(0, 255, 163, 0.05);
+    background: rgba(168, 85, 247, 0.1);
+    color: #c084fc;
 }
 
 .title {
-    color: #f8fafc;
+    color: white;
     font-weight: 700;
-    font-size: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    font-size: 1.1rem;
 }
 
 .subtitle {
-    color: #94a3b8;
-    font-family: 'JetBrains Mono', monospace;
+    color: #64748b;
     font-size: 0.75rem;
     margin-top: 0.25rem;
 }
 
 .metricValue {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'Geist Mono', monospace;
     font-size: 2.5rem;
     font-weight: 700;
-    color: #fff;
+    color: white;
     margin-bottom: 1rem;
     display: flex;
     align-items: baseline;
     gap: 0.5rem;
-    text-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
 }
 
 .unit {
@@ -148,24 +140,23 @@
     font-weight: 600;
 }
 
-/* Status Indicators */
+/* Status Indicator */
 .statusGood {
-    color: var(--cortex-mint);
-    text-shadow: 0 0 10px rgba(0, 255, 163, 0.4);
+    color: #34d399;
 }
 
 .statusWarn {
-    color: #facc15;
+    color: #fbbf24;
 }
 
 .statusBad {
-    color: #ef4444;
+    color: #f87171;
 }
 
 /* Progress Bar */
 .progressTrack {
     width: 100%;
-    height: 4px;
+    height: 6px;
     background: rgba(255, 255, 255, 0.05);
     border-radius: 999px;
     overflow: hidden;
@@ -177,33 +168,29 @@
     animation: pulse 2s infinite ease-in-out;
 }
 
-/* Reusing class names but mapping to new colors */
 .fillBlue {
-    background: var(--cortex-cyan);
+    background: #60a5fa;
     width: 42%;
-    box-shadow: 0 0 10px var(--cortex-cyan);
 }
 
 .fillPurple {
-    background: var(--cortex-mint);
+    background: #c084fc;
     width: 99%;
-    box-shadow: 0 0 10px var(--cortex-mint);
 }
 
 .meta {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.7rem;
-    color: #64748b;
-    margin-top: 1rem;
-    opacity: 0.8;
+    font-family: monospace;
+    font-size: 0.75rem;
+    color: #94a3b8;
+    margin-top: 0.75rem;
 }
 
-/* Terminal Style Logs */
+/* Terminal Sytle Logs */
 .terminalCard {
     margin-top: 2rem;
-    background: #020408;
-    /* Deep void for terminal */
-    border: 1px solid var(--cortex-border);
+    background: #0f172a;
+    /* Darker background for terminal feel */
+    border-color: #1e293b;
     min-height: 400px;
     display: flex;
     flex-direction: column;
@@ -214,41 +201,39 @@
     align-items: center;
     justify-content: space-between;
     padding-bottom: 1rem;
-    border-bottom: 1px solid var(--cortex-border);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     margin-bottom: 1rem;
 }
 
 .terminalTitle {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    color: var(--cortex-mint);
+    gap: 0.5rem;
+    color: #34d399;
     font-weight: 700;
     font-size: 0.9rem;
-    font-family: 'JetBrains Mono', monospace;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.05em;
 }
 
 .liveDot {
     width: 8px;
     height: 8px;
-    background: var(--cortex-mint);
+    background: #34d399;
     border-radius: 50%;
     animation: glow 2s infinite;
-    box-shadow: 0 0 5px var(--cortex-mint);
 }
 
 .terminalCommand {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: monospace;
     color: #475569;
     font-size: 0.75rem;
 }
 
 .logs {
-    font-family: 'JetBrains Mono', monospace;
+    font-family: 'Geist Mono', 'Fira Code', monospace;
     font-size: 0.85rem;
-    line-height: 1.8;
+    line-height: 1.6;
     color: #cbd5e1;
     overflow-y: auto;
     flex: 1;
@@ -256,12 +241,12 @@
 }
 
 .logs::-webkit-scrollbar {
-    width: 4px;
+    width: 6px;
 }
 
 .logs::-webkit-scrollbar-thumb {
-    background: rgba(0, 240, 255, 0.2);
-    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
 }
 
 .logs::-webkit-scrollbar-track {
@@ -271,50 +256,40 @@
 .logEntry {
     display: flex;
     gap: 1rem;
-    margin-bottom: 0px;
-    padding: 0.25rem 0.5rem;
-    border-left: 2px solid transparent;
-    transition: all 0.1s;
-}
-
-.logEntry:hover {
-    background: rgba(0, 240, 255, 0.03);
-    border-left-color: var(--cortex-cyan);
+    margin-bottom: 0.25rem;
+    opacity: 0.9;
 }
 
 .timestamp {
-    color: #475569;
+    color: #64748b;
     flex-shrink: 0;
-    font-size: 0.75rem;
 }
 
 .level {
     font-weight: 700;
-    font-size: 0.75rem;
-    min-width: 60px;
 }
 
 .info {
-    color: var(--cortex-cyan);
+    color: #60a5fa;
 }
 
 .warn {
-    color: #facc15;
+    color: #fbbf24;
 }
 
 .error {
-    color: #ef4444;
+    color: #f87171;
 }
 
 .success {
-    color: var(--cortex-mint);
+    color: #34d399;
 }
 
 .cursor {
     display: inline-block;
     width: 8px;
     height: 16px;
-    background: var(--cortex-mint);
+    background: #34d399;
     animation: pulse 1s infinite steps(2);
     vertical-align: middle;
     margin-left: 0.5rem;

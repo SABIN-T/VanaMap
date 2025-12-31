@@ -1,16 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap');
-
-/* Cortex Theme Variables */
+/* Page Container */
 .pageContainer {
-    --cortex-cyan: #00f0ff;
-    --cortex-mint: #00ffa3;
-    --cortex-void: #050505;
-    --cortex-glass: rgba(10, 15, 20, 0.7);
-    --cortex-border: rgba(0, 240, 255, 0.15);
-
     padding-bottom: 4rem;
     animation: fadeIn 0.6s ease-out;
-    font-family: 'Outfit', sans-serif;
 }
 
 @keyframes fadeIn {
@@ -37,7 +28,7 @@
     }
 }
 
-/* SEARCH BAR */
+/* SEARCH BAR (Consistent with other admin pages) */
 .searchContainer {
     position: relative;
     max-width: 600px;
@@ -47,23 +38,24 @@
 
 .searchBar {
     width: 100%;
-    background: var(--cortex-glass);
+    background: var(--glass-bg);
     backdrop-filter: blur(12px);
-    border: 1px solid var(--cortex-border);
+    -webkit-backdrop-filter: blur(12px);
+    border: var(--glass-border);
     border-radius: 9999px;
+    /* Pill shape */
     padding: 1rem 3.5rem 1rem 3.5rem;
     font-size: 1.1rem;
-    color: white;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    color: var(--color-text-main);
+    box-shadow: var(--glass-shadow);
     transition: all 0.3s ease;
     outline: none;
-    font-family: 'JetBrains Mono', monospace;
 }
 
 .searchBar:focus {
-    background: rgba(0, 0, 0, 0.6);
-    border-color: var(--cortex-cyan);
-    box-shadow: 0 0 15px rgba(0, 240, 255, 0.15);
+    background: var(--color-bg-card);
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
 }
 
 .searchIcon {
@@ -71,13 +63,13 @@
     left: 1.25rem;
     top: 50%;
     transform: translateY(-50%);
-    color: #94a3b8;
+    color: var(--color-text-dim);
     pointer-events: none;
     transition: color 0.3s;
 }
 
 .searchBar:focus~.searchIcon {
-    color: var(--cortex-cyan);
+    color: #6366f1;
 }
 
 .clearButton {
@@ -98,8 +90,8 @@
 }
 
 .clearButton:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
+    background: var(--color-bg-alt);
+    color: var(--color-text-main);
 }
 
 /* LAYOUT GRID */
@@ -123,9 +115,9 @@
 }
 
 .userCard {
-    background: var(--cortex-glass);
+    background: var(--glass-bg);
     backdrop-filter: blur(10px);
-    border: 1px solid var(--cortex-border);
+    border: var(--glass-border);
     border-radius: 1rem;
     padding: 1.25rem;
     display: flex;
@@ -133,19 +125,19 @@
     justify-content: space-between;
     transition: all 0.2s ease;
     cursor: default;
+    box-shadow: var(--card-shadow);
 }
 
 .userCard:hover {
-    background: rgba(0, 240, 255, 0.05);
-    border-color: var(--cortex-cyan);
+    background: var(--color-bg-card);
+    border-color: var(--color-primary);
     transform: translateX(4px);
-    box-shadow: 0 0 15px rgba(0, 240, 255, 0.1);
 }
 
 .userCard.active {
-    background: rgba(0, 240, 255, 0.1);
-    border-color: var(--cortex-cyan);
-    box-shadow: 0 0 20px -5px rgba(0, 240, 255, 0.2);
+    background: rgba(99, 102, 241, 0.1);
+    border-color: #6366f1;
+    box-shadow: 0 0 20px -5px rgba(99, 102, 241, 0.2);
 }
 
 .userInfo {
@@ -157,24 +149,20 @@
 .avatar {
     width: 48px;
     height: 48px;
-    border-radius: 12px;
-    /* Squircle */
-    background: linear-gradient(135deg, rgba(0, 240, 255, 0.2) 0%, rgba(0, 240, 255, 0.05) 100%);
-    border: 1px solid var(--cortex-cyan);
+    border-radius: 50%;
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--cortex-cyan);
+    color: white;
     font-weight: 700;
     font-size: 1.25rem;
-    box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
-    font-family: 'JetBrains Mono', monospace;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
 }
 
 .avatarAdmin {
-    background: linear-gradient(135deg, rgba(251, 191, 36, 0.2) 0%, rgba(251, 191, 36, 0.05) 100%);
-    border-color: #fbbf24;
-    color: #fbbf24;
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+    /* Amber for Admin */
 }
 
 .userDetails {
@@ -184,39 +172,34 @@
 
 .userName {
     font-weight: 700;
-    color: white;
+    color: var(--color-text-main);
     font-size: 1.05rem;
-    letter-spacing: 0.5px;
 }
 
 .userEmail {
     font-size: 0.85rem;
-    color: #94a3b8;
-    font-family: 'JetBrains Mono', monospace;
+    color: var(--color-text-muted);
 }
 
 .roleBadge {
     font-size: 0.65rem;
     padding: 0.15rem 0.5rem;
-    border-radius: 4px;
+    border-radius: 999px;
     text-transform: uppercase;
     font-weight: 800;
     margin-top: 0.25rem;
     display: inline-block;
     letter-spacing: 0.05em;
-    font-family: 'JetBrains Mono', monospace;
 }
 
 .roleUser {
-    background: rgba(0, 240, 255, 0.1);
-    color: var(--cortex-cyan);
-    border: 1px solid rgba(0, 240, 255, 0.2);
+    background: rgba(99, 102, 241, 0.1);
+    color: var(--color-primary);
 }
 
 .roleAdmin {
-    background: rgba(251, 191, 36, 0.1);
-    color: #fbbf24;
-    border: 1px solid rgba(251, 191, 36, 0.2);
+    background: rgba(245, 158, 11, 0.1);
+    color: #d97706;
 }
 
 .actionBtn {
@@ -226,17 +209,17 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(255, 255, 255, 0.05);
-    color: #94a3b8;
-    border: 1px solid var(--cortex-border);
+    background: var(--color-bg-alt);
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border);
     transition: all 0.2s;
     cursor: pointer;
 }
 
 .actionBtn:hover {
-    background: rgba(0, 240, 255, 0.1);
-    color: var(--cortex-cyan);
-    border-color: var(--cortex-cyan);
+    background: rgba(99, 102, 241, 0.2);
+    color: #818cf8;
+    border-color: rgba(99, 102, 241, 0.3);
 }
 
 /* ACTION SIDEBAR */
@@ -246,32 +229,30 @@
 }
 
 .actionPanel {
-    background: var(--cortex-glass);
+    background: var(--glass-bg);
     backdrop-filter: blur(20px);
-    border: 1px solid var(--cortex-border);
+    border: var(--glass-border);
     border-radius: 1.5rem;
     padding: 2rem;
-    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    box-shadow: var(--glass-shadow);
     animation: slideInRight 0.4s ease-out;
 }
 
 .panelTitle {
     font-size: 1.1rem;
     font-weight: 700;
-    color: white;
+    color: var(--color-text-main);
     margin-bottom: 1.5rem;
     display: flex;
     align-items: center;
     gap: 0.75rem;
     padding-bottom: 1rem;
-    border-bottom: 1px solid var(--cortex-border);
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    border-bottom: 1px solid var(--color-border);
 }
 
 .targetInfo {
-    background: rgba(0, 240, 255, 0.1);
-    border: 1px solid rgba(0, 240, 255, 0.2);
+    background: rgba(99, 102, 241, 0.1);
+    border: 1px solid rgba(99, 102, 241, 0.2);
     border-radius: 0.75rem;
     padding: 1rem;
     margin-bottom: 1.5rem;
@@ -281,15 +262,14 @@
     font-size: 0.7rem;
     text-transform: uppercase;
     font-weight: 700;
-    color: var(--cortex-cyan);
+    color: #818cf8;
     margin-bottom: 0.25rem;
-    font-family: 'JetBrains Mono', monospace;
 }
 
 .targetValue {
-    color: white;
+    color: var(--color-text-main);
     font-weight: 600;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: monospace;
 }
 
 .formGroup {
@@ -303,45 +283,41 @@
     color: #94a3b8;
     text-transform: uppercase;
     margin-bottom: 0.5rem;
-    font-family: 'JetBrains Mono', monospace;
 }
 
 .glassInput {
     width: 100%;
-    background: rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
     border-radius: 0.75rem;
     padding: 0.85rem 1rem;
-    color: white;
+    color: var(--color-text-main);
     transition: all 0.3s;
     outline: none;
-    font-family: 'JetBrains Mono', monospace;
 }
 
 .glassInput:focus {
-    background: rgba(0, 0, 0, 0.6);
-    border-color: var(--cortex-cyan);
-    box-shadow: 0 0 15px rgba(0, 240, 255, 0.15);
+    background: var(--color-bg-card);
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
 }
 
 .submitBtn {
     width: 100%;
     padding: 0.85rem;
     border-radius: 0.75rem;
-    background: linear-gradient(135deg, var(--cortex-mint) 0%, #059669 100%);
-    color: black;
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    color: white;
     font-weight: 700;
     border: none;
     cursor: pointer;
     transition: all 0.2s;
-    box-shadow: 0 4px 12px rgba(0, 255, 163, 0.3);
-    text-transform: uppercase;
-    font-family: 'JetBrains Mono', monospace;
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
 }
 
 .submitBtn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 0 20px rgba(0, 255, 163, 0.4);
+    box-shadow: 0 8px 20px rgba(79, 70, 229, 0.4);
 }
 
 .cancelBtn {
@@ -355,49 +331,45 @@
     cursor: pointer;
     transition: all 0.2s;
     margin-top: 0.75rem;
-    font-family: 'JetBrains Mono', monospace;
 }
 
 .cancelBtn:hover {
-    background: rgba(255, 255, 255, 0.05);
-    color: white;
-    border-color: white;
+    background: var(--color-bg-alt);
+    color: var(--color-text-main);
 }
 
-/* Empty Panel */
+/* Empty Panel State */
 .emptyPanel {
     text-align: center;
     padding: 3rem 1rem;
     color: #64748b;
-    border: 1px dashed var(--cortex-border);
+    border: 2px dashed rgba(255, 255, 255, 0.05);
     border-radius: 1.5rem;
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background: rgba(0, 0, 0, 0.2);
 }
 
 .quickResetBtn {
     width: 100%;
     padding: 0.75rem;
-    background: rgba(251, 191, 36, 0.1);
+    background: rgba(245, 158, 11, 0.1);
     color: #fbbf24;
-    border: 1px dashed rgba(251, 191, 36, 0.3);
+    border: 1px dashed rgba(245, 158, 11, 0.3);
     border-radius: 0.75rem;
     font-weight: 600;
     font-size: 0.85rem;
     cursor: pointer;
     transition: all 0.2s;
     margin-bottom: 1.5rem;
-    font-family: 'JetBrains Mono', monospace;
 }
 
 .quickResetBtn:hover {
-    background: rgba(251, 191, 36, 0.2);
-    border-color: #fbbf24;
-    box-shadow: 0 0 10px rgba(251, 191, 36, 0.2);
+    background: rgba(245, 158, 11, 0.2);
+    border-color: rgba(245, 158, 11, 0.5);
+    color: #fcd34d;
 }
 
 .deleteBtn {
@@ -411,26 +383,33 @@
     font-size: 0.85rem;
     cursor: pointer;
     transition: all 0.2s;
-    font-family: 'JetBrains Mono', monospace;
 }
 
 .deleteBtn:hover {
     background: rgba(239, 68, 68, 0.2);
-    border-color: #f87171;
-    box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+    border-color: rgba(239, 68, 68, 0.4);
+    color: #fca5a5;
 }
 
-/* ALARMS */
+/* ALARM / ALERTS SECTION */
+.alarmContainer {
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    animation: fadeIn 0.5s ease-out;
+}
+
 .alarmCard {
-    background: rgba(220, 38, 38, 0.05);
-    border: 1px solid rgba(220, 38, 38, 0.3);
+    background: rgba(220, 38, 38, 0.1);
+    border: 1px solid rgba(220, 38, 38, 0.2);
     border-left: 4px solid #dc2626;
     border-radius: 12px;
     padding: 1rem 1.5rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.1);
     position: relative;
     overflow: hidden;
 }
@@ -439,7 +418,7 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(90deg, transparent, rgba(220, 38, 38, 0.1), transparent);
+    background: linear-gradient(90deg, transparent, rgba(220, 38, 38, 0.05), transparent);
     transform: translateX(-100%);
     animation: sweep 3s infinite;
 }
@@ -454,10 +433,9 @@
     display: flex;
     align-items: center;
     gap: 1rem;
-    color: #ef4444;
+    color: #b91c1c;
     font-size: 0.9rem;
     font-weight: 500;
-    font-family: 'JetBrains Mono', monospace;
 }
 
 .alarmIcon {
@@ -483,13 +461,13 @@
 }
 
 .alarmEmail {
-    color: white;
+    color: var(--color-text-main);
     font-weight: 700;
 }
 
 .alarmTime {
     font-size: 0.75rem;
-    color: rgba(255, 255, 255, 0.5);
+    color: rgba(252, 165, 165, 0.6);
     margin-left: 0.5rem;
 }
 
@@ -498,6 +476,34 @@
         flex-direction: column;
         align-items: flex-start;
         gap: 1rem;
+    }
+
+    .alarmContent {
+        font-size: 0.85rem;
+    }
+
+    .searchBar {
+        font-size: 0.95rem;
+        padding: 0.8rem 3rem;
+    }
+
+    .userCard {
+        padding: 1rem;
+    }
+
+    .userInfo {
+        gap: 0.75rem;
+    }
+
+    .avatar {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+    }
+
+    .sidebar {
+        position: static;
+        margin-top: 2rem;
     }
 }
 
@@ -517,12 +523,10 @@
     justify-content: center;
     gap: 0.5rem;
     box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
-    font-family: 'JetBrains Mono', monospace;
-    text-transform: uppercase;
 }
 
 .premiumBtn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
+    box-shadow: 0 8px 20px rgba(245, 158, 11, 0.4);
     filter: brightness(1.1);
 }

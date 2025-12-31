@@ -1,28 +1,22 @@
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700;800&display=swap');
-
 .container {
-    --cortex-cyan: #00f0ff;
-    --cortex-mint: #00ffa3;
-    --cortex-void: #050505;
-    --cortex-glass: rgba(10, 15, 20, 0.7);
-    --cortex-border: rgba(0, 240, 255, 0.15);
-
     display: flex;
     min-height: 100vh;
-    background: var(--cortex-void);
-    color: #e2e8f0;
+    background: var(--color-bg);
+    color: var(--color-text-main);
     font-family: 'Outfit', sans-serif;
+    transition: background 0.3s ease;
 }
 
 /* --- SIDEBAR --- */
 .sidebar {
     width: 280px;
-    background: rgba(10, 15, 20, 0.9);
-    border-right: 1px solid var(--cortex-border);
+    background: var(--glass-bg);
+    border-right: var(--glass-border);
     display: flex;
     flex-direction: column;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     z-index: 1000;
     height: 100vh;
     position: sticky;
@@ -37,11 +31,8 @@
 }
 
 .sidebarHeader {
-    padding: 2.5rem 1.5rem;
-    border-bottom: 1px solid var(--cortex-border);
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    padding: 2rem;
+    border-bottom: var(--glass-border);
 }
 
 .brand {
@@ -51,28 +42,32 @@
 }
 
 .logoBox {
-    width: 44px;
-    height: 44px;
-    background: rgba(0, 240, 255, 0.1);
-    border: 1px solid var(--cortex-cyan);
+    width: 40px;
+    height: 40px;
+    background: rgba(250, 204, 21, 0.1);
+    border: 1px solid rgba(250, 204, 21, 0.2);
     border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
 }
 
 .brandName {
-    font-size: 1.1rem;
+    font-size: 1.25rem;
     font-weight: 800;
-    letter-spacing: 2px;
-    color: white;
-    font-family: 'JetBrains Mono', monospace;
-    text-transform: uppercase;
-    background: linear-gradient(90deg, #fff, var(--cortex-cyan));
+    letter-spacing: 0.1em;
+    background: linear-gradient(to right, var(--color-text-main), var(--color-text-muted));
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
+    transition: all 0.5s ease;
+}
+
+.premiumMode .brandName {
+    background: linear-gradient(to right, #10b981, #38bdf8);
+    -webkit-background-clip: text;
+    background-clip: text;
+    text-shadow: 0 0 15px rgba(16, 185, 129, 0.4);
 }
 
 .nav {
@@ -82,51 +77,77 @@
     flex-direction: column;
     gap: 0.5rem;
     overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.nav::-webkit-scrollbar {
+    width: 4px;
+}
+
+.nav::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.nav::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
+
+.premiumMode .nav::-webkit-scrollbar-thumb {
+    background: linear-gradient(to bottom, #10b981, #38bdf8);
 }
 
 .navItem {
     display: flex;
     align-items: center;
     gap: 1rem;
-    padding: 0.8rem 1.25rem;
-    border-radius: 10px;
-    color: #94a3b8;
+    padding: 0.875rem 1.25rem;
+    border-radius: 12px;
+    color: var(--color-text-muted);
     text-decoration: none;
     transition: all 0.2s;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    font-weight: 600;
-    border: 1px solid transparent;
+    position: relative;
+    font-weight: 500;
 }
 
 .navItem:hover {
-    background: rgba(255, 255, 255, 0.03);
-    color: white;
-    border-color: rgba(255, 255, 255, 0.05);
+    background: var(--color-bg-alt);
+    color: var(--color-text-main);
+}
+
+.navSub {
+    margin-left: 1.5rem;
+    font-size: 0.9rem;
+    opacity: 0.8;
 }
 
 .navActive {
-    background: rgba(0, 240, 255, 0.1) !important;
-    color: var(--cortex-cyan) !important;
-    border-color: var(--cortex-cyan) !important;
-    box-shadow: 0 0 15px rgba(0, 240, 255, 0.1);
+    background: rgba(16, 185, 129, 0.08) !important;
+    color: #10b981 !important;
+}
+
+.navIcon {
+    opacity: 0.7;
+}
+
+.navActive .navIcon {
+    opacity: 1;
 }
 
 .activeIndicator {
     position: absolute;
     left: 0;
-    top: 25%;
-    bottom: 25%;
+    top: 20%;
+    bottom: 20%;
     width: 3px;
-    background: var(--cortex-cyan);
+    background: #10b981;
     border-radius: 0 4px 4px 0;
-    box-shadow: 0 0 10px var(--cortex-cyan);
+    box-shadow: 0 0 10px #10b981;
 }
 
 .sidebarFooter {
     padding: 1.5rem;
-    border-top: 1px solid var(--cortex-border);
+    border-top: var(--glass-border);
 }
 
 .logoutBtn {
@@ -134,47 +155,55 @@
     display: flex;
     align-items: center;
     gap: 1rem;
-    padding: 0.8rem 1.25rem;
-    border-radius: 10px;
-    background: rgba(239, 68, 68, 0.05);
-    border: 1px solid rgba(239, 68, 68, 0.1);
-    color: #ef4444;
+    padding: 0.875rem 1.25rem;
+    border-radius: 12px;
+    background: rgba(244, 63, 94, 0.05);
+    border: 1px solid rgba(244, 63, 94, 0.1);
+    color: #f43f5e;
     cursor: pointer;
     transition: all 0.2s;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    font-weight: 700;
+    font-weight: 600;
 }
 
 .logoutBtn:hover {
-    background: #ef4444;
-    color: white;
-    box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+    background: #f43f5e;
+    color: #fff;
 }
 
-/* --- TOP BAR --- */
+/* --- MAIN CONTENT --- */
+.main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
 .topBar {
     height: 72px;
-    background: rgba(5, 5, 5, 0.8);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--cortex-border);
+    background: var(--glass-bg);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: var(--glass-border);
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 2rem;
-    position: sticky;
-    top: 0;
-    z-index: 900;
+}
+
+.topBarLeft {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
 }
 
 .toggleBtn {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid var(--cortex-border);
-    color: #94a3b8;
-    width: 38px;
-    height: 38px;
-    border-radius: 8px;
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -183,83 +212,148 @@
 }
 
 .toggleBtn:hover {
-    border-color: var(--cortex-cyan);
-    color: var(--cortex-cyan);
+    background: var(--color-bg-card);
+    color: var(--color-text-main);
+}
+
+.breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .rootCrumb {
-    color: var(--cortex-cyan);
-    font-weight: 700;
+    color: var(--color-text-dim);
+    font-weight: 600;
     text-transform: uppercase;
-    font-size: 0.7rem;
-    font-family: 'JetBrains Mono', monospace;
-    letter-spacing: 1px;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
 }
 
 .crumbDivider {
     color: #334155;
-    margin: 0 0.5rem;
 }
 
 .activeCrumb {
-    font-size: 0.75rem;
-    color: white;
-    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--color-text-muted);
+}
+
+.topBarRight {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
 }
 
 .adminBadge {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    padding: 0.4rem 0.75rem;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid var(--cortex-border);
-    border-radius: 12px;
+    padding: 0.5rem;
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+    border-radius: 30px;
 }
 
 .adminAvatar {
-    width: 28px;
-    height: 28px;
-    background: linear-gradient(135deg, var(--cortex-cyan), var(--cortex-mint));
-    border-radius: 6px;
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, #10b981, #3b82f6);
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: 800;
-    font-size: 0.7rem;
-    color: #000;
-    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: #020617;
+}
+
+.adminInfo {
+    padding-right: 0.75rem;
 }
 
 .adminName {
     font-size: 0.8rem;
-    font-weight: 700;
-    color: white;
+    font-weight: 600;
+    color: var(--color-text-main);
 }
 
 .adminRole {
-    font-size: 0.6rem;
-    color: var(--cortex-cyan);
+    font-size: 0.65rem;
+    color: #64748b;
     text-transform: uppercase;
     font-weight: 700;
-    font-family: 'JetBrains Mono', monospace;
+}
+
+/* --- PREMIUM TOGGLE --- */
+.premiumToggle {
+    position: relative;
+    width: 64px;
+    height: 32px;
+    background: #1e293b;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    align-items: center;
+    padding: 0 4px;
+}
+
+.premiumToggleActive {
+    background: linear-gradient(to right, #10b981, #38bdf8);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+}
+
+.toggleCircle {
+    width: 24px;
+    height: 24px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.premiumToggleActive .toggleCircle {
+    transform: translateX(30px) rotate(360deg);
+}
+
+.toggleIcon {
+    color: #64748b;
+    transition: color 0.3s;
+}
+
+.premiumToggleActive .toggleIcon {
+    color: #10b981;
 }
 
 /* --- CONTENT --- */
 .content {
     flex: 1;
     padding: 2.5rem;
-    background: var(--cortex-void);
+}
+
+.contentHeader {
+    margin-bottom: 2rem;
 }
 
 .pageTitle {
-    font-size: 1.75rem;
-    font-weight: 900;
-    letter-spacing: -0.5px;
-    color: white;
-    text-transform: uppercase;
-    margin-bottom: 2rem;
-    font-family: 'JetBrains Mono', monospace;
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    background: linear-gradient(to right, var(--color-text-main), var(--color-text-muted));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.pageBody {
+    animation: fadeIn 0.4s ease-out;
 }
 
 @keyframes fadeIn {
@@ -274,43 +368,80 @@
     }
 }
 
-.pageBody {
-    animation: fadeIn 0.4s ease-out;
-}
-
-/* Mobile */
 @media (max-width: 1024px) {
     .sidebar {
         position: fixed;
-        box-shadow: 20px 0 50px rgba(0, 0, 0, 0.8);
+        left: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 11000;
+        /* Higher than MobileTabBar (10000) */
+        box-shadow: 20px 0 50px rgba(0, 0, 0, 0.5);
     }
 
     .sidebarClosed {
         transform: translateX(-100%) !important;
         width: 280px;
+        /* Keep width for animation consistency */
+    }
+
+    .sidebarOpen {
+        transform: translateX(0) !important;
+    }
+
+    .main {
+        width: 100%;
+    }
+
+    .topBar {
+        padding: 0 1rem;
+    }
+
+    .breadcrumbs {
+        display: none;
     }
 
     .content {
         padding: 1.5rem;
         padding-bottom: 100px;
+        /* Space for mobile tab bar */
     }
 
     .pageTitle {
-        font-size: 1.25rem;
+        font-size: 1.5rem;
+    }
+
+    .adminInfo {
+        display: none;
+    }
+
+    .adminBadge {
+        padding: 0.25rem;
     }
 }
 
 .backdrop {
     display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.8);
-    backdrop-filter: blur(4px);
-    z-index: 1500;
 }
 
 @media (max-width: 1024px) {
     .backdrop {
         display: block;
+        position: fixed;
+        inset: 0;
+        background: rgba(2, 6, 23, 0.8);
+        backdrop-filter: blur(4px);
+        z-index: 1500;
+        animation: backdropFadeIn 0.3s ease-out;
+    }
+}
+
+@keyframes backdropFadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
     }
 }
