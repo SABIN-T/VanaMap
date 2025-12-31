@@ -3,6 +3,7 @@ import { Send, Sparkles, Leaf, Bot, User, Trash2, Download } from 'lucide-react'
 import { fetchPlants } from '../services/api';
 import toast from 'react-hot-toast';
 import styles from './AIDoctor.module.css';
+import { analyzeUserRequest, getResponseStructure } from '../utils/requestAnalysis';
 
 interface Message {
     id: string;
