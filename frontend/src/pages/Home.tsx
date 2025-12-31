@@ -726,7 +726,7 @@ export const Home = () => {
                                     plant={plant}
                                     onAdd={handleAddToCart}
                                     score={weather ? plant.score : undefined}
-                                    isTopMatch={weather ? index === 0 && (plant.score || 0) > 0 : false}
+                                    isTopMatch={weather ? (plant.score || 0) >= 100 : false}
                                     priority={index < 2}
                                     stockStatus={getVendorStats(plant.id)}
                                     hideBuyBtn={true}

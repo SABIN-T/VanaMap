@@ -66,7 +66,7 @@ export const PLANTS: Plant[] = [
         "medicinalValues": ["Burns healing", "Skin hydration"],
         "advantages": ["Medicinal gel", "Succulent"],
         "price": 25,
-        "type": "indoor",
+        "type": "outdoor",
         "lifespan": "5-20 Years"
     },
     {
@@ -752,7 +752,7 @@ export const PLANTS: Plant[] = [
             "Medicinal"
         ],
         "price": 25,
-        "type": "indoor",
+        "type": "outdoor",
         "lifespan": "1-3 Years"
     },
     {
@@ -775,7 +775,7 @@ export const PLANTS: Plant[] = [
             "Pest repellent"
         ],
         "price": 25,
-        "type": "indoor",
+        "type": "outdoor",
         "lifespan": "10-50 Years"
     },
     {

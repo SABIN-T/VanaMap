@@ -272,7 +272,7 @@ export const INDIAN_PLANT_DB: Record<string, Partial<Plant>> = {
         minHumidity: 20,
         isNocturnal: true,
         description: 'Skin healer. Low maintenance.',
-        type: 'indoor', // can be both
+        type: 'outdoor', // Changed to outdoor for accurate growth simulation (needs sun)
         medicinalValues: ['Skin care'],
         advantages: ['Medicinal', 'Hardy']
     },

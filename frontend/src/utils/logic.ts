@@ -86,13 +86,9 @@ export const calculateAptnessMC = (
     // Average energy across all Monte Carlo iterations
     const rawAvg = energySamples.reduce((a, b) => a + b, 0) / iterations;
 
-    // --- Genetic Differentiation ---
-    // Deterministic factor from name to simulate micro-metabolic differences
-    const geneticSeed = (plant.scientificName || plant.name).split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
-    const metabolicEfficiency = 0.98 + ((geneticSeed % 40) / 1000); // 0.98 to 1.02
-
-    // Apply botanical multipliers (Toughness, Air Purification)
-    let modifier = 1.0 * metabolicEfficiency;
+    // Final result is high-precision (float)
+    // Removed genetic differentiation to allow tied scores for identical species specs
+    let modifier = 1.0;
     const desc = (plant.description || "").toLowerCase();
 
     // Hardy plants have a higher baseline "Resilience Energy"
@@ -101,12 +97,11 @@ export const calculateAptnessMC = (
     const isPurifier = plant.medicinalValues?.includes('Air purification') ||
         plant.advantages?.some(a => a.toLowerCase().includes('purif'));
 
-    // Environmental synergies
+    // Environmental synergies with AQI
     if (aqi > 100 && isPurifier) modifier += 0.1;
     else if (aqi > 150 && !isPurifier) modifier -= 0.15;
 
-    // Final result is high-precision (float)
-    return Math.max(0, Math.min(100, rawAvg * modifier));
+    return Math.round(rawAvg * modifier * 10) / 10;
 };
 
 export const calculateAptness = (
@@ -200,18 +195,14 @@ export const runRoomSimulationMC = (
 
 export const normalizeBatch = (scores: number[]): number[] => {
     if (scores.length === 0) return [];
-    if (scores.length === 1) return [100.0];
-
     const maxScore = Math.max(...scores);
-    const minScore = Math.min(...scores);
+    if (maxScore === 0) return scores.map(() => 0);
 
-    // Scale everything such that max -> 100 and min -> 10
-    // formula: 10 + (s - min) * (100 - 10) / (max - min)
-    const range = maxScore - minScore;
-
+    // Scaling the top to exactly 100.0
+    // Others are scaled proportionally. No forced floor.
+    // This allows multiple plants to hit 100 if they tie for max.
     return scores.map(s => {
-        if (range === 0) return 100.0;
-        const normalized = 10 + ((s - minScore) * 90) / range;
+        const normalized = (s / maxScore) * 100;
         return Math.round(normalized * 10) / 10;
     });
 };
