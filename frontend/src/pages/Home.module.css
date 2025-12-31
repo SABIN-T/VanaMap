@@ -647,6 +647,28 @@
     transform: scale(0.96);
 }
 
+/* GPS Button Loading State */
+.gpsBtnLoading {
+    cursor: wait !important;
+    pointer-events: none;
+}
+
+.gpsBtnLoading::before {
+    animation: shine 1s infinite !important;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+}
+
 .divider {
     display: flex;
     align-items: center;
@@ -1682,7 +1704,9 @@
     .typeFilterDesc {
         display: none;
     }
-}/* ========================================
+}
+
+/* ========================================
    MOBILE PERFORMANCE OPTIMIZATIONS
    ======================================== */
 
@@ -1739,6 +1763,7 @@
         scroll-behavior: auto !important;
     }
 }
+
 /* ULTRA-FAST Mobile Performance - Additional Optimizations */
 @media (max-width: 768px) {
 

@@ -463,12 +463,17 @@ export const Home = () => {
                                 <Button
                                     variant="primary"
                                     onClick={handleGetLocation}
-                                    className={styles.gpsBtn}
+                                    className={`${styles.gpsBtn} ${locationLoading ? styles.gpsBtnLoading : ''}`}
                                     disabled={locationLoading}
                                     aria-label="Detect current location for plant recommendations"
+                                    style={locationLoading ? {
+                                        background: 'linear-gradient(135deg, #f59e0b, #d97706)',
+                                        boxShadow: '0 0 30px rgba(245, 158, 11, 0.5)',
+                                        animation: 'pulse 1.5s ease-in-out infinite'
+                                    } : {}}
                                 >
                                     <MapPin size={22} className={locationLoading ? "animate-spin" : "animate-bounce"} style={{ marginRight: '12px' }} />
-                                    {locationLoading ? "DETERMINING CLIMATE..." : "Auto-Detect Local Climate"}
+                                    {locationLoading ? "🌍 DETERMINING CLIMATE..." : "Auto-Detect Local Climate"}
                                 </Button>
 
                                 <div className={styles.divider}>
