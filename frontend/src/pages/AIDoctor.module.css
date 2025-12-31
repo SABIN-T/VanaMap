@@ -108,6 +108,121 @@
 }
 
 /* =========================================
+   ADVANCED FEATURES TOOLBAR
+   ========================================= */
+.featuresToolbar {
+    flex-shrink: 0;
+    background: rgba(3, 7, 18, 0.98);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding: 0.75rem 1.5rem;
+    backdrop-filter: blur(20px);
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(16, 185, 129, 0.3) transparent;
+}
+
+.featuresToolbar::-webkit-scrollbar {
+    height: 4px;
+}
+
+.featuresToolbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.featuresToolbar::-webkit-scrollbar-thumb {
+    background: rgba(16, 185, 129, 0.3);
+    border-radius: 2px;
+}
+
+.featureButtons {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.featureBtn {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1rem;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(5, 150, 105, 0.05) 100%);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    border-radius: 0.75rem;
+    color: #10b981;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.1);
+}
+
+.featureBtn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(5, 150, 105, 0.1) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.featureBtn:hover {
+    transform: translateY(-2px) scale(1.02);
+    border-color: rgba(16, 185, 129, 0.4);
+    box-shadow:
+        0 8px 20px rgba(16, 185, 129, 0.2),
+        0 0 0 1px rgba(16, 185, 129, 0.1);
+    color: #34d399;
+}
+
+.featureBtn:hover::before {
+    opacity: 1;
+}
+
+.featureBtn:active {
+    transform: translateY(0) scale(0.98);
+}
+
+.featureBtn svg {
+    position: relative;
+    z-index: 1;
+    transition: transform 0.3s ease;
+}
+
+.featureBtn:hover svg {
+    transform: scale(1.1) rotate(-5deg);
+}
+
+.featureBtn span {
+    position: relative;
+    z-index: 1;
+    white-space: nowrap;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+    .featureBtn span {
+        display: none;
+    }
+
+    .featureBtn {
+        padding: 0.6rem;
+        width: 40px;
+        height: 40px;
+        justify-content: center;
+    }
+
+    .featuresToolbar {
+        padding: 0.5rem 1rem;
+    }
+}
+
+/* =========================================
    CHAT AREA
    ========================================= */
 .chatContainer {

@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Send, Sparkles, Leaf, Bot, User, Trash2, Download } from 'lucide-react';
+import { Send, Sparkles, Leaf, Bot, User, Trash2, Download, Calendar, Globe, Camera, Mic, ShoppingCart } from 'lucide-react';
 import { fetchPlants } from '../services/api';
 import toast from 'react-hot-toast';
 import styles from './AIDoctor.module.css';
@@ -1027,6 +1027,56 @@ What would you like to know about your plants today?`;
                     </div>
                 </div>
             </header>
+
+            {/* Advanced Features Toolbar */}
+            <div className={styles.featuresToolbar}>
+                <div className={styles.featureButtons}>
+                    <button
+                        className={styles.featureBtn}
+                        onClick={() => toast('Care Calendar - Coming Soon! Set reminders for watering, fertilizing, and more.', { icon: '📅', duration: 4000 })}
+                        title="Care Calendar - Set plant care reminders"
+                    >
+                        <Calendar size={20} />
+                        <span>Care Calendar</span>
+                    </button>
+
+                    <button
+                        className={styles.featureBtn}
+                        onClick={() => toast('Multi-Language Support - Coming Soon! Chat in 50+ languages including all Indian languages.', { icon: '🌍', duration: 4000 })}
+                        title="Multi-Language - 50+ languages"
+                    >
+                        <Globe size={20} />
+                        <span>Language</span>
+                    </button>
+
+                    <button
+                        className={styles.featureBtn}
+                        onClick={() => toast('Image Recognition - Coming Soon! Upload plant photos for instant diagnosis.', { icon: '📸', duration: 4000 })}
+                        title="Image Recognition - Diagnose from photos"
+                    >
+                        <Camera size={20} />
+                        <span>Scan Plant</span>
+                    </button>
+
+                    <button
+                        className={styles.featureBtn}
+                        onClick={() => toast('Voice Input - Coming Soon! Talk to Dr. Flora hands-free!', { icon: '🎤', duration: 4000 })}
+                        title="Voice Input - Hands-free chat"
+                    >
+                        <Mic size={20} />
+                        <span>Voice</span>
+                    </button>
+
+                    <button
+                        className={styles.featureBtn}
+                        onClick={() => toast('Shopping Assistant - Coming Soon! Find best deals on plants and supplies.', { icon: '🛒', duration: 4000 })}
+                        title="Shopping Assistant - Find best deals"
+                    >
+                        <ShoppingCart size={20} />
+                        <span>Shop</span>
+                    </button>
+                </div>
+            </div>
 
             <div className={styles.chatContainer}>
                 <div className={styles.messagesWrapper}>
