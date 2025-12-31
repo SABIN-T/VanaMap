@@ -287,7 +287,7 @@ Be specific, practical, and encouraging.`;
         }
 
         // Fallback: General recommendations based on query
-        return generateGeneralRecommendations(userMessage);
+        return generateGeneralRecommendations();
     };
 
     const generateDefaultRecommendations = (criteria: string, plants: any[]): string => {
@@ -332,7 +332,7 @@ Be specific, practical, and encouraging.`;
         return response;
     };
 
-    const generateGeneralRecommendations = (query: string): string => {
+    const generateGeneralRecommendations = (): string => {
         return `🌿 **Plant Recommendations**\n\n` +
             `I'd love to help you find the perfect plant! To give you the best recommendations, please tell me:\n\n` +
             `**Environment:**\n` +
