@@ -4,7 +4,7 @@ import styles from './PlantDetailsModal.module.css';
 import { useState, useMemo, useEffect } from 'react';
 import { Button } from '../../common/Button';
 import toast from 'react-hot-toast';
-import { runRoomSimulationMC } from '../../../utils/logic';
+import { runRoomSimulationMC, generatePlantInsights } from '../../../utils/logic';
 
 interface PlantDetailsModalProps {
     plant: Plant;
@@ -73,11 +73,13 @@ export const PlantDetailsModal = ({ plant, score = 0, weather, onClose, onBuy }:
     // ==========================================
 
     const renderGrowthVerdict = () => {
+        const insights = generatePlantInsights(plant, currentTemp, currentHumidity);
+
         const getVerdict = () => {
-            if (score >= 90) return { label: 'Optimal Match', color: '#10b981', desc: 'Condition analysis complete. This specimen will thrive and reach peak physiological potential in your current climate.' };
-            if (score >= 75) return { label: 'Resilient Fit', color: '#38bdf8', desc: 'Biological compatibility is high. Expect steady growth with standard maintenance protocols.' };
-            if (score >= 50) return { label: 'Struggling Match', color: '#fb923c', desc: 'Climate stress detected. This species may require supplemental humidity or shade to avoid biological fatigue.' };
-            return { label: 'Non-Viable', color: '#f87171', desc: 'Severe ecosystem mismatch. Vitality levels are predicted to drop rapidly in these conditions.' };
+            if (score >= 90) return { label: 'Optimal Match', color: '#10b981', desc: 'Condition analysis complete. Vital signs are within optimal ranges for peak physiological productivity.' };
+            if (score >= 75) return { label: 'Resilient Fit', color: '#38bdf8', desc: 'Biological compatibility is high. The specimen is capable of adapting to current atmospheric variance.' };
+            if (score >= 50) return { label: 'Struggling Match', color: '#fb923c', desc: 'Ecosystem stress detected. Metabolic efficiency is compromised due to environmental mismatch.' };
+            return { label: 'Non-Viable', color: '#f87171', desc: 'Critical life-energy deficit. Continuous exposure to these conditions may lead to permanent cellular damage.' };
         };
 
         const verdict = getVerdict();
@@ -122,11 +124,11 @@ export const PlantDetailsModal = ({ plant, score = 0, weather, onClose, onBuy }:
                 <div className={styles.tipsGrid}>
                     <div className={styles.tipCard} style={{ borderColor: verdict.color }}>
                         <h5>Growth Prediction</h5>
-                        <p>{score >= 75 ? 'Rapid leaf scaling and root development expected.' : 'Slower growth cycles; monitor leaf tips for dehydration.'}</p>
+                        <p>{insights.prediction}</p>
                     </div>
                     <div className={styles.tipCard} style={{ borderColor: '#38bdf8' }}>
                         <h5>Environment Tip</h5>
-                        <p>{plant.type === 'indoor' ? 'Keep away from direct AC drafts.' : 'Ensure morning sunlight for at least 3 hours.'}</p>
+                        <p>{insights.tip}</p>
                     </div>
                 </div>
             </div>

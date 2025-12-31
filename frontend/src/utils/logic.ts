@@ -200,13 +200,18 @@ export const runRoomSimulationMC = (
 
 export const normalizeBatch = (scores: number[]): number[] => {
     if (scores.length === 0) return [];
-    const maxScore = Math.max(...scores);
-    if (maxScore === 0) return scores;
+    if (scores.length === 1) return [100.0];
 
-    // Normalizing the highest result to exactly 100.0
-    // Others are scaled proportionally with high resolution (0.1 precision)
+    const maxScore = Math.max(...scores);
+    const minScore = Math.min(...scores);
+
+    // Scale everything such that max -> 100 and min -> 10
+    // formula: 10 + (s - min) * (100 - 10) / (max - min)
+    const range = maxScore - minScore;
+
     return scores.map(s => {
-        const normalized = (s / maxScore) * 100;
+        if (range === 0) return 100.0;
+        const normalized = 10 + ((s - minScore) * 90) / range;
         return Math.round(normalized * 10) / 10;
     });
 };
@@ -234,3 +239,44 @@ export const getDistanceFromLatLonInKm = (lat1: number, lon1: number, lat2: numb
 function deg2rad(deg: number) {
     return deg * (Math.PI / 180);
 }
+
+/**
+ * Generates dynamic, scientifically accurate insights for a plant based on current environment.
+ */
+export const generatePlantInsights = (plant: Plant, temp: number, humidity: number) => {
+    let prediction = "";
+    let tip = "";
+
+    const tMid = (plant.idealTempMin + plant.idealTempMax) / 2;
+    const isHeatStress = temp > plant.idealTempMax;
+    const isColdStress = temp < plant.idealTempMin;
+    const isHumidityStress = humidity < plant.minHumidity;
+
+    // 1. Growth Prediction
+    if (!isHeatStress && !isColdStress && !isHumidityStress) {
+        prediction = "High metabolic efficiency detected. Expect robust biomass accumulation and optimal leaf expansion speed.";
+    } else if (isHeatStress) {
+        prediction = "Thermal threshold exceeded. Growth rates will likely decelerate as the plant prioritizes cellular cooling and water retention.";
+    } else if (isColdStress) {
+        prediction = "Lower thermal limit reached. Metabolic processes are slowing down; expect minimal new growth until temperatures stabilize.";
+    } else if (isHumidityStress) {
+        prediction = "Transpiration-respiration imbalance detected. New leaf development may be stunted or show signs of tip-burn.";
+    } else {
+        prediction = "Moderate growth predicted. The specimen is adapting to sub-optimal atmospheric conditions.";
+    }
+
+    // 2. Environment Tip
+    if (isHeatStress) {
+        tip = "Critical: Move to a cooler, shaded location and increase irrigation frequency to prevent vascular collapse.";
+    } else if (isColdStress) {
+        tip = "Keep away from drafty windows and entryways. Consider a grow light to provide supplemental thermal energy.";
+    } else if (isHumidityStress) {
+        tip = "Atmospheric moisture is insufficient. Use a humidifier or mist the foliage daily to maintain stomatal health.";
+    } else if (temp > tMid + 5) {
+        tip = "Higher temperatures may trigger faster soil drying. Monitor moisture depth more frequently.";
+    } else {
+        tip = "Current conditions are stable. Maintain consistent light exposure for continued vitality.";
+    }
+
+    return { prediction, tip };
+};
