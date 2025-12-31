@@ -46,22 +46,58 @@ export const AIDoctor = () => {
         scrollToBottom();
     }, [messages]);
 
-    // Advanced AI Response System with Human-like Conversation
+    // Web Search for Scientific Plant Data
+    const searchPlantScience = async (query: string): Promise<string | null> => {
+        try {
+            // Use DuckDuckGo Instant Answer API (free, no key required)
+            const searchQuery = encodeURIComponent(`plant ${query} scientific care`);
+            const response = await fetch(`https://api.duckduckgo.com/?q=${searchQuery}&format=json&no_html=1&skip_disambig=1`);
+
+            if (response.ok) {
+                const data = await response.json();
+
+                // Extract useful information
+                let info = '';
+                if (data.AbstractText) {
+                    info += data.AbstractText;
+                }
+                if (data.RelatedTopics && data.RelatedTopics.length > 0) {
+                    const relevantTopics = data.RelatedTopics.slice(0, 3);
+                    relevantTopics.forEach((topic: any) => {
+                        if (topic.Text) {
+                            info += `\n${topic.Text}`;
+                        }
+                    });
+                }
+
+                return info.length > 50 ? info : null;
+            }
+        } catch (error) {
+            console.log('Web search failed:', error);
+        }
+        return null;
+    };
+
+    // Advanced AI Response System with Human-like Conversation + Web Search
     const getHumanLikeAIResponse = async (userMessage: string): Promise<string | null> => {
+        // First, try to get scientific data from web
+        const webData = await searchPlantScience(userMessage);
+
         const conversationalPrompt = `You are Dr. Flora, a warm and knowledgeable botanist who loves plants and nature. You've been gardening for decades and love sharing your passion with others.
 
-Respond to this question in a friendly, conversational way - like you're chatting with a friend over coffee. Use natural language, personal anecdotes when relevant, and be encouraging. Don't be overly formal or robotic.
+${webData ? `Here's some scientific information that might be relevant:\n${webData}\n\n` : ''}Respond to this question in a friendly, conversational way - like you're chatting with a friend over coffee. Use natural language, personal anecdotes when relevant, and be encouraging. Don't be overly formal or robotic.
 
 Question: "${userMessage}"
 
 Guidelines for your response:
-- Start with a friendly acknowledgment or greeting
+- If you're not sure about something plant-related, be honest and say "I'm not entirely sure about that" or "That's outside my expertise"
+- If the question is NOT about plants, nature, or gardening, politely redirect: "Hmm, I'm really more of a plant expert! But I'd love to help with any plant questions you have!"
+- Start with a friendly acknowledgment
 - Share practical advice based on real experience
 - Use conversational phrases like "I've found that...", "In my experience...", "Here's what works for me..."
 - Be specific and actionable
-- End with encouragement or an invitation to ask more
+- End with encouragement or suggested follow-up questions
 - Keep it warm and personal, not clinical
-- If you're not 100% sure, it's okay to say "I think" or "usually"
 
 Respond naturally as Dr. Flora would:`;
 
