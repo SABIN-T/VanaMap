@@ -47,7 +47,7 @@ export const AIDoctor = () => {
     }, [messages]);
 
     // Advanced AI Response System with Human-like Conversation
-    const getHumanLikeAIResponse = async (userMessage: string, context: any): Promise<string | null> => {
+    const getHumanLikeAIResponse = async (userMessage: string): Promise<string | null> => {
         const conversationalPrompt = `You are Dr. Flora, a warm and knowledgeable botanist who loves plants and nature. You've been gardening for decades and love sharing your passion with others.
 
 Respond to this question in a friendly, conversational way - like you're chatting with a friend over coffee. Use natural language, personal anecdotes when relevant, and be encouraging. Don't be overly formal or robotic.
@@ -120,7 +120,7 @@ Respond naturally as Dr. Flora would:`;
                     // Validate response quality
                     if (aiText.length > 100 && aiText.length < 2000 && !aiText.includes('I cannot') && !aiText.includes('I am not able')) {
                         // Format the response nicely
-                        return formatHumanLikeResponse(aiText, userMessage);
+                        return formatHumanLikeResponse(aiText);
                     }
                 }
             } catch (error) {
@@ -132,7 +132,7 @@ Respond naturally as Dr. Flora would:`;
         return null; // All models failed
     };
 
-    const formatHumanLikeResponse = (aiText: string, originalQuestion: string): string => {
+    const formatHumanLikeResponse = (aiText: string): string => {
         // Add friendly formatting
         let formatted = `🌿 **Dr. Flora says:**\n\n`;
 
@@ -240,7 +240,7 @@ Need more specific help? Describe your plant's symptoms in detail!`;
         // STEP 4: Advanced AI with Human-like Conversation
         try {
             // Try multiple free AI models for best results
-            const aiResponse = await getHumanLikeAIResponse(userMessage, context);
+            const aiResponse = await getHumanLikeAIResponse(userMessage);
             if (aiResponse) {
                 return aiResponse;
             }
