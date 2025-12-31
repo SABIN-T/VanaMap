@@ -100,7 +100,7 @@ export const PLANTS: Plant[] = [
         "medicinalValues": ["Anti-inflammatory properties"],
         "advantages": ["Glossy large leaves", "Statement piece"],
         "price": 25,
-        "type": "indoor",
+        "type": "outdoor",
         "lifespan": "15-25 Years"
     },
     {
@@ -117,7 +117,7 @@ export const PLANTS: Plant[] = [
         "medicinalValues": ["Root used for snakebites (traditional)"],
         "advantages": ["Iconic split leaves", "Tropical vibe"],
         "price": 25,
-        "type": "indoor",
+        "type": "outdoor",
         "lifespan": "10-50 Years"
     },
     {
@@ -202,7 +202,7 @@ export const PLANTS: Plant[] = [
         "medicinalValues": ["Air cleaning"],
         "advantages": ["Architectural shape", "Huge leaves"],
         "price": 25,
-        "type": "indoor",
+        "type": "outdoor",
         "lifespan": "25-50 Years"
     },
     {
@@ -253,7 +253,7 @@ export const PLANTS: Plant[] = [
         "medicinalValues": ["None suitable for home use"],
         "advantages": ["Exotic flowers", "Large leaves"],
         "price": 25,
-        "type": "indoor",
+        "type": "outdoor",
         "lifespan": "50-100 Years"
     },
     {
@@ -885,7 +885,7 @@ export const PLANTS: Plant[] = [
             "Slim profile"
         ],
         "price": 25,
-        "type": "indoor",
+        "type": "outdoor",
         "lifespan": "15-20 Years"
     },
     {
@@ -973,7 +973,7 @@ export const PLANTS: Plant[] = [
             "Bushy"
         ],
         "price": 25,
-        "type": "indoor",
+        "type": "outdoor",
         "lifespan": "10-15 Years"
     },
     {
@@ -995,7 +995,7 @@ export const PLANTS: Plant[] = [
             "Fast growth"
         ],
         "price": 25,
-        "type": "indoor",
+        "type": "outdoor",
         "lifespan": "1 Year"
     },
     {
@@ -1017,7 +1017,7 @@ export const PLANTS: Plant[] = [
             "Braided trunks"
         ],
         "price": 25,
-        "type": "indoor",
+        "type": "outdoor",
         "lifespan": "20-50 Years"
     },
     {
@@ -1413,7 +1413,7 @@ export const PLANTS: Plant[] = [
             "Airy feel"
         ],
         "price": 25,
-        "type": "indoor",
+        "type": "outdoor",
         "lifespan": "10+ Years"
     },
     {
@@ -1435,7 +1435,7 @@ export const PLANTS: Plant[] = [
             "Hardy"
         ],
         "price": 25,
-        "type": "indoor",
+        "type": "outdoor",
         "lifespan": "10+ Years"
     },
     {
@@ -1501,7 +1501,7 @@ export const PLANTS: Plant[] = [
             "Drought tolerant"
         ],
         "price": 25,
-        "type": "indoor",
+        "type": "outdoor",
         "lifespan": "40+ Years"
     },
     {
@@ -1523,7 +1523,7 @@ export const PLANTS: Plant[] = [
             "Symmetrical"
         ],
         "price": 25,
-        "type": "indoor",
+        "type": "outdoor",
         "lifespan": "50+ Years"
     },
     {
@@ -1545,7 +1545,7 @@ export const PLANTS: Plant[] = [
             "Tough"
         ],
         "price": 25,
-        "type": "indoor",
+        "type": "outdoor",
         "lifespan": "20+ Years"
     },
     {
@@ -2965,7 +2965,7 @@ export const PLANTS: Plant[] = [
             "Epiphyte"
         ],
         "price": 25,
-        "type": "indoor",
+        "type": "outdoor",
         "lifespan": "20+ Years"
     },
     {
@@ -5854,7 +5854,7 @@ export const PLANTS: Plant[] = [
             "Bloom once & die"
         ],
         "price": 25,
-        "type": "indoor",
+        "type": "outdoor",
         "lifespan": "15-25 Years"
     },
     {
@@ -5876,7 +5876,7 @@ export const PLANTS: Plant[] = [
             "White markings"
         ],
         "price": 25,
-        "type": "indoor",
+        "type": "outdoor",
         "lifespan": "15-30 Years"
     },
     {
@@ -5898,7 +5898,7 @@ export const PLANTS: Plant[] = [
             "Curly"
         ],
         "price": 25,
-        "type": "indoor",
+        "type": "outdoor",
         "lifespan": "40+ Years"
     },
     {
@@ -5920,7 +5920,7 @@ export const PLANTS: Plant[] = [
             "Bushy"
         ],
         "price": 25,
-        "type": "indoor",
+        "type": "outdoor",
         "lifespan": "10 Years"
     },
     {
@@ -5942,7 +5942,7 @@ export const PLANTS: Plant[] = [
             "Fire colors"
         ],
         "price": 25,
-        "type": "indoor",
+        "type": "outdoor",
         "lifespan": "10 Years"
     },
     {
@@ -7639,7 +7639,7 @@ export const PLANTS: Plant[] = [
             "Elegant"
         ],
         "price": 25,
-        "type": "indoor",
+        "type": "outdoor",
         "lifespan": "40 Years"
     },
     {
@@ -7683,7 +7683,7 @@ export const PLANTS: Plant[] = [
             "Modern look"
         ],
         "price": 25,
-        "type": "indoor",
+        "type": "outdoor",
         "lifespan": "40 Years"
     },
     {
@@ -7727,7 +7727,7 @@ export const PLANTS: Plant[] = [
             "Curly leaves"
         ],
         "price": 25,
-        "type": "indoor",
+        "type": "outdoor",
         "lifespan": "100 Years"
     },
     {
@@ -7749,7 +7749,7 @@ export const PLANTS: Plant[] = [
             "Hardy"
         ],
         "price": 25,
-        "type": "indoor",
+        "type": "outdoor",
         "lifespan": "40 Years"
     },
     {
@@ -7771,7 +7771,7 @@ export const PLANTS: Plant[] = [
             "Soft needles"
         ],
         "price": 25,
-        "type": "indoor",
+        "type": "outdoor",
         "lifespan": "150 Years"
     },
     {
