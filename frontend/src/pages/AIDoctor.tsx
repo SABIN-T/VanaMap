@@ -46,6 +46,121 @@ export const AIDoctor = () => {
         scrollToBottom();
     }, [messages]);
 
+    // Advanced AI Response System with Human-like Conversation
+    const getHumanLikeAIResponse = async (userMessage: string, context: any): Promise<string | null> => {
+        const conversationalPrompt = `You are Dr. Flora, a warm and knowledgeable botanist who loves plants and nature. You've been gardening for decades and love sharing your passion with others.
+
+Respond to this question in a friendly, conversational way - like you're chatting with a friend over coffee. Use natural language, personal anecdotes when relevant, and be encouraging. Don't be overly formal or robotic.
+
+Question: "${userMessage}"
+
+Guidelines for your response:
+- Start with a friendly acknowledgment or greeting
+- Share practical advice based on real experience
+- Use conversational phrases like "I've found that...", "In my experience...", "Here's what works for me..."
+- Be specific and actionable
+- End with encouragement or an invitation to ask more
+- Keep it warm and personal, not clinical
+- If you're not 100% sure, it's okay to say "I think" or "usually"
+
+Respond naturally as Dr. Flora would:`;
+
+        // Try multiple AI models for best results
+        const models = [
+            'mistralai/Mistral-7B-Instruct-v0.2',  // Best for conversation
+            'microsoft/DialoGPT-large',             // Good for dialogue
+            'facebook/blenderbot-400M-distill'      // Fallback
+        ];
+
+        for (const model of models) {
+            try {
+                const response = await fetch(`https://api-inference.huggingface.co/models/${model}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        inputs: conversationalPrompt,
+                        parameters: {
+                            max_new_tokens: 500,
+                            temperature: 0.8,  // Higher for more natural conversation
+                            top_p: 0.95,
+                            do_sample: true,
+                            return_full_text: false
+                        },
+                        options: {
+                            wait_for_model: true,
+                            use_cache: false
+                        }
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    let aiText = '';
+
+                    // Handle different response formats
+                    if (Array.isArray(data)) {
+                        aiText = data[0]?.generated_text || data[0]?.text || '';
+                    } else if (data.generated_text) {
+                        aiText = data.generated_text;
+                    } else if (typeof data === 'string') {
+                        aiText = data;
+                    }
+
+                    // Clean up the response
+                    aiText = aiText.trim();
+
+                    // Remove the prompt if it was included in response
+                    if (aiText.includes('Question:')) {
+                        const parts = aiText.split(/Question:|Respond naturally/);
+                        aiText = parts[parts.length - 1].trim();
+                    }
+
+                    // Validate response quality
+                    if (aiText.length > 100 && aiText.length < 2000 && !aiText.includes('I cannot') && !aiText.includes('I am not able')) {
+                        // Format the response nicely
+                        return formatHumanLikeResponse(aiText, userMessage);
+                    }
+                }
+            } catch (error) {
+                console.log(`Model ${model} failed, trying next...`);
+                continue;
+            }
+        }
+
+        return null; // All models failed
+    };
+
+    const formatHumanLikeResponse = (aiText: string, originalQuestion: string): string => {
+        // Add friendly formatting
+        let formatted = `🌿 **Dr. Flora says:**\n\n`;
+
+        // Clean up and format the AI response
+        const paragraphs = aiText.split('\n').filter(p => p.trim().length > 0);
+
+        paragraphs.forEach(para => {
+            // Add emoji to key sections
+            if (para.toLowerCase().includes('water')) {
+                formatted += `💧 ${para}\n\n`;
+            } else if (para.toLowerCase().includes('light') || para.toLowerCase().includes('sun')) {
+                formatted += `☀️ ${para}\n\n`;
+            } else if (para.toLowerCase().includes('tip') || para.toLowerCase().includes('remember')) {
+                formatted += `💡 ${para}\n\n`;
+            } else if (para.toLowerCase().includes('problem') || para.toLowerCase().includes('issue')) {
+                formatted += `⚠️ ${para}\n\n`;
+            } else {
+                formatted += `${para}\n\n`;
+            }
+        });
+
+        // Add a friendly closing
+        formatted += `---\n`;
+        formatted += `🌱 *Feel free to ask me anything else about your plants! I'm here to help them thrive.*`;
+
+        return formatted;
+    };
+
     const generateAIResponse = async (userMessage: string): Promise<string> => {
         const lowerMsg = userMessage.toLowerCase();
 
@@ -122,36 +237,12 @@ Need more specific help? Describe your plant's symptoms in detail!`;
             return generateDiagnosticResponse(userMessage, context);
         }
 
-        // STEP 4: Try external AI API with enhanced prompt
+        // STEP 4: Advanced AI with Human-like Conversation
         try {
-            const enhancedPrompt = `You are Dr. Flora, a world-renowned botanist and plant pathologist with 30 years of experience. 
-Analyze this question using scientific reasoning and provide a comprehensive, actionable response.
-
-Question: ${userMessage}
-
-Provide your answer in this structure:
-1. Analysis of the situation
-2. Most likely causes (ranked by probability)
-3. Specific solutions with step-by-step instructions
-4. Preventive measures for the future
-
-Be specific, practical, and encouraging.`;
-
-            const response = await fetch('https://api-inference.huggingface.co/models/facebook/blenderbot-400M-distill', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    inputs: enhancedPrompt,
-                    parameters: { max_length: 600, temperature: 0.7, top_p: 0.9 }
-                })
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                const aiResponse = data[0]?.generated_text;
-                if (aiResponse && aiResponse.length > 50) {
-                    return `🤖 **AI Analysis:**\n\n${aiResponse}\n\n---\n💡 *This response is AI-generated. For critical plant health issues, consider consulting a local horticulturist.*`;
-                }
+            // Try multiple free AI models for best results
+            const aiResponse = await getHumanLikeAIResponse(userMessage, context);
+            if (aiResponse) {
+                return aiResponse;
             }
         } catch (e) {
             console.error('AI API error:', e);
