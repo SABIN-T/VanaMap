@@ -35,9 +35,10 @@ export interface ShoppingRecommendation {
 export class ShoppingAssistantService {
 
     // Search for products
-    static async searchProducts(query: string, category?: string): Promise<ProductDeal[]> {
+    static async searchProducts(query: string, _category?: string): Promise<ProductDeal[]> {
         // In production, integrate with actual e-commerce APIs
         // For now, return mock data with real-like structure
+        // Note: category parameter will be used when integrating real e-commerce API
 
         const mockProducts: ProductDeal[] = [
             {
@@ -165,20 +166,20 @@ export class ShoppingAssistantService {
 
     // Get seasonal deals
     static getSeasonalDeals(): ProductDeal[] {
-        const month = new Date().getMonth();
-        const season = month >= 2 && month <= 5 ? 'spring' :
-            month >= 6 && month <= 8 ? 'monsoon' :
-                month >= 9 && month <= 11 ? 'autumn' : 'winter';
+        // TODO: Implement seasonal deals based on current season
+        // const month = new Date().getMonth();
+        // const season = month >= 2 && month <= 5 ? 'spring' : ...
 
-        // Return season-appropriate plants
+        // Return season-appropriate plants (placeholder)
         return [];
     }
 
     // Track price history (mock)
-    static getPriceHistory(productId: string): {
+    static getPriceHistory(_productId: string): {
         date: Date;
         price: number;
     }[] {
+        // Note: productId will be used when integrating real price tracking API
         const history = [];
         const today = new Date();
 
@@ -207,8 +208,10 @@ export class ShoppingAssistantService {
 
     // Check alerts
     static checkAlerts(): void {
-        const alerts = JSON.parse(localStorage.getItem('price_alerts') || '[]');
+        // TODO: Implement price alert checking
+        // const alerts = JSON.parse(localStorage.getItem('price_alerts') || '[]');
         // In production, check actual prices and notify
+        console.log('Price alerts check - to be implemented');
     }
 }
 

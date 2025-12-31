@@ -166,7 +166,7 @@ export class TranslationService {
             const response = await fetch(url);
 
             if (response.ok) {
-                const data = await response.json();
+                // const data = await response.json();
                 // This is a simplified detection - in production, use a dedicated API
                 return 'en';
             }
