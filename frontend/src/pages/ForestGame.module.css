@@ -430,7 +430,8 @@
 @media (min-width: 1024px) {
     .container {
         max-width: 100vw;
-        height: 100vh;
+        height: calc(100vh - 80px);
+        /* Subtract header height */
         margin: 0;
         background: radial-gradient(circle at center, #022c22 0%, #020617 80%);
         overflow: hidden;
@@ -445,7 +446,8 @@
 
     .bgGlow {
         width: 100vw;
-        height: 100vh;
+        height: 100%;
+        /* Match container */
         background: radial-gradient(circle at 50% 120%, var(--primary) 0%, transparent 60%);
         opacity: 0.1;
         filter: blur(100px);
@@ -502,7 +504,8 @@
     /* --- CENTRAL COMMAND INTERFACE --- */
     .mainContent {
         padding: 0;
-        height: 100vh;
+        height: 100%;
+        /* Fill container */
         width: 100vw;
     }
 
@@ -519,7 +522,8 @@
             0 0 0 1px rgba(255, 255, 255, 0.05),
             0 20px 50px -20px rgba(0, 0, 0, 0.8),
             0 0 100px -50px var(--primary);
-        transform: translateY(-5%);
+        transform: translateY(-2%);
+        /* Subtle adjustment */
     }
 
     .badge {

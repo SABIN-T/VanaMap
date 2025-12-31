@@ -324,9 +324,12 @@
         grid-template-areas:
             "sidebar chat"
             "sidebar input";
-        height: 100vh;
+        height: calc(100vh - 80px);
+        /* Subtract header height to prevent scroll */
         max-width: 100vw;
         overflow: hidden;
+        margin-top: 0;
+        /* Align perfectly */
         padding: 0;
 
         background:
