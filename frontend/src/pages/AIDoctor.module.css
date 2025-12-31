@@ -502,7 +502,8 @@
         background: transparent;
         border-top: none;
         backdrop-filter: none;
-        padding: 2rem;
+        padding: 2rem 2rem 5px 2rem;
+        /* Reduced bottom padding */
         display: flex;
         justify-content: center;
         pointer-events: none;
