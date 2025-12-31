@@ -42,10 +42,39 @@ export const calculateBiologicalEfficiency = (
 };
 
 /**
- * Monte Carlo Aptness Calculation
+ * Seeded Random Number Generator (Mulberry32)
+ * Produces deterministic pseudo-random numbers for consistent simulation results
+ */
+function seededRandom(seed: number) {
+    return function () {
+        seed = (seed + 0x6D2B79F5) | 0;
+        let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+        t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+}
+
+/**
+ * Generate a deterministic seed from plant and environment data
+ */
+function generateSeed(plant: Plant, baseTemp: number, baseHumidity: number, aqi: number): number {
+    const plantStr = plant.id + plant.scientificName + plant.name;
+    let hash = 0;
+    for (let i = 0; i < plantStr.length; i++) {
+        hash = ((hash << 5) - hash) + plantStr.charCodeAt(i);
+        hash = hash & hash; // Convert to 32-bit integer
+    }
+
+    // Incorporate environmental data (rounded to avoid floating point precision issues)
+    const envHash = Math.round(baseTemp * 10) + Math.round(baseHumidity * 10) + Math.round(aqi);
+    return Math.abs(hash + envHash);
+}
+
+/**
+ * Monte Carlo Aptness Calculation - DETERMINISTIC VERSION
  * Simulates a stochastic 7-day (168-hour) environmental period.
  * Uses a cumulative Life-Energy model to determine exact ecosystem fit.
- * This provides "Minute Aptness" resolution.
+ * Now produces CONSISTENT results for the same plant + environment combination.
  */
 export const calculateAptnessMC = (
     plant: Plant,
@@ -54,23 +83,31 @@ export const calculateAptnessMC = (
     baseHumidity: number = 50,
     iterations: number = 150
 ): number => {
+    // Create deterministic random number generator
+    const seed = generateSeed(plant, baseTemp, baseHumidity, aqi);
+    const random = seededRandom(seed);
+
     let energySamples: number[] = [];
 
     for (let i = 0; i < iterations; i++) {
         let cumulativeEnergy = 0;
-        const simulationHours = 168; // 1 Week simulation
+        const simulationHours = 720; // 30-day simulation (30 * 24 hours)
 
         for (let h = 0; h < simulationHours; h++) {
             const hourOfDay = h % 24;
+            const dayOfMonth = Math.floor(h / 24);
 
             // Diurnal Temperature Swing (Sine wave: colder at night, warmer at day)
             const diurnalDelta = Math.sin((hourOfDay - 8) * (Math.PI / 12)) * 6;
 
-            // Stochastic weather noise
-            const randomJitter = (Math.random() - 0.5) * 5;
+            // Weekly weather variation (simulates weather patterns over 30 days)
+            const weeklyVariation = Math.sin((dayOfMonth / 7) * Math.PI) * 3;
 
-            const jitterTemp = baseTemp + diurnalDelta + randomJitter;
-            const jitterHumidity = baseHumidity + (Math.random() - 0.5) * 25;
+            // Deterministic stochastic weather noise using seeded random
+            const randomJitter = (random() - 0.5) * 5;
+
+            const jitterTemp = baseTemp + diurnalDelta + weeklyVariation + randomJitter;
+            const jitterHumidity = baseHumidity + (random() - 0.5) * 25;
 
             // Calculate exact efficiency (0.0 to 1.0) for this specific hour
             const efficiency = calculateBiologicalEfficiency(plant, jitterTemp, jitterHumidity);
