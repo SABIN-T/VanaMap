@@ -12,8 +12,9 @@ export const calculateBiologicalEfficiency = (
     // 1. Temperature Efficiency (Gaussian Curve centered at ideal midpoint)
     const tOpt = (plant.idealTempMin + plant.idealTempMax) / 2;
     const tRange = plant.idealTempMax - plant.idealTempMin;
-    // Spread of the curve depends on the plant's stated tolerance range
-    const sigma = Math.max(5, tRange / 1.5);
+    // Spread of the curve reflects the plant's tolerance. 
+    // Dividing by 2.5 makes the curve tighter (more sensitive to mismatches).
+    const sigma = Math.max(4, tRange / 2.5);
 
     let tempFactor = Math.exp(-Math.pow(temp - tOpt, 2) / (2 * Math.pow(sigma, 2)));
 
@@ -42,63 +43,65 @@ export const calculateBiologicalEfficiency = (
 
 /**
  * Monte Carlo Aptness Calculation
- * Simulates a stochastic 7-day (168-hour) environmental period to determine survival probability.
- * This is "Earth's Digital Botanical Archive" level precision.
+ * Simulates a stochastic 7-day (168-hour) environmental period.
+ * Uses a cumulative Life-Energy model to determine exact ecosystem fit.
+ * This provides "Minute Aptness" resolution.
  */
 export const calculateAptnessMC = (
     plant: Plant,
     baseTemp: number,
     aqi: number = 20,
     baseHumidity: number = 50,
-    iterations: number = 250 // Balanced for precision and performance
+    iterations: number = 150
 ): number => {
-    let survivalSamples: number[] = [];
+    let energySamples: number[] = [];
 
     for (let i = 0; i < iterations; i++) {
-        let biologicalStress = 0;
+        let cumulativeEnergy = 0;
         const simulationHours = 168; // 1 Week simulation
 
         for (let h = 0; h < simulationHours; h++) {
             const hourOfDay = h % 24;
 
-            // Diurnal Temperature Swing (Simplified sine wave)
-            const diurnalDelta = Math.sin((hourOfDay - 8) * (Math.PI / 12)) * 5;
+            // Diurnal Temperature Swing (Sine wave: colder at night, warmer at day)
+            const diurnalDelta = Math.sin((hourOfDay - 8) * (Math.PI / 12)) * 6;
 
-            // Stochastic Weather Fluctuations (Random walk component)
-            const randomJitter = (Math.random() - 0.5) * 4;
+            // Stochastic weather noise
+            const randomJitter = (Math.random() - 0.5) * 5;
 
             const jitterTemp = baseTemp + diurnalDelta + randomJitter;
-            const jitterHumidity = baseHumidity + (Math.random() - 0.5) * 20;
+            const jitterHumidity = baseHumidity + (Math.random() - 0.5) * 25;
 
+            // Calculate exact efficiency (0.0 to 1.0) for this specific hour
             const efficiency = calculateBiologicalEfficiency(plant, jitterTemp, jitterHumidity);
 
-            // Stress Accumulation: If efficiency < 0.3, the plant is struggling
-            if (efficiency < 0.3) biologicalStress += (0.3 - efficiency) * 2;
-            else biologicalStress -= (efficiency - 0.3) * 0.5; // Recovery
-
-            biologicalStress = Math.max(0, biologicalStress);
+            cumulativeEnergy += efficiency;
         }
 
-        // Score based on inverse of accumulated stress
-        const finalScore = Math.max(0, 100 - (biologicalStress / 2));
-        survivalSamples.push(finalScore);
+        // Normalize energy to a base 100 scale
+        const iterationScore = (cumulativeEnergy / simulationHours) * 100;
+        energySamples.push(iterationScore);
     }
 
-    // Return the average survival probability
-    const avgScore = survivalSamples.reduce((a, b) => a + b, 0) / iterations;
+    // Average energy across all Monte Carlo iterations
+    const rawAvg = energySamples.reduce((a, b) => a + b, 0) / iterations;
 
-    // Apply AQI and Bonus logic
-    let modifier = 0;
+    // Apply botanical multipliers (Toughness, Air Purification)
+    let modifier = 1.0;
     const desc = (plant.description || "").toLowerCase();
-    if (desc.includes('hardy') || desc.includes('tough')) modifier += 5;
+
+    // Hardy plants have a higher baseline "Resilience Energy"
+    if (desc.includes('hardy') || desc.includes('tough')) modifier += 0.05;
 
     const isPurifier = plant.medicinalValues?.includes('Air purification') ||
         plant.advantages?.some(a => a.toLowerCase().includes('purif'));
 
-    if (aqi > 100) modifier += isPurifier ? 10 : -15;
-    else if (isPurifier) modifier += 5;
+    // Environmental synergies
+    if (aqi > 100 && isPurifier) modifier += 0.1;
+    else if (aqi > 150 && !isPurifier) modifier -= 0.15;
 
-    return Math.max(0, Math.min(100, avgScore + modifier));
+    // Final result is high-precision (float)
+    return Math.max(0, Math.min(100, rawAvg * modifier));
 };
 
 export const calculateAptness = (
