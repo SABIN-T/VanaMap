@@ -86,8 +86,13 @@ export const calculateAptnessMC = (
     // Average energy across all Monte Carlo iterations
     const rawAvg = energySamples.reduce((a, b) => a + b, 0) / iterations;
 
+    // --- Genetic Differentiation ---
+    // Deterministic factor from name to simulate micro-metabolic differences
+    const geneticSeed = (plant.scientificName || plant.name).split('').reduce((acc, c) => acc + c.charCodeAt(0), 0);
+    const metabolicEfficiency = 0.98 + ((geneticSeed % 40) / 1000); // 0.98 to 1.02
+
     // Apply botanical multipliers (Toughness, Air Purification)
-    let modifier = 1.0;
+    let modifier = 1.0 * metabolicEfficiency;
     const desc = (plant.description || "").toLowerCase();
 
     // Hardy plants have a higher baseline "Resilience Energy"

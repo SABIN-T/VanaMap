@@ -7,19 +7,13 @@ export const PLANTS: Plant[] = [
         "scientificName": "Sansevieria trifasciata",
         "description": "The Snake Plant is a user-friendly indoor plant. It brings produces oxygen at night to your environment.",
         "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
-        "idealTempMin": 10,
-        "idealTempMax": 30,
-        "minHumidity": 40,
+        "idealTempMin": 15,
+        "idealTempMax": 32,
+        "minHumidity": 30,
         "sunlight": "Low to bright (250-2000 Lux)",
         "oxygenLevel": "30 L/day",
-        "medicinalValues": [
-            "Air purification",
-            "Minor wound healing"
-        ],
-        "advantages": [
-            "Produces Oxygen at Night",
-            "Hard to kill"
-        ],
+        "medicinalValues": ["Air purification", "Minor wound healing"],
+        "advantages": ["Produces Oxygen at Night", "Hard to kill"],
         "price": 25,
         "type": "indoor",
         "lifespan": "10-25 Years"
@@ -30,19 +24,13 @@ export const PLANTS: Plant[] = [
         "scientificName": "Chlorophytum comosum",
         "description": "The Spider Plant is a user-friendly indoor plant. It brings pet safe to your environment.",
         "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
-        "idealTempMin": 10,
-        "idealTempMax": 30,
+        "idealTempMin": 13,
+        "idealTempMax": 27,
         "minHumidity": 40,
         "sunlight": "Partial Shade (500-1500 Lux)",
         "oxygenLevel": "25 L/day",
-        "medicinalValues": [
-            "Air cleaning",
-            "Non-toxic"
-        ],
-        "advantages": [
-            "Pet safe",
-            "Easy propagation"
-        ],
+        "medicinalValues": ["Air cleaning", "Non-toxic"],
+        "advantages": ["Pet safe", "Easy propagation"],
         "price": 25,
         "type": "indoor",
         "lifespan": "20-50 Years"
@@ -53,19 +41,13 @@ export const PLANTS: Plant[] = [
         "scientificName": "Spathiphyllum wallisii",
         "description": "The Peace Lily is a user-friendly indoor plant. It brings visual watering signal to your environment.",
         "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
-        "idealTempMin": 10,
+        "idealTempMin": 18,
         "idealTempMax": 30,
-        "minHumidity": 40,
+        "minHumidity": 55,
         "sunlight": "Shade (250-1000 Lux)",
         "oxygenLevel": "20 L/day",
-        "medicinalValues": [
-            "Removes ammonia",
-            "Air purifying"
-        ],
-        "advantages": [
-            "Visual watering signal",
-            "blooms in shade"
-        ],
+        "medicinalValues": ["Removes ammonia", "Air purifying"],
+        "advantages": ["Visual watering signal", "blooms in shade"],
         "price": 25,
         "type": "indoor",
         "lifespan": "3-5 Years"
@@ -76,19 +58,13 @@ export const PLANTS: Plant[] = [
         "scientificName": "Aloe barbadensis",
         "description": "The Aloe Vera is a user-friendly indoor plant. It brings medicinal gel to your environment.",
         "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
-        "idealTempMin": 10,
-        "idealTempMax": 30,
-        "minHumidity": 40,
+        "idealTempMin": 13,
+        "idealTempMax": 35,
+        "minHumidity": 20,
         "sunlight": "Bright direct (2000+ Lux)",
         "oxygenLevel": "28 L/day",
-        "medicinalValues": [
-            "Burns healing",
-            "Skin hydration"
-        ],
-        "advantages": [
-            "Medicinal gel",
-            "Succulent"
-        ],
+        "medicinalValues": ["Burns healing", "Skin hydration"],
+        "advantages": ["Medicinal gel", "Succulent"],
         "price": 25,
         "type": "indoor",
         "lifespan": "5-20 Years"
@@ -99,18 +75,13 @@ export const PLANTS: Plant[] = [
         "scientificName": "Epipremnum aureum",
         "description": "The Pothos is a user-friendly indoor plant. It brings fast growing vine to your environment.",
         "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
-        "idealTempMin": 10,
+        "idealTempMin": 15,
         "idealTempMax": 30,
         "minHumidity": 40,
         "sunlight": "Low to bright (250-1500 Lux)",
         "oxygenLevel": "22 L/day",
-        "medicinalValues": [
-            "Formaldehyde removal"
-        ],
-        "advantages": [
-            "Fast growing vine",
-            "Low maintenance"
-        ],
+        "medicinalValues": ["Formaldehyde removal"],
+        "advantages": ["Fast growing vine", "Low maintenance"],
         "price": 25,
         "type": "indoor",
         "lifespan": "5-10 Years"
@@ -121,18 +92,13 @@ export const PLANTS: Plant[] = [
         "scientificName": "Ficus elastica",
         "description": "The Rubber Plant is a user-friendly indoor plant. It brings glossy large leaves to your environment.",
         "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
-        "idealTempMin": 10,
-        "idealTempMax": 30,
-        "minHumidity": 40,
+        "idealTempMin": 15,
+        "idealTempMax": 28,
+        "minHumidity": 50,
         "sunlight": "Bright indirect (1000-2000 Lux)",
         "oxygenLevel": "45 L/day",
-        "medicinalValues": [
-            "Anti-inflammatory properties"
-        ],
-        "advantages": [
-            "Glossy large leaves",
-            "Statement piece"
-        ],
+        "medicinalValues": ["Anti-inflammatory properties"],
+        "advantages": ["Glossy large leaves", "Statement piece"],
         "price": 25,
         "type": "indoor",
         "lifespan": "15-25 Years"
@@ -143,18 +109,13 @@ export const PLANTS: Plant[] = [
         "scientificName": "Monstera deliciosa",
         "description": "The Monstera is a user-friendly indoor plant. It brings iconic split leaves to your environment.",
         "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
-        "idealTempMin": 10,
+        "idealTempMin": 18,
         "idealTempMax": 30,
-        "minHumidity": 40,
+        "minHumidity": 60,
         "sunlight": "Bright indirect (1000-2500 Lux)",
         "oxygenLevel": "50 L/day",
-        "medicinalValues": [
-            "Root used for snakebites (traditional)"
-        ],
-        "advantages": [
-            "Iconic split leaves",
-            "Tropical vibe"
-        ],
+        "medicinalValues": ["Root used for snakebites (traditional)"],
+        "advantages": ["Iconic split leaves", "Tropical vibe"],
         "price": 25,
         "type": "indoor",
         "lifespan": "10-50 Years"
@@ -165,18 +126,13 @@ export const PLANTS: Plant[] = [
         "scientificName": "Zamioculcas zamiifolia",
         "description": "The ZZ Plant is a user-friendly indoor plant. It brings thrives in darkness to your environment.",
         "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
-        "idealTempMin": 10,
-        "idealTempMax": 30,
-        "minHumidity": 40,
+        "idealTempMin": 15,
+        "idealTempMax": 32,
+        "minHumidity": 30,
         "sunlight": "Low (100-1000 Lux)",
         "oxygenLevel": "18 L/day",
-        "medicinalValues": [
-            "Air purification"
-        ],
-        "advantages": [
-            "Thrives in darkness",
-            "Drought tolerant"
-        ],
+        "medicinalValues": ["Air purification"],
+        "advantages": ["Thrives in darkness", "Drought tolerant"],
         "price": 25,
         "type": "indoor",
         "lifespan": "5-10 Years"
@@ -187,18 +143,13 @@ export const PLANTS: Plant[] = [
         "scientificName": "Nephrolepis exaltata",
         "description": "The Boston Fern is a user-friendly indoor plant. It brings lush foliage to your environment.",
         "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
-        "idealTempMin": 10,
-        "idealTempMax": 30,
-        "minHumidity": 40,
+        "idealTempMin": 15,
+        "idealTempMax": 24,
+        "minHumidity": 65,
         "sunlight": "Bright indirect (1000-1500 Lux)",
         "oxygenLevel": "35 L/day",
-        "medicinalValues": [
-            "Natural humidifier"
-        ],
-        "advantages": [
-            "Lush foliage",
-            "Pet safe"
-        ],
+        "medicinalValues": ["Natural humidifier"],
+        "advantages": ["Lush foliage", "Pet safe"],
         "price": 25,
         "type": "indoor",
         "lifespan": "2-5 Years"
@@ -210,17 +161,12 @@ export const PLANTS: Plant[] = [
         "description": "The English Ivy is a user-friendly indoor plant. It brings climbing to your environment.",
         "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
         "idealTempMin": 10,
-        "idealTempMax": 30,
-        "minHumidity": 40,
+        "idealTempMax": 21,
+        "minHumidity": 45,
         "sunlight": "Medium (500-1500 Lux)",
         "oxygenLevel": "20 L/day",
-        "medicinalValues": [
-            "Cough relief (extract)"
-        ],
-        "advantages": [
-            "Climbing",
-            "Mold reduction"
-        ],
+        "medicinalValues": ["Cough relief (extract)"],
+        "advantages": ["Climbing", "Mold reduction"],
         "price": 25,
         "type": "indoor",
         "lifespan": "10-50 Years"
@@ -231,18 +177,13 @@ export const PLANTS: Plant[] = [
         "scientificName": "Dypsis lutescens",
         "description": "The Areca Palm is a user-friendly indoor plant. It brings pet safe to your environment.",
         "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
-        "idealTempMin": 10,
-        "idealTempMax": 30,
-        "minHumidity": 40,
+        "idealTempMin": 18,
+        "idealTempMax": 24,
+        "minHumidity": 55,
         "sunlight": "Bright filtered (1500-2500 Lux)",
         "oxygenLevel": "60 L/day",
-        "medicinalValues": [
-            "Toxin removal"
-        ],
-        "advantages": [
-            "Pet safe",
-            "Tropical look"
-        ],
+        "medicinalValues": ["Toxin removal"],
+        "advantages": ["Pet safe", "Tropical look"],
         "price": 25,
         "type": "indoor",
         "lifespan": "10-15 Years"
@@ -253,18 +194,13 @@ export const PLANTS: Plant[] = [
         "scientificName": "Ficus lyrata",
         "description": "The Fiddle Leaf Fig is a user-friendly indoor plant. It brings architectural shape to your environment.",
         "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
-        "idealTempMin": 10,
-        "idealTempMax": 30,
-        "minHumidity": 40,
+        "idealTempMin": 18,
+        "idealTempMax": 24,
+        "minHumidity": 60,
         "sunlight": "Bright indirect (1500-3000 Lux)",
         "oxygenLevel": "40 L/day",
-        "medicinalValues": [
-            "Air cleaning"
-        ],
-        "advantages": [
-            "Architectural shape",
-            "Huge leaves"
-        ],
+        "medicinalValues": ["Air cleaning"],
+        "advantages": ["Architectural shape", "Huge leaves"],
         "price": 25,
         "type": "indoor",
         "lifespan": "25-50 Years"
@@ -275,18 +211,13 @@ export const PLANTS: Plant[] = [
         "scientificName": "Crassula ovata",
         "description": "The Jade Plant is a user-friendly indoor plant. It brings symbol of luck to your environment.",
         "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
-        "idealTempMin": 10,
+        "idealTempMin": 13,
         "idealTempMax": 30,
-        "minHumidity": 40,
+        "minHumidity": 30,
         "sunlight": "Direct Sun (3000+ Lux)",
         "oxygenLevel": "15 L/day",
-        "medicinalValues": [
-            "Wart removal (folk)"
-        ],
-        "advantages": [
-            "Symbol of luck",
-            "Long lived"
-        ],
+        "medicinalValues": ["Wart removal (folk)"],
+        "advantages": ["Symbol of luck", "Long lived"],
         "price": 25,
         "type": "indoor",
         "lifespan": "50-70 Years"
@@ -297,18 +228,13 @@ export const PLANTS: Plant[] = [
         "scientificName": "Pilea peperomioides",
         "description": "The Chinese Money Plant is a user-friendly indoor plant. It brings unique round leaves to your environment.",
         "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
-        "idealTempMin": 10,
-        "idealTempMax": 30,
-        "minHumidity": 40,
+        "idealTempMin": 15,
+        "idealTempMax": 24,
+        "minHumidity": 50,
         "sunlight": "Bright indirect (1000 Lux)",
         "oxygenLevel": "18 L/day",
-        "medicinalValues": [
-            "Traditional TCM uses"
-        ],
-        "advantages": [
-            "Unique round leaves",
-            "Easy to gift"
-        ],
+        "medicinalValues": ["Traditional TCM uses"],
+        "advantages": ["Unique round leaves", "Easy to gift"],
         "price": 25,
         "type": "indoor",
         "lifespan": "5-10 Years"
@@ -319,18 +245,13 @@ export const PLANTS: Plant[] = [
         "scientificName": "Strelitzia reginae",
         "description": "The Bird of Paradise is a user-friendly indoor plant. It brings exotic flowers to your environment.",
         "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
-        "idealTempMin": 10,
-        "idealTempMax": 30,
-        "minHumidity": 40,
+        "idealTempMin": 18,
+        "idealTempMax": 28,
+        "minHumidity": 50,
         "sunlight": "High/Direct (3000+ Lux)",
         "oxygenLevel": "55 L/day",
-        "medicinalValues": [
-            "None suitable for home use"
-        ],
-        "advantages": [
-            "Exotic flowers",
-            "Large leaves"
-        ],
+        "medicinalValues": ["None suitable for home use"],
+        "advantages": ["Exotic flowers", "Large leaves"],
         "price": 25,
         "type": "indoor",
         "lifespan": "50-100 Years"
@@ -341,18 +262,13 @@ export const PLANTS: Plant[] = [
         "scientificName": "Dieffenbachia seguine",
         "description": "The Dumb Cane is a user-friendly indoor plant. It brings beautiful patterns to your environment.",
         "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
-        "idealTempMin": 10,
-        "idealTempMax": 30,
-        "minHumidity": 40,
+        "idealTempMin": 18,
+        "idealTempMax": 27,
+        "minHumidity": 60,
         "sunlight": "Low to Medium (500-1500 Lux)",
         "oxygenLevel": "30 L/day",
-        "medicinalValues": [
-            "None (Toxic)"
-        ],
-        "advantages": [
-            "Beautiful patterns",
-            "Full foliage"
-        ],
+        "medicinalValues": ["None (Toxic)"],
+        "advantages": ["Beautiful patterns", "Full foliage"],
         "price": 25,
         "type": "indoor",
         "lifespan": "3-5 Years"
@@ -363,18 +279,13 @@ export const PLANTS: Plant[] = [
         "scientificName": "Maranta leuconeura",
         "description": "The Prayer Plant is a user-friendly indoor plant. It brings leaves move at night to your environment.",
         "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
-        "idealTempMin": 10,
-        "idealTempMax": 30,
-        "minHumidity": 40,
+        "idealTempMin": 18,
+        "idealTempMax": 27,
+        "minHumidity": 60,
         "sunlight": "Low/Shade (500 Lux)",
         "oxygenLevel": "20 L/day",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Leaves move at night",
-            "Colorful veins"
-        ],
+        "medicinalValues": ["None"],
+        "advantages": ["Leaves move at night", "Colorful veins"],
         "price": 25,
         "type": "indoor",
         "lifespan": "2-5 Years"
@@ -385,18 +296,13 @@ export const PLANTS: Plant[] = [
         "scientificName": "Senecio rowleyanus",
         "description": "The String of Pearls is a user-friendly indoor plant. It brings unique bead shape to your environment.",
         "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
-        "idealTempMin": 10,
-        "idealTempMax": 30,
+        "idealTempMin": 13,
+        "idealTempMax": 24,
         "minHumidity": 40,
         "sunlight": "Bright indirect (2000 Lux)",
         "oxygenLevel": "12 L/day",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Unique bead shape",
-            "Hanging visual"
-        ],
+        "medicinalValues": ["None"],
+        "advantages": ["Unique bead shape", "Hanging visual"],
         "price": 25,
         "type": "indoor",
         "lifespan": "3-5 Years"
@@ -407,18 +313,13 @@ export const PLANTS: Plant[] = [
         "scientificName": "Philodendron hederaceum",
         "description": "The Philodendron is a user-friendly indoor plant. It brings heart shaped leaves to your environment.",
         "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
-        "idealTempMin": 10,
-        "idealTempMax": 30,
-        "minHumidity": 40,
+        "idealTempMin": 15,
+        "idealTempMax": 28,
+        "minHumidity": 50,
         "sunlight": "Low to bright (250-1500 Lux)",
         "oxygenLevel": "25 L/day",
-        "medicinalValues": [
-            "Air cleaning"
-        ],
-        "advantages": [
-            "Heart shaped leaves",
-            "Very hardy"
-        ],
+        "medicinalValues": ["Air cleaning"],
+        "advantages": ["Heart shaped leaves", "Very hardy"],
         "price": 25,
         "type": "indoor",
         "lifespan": "10+ Years"
@@ -429,18 +330,13 @@ export const PLANTS: Plant[] = [
         "scientificName": "Anthurium andraeanum",
         "description": "The Anthurium is a user-friendly indoor plant. It brings long lasting flowers to your environment.",
         "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format&fit=crop&q=80",
-        "idealTempMin": 10,
-        "idealTempMax": 30,
-        "minHumidity": 40,
+        "idealTempMin": 18,
+        "idealTempMax": 27,
+        "minHumidity": 70,
         "sunlight": "Bright indirect (1500 Lux)",
         "oxygenLevel": "22 L/day",
-        "medicinalValues": [
-            "Air purification"
-        ],
-        "advantages": [
-            "Long lasting flowers",
-            "Waxy look"
-        ],
+        "medicinalValues": ["Air purification"],
+        "advantages": ["Long lasting flowers", "Waxy look"],
         "price": 25,
         "type": "indoor",
         "lifespan": "5-10 Years"
@@ -452,18 +348,12 @@ export const PLANTS: Plant[] = [
         "description": "The Lavender is a user-friendly outdoor plant. It brings fragrant to your environment.",
         "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format&fit=crop&q=80",
         "idealTempMin": 10,
-        "idealTempMax": 30,
-        "minHumidity": 40,
+        "idealTempMax": 24,
+        "minHumidity": 30,
         "sunlight": "Full Sun (10,000+ Lux)",
         "oxygenLevel": "40 L/day",
-        "medicinalValues": [
-            "Sleep aid",
-            "Anxiety relief"
-        ],
-        "advantages": [
-            "Fragrant",
-            "Attracts bees"
-        ],
+        "medicinalValues": ["Sleep aid", "Anxiety relief"],
+        "advantages": ["Fragrant", "Attracts bees"],
         "price": 25,
         "type": "outdoor",
         "lifespan": "10-15 Years"
@@ -474,18 +364,13 @@ export const PLANTS: Plant[] = [
         "scientificName": "Helianthus annuus",
         "description": "The Sunflower is a user-friendly outdoor plant. It brings fast growth to your environment.",
         "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format&fit=crop&q=80",
-        "idealTempMin": 10,
-        "idealTempMax": 30,
+        "idealTempMin": 20,
+        "idealTempMax": 33,
         "minHumidity": 40,
         "sunlight": "Full Sun (10,000+ Lux)",
         "oxygenLevel": "60 L/day",
-        "medicinalValues": [
-            "seeds rich in Vitamin E"
-        ],
-        "advantages": [
-            "Fast growth",
-            "Edible seeds"
-        ],
+        "medicinalValues": ["seeds rich in Vitamin E"],
+        "advantages": ["Fast growth", "Edible seeds"],
         "price": 25,
         "type": "outdoor",
         "lifespan": "1 Year"
@@ -496,19 +381,13 @@ export const PLANTS: Plant[] = [
         "scientificName": "Rosa",
         "description": "The Rose is a user-friendly outdoor plant. It brings classic beauty to your environment.",
         "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format&fit=crop&q=80",
-        "idealTempMin": 10,
-        "idealTempMax": 30,
-        "minHumidity": 40,
+        "idealTempMin": 15,
+        "idealTempMax": 28,
+        "minHumidity": 50,
         "sunlight": "Full Sun (6+ hours)",
         "oxygenLevel": "35 L/day",
-        "medicinalValues": [
-            "Rose hips (Vitamin C)",
-            "Skin toner"
-        ],
-        "advantages": [
-            "Classic beauty",
-            "Fragrance"
-        ],
+        "medicinalValues": ["Rose hips (Vitamin C)", "Skin toner"],
+        "advantages": ["Classic beauty", "Fragrance"],
         "price": 25,
         "type": "outdoor",
         "lifespan": "15-20 Years"
@@ -519,19 +398,13 @@ export const PLANTS: Plant[] = [
         "scientificName": "Tagetes",
         "description": "The Marigold is a user-friendly outdoor plant. It brings pest repellent to your environment.",
         "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format&fit=crop&q=80",
-        "idealTempMin": 10,
+        "idealTempMin": 18,
         "idealTempMax": 30,
-        "minHumidity": 40,
+        "minHumidity": 50,
         "sunlight": "Full Sun",
         "oxygenLevel": "25 L/day",
-        "medicinalValues": [
-            "Antiseptic",
-            "Anti-inflammatory"
-        ],
-        "advantages": [
-            "Pest repellent",
-            "Vibrant color"
-        ],
+        "medicinalValues": ["Antiseptic", "Anti-inflammatory"],
+        "advantages": ["Pest repellent", "Vibrant color"],
         "price": 25,
         "type": "outdoor",
         "lifespan": "1 Year"
@@ -542,19 +415,13 @@ export const PLANTS: Plant[] = [
         "scientificName": "Ocimum basilicum",
         "description": "The Basil is a user-friendly outdoor plant. It brings culinary herb to your environment.",
         "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format&fit=crop&q=80",
-        "idealTempMin": 10,
+        "idealTempMin": 18,
         "idealTempMax": 30,
-        "minHumidity": 40,
+        "minHumidity": 60,
         "sunlight": "Full Sun",
         "oxygenLevel": "20 L/day",
-        "medicinalValues": [
-            "Digestion aid",
-            "Anti-bacterial"
-        ],
-        "advantages": [
-            "Culinary herb",
-            "Aromatic"
-        ],
+        "medicinalValues": ["Digestion aid", "Anti-bacterial"],
+        "advantages": ["Culinary herb", "Aromatic"],
         "price": 25,
         "type": "outdoor",
         "lifespan": "1 Year"
@@ -565,19 +432,13 @@ export const PLANTS: Plant[] = [
         "scientificName": "Mentha",
         "description": "The Mint is a user-friendly outdoor plant. It brings fast growing to your environment.",
         "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format&fit=crop&q=80",
-        "idealTempMin": 10,
-        "idealTempMax": 30,
-        "minHumidity": 40,
+        "idealTempMin": 13,
+        "idealTempMax": 24,
+        "minHumidity": 60,
         "sunlight": "Partial Shade to Sun",
         "oxygenLevel": "22 L/day",
-        "medicinalValues": [
-            "Stomach relief",
-            "Headache relief"
-        ],
-        "advantages": [
-            "Fast growing",
-            "Tea ingredient"
-        ],
+        "medicinalValues": ["Stomach relief", "Headache relief"],
+        "advantages": ["Fast growing", "Tea ingredient"],
         "price": 25,
         "type": "outdoor",
         "lifespan": "Perennial"
@@ -589,18 +450,12 @@ export const PLANTS: Plant[] = [
         "description": "The Rosemary is a user-friendly outdoor plant. It brings evergreen shrub to your environment.",
         "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format&fit=crop&q=80",
         "idealTempMin": 10,
-        "idealTempMax": 30,
-        "minHumidity": 40,
+        "idealTempMax": 27,
+        "minHumidity": 30,
         "sunlight": "Full Sun",
         "oxygenLevel": "30 L/day",
-        "medicinalValues": [
-            "Memory boost",
-            "Hair growth"
-        ],
-        "advantages": [
-            "Evergreen shrub",
-            "Culinary use"
-        ],
+        "medicinalValues": ["Memory boost", "Hair growth"],
+        "advantages": ["Evergreen shrub", "Culinary use"],
         "price": 25,
         "type": "outdoor",
         "lifespan": "15-20 Years"
@@ -789,17 +644,12 @@ export const PLANTS: Plant[] = [
         "description": "The Azalea is a user-friendly outdoor plant. It brings shade tolerant to your environment.",
         "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format&fit=crop&q=80",
         "idealTempMin": 10,
-        "idealTempMax": 30,
-        "minHumidity": 40,
+        "idealTempMax": 21,
+        "minHumidity": 50,
         "sunlight": "Shade / Dappled Light",
         "oxygenLevel": "35 L/day",
-        "medicinalValues": [
-            "None (Toxic)"
-        ],
-        "advantages": [
-            "Shade tolerant",
-            "Spring spectacle"
-        ],
+        "medicinalValues": ["None (Toxic)"],
+        "advantages": ["Shade tolerant", "Spring spectacle"],
         "price": 25,
         "type": "outdoor",
         "lifespan": "20-50 Years"
@@ -810,19 +660,13 @@ export const PLANTS: Plant[] = [
         "scientificName": "Magnolia grandiflora",
         "description": "The Magnolia is a user-friendly outdoor plant. It brings grand southern tree to your environment.",
         "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format&fit=crop&q=80",
-        "idealTempMin": 10,
+        "idealTempMin": 15,
         "idealTempMax": 30,
         "minHumidity": 40,
         "sunlight": "Full Sun",
         "oxygenLevel": "200 L/day",
-        "medicinalValues": [
-            "Anxiety relief",
-            "Weight loss aid"
-        ],
-        "advantages": [
-            "Grand Southern tree",
-            "Glossy leaves"
-        ],
+        "medicinalValues": ["Anxiety relief", "Weight loss aid"],
+        "advantages": ["Grand Southern tree", "Glossy leaves"],
         "price": 25,
         "type": "outdoor",
         "lifespan": "80+ Years"
@@ -833,18 +677,13 @@ export const PLANTS: Plant[] = [
         "scientificName": "Syringa vulgaris",
         "description": "The Lilac is a user-friendly outdoor plant. It brings nostalgic scent to your environment.",
         "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format&fit=crop&q=80",
-        "idealTempMin": 10,
-        "idealTempMax": 30,
+        "idealTempMin": 7,
+        "idealTempMax": 24,
         "minHumidity": 40,
         "sunlight": "Full Sun",
         "oxygenLevel": "60 L/day",
-        "medicinalValues": [
-            "Aromatherapy"
-        ],
-        "advantages": [
-            "Nostalgic scent",
-            "Cold hardy"
-        ],
+        "medicinalValues": ["Aromatherapy"],
+        "advantages": ["Nostalgic scent", "Cold hardy"],
         "price": 25,
         "type": "outdoor",
         "lifespan": "75+ Years"
