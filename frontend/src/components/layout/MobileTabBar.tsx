@@ -14,7 +14,7 @@ export const MobileTabBar = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    if (!isMobile || location.pathname === '/pot-designer') return null;
+    if (!isMobile || location.pathname === '/pot-designer' || location.pathname === '/ai-doctor') return null;
 
     const tabs = [
         { path: '/', icon: Home, label: 'Home' },
