@@ -161,6 +161,53 @@ Respond naturally as Dr. Flora would:`;
         return formatted;
     };
 
+    // Quick Response Handler for Simple Questions
+    const getQuickResponse = (lowerMsg: string): string | null => {
+        // Name questions
+        if (/what.*your.*name|who.*are.*you|your.*name/.test(lowerMsg)) {
+            return `🌿 Hi there! I'm **Dr. Flora**, your friendly plant expert! I'm here to help you with all your plant care questions. What would you like to know about your green friends today?`;
+        }
+
+        // Greetings
+        if (/^(hi|hello|hey|greetings|good morning|good afternoon|good evening)[\s!.?]*$/i.test(lowerMsg)) {
+            return `🌿 Hello! Welcome to the plant care center! I'm Dr. Flora, and I'm excited to help you with your plants. What can I assist you with today?`;
+        }
+
+        // Thanks
+        if (/^(thank|thanks|thx|ty|appreciate)[\s!.?]*$/i.test(lowerMsg)) {
+            return `🌱 You're very welcome! I'm always happy to help your plants thrive. Feel free to ask me anything else!`;
+        }
+
+        // How are you
+        if (/how.*are.*you|how.*you.*doing/.test(lowerMsg)) {
+            return `🌿 I'm doing great, thanks for asking! I'm always energized when talking about plants! How can I help you and your green companions today?`;
+        }
+
+        // What can you do / help with
+        if (/what.*can.*you.*do|what.*help|your.*purpose|can.*you.*help/.test(lowerMsg)) {
+            return `🌿 **I'm here to help with all things plants!**
+
+I can assist you with:
+• 🔬 **Diagnosing** plant problems (yellowing, pests, diseases)
+• 💧 **Watering** schedules and techniques
+• ☀️ **Light** requirements for different plants
+• 🌱 **Fertilizer** recommendations
+• 🪴 **Plant recommendations** for your space
+• 🌡️ **Care guides** for specific plants
+• 🐛 **Pest control** solutions
+• ✂️ **Pruning** and propagation tips
+
+Just ask me anything about your plants, and I'll do my best to help them thrive! What would you like to know?`;
+        }
+
+        // Goodbye
+        if (/^(bye|goodbye|see you|later|gtg|gotta go)[\s!.?]*$/i.test(lowerMsg)) {
+            return `🌿 Happy gardening! Take care of those beautiful plants, and come back anytime you need help. See you soon! 🌱`;
+        }
+
+        return null; // No quick response, continue to AI
+    };
+
     const generateAIResponse = async (userMessage: string): Promise<string> => {
         const lowerMsg = userMessage.toLowerCase();
 
@@ -222,6 +269,12 @@ ${plantMatch.advantages?.length ? `\n✨ **Key Benefits:**\n${plantMatch.advanta
 Need more specific help? Describe your plant's symptoms in detail!`;
 
             return response;
+        }
+
+        // STEP 2.3: Quick Response Handler for Simple Questions
+        const quickResponse = getQuickResponse(lowerMsg);
+        if (quickResponse) {
+            return quickResponse;
         }
 
         // STEP 2.5: Plant Recommendation Engine for "best plant for X" queries
