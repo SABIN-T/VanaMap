@@ -259,7 +259,7 @@
     width: 100%;
 
     /* Mobile Safe Area */
-    padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
+    padding-bottom: env(safe-area-inset-bottom);
 }
 
 .inputWrapper {

@@ -394,9 +394,6 @@ You can also ask about specific plants like "How do I care for a snake plant?" o
                         {loading ? <Sparkles size={20} className={styles.sparkle} /> : <Send size={20} />}
                     </button>
                 </div>
-                <p className={styles.disclaimer}>
-                    💡 AI-powered advice based on botanical science and your plant database
-                </p>
             </div>
         </div>
     );
