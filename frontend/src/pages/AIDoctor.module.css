@@ -369,13 +369,13 @@
         grid-template-areas:
             "sidebar chat"
             "sidebar input";
-        height: calc(100vh - 80px);
-        /* PRECISE FIT: Minus Global Nav */
+        height: 100vh;
         max-width: 100vw;
         overflow: hidden;
         background: #000;
-        margin-top: 80px;
-        /* Push below Navbar */
+        margin-top: 0;
+        padding-top: 100px;
+        box-sizing: border-box;
     }
 
     /* Cinematic Background Upgrade */
@@ -429,6 +429,9 @@
     .title {
         font-size: 1.5rem;
         margin-bottom: 0.25rem;
+        color: #ffffff;
+        -webkit-text-fill-color: #ffffff;
+        background: none;
     }
 
     .subtitle {
