@@ -1572,3 +1572,114 @@
         transform: translateY(0);
     }
 }
+
+/* ========================================
+   TYPE FILTER - COLUMN LAYOUT (SHOPS STYLE)
+   ======================================== */
+
+.typeFilterContainer {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    width: 100%;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.typeFilterCard {
+    flex: 1;
+    background: var(--glass-bg);
+    border: var(--glass-border);
+    border-radius: 1.25rem;
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(10px);
+    text-align: left;
+}
+
+.typeFilterCard:hover {
+    background: var(--color-bg-card);
+    transform: translateY(-4px);
+    border-color: var(--color-primary);
+}
+
+.typeFilterCard.typeFilterActive {
+    background: rgba(16, 185, 129, 0.1);
+    border-color: #10b981;
+    box-shadow: 0 10px 30px -10px rgba(16, 185, 129, 0.3);
+}
+
+.typeFilterIcon {
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    transition: all 0.3s;
+    flex-shrink: 0;
+}
+
+.typeFilterActive .typeFilterIcon {
+    background: #10b981;
+    transform: scale(1.1);
+}
+
+.typeFilterInfo {
+    display: flex;
+    flex-direction: column;
+}
+
+.typeFilterName {
+    font-weight: 800;
+    color: var(--color-text-main);
+    font-size: 0.95rem;
+}
+
+.typeFilterDesc {
+    font-size: 0.7rem;
+    color: var(--color-text-dim);
+}
+
+.typeFilterActive .typeFilterName {
+    color: #34d399;
+}
+
+.typeFilterActive .typeFilterDesc {
+    color: #10b981;
+    opacity: 0.8;
+}
+
+/* Mobile Optimization */
+@media (max-width: 768px) {
+    .typeFilterContainer {
+        gap: 0.5rem;
+        max-width: 100%;
+    }
+
+    .typeFilterCard {
+        padding: 0.6rem;
+        border-radius: 1rem;
+    }
+
+    .typeFilterIcon {
+        width: 32px;
+        height: 32px;
+        font-size: 1rem;
+    }
+
+    .typeFilterName {
+        font-size: 0.8rem;
+    }
+
+    .typeFilterDesc {
+        display: none;
+    }
+}

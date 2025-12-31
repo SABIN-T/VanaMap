@@ -631,35 +631,36 @@ export const Home = () => {
 
                 <div className={styles.filterDiscoverySection} ref={filterSectionRef} style={{ scrollMarginTop: '100px' }}>
 
-
                     <div className={styles.filterWrapper}>
                         <h3 className={styles.filterQuestion}>Which plant are you looking for?</h3>
-                        <div className={styles.categorySelectionList}>
+
+                        {/* Column Layout Filter Cards - Matching Shops Design */}
+                        <div className={styles.typeFilterContainer}>
                             <div
-                                className={`${styles.categoryCard} ${filter === 'indoor' ? styles.categoryCardActive : ''}`}
+                                className={`${styles.typeFilterCard} ${filter === 'indoor' ? styles.typeFilterActive : ''}`}
                                 onClick={() => {
                                     setFilter(filter === 'indoor' ? 'all' : 'indoor');
                                     scrollToPlants();
                                 }}
                             >
-                                <div className={styles.categoryIcon}>🏠</div>
-                                <div className={styles.categoryText}>
-                                    <h3 className={styles.categoryName}>Indoor Collection</h3>
-                                    <p className={styles.categoryDesc}>Air-purifying specimens for your room.</p>
+                                <div className={styles.typeFilterIcon}>🏠</div>
+                                <div className={styles.typeFilterInfo}>
+                                    <span className={styles.typeFilterName}>Indoor</span>
+                                    <span className={styles.typeFilterDesc}>Interior Species</span>
                                 </div>
                             </div>
 
                             <div
-                                className={`${styles.categoryCard} ${filter === 'outdoor' ? styles.categoryCardActive : ''}`}
+                                className={`${styles.typeFilterCard} ${filter === 'outdoor' ? styles.typeFilterActive : ''}`}
                                 onClick={() => {
                                     setFilter(filter === 'outdoor' ? 'all' : 'outdoor');
                                     scrollToPlants();
                                 }}
                             >
-                                <div className={styles.categoryIcon}>🌿</div>
-                                <div className={styles.categoryText}>
-                                    <h3 className={styles.categoryName}>Outdoor Nature</h3>
-                                    <p className={styles.categoryDesc}>Resilient varieties for your garden.</p>
+                                <div className={styles.typeFilterIcon}>🌲</div>
+                                <div className={styles.typeFilterInfo}>
+                                    <span className={styles.typeFilterName}>Outdoor</span>
+                                    <span className={styles.typeFilterDesc}>Natural Resilience</span>
                                 </div>
                             </div>
                         </div>
