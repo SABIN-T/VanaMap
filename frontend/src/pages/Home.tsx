@@ -409,6 +409,36 @@ export const Home = () => {
                                     </svg>
                                 </div>
                             </a>
+
+                            {/* Premium X (Twitter) Icon */}
+                            <a
+                                href="https://x.com/VanaMap50945"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className={styles.twitterLink}
+                                aria-label="Follow VanaMap on X"
+                            >
+                                <div className={styles.twitterIcon}>
+                                    <svg
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                        <path
+                                            d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932 6.064-6.932zm-1.29 19.497h2.039L6.486 3.24H4.298l13.313 17.41z"
+                                            fill="url(#twitterGradient)"
+                                        />
+                                        <defs>
+                                            <linearGradient id="twitterGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                <stop offset="0%" stopColor="#ffffff" />
+                                                <stop offset="100%" stopColor="#94a3b8" />
+                                            </linearGradient>
+                                        </defs>
+                                    </svg>
+                                </div>
+                            </a>
                         </div>
 
                         <div className={styles.heroBadge}>

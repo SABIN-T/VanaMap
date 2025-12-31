@@ -387,6 +387,100 @@
     }
 }
 
+/* Premium X (Twitter) Icon */
+.twitterLink {
+    display: inline-flex;
+    margin-bottom: 1.5rem;
+    text-decoration: none;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.twitterLink:hover {
+    transform: translateY(-4px) scale(1.05);
+}
+
+.twitterIcon {
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(15, 23, 42, 0.4) 100%);
+    border: 2px solid transparent;
+    border-radius: 1.25rem;
+    backdrop-filter: blur(20px);
+    box-shadow:
+        0 10px 30px -10px rgba(0, 0, 0, 0.5),
+        0 0 0 1px rgba(255, 255, 255, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.twitterIcon::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #000000 0%, #1e293b 100%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    border-radius: 1.25rem;
+}
+
+.twitterIcon:hover {
+    border-color: rgba(255, 255, 255, 0.3);
+    box-shadow:
+        0 20px 40px -10px rgba(0, 0, 0, 0.6),
+        0 0 0 1px rgba(255, 255, 255, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+}
+
+.twitterIcon:hover::before {
+    opacity: 0.2;
+}
+
+.twitterIcon svg {
+    position: relative;
+    z-index: 1;
+    transition: transform 0.3s ease;
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.1));
+}
+
+.twitterIcon:hover svg {
+    transform: rotate(15deg) scale(1.1);
+}
+
+/* Twitter Icon Shine animation */
+.twitterIcon::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg,
+            transparent 30%,
+            rgba(255, 255, 255, 0.1) 50%,
+            transparent 70%);
+    transform: rotate(45deg);
+    animation: iconShine 3s infinite;
+}
+
+/* Mobile optimization */
+@media (max-width: 640px) {
+    .twitterIcon {
+        width: 48px;
+        height: 48px;
+    }
+
+    .twitterIcon svg {
+        width: 18px;
+        height: 18px;
+    }
+}
+
 /* Shine animation */
 .instagramIcon::after {
     content: '';
