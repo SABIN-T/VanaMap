@@ -198,10 +198,21 @@ Respond naturally as Dr. Flora would:`;
     };
 
     // Quick Response Handler for Simple Questions
-    const getQuickResponse = (lowerMsg: string): string | null => {
-        // Name questions
-        if (/what.*your.*name|who.*are.*you|your.*name/.test(lowerMsg)) {
-            return `Hi there! I'm Dr. Flora, your plant care expert. What can I help you with today?`;
+    const getQuickResponse = (lowerMsg: string, originalMsg: string): string | null => {
+        // User introducing themselves - extract name and respond naturally
+        if (/my name is|i'm|i am|this is|call me/i.test(lowerMsg)) {
+            // Extract the name
+            const nameMatch = originalMsg.match(/(?:my name is|i'm|i am|this is|call me)\s+([a-z]+)/i);
+            if (nameMatch && nameMatch[1]) {
+                const userName = nameMatch[1];
+                return `Nice to meet you, ${userName}! I'm Dr. Flora. How can I help you with your plants today?`;
+            }
+            return `Nice to meet you! I'm Dr. Flora. What can I help you with today?`;
+        }
+
+        // Name questions - asking about AI's name
+        if (/what.*your.*name|who.*are.*you|your.*name/.test(lowerMsg) && !/my name|i'm|i am/.test(lowerMsg)) {
+            return `I'm Dr. Flora, your plant care expert. What can I help you with today?`;
         }
 
         // Greetings - keep it simple and friendly
@@ -296,7 +307,7 @@ Need more specific help? Describe your plant's symptoms in detail!`;
         }
 
         // STEP 2.3: Quick Response Handler for Simple Questions
-        const quickResponse = getQuickResponse(lowerMsg);
+        const quickResponse = getQuickResponse(lowerMsg, userMessage);
         if (quickResponse) {
             return quickResponse;
         }
