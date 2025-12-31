@@ -403,6 +403,8 @@
     .container {
         max-width: 1400px;
         margin: 0 auto;
+        padding-bottom: 0;
+        /* No mobile nav on desktop */
     }
 
     .header {
