@@ -121,6 +121,27 @@
     scroll-behavior: smooth;
     display: flex;
     flex-direction: column;
+    padding-bottom: 100px;
+    /* Space for absolute input */
+}
+
+/* ... existing styles ... */
+
+/* --- INPUT AREA --- */
+.inputContainer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    background: transparent;
+    border-top: none;
+    padding: 0 1.5rem 1.5rem 1.5rem;
+    /* No top padding, only sides and bottom */
+    width: 100%;
+
+    /* Mobile Safe Area */
+    padding-bottom: max(1rem, env(safe-area-inset-bottom, 0));
 }
 
 .messagesWrapper {
