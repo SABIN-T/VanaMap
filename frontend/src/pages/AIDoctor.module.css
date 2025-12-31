@@ -397,3 +397,214 @@
         height: 48px;
     }
 }
+
+/* Desktop Compact View - High Information Density */
+@media (min-width: 1024px) {
+    .container {
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+    .header {
+        padding: 0.75rem 1.5rem;
+        /* Reduced from 1.5rem */
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .headerContent {
+        max-width: 100%;
+    }
+
+    .logoSection {
+        gap: 0.75rem;
+        /* Reduced from 1.25rem */
+    }
+
+    .logoIcon {
+        width: 40px;
+        /* Reduced from 56px */
+        height: 40px;
+        border-radius: 0.75rem;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+    }
+
+    .logoIcon svg {
+        width: 22px;
+        height: 22px;
+    }
+
+    .title {
+        font-size: 1.25rem;
+        /* Reduced from 1.75rem */
+        font-weight: 800;
+        line-height: 1.2;
+    }
+
+    .subtitle {
+        font-size: 0.75rem;
+        /* Reduced from 0.9rem */
+        margin: 0.125rem 0 0 0;
+        opacity: 0.8;
+    }
+
+    .actions {
+        gap: 0.5rem;
+    }
+
+    .actionBtn {
+        width: 36px;
+        /* Reduced from 40px */
+        height: 36px;
+        border-radius: 0.625rem;
+    }
+
+    .actionBtn svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    .chatContainer {
+        padding: 1.25rem 1.5rem;
+        /* Reduced from 2rem */
+        max-height: calc(100vh - 180px);
+    }
+
+    .messagesWrapper {
+        max-width: 1100px;
+        /* Increased from 900px for better use of space */
+        gap: 1rem;
+        /* Reduced from 1.5rem */
+    }
+
+    .message {
+        gap: 0.75rem;
+        /* Reduced from 1rem */
+    }
+
+    .messageIcon {
+        width: 34px;
+        /* Reduced from 40px */
+        height: 34px;
+        flex-shrink: 0;
+    }
+
+    .messageIcon svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .messageContent {
+        max-width: 80%;
+        /* Increased from 75% */
+    }
+
+    .messageHeader {
+        gap: 0.5rem;
+        /* Reduced from 0.75rem */
+        margin-bottom: 0.375rem;
+        /* Reduced from 0.5rem */
+    }
+
+    .messageSender {
+        font-size: 0.75rem;
+        /* Reduced from 0.85rem */
+        font-weight: 600;
+    }
+
+    .messageTime {
+        font-size: 0.65rem;
+        /* Reduced from 0.75rem */
+    }
+
+    .messageText {
+        padding: 0.875rem 1rem;
+        /* Reduced from 1.25rem */
+        border-radius: 1rem;
+        font-size: 0.875rem;
+        /* Reduced from 0.95rem */
+        line-height: 1.5;
+        /* Tighter from 1.7 */
+    }
+
+    .messageText p {
+        margin-bottom: 0.5rem;
+        /* Reduced from 0.75rem */
+    }
+
+    .messageText strong {
+        font-weight: 600;
+    }
+
+    .typing {
+        padding: 0.75rem;
+        /* Reduced from 1rem */
+    }
+
+    .typing span {
+        width: 6px;
+        /* Reduced from 8px */
+        height: 6px;
+    }
+
+    .inputContainer {
+        padding: 1rem 1.5rem;
+        /* Reduced from 1.5rem 2rem */
+        background: rgba(15, 23, 42, 0.9);
+        border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .inputWrapper {
+        max-width: 1100px;
+        gap: 0.75rem;
+        /* Reduced from 1rem */
+    }
+
+    .input {
+        padding: 0.875rem 1.125rem;
+        /* Reduced from 1.25rem 1.5rem */
+        font-size: 0.875rem;
+        /* Reduced from 0.95rem */
+        border-radius: 1rem;
+    }
+
+    .sendBtn {
+        width: 48px;
+        /* Reduced from 56px */
+        height: 48px;
+        border-radius: 0.875rem;
+        box-shadow: 0 3px 10px rgba(16, 185, 129, 0.25);
+    }
+
+    .sendBtn svg {
+        width: 18px;
+        height: 18px;
+    }
+
+    .disclaimer {
+        margin: 0.625rem auto 0;
+        /* Reduced from 1rem */
+        font-size: 0.7rem;
+        /* Reduced from 0.8rem */
+        opacity: 0.7;
+    }
+
+    /* Compact scrollbar for desktop */
+    .chatContainer::-webkit-scrollbar {
+        width: 6px;
+        /* Reduced from 8px */
+    }
+
+    .chatContainer::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.15);
+        border-radius: 8px;
+    }
+
+    .chatContainer::-webkit-scrollbar-thumb {
+        background: rgba(16, 185, 129, 0.25);
+        border-radius: 8px;
+    }
+
+    .chatContainer::-webkit-scrollbar-thumb:hover {
+        background: rgba(16, 185, 129, 0.4);
+    }
+}
