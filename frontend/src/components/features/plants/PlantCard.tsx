@@ -69,7 +69,7 @@ export const PlantCard = ({ plant, score, isTopMatch, priority = false, onAdd, s
                             onClick={(e) => {
                                 e.stopPropagation();
                                 toast(
-                                    `🌱 ${score}% Aptness: Absolute biological fit score simulated over a 168-hour stochastic window. No relative normalization applied.`,
+                                    `🌱 ${score}% Aptness: Scientifically normalized fit based on your unique 30-day ecosystem profile. The top species is calibrated to 100%.`,
                                     { duration: 5000, style: { background: '#0f172a', color: '#fff', border: '1px solid rgba(255,255,255,0.1)' } }
                                 );
                             }}

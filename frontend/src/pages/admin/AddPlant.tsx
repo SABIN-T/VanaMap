@@ -457,6 +457,42 @@ export const AddPlant = () => {
                                         </select>
                                     </div>
                                 </div>
+
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+                                    <div>
+                                        <div className="flex justify-between items-center mb-4">
+                                            <label className="text-xs font-bold uppercase text-slate-400 flex items-center gap-2">
+                                                <Thermometer size={14} className="text-amber-400" /> Ideal Temp (Min)
+                                            </label>
+                                            <span className="text-sm font-mono text-amber-400 font-bold">{newPlant.idealTempMin}°C</span>
+                                        </div>
+                                        <div className={styles.rangeWrapper}>
+                                            <input
+                                                type="range" min="0" max="40" step="1"
+                                                value={newPlant.idealTempMin}
+                                                onChange={(e) => setNewPlant({ ...newPlant, idealTempMin: Number(e.target.value) })}
+                                                className={styles.rangeInput}
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div className="flex justify-between items-center mb-4">
+                                            <label className="text-xs font-bold uppercase text-slate-400 flex items-center gap-2">
+                                                <Thermometer size={14} className="text-red-400" /> Ideal Temp (Max)
+                                            </label>
+                                            <span className="text-sm font-mono text-red-400 font-bold">{newPlant.idealTempMax}°C</span>
+                                        </div>
+                                        <div className={styles.rangeWrapper}>
+                                            <input
+                                                type="range" min="0" max="50" step="1"
+                                                value={newPlant.idealTempMax}
+                                                onChange={(e) => setNewPlant({ ...newPlant, idealTempMax: Number(e.target.value) })}
+                                                className={styles.rangeInput}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             {/* Submit Area */}

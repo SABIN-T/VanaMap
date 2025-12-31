@@ -5,7 +5,7 @@ import { PlantCard } from '../components/features/plants/PlantCard';
 import { Button } from '../components/common/Button';
 import { fetchPlants, fetchVendors } from '../services/api';
 import { getWeather, geocodeCity, reverseGeocode } from '../services/weather';
-import { calculateAptness } from '../utils/logic';
+import { calculateAptness, normalizeBatch } from '../utils/logic';
 import type { Plant, Vendor } from '../types';
 import { Sprout, MapPin, Thermometer, Wind, ArrowDown, Sparkles, Search, AlertCircle, Heart, Sun, Activity, GraduationCap, ShoppingBag, PlusCircle, MoveRight, MessageCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -262,29 +262,36 @@ export const Home = () => {
     };
 
     const displayedPlants = useMemo(() => {
-        const processed = [...plants]
-            .filter(p => {
-                const matchesType = filter === 'all' ? true : p.type === filter;
-                const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                    (p.scientificName || '').toLowerCase().includes(searchQuery.toLowerCase());
-                const matchesLight = lightFilter === 'all' ? true : (() => {
-                    const s = p.sunlight?.toLowerCase() || '';
-                    if (lightFilter === 'low') return s.includes('low') || s.includes('shade') || s.includes('shadow');
-                    if (lightFilter === 'medium') return s.includes('indirect') || s.includes('partial') || s.includes('medium');
-                    if (lightFilter === 'high') return s.includes('full') || s.includes('high') || s.includes('direct') || s.includes('bright');
-                    return false;
-                })();
-                return matchesType && matchesSearch && matchesLight;
-            })
-            .map(p => {
-                if (!weather) return { ...p, score: 0 };
-                // Get absolute high-precision score
-                const rawScore = calculateAptness(p, weather.avgTemp30Days, weather.air_quality?.aqi, weather.avgHumidity30Days, undefined, true, 150);
-                return { ...p, score: Math.round(rawScore * 10) / 10 }; // 1 Decimal precision
-            })
-            .sort((a, b) => (weather ? (b.score || 0) - (a.score || 0) : 0));
+        const filtered = plants.filter(p => {
+            const matchesType = filter === 'all' ? true : p.type === filter;
+            const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                (p.scientificName || '').toLowerCase().includes(searchQuery.toLowerCase());
+            const matchesLight = lightFilter === 'all' ? true : (() => {
+                const s = p.sunlight?.toLowerCase() || '';
+                if (lightFilter === 'low') return s.includes('low') || s.includes('shade') || s.includes('shadow');
+                if (lightFilter === 'medium') return s.includes('indirect') || s.includes('partial') || s.includes('medium');
+                if (lightFilter === 'high') return s.includes('full') || s.includes('high') || s.includes('direct') || s.includes('bright');
+                return false;
+            })();
+            return matchesType && matchesSearch && matchesLight;
+        });
 
-        return processed;
+        if (!weather) return filtered.map(p => ({ ...p, score: 0 }));
+
+        // 1. Calculate raw high-precision absolute scores
+        const scoredRaw = filtered.map(p => {
+            const rawScore = calculateAptness(p, weather.avgTemp30Days, weather.air_quality?.aqi, weather.avgHumidity30Days, undefined, true, 150);
+            return { ...p, rawScore };
+        });
+
+        // 2. Normalize the batch relative to the highest raw score
+        const rawScores = scoredRaw.map(s => s.rawScore);
+        const normalizedScores = normalizeBatch(rawScores);
+
+        // 3. Map normalized scores back and sort
+        return scoredRaw
+            .map((p, i) => ({ ...p, score: normalizedScores[i] }))
+            .sort((a, b) => b.score - a.score);
     }, [plants, filter, searchQuery, lightFilter, weather]);
 
     return (

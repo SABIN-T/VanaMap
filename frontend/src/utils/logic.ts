@@ -203,9 +203,12 @@ export const normalizeBatch = (scores: number[]): number[] => {
     const maxScore = Math.max(...scores);
     if (maxScore === 0) return scores;
 
-    // To satisfy "start from normalized to 100%", we scale the highest result to 100
-    // and all others relative to it.
-    return scores.map(s => Math.round((s / maxScore) * 100));
+    // Normalizing the highest result to exactly 100.0
+    // Others are scaled proportionally with high resolution (0.1 precision)
+    return scores.map(s => {
+        const normalized = (s / maxScore) * 100;
+        return Math.round(normalized * 10) / 10;
+    });
 };
 
 export const formatDistance = (meters: number): string => {

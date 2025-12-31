@@ -32,13 +32,43 @@ export const Settings = () => {
         });
     };
 
-    const handleDangerAction = (action: string) => {
+    const handleDangerAction = async (action: string) => {
         if (window.confirm(`Are you sure you want to ${action}? This cannot be undone.`)) {
-            toast.loading(`Executing: ${action}...`);
-            setTimeout(() => {
-                toast.dismiss();
-                toast.success(`${action} Completed Successfully`);
-            }, 1500);
+            const tid = toast.loading(`${action} in progress...`);
+
+            try {
+                if (action === 'Bulk Ecosystem Sync') {
+                    const { fetchPlants, updatePlant } = await import('../../services/api');
+                    const { INDIAN_PLANT_DB } = await import('../../data/indianPlants');
+
+                    const plants = await fetchPlants();
+                    let updatedCount = 0;
+
+                    for (const plant of plants) {
+                        const sciName = (plant.scientificName || '').toLowerCase().trim();
+                        const template = INDIAN_PLANT_DB[sciName];
+
+                        if (template) {
+                            await updatePlant(plant.id, {
+                                ...plant,
+                                idealTempMin: template.idealTempMin || plant.idealTempMin,
+                                idealTempMax: template.idealTempMax || plant.idealTempMax,
+                                minHumidity: template.minHumidity || plant.minHumidity,
+                                isNocturnal: template.isNocturnal ?? plant.isNocturnal
+                            });
+                            updatedCount++;
+                        }
+                    }
+                    toast.success(`Synced ${updatedCount} specimens with Ecosystem Intelligence`, { id: tid });
+                } else {
+                    setTimeout(() => {
+                        toast.dismiss(tid);
+                        toast.success(`${action} Completed Successfully`);
+                    }, 1500);
+                }
+            } catch (err) {
+                toast.error(`${action} failed: Check terminal logs`, { id: tid });
+            }
         }
     };
 
@@ -107,8 +137,13 @@ export const Settings = () => {
                                         <div className={`${styles.cardDesc} ${styles.dangerDesc}`}>Irreversible actions. Please proceed with extreme caution.</div>
                                     </div>
                                     <div className={styles.dangerActions}>
+                                        <button
+                                            className={`${styles.dangerBtn} bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 border-emerald-500/20`}
+                                            onClick={() => handleDangerAction('Bulk Ecosystem Sync')}
+                                        >
+                                            Bulk Ecosystem Sync
+                                        </button>
                                         <button className={styles.dangerBtn} onClick={() => handleDangerAction('Flush Cache')}>Flush Redis Cache</button>
-                                        <button className={styles.dangerBtn} onClick={() => handleDangerAction('Reset Analytics')}>Reset Analytics</button>
                                     </div>
                                 </div>
                             </>
