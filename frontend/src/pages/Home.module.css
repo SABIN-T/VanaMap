@@ -121,6 +121,113 @@
     transition: all 0.3s ease;
 }
 
+/* Premium Instagram Icon */
+.instagramLink {
+    display: inline-flex;
+    margin-bottom: 1.5rem;
+    text-decoration: none;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.instagramLink:hover {
+    transform: translateY(-4px) scale(1.05);
+}
+
+.instagramIcon {
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(240, 148, 51, 0.1) 0%, rgba(188, 24, 136, 0.1) 100%);
+    border: 2px solid transparent;
+    border-radius: 1.25rem;
+    backdrop-filter: blur(20px);
+    box-shadow:
+        0 10px 30px -10px rgba(240, 148, 51, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.instagramIcon::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    border-radius: 1.25rem;
+}
+
+.instagramIcon:hover {
+    border-color: rgba(240, 148, 51, 0.5);
+    box-shadow:
+        0 20px 40px -10px rgba(240, 148, 51, 0.5),
+        0 0 0 1px rgba(240, 148, 51, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+}
+
+.instagramIcon:hover::before {
+    opacity: 0.15;
+}
+
+.instagramIcon svg {
+    position: relative;
+    z-index: 1;
+    transition: transform 0.3s ease;
+}
+
+.instagramIcon:hover svg {
+    transform: rotate(-5deg) scale(1.1);
+}
+
+/* Shine animation */
+.instagramIcon::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg,
+            transparent 30%,
+            rgba(255, 255, 255, 0.2) 50%,
+            transparent 70%);
+    transform: rotate(45deg);
+    animation: instagramShine 3s infinite;
+}
+
+@keyframes instagramShine {
+    0% {
+        transform: translateX(-100%) translateY(-100%) rotate(45deg);
+    }
+
+    20% {
+        transform: translateX(100%) translateY(100%) rotate(45deg);
+    }
+
+    100% {
+        transform: translateX(100%) translateY(100%) rotate(45deg);
+    }
+}
+
+/* Mobile optimization */
+@media (max-width: 640px) {
+    .instagramIcon {
+        width: 48px;
+        height: 48px;
+    }
+
+    .instagramIcon svg {
+        width: 20px;
+        height: 20px;
+    }
+}
+
 @media (min-width: 1024px) {
     .heroBadge {
         margin-bottom: 1.5rem;
