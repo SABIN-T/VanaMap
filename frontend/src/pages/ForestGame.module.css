@@ -460,52 +460,56 @@
     }
 
     .header {
-        padding: 0.75rem 1.25rem;
-        /* Reduced from 1rem 1.5rem */
+        padding: 0.5rem 1rem;
+        /* Further reduced from 0.75rem 1.25rem */
     }
 
     .backBtn {
-        padding: 0.5rem;
-        /* Reduced from 0.6rem */
-        width: 36px;
-        height: 36px;
+        padding: 0.4rem;
+        /* Further reduced */
+        width: 32px;
+        height: 32px;
     }
 
     .backBtn svg {
-        width: 16px;
-        height: 16px;
+        width: 14px;
+        height: 14px;
     }
 
     .statsGroup {
-        gap: 0.5rem;
-        /* Reduced from 0.75rem */
+        gap: 0.4rem;
+        /* Further reduced */
     }
 
     .miniStat {
-        padding: 0.35rem 0.65rem;
-        /* Reduced from 0.4rem 0.8rem */
-        font-size: 0.75rem;
-        /* Reduced from 0.85rem */
-        gap: 0.3rem;
+        padding: 0.3rem 0.5rem;
+        /* Further reduced */
+        font-size: 0.7rem;
+        /* Further reduced */
+        gap: 0.25rem;
     }
 
     .miniStat svg {
-        width: 13px;
-        height: 13px;
+        width: 12px;
+        height: 12px;
     }
 
     .pulseRed {
-        font-size: 0.95rem;
-        /* Reduced from 1.1rem */
-        padding: 0.4rem 0.85rem;
-        /* Reduced from 0.5rem 1rem */
+        font-size: 0.85rem;
+        /* Further reduced */
+        padding: 0.35rem 0.7rem;
+        /* Further reduced */
     }
 
     .mainContent {
-        padding: 0.75rem;
-        /* Reduced from 1rem */
-        padding-bottom: 1rem;
-        /* Reduced from 60px - no mobile nav on desktop */
+        padding: 0.5rem;
+        /* Further reduced from 0.75rem */
+        padding-bottom: 0.5rem;
+        /* Minimal bottom padding */
+        height: 100vh;
+        /* Ensure full height */
+        box-sizing: border-box;
+        /* Include padding in height calculation */
     }
 
     .card {
