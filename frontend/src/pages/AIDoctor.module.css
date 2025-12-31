@@ -253,8 +253,8 @@
 .inputContainer {
     flex-shrink: 0;
     /* Do not shrink */
-    background: rgba(3, 7, 18, 0.95);
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    background: transparent;
+    border-top: none;
     padding: 1.5rem;
     width: 100%;
 
