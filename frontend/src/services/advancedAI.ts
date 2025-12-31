@@ -170,7 +170,7 @@ Respond naturally and helpfully:`;
 }
 
 // Helper function to format AI response like Gemini/GPT
-export function formatAdvancedResponse(aiText: string, userQuestion: string): string {
+export function formatAdvancedResponse(aiText: string): string {
     let formatted = `🌿 **Dr. Flora:**\n\n`;
 
     // Split into paragraphs
