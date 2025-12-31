@@ -66,7 +66,7 @@ export const PLANTS: Plant[] = [
         "medicinalValues": ["Burns healing", "Skin hydration"],
         "advantages": ["Medicinal gel", "Succulent"],
         "price": 25,
-        "type": "outdoor",
+        "type": "indoor",
         "lifespan": "5-20 Years"
     },
     {

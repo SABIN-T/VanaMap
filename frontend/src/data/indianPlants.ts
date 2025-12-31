@@ -272,7 +272,7 @@ export const INDIAN_PLANT_DB: Record<string, Partial<Plant>> = {
         minHumidity: 20,
         isNocturnal: true,
         description: 'Skin healer. Low maintenance.',
-        type: 'outdoor', // Changed to outdoor for accurate growth simulation (needs sun)
+        type: 'indoor', // Versatile succulent commonly grown as houseplant
         medicinalValues: ['Skin care'],
         advantages: ['Medicinal', 'Hardy']
     },
