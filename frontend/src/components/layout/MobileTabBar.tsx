@@ -14,7 +14,8 @@ export const MobileTabBar = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    if (!isMobile || location.pathname === '/pot-designer' || location.pathname === '/ai-doctor') return null;
+    // Hide on specific pages or if not mobile
+    if (!isMobile || location.pathname.includes('/pot-designer') || location.pathname.includes('/ai-doctor')) return null;
 
     const tabs = [
         { path: '/', icon: Home, label: 'Home' },
