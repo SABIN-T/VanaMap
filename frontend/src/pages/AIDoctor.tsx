@@ -109,6 +109,14 @@ Need more specific help? Describe your plant's symptoms in detail!`;
             return response;
         }
 
+        // STEP 2.5: Plant Recommendation Engine for "best plant for X" queries
+        const isRecommendationQuery = /best|recommend|suggest|good|suitable|ideal|perfect/.test(lowerMsg) &&
+            (/plant|flower|herb|tree|succulent|fern/.test(lowerMsg) || /for/.test(lowerMsg));
+
+        if (isRecommendationQuery) {
+            return generatePlantRecommendations(userMessage, plants);
+        }
+
         // STEP 3: Advanced symptom-based diagnosis with logical reasoning
         if (context.hasSymptoms || context.hasPest) {
             return generateDiagnosticResponse(userMessage, context);
@@ -151,6 +159,198 @@ Be specific, practical, and encouraging.`;
 
         // STEP 5: Intelligent fallback with context awareness
         return generateFallbackResponse(userMessage);
+    };
+
+    // Plant Recommendation Engine
+    const generatePlantRecommendations = (userMessage: string, plantDatabase: any[]): string => {
+        const lowerMsg = userMessage.toLowerCase();
+
+        // Analyze query for specific requirements
+        const requirements = {
+            highHumidity: /high.*humid|humid.*area|tropical|moisture|wet/.test(lowerMsg),
+            lowHumidity: /low.*humid|dry.*air|arid|desert/.test(lowerMsg),
+            lowLight: /low.*light|shade|dark|no.*sun|indirect/.test(lowerMsg),
+            brightLight: /bright|sunny|direct.*sun|full.*sun/.test(lowerMsg),
+            lowMaintenance: /easy|beginner|low.*maintenance|hard.*kill|forgiving/.test(lowerMsg),
+            airPurifying: /air.*purif|clean.*air|oxygen|filter/.test(lowerMsg),
+            petSafe: /pet.*safe|cat|dog|non.*toxic/.test(lowerMsg),
+            indoor: /indoor|house|apartment|office/.test(lowerMsg),
+            outdoor: /outdoor|garden|patio|balcony/.test(lowerMsg),
+            flowering: /flower|bloom|blossom/.test(lowerMsg),
+            medicinal: /medicinal|healing|health|medicine/.test(lowerMsg),
+        };
+
+        let recommendations: any[] = [];
+        let criteriaText = '';
+
+        // Filter plants based on requirements
+        if (requirements.highHumidity) {
+            criteriaText = 'High Humidity Environments';
+            recommendations = plantDatabase.filter(p => (p.minHumidity || 0) >= 60)
+                .sort((a, b) => (b.minHumidity || 0) - (a.minHumidity || 0))
+                .slice(0, 8);
+
+            // Add known high-humidity lovers even if not in filtered results
+            const highHumidityDefaults = [
+                { name: 'Boston Fern', humidity: '70%+', care: 'Keep soil moist, mist daily', why: 'Thrives in bathroom humidity' },
+                { name: 'Peace Lily', humidity: '60%+', care: 'Water weekly, tolerates low light', why: 'Excellent air purifier for humid spaces' },
+                { name: 'Calathea', humidity: '60-80%', care: 'Filtered water, indirect light', why: 'Stunning foliage, loves moisture' },
+                { name: 'Orchids', humidity: '50-70%', care: 'Water weekly, bright indirect light', why: 'Beautiful blooms in humid conditions' },
+                { name: 'Monstera Deliciosa', humidity: '60%+', care: 'Water when top 2" dry', why: 'Large tropical leaves, fast-growing' },
+                { name: 'Pothos', humidity: '50-70%', care: 'Very forgiving, low light OK', why: 'Nearly indestructible, trails beautifully' },
+            ];
+
+            if (recommendations.length < 3) {
+                return generateDefaultRecommendations(criteriaText, highHumidityDefaults);
+            }
+        }
+
+        if (requirements.lowLight) {
+            criteriaText = 'Low Light Conditions';
+            const lowLightDefaults = [
+                { name: 'Snake Plant (Sansevieria)', light: 'Low to bright', care: 'Water every 2-4 weeks', why: 'Extremely tolerant, air purifying' },
+                { name: 'ZZ Plant', light: 'Low to medium', care: 'Water monthly', why: 'Glossy leaves, drought tolerant' },
+                { name: 'Pothos', light: 'Low to bright', care: 'Water weekly', why: 'Trails beautifully, very forgiving' },
+                { name: 'Cast Iron Plant', light: 'Low', care: 'Water every 2 weeks', why: 'Lives up to its name - indestructible' },
+                { name: 'Chinese Evergreen', light: 'Low to medium', care: 'Keep soil moist', why: 'Colorful foliage, low maintenance' },
+                { name: 'Peace Lily', light: 'Low to medium', care: 'Water weekly', why: 'White blooms, air purifying' },
+            ];
+            return generateDefaultRecommendations(criteriaText, lowLightDefaults);
+        }
+
+        if (requirements.lowMaintenance) {
+            criteriaText = 'Low Maintenance / Beginner-Friendly';
+            const easyPlants = [
+                { name: 'Snake Plant', difficulty: 'Very Easy', care: 'Water every 2-4 weeks, any light', why: 'Survives neglect, air purifying' },
+                { name: 'Pothos', difficulty: 'Very Easy', care: 'Water weekly, low to bright light', why: 'Grows in water or soil, hard to kill' },
+                { name: 'Spider Plant', difficulty: 'Very Easy', care: 'Water weekly, indirect light', why: 'Produces baby plants, air purifying' },
+                { name: 'ZZ Plant', difficulty: 'Very Easy', care: 'Water monthly, low light OK', why: 'Drought tolerant, glossy leaves' },
+                { name: 'Succulents (Jade, Aloe)', difficulty: 'Easy', care: 'Water every 2-3 weeks, bright light', why: 'Stores water, minimal care' },
+                { name: 'Rubber Plant', difficulty: 'Easy', care: 'Water when dry, bright indirect', why: 'Large glossy leaves, forgiving' },
+            ];
+            return generateDefaultRecommendations(criteriaText, easyPlants);
+        }
+
+        if (requirements.airPurifying) {
+            criteriaText = 'Air Purifying Plants';
+            const airPurifiers = [
+                { name: 'Snake Plant', benefit: 'Removes formaldehyde, benzene', bonus: 'Releases O₂ at night', care: 'Very low maintenance' },
+                { name: 'Peace Lily', benefit: 'Removes ammonia, benzene, formaldehyde', bonus: 'Beautiful white blooms', care: 'Moderate water needs' },
+                { name: 'Spider Plant', benefit: 'Removes carbon monoxide, xylene', bonus: 'Produces baby plants', care: 'Very easy to grow' },
+                { name: 'Boston Fern', benefit: 'Removes formaldehyde, xylene', bonus: 'Natural humidifier', care: 'Needs high humidity' },
+                { name: 'Rubber Plant', benefit: 'Removes formaldehyde', bonus: 'Large, attractive leaves', care: 'Easy care' },
+                { name: 'Aloe Vera', benefit: 'Removes formaldehyde, benzene', bonus: 'Medicinal gel in leaves', care: 'Minimal watering' },
+            ];
+
+            let response = `🌿 **Best Air Purifying Plants for ${criteriaText}**\n\n`;
+            response += `*Based on NASA Clean Air Study and scientific research*\n\n`;
+
+            airPurifiers.forEach((plant, i) => {
+                response += `**${i + 1}. ${plant.name}**\n`;
+                response += `   🔬 **Removes:** ${plant.benefit}\n`;
+                response += `   ✨ **Bonus:** ${plant.bonus}\n`;
+                response += `   🌱 **Care:** ${plant.care}\n\n`;
+            });
+
+            response += `💡 **Pro Tips for Maximum Air Purification:**\n`;
+            response += `• Use 1 plant per 100 sq ft for best results\n`;
+            response += `• Combine multiple species for broader toxin removal\n`;
+            response += `• Keep leaves clean - dust blocks air filtration\n`;
+            response += `• Larger plants = more air cleaning power\n\n`;
+
+            response += `📊 **Effectiveness Ranking:**\n`;
+            response += `1. Snake Plant - Best overall, works 24/7\n`;
+            response += `2. Peace Lily - Highest toxin removal rate\n`;
+            response += `3. Spider Plant - Best for small spaces\n\n`;
+
+            response += `Want specific care instructions for any of these? Just ask!`;
+            return response;
+        }
+
+        // If we have database matches, use them
+        if (recommendations.length > 0) {
+            let response = `🌿 **Top Plant Recommendations for ${criteriaText}**\n\n`;
+            response += `*Based on your plant database*\n\n`;
+
+            recommendations.slice(0, 6).forEach((plant, i) => {
+                response += `**${i + 1}. ${plant.name}**`;
+                if (plant.scientificName) response += ` (*${plant.scientificName}*)`;
+                response += `\n`;
+                if (plant.description) response += `   ${plant.description.substring(0, 100)}...\n`;
+                response += `   🌡️ Temp: ${plant.idealTempMin || 18}-${plant.idealTempMax || 28}°C\n`;
+                response += `   💧 Humidity: ${plant.minHumidity || 40}%+\n`;
+                response += `   ☀️ Light: ${plant.sunlight || 'Moderate'}\n\n`;
+            });
+
+            response += `💡 Want detailed care instructions for any of these? Just ask about the specific plant!`;
+            return response;
+        }
+
+        // Fallback: General recommendations based on query
+        return generateGeneralRecommendations(userMessage);
+    };
+
+    const generateDefaultRecommendations = (criteria: string, plants: any[]): string => {
+        let response = `🌿 **Best Plants for ${criteria}**\n\n`;
+        response += `*Expert-curated recommendations*\n\n`;
+
+        plants.forEach((plant, i) => {
+            response += `**${i + 1}. ${plant.name}**\n`;
+            Object.keys(plant).forEach(key => {
+                if (key !== 'name' && key !== 'why') {
+                    const label = key.charAt(0).toUpperCase() + key.slice(1);
+                    response += `   📌 **${label}:** ${plant[key]}\n`;
+                }
+            });
+            if (plant.why) {
+                response += `   ✨ **Why it's great:** ${plant.why}\n`;
+            }
+            response += `\n`;
+        });
+
+        response += `💡 **Quick Care Tips:**\n`;
+        if (criteria.includes('Humidity')) {
+            response += `• Group plants together to create microclimate\n`;
+            response += `• Use pebble trays with water for extra humidity\n`;
+            response += `• Mist leaves 2-3 times weekly\n`;
+            response += `• Consider a humidifier for optimal growth\n`;
+        } else if (criteria.includes('Low Light')) {
+            response += `• Rotate plants weekly for even growth\n`;
+            response += `• Clean leaves monthly to maximize light absorption\n`;
+            response += `• Reduce watering in low light (slower growth = less water)\n`;
+            response += `• Consider LED grow lights for darker corners\n`;
+        } else if (criteria.includes('Beginner')) {
+            response += `• Start with 1-2 plants to build confidence\n`;
+            response += `• Set phone reminders for watering\n`;
+            response += `• Use moisture meter to avoid overwatering\n`;
+            response += `• Don't panic if a leaf dies - it's normal!\n`;
+        }
+
+        response += `\n🎯 **Success Rate:** These plants have 90%+ survival rate for beginners!\n\n`;
+        response += `Want specific care instructions for any plant? Just ask!`;
+
+        return response;
+    };
+
+    const generateGeneralRecommendations = (query: string): string => {
+        return `🌿 **Plant Recommendations**\n\n` +
+            `I'd love to help you find the perfect plant! To give you the best recommendations, please tell me:\n\n` +
+            `**Environment:**\n` +
+            `• Light level? (bright/medium/low)\n` +
+            `• Humidity? (high/normal/dry)\n` +
+            `• Indoor or outdoor?\n` +
+            `• Temperature range?\n\n` +
+            `**Your Preferences:**\n` +
+            `• Experience level? (beginner/intermediate/expert)\n` +
+            `• Maintenance preference? (low/moderate/high)\n` +
+            `• Any specific features? (flowering/air purifying/edible)\n` +
+            `• Space available? (small pot/large floor plant)\n\n` +
+            `**Example queries:**\n` +
+            `• "Best plants for high humidity bathroom"\n` +
+            `• "Low maintenance plants for office desk"\n` +
+            `• "Air purifying plants for bedroom"\n` +
+            `• "Flowering plants for bright window"\n\n` +
+            `The more details you provide, the better I can match you with your perfect plant companion! 🌱`;
     };
 
     // New helper function for diagnostic responses
