@@ -23,11 +23,11 @@ export class SmartResponseEngine {
 
         // Route to appropriate handler based on question type
         if (analysis.isGreeting) {
-            return this.handleGreeting(userQuestion);
+            return this.handleGreeting();
         }
 
         if (analysis.isSimpleQuery) {
-            return this.handleSimpleQuery(userQuestion, analysis);
+            return this.handleSimpleQuery(userQuestion);
         }
 
         if (analysis.needsPlantInfo) {
@@ -42,7 +42,6 @@ export class SmartResponseEngine {
         if (analysis.needsGeneralAdvice) {
             return await this.handleGeneralAdvice(
                 userQuestion,
-                internalPlants,
                 webSearchFn
             );
         }
@@ -50,7 +49,6 @@ export class SmartResponseEngine {
         // Default: comprehensive response
         return await this.handleComplexQuery(
             userQuestion,
-            internalPlants,
             webSearchFn
         );
     }
@@ -118,12 +116,12 @@ export class SmartResponseEngine {
     }
 
     // Handle greetings
-    private static handleGreeting(question: string): string {
+    private static handleGreeting(): string {
         return "Hello! What can I help you with today?";
     }
 
     // Handle simple queries
-    private static handleSimpleQuery(question: string, analysis: any): string {
+    private static handleSimpleQuery(question: string): string {
         const lower = question.toLowerCase();
 
         if (lower.includes('name')) {
@@ -186,7 +184,6 @@ export class SmartResponseEngine {
     // Handle general advice queries
     private static async handleGeneralAdvice(
         question: string,
-        internalPlants: Plant[],
         webSearchFn: (query: string) => Promise<string | null>
     ): Promise<string> {
 
@@ -203,7 +200,6 @@ export class SmartResponseEngine {
     // Handle complex queries
     private static async handleComplexQuery(
         question: string,
-        internalPlants: Plant[],
         webSearchFn: (query: string) => Promise<string | null>
     ): Promise<string> {
 
