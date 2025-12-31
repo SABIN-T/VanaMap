@@ -372,6 +372,43 @@ export const Home = () => {
                                     </svg>
                                 </div>
                             </a>
+                            {/* Premium Email Icon */}
+                            <a
+                                href="mailto:jiibruh86@gmail.com"
+                                className={styles.emailLink}
+                                aria-label="Email VanaMap Support"
+                            >
+                                <div className={styles.emailIcon}>
+                                    <svg
+                                        width="24"
+                                        height="24"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                    >
+                                        <path
+                                            d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z"
+                                            stroke="url(#emailGradient)"
+                                            strokeWidth="2"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                        />
+                                        <path
+                                            d="M22 6L12 13L2 6"
+                                            stroke="url(#emailGradient)"
+                                            strokeWidth="2"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                        />
+                                        <defs>
+                                            <linearGradient id="emailGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                                <stop offset="0%" stopColor="#38bdf8" />
+                                                <stop offset="100%" stopColor="#818cf8" />
+                                            </linearGradient>
+                                        </defs>
+                                    </svg>
+                                </div>
+                            </a>
                         </div>
 
                         <div className={styles.heroBadge}>

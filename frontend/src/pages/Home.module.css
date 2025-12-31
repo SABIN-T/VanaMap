@@ -293,6 +293,100 @@
     }
 }
 
+/* Premium Email Icon */
+.emailLink {
+    display: inline-flex;
+    margin-bottom: 1.5rem;
+    text-decoration: none;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.emailLink:hover {
+    transform: translateY(-4px) scale(1.05);
+}
+
+.emailIcon {
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, rgba(56, 189, 248, 0.1) 0%, rgba(129, 140, 248, 0.1) 100%);
+    border: 2px solid transparent;
+    border-radius: 1.25rem;
+    backdrop-filter: blur(20px);
+    box-shadow:
+        0 10px 30px -10px rgba(56, 189, 248, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.emailIcon::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #38bdf8 0%, #818cf8 100%);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    border-radius: 1.25rem;
+}
+
+.emailIcon:hover {
+    border-color: rgba(56, 189, 248, 0.5);
+    box-shadow:
+        0 20px 40px -10px rgba(56, 189, 248, 0.5),
+        0 0 0 1px rgba(56, 189, 248, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+}
+
+.emailIcon:hover::before {
+    opacity: 0.15;
+}
+
+.emailIcon svg {
+    position: relative;
+    z-index: 1;
+    transition: transform 0.3s ease;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.emailIcon:hover svg {
+    transform: translateY(-2px) scale(1.1);
+}
+
+/* Email Icon Shine animation */
+.emailIcon::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg,
+            transparent 30%,
+            rgba(255, 255, 255, 0.2) 50%,
+            transparent 70%);
+    transform: rotate(45deg);
+    animation: iconShine 3s infinite;
+}
+
+/* Mobile optimization */
+@media (max-width: 640px) {
+    .emailIcon {
+        width: 48px;
+        height: 48px;
+    }
+
+    .emailIcon svg {
+        width: 20px;
+        height: 20px;
+    }
+}
+
 /* Shine animation */
 .instagramIcon::after {
     content: '';
