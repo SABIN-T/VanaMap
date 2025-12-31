@@ -1,54 +1,54 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap');
 
-/* AIDoctor.module.css - PRECISION LAYOUT EDITION */
+/* AIDoctor.module.css - FINAL DESKTOP FIX */
 
+/* =========================================
+   GLOBAL RESET FOR THIS PAGE
+   ========================================= */
 .container {
-    /* --- LAYOUT RESET --- */
-    padding-top: 80px;
-    /* Critical: Offsets Fixed Navbar (60px) + 20px Buffer */
-    height: 100vh;
-    /* Fallback */
-    height: 100dvh;
-    /* Mobile Viewport Fix */
+    /* Fixed Positioning Strategy */
+    position: fixed;
+    /* Force fixed to prevent any scrolling beyond viewport */
+    top: 0;
+    left: 0;
     width: 100%;
+    height: 100%;
+    /* Strict 100% height */
+    padding-top: 80px;
+    /* Space for Navbar */
+
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    /* Prevent double scrollbars */
-    position: relative;
+    /* No outer scrollbars */
 
-    /* --- THEME --- */
     background-color: #030712;
-    /* Deepest Navy/Black */
     color: #f8fafc;
     font-family: 'Outfit', sans-serif;
-
-    /* Remove any default browser margins from children */
-    --gap-base: 1rem;
+    z-index: 10;
+    /* Ensure above basic elements but below navbar modals */
 }
 
-.container * {
-    box-sizing: border-box;
-    margin: 0;
-    /* Strict reset */
-}
-
-/* --- HEADER SECTION --- */
-/* Compact, pinned to top of container flow */
+/* =========================================
+   HEADER
+   ========================================= */
 .header {
     flex-shrink: 0;
+    height: 70px;
+    /* Fixed height header */
     background: rgba(3, 7, 18, 0.95);
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    padding: 1rem 1.5rem;
-    z-index: 20;
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
     backdrop-filter: blur(12px);
 }
 
 .headerContent {
     max-width: 1200px;
-    margin: 0 auto;
     width: 100%;
+    margin: 0 auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -66,7 +66,6 @@
     border-radius: 10px;
     background: rgba(16, 185, 129, 0.1);
     color: #10b981;
-    /* Emerald */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -76,15 +75,14 @@
 .title {
     font-size: 1.1rem;
     font-weight: 700;
-    letter-spacing: -0.01em;
     color: #fff;
+    margin: 0;
 }
 
 .subtitle {
     font-size: 0.75rem;
     color: #94a3b8;
-    margin-top: 2px !important;
-    /* Override reset */
+    margin: 2px 0 0 0;
 }
 
 .actions {
@@ -102,46 +100,20 @@
     background: transparent;
     color: #94a3b8;
     border: 1px solid rgba(255, 255, 255, 0.05);
-    transition: all 0.2s;
     cursor: pointer;
 }
 
-.actionBtn:hover {
-    background: rgba(255, 255, 255, 0.1);
-    color: #fff;
-}
-
-/* --- CHAT SCROLL AREA --- */
-/* Takes all remaining space */
+/* =========================================
+   CHAT AREA
+   ========================================= */
 .chatContainer {
     flex: 1;
+    /* Takes all available space between header and input */
     overflow-y: auto;
-    /* Enable scroll here */
-    padding: 0;
+    /* Scrollable content */
     scroll-behavior: smooth;
-    display: flex;
-    flex-direction: column;
-    padding-bottom: 100px;
-    /* Space for absolute input */
-}
-
-/* ... existing styles ... */
-
-/* --- INPUT AREA --- */
-.inputContainer {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 50;
-    background: transparent;
-    border-top: none;
-    padding: 0 1.5rem 1.5rem 1.5rem;
-    /* No top padding, only sides and bottom */
-    width: 100%;
-
-    /* Mobile Safe Area */
-    padding-bottom: max(1rem, env(safe-area-inset-bottom, 0));
+    padding-bottom: 2rem;
+    /* Buffer for scrolling */
 }
 
 .messagesWrapper {
@@ -149,14 +121,12 @@
     max-width: 900px;
     margin: 0 auto;
     padding: 1.5rem;
-    /* Internal padding only */
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
-    min-height: min-content;
 }
 
-/* --- MESSAGES --- */
+/* Messages Styles (Same as before) */
 .message {
     display: flex;
     gap: 1rem;
@@ -206,7 +176,6 @@
     align-items: center;
     font-size: 0.7rem;
     color: #64748b;
-    padding: 0 0.25rem;
 }
 
 .messageSender {
@@ -220,33 +189,21 @@
     border-radius: 1rem;
     font-size: 0.95rem;
     line-height: 1.6;
-    position: relative;
     word-wrap: break-word;
+    color: #e2e8f0;
 }
 
 .assistantMessage .messageText {
     background: #1e293b;
-    color: #e2e8f0;
     border-top-left-radius: 2px;
 }
 
 .userMessage .messageText {
-    background: #2563eb;
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
     color: #fff;
     border-top-right-radius: 2px;
-    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
 }
 
-.messageText p {
-    margin-bottom: 0.5rem !important;
-    /* Spacing between paragraphs */
-}
-
-.messageText p:last-child {
-    margin-bottom: 0 !important;
-}
-
-/* Typing Dots */
 .typing {
     display: flex;
     gap: 4px;
@@ -269,31 +226,59 @@
     animation-delay: -0.16s;
 }
 
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
 
-/* --- INPUT AREA --- */
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes bounce {
+
+    0%,
+    80%,
+    100% {
+        transform: scale(0);
+    }
+
+    40% {
+        transform: scale(1);
+    }
+}
+
+
+/* =========================================
+   INPUT AREA - THE CRITICAL FIX
+   ========================================= */
 .inputContainer {
     flex-shrink: 0;
-    /* Do not shrink */
-    background: transparent;
-    border-top: none;
-    padding: 1.5rem 1.5rem 0.5rem 1.5rem;
-    /* Reduced bottom padding */
     width: 100%;
+    background: transparent;
 
-    /* Mobile Safe Area */
-    padding-bottom: max(0.5rem, env(safe-area-inset-bottom, 0));
+    /* DESKTOP DEFAULTS (ZERO PADDING BOTTOM) */
+    padding: 1rem 1.5rem 0.5rem 1.5rem;
+    /* Visual padding for aesthetics */
+    margin-bottom: 0px;
+    /* Force flush to bottom */
+
+    display: flex;
+    justify-content: center;
 }
 
 .inputWrapper {
+    width: 100%;
     max-width: 900px;
-    margin: 0 auto;
-    position: relative;
-    display: flex;
-    gap: 0.75rem;
-    align-items: flex-end;
     background: #1e293b;
     border-radius: 1rem;
     padding: 0.4rem 0.75rem;
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-end;
     border: 1px solid rgba(255, 255, 255, 0.05);
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
 }
@@ -346,62 +331,44 @@
 }
 
 .disclaimer {
-    display: block;
-    text-align: center;
-    font-size: 0.7rem;
-    color: #475569;
-    margin-top: 0.75rem !important;
+    display: none;
 }
 
-/* --- ANIMATIONS --- */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
+/* Ensure hidden */
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
 
-@keyframes bounce {
-
-    0%,
-    80%,
-    100% {
-        transform: scale(0);
-    }
-
-    40% {
-        transform: scale(1);
-    }
-}
-
-/* --- MOBILE OPTIMIZATION --- */
+/* =========================================
+   MOBILE OVERRIDES (Keep strict separation)
+   ========================================= */
 @media (max-width: 768px) {
     .container {
+        position: relative;
+        /* On mobile, relative often behaves better with viewport units */
+        height: 100dvh;
+        /* Dynamic viewport height */
         padding-top: 70px;
-        /* Slightly less padding on mobile */
     }
 
-    .header {
-        padding: 0.75rem 1rem;
+    .chatContainer {
+        padding-bottom: 0;
+        /* Let input push it up naturally */
+    }
+
+    .inputContainer {
+        /* Restore the safe-area padding ONLY for mobile */
+        background: rgba(3, 7, 18, 0.95);
+        /* Add background back for mobile protection */
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+
+        position: sticky;
+        /* Stick to bottom of flex container */
+        bottom: 0;
+
+        padding: 1rem;
+        padding-bottom: max(1rem, env(safe-area-inset-bottom));
     }
 
     .messagesWrapper {
         padding: 1rem;
-        gap: 1rem;
-    }
-
-    .messageText {
-        padding: 0.75rem 1rem;
-        font-size: 0.9rem;
-    }
-
-    .inputContainer {
-        padding: 1rem;
-        padding-bottom: max(1rem, env(safe-area-inset-bottom));
     }
 }
