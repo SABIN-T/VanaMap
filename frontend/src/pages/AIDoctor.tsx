@@ -150,7 +150,7 @@ Be specific, practical, and encouraging.`;
         }
 
         // STEP 5: Intelligent fallback with context awareness
-        return generateFallbackResponse(userMessage, context);
+        return generateFallbackResponse(userMessage);
     };
 
     // New helper function for diagnostic responses
@@ -248,7 +248,7 @@ Be specific, practical, and encouraging.`;
         return diagnosis;
     };
 
-    const generateFallbackResponse = (userMessage: string, context?: any): string => {
+    const generateFallbackResponse = (userMessage: string): string => {
         const lowerMsg = userMessage.toLowerCase();
 
         // Enhanced disease/symptom response
