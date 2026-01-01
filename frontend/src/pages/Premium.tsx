@@ -34,7 +34,7 @@ export const Premium = () => {
         });
     };
 
-    const isPromoActive = new Date() < new Date('2026-02-01');
+    const isPromoActive = new Date() < new Date('2024-02-01'); // Promo Disabled for Payment Testing
 
     const handlePaidSubscription = async () => {
         setLoading(true);
@@ -278,6 +278,10 @@ export const Premium = () => {
                         </div>
                     </div>
                 </section>
+                {/* Compliance Footer for Razorpay */}
+                <div className="mt-8 text-center text-xs text-slate-500 pb-8">
+                    <p>Secured by Razorpay. By subscribing, you agree to our <a href="#" className="underline hover:text-emerald-400">Terms of Service</a> and <a href="#" className="underline hover:text-emerald-400">Privacy Policy</a>.</p>
+                </div>
             </div>
         </div>
     );
