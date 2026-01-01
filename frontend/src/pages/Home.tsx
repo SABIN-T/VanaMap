@@ -577,12 +577,7 @@ export const Home = () => {
                 </div>
             </section>
 
-            {/* MOVED: Suggestion Button (As Banner) */}
-            <div className={styles.suggestionButtonSection} style={{ marginTop: '2rem', marginBottom: '2rem', display: 'flex', justifyContent: 'center' }}>
-                <Button onClick={() => navigate('/support')} className={styles.suggestionBtn} style={{ maxWidth: '400px', width: '90%' }}>
-                    <PlusCircle size={18} style={{ marginRight: '8px' }} /> Don't see a plant? Suggest it here
-                </Button>
-            </div>
+
 
             {/* MOVED: Plant Grid (The Main Content) */}
             <div className="container" id="plant-grid" style={{ scrollMarginTop: '2rem' }}>
@@ -745,6 +740,12 @@ export const Home = () => {
                         </Button>
                     </div>
                 )}
+
+                <div className={styles.suggestionButtonSection} style={{ marginTop: '2rem', marginBottom: '2rem' }}>
+                    <Button onClick={() => navigate('/support')} className={styles.suggestionBtn}>
+                        <PlusCircle size={18} style={{ marginRight: '8px' }} /> Don't see a plant? Suggest it here
+                    </Button>
+                </div>
             </div>
 
             {/* MOVED: Intelligence Section (Core Capabilities) */}
