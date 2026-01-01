@@ -356,6 +356,15 @@ app.use('/api/auth/signup', authLimiter);
 app.get('/api/auth/me', auth, async (req, res) => {
     try {
         const user = await User.findById(req.user.id).select('-password');
+
+        // Auto-Expire Check (On Page Load)
+        if (user && user.isPremium && user.premiumExpiry && new Date() > user.premiumExpiry) {
+            console.log(`[AUTH] Auto-expiring premium for ${user.email}`);
+            user.isPremium = false;
+            user.premiumType = 'none';
+            await user.save();
+        }
+
         res.json(user);
     } catch (e) {
         res.status(500).json({ error: e.message });
@@ -1772,6 +1781,14 @@ app.post('/api/auth/login', async (req, res) => {
         // Secure password check using bcrypt
         const isMatch = await user.comparePassword(password);
         if (!isMatch) return res.status(401).json({ error: "Invalid Credentials" });
+
+        // Auto-Expire Check (On Login)
+        if (user.isPremium && user.premiumExpiry && new Date() > user.premiumExpiry) {
+            console.log(`[AUTH] Auto-expiring premium for ${user.email}`);
+            user.isPremium = false;
+            user.premiumType = 'none';
+            await user.save();
+        }
 
         console.log(`[AUTH] Login success: ${identifier} (${user.role})`);
         const token = jwt.sign({ id: user._id, email: user.email, role: user.role }, JWT_SECRET, { expiresIn: '7d' });
