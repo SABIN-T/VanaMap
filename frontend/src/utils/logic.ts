@@ -199,7 +199,9 @@ export const calculatePlantsNeeded = (
     const netDeficit = totalDemand - roomBufferLiters;
 
     // 4. Plant Production (with efficiency)
-    const efficiency = aptnessScore / 100;
+    // Quadratic Stress Curve: Plants suffer disproportionately from poor conditions
+    // This makes the slider impact more visible (Aptness 80% -> Eff 64%)
+    const efficiency = Math.pow(aptnessScore / 100, 2);
     const { hourly: plantRate } = calculateO2Production(plant, 1, hoursPerDay, efficiency);
 
     const effectiveProductionHours = Math.min(hoursPerDay, 12);
