@@ -22,7 +22,14 @@ export const Home = () => {
 
     const [searchQuery, setSearchQuery] = useState('');
     const [lightFilter, setLightFilter] = useState<'all' | 'low' | 'medium' | 'high'>('all');
-    const [weather, setWeather] = useState<any>(null);
+    const [weather, setWeather] = useState<any>(() => {
+        const cached = localStorage.getItem('vanamap_weather');
+        try {
+            return cached ? JSON.parse(cached) : null;
+        } catch (e) {
+            return null;
+        }
+    });
     const [locationLoading, setLocationLoading] = useState(false);
     const [plantsLoading, setPlantsLoading] = useState(true);
     const [isFromCache, setIsFromCache] = useState(false);
@@ -187,9 +194,39 @@ export const Home = () => {
 
     const handleGetLocation = () => {
         setLocationLoading(true);
+        const toastId = toast.loading("Finding your location...");
+
+        const performIPFallback = async (reason: string) => {
+            console.log(`GPS fail: ${reason}. Trying IP fallback...`);
+            try {
+                // IP Geolocation fallback (ipapi.co is free and reliable)
+                const response = await fetch('https://ipapi.co/json/');
+                const data = await response.json();
+
+                if (data.latitude && data.longitude) {
+                    const { latitude, longitude, city, country_name } = data;
+                    const weatherData = await getWeather(latitude, longitude);
+                    if (weatherData) {
+                        const locName = city ? `${city}, ${country_name}` : "Detected Location";
+                        setWeather({ ...weatherData, locationName: locName });
+                        toast.success(`Located: ${locName}`, { id: toastId });
+                        scrollToFilters();
+                    } else {
+                        toast.error("Weather unavailable for your zone.", { id: toastId });
+                    }
+                } else {
+                    toast.error("Could not detect location. Please search manually.", { id: toastId });
+                }
+            } catch (err) {
+                console.error("IP fallback failed", err);
+                toast.error("Location access failed. Please search manually.", { id: toastId });
+            } finally {
+                setLocationLoading(false);
+            }
+        };
+
         if (navigator.geolocation) {
-            const toastId = toast.loading("Finding your location...");
-            const options = { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 };
+            const options = { enableHighAccuracy: true, timeout: 6000, maximumAge: 0 };
             navigator.geolocation.getCurrentPosition(async (position) => {
                 const { latitude, longitude } = position.coords;
                 try {
@@ -207,23 +244,37 @@ export const Home = () => {
                     }
                 } catch (e) {
                     console.error(e);
-                    toast.error("Network error.", { id: toastId });
+                    toast.error("Network error fetching weather.", { id: toastId });
                 } finally {
                     setLocationLoading(false);
                 }
             }, (err) => {
-                console.error(err);
-                setLocationLoading(false);
                 let msg = "GPS access denied.";
                 if (err.code === 3) msg = "Location timeout.";
                 if (err.code === 2) msg = "Location unavailable.";
-                toast.error(msg, { id: toastId });
+                performIPFallback(msg);
             }, options);
         } else {
-            toast.error("GPS not supported.");
-            setLocationLoading(false);
+            performIPFallback("GPS not supported.");
         }
     };
+
+    useEffect(() => {
+        if (weather) {
+            localStorage.setItem('vanamap_weather', JSON.stringify(weather));
+        }
+    }, [weather]);
+
+    useEffect(() => {
+        // Auto-detect on mount if nothing is cached
+        const hasNoLocation = !localStorage.getItem('vanamap_weather');
+        if (hasNoLocation) {
+            const timer = setTimeout(() => {
+                handleGetLocation();
+            }, 1200);
+            return () => clearTimeout(timer);
+        }
+    }, []);
 
     const handleAddToCart = (plant: Plant) => {
         // Navigate to Shops page with the selected plant ID to open it immediately
@@ -463,11 +514,6 @@ export const Home = () => {
                                     className={`${styles.gpsBtn} ${locationLoading ? styles.gpsBtnLoading : ''}`}
                                     disabled={locationLoading}
                                     aria-label="Detect current location for plant recommendations"
-                                    style={locationLoading ? {
-                                        background: 'linear-gradient(135deg, #f59e0b, #d97706)',
-                                        boxShadow: '0 0 30px rgba(245, 158, 11, 0.5)',
-                                        animation: 'pulse 1.5s ease-in-out infinite'
-                                    } : {}}
                                 >
                                     <MapPin size={22} className={locationLoading ? "animate-spin" : "animate-bounce"} style={{ marginRight: '12px' }} />
                                     {locationLoading ? "🌍 DETERMINING CLIMATE..." : "Auto-Detect Local Climate"}
@@ -523,7 +569,10 @@ export const Home = () => {
                                     <div className={styles.statValue} style={{ fontSize: '1.1rem' }}>
                                         {weather.locationName || weather.city || 'Local Zone'}
                                     </div>
-                                    <button onClick={() => setWeather(null)} className={styles.changeLocationBtn}>
+                                    <button onClick={() => {
+                                        setWeather(null);
+                                        localStorage.removeItem('vanamap_weather');
+                                    }} className={styles.changeLocationBtn}>
                                         Change Location
                                     </button>
                                 </div>

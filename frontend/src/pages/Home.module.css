@@ -647,8 +647,10 @@
     transform: scale(0.96);
 }
 
-/* GPS Button Loading State */
 .gpsBtnLoading {
+    background: linear-gradient(135deg, #f59e0b, #d97706) !important;
+    box-shadow: 0 0 30px rgba(245, 158, 11, 0.5) !important;
+    animation: pulse 1.5s ease-in-out infinite !important;
     cursor: wait !important;
     pointer-events: none;
 }

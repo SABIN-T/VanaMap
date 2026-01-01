@@ -228,12 +228,26 @@ out skel qt;
                 if (tid) toast.success("Satellites locked!", { id: tid });
                 await fetchAllData(latitude, longitude, searchRadius);
             },
-            () => {
-                if (tid) toast.error("Precision tracking failed", { id: tid });
-                setPosition(prev => prev || [28.6139, 77.2090]); // Fallback
-                setLoading(false);
+            async (err) => {
+                console.warn(`GPS failed: ${err.message}. Trying IP fallback...`);
+                try {
+                    const response = await fetch('https://ipapi.co/json/');
+                    const data = await response.json();
+                    if (data.latitude && data.longitude) {
+                        const { latitude, longitude, city } = data;
+                        setPosition([latitude, longitude]);
+                        if (tid) toast.success(`Located via IP: ${city || "approximate"}`, { id: tid });
+                        await fetchAllData(latitude, longitude, searchRadius);
+                    } else {
+                        throw new Error("No data");
+                    }
+                } catch (fallbackErr) {
+                    if (tid) toast.error("Location tracking unavailable", { id: tid });
+                    setPosition(prev => prev || [28.6139, 77.2090]); // Fallback to Delhi
+                    setLoading(false);
+                }
             },
-            { enableHighAccuracy: true, timeout: 15000 }
+            { enableHighAccuracy: true, timeout: 8000 }
         );
     }, [loading, searchRadius]); // Added searchRadius dependency
 
