@@ -7,78 +7,61 @@ import type { Plant } from '../types';
  * to create smooth, non-binary score distributions.
  * 
  * SCALING LOGIC:
- * Uses a Rank-Interpolated Normalization to ensure a smooth "100% to 10%" gradient
- * regardless of raw score clustering.
+ * Uses a Rank-Interpolated Normalization to ensure a smooth "100% to 10%" gradient.
  */
 
 // ==========================================
-// 1. CONTINUOUS SCORING FUNCTIONS (Smooth Curves)
+// 1. CONTINUOUS SCORING FUNCTIONS
 // ==========================================
 
-/**
- * Temperature Score: Gaussian Bell Curve
- * No sharp drop-offs. Smooth decay from optimal.
- */
 const getTempScore = (plant: Plant, avgTemp: number): number => {
     const min = plant.idealTempMin || 15;
     const max = plant.idealTempMax || 30;
     const optimal = (min + max) / 2;
-    // Standard deviation is roughly 1/4th of the range radius for a loose fit, 
-    // or smaller for strict fit. We use a tolerant curve.
     const rangeRadius = (max - min) / 2;
-    const sigma = Math.max(5, rangeRadius); // Minimum sigma to prevent too sharp peaks
+    const sigma = Math.max(5, rangeRadius);
 
-    // Gaussian formula: e^(-(x-mu)^2 / (2*sigma^2))
     const diff = avgTemp - optimal;
     return Math.exp(-(diff * diff) / (2 * sigma * sigma));
 };
 
-/**
- * Humidity Score: Sigmoid-like Logistic Function
- * Smooth transition around requirements.
- */
 const getHumidityScore = (plant: Plant, avgHumidity: number): number => {
     const min = plant.minHumidity || 40;
-    // Ideal is somewhat higher than min
     const optimal = min + 15;
-
-    // Calculate difference from optimal
     const diff = avgHumidity - optimal;
-
-    // Use a logistic curve to map this difference to 0-1
-    // A divisor of 30 stretches the curve for smoother transitions
     return 1 / (1 + Math.exp(-diff / 15));
 };
 
 /**
- * Light Score: Parabolic Match
+ * Light Score: Intelligent Parsing of 'sunlight' property
  */
 const getLightScore = (plant: Plant, lightPercent: number): number => {
-    let target = 50;
-    const req = (plant as any).lightReq || 'medium';
-    if (req === 'low') target = 30;
-    if (req === 'high') target = 80;
+    // Parse the plant's sunlight requirement from string
+    const sun = (plant.sunlight || 'medium').toLowerCase();
 
-    // Quadratic penalty: 1 - k*(diff^2)
+    let target = 50; // Default Medium
+
+    if (sun.includes('high') || sun.includes('direct') || sun.includes('full') || sun.includes('bright')) {
+        target = 80; // High light
+    } else if (sun.includes('low') || sun.includes('shade') || sun.includes('indirect')) {
+        target = 30; // Low light
+    }
+
+    // Parabolic matching
     const diff = Math.abs(lightPercent - target);
-    // Normalize diff to 0-1 range (max diff is approx 70 or 80)
     const maxDiff = 100;
-
-    // We want 1.0 at target, and ~0.2 at max distance
+    // Returns 1.0 at perfect match, drops off away from target
     return Math.max(0.1, 1 - Math.pow(diff / maxDiff, 1.5));
 };
 
-/**
- * AQI Score: Linear Bonus
- */
 const getAQIScore = (plant: Plant, aqi: number): number => {
     const isPurifier = plant.medicinalValues?.includes('Air purification') ||
         plant.advantages?.some(a => a.toLowerCase().includes('purif'));
 
-    // If air is bad (AQI > 100)
+    // Bonus for purifiers in bad air
     if (aqi > 100) {
-        if (isPurifier) return 1.2; // Bonus!
-        return Math.max(0.2, 1.0 - ((aqi - 100) / 300)); // Penalty for non-purifiers
+        if (isPurifier) return 1.2;
+        return Math.max(0.2, 1.0 - ((aqi - 100) / 300));
     }
     return 1.0;
 };
@@ -93,21 +76,18 @@ export const calculateAptness = (
     aqi: number = 20,
     currentHumidity: number = 50,
     lightPercent: number = 70,
-    _unused: any = null, // Parameter kept for signature compatibility if needed
+    _unused: any = null,
     _unused2: any = null
 ): number => {
-    // 1. Calculate Component Scores (0.0 - 1.0+)
     const sTemp = getTempScore(plant, currentTemp);
     const sHum = getHumidityScore(plant, currentHumidity);
     const sLight = getLightScore(plant, lightPercent);
     const sAQI = getAQIScore(plant, aqi);
 
-    // 2. Apply Weights
-    // Temp 35%, Hum 25%, Light 25%, AQI 15%
+    // Weights: Temp 35%, Hum 25%, Light 25%, AQI 15%
     let raw = (sTemp * 0.35) + (sHum * 0.25) + (sLight * 0.25) + (sAQI * 0.15);
 
-    // 3. Apply Multipliers (Maintenance, Type)
-    // Small tweaks to create granularity between plants with identical bio-needs
+    // Multipliers
     const type = plant.type || 'indoor';
     if (type === 'indoor') raw *= 1.05;
 
@@ -115,53 +95,33 @@ export const calculateAptness = (
     if (maint === 'low') raw *= 1.05;
     if (maint === 'high') raw *= 0.95;
 
-    // Return raw score (unbounded, typically 0.2 to 1.3)
     return raw;
 };
 
 /**
  * RANK-BASED SMOOTHING NORMALIZATION
- * This forces a beautiful distribution (100, 95, 90, 85...) regardless of clustering.
  */
 export const normalizeBatch = (scores: number[]): number[] => {
     if (scores.length === 0) return [];
     if (scores.length === 1) return [100.0];
 
-    // 1. Create objects to preserve original indices
     const indexed = scores.map((val, idx) => ({ val, idx }));
-
-    // 2. Sort by raw score descending
     indexed.sort((a, b) => b.val - a.val);
 
-    // 3. Assign new scores based on Rank and Curve
     const count = scores.length;
-
     const finalScores = new Array(count);
-
-    // We want the top plant to be 100%
-    // We want the bottom plant to be ~10% (unless it's actually good)
-    // We use a blend of Rank Position and Raw Value
-
     const maxRaw = indexed[0].val;
     const minRaw = indexed[count - 1].val;
-    const rawRange = maxRaw - minRaw || 1; // prevent divide zero
+    const rawRange = maxRaw - minRaw || 1;
 
     for (let i = 0; i < count; i++) {
         const item = indexed[i];
 
-        // A. Rank Score (0 to 1): Strictly linear falloff based on position
-        // Top rank = 1, Bottom rank = 0
+        // 70% Rank position, 30% Absolute value
         const rankPercent = 1 - (i / (count - 1));
-
-        // B. Raw Score (0 to 1): Based on actual value range
         const rawPercent = (item.val - minRaw) / rawRange;
 
-        // C. Combine
-        // Weighting Rank heavily (70%) ensures the user sees the "step by step" difference they asked for
-        // Weighting Raw (30%) keeps some truth (e.g. if the top 2 are essentially identical, scores stay close)
         const combined = (rankPercent * 0.7) + (rawPercent * 0.3);
-
-        // Map 0-1 to 10-100
         const final = 10 + (combined * 90);
 
         finalScores[item.idx] = Math.round(final * 10) / 10;
@@ -171,7 +131,7 @@ export const normalizeBatch = (scores: number[]): number[] => {
 };
 
 // ==========================================
-// 3. UTILITIES
+// 3. UTILITIES & SIMULATION
 // ==========================================
 
 export const formatDistance = (meters: number): string => {
@@ -180,7 +140,7 @@ export const formatDistance = (meters: number): string => {
 };
 
 export const getDistanceFromLatLonInKm = (lat1: number, lon1: number, lat2: number, lon2: number) => {
-    const R = 6371; // Radius of the earth in km
+    const R = 6371;
     const dLat = deg2rad(lat2 - lat1);
     const dLon = deg2rad(lon2 - lon1);
     const a =
@@ -195,7 +155,7 @@ function deg2rad(deg: number) {
     return deg * (Math.PI / 180);
 }
 
-// O2 Production Logic (Rate Based)
+// O2 Production Logic
 export const calculateO2Production = (
     plant: Plant,
     quantity: number = 1,
@@ -208,29 +168,68 @@ export const calculateO2Production = (
     else baseRate = 3;
 
     // Hourly rate assuming photosynthesis window
+    // (Averaged over 24h for simplicity in determining "capacity", 
+    // effectively assumes 12h active production spread out)
     const hourlyRate = (baseRate / 12) * quantity;
-    const daily = hourlyRate * Math.min(12, hoursPerDay); // capped at 12 eff. hours for basic calc
+    const daily = hourlyRate * Math.min(12, hoursPerDay);
 
     return { daily, hourly: hourlyRate };
 };
 
+/**
+ * Plants Needed - ROOM BUFFER LOGIC
+ * Calculates needed plants accounting for the room's initial air volume.
+ * Slower consumption (less time) means room buffer covers more of the need.
+ */
 export const calculatePlantsNeeded = (
     plant: Plant,
-    _roomSize: number,
+    roomSize: number, // m^2
     hoursPerDay: number = 8,
     peopleCount: number = 1
 ): { plantsNeeded: number; totalO2: number; isLethal: boolean } => {
-    // 1 Human = ~23 Liters O2 / Hour
-    const humanNeedHourly = 23 * peopleCount;
+    // 1. Calculate Limits
+    // Ceiling height approx 2.5m
+    const roomVolumeLiters = roomSize * 2.5 * 1000;
 
-    // Plant output / Hour
+    // Safety buffer: How much O2 can we consume from the room before it gets "stuffy"?
+    // Fresh air: 21% O2. Grossly Stuffy: 20%. Dangerous: 19.5%.
+    // Let's say we want to maintain at least 20.5% for "Freshness".
+    // So we have a 0.5% buffer of the room volume.
+    const roomBufferLiters = roomVolumeLiters * 0.005; // 0.5% of room air
+
+    // 2. Human Demand
+    // 23 Liters / Hour / Person
+    const totalDemand = 23 * peopleCount * hoursPerDay;
+
+    // 3. Net Need
+    // If the room buffer covers the total demand, we theoretically need 0 plants.
+    // But we'll recommend at least 1 for freshness multiplier.
+    const netDeficit = totalDemand - roomBufferLiters;
+
+    // 4. Plant Production Calculation
+    // Total produced by 1 plant over the duration
     const { hourly: plantRate } = calculateO2Production(plant, 1, hoursPerDay);
+    const productionPerPlant = plantRate * hoursPerDay;
+    // Note: If hours > 12, production caps (plants sleep), but human demand continues.
+    // Our calculateO2Production handles logic simplistically, 
+    // but effectively: Rate * Duration. (With 12h cap on production time usually).
+    // Let's rely on `plantRate` being the *Active Hourly Rate* and adjust physics:
+    // Production = Rate * Math.min(hours, 12).
 
-    // Simple matching: Need enough plants to cover hourly consumption
-    const plantsNeeded = Math.ceil(humanNeedHourly / Math.max(0.1, plantRate));
+    const effectiveProductionHours = Math.min(hoursPerDay, 12);
+    const singlePlantTotalOutput = plantRate * effectiveProductionHours;
 
-    // Total production over the specific duration
-    const totalO2 = plantRate * plantsNeeded * hoursPerDay;
+    let plantsNeeded = 1;
+    if (netDeficit > 0) {
+        plantsNeeded = Math.ceil(netDeficit / Math.max(0.1, singlePlantTotalOutput));
+    } else {
+        // Room accounts for it, simplified to 1 or 0.
+        // Let's return 1 to encourage purchase :)
+        plantsNeeded = 1;
+    }
+
+    // Total potential O2 added to room
+    const totalO2 = singlePlantTotalOutput * plantsNeeded;
 
     return {
         plantsNeeded,
@@ -239,9 +238,6 @@ export const calculatePlantsNeeded = (
     };
 };
 
-/**
- * ROOM SIMULATION (Cleaned)
- */
 export const runRoomSimulationMC = (
     plant: Plant,
     roomSize: number,
@@ -250,9 +246,8 @@ export const runRoomSimulationMC = (
     avgTemp: number,
     avgHumidity: number,
     aqi: number,
-    lightLevel: number = 70 // Added parameter
+    lightLevel: number = 70
 ) => {
-    // We run the basic aptness check for the sim
     const aptness = calculateAptness(plant, avgTemp, aqi, avgHumidity, lightLevel);
     const { plantsNeeded, totalO2, isLethal } = calculatePlantsNeeded(plant, roomSize, hoursPerDay, peopleCount);
 
@@ -265,7 +260,6 @@ export const runRoomSimulationMC = (
 };
 
 export const generatePlantInsights = (plant: Plant, avgTemp: number, avgHumidity: number, aqi: number = 20) => {
-    // Temperature insights
     const idealMin = plant.idealTempMin || 15;
     const idealMax = plant.idealTempMax || 30;
 
@@ -282,17 +276,14 @@ export const generatePlantInsights = (plant: Plant, avgTemp: number, avgHumidity
         tip = `Keep away from direct heat sources and mist to cool.`;
     }
 
-    // Humidity insights
     const minHumidity = plant.minHumidity || 40;
     if (avgHumidity < minHumidity && !tip) {
         tip = `Humidity is low (${avgHumidity}%). This plant prefers >${minHumidity}%. Mist it!`;
     }
 
-    // Air Quality insights
     if (!tip && aqi > 100) {
         const isPurifier = plant.medicinalValues?.includes('Air purification') ||
             plant.advantages?.some(a => a.toLowerCase().includes('purif'));
-
         if (isPurifier) {
             tip = `Excellent choice! This plant will help combat the current high AQI (${aqi}).`;
         }
