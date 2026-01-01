@@ -326,7 +326,59 @@ export const Auth = () => {
                     {view === 'signup' && (
                         <>
                             <div className={styles.formGroup}>
-                                <label className={styles.label}>{role === 'vendor' ? 'Business Location' : 'Your Location'}</label>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                                    <label className={styles.label} style={{ marginBottom: 0 }}>
+                                        {role === 'vendor' ? 'Business Location' : 'Your Location'}
+                                    </label>
+                                    <button
+                                        type="button"
+                                        onClick={() => {
+                                            if (!navigator.geolocation) return toast.error("Not supported");
+                                            const tid = toast.loading("Detecting...");
+                                            navigator.geolocation.getCurrentPosition(async (pos) => {
+                                                try {
+                                                    const { latitude, longitude } = pos.coords;
+                                                    const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
+                                                    const data = await res.json();
+
+                                                    if (data.address) {
+                                                        const code = data.address.country_code?.toUpperCase();
+                                                        const countryObj = Country.getCountryByCode(code);
+
+                                                        if (countryObj) {
+                                                            setSelectedCountry(countryObj);
+                                                            setCountry(countryObj.name);
+                                                            setPhoneCode(countryObj.phonecode);
+
+                                                            const stateName = data.address.state;
+                                                            if (stateName) {
+                                                                const states = State.getStatesOfCountry(countryObj.isoCode);
+                                                                const foundState = states.find(s =>
+                                                                    s.name.toLowerCase().includes(stateName.toLowerCase()) ||
+                                                                    stateName.toLowerCase().includes(s.name.toLowerCase())
+                                                                );
+                                                                if (foundState) {
+                                                                    setSelectedState(foundState);
+                                                                    setState(foundState.name);
+                                                                }
+                                                            }
+                                                        }
+
+                                                        const cityVal = data.address.city || data.address.town || data.address.village || data.address.county || '';
+                                                        if (cityVal) setCity(cityVal);
+
+                                                        toast.success("Location Detected!", { id: tid });
+                                                    }
+                                                } catch (e) {
+                                                    toast.error("Failed to detect address", { id: tid });
+                                                }
+                                            }, () => toast.error("Permission denied", { id: tid }));
+                                        }}
+                                        style={{ background: 'none', border: 'none', color: '#10b981', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}
+                                    >
+                                        📍 Auto-Detect
+                                    </button>
+                                </div>
                                 <div style={{ display: 'grid', gap: '0.75rem' }}>
                                     <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
                                         <select
@@ -346,7 +398,7 @@ export const Auth = () => {
                                             onChange={(e) => handleStateChange(e.target.value)}
                                             required
                                         >
-                                            <option value="">Select State</option>
+                                            <option value="">{selectedCountry ? 'Select State' : 'Select Country First'}</option>
                                             {selectedCountry && State.getStatesOfCountry(selectedCountry.isoCode).map(s => (
                                                 <option key={s.isoCode} value={s.isoCode}>{s.name}</option>
                                             ))}
