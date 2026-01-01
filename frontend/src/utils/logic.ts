@@ -70,81 +70,68 @@ function generateSeed(plant: Plant, baseTemp: number, baseHumidity: number, aqi:
     return Math.abs(hash + envHash);
 }
 
+
 /**
- * Monte Carlo Aptness Calculation - DETERMINISTIC VERSION
- * Simulates a stochastic 7-day (168-hour) environmental period.
- * Uses a cumulative Life-Energy model to determine exact ecosystem fit.
- * Now produces CONSISTENT results for the same plant + environment combination.
+ * Simple Aptness Calculation - ULTRA FAST
+ * Direct biological efficiency calculation without Monte Carlo iterations
+ * Deterministic and instant results for both mobile and desktop
  */
 export const calculateAptnessMC = (
     plant: Plant,
     baseTemp: number,
     aqi: number = 20,
     baseHumidity: number = 50,
-    iterations: number = 150
+    _iterations: number = 150 // Kept for API compatibility but not used
 ): number => {
-    // Create deterministic random number generator
-    const seed = generateSeed(plant, baseTemp, baseHumidity, aqi);
-    const random = seededRandom(seed);
+    // Calculate base biological efficiency
+    const baseEfficiency = calculateBiologicalEfficiency(plant, baseTemp, baseHumidity);
 
-    // ULTRA-FAST Mobile optimization: Aggressive reduction for instant results
-    // Desktop: 150 iterations × 720 hours = full accuracy
-    // Mobile: 30 iterations × 360 hours = 5x faster, still scientifically valid
-    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-    const optimizedIterations = isMobile ? 30 : iterations;
-    const simulationHours = isMobile ? 360 : 720; // 15 days on mobile, 30 days on desktop
+    // Simulate day/night cycle impact (average of day and night efficiency)
+    const dayTemp = baseTemp + 4; // Warmer during day
+    const nightTemp = baseTemp - 4; // Cooler at night
+    const dayEfficiency = calculateBiologicalEfficiency(plant, dayTemp, baseHumidity);
+    const nightEfficiency = calculateBiologicalEfficiency(plant, nightTemp, baseHumidity);
 
-    let energySamples: number[] = [];
+    // Average efficiency across day/night cycle
+    const avgEfficiency = (baseEfficiency * 0.5 + dayEfficiency * 0.25 + nightEfficiency * 0.25);
 
-    for (let i = 0; i < optimizedIterations; i++) {
-        let cumulativeEnergy = 0;
+    // Convert to 0-100 scale
+    let score = avgEfficiency * 100;
 
-        for (let h = 0; h < simulationHours; h++) {
-            const hourOfDay = h % 24;
-            const dayOfMonth = Math.floor(h / 24);
-
-            // Diurnal Temperature Swing (Sine wave: colder at night, warmer at day)
-            const diurnalDelta = Math.sin((hourOfDay - 8) * (Math.PI / 12)) * 6;
-
-            // Weekly weather variation (simulates weather patterns over 30 days)
-            const weeklyVariation = Math.sin((dayOfMonth / 7) * Math.PI) * 3;
-
-            // Deterministic stochastic weather noise using seeded random
-            const randomJitter = (random() - 0.5) * 5;
-
-            const jitterTemp = baseTemp + diurnalDelta + weeklyVariation + randomJitter;
-            const jitterHumidity = baseHumidity + (random() - 0.5) * 25;
-
-            // Calculate exact efficiency (0.0 to 1.0) for this specific hour
-            const efficiency = calculateBiologicalEfficiency(plant, jitterTemp, jitterHumidity);
-
-            cumulativeEnergy += efficiency;
-        }
-
-        // Normalize energy to a base 100 scale
-        const iterationScore = (cumulativeEnergy / simulationHours) * 100;
-        energySamples.push(iterationScore);
-    }
-
-    // Average energy across all Monte Carlo iterations
-    const rawAvg = energySamples.reduce((a, b) => a + b, 0) / optimizedIterations;
-
-    // Final result is high-precision (float)
-    // Removed genetic differentiation to allow tied scores for identical species specs
+    // Apply biological modifiers
     let modifier = 1.0;
     const desc = (plant.description || "").toLowerCase();
 
-    // Hardy plants have a higher baseline "Resilience Energy"
+    // Hardy plants have higher resilience
     if (desc.includes('hardy') || desc.includes('tough')) modifier += 0.05;
 
+    // Air purification synergy with AQI
     const isPurifier = plant.medicinalValues?.includes('Air purification') ||
         plant.advantages?.some(a => a.toLowerCase().includes('purif'));
 
-    // Environmental synergies with AQI
     if (aqi > 100 && isPurifier) modifier += 0.1;
     else if (aqi > 150 && !isPurifier) modifier -= 0.15;
 
-    return Math.round(rawAvg * modifier * 10) / 10;
+    // Apply temperature stress penalties
+    const tempMin = plant.idealTempMin || 15;
+    const tempMax = plant.idealTempMax || 30;
+
+    if (baseTemp < tempMin) {
+        const coldStress = (tempMin - baseTemp) / 10;
+        modifier -= Math.min(coldStress * 0.1, 0.3);
+    } else if (baseTemp > tempMax) {
+        const heatStress = (baseTemp - tempMax) / 10;
+        modifier -= Math.min(heatStress * 0.1, 0.3);
+    }
+
+    // Apply humidity stress penalties
+    const minHumidity = plant.minHumidity || 40;
+    if (baseHumidity < minHumidity) {
+        const dryStress = (minHumidity - baseHumidity) / 20;
+        modifier -= Math.min(dryStress * 0.1, 0.2);
+    }
+
+    return Math.round(score * modifier * 10) / 10;
 };
 
 export const calculateAptness = (

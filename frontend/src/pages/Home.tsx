@@ -278,13 +278,10 @@ export const Home = () => {
 
         if (!weather) return filtered.map(p => ({ ...p, score: 0 }));
 
-        // ULTRA-FAST Mobile optimization: 5x faster on mobile
-        const isMobile = window.innerWidth < 768;
-        const iterations = isMobile ? 30 : 150;
-
+        // Simple biological simulation - instant for both mobile and desktop
         // 1. Calculate raw high-precision absolute scores
         const scoredRaw = filtered.map(p => {
-            const rawScore = calculateAptness(p, weather.avgTemp30Days, weather.air_quality?.aqi, weather.avgHumidity30Days, undefined, true, iterations);
+            const rawScore = calculateAptness(p, weather.avgTemp30Days, weather.air_quality?.aqi, weather.avgHumidity30Days, undefined, true);
             return { ...p, rawScore };
         });
 
@@ -298,6 +295,7 @@ export const Home = () => {
             .sort((a, b) => b.score - a.score);
 
         // 4. MOBILE: Limit initial render to 20 plants for instant loading
+        const isMobile = window.innerWidth < 768;
         if (isMobile && sorted.length > 20) {
             return sorted.slice(0, 20);
         }
@@ -721,7 +719,7 @@ export const Home = () => {
                             <span className={styles.explainerTitle}>Understanding Aptness Scores</span>
                         </div>
                         <p className={styles.explainerText}>
-                            Aptness is a <strong>scientifically-calibrated biological compatibility metric</strong> derived from a deterministic 720-hour (30-day) Monte Carlo simulation of your unique ecosystem profile. Scores are distributed using <strong>percentile-based normalization</strong>: top 10% plants score 90-100%, middle tier 50-90%, and lower tier 10-50%. This creates clear differentiation while maintaining scientific accuracy for your specific environmental conditions.
+                            Aptness is a <strong>scientifically-calibrated biological compatibility metric</strong> based on direct biological efficiency calculations for your environment. The system evaluates temperature tolerance, humidity requirements, and day/night cycle impacts. Scores are distributed using <strong>percentile-based normalization</strong>: top 10% plants score 90-100%, middle tier 50-90%, and lower tier 10-50%, creating clear differentiation for easy decision-making.
                         </p>
                         <div className={styles.explainerLegend}>
                             <div className={styles.legendItem}>
