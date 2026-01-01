@@ -714,7 +714,7 @@ export const Home = () => {
                             <span className={styles.explainerTitle}>Understanding Aptness Scores</span>
                         </div>
                         <p className={styles.explainerText}>
-                            Aptness is a <strong>scientifically-calibrated biological compatibility metric</strong> derived from a deterministic 720-hour (30-day) Monte Carlo simulation of your unique ecosystem profile. The top-ranked species is normalized to <strong>100%</strong>, with all others scaled proportionally based on temperature tolerance, humidity requirements, and metabolic efficiency. Each plant receives a <strong>consistent, reproducible score</strong> for your specific environmental conditions.
+                            Aptness is a <strong>scientifically-calibrated biological compatibility metric</strong> derived from a deterministic 720-hour (30-day) Monte Carlo simulation of your unique ecosystem profile. Scores are distributed using <strong>percentile-based normalization</strong>: top 10% plants score 90-100%, middle tier 50-90%, and lower tier 10-50%. This creates clear differentiation while maintaining scientific accuracy for your specific environmental conditions.
                         </p>
                         <div className={styles.explainerLegend}>
                             <div className={styles.legendItem}>
