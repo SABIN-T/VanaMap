@@ -41,7 +41,7 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({
     storage: storage,
-    limits: { fileSize: 10 * 1024 * 1024 }
+    limits: { fileSize: 50 * 1024 * 1024 }
 });
 
 // --- AUTOMATED PREMIUM CHECK (Daily at Midnight) ---
@@ -1277,7 +1277,19 @@ app.post('/api/plants', auth, admin, upload.single('image'), async (req, res) =>
 });
 
 // Edit Plant (with Auto-Upload)
-app.patch('/api/plants/:id', auth, admin, upload.single('image'), async (req, res) => {
+app.patch('/api/plants/:id', auth, admin, (req, res, next) => {
+    upload.single('image')(req, res, (err) => {
+        if (err) {
+            console.error("Upload Error:", err);
+            // Multer specific errors
+            if (err instanceof multer.MulterError) {
+                return res.status(400).json({ error: `Upload error: ${err.message}` });
+            }
+            return res.status(500).json({ error: `Cloud update failed: ${err.message}` });
+        }
+        next();
+    });
+}, async (req, res) => {
     try {
         const updates = req.body;
 
@@ -1286,6 +1298,11 @@ app.patch('/api/plants/:id', auth, admin, upload.single('image'), async (req, re
             updates.imageUrl = req.file.path;
             console.log('[PLANT] Updated image:', updates.imageUrl);
         }
+
+        // IMPORTANT: Security/Sanity Check
+        delete updates._id;
+        delete updates.createdAt;
+        delete updates.updatedAt;
 
         const plant = await Plant.findOneAndUpdate({ id: req.params.id }, updates, { new: true });
         res.json(plant);
