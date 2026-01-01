@@ -577,70 +577,14 @@ export const Home = () => {
                 </div>
             </section>
 
-            <div className={styles.intelligenceSection}>
-                <div className={styles.sectionHeader}>
-                    <span className={styles.sectionBadge}>CORE CAPABILITIES</span>
-                    <h2 className={styles.sectionTitle}>Built for Deep Biological Insights</h2>
-                    <p className={styles.sectionSubtitle}>VanaMap bridges the gap between atmospheric science and interior design.</p>
-                </div>
-                <div className={styles.onboardingGrid} style={{ marginTop: '4rem' }}>
-                    {capabilities.map((cap) => (
-                        <div
-                            key={cap.id}
-                            className={`${styles.capabilityCard} ${expandedCards[cap.id] ? styles.cardExpanded : ''}`}
-                            onClick={() => toggleCard(cap.id)}
-                            role="button"
-                            tabIndex={0}
-                        >
-                            <div className={styles.onboardingIcon} style={{ background: cap.bg, color: cap.color }}>
-                                {cap.icon}
-                            </div>
-                            <h3>{cap.title}</h3>
-                            <p>{cap.desc}</p>
-                        </div>
-                    ))}
-                </div>
+            {/* MOVED: Suggestion Button (As Banner) */}
+            <div className={styles.suggestionButtonSection} style={{ marginTop: '2rem', marginBottom: '2rem', display: 'flex', justifyContent: 'center' }}>
+                <Button onClick={() => navigate('/support')} className={styles.suggestionBtn} style={{ maxWidth: '400px', width: '90%' }}>
+                    <PlusCircle size={18} style={{ marginRight: '8px' }} /> Don't see a plant? Suggest it here
+                </Button>
             </div>
 
-            <section className={styles.onboardingSection}>
-                <div className={styles.sectionHeader}>
-                    <span className={styles.sectionBadge}>WHO ARE YOU?</span>
-                    <h2 className={styles.sectionTitle}>Designed for our Community</h2>
-                    <p className={styles.sectionSubtitle}>Discover how VanaMap empowers different roles in our green ecosystem.</p>
-                </div>
-
-                <div className={styles.onboardingGrid}>
-                    {personas.map((p) => (
-                        <div
-                            key={p.id}
-                            className={`${styles.onboardingCard} ${expandedCards[p.id] ? styles.cardExpanded : ''}`}
-                            onClick={() => toggleCard(p.id)}
-                            role="button"
-                            tabIndex={0}
-                        >
-                            <div className={styles.onboardingIcon} style={{ background: p.bg, color: p.color }}>
-                                {p.icon}
-                            </div>
-                            <h3>{p.title}</h3>
-                            <p>{p.desc}</p>
-                            {expandedCards[p.id] && p.id === 'role-vendor' && (
-                                <Button
-                                    size="sm"
-                                    onClick={(e) => {
-                                        e.stopPropagation();
-                                        navigate('/auth?role=vendor&view=signup');
-                                    }}
-                                    style={{ marginTop: '1rem', width: '100%', background: p.color, color: 'black', fontWeight: 800 }}
-                                >
-                                    JOIN AS VENDOR
-                                </Button>
-                            )}
-                            <span className={styles.onboardingMeta}>{p.meta}</span>
-                        </div>
-                    ))}
-                </div>
-            </section>
-
+            {/* MOVED: Plant Grid (The Main Content) */}
             <div className="container" id="plant-grid" style={{ scrollMarginTop: '2rem' }}>
                 <div className={styles.sectionHeader}>
                     <span className={styles.sectionBadge}>PLANT DISCOVERY</span>
@@ -801,68 +745,130 @@ export const Home = () => {
                         </Button>
                     </div>
                 )}
-
-                <div className={styles.suggestionButtonSection}>
-                    <Button onClick={() => navigate('/support')} className={styles.suggestionBtn}>
-                        <PlusCircle size={18} style={{ marginRight: '8px' }} /> Don't see a plant? Suggest it here
-                    </Button>
-                </div>
-
-                <div className={styles.sponsorCTA}>
-                    <div className={styles.sponsorContent}>
-                        <div className={styles.sponsorIcon}>
-                            <Heart size={32} fill="#facc15" color="#facc15" />
-                        </div>
-                        <div className={styles.sponsorText}>
-                            <h3>Support the Green Future</h3>
-                            <p>Partner with VanaMap to help us grow our ecosystem database.</p>
-                        </div>
-                        <Button onClick={() => navigate('/sponsor')} className={styles.sponsorButton}>
-                            Become a Sponsor <MoveRight size={20} style={{ marginLeft: '12px' }} />
-                        </Button>
-                    </div>
-                </div>
-
-                <div style={{ textAlign: 'center', marginTop: '4rem', marginBottom: '2rem' }}>
-                    <p style={{ color: 'var(--color-text-dim)', marginBottom: '1rem' }}>Need help with the app?</p>
-                    <Button
-                        onClick={() => navigate('/contact')}
-                        variant="ghost"
-                        size="lg"
-                        style={{ border: '1px solid var(--color-border)', borderRadius: '99px' }}
-                    >
-                        <MessageCircle size={20} style={{ marginRight: '8px' }} /> Contact Support
-                    </Button>
-                </div>
-
-                <footer style={{
-                    marginTop: '6rem',
-                    padding: '4rem 2rem 2rem',
-                    borderTop: '1px solid var(--color-border)',
-                    background: 'var(--color-bg-alt)',
-                    textAlign: 'center'
-                }}>
-                    <div style={{ display: 'flex', gap: '4rem', flexWrap: 'wrap', justifyContent: 'center', marginBottom: '4rem' }}>
-                        <div>
-                            <p style={{ color: 'var(--color-text-dim)', fontSize: '0.9rem', marginBottom: '1rem' }}>Get it on Mobile</p>
-                            <div style={{ padding: '0.75rem', background: 'white', border: '1px solid var(--color-border)', borderRadius: '1rem', display: 'inline-block' }}>
-                                <QRCodeSVG value="https://www.vanamap.online" size={120} />
-                            </div>
-                        </div>
-
-                        <div style={{ textAlign: 'left' }}>
-                            <h4 style={{ color: 'var(--color-text-main)', marginBottom: '1.5rem' }}>Ecosystem</h4>
-                            <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                                <li><a href="/support" style={{ color: 'var(--color-text-muted)', textDecoration: 'none', fontSize: '0.9rem' }}>Suggestions</a></li>
-                                <li><a href="/sponsor" style={{ color: 'var(--color-text-muted)', textDecoration: 'none', fontSize: '0.9rem' }}>Sponsorship</a></li>
-                                <li><a href="/vendor" style={{ color: 'var(--color-text-muted)', textDecoration: 'none', fontSize: '0.9rem' }}>For Vendors</a></li>
-                                <li><a href="/about" style={{ color: 'var(--color-text-muted)', textDecoration: 'none', fontSize: '0.9rem' }}>About Us</a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <p style={{ color: 'var(--color-text-dim)', fontSize: '0.8rem' }}>© 2025 VanaMap - Earth's Digital Botanical Archive</p>
-                </footer>
             </div>
-        </div >
+
+            {/* MOVED: Intelligence Section (Core Capabilities) */}
+            <div className={styles.intelligenceSection} style={{ marginTop: '0' }}>
+                <div className={styles.sectionHeader}>
+                    <span className={styles.sectionBadge}>CORE CAPABILITIES</span>
+                    <h2 className={styles.sectionTitle}>Built for Deep Biological Insights</h2>
+                    <p className={styles.sectionSubtitle}>VanaMap bridges the gap between atmospheric science and interior design.</p>
+                </div>
+                <div className={styles.onboardingGrid} style={{ marginTop: '4rem' }}>
+                    {capabilities.map((cap) => (
+                        <div
+                            key={cap.id}
+                            className={`${styles.capabilityCard} ${expandedCards[cap.id] ? styles.cardExpanded : ''}`}
+                            onClick={() => toggleCard(cap.id)}
+                            role="button"
+                            tabIndex={0}
+                        >
+                            <div className={styles.onboardingIcon} style={{ background: cap.bg, color: cap.color }}>
+                                {cap.icon}
+                            </div>
+                            <h3>{cap.title}</h3>
+                            <p>{cap.desc}</p>
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {/* MOVED: Onboarding Section (Personas) */}
+            <section className={styles.onboardingSection}>
+                <div className={styles.sectionHeader}>
+                    <span className={styles.sectionBadge}>WHO ARE YOU?</span>
+                    <h2 className={styles.sectionTitle}>Designed for our Community</h2>
+                    <p className={styles.sectionSubtitle}>Discover how VanaMap empowers different roles in our green ecosystem.</p>
+                </div>
+
+                <div className={styles.onboardingGrid}>
+                    {personas.map((p) => (
+                        <div
+                            key={p.id}
+                            className={`${styles.onboardingCard} ${expandedCards[p.id] ? styles.cardExpanded : ''}`}
+                            onClick={() => toggleCard(p.id)}
+                            role="button"
+                            tabIndex={0}
+                        >
+                            <div className={styles.onboardingIcon} style={{ background: p.bg, color: p.color }}>
+                                {p.icon}
+                            </div>
+                            <h3>{p.title}</h3>
+                            <p>{p.desc}</p>
+                            {expandedCards[p.id] && p.id === 'role-vendor' && (
+                                <Button
+                                    size="sm"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        navigate('/auth?role=vendor&view=signup');
+                                    }}
+                                    style={{ marginTop: '1rem', width: '100%', background: p.color, color: 'black', fontWeight: 800 }}
+                                >
+                                    JOIN AS VENDOR
+                                </Button>
+                            )}
+                            <span className={styles.onboardingMeta}>{p.meta}</span>
+                        </div>
+                    ))}
+                </div>
+            </section>
+
+            {/* Footer Stuff */}
+            <div className={styles.sponsorCTA}>
+                <div className={styles.sponsorContent}>
+                    <div className={styles.sponsorIcon}>
+                        <Heart size={32} fill="#facc15" color="#facc15" />
+                    </div>
+                    <div className={styles.sponsorText}>
+                        <h3>Support the Green Future</h3>
+                        <p>Partner with VanaMap to help us grow our ecosystem database.</p>
+                    </div>
+                    <Button onClick={() => navigate('/sponsor')} className={styles.sponsorButton}>
+                        Become a Sponsor <MoveRight size={20} style={{ marginLeft: '12px' }} />
+                    </Button>
+                </div>
+            </div>
+
+            <div style={{ textAlign: 'center', marginTop: '4rem', marginBottom: '2rem' }}>
+                <p style={{ color: 'var(--color-text-dim)', marginBottom: '1rem' }}>Need help with the app?</p>
+                <Button
+                    onClick={() => navigate('/contact')}
+                    variant="ghost"
+                    size="lg"
+                    style={{ border: '1px solid var(--color-border)', borderRadius: '99px' }}
+                >
+                    <MessageCircle size={20} style={{ marginRight: '8px' }} /> Contact Support
+                </Button>
+            </div>
+
+            <footer style={{
+                marginTop: '6rem',
+                padding: '4rem 2rem 2rem',
+                borderTop: '1px solid var(--color-border)',
+                background: 'var(--color-bg-alt)',
+                textAlign: 'center'
+            }}>
+                <div style={{ display: 'flex', gap: '4rem', flexWrap: 'wrap', justifyContent: 'center', marginBottom: '4rem' }}>
+                    <div>
+                        <p style={{ color: 'var(--color-text-dim)', fontSize: '0.9rem', marginBottom: '1rem' }}>Get it on Mobile</p>
+                        <div style={{ padding: '0.75rem', background: 'white', border: '1px solid var(--color-border)', borderRadius: '1rem', display: 'inline-block' }}>
+                            <QRCodeSVG value="https://www.vanamap.online" size={120} />
+                        </div>
+                    </div>
+
+                    <div style={{ textAlign: 'left' }}>
+                        <h4 style={{ color: 'var(--color-text-main)', marginBottom: '1.5rem' }}>Ecosystem</h4>
+                        <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                            <li><a href="/support" style={{ color: 'var(--color-text-muted)', textDecoration: 'none', fontSize: '0.9rem' }}>Suggestions</a></li>
+                            <li><a href="/sponsor" style={{ color: 'var(--color-text-muted)', textDecoration: 'none', fontSize: '0.9rem' }}>Sponsorship</a></li>
+                            <li><a href="/vendor" style={{ color: 'var(--color-text-muted)', textDecoration: 'none', fontSize: '0.9rem' }}>For Vendors</a></li>
+                            <li><a href="/about" style={{ color: 'var(--color-text-muted)', textDecoration: 'none', fontSize: '0.9rem' }}>About Us</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <p style={{ color: 'var(--color-text-dim)', fontSize: '0.8rem' }}>© 2025 VanaMap - Earth's Digital Botanical Archive</p>
+            </footer>
+
+        </div>
     );
 };
