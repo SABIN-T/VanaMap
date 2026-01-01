@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-import { Crown, Check, Shield, Zap, Heart } from 'lucide-react';
+import { Crown, Check, Shield, Zap, Heart, Bot, Headset } from 'lucide-react';
 import toast from 'react-hot-toast';
 import styles from './Premium.module.css';
 
@@ -193,15 +193,15 @@ export const Premium = () => {
                         <ul className={styles.features}>
                             <li className={styles.featureItem}>
                                 <Check size={18} className={styles.checkIcon} />
-                                Basic Plant Search
+                                Unlimited Global Plant Search
                             </li>
                             <li className={styles.featureItem}>
                                 <Check size={18} className={styles.checkIcon} />
-                                Community Access
+                                Access Public Garden Community
                             </li>
                             <li className={styles.featureItem}>
                                 <Check size={18} className={styles.checkIcon} />
-                                Max 3 Favorites
+                                Create up to 3 Plant Collections
                             </li>
                         </ul>
                         <button className={`${styles.button} ${styles.btnFree}`} disabled>
@@ -228,20 +228,20 @@ export const Premium = () => {
 
                         <ul className={styles.features}>
                             <li className={`${styles.featureItem} ${styles.premium}`}>
-                                <Check size={18} className={styles.checkIcon} />
-                                <span><strong>Unlimited</strong> Favorites</span>
+                                <Heart size={18} className={styles.checkIcon} />
+                                <span><strong>Unlimited</strong> Personal Garden Collections</span>
                             </li>
                             <li className={`${styles.featureItem} ${styles.premium}`}>
-                                <Check size={18} className={styles.checkIcon} />
-                                <span>Access to <strong>Heaven</strong> (Exclusive)</span>
+                                <Crown size={18} className={styles.checkIcon} />
+                                <span>Exclusive <strong>Heaven</strong> Metaverse Access</span>
                             </li>
                             <li className={`${styles.featureItem} ${styles.premium}`}>
-                                <Check size={18} className={styles.checkIcon} />
-                                <span>AI Plant Diagnostics</span>
+                                <Bot size={18} className={styles.checkIcon} />
+                                <span>Dr. Flora: <strong>GPT-4o</strong> AI Diagnosis</span>
                             </li>
                             <li className={`${styles.featureItem} ${styles.premium}`}>
-                                <Check size={18} className={styles.checkIcon} />
-                                <span>Priority Support</span>
+                                <Headset size={18} className={styles.checkIcon} />
+                                <span>24/7 Priority Concierge Support</span>
                             </li>
                         </ul>
 

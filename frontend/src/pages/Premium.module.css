@@ -181,9 +181,22 @@
 /* Premium Card Special Styles */
 .cardPremium {
     background: linear-gradient(145deg, rgba(30, 41, 59, 0.9), rgba(15, 23, 42, 0.95));
-    border: 1px solid rgba(250, 204, 21, 0.3);
-    box-shadow: 0 0 30px rgba(250, 204, 21, 0.1);
+    border: 1px solid rgba(250, 204, 21, 0.4);
+    box-shadow: 0 0 30px rgba(250, 204, 21, 0.15);
     transform: scale(1.02);
+    animation: borderPulse 3s infinite alternate;
+}
+
+@keyframes borderPulse {
+    0% {
+        border-color: rgba(250, 204, 21, 0.3);
+        box-shadow: 0 0 20px rgba(250, 204, 21, 0.1);
+    }
+
+    100% {
+        border-color: rgba(250, 204, 21, 0.8);
+        box-shadow: 0 0 40px rgba(250, 204, 21, 0.3);
+    }
 }
 
 .cardPremium::before {
@@ -309,6 +322,33 @@
     background: linear-gradient(135deg, var(--gold-primary), var(--gold-secondary));
     color: #0f172a;
     box-shadow: 0 4px 0 #854d0e;
+    position: relative;
+    overflow: hidden;
+}
+
+.btnPremium::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    animation: shimmer 2.5s infinite;
+}
+
+@keyframes shimmer {
+    0% {
+        left: -100%;
+    }
+
+    20% {
+        left: 100%;
+    }
+
+    100% {
+        left: 100%;
+    }
 }
 
 .btnPremium:hover {
