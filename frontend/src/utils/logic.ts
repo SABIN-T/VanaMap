@@ -121,8 +121,17 @@ const calculateStressFactor = (plant: Plant, temp: number, light: number): numbe
     const min = plant.idealTempMin || 15;
     const max = plant.idealTempMax || 30;
 
-    if (temp < min) stress += (min - temp) * 0.2; // 20% stress per degree cold
-    else if (temp > max) stress += (temp - max) * 0.2; // 20% stress per degree hot
+    // Logical Tolerance: 
+    // Small deviations (1-2 degrees) are fine. Large ones scale quadratically.
+    let tempDiff = 0;
+    if (temp < min) tempDiff = min - temp;
+    else if (temp > max) tempDiff = temp - max;
+
+    // Curve: 2 degrees = 0.04 (4% stress). 5 degrees = 0.25 (25% stress). 10 degrees = 1.0 (Max).
+    // Formula: (Diff^2) / 100
+    if (tempDiff > 0) {
+        stress += (tempDiff * tempDiff) / 100;
+    }
 
     // Cap stress at 0.9 (90% efficiency loss), never 100% dead for UI sake
     return Math.min(0.9, stress);
