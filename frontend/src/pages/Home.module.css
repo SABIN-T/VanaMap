@@ -884,27 +884,37 @@
 }
 
 .weatherCard {
-    background: var(--glass-bg);
-    border: var(--glass-border);
-    border-radius: 1.5rem;
-    padding: 1.25rem;
-    text-align: center;
-    backdrop-filter: blur(20px);
-    transition: all 0.4s ease;
+    background: rgba(15, 23, 42, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 1.75rem;
+    padding: 1.5rem;
+    backdrop-filter: blur(24px);
+    transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    gap: 1rem;
-    min-height: 140px;
+    gap: 1.25rem;
+    min-height: 100px;
     position: relative;
     width: 100%;
-    box-shadow: var(--card-shadow);
+    overflow: hidden;
+}
+
+.weatherCard::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
 }
 
 .weatherCard:hover {
-    transform: translateY(-4px);
-    background: var(--color-bg-card);
-    border-color: var(--color-primary);
+    transform: translateY(-5px);
+    background: rgba(15, 23, 42, 0.6);
+    border-color: rgba(16, 185, 129, 0.4);
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5), 0 0 20px rgba(16, 185, 129, 0.1);
 }
 
 .statIcon {
@@ -936,16 +946,45 @@
     flex: 1;
 }
 
-.changeLocationBtn {
-    background: transparent;
-    border: none;
-    color: #38bdf8;
-    font-size: 0.75rem;
-    cursor: pointer;
-    text-decoration: underline;
-    align-self: flex-start;
-    padding: 0;
+.statDescription {
+    color: var(--color-text-dim);
+    font-size: 0.65rem;
+    font-weight: 500;
     margin-top: 2px;
+}
+
+.changeLocationBtn {
+    background: rgba(56, 189, 248, 0.08);
+    border: 1px solid rgba(56, 189, 248, 0.15);
+    color: #38bdf8;
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    align-self: flex-start;
+    padding: 6px 14px;
+    margin-top: 10px;
+    border-radius: 99px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s ease;
+}
+
+.changeLocationBtn:hover {
+    background: rgba(56, 189, 248, 0.15);
+    border-color: #38bdf8;
+    transform: translateX(4px);
+    box-shadow: 0 0 15px rgba(56, 189, 248, 0.2);
+}
+
+.changeLocationBtn svg {
+    transition: transform 0.3s ease;
+}
+
+.changeLocationBtn:hover svg {
+    transform: rotate(15deg) scale(1.1);
 }
 
 @media (max-width: 640px) {
