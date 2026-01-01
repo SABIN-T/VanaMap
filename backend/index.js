@@ -509,7 +509,7 @@ app.post('/api/payments/create-order', auth, async (req, res) => {
         }
 
         const order = await razorpay.orders.create(options);
-        res.json(order);
+        res.json({ ...order, key: process.env.RAZORPAY_KEY_ID });
     } catch (error) {
         console.log(error);
         res.status(500).send(error);
@@ -2148,72 +2148,6 @@ app.get('/api/news', async (req, res) => {
                 source: "Nature Weekly"
             }
         ]);
-    }
-});
-
-// --- RAZORPAY PAYMENT ENDPOINTS ---
-const razorpay = new Razorpay({
-    key_id: process.env.RAZORPAY_KEY_ID,
-    key_secret: process.env.RAZORPAY_KEY_SECRET
-});
-
-app.post('/api/payments/create-order', auth, async (req, res) => {
-    try {
-        const options = {
-            amount: 1000, // ₹10.00 in paise
-            currency: "INR",
-            receipt: "order_rcptid_" + Date.now()
-        };
-        const order = await razorpay.orders.create(options);
-        res.json({ ...order, key: process.env.RAZORPAY_KEY_ID });
-    } catch (error) {
-        console.error("Razorpay Order Error:", error);
-        res.status(500).json({ error: error.message });
-    }
-});
-
-app.post('/api/payments/verify', auth, async (req, res) => {
-    try {
-        const crypto = require('crypto');
-        const { orderId, paymentId, signature } = req.body;
-
-        const generatedSignature = crypto
-            .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
-            .update(orderId + "|" + paymentId)
-            .digest("hex");
-
-        if (generatedSignature === signature) {
-            // Payment Successful -> Update User
-            const user = await User.findById(req.user.id);
-            const now = new Date();
-            user.isPremium = true;
-            user.premiumType = 'monthly';
-            user.premiumStartDate = now;
-            user.premiumExpiry = new Date(now.setMonth(now.getMonth() + 1));
-            user.lastPurchaseDate = new Date(); // Reset purchase date
-
-            // Save payment record
-            const payment = new Payment({
-                userId: user.id,
-                userName: user.name,
-                amount: 10,
-                currency: 'INR',
-                orderId: orderId,
-                paymentId: paymentId,
-                signature: signature,
-                status: 'paid',
-                plan: 'monthly'
-            });
-            await payment.save();
-            await user.save();
-
-            res.json({ success: true, message: "Payment Verified" });
-        } else {
-            res.status(400).json({ success: false, message: "Invalid Signature" });
-        }
-    } catch (error) {
-        console.error("Payment Verify Error:", error);
-        res.status(500).json({ error: error.message });
     }
 });
 
