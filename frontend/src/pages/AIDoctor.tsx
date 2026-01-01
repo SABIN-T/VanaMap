@@ -105,6 +105,8 @@ Respond naturally as Dr. Flora would:`;
         const API_URL = import.meta.env.VITE_API_URL || 'https://plantoxy.onrender.com/api';
 
         try {
+            console.log('[AI Doctor] Sending request to:', `${API_URL}/chat`);
+
             const response = await fetch(`${API_URL}/chat`, {
                 method: "POST",
                 headers: {
@@ -112,7 +114,6 @@ Respond naturally as Dr. Flora would:`;
                     // Add auth token if needed, but chat acts as public/guest capable feature for now
                 },
                 body: JSON.stringify({
-                    model: "gpt-4o",
                     messages: [
                         {
                             role: "system",
@@ -126,17 +127,25 @@ Respond naturally as Dr. Flora would:`;
                 })
             });
 
+            console.log('[AI Doctor] Response status:', response.status);
+
             if (response.ok) {
                 const data = await response.json();
-                const aiText = data.choices[0]?.message?.content || "";
+                console.log('[AI Doctor] Response data:', data);
+
+                const aiText = data.choices?.[0]?.message?.content || "";
 
                 // Validate response quality
                 if (aiText.length > 5) {
                     // Format the response nicely
                     return formatHumanLikeResponse(aiText);
+                } else {
+                    console.error('[AI Doctor] Empty or invalid response');
+                    toast.error("Dr. Flora didn't respond. Please try again.");
                 }
             } else {
-                console.error("AI Doctor Server Error:", await response.text());
+                const errorText = await response.text();
+                console.error("AI Doctor Server Error:", errorText);
                 toast.error("Dr. Flora is having trouble connecting to the server.");
             }
         } catch (error) {
