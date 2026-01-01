@@ -2114,7 +2114,7 @@ app.get('/api/news', async (req, res) => {
 
             // 2. If not, try to find <img> tag in content
             if (!imageUrl && item.content) {
-                const imgMatch = item.content.match(/<img[^>]+src="([^">]+)"/);
+                const imgMatch = item.content.match(/<img[^>]+src=["']([^"']+)["']/i);
                 if (imgMatch) imageUrl = imgMatch[1];
             }
 
