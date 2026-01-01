@@ -261,7 +261,7 @@ export const Premium = () => {
                             {configLoading
                                 ? 'Checking for exclusive offers...'
                                 : (config.activePromo
-                                    ? `Free until ${config.freeEnd ? new Date(config.freeEnd).toLocaleDateString() : 'Limited Time'}!`
+                                    ? `Free until ${config.freeEnd ? new Date(config.freeEnd).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }) : 'Limited Time'}!`
                                     : 'Best Value for Serious Gardeners'
                                 )
                             }
@@ -322,6 +322,6 @@ export const Premium = () => {
                     <p>Secured by Razorpay. By subscribing, you agree to our <a href="#" className="underline hover:text-emerald-400">Terms of Service</a> and <a href="#" className="underline hover:text-emerald-400">Privacy Policy</a>.</p>
                 </div>
             </div>
-        </div>
+        </div >
     );
 };
