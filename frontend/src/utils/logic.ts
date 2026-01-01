@@ -209,7 +209,6 @@ export const calculatePlantsNeeded = (
     // 4. Plant Production Calculation
     // Total produced by 1 plant over the duration
     const { hourly: plantRate } = calculateO2Production(plant, 1, hoursPerDay);
-    const productionPerPlant = plantRate * hoursPerDay;
     // Note: If hours > 12, production caps (plants sleep), but human demand continues.
     // Our calculateO2Production handles logic simplistically, 
     // but effectively: Rate * Duration. (With 12h cap on production time usually).
