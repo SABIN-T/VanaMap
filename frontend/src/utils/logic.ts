@@ -50,7 +50,6 @@ const getLightScore = (plant: Plant, lightPercent: number): number => {
     // Parabolic matching
     const diff = Math.abs(lightPercent - target);
     const maxDiff = 100;
-    // Returns 1.0 at perfect match, drops off away from target
     return Math.max(0.1, 1 - Math.pow(diff / maxDiff, 1.5));
 };
 
@@ -58,7 +57,6 @@ const getAQIScore = (plant: Plant, aqi: number): number => {
     const isPurifier = plant.medicinalValues?.includes('Air purification') ||
         plant.advantages?.some(a => a.toLowerCase().includes('purif'));
 
-    // Bonus for purifiers in bad air
     if (aqi > 100) {
         if (isPurifier) return 1.2;
         return Math.max(0.2, 1.0 - ((aqi - 100) / 300));
@@ -117,7 +115,6 @@ export const normalizeBatch = (scores: number[]): number[] => {
     for (let i = 0; i < count; i++) {
         const item = indexed[i];
 
-        // 70% Rank position, 30% Absolute value
         const rankPercent = 1 - (i / (count - 1));
         const rawPercent = (item.val - minRaw) / rawRange;
 
@@ -155,79 +152,59 @@ function deg2rad(deg: number) {
     return deg * (Math.PI / 180);
 }
 
-// O2 Production Logic
+// O2 Production Logic (Rate Based + Efficiency)
 export const calculateO2Production = (
     plant: Plant,
     quantity: number = 1,
-    hoursPerDay: number = 24
+    hoursPerDay: number = 24,
+    efficiency: number = 1.0 // New: Impact of aptness on production
 ): { daily: number; hourly: number } => {
-    let baseRate = 5; // grams/Liters roughly per day baseline
+    let baseRate = 5;
     if (plant.oxygenLevel === 'very-high') baseRate = 15;
     else if (plant.oxygenLevel === 'high') baseRate = 10;
     else if (plant.oxygenLevel === 'medium') baseRate = 5;
     else baseRate = 3;
 
-    // Hourly rate assuming photosynthesis window
-    // (Averaged over 24h for simplicity in determining "capacity", 
-    // effectively assumes 12h active production spread out)
-    const hourlyRate = (baseRate / 12) * quantity;
+    // Apply efficiency: Dying plants produce less O2
+    const effectiveRate = baseRate * Math.max(0.1, efficiency);
+
+    const hourlyRate = (effectiveRate / 12) * quantity;
     const daily = hourlyRate * Math.min(12, hoursPerDay);
 
     return { daily, hourly: hourlyRate };
 };
 
-/**
- * Plants Needed - ROOM BUFFER LOGIC
- * Calculates needed plants accounting for the room's initial air volume.
- * Slower consumption (less time) means room buffer covers more of the need.
- */
 export const calculatePlantsNeeded = (
     plant: Plant,
-    roomSize: number, // m^2
+    roomSize: number,
     hoursPerDay: number = 8,
-    peopleCount: number = 1
+    peopleCount: number = 1,
+    aptnessScore: number = 100 // New parameter
 ): { plantsNeeded: number; totalO2: number; isLethal: boolean } => {
     // 1. Calculate Limits
-    // Ceiling height approx 2.5m
     const roomVolumeLiters = roomSize * 2.5 * 1000;
-
-    // Safety buffer: How much O2 can we consume from the room before it gets "stuffy"?
-    // Fresh air: 21% O2. Grossly Stuffy: 20%. Dangerous: 19.5%.
-    // Let's say we want to maintain at least 20.5% for "Freshness".
-    // So we have a 0.5% buffer of the room volume.
-    const roomBufferLiters = roomVolumeLiters * 0.005; // 0.5% of room air
+    const roomBufferLiters = roomVolumeLiters * 0.005; // 0.5% buffer
 
     // 2. Human Demand
-    // 23 Liters / Hour / Person
     const totalDemand = 23 * peopleCount * hoursPerDay;
 
     // 3. Net Need
-    // If the room buffer covers the total demand, we theoretically need 0 plants.
-    // But we'll recommend at least 1 for freshness multiplier.
     const netDeficit = totalDemand - roomBufferLiters;
 
-    // 4. Plant Production Calculation
-    // Total produced by 1 plant over the duration
-    const { hourly: plantRate } = calculateO2Production(plant, 1, hoursPerDay);
-    // Note: If hours > 12, production caps (plants sleep), but human demand continues.
-    // Our calculateO2Production handles logic simplistically, 
-    // but effectively: Rate * Duration. (With 12h cap on production time usually).
-    // Let's rely on `plantRate` being the *Active Hourly Rate* and adjust physics:
-    // Production = Rate * Math.min(hours, 12).
+    // 4. Plant Production (with efficiency)
+    const efficiency = aptnessScore / 100;
+    const { hourly: plantRate } = calculateO2Production(plant, 1, hoursPerDay, efficiency);
 
     const effectiveProductionHours = Math.min(hoursPerDay, 12);
     const singlePlantTotalOutput = plantRate * effectiveProductionHours;
 
     let plantsNeeded = 1;
     if (netDeficit > 0) {
-        plantsNeeded = Math.ceil(netDeficit / Math.max(0.1, singlePlantTotalOutput));
+        plantsNeeded = Math.ceil(netDeficit / Math.max(0.01, singlePlantTotalOutput));
     } else {
-        // Room accounts for it, simplified to 1 or 0.
-        // Let's return 1 to encourage purchase :)
         plantsNeeded = 1;
     }
 
-    // Total potential O2 added to room
     const totalO2 = singlePlantTotalOutput * plantsNeeded;
 
     return {
@@ -247,8 +224,17 @@ export const runRoomSimulationMC = (
     aqi: number,
     lightLevel: number = 70
 ) => {
+    // Calculate aptness first
     const aptness = calculateAptness(plant, avgTemp, aqi, avgHumidity, lightLevel);
-    const { plantsNeeded, totalO2, isLethal } = calculatePlantsNeeded(plant, roomSize, hoursPerDay, peopleCount);
+
+    // Pass aptness to plants needed calculation
+    const { plantsNeeded, totalO2, isLethal } = calculatePlantsNeeded(
+        plant,
+        roomSize,
+        hoursPerDay,
+        peopleCount,
+        aptness // Now efficiency affects count!
+    );
 
     return {
         aptness,
