@@ -18,8 +18,8 @@ const getTempScore = (plant: Plant, avgTemp: number): number => {
     const min = plant.idealTempMin || 15;
     const max = plant.idealTempMax || 30;
     const optimal = (min + max) / 2;
-    const rangeRadius = (max - min) / 2;
-    const sigma = Math.max(5, rangeRadius);
+    // Strict sensitivity: Sigma 3 means +/- 6 degrees drops score significantly
+    const sigma = 3;
 
     const diff = avgTemp - optimal;
     return Math.exp(-(diff * diff) / (2 * sigma * sigma));
@@ -33,7 +33,7 @@ const getHumidityScore = (plant: Plant, avgHumidity: number): number => {
 };
 
 /**
- * Light Score: Intelligent Parsing of 'sunlight' property
+ * Light Score: High Sensitivity Curve
  */
 const getLightScore = (plant: Plant, lightPercent: number): number => {
     const sun = (plant.sunlight || 'medium').toLowerCase();
@@ -48,7 +48,9 @@ const getLightScore = (plant: Plant, lightPercent: number): number => {
 
     const diff = Math.abs(lightPercent - target);
     const maxDiff = 100;
-    return Math.max(0.1, 1 - Math.pow(diff / maxDiff, 1.5));
+    // Power 0.6 makes the curve CONVEX, meaning score drops off VERY fast initially.
+    // This provides immediate feedback as you slide away from ideal.
+    return Math.max(0.1, 1 - Math.pow(diff / maxDiff, 0.6));
 };
 
 const getAQIScore = (plant: Plant, aqi: number): number => {
@@ -80,6 +82,7 @@ export const calculateAptness = (
     const sLight = getLightScore(plant, lightPercent);
     const sAQI = getAQIScore(plant, aqi);
 
+    // Weights: Temp 35%, Hum 25%, Light 25%, AQI 15%
     let raw = (sTemp * 0.35) + (sHum * 0.25) + (sLight * 0.25) + (sAQI * 0.15);
 
     const type = plant.type || 'indoor';
@@ -155,19 +158,13 @@ export const calculateO2Production = (
     hoursPerDay: number = 24,
     efficiency: number = 1.0
 ): { daily: number; hourly: number } => {
-    // Base "Wellness Units" per hour (Proxy for CO2 scrubbing + O2 gen)
-    // Low: 0.8 units/hr. High: 3.5 units/hr.
     let baseRate = 1.0;
     if (plant.oxygenLevel === 'very-high') baseRate = 3.5;
     else if (plant.oxygenLevel === 'high') baseRate = 2.5;
     else if (plant.oxygenLevel === 'medium') baseRate = 1.5;
     else baseRate = 0.8;
 
-    // Apply efficiency: Dying plants clean less air
     const effectiveHourlyRate = baseRate * Math.max(0.1, efficiency);
-
-    // Total Cleaning Power over Duration
-    // Plants clean effectively during light hours, less at night.
     const hourly = effectiveHourlyRate * quantity;
     const daily = hourly * Math.min(12, hoursPerDay);
 
@@ -182,46 +179,32 @@ export const calculatePlantsNeeded = (
     aptnessScore: number = 100
 ): { plantsNeeded: number; totalO2: number; isLethal: boolean } => {
     // 1. Calculate Limits (CO2 Freshness Standard)
-    // Ceiling height approx 2.5m -> Liters
     const roomVolumeLiters = roomSize * 2.5 * 1000;
-
-    // Safety buffer: CO2 buildup creates "stuffiness" long before O2 runs out.
-    // In a sealed 20m2 room, air becomes "stale" (>1000ppm CO2) in ~2 hours.
-    // This is approx 0.1% of average room volume effectively "used up".
     const roomBufferLiters = roomVolumeLiters * 0.001; // 0.1% (Approx 2 hours breathing)
 
     // 2. Human Demand
-    // 23 Liters / Hour / Person (Standard Respiration)
     const totalDemand = 23 * peopleCount * hoursPerDay;
 
     // 3. Net Need
-    // Demand minus what the room naturally buffers before getting stale
     const netDeficit = totalDemand - roomBufferLiters;
 
     // 4. Plant Production (with efficiency)
     // Quadratic Stress Curve: Plants suffer disproportionately from poor conditions
-    // This makes the slider impact more visible (Aptness 80% -> Eff 64%)
     const efficiency = Math.pow(aptnessScore / 100, 2);
+
     const { hourly: plantRate } = calculateO2Production(plant, 1, hoursPerDay, efficiency);
 
     const effectiveProductionHours = Math.min(hoursPerDay, 12);
 
-    // CALIBRATION FACTOR:
-    // Multiply by ~5 to map "Wellness Units" to "Liters of Need" 
-    // This calibrates the output to recommend ~2-5 plants for an 8h sleep.
-    // Without this, scientifically we'd need 50 plants (equilibrium).
-    // With it, we calculate "Wellness Support".
     const calibratedOutput = plantRate * effectiveProductionHours * 5;
 
     let plantsNeeded = 1;
     if (netDeficit > 0) {
         plantsNeeded = Math.ceil(netDeficit / Math.max(0.1, calibratedOutput));
     } else {
-        // Room air is fresh enough for this short duration
         plantsNeeded = 1;
     }
 
-    // For display "Total Growth/Production"
     const totalO2 = calibratedOutput * plantsNeeded;
 
     return {
