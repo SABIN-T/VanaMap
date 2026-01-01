@@ -4,10 +4,11 @@ import type { Plant } from '../types';
  * COMPLETE APTNESS CALCULATION SYSTEM - SCIENTIFIC OVERHAUL
  * 
  * This system calculates plant compatibility based on:
- * 1. Temperature matching (50% weight) - Gaussian distribution
- * 2. Humidity requirements (30% weight) - Threshold-based
- * 3. Air quality interaction (20% weight) - Purifier bonus
- * 4. Plant characteristics - Type, maintenance, oxygen production
+ * 1. Temperature matching (40% weight) - Gaussian distribution
+ * 2. Humidity requirements (25% weight) - Threshold-based
+ * 3. Light Matching (25% weight) - New requirement
+ * 4. Air quality interaction (10% weight) - Purifier bonus
+ * 5. Plant characteristics - Type, maintenance, oxygen production
  * 
  * Output: 10% (incompatible) to 100% (perfect match)
  */
@@ -85,6 +86,29 @@ const calculateAQIScore = (plant: Plant, aqi: number): number => {
 };
 
 /**
+ * Calculate light compatibility score (0-1)
+ */
+const calculateLightScore = (plant: Plant, lightPercent: number): number => {
+    // lightPercent is 0-100 (from slider)
+    // Plant requirements: 'low', 'medium', 'high'
+    // Map requirements to optimal percentages
+    let optimalLight = 50; // medium
+    let tolerance = 30;
+
+    const req = (plant as any).lightReq || 'medium';
+    if (req === 'low') { optimalLight = 30; tolerance = 20; }
+    if (req === 'high') { optimalLight = 80; tolerance = 20; }
+
+    // Gaussian-like curve for light matching
+    if (Math.abs(lightPercent - optimalLight) <= tolerance) {
+        return 1.0;
+    } else {
+        const diff = Math.abs(lightPercent - optimalLight) - tolerance;
+        return Math.max(0.2, 1.0 - (diff / 40));
+    }
+};
+
+/**
  * Calculate plant type bonus (indoor vs outdoor)
  */
 const calculateTypeFactor = (plant: Plant): number => {
@@ -126,12 +150,14 @@ export const calculateAptnessMC = (
     baseTemp: number,
     aqi: number = 20,
     baseHumidity: number = 50,
+    lightPercent: number = 70, // Added light parameter
     _iterations: number = 150
 ): number => {
     // Core environmental compatibility scores (0-1 each)
     const tempScore = calculateTemperatureScore(plant, baseTemp);
     const humidityScore = calculateHumidityScore(plant, baseHumidity);
     const aqiScore = calculateAQIScore(plant, aqi);
+    const lightScore = calculateLightScore(plant, lightPercent);
 
     // Plant characteristic factors (multipliers)
     const typeFactor = calculateTypeFactor(plant);
@@ -139,11 +165,12 @@ export const calculateAptnessMC = (
     const oxygenFactor = calculateOxygenFactor(plant);
 
     // Weighted combination of environmental scores
-    // Temperature is most important (50%), humidity (30%), AQI (20%)
+    // Temp (40%), Humidity (25%), Light (25%), AQI (10%)
     const environmentalScore = (
-        tempScore * 0.5 +
-        humidityScore * 0.3 +
-        aqiScore * 0.2
+        tempScore * 0.40 +
+        humidityScore * 0.25 +
+        lightScore * 0.25 +
+        aqiScore * 0.10
     );
 
     // Apply plant characteristic multipliers
@@ -162,17 +189,13 @@ export const calculateAptnessMC = (
 export const calculateAptness = (
     plant: Plant,
     currentTemp: number,
-    aqi?: number,
-    currentHumidity?: number,
-    _lightPercent?: number,
+    aqi: number = 20,
+    currentHumidity: number = 50,
+    lightPercent: number = 70,
     useMonteCarlo: boolean = false,
     iterations?: number
 ): number => {
-    if (useMonteCarlo) {
-        return calculateAptnessMC(plant, currentTemp, aqi, currentHumidity, iterations);
-    }
-    // Fallback to Monte Carlo for compatibility
-    return calculateAptnessMC(plant, currentTemp, aqi, currentHumidity);
+    return calculateAptnessMC(plant, currentTemp, aqi, currentHumidity, lightPercent, iterations);
 };
 
 export const normalizeBatch = (scores: number[]): number[] => {
@@ -222,16 +245,21 @@ export const calculateO2Production = (
     quantity: number = 1,
     hoursPerDay: number = 24
 ): { daily: number; hourly: number } => {
-    let baseRate = 5;
+    let baseRate = 5; // grams/Liters roughly per day baseline
     if (plant.oxygenLevel === 'very-high') baseRate = 15;
     else if (plant.oxygenLevel === 'high') baseRate = 10;
     else if (plant.oxygenLevel === 'medium') baseRate = 5;
     else baseRate = 3;
 
-    const hourly = (baseRate * quantity) / 24;
-    const daily = hourly * hoursPerDay;
+    // Adjust rate based on hours of light (photosynthesis active time)
+    // Production is rate * hours (not constant/24)
+    // But for "Hourly" capacity, we look at peak rate
+    const hourlyRate = baseRate / 12; // Assuming baseRate is for a 12h day roughly
 
-    return { daily, hourly };
+    // Total production for the given duration
+    const totalProduction = hourlyRate * hoursPerDay * quantity;
+
+    return { daily: totalProduction, hourly: hourlyRate * quantity };
 };
 
 export const calculatePlantsNeeded = (
@@ -240,15 +268,23 @@ export const calculatePlantsNeeded = (
     hoursPerDay: number = 8,
     peopleCount: number = 1
 ): { plantsNeeded: number; totalO2: number; isLethal: boolean } => {
-    const totalRequiredO2 = peopleCount * 550;
-    const { daily: dailyO2PerPlant } = calculateO2Production(plant, 1, hoursPerDay);
-    const plantsNeeded = Math.max(1, Math.ceil(totalRequiredO2 / Math.max(0.1, dailyO2PerPlant)));
-    const totalO2 = dailyO2PerPlant * plantsNeeded;
+    // Human Consumption: ~550L per day => ~23L per hour
+    const humanHourlyNeed = 23 * peopleCount;
+
+    // Plant Production Rate (Liters per hour of active light)
+    const { hourly: plantHourlyRate } = calculateO2Production(plant, 1, 24);
+
+    // Rate Matching: How many plants to match the hourly consumption?
+    // This keeps the number stable regardless of how long you stay
+    const plantsNeeded = Math.ceil(humanHourlyNeed / Math.max(0.1, plantHourlyRate));
+
+    // Total O2 generated over the specific duration
+    const totalO2 = plantHourlyRate * plantsNeeded * hoursPerDay;
 
     return {
         plantsNeeded,
         totalO2,
-        isLethal: dailyO2PerPlant < 0
+        isLethal: plantHourlyRate < 0
     };
 };
 
@@ -262,7 +298,8 @@ export const runRoomSimulationMC = (
     avgHumidity: number,
     aqi: number
 ) => {
-    const aptness = calculateAptnessMC(plant, avgTemp, aqi, avgHumidity);
+    // Note: Light is fixed at 70 for this quick sim, or could be passed through
+    const aptness = calculateAptnessMC(plant, avgTemp, aqi, avgHumidity, 70);
     const { plantsNeeded, totalO2, isLethal } = calculatePlantsNeeded(plant, roomSize, hoursPerDay, peopleCount);
 
     return {
