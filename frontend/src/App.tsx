@@ -12,6 +12,8 @@ import { AnimatedRoutes } from './components/layout/AnimatedRoutes';
 import { NetworkIndicator } from './components/common/NetworkIndicator';
 import { SystemGuard } from './components/common/SystemGuard';
 
+import { LocationNag } from './components/common/LocationNag';
+
 function App() {
   return (
     <div className="app-shell">
@@ -19,7 +21,7 @@ function App() {
         <AuthProvider>
           <CartProvider>
             <Router>
-
+              <LocationNag />
               <NetworkIndicator />
               <Toaster
                 position="top-center"

@@ -92,9 +92,30 @@ export const UserDashboard = () => {
 
     const detectLocation = () => {
         setDetectingLoc(true);
+        const performIPFallback = async (reason: string) => {
+            console.warn(`Dashboard GPS fail: ${reason}. Trying IP fallback...`);
+            try {
+                const response = await fetch('https://ipapi.co/json/');
+                const data = await response.json();
+                if (data.latitude && data.longitude) {
+                    setVendorForm(prev => ({
+                        ...prev,
+                        latitude: data.latitude,
+                        longitude: data.longitude
+                    }));
+                    toast.success(`Detected approx location: ${data.city || "Success"}!`);
+                } else {
+                    toast.error("Could not detect location automatically.");
+                }
+            } catch (err) {
+                toast.error("Location detection failed. Please enter coordinates manually.");
+            } finally {
+                setDetectingLoc(false);
+            }
+        };
+
         if (!navigator.geolocation) {
-            toast.error("GPS not supported");
-            setDetectingLoc(false);
+            performIPFallback("GPS not supported");
             return;
         }
         navigator.geolocation.getCurrentPosition(
@@ -105,12 +126,13 @@ export const UserDashboard = () => {
                     longitude: pos.coords.longitude
                 }));
                 setDetectingLoc(false);
-                toast.success("Location detected!");
+                toast.success("GPS Location detected!");
             },
             (err) => {
-                console.error(err);
-                toast.error("Could not fetch location");
-                setDetectingLoc(false);
+                let msg = "GPS access denied.";
+                if (err.code === 3) msg = "Location timeout.";
+                if (err.code === 2) msg = "Location unavailable.";
+                performIPFallback(msg);
             }
         );
     };
