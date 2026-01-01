@@ -155,7 +155,10 @@ export const PermissionCenter = () => {
                 <div className={styles.footer}>
                     <div className={styles.infoBox}>
                         <Info size={16} />
-                        <p>If denied, you must enable these manually in your <b>Browser {'>'} Site Settings</b>.</p>
+                        <p>
+                            <b>Mobile Shortcut:</b> Long-press the app icon (touch for a second) {'>'} Site Settings.<br />
+                            Or enable in <b>Browser {'>'} Site Settings</b>.
+                        </p>
                     </div>
                     <button className={styles.finishBtn} onClick={() => setIsOpen(false)}>Done</button>
                 </div>

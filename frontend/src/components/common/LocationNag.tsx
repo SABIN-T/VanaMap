@@ -16,7 +16,7 @@ export const LocationNag = () => {
                 const status = await navigator.permissions.query({ name: 'geolocation' as PermissionName });
 
                 const handleStatusChange = () => {
-                    const hasNagged = sessionStorage.getItem('vanamap_location_nagged_v3');
+                    const hasNagged = sessionStorage.getItem('vanamap_location_nagged_v4');
                     if (hasNagged) return;
 
                     if (status.state === 'denied') {
@@ -29,14 +29,14 @@ export const LocationNag = () => {
                                     <p style={{ margin: 0, fontWeight: 800, fontSize: '0.95rem', color: '#92400e' }}>GPS Access Blocked</p>
                                     <p style={{ margin: '4px 0', fontSize: '0.8rem', color: '#b45309', lineHeight: 1.4 }}>
                                         To see Survival Matches: <br />
-                                        <strong>Mobile:</strong> Open <b>Chrome/Safari Settings</b> {'>'} <b>Site Settings</b> {'>'} <b>Location</b> (not phone settings).<br />
+                                        <strong>Mobile:</strong> Long-press app icon (Site Settings) OR check Browser Settings {'>'} Location.<br />
                                         <strong>Desktop:</strong> Click the <b>Lock</b> icon next to URL.
                                     </p>
                                     <div style={{ display: 'flex', gap: '8px', marginTop: '8px' }}>
                                         <button
                                             onClick={() => {
                                                 toast.dismiss(t.id);
-                                                sessionStorage.setItem('vanamap_location_nagged_v3', 'true');
+                                                sessionStorage.setItem('vanamap_location_nagged_v4', 'true');
                                             }}
                                             style={{
                                                 background: '#f59e0b',
@@ -69,7 +69,7 @@ export const LocationNag = () => {
                                 </div>
                             </div>
                         ), { duration: 15000, position: 'top-center' });
-                        sessionStorage.setItem('vanamap_location_nagged_v3', 'true');
+                        sessionStorage.setItem('vanamap_location_nagged_v4', 'true');
                     } else if (status.state === 'prompt') {
                         toast((t) => (
                             <div style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '4px' }}>
@@ -86,9 +86,9 @@ export const LocationNag = () => {
                                             toast.dismiss(t.id);
                                             navigator.geolocation.getCurrentPosition(
                                                 () => toast.success("Satellites Synced!"),
-                                                () => toast.error("Access blocked. Check Browser (not Phone) settings.")
+                                                () => toast.error("Access blocked. Check Browser Settings.")
                                             );
-                                            sessionStorage.setItem('vanamap_location_nagged_v3', 'true');
+                                            sessionStorage.setItem('vanamap_location_nagged_v4', 'true');
                                         }}
                                         style={{
                                             marginTop: '10px',
@@ -110,7 +110,7 @@ export const LocationNag = () => {
                                 </div>
                             </div>
                         ), { duration: 20000, position: 'bottom-center' });
-                        sessionStorage.setItem('vanamap_location_nagged_v3', 'true');
+                        sessionStorage.setItem('vanamap_location_nagged_v4', 'true');
                     }
                 };
 
