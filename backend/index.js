@@ -2153,7 +2153,7 @@ app.post('/api/chat', async (req, res) => {
 
         console.log('[AI Doctor] Processing chat request...');
 
-        // Using Groq's FREE API with Llama 3.1 70B
+        // Using Groq's FREE API with Llama 3.3 70B (Latest)
         const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
             method: "POST",
             headers: {
@@ -2161,7 +2161,7 @@ app.post('/api/chat', async (req, res) => {
                 "Authorization": `Bearer ${apiKey}`
             },
             body: JSON.stringify({
-                model: "llama-3.1-70b-versatile", // FREE powerful model
+                model: "llama-3.3-70b-versatile", // Latest supported model
                 messages: messages,
                 max_tokens: 1000,
                 temperature: 0.7,
