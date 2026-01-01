@@ -213,10 +213,21 @@ export const PlantDetailsModal = ({ plant, score = 0, weather, onClose, onBuy }:
                         />
                     </div>
                 ) : (
-                    <div style={{ fontSize: '0.8rem', color: '#64748b', fontStyle: 'italic' }}>
-                        Using local weather: <strong style={{ color: '#94a3b8' }}>{weather?.avgTemp30Days || 25}°C</strong>
+                    <div style={{ fontSize: '0.8rem', color: '#64748b', fontStyle: 'italic', display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                        <span>Using 30-Day Avg Temp: <strong style={{ color: '#94a3b8' }}>{weather?.avgTemp30Days || 25}°C</strong></span>
                     </div>
                 )}
+            </div>
+
+            {/* Humidity (Read Only) */}
+            <div className={styles.controlItem} style={{ opacity: 0.8 }}>
+                <div className={styles.controlHeader}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}><Droplet size={14} /> Avg Humidity (30-Day)</div>
+                    <span className={styles.controlValue} style={{ color: '#60a5fa' }}>{weather?.avgHumidity30Days || 50}%</span>
+                </div>
+                <div style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '4px' }}>
+                    Based on your location frequency
+                </div>
             </div>
         </div>
     );
