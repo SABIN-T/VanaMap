@@ -2124,6 +2124,46 @@ app.post('/api/admin/broadcast', auth, admin, async (req, res) => {
     }
 });
 
+// --- AI DOCTOR ENDPOINT ---
+app.post('/api/chat', async (req, res) => {
+    try {
+        const { messages, model } = req.body;
+        const apiKey = process.env.OPENAI_API_KEY;
+
+        if (!apiKey) {
+            console.error("Create Chat Error: OPENAI_API_KEY is not set in backend .env");
+            return res.status(500).json({ error: "Server configuration error: API Key missing" });
+        }
+
+        // Using native fetch (Node 18+)
+        const response = await fetch("https://api.openai.com/v1/chat/completions", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${apiKey}`
+            },
+            body: JSON.stringify({
+                model: model || "gpt-4o",
+                messages: messages,
+                max_tokens: 1000,
+                temperature: 0.7
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            console.error("OpenAI API Error:", data);
+            return res.status(response.status).json(data);
+        }
+
+        res.json(data);
+    } catch (e) {
+        console.error("Chat API Error:", e);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+});
+
 // Start Server
 const PORT = process.env.PORT || 5000;
 

@@ -101,24 +101,18 @@ Guidelines for your response:
 
 Respond naturally as Dr. Flora would:`;
 
-        // Use OpenAI GPT-4o for the best possible experience
-        const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY;
-
-        if (!OPENAI_API_KEY) {
-            console.error("OpenAI API Key missing. Please check .env file.");
-            toast.error("AI Doctor is currently offline (Key Missing).");
-            return null;
-        }
+        // Use Secure Backend for AI processing
+        const API_URL = import.meta.env.VITE_API_URL || 'https://plantoxy.onrender.com/api';
 
         try {
-            const response = await fetch("https://api.openai.com/v1/chat/completions", {
+            const response = await fetch(`${API_URL}/chat`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${OPENAI_API_KEY}`
+                    // Add auth token if needed, but chat acts as public/guest capable feature for now
                 },
                 body: JSON.stringify({
-                    model: "gpt-4o", // High intelligence model
+                    model: "gpt-4o",
                     messages: [
                         {
                             role: "system",
@@ -128,9 +122,7 @@ Respond naturally as Dr. Flora would:`;
                             role: "user",
                             content: userMessage
                         }
-                    ],
-                    max_tokens: 1000,
-                    temperature: 0.7 // Balanced creativity and accuracy
+                    ]
                 })
             });
 
@@ -144,10 +136,12 @@ Respond naturally as Dr. Flora would:`;
                     return formatHumanLikeResponse(aiText);
                 }
             } else {
-                console.error("OpenAI API Error:", await response.text());
+                console.error("AI Doctor Server Error:", await response.text());
+                toast.error("Dr. Flora is having trouble connecting to the server.");
             }
         } catch (error) {
-            console.error("OpenAI Fetch Failed:", error);
+            console.error("AI Doctor Network Error:", error);
+            toast.error("Network error. Please try again.");
         }
 
         return null; // Failed
