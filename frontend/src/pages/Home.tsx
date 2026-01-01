@@ -32,6 +32,7 @@ export const Home = () => {
     const [suggestions, setSuggestions] = useState<any[]>([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [visibleLimit, setVisibleLimit] = useState(() => window.innerWidth < 768 ? 4 : 10);
+    const [showAllPlants, setShowAllPlants] = useState(false); // Mobile pagination control
 
     const plantsSectionRef = useRef<HTMLDivElement>(null);
     const filterSectionRef = useRef<HTMLDivElement>(null);
@@ -293,9 +294,16 @@ export const Home = () => {
         const normalizedScores = normalizeBatch(rawScores);
 
         // 3. Map normalized scores back and sort
-        return scoredRaw
+        const sorted = scoredRaw
             .map((p, i) => ({ ...p, score: normalizedScores[i] }))
             .sort((a, b) => b.score - a.score);
+
+        // 4. MOBILE: Limit initial render to 20 plants for instant loading
+        if (isMobile && sorted.length > 20) {
+            return sorted.slice(0, 20);
+        }
+
+        return sorted;
     }, [plants, filter, searchQuery, lightFilter, weather]);
 
     return (

@@ -246,8 +246,19 @@ export const normalizeBatch = (scores: number[]): number[] => {
     if (maxScore === 0) return scores.map(() => 0);
     if (maxScore === minScore) return scores.map(() => 100.0); // All identical
 
-    // Enhanced normalization for better visual differentiation
-    // Uses a combination of linear scaling and percentile-based adjustment
+    // MOBILE OPTIMIZATION: Use simpler linear scaling for instant performance
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+
+    if (isMobile) {
+        // Fast linear normalization (10-100 range)
+        return scores.map(s => {
+            const normalized = ((s - minScore) / (maxScore - minScore)) * 90 + 10;
+            return Math.round(normalized * 10) / 10;
+        });
+    }
+
+    // DESKTOP: Enhanced normalization for better visual differentiation
+    // Uses percentile-based adjustment for clearer tiers
 
     // Sort scores to find percentiles
     const sortedScores = [...scores].sort((a, b) => b - a);
