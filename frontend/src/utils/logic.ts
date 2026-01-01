@@ -181,14 +181,35 @@ export const runRoomSimulationMC = (
         basePlantsNeeded = 1;
     }
 
-    // C. Apply Plant Strength Multipliers (Proper Details)
+    // C. Apply Plant Strength Multipliers (Proper Data Parsing)
     let strengthMultiplier = 1.0;
-    if (plant.oxygenLevel === 'very-high') strengthMultiplier = 0.6;
-    else if (plant.oxygenLevel === 'high') strengthMultiplier = 0.8;
-    else if (plant.oxygenLevel === 'low') strengthMultiplier = 1.2;
+
+    // PARSE EXPLICIT DATA: "300ml/h", "22L/day"
+    const oxyStr = (plant.oxygenLevel || '').toLowerCase();
+    const oxyMatch = oxyStr.match(/(\d+)\s*(ml\/h|l\/day|l\/h)/);
+
+    if (oxyMatch) {
+        const val = parseInt(oxyMatch[1]);
+        const unit = oxyMatch[2];
+        // Normalize to ml/h
+        let rate = 500; // default baseline
+        if (unit === 'ml/h') rate = val;
+        else if (unit === 'l/h') rate = val * 1000;
+        else if (unit === 'l/day') rate = (val * 1000) / 12; // 12h active
+
+        // Higher rate = Lower Multiplier (Better plant)
+        // Baseline 500ml/h = 1.0
+        // 1000ml/h = 0.5
+        strengthMultiplier = 500 / Math.max(50, rate);
+    } else {
+        // Fallback to Category
+        if (plant.oxygenLevel === 'very-high') strengthMultiplier = 0.5;
+        else if (plant.oxygenLevel === 'high') strengthMultiplier = 0.7;
+        else if (plant.oxygenLevel === 'low') strengthMultiplier = 1.3;
+    }
 
     // CAM / Nocturnal Bonus (Snake plants etc work at night)
-    if (plant.isNocturnal) strengthMultiplier *= 0.7; // ~30% Bonus!
+    if (plant.isNocturnal) strengthMultiplier *= 0.7;
 
     let plantsBeforeStress = basePlantsNeeded * strengthMultiplier * peopleCount;
 
