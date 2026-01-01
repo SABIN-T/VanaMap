@@ -440,10 +440,19 @@ app.post('/api/notifications/subscribe', async (req, res) => {
 });
 
 // --- PAYMENT INTEGRATION ---
-const razorpay = new Razorpay({
-    key_id: process.env.RAZORPAY_KEY_ID,
-    key_secret: process.env.RAZORPAY_KEY_SECRET
-});
+let razorpay;
+try {
+    if (process.env.RAZORPAY_KEY_ID && process.env.RAZORPAY_KEY_SECRET) {
+        razorpay = new Razorpay({
+            key_id: process.env.RAZORPAY_KEY_ID,
+            key_secret: process.env.RAZORPAY_KEY_SECRET
+        });
+    } else {
+        console.warn("Razorpay Keys missing in environment. Payment features will be disabled.");
+    }
+} catch (e) {
+    console.error("Razorpay Init Error:", e.message);
+}
 
 // Create Order
 app.post('/api/payments/create-order', auth, async (req, res) => {
@@ -468,6 +477,10 @@ app.post('/api/payments/create-order', auth, async (req, res) => {
         // If Free, we don't need Razorpay order. The frontend calls 'activate-free-premium'.
         // But if we need Razorpay for PAID flow:
 
+        if (!razorpay) {
+            return res.status(503).json({ error: "Payment gateway not configured" });
+        }
+
         const order = await razorpay.orders.create(options);
         res.json(order);
     } catch (error) {
@@ -481,6 +494,11 @@ app.post('/api/payments/verify', auth, async (req, res) => {
     try {
         const { orderId, paymentId, signature, planType } = req.body;
         const crypto = require('crypto');
+
+        if (!process.env.RAZORPAY_KEY_SECRET) {
+            return res.status(503).json({ error: "Server configuration missing (Payment)" });
+        }
+
         const generated_signature = crypto.createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
             .update(orderId + "|" + paymentId)
             .digest('hex');
