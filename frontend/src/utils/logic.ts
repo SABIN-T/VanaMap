@@ -41,35 +41,6 @@ export const calculateBiologicalEfficiency = (
     return tempFactor * humidityFactor * lightFactor;
 };
 
-/**
- * Seeded Random Number Generator (Mulberry32)
- * Produces deterministic pseudo-random numbers for consistent simulation results
- */
-function seededRandom(seed: number) {
-    return function () {
-        seed = (seed + 0x6D2B79F5) | 0;
-        let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
-        t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-        return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-    };
-}
-
-/**
- * Generate a deterministic seed from plant and environment data
- */
-function generateSeed(plant: Plant, baseTemp: number, baseHumidity: number, aqi: number): number {
-    const plantStr = plant.id + plant.scientificName + plant.name;
-    let hash = 0;
-    for (let i = 0; i < plantStr.length; i++) {
-        hash = ((hash << 5) - hash) + plantStr.charCodeAt(i);
-        hash = hash & hash; // Convert to 32-bit integer
-    }
-
-    // Incorporate environmental data (rounded to avoid floating point precision issues)
-    const envHash = Math.round(baseTemp * 10) + Math.round(baseHumidity * 10) + Math.round(aqi);
-    return Math.abs(hash + envHash);
-}
-
 
 /**
  * Simple Aptness Calculation - ULTRA FAST
