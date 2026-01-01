@@ -62,9 +62,10 @@ export const PlantDetailsModal = ({ plant, score = 0, weather, onClose, onBuy }:
             numPeople,
             currentTemp,
             currentHumidity,
-            aqi
+            aqi,
+            lightLevel // Added lightLevel
         );
-    }, [plant, numPeople, simulationHours, currentTemp, currentHumidity, weather]);
+    }, [plant, numPeople, simulationHours, currentTemp, currentHumidity, weather, lightLevel]); // Added lightLevel to dep array
 
     const plantsNeeded = simResults.plantsNeeded;
 

@@ -249,10 +249,11 @@ export const runRoomSimulationMC = (
     peopleCount: number,
     avgTemp: number,
     avgHumidity: number,
-    aqi: number
+    aqi: number,
+    lightLevel: number = 70 // Added parameter
 ) => {
     // We run the basic aptness check for the sim
-    const aptness = calculateAptness(plant, avgTemp, aqi, avgHumidity, 70);
+    const aptness = calculateAptness(plant, avgTemp, aqi, avgHumidity, lightLevel);
     const { plantsNeeded, totalO2, isLethal } = calculatePlantsNeeded(plant, roomSize, hoursPerDay, peopleCount);
 
     return {
