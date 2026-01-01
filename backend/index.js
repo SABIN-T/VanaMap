@@ -539,7 +539,13 @@ app.get('/api/public/premium-config', async (req, res) => {
         });
 
         const now = new Date();
-        const activePromo = isFree && (!freeStart || new Date(freeStart) <= now) && (!freeEnd || new Date(freeEnd) >= now);
+        const start = freeStart ? new Date(freeStart) : null;
+        const end = freeEnd ? new Date(freeEnd) : null;
+
+        const isFreeBool = isFree === true || isFree === 'true';
+        const activePromo = isFreeBool &&
+            (!start || isNaN(start.getTime()) || start <= now) &&
+            (!end || isNaN(end.getTime()) || end >= now);
 
         res.json({ price, activePromo, freeEnd });
     } catch (e) { res.status(500).json({ error: e.message }); }

@@ -10,6 +10,7 @@ export const Premium = () => {
     const token = user?.token;
     const [loading, setLoading] = useState(false);
     const [config, setConfig] = useState({ price: 10, activePromo: false, freeEnd: '' });
+    const [configLoading, setConfigLoading] = useState(true);
     const navigate = useNavigate();
 
     // Access Control
@@ -25,6 +26,8 @@ export const Premium = () => {
                 setConfig(data);
             } catch (e) {
                 console.error("Config fetch failed", e);
+            } finally {
+                setConfigLoading(false);
             }
         };
         fetchConfig();
@@ -173,17 +176,28 @@ export const Premium = () => {
         }
     };
 
+    const getButtonText = () => {
+        if (configLoading) return 'Checking Offers...';
+        if (loading) return 'Processing...';
+        if (user?.isPremium) return 'Premium Active';
+
+        if (config.activePromo) {
+            if (!user) return 'Login to Claim Free Access';
+            return 'Claim Free Access Now';
+        } else {
+            if (!user) return 'Login to Upgrade';
+            return 'Upgrade to Premium';
+        }
+    };
+
     return (
         <div className={styles.container}>
-            {/* Background Effects */}
             <div className={styles.backgroundEffects}>
                 <div className={`${styles.orb} ${styles.orb1}`}></div>
                 <div className={`${styles.orb} ${styles.orb2}`}></div>
             </div>
 
             <div className={styles.content}>
-
-                {/* Hero Section */}
                 <header className={styles.hero}>
                     <div className={styles.crownBadge}>
                         <Crown size={40} className="text-slate-900" strokeWidth={2.5} />
@@ -197,7 +211,6 @@ export const Premium = () => {
                     </p>
                 </header>
 
-                {/* Plans Comparison */}
                 <div className={styles.plansGrid}>
 
                     {/* Free Plan */}
@@ -227,21 +240,30 @@ export const Premium = () => {
 
                     {/* Premium Plan */}
                     <div className={`${styles.card} ${styles.cardPremium}`}>
-                        {config.activePromo && <div className={styles.badge}>Limited Offer</div>}
+                        {(config.activePromo || configLoading) && <div className={styles.badge}>Limited Offer</div>}
 
                         <div className={styles.planName}>
                             Premium <Crown size={24} fill="currentColor" className="text-yellow-400" />
                         </div>
 
                         <div className="flex items-baseline mb-1">
-                            <span className={styles.price}>{config.activePromo ? '₹0' : `₹${config.price}`}</span>
-                            <span className={styles.priceStrike}>{config.activePromo ? `₹${config.price}` : ''}</span>
-                            <span className={styles.priceDuration}>/mo</span>
+                            {configLoading ? (
+                                <span className={styles.price} style={{ fontSize: '1.5rem', opacity: 0.7 }}>Checking...</span>
+                            ) : (
+                                <>
+                                    <span className={styles.price}>{config.activePromo ? '₹0' : `₹${config.price}`}</span>
+                                    <span className={styles.priceStrike}>{config.activePromo ? `₹${config.price}` : ''}</span>
+                                    <span className={styles.priceDuration}>/mo</span>
+                                </>
+                            )}
                         </div>
                         <div className={styles.promoText}>
-                            {config.activePromo
-                                ? `Free until ${config.freeEnd ? new Date(config.freeEnd).toLocaleDateString() : 'Limited Time'}!`
-                                : 'Best Value for Serious Gardeners'
+                            {configLoading
+                                ? 'Checking for exclusive offers...'
+                                : (config.activePromo
+                                    ? `Free until ${config.freeEnd ? new Date(config.freeEnd).toLocaleDateString() : 'Limited Time'}!`
+                                    : 'Best Value for Serious Gardeners'
+                                )
                             }
                         </div>
 
@@ -266,15 +288,14 @@ export const Premium = () => {
 
                         <button
                             onClick={handlePayment}
-                            disabled={loading || user?.isPremium}
+                            disabled={loading || user?.isPremium || configLoading}
                             className={`${styles.button} ${user?.isPremium ? styles.btnActive : styles.btnPremium}`}
                         >
-                            {loading ? 'Processing...' : (user?.isPremium ? 'Premium Active' : (config.activePromo ? 'Claim Free Access Now' : 'Upgrade to Premium'))}
+                            {getButtonText()}
                         </button>
                     </div>
                 </div>
 
-                {/* Value Props */}
                 <section className={styles.valueProps}>
                     <h3 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 to-cyan-400">
                         Why Go Premium?
@@ -297,7 +318,6 @@ export const Premium = () => {
                         </div>
                     </div>
                 </section>
-                {/* Compliance Footer for Razorpay */}
                 <div className="mt-8 text-center text-xs text-slate-500 pb-8">
                     <p>Secured by Razorpay. By subscribing, you agree to our <a href="#" className="underline hover:text-emerald-400">Terms of Service</a> and <a href="#" className="underline hover:text-emerald-400">Privacy Policy</a>.</p>
                 </div>
