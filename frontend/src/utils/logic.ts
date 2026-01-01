@@ -1,56 +1,44 @@
 import type { Plant } from '../types';
 
 /**
- * CORTEX OS - ADVANCED BIO-SIMULATION ENGINE
+ * CORTEX OS - INDEPENDENT BIO-SIMULATION ENGINE
  * 
- * This engine calculates plant compatibility using continuous differentiable functions
- * to create smooth, non-binary score distributions.
+ * Separates "Aptness" (General Compatibility) from "Room Simulation" (Survival Physics).
  * 
- * SCALING LOGIC:
- * Uses a Rank-Interpolated Normalization to ensure a smooth "100% to 10%" gradient.
+ * ROOM SIMULATION LOGIC:
+ * Uses a "Stress Multiplier" approach.
+ * Ideal conditions = 1.0x Plant Requirement.
+ * Bad conditions = 1.5x, 2.0x, 3.0x Plant Requirement (Stress reduces efficiency).
  */
 
 // ==========================================
-// 1. CONTINUOUS SCORING FUNCTIONS
+// 1. APTNESS SCORING (For Match %)
 // ==========================================
 
 const getTempScore = (plant: Plant, avgTemp: number): number => {
     const min = plant.idealTempMin || 15;
     const max = plant.idealTempMax || 30;
     const optimal = (min + max) / 2;
-    // Strict sensitivity: Sigma 3 means +/- 6 degrees drops score significantly
-    const sigma = 3;
-
+    const sigma = 5; // Standard tolerance for matching
     const diff = avgTemp - optimal;
     return Math.exp(-(diff * diff) / (2 * sigma * sigma));
 };
 
 const getHumidityScore = (plant: Plant, avgHumidity: number): number => {
     const min = plant.minHumidity || 40;
-    const optimal = min + 15;
-    const diff = avgHumidity - optimal;
+    const diff = avgHumidity - (min + 15);
     return 1 / (1 + Math.exp(-diff / 15));
 };
 
-/**
- * Light Score: High Sensitivity Curve
- */
 const getLightScore = (plant: Plant, lightPercent: number): number => {
     const sun = (plant.sunlight || 'medium').toLowerCase();
-
     let target = 50;
+    if (sun.includes('high') || sun.includes('direct') || sun.includes('bright')) target = 80;
+    else if (sun.includes('low') || sun.includes('shade')) target = 30;
 
-    if (sun.includes('high') || sun.includes('direct') || sun.includes('full') || sun.includes('bright')) {
-        target = 80;
-    } else if (sun.includes('low') || sun.includes('shade') || sun.includes('indirect')) {
-        target = 30;
-    }
-
+    // Standard matching curve for Aptness
     const diff = Math.abs(lightPercent - target);
-    const maxDiff = 100;
-    // Power 0.6 makes the curve CONVEX, meaning score drops off VERY fast initially.
-    // This provides immediate feedback as you slide away from ideal.
-    return Math.max(0.1, 1 - Math.pow(diff / maxDiff, 0.6));
+    return Math.max(0.1, 1 - Math.pow(diff / 100, 1.5));
 };
 
 const getAQIScore = (plant: Plant, aqi: number): number => {
@@ -63,10 +51,6 @@ const getAQIScore = (plant: Plant, aqi: number): number => {
     }
     return 1.0;
 };
-
-// ==========================================
-// 2. MAIN CALCULATION
-// ==========================================
 
 export const calculateAptness = (
     plant: Plant,
@@ -82,12 +66,10 @@ export const calculateAptness = (
     const sLight = getLightScore(plant, lightPercent);
     const sAQI = getAQIScore(plant, aqi);
 
-    // Weights: Temp 35%, Hum 25%, Light 25%, AQI 15%
     let raw = (sTemp * 0.35) + (sHum * 0.25) + (sLight * 0.25) + (sAQI * 0.15);
 
     const type = plant.type || 'indoor';
     if (type === 'indoor') raw *= 1.05;
-
     const maint = (plant as any).maintenance || 'medium';
     if (maint === 'low') raw *= 1.05;
     if (maint === 'high') raw *= 0.95;
@@ -95,9 +77,6 @@ export const calculateAptness = (
     return raw;
 };
 
-/**
- * RANK-BASED SMOOTHING NORMALIZATION
- */
 export const normalizeBatch = (scores: number[]): number[] => {
     if (scores.length === 0) return [];
     if (scores.length === 1) return [100.0];
@@ -107,9 +86,8 @@ export const normalizeBatch = (scores: number[]): number[] => {
 
     const count = scores.length;
     const finalScores = new Array(count);
-    const maxRaw = indexed[0].val;
     const minRaw = indexed[count - 1].val;
-    const rawRange = maxRaw - minRaw || 1;
+    const rawRange = indexed[0].val - minRaw || 1;
 
     for (let i = 0; i < count; i++) {
         const item = indexed[i];
@@ -127,7 +105,96 @@ export const normalizeBatch = (scores: number[]): number[] => {
 };
 
 // ==========================================
-// 3. UTILITIES & SIMULATION
+// 2. NEW INDEPENDENT ROOM SIMULATION
+// ==========================================
+
+// Calculates the "Stress" (Efficiency Loss) based on sliders
+const calculateStressFactor = (plant: Plant, temp: number, light: number): number => {
+    let stress = 0.0;
+
+    // 1. Light Stress (Direct, Linear Penalty)
+    const sun = (plant.sunlight || 'medium').toLowerCase();
+    let idealLight = 50;
+    if (sun.includes('high') || sun.includes('bright')) idealLight = 80;
+    else if (sun.includes('low') || sun.includes('shade')) idealLight = 30;
+
+    const lightDiff = Math.abs(light - idealLight);
+    // Every 10% deviation adds 15% stress (Plant needs 15% more help)
+    stress += (lightDiff / 10) * 0.15;
+
+    // 2. Temperature Stress
+    // Ideal range is safe. Outside range adds stress rapidly.
+    const min = plant.idealTempMin || 15;
+    const max = plant.idealTempMax || 30;
+
+    if (temp < min) stress += (min - temp) * 0.2; // 20% stress per degree cold
+    else if (temp > max) stress += (temp - max) * 0.2; // 20% stress per degree hot
+
+    // Cap stress at 0.9 (90% efficiency loss), never 100% dead for UI sake
+    return Math.min(0.9, stress);
+};
+
+export const runRoomSimulationMC = (
+    plant: Plant,
+    roomSize: number,
+    hoursPerDay: number,
+    peopleCount: number,
+    avgTemp: number,
+    avgHumidity: number,
+    aqi: number,
+    lightLevel: number = 70
+) => {
+    // 1. Calculate Standard Aptness (For display only)
+    const aptness = calculateAptness(plant, avgTemp, aqi, avgHumidity, lightLevel);
+
+    // 2. INDEPENDENT PLANT COUNT LOGIC
+
+    // A. Base Demand (Wellness Standard)
+    // 8 Hours = Need ~3 Wellness Units (Plants).
+    // 2 Hours = Need ~1.
+    // Scale: Hours * 0.4
+    let basePlantsNeeded = Math.max(1, hoursPerDay * 0.4);
+
+    // B. Room Buffer Logic (Free Pass for short stays)
+    // If < 2 hours, we reduce the need significantly
+    if (hoursPerDay < 2) {
+        basePlantsNeeded = 1;
+    }
+
+    // C. Apply Plant Strength Multiplier
+    // Strong plants (high O2) reduce count. Weak plants increase it.
+    let strengthMultiplier = 1.0;
+    if (plant.oxygenLevel === 'very-high') strengthMultiplier = 0.6; // Need fewer
+    else if (plant.oxygenLevel === 'high') strengthMultiplier = 0.8;
+    else if (plant.oxygenLevel === 'low') strengthMultiplier = 1.2; // Need more
+
+    let plantsBeforeStress = basePlantsNeeded * strengthMultiplier * peopleCount;
+
+    // D. APPLY SLIDER STRESS (The Physics Engine)
+    // If Light/AC are bad, the plant works less efficiently.
+    // Efficiency = 1.0 - Stress.
+    // Plants Needed = Base / Efficiency.
+    const stress = calculateStressFactor(plant, avgTemp, lightLevel);
+    const efficiency = 1.0 - stress;
+
+    // Calculate final needed
+    // Example: Need 3. Eff 0.5 (Stress). New Need = 6.
+    const finalPlantsNeeded = Math.ceil(plantsBeforeStress / Math.max(0.1, efficiency));
+
+    // E. Total Output (Visual Stat)
+    // Just a scaling number for the UI graph
+    const totalO2 = finalPlantsNeeded * 15 * hoursPerDay * efficiency;
+
+    return {
+        aptness,
+        plantsNeeded: finalPlantsNeeded,
+        totalO2,
+        isLethal: false
+    };
+};
+
+// ==========================================
+// 3. UTILITIES
 // ==========================================
 
 export const formatDistance = (meters: number): string => {
@@ -150,97 +217,6 @@ export const getDistanceFromLatLonInKm = (lat1: number, lon1: number, lat2: numb
 function deg2rad(deg: number) {
     return deg * (Math.PI / 180);
 }
-
-// O2 Production Logic (Calibrated for CO2 Scrubbing / Air Cleaning Power)
-export const calculateO2Production = (
-    plant: Plant,
-    quantity: number = 1,
-    hoursPerDay: number = 24,
-    efficiency: number = 1.0
-): { daily: number; hourly: number } => {
-    let baseRate = 1.0;
-    if (plant.oxygenLevel === 'very-high') baseRate = 3.5;
-    else if (plant.oxygenLevel === 'high') baseRate = 2.5;
-    else if (plant.oxygenLevel === 'medium') baseRate = 1.5;
-    else baseRate = 0.8;
-
-    const effectiveHourlyRate = baseRate * Math.max(0.1, efficiency);
-    const hourly = effectiveHourlyRate * quantity;
-    const daily = hourly * Math.min(12, hoursPerDay);
-
-    return { daily, hourly };
-};
-
-export const calculatePlantsNeeded = (
-    plant: Plant,
-    roomSize: number,
-    hoursPerDay: number = 8,
-    peopleCount: number = 1,
-    aptnessScore: number = 100
-): { plantsNeeded: number; totalO2: number; isLethal: boolean } => {
-    // 1. Calculate Limits (CO2 Freshness Standard)
-    const roomVolumeLiters = roomSize * 2.5 * 1000;
-    const roomBufferLiters = roomVolumeLiters * 0.001; // 0.1% (Approx 2 hours breathing)
-
-    // 2. Human Demand
-    const totalDemand = 23 * peopleCount * hoursPerDay;
-
-    // 3. Net Need
-    const netDeficit = totalDemand - roomBufferLiters;
-
-    // 4. Plant Production (with efficiency)
-    // Quadratic Stress Curve: Plants suffer disproportionately from poor conditions
-    const efficiency = Math.pow(aptnessScore / 100, 2);
-
-    const { hourly: plantRate } = calculateO2Production(plant, 1, hoursPerDay, efficiency);
-
-    const effectiveProductionHours = Math.min(hoursPerDay, 12);
-
-    const calibratedOutput = plantRate * effectiveProductionHours * 5;
-
-    let plantsNeeded = 1;
-    if (netDeficit > 0) {
-        plantsNeeded = Math.ceil(netDeficit / Math.max(0.1, calibratedOutput));
-    } else {
-        plantsNeeded = 1;
-    }
-
-    const totalO2 = calibratedOutput * plantsNeeded;
-
-    return {
-        plantsNeeded,
-        totalO2,
-        isLethal: false
-    };
-};
-
-export const runRoomSimulationMC = (
-    plant: Plant,
-    roomSize: number,
-    hoursPerDay: number,
-    peopleCount: number,
-    avgTemp: number,
-    avgHumidity: number,
-    aqi: number,
-    lightLevel: number = 70
-) => {
-    const aptness = calculateAptness(plant, avgTemp, aqi, avgHumidity, lightLevel);
-
-    const { plantsNeeded, totalO2, isLethal } = calculatePlantsNeeded(
-        plant,
-        roomSize,
-        hoursPerDay,
-        peopleCount,
-        aptness
-    );
-
-    return {
-        aptness,
-        plantsNeeded,
-        totalO2,
-        isLethal
-    };
-};
 
 export const generatePlantInsights = (plant: Plant, avgTemp: number, avgHumidity: number, aqi: number = 20) => {
     const idealMin = plant.idealTempMin || 15;
