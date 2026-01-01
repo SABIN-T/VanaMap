@@ -272,6 +272,18 @@ export const Home = () => {
             const timer = setTimeout(() => {
                 handleGetLocation();
             }, 1200);
+
+            // Listen for permission changes to trigger detect immediately on 'allow'
+            if (navigator.permissions && navigator.permissions.query) {
+                navigator.permissions.query({ name: 'geolocation' as PermissionName }).then(status => {
+                    status.onchange = () => {
+                        if (status.state === 'granted') {
+                            handleGetLocation();
+                        }
+                    };
+                });
+            }
+
             return () => clearTimeout(timer);
         }
     }, []);
