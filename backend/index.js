@@ -17,6 +17,33 @@ const cron = require('node-cron');
 const Parser = require('rss-parser');
 const parser = new Parser();
 
+// --- CLOUDINARY CONFIGURATION ---
+const cloudinary = require('cloudinary').v2;
+const multer = require('multer');
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+
+// Auto-configure from CLOUDINARY_URL env var
+if (process.env.CLOUDINARY_URL) {
+    console.log('✅ Cloudinary configured');
+}
+
+const storage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'vanamap-plants',
+        allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
+        transformation: [
+            { width: 1200, height: 1200, crop: 'limit' },
+            { quality: 'auto:good' }
+        ]
+    }
+});
+
+const upload = multer({
+    storage: storage,
+    limits: { fileSize: 10 * 1024 * 1024 }
+});
+
 // --- AUTOMATED PREMIUM CHECK (Daily at Midnight) ---
 cron.schedule('0 0 * * *', async () => {
     console.log('[CRON] Checking for expired premium subscriptions...');
@@ -1227,22 +1254,52 @@ app.get('/api/plants', async (req, res) => {
     }
 });
 
-app.post('/api/plants', auth, admin, async (req, res) => {
+// Add Plant (with Auto-Upload)
+app.post('/api/plants', auth, admin, upload.single('image'), async (req, res) => {
     try {
-        const plant = new Plant(req.body);
+        const plantData = req.body;
+
+        // If image uploaded, use Cloudinary URL
+        if (req.file) {
+            plantData.imageUrl = req.file.path;
+            console.log('[PLANT] Image auto-uploaded:', plantData.imageUrl);
+        }
+
+        const plant = new Plant(plantData);
         await plant.save();
 
         await broadcastAlert('plant', `New plant added: ${plant.name}`, { plantId: plant.id }, `/#plant-${plant.id}`);
         res.status(201).json(plant);
     } catch (err) {
+        console.error("Add Plant Error:", err);
         res.status(500).json({ error: err.message });
     }
 });
 
-app.patch('/api/plants/:id', auth, admin, async (req, res) => {
+// Edit Plant (with Auto-Upload)
+app.patch('/api/plants/:id', auth, admin, upload.single('image'), async (req, res) => {
     try {
-        const plant = await Plant.findOneAndUpdate({ id: req.params.id }, req.body, { new: true });
+        const updates = req.body;
+
+        // If new image uploaded, update URL
+        if (req.file) {
+            updates.imageUrl = req.file.path;
+            console.log('[PLANT] Updated image:', updates.imageUrl);
+        }
+
+        const plant = await Plant.findOneAndUpdate({ id: req.params.id }, updates, { new: true });
         res.json(plant);
+    } catch (err) {
+        console.error("Edit Plant Error:", err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Direct Upload Helper
+app.post('/api/plants/upload', auth, admin, upload.single('image'), async (req, res) => {
+    try {
+        if (!req.file) return res.status(400).json({ error: 'No image file' });
+        res.json({ success: true, imageUrl: req.file.path });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }

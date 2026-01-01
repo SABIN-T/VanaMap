@@ -180,25 +180,35 @@ export const approveResetRequest = async (userId: string) => {
     return res.json();
 };
 
-export const addPlant = async (plantData: Partial<Plant>) => {
+
+export const addPlant = async (plantData: Partial<Plant> | FormData) => {
+    const isFormData = plantData instanceof FormData;
+    const headers = { ...getHeaders() };
+    if (isFormData) delete headers['Content-Type'];
+
     const res = await fetch(`${API_URL}/plants`, {
         method: 'POST',
-        headers: getHeaders(),
-        body: JSON.stringify(plantData)
+        headers,
+        body: isFormData ? plantData : JSON.stringify(plantData)
     });
     if (!res.ok) throw new Error("Failed to add plant");
     return res.json();
 };
 
-export const updatePlant = async (id: string, updates: Partial<Plant>) => {
+export const updatePlant = async (id: string, updates: Partial<Plant> | FormData) => {
+    const isFormData = updates instanceof FormData;
+    const headers = { ...getHeaders() };
+    if (isFormData) delete headers['Content-Type'];
+
     const res = await fetch(`${API_URL}/plants/${id}`, {
         method: 'PATCH',
-        headers: getHeaders(),
-        body: JSON.stringify(updates)
+        headers,
+        body: isFormData ? updates : JSON.stringify(updates)
     });
     if (!res.ok) throw new Error("Failed to update plant");
     return res.json();
 };
+
 
 export const deletePlant = async (id: string) => {
     const res = await fetch(`${API_URL}/plants/${id}`, {

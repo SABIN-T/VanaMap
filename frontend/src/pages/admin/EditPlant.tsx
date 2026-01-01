@@ -50,6 +50,7 @@ export const EditPlant = () => {
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [plant, setPlant] = useState<Partial<Plant>>({});
+    const [imageFile, setImageFile] = useState<File | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     // Tags state for array fields
@@ -85,13 +86,16 @@ export const EditPlant = () => {
     const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
-        const tid = toast.loading("Processing image...");
+
+        setImageFile(file); // Store raw file for upload
+
+        const tid = toast.loading("Processing preview...");
         try {
             const compressedBase64 = await compressImage(file);
             setPlant({ ...plant, imageUrl: compressedBase64 });
-            toast.success("Image updated", { id: tid });
+            toast.success("Image selected", { id: tid });
         } catch (err) {
-            toast.error("Compression failed", { id: tid });
+            toast.error("Preview failed", { id: tid });
         }
     };
 
@@ -100,14 +104,42 @@ export const EditPlant = () => {
         if (!id) return;
 
         setSaving(true);
-        const tid = toast.loading("Recording modifications to registry...");
+        const tid = toast.loading("Saving changes...");
 
         try {
-            await updatePlant(id, plant);
-            toast.success("Specimen updated successfully", { id: tid });
+            // Check if we need to send FormData (new image) or JSON
+            if (imageFile) {
+                const formData = new FormData();
+
+                // Append all plant fields
+                Object.keys(plant).forEach(key => {
+                    const value = plant[key as keyof Plant];
+                    if (value === undefined || value === null) return;
+
+                    // Skip imageUrl if we have a new file (backend handles it)
+                    if (key === 'imageUrl') return;
+
+                    if (Array.isArray(value)) {
+                        value.forEach(item => formData.append(key, String(item)));
+                    } else if (typeof value === 'object') {
+                        formData.append(key, JSON.stringify(value));
+                    } else {
+                        formData.append(key, String(value));
+                    }
+                });
+
+                formData.append('image', imageFile);
+                await updatePlant(id, formData);
+            } else {
+                // No new image, send standard JSON
+                await updatePlant(id, plant);
+            }
+
+            toast.success("Plant updated successfully", { id: tid });
             setTimeout(() => navigate('/admin/manage-plants'), 1000);
         } catch (err) {
-            toast.error("An error occurred during verification", { id: tid });
+            console.error(err);
+            toast.error("Update failed", { id: tid });
             setSaving(false);
         }
     };
