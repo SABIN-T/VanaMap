@@ -117,7 +117,7 @@ const calculateStressFactor = (plant: Plant, temp: number, light: number): numbe
     // Every 10% deviation adds 15% stress (Plant needs 15% more help)
     stress += (lightDiff / 10) * 0.15;
 
-    // 2. Temperature Stress
+    // 2. Temperature Stress (AC Sensitivity Verified)
     const min = plant.idealTempMin || 15;
     const max = plant.idealTempMax || 30;
 
