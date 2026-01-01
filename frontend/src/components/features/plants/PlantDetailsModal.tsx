@@ -52,15 +52,19 @@ export const PlantDetailsModal = ({ plant, score = 0, weather, onClose, onBuy }:
     // Parse the specific L/day from string "30 L/day"
 
     const simResults = useMemo(() => {
+        const roomSize = 20; // Default room size in m²
+        const aqi = weather?.air_quality?.aqi || 50; // Get AQI from weather or default
+
         return runRoomSimulationMC(
             plant,
-            numPeople,
+            roomSize,
             simulationHours,
+            numPeople,
             currentTemp,
             currentHumidity,
-            lightLevel
+            aqi
         );
-    }, [plant, numPeople, simulationHours, currentTemp, currentHumidity, lightLevel]);
+    }, [plant, numPeople, simulationHours, currentTemp, currentHumidity, weather]);
 
     const plantsNeeded = simResults.plantsNeeded;
 
@@ -73,7 +77,8 @@ export const PlantDetailsModal = ({ plant, score = 0, weather, onClose, onBuy }:
     // ==========================================
 
     const renderGrowthVerdict = () => {
-        const insights = generatePlantInsights(plant, currentTemp, currentHumidity);
+        const aqi = weather?.air_quality?.aqi || 50;
+        const insights = generatePlantInsights(plant, currentTemp, currentHumidity, aqi);
 
         const getVerdict = () => {
             if (score >= 90) return { label: 'Optimal Match', color: '#10b981', desc: 'Condition analysis complete. Vital signs are within optimal ranges for peak physiological productivity.' };
