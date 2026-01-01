@@ -192,7 +192,7 @@ export const calculateAptness = (
     aqi: number = 20,
     currentHumidity: number = 50,
     lightPercent: number = 70,
-    useMonteCarlo: boolean = false,
+    _useMonteCarlo: boolean = false,
     iterations?: number
 ): number => {
     return calculateAptnessMC(plant, currentTemp, aqi, currentHumidity, lightPercent, iterations);
@@ -208,11 +208,27 @@ export const normalizeBatch = (scores: number[]): number[] => {
     if (maxScore === 0) return scores.map(() => 0);
     if (maxScore === minScore) return scores.map(() => 100.0);
 
-    // Simple linear normalization: 100% to 10% scale
-    // Top plant = 100%, Lowest plant = 10%, others scaled linearly
+    // Hybrid Normalization Strategy
+    // Combines relative ranking (best in list = 100%) with absolute quality
+    // This creates better spread and doesn't force everything to extremes
+
+    // Theoretical maximum raw score is around 1.5 due to bonus multipliers
+    const THEORETICAL_MAX = 1.5;
+
     return scores.map(s => {
-        const normalized = ((s - minScore) / (maxScore - minScore)) * 90 + 10;
-        return Math.round(normalized * 10) / 10;
+        // Absolute quality score (0-100)
+        // Ensure it doesn't exceed 100
+        const absoluteScore = Math.min(100, (s / THEORETICAL_MAX) * 100);
+
+        // Relative rank score (10-100)
+        const relativeScore = ((s - minScore) / (maxScore - minScore)) * 90 + 10;
+
+        // Weighted average: 70% relative (to highlight best options), 30% absolute
+        // This ensures the "best" available plant is emphasized, but absolute quality still keeps it grounded
+        const final = (relativeScore * 0.7) + (absoluteScore * 0.3);
+
+        // Clamp between 10 and 100
+        return Math.round(Math.min(100, Math.max(10, final)) * 10) / 10;
     });
 };
 
