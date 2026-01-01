@@ -274,41 +274,48 @@ export const runRoomSimulationMC = (
 };
 
 // Generate plant insights for details modal
-export const generatePlantInsights = (plant: Plant, avgTemp: number, avgHumidity: number, aqi: number) => {
-    const insights: string[] = [];
-
+export const generatePlantInsights = (plant: Plant, avgTemp: number, avgHumidity: number, aqi: number = 20) => {
     // Temperature insights
     const idealMin = plant.idealTempMin || 15;
     const idealMax = plant.idealTempMax || 30;
+
+    let prediction = '';
+    let tip = '';
+
     if (avgTemp >= idealMin && avgTemp <= idealMax) {
-        insights.push(`✅ Perfect temperature match (${idealMin}-${idealMax}°C)`);
+        prediction = `This plant will thrive in your current temperature (${avgTemp}°C). Expect healthy growth and vibrant foliage.`;
     } else if (avgTemp < idealMin) {
-        insights.push(`⚠️ Too cold - prefers ${idealMin}-${idealMax}°C`);
+        prediction = `Temperature is ${idealMin - avgTemp}°C below ideal. Growth may be slower, but the plant can adapt with proper care.`;
+        tip = `Consider moving to a warmer location or using a heat mat to maintain ${idealMin}-${idealMax}°C.`;
     } else {
-        insights.push(`⚠️ Too warm - prefers ${idealMin}-${idealMax}°C`);
+        prediction = `Temperature is ${avgTemp - idealMax}°C above ideal. The plant may show signs of heat stress.`;
+        tip = `Provide shade during peak hours and ensure adequate ventilation to cool the environment.`;
     }
 
     // Humidity insights
     const minHumidity = plant.minHumidity || 40;
-    if (avgHumidity >= minHumidity) {
-        insights.push(`✅ Humidity is adequate (needs ${minHumidity}%+)`);
-    } else {
-        insights.push(`⚠️ Too dry - needs ${minHumidity}%+ humidity`);
+    if (avgHumidity < minHumidity && !tip) {
+        tip = `Humidity is below ${minHumidity}%. Use a humidifier or mist regularly to prevent leaf browning.`;
     }
 
     // Air quality insights
     const isPurifier = plant.medicinalValues?.includes('Air purification') ||
         plant.advantages?.some(a => a.toLowerCase().includes('purif'));
-    if (isPurifier && aqi > 100) {
-        insights.push(`🌿 Excellent air purifier for your AQI (${aqi})`);
-    } else if (isPurifier) {
-        insights.push(`🌿 Natural air purifier`);
+    if (isPurifier && aqi > 100 && !tip) {
+        tip = `This plant excels at purifying air. Perfect choice for your current AQI (${aqi}).`;
     }
 
-    // Oxygen production insights
-    if (plant.oxygenLevel === 'very-high' || plant.oxygenLevel === 'high') {
-        insights.push(`💨 High oxygen producer`);
+    // Default tip if none set
+    if (!tip) {
+        if (plant.oxygenLevel === 'very-high' || plant.oxygenLevel === 'high') {
+            tip = `High oxygen producer! Place in bedrooms or workspaces for maximum benefit.`;
+        } else {
+            tip = `Maintain consistent watering and monitor for pests to ensure healthy growth.`;
+        }
     }
 
-    return insights;
+    return {
+        prediction,
+        tip
+    };
 };
