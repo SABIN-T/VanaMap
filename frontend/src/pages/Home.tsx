@@ -290,17 +290,9 @@ export const Home = () => {
         const normalizedScores = normalizeBatch(rawScores);
 
         // 3. Map normalized scores back and sort
-        const sorted = scoredRaw
+        return scoredRaw
             .map((p, i) => ({ ...p, score: normalizedScores[i] }))
             .sort((a, b) => b.score - a.score);
-
-        // 4. MOBILE: Limit initial render to 20 plants for instant loading
-        const isMobile = window.innerWidth < 768;
-        if (isMobile && sorted.length > 20) {
-            return sorted.slice(0, 20);
-        }
-
-        return sorted;
     }, [plants, filter, searchQuery, lightFilter, weather]);
 
     return (
