@@ -70,7 +70,7 @@ export const Premium = () => {
             const order = await result.json();
 
             const options = {
-                key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_live_RxOhUE43Mr4CZp',
+                key: order.key, // Use the key provided by backend to ensure match
                 amount: order.amount,
                 currency: order.currency,
                 name: "VanaMap Premium",
