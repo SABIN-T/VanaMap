@@ -5,27 +5,13 @@ import { Crown, Check, Shield, Zap, Heart } from 'lucide-react';
 import toast from 'react-hot-toast';
 import styles from './Premium.module.css';
 
-// Load Razorpay Script (Commented out until paid flow is restored)
-// const loadRazorpay = () => {
-//     return new Promise((resolve) => {
-//         const script = document.createElement('script');
-//         script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-//         script.onload = () => resolve(true);
-//         script.onerror = () => resolve(false);
-//         document.body.appendChild(script);
-//     });
-// };
-
 export const Premium = () => {
     const { user, refreshUser } = useAuth();
     const token = user?.token;
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-    // Prevent direct access if user shouldn't see this yet logic? 
-    // Prompt says: "remove the premium page from the nav bar it should open only when the users or vendors if thery add more than three like... if they click fourth time it should show the premium button."
-    // But if they navigate directly via URL, maybe we let them see it? Let's check favorites count.
-
+    // Access Control
     const canView = user && (user.favorites?.length > 3 || user.isPremium || user.role === 'admin');
 
     useEffect(() => {
@@ -33,23 +19,35 @@ export const Premium = () => {
             toast("Add more than 3 plants to favorites to unlock Premium!", { icon: '🔒' });
             navigate('/');
         } else if (user?.isPremium) {
-            // If already premium, go to Heaven automatically
             navigate('/heaven');
         }
     }, [user, canView, navigate]);
 
-    const handlePayment = async () => {
-        if (!user) {
-            navigate('/auth', { state: { from: '/premium' } });
+    // Helpers
+    const loadRazorpay = () => {
+        return new Promise((resolve) => {
+            const script = document.createElement('script');
+            script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+            script.onload = () => resolve(true);
+            script.onerror = () => resolve(false);
+            document.body.appendChild(script);
+        });
+    };
+
+    const isPromoActive = new Date() < new Date('2026-02-01');
+
+    const handlePaidSubscription = async () => {
+        setLoading(true);
+        const res = await loadRazorpay();
+        if (!res) {
+            toast.error("Razorpay SDK failed to load");
+            setLoading(false);
             return;
         }
 
-        setLoading(true);
-        // ... rest of logic
-        // For now, let's just do the Free Activation call since it's the promo period.
         try {
             const API_URL = import.meta.env.VITE_API_URL || 'https://plantoxy.onrender.com/api';
-            const response = await fetch(`${API_URL}/payments/activate-free`, {
+            const result = await fetch(`${API_URL}/payments/create-order`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -57,43 +55,20 @@ export const Premium = () => {
                 }
             });
 
-            const data = await response.json();
-            if (data.success) {
-                toast.success("Welcome to Premium Heaven! 🌟");
-                await refreshUser(); // Update context
-                navigate('/heaven'); // Redirect to Heaven
-            } else {
-                toast.error(data.error || "Activation failed");
+            if (!result.ok) {
+                if (result.status === 503) {
+                    toast.error("Payment Gateway disabled by server. Please try again later.");
+                } else {
+                    toast.error("Order creation failed");
+                }
+                setLoading(false);
+                return;
             }
-        } catch (error) {
-            console.error(error);
-            toast.error("Something went wrong");
-        } finally {
-            setLoading(false);
-        }
-    };
 
-    // ...
-
-
-
-    // Alternative: Real Razorpay Flow (Hidden/Secondary if Free is active)
-    // Alternative: Real Razorpay Flow (Hidden/Secondary if Free is active)
-    /*
-    const handlePaidSubscription = async () => {
-        setLoading(true);
-        const res = await loadRazorpay();
-        if (!res) return;
-
-        try {
-            const result = await fetch('http://localhost:5000/api/payments/create-order', {
-                method: 'POST',
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
             const order = await result.json();
 
             const options = {
-                key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_live_RxOhUE43Mr4CZp', // Fallback to prompt key if env missing (but safer to use env)
+                key: import.meta.env.VITE_RAZORPAY_KEY_ID || 'rzp_live_RxOhUE43Mr4CZp',
                 amount: order.amount,
                 currency: order.currency,
                 name: "VanaMap Premium",
@@ -101,7 +76,7 @@ export const Premium = () => {
                 image: "/logo.png",
                 order_id: order.id,
                 handler: async function (response: any) {
-                    const verifyRes = await fetch('http://localhost:5000/api/payments/verify', {
+                    const verifyRes = await fetch(`${API_URL}/payments/verify`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -115,9 +90,9 @@ export const Premium = () => {
                         })
                     });
                     const verifyData = await verifyRes.json();
-                    if (verifyData.success) {
+                    if (verifyData.success || verifyRes.ok) {
                         toast.success("Payment Successful! Welcome to Premium.");
-                        refreshUser();
+                        await refreshUser();
                         navigate('/heaven');
                     } else {
                         toast.error("Payment Verification Failed");
@@ -143,7 +118,44 @@ export const Premium = () => {
             setLoading(false);
         }
     };
-    */
+
+    const handlePayment = async () => {
+        if (!user) {
+            navigate('/auth', { state: { from: '/premium' } });
+            return;
+        }
+
+        if (!isPromoActive) {
+            await handlePaidSubscription();
+            return;
+        }
+
+        setLoading(true);
+        try {
+            const API_URL = import.meta.env.VITE_API_URL || 'https://plantoxy.onrender.com/api';
+            const response = await fetch(`${API_URL}/payments/activate-free`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            const data = await response.json();
+            if (response.ok && data.success) {
+                toast.success("Welcome to Premium Heaven! 🌟");
+                await refreshUser();
+                navigate('/heaven');
+            } else {
+                toast.error(data.error || "Activation failed");
+            }
+        } catch (error) {
+            console.error(error);
+            toast.error("Something went wrong");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <div className={styles.container}>
@@ -199,18 +211,20 @@ export const Premium = () => {
 
                     {/* Premium Plan */}
                     <div className={`${styles.card} ${styles.cardPremium}`}>
-                        <div className={styles.badge}>Limited Offer</div>
+                        {isPromoActive && <div className={styles.badge}>Limited Offer</div>}
 
                         <div className={styles.planName}>
                             Premium <Crown size={24} fill="currentColor" className="text-yellow-400" />
                         </div>
 
                         <div className="flex items-baseline mb-1">
-                            <span className={styles.price}>₹0</span>
-                            <span className={styles.priceStrike}>₹10</span>
+                            <span className={styles.price}>{isPromoActive ? '₹0' : '₹10'}</span>
+                            <span className={styles.priceStrike}>{isPromoActive ? '₹10' : ''}</span>
                             <span className={styles.priceDuration}>/mo</span>
                         </div>
-                        <div className={styles.promoText}>Free until Jan 31, 2026!</div>
+                        <div className={styles.promoText}>
+                            {isPromoActive ? 'Free until Jan 31, 2026!' : 'Best Value for Serious Gardeners'}
+                        </div>
 
                         <ul className={styles.features}>
                             <li className={`${styles.featureItem} ${styles.premium}`}>
@@ -231,14 +245,12 @@ export const Premium = () => {
                             </li>
                         </ul>
 
-
-
                         <button
                             onClick={handlePayment}
                             disabled={loading || user?.isPremium}
                             className={`${styles.button} ${user?.isPremium ? styles.btnActive : styles.btnPremium}`}
                         >
-                            {loading ? 'Processing...' : (user?.isPremium ? 'Premium Active' : (!user ? 'Login to Claim Free Access' : 'Claim Free Access Now'))}
+                            {loading ? 'Processing...' : (user?.isPremium ? 'Premium Active' : (isPromoActive ? 'Claim Free Access Now' : 'Upgrade to Premium'))}
                         </button>
                     </div>
                 </div>
