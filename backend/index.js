@@ -563,19 +563,27 @@ app.get('/api/public/premium-config', async (req, res) => {
 // 4. Claim Free Premium
 app.post('/api/payments/claim-free', auth, async (req, res) => {
     try {
-        const settings = await SystemSettings.find({ key: { $in: ['premium_is_free', 'premium_free_start', 'premium_free_end'] } });
-        let isFree = false, freeStart = null, freeEnd = null;
+        const settings = await SystemSettings.find({ key: { $in: ['premium_price_inr', 'premium_is_free', 'premium_free_start', 'premium_free_end'] } });
+        let price = 10, isFree = false, freeStart = null, freeEnd = null;
 
         settings.forEach(s => {
+            if (s.key === 'premium_price_inr') price = s.value;
             if (s.key === 'premium_is_free') isFree = s.value;
             if (s.key === 'premium_free_start') freeStart = s.value;
             if (s.key === 'premium_free_end') freeEnd = s.value;
         });
 
         const now = new Date();
-        const isValid = isFree && (!freeStart || new Date(freeStart) <= now) && (!freeEnd || new Date(freeEnd) >= now);
+        const start = freeStart ? new Date(freeStart) : null;
+        const end = freeEnd ? new Date(freeEnd) : null;
 
-        if (!isValid) return res.status(400).json({ error: "Promo not active" });
+        const isFreePromo = (isFree === true || isFree === 'true') &&
+            (!start || isNaN(start.getTime()) || start <= now) &&
+            (!end || isNaN(end.getTime()) || end >= now);
+
+        const isPriceZero = parseInt(price) === 0;
+
+        if (!isFreePromo && !isPriceZero) return res.status(400).json({ error: "Promo not active or expired" });
 
         const user = await User.findById(req.user.id);
         user.isPremium = true;
