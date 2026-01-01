@@ -16,7 +16,7 @@ export const LocationNag = () => {
                 const status = await navigator.permissions.query({ name: 'geolocation' as PermissionName });
 
                 const handleStatusChange = () => {
-                    const hasNagged = sessionStorage.getItem('vanamap_location_nagged_v2');
+                    const hasNagged = sessionStorage.getItem('vanamap_location_nagged_v3');
                     if (hasNagged) return;
 
                     if (status.state === 'denied') {
@@ -29,14 +29,14 @@ export const LocationNag = () => {
                                     <p style={{ margin: 0, fontWeight: 800, fontSize: '0.95rem', color: '#92400e' }}>GPS Access Blocked</p>
                                     <p style={{ margin: '4px 0', fontSize: '0.8rem', color: '#b45309', lineHeight: 1.4 }}>
                                         To see Survival Matches: <br />
-                                        <strong>Desktop:</strong> Click the <b>Lock</b> icon next to URL.<br />
-                                        <strong>Mobile:</strong> Check Site Settings in your browser.
+                                        <strong>Mobile:</strong> Open <b>Chrome/Safari Settings</b> {'>'} <b>Site Settings</b> {'>'} <b>Location</b> (not phone settings).<br />
+                                        <strong>Desktop:</strong> Click the <b>Lock</b> icon next to URL.
                                     </p>
                                     <div style={{ display: 'flex', gap: '8px', marginTop: '8px' }}>
                                         <button
                                             onClick={() => {
                                                 toast.dismiss(t.id);
-                                                sessionStorage.setItem('vanamap_location_nagged_v2', 'true');
+                                                sessionStorage.setItem('vanamap_location_nagged_v3', 'true');
                                             }}
                                             style={{
                                                 background: '#f59e0b',
@@ -69,7 +69,7 @@ export const LocationNag = () => {
                                 </div>
                             </div>
                         ), { duration: 15000, position: 'top-center' });
-                        sessionStorage.setItem('vanamap_location_nagged_v2', 'true');
+                        sessionStorage.setItem('vanamap_location_nagged_v3', 'true');
                     } else if (status.state === 'prompt') {
                         toast((t) => (
                             <div style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '4px' }}>
@@ -79,16 +79,16 @@ export const LocationNag = () => {
                                 <div>
                                     <p style={{ margin: 0, fontWeight: 800, fontSize: '1rem', color: '#064e3b' }}>Connect to Local Climate?</p>
                                     <p style={{ margin: '4px 0', fontSize: '0.85rem', color: '#065f46', opacity: 0.9 }}>
-                                        Enable location to unlock <b>precision growth data</b> for your zone.
+                                        Enable location in your <b>Browser Settings</b> to unlock precision data.
                                     </p>
                                     <button
                                         onClick={() => {
                                             toast.dismiss(t.id);
                                             navigator.geolocation.getCurrentPosition(
                                                 () => toast.success("Satellites Synced!"),
-                                                () => toast.error("Access failed. Check browser settings.")
+                                                () => toast.error("Access blocked. Check Browser (not Phone) settings.")
                                             );
-                                            sessionStorage.setItem('vanamap_location_nagged_v2', 'true');
+                                            sessionStorage.setItem('vanamap_location_nagged_v3', 'true');
                                         }}
                                         style={{
                                             marginTop: '10px',
@@ -110,7 +110,7 @@ export const LocationNag = () => {
                                 </div>
                             </div>
                         ), { duration: 20000, position: 'bottom-center' });
-                        sessionStorage.setItem('vanamap_location_nagged_v2', 'true');
+                        sessionStorage.setItem('vanamap_location_nagged_v3', 'true');
                     }
                 };
 
