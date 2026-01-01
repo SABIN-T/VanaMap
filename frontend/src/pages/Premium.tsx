@@ -13,6 +13,9 @@ export const Premium = () => {
     const [configLoading, setConfigLoading] = useState(true);
     const navigate = useNavigate();
 
+    // Derived State
+    const isFreeMode = config.activePromo || config.price === 0 || String(config.price) === '0';
+
     // Access Control
     const canView = user && (user.favorites?.length > 3 || user.isPremium || user.role === 'admin');
     const API_URL = import.meta.env.VITE_API_URL || 'https://plantoxy.onrender.com/api';
@@ -169,7 +172,7 @@ export const Premium = () => {
             return;
         }
 
-        if (config.activePromo) {
+        if (isFreeMode) {
             await handleFreeClaim();
         } else {
             await handlePaidSubscription();
@@ -181,7 +184,7 @@ export const Premium = () => {
         if (loading) return 'Processing...';
         if (user?.isPremium) return 'Premium Active';
 
-        if (config.activePromo) {
+        if (isFreeMode) {
             if (!user) return 'Login to Claim Free Access';
             return 'Claim Free Access Now';
         } else {
@@ -240,7 +243,7 @@ export const Premium = () => {
 
                     {/* Premium Plan */}
                     <div className={`${styles.card} ${styles.cardPremium}`}>
-                        {(config.activePromo || configLoading) && <div className={styles.badge}>Limited Offer</div>}
+                        {(isFreeMode || configLoading) && <div className={styles.badge}>Limited Offer</div>}
 
                         <div className={styles.planName}>
                             Premium <Crown size={24} fill="currentColor" className="text-yellow-400" />
@@ -251,8 +254,8 @@ export const Premium = () => {
                                 <span className={styles.price} style={{ fontSize: '1.5rem', opacity: 0.7 }}>Checking...</span>
                             ) : (
                                 <>
-                                    <span className={styles.price}>{config.activePromo ? '₹0' : `₹${config.price}`}</span>
-                                    <span className={styles.priceStrike}>{config.activePromo ? `₹${config.price}` : ''}</span>
+                                    <span className={styles.price}>{isFreeMode ? '₹0' : `₹${config.price}`}</span>
+                                    <span className={styles.priceStrike}>{isFreeMode ? `₹${config.price}` : ''}</span>
                                     <span className={styles.priceDuration}>/mo</span>
                                 </>
                             )}
@@ -260,8 +263,10 @@ export const Premium = () => {
                         <div className={styles.promoText}>
                             {configLoading
                                 ? 'Checking for exclusive offers...'
-                                : (config.activePromo
-                                    ? `Free until ${config.freeEnd ? new Date(config.freeEnd).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }) : 'Limited Time'}!`
+                                : (isFreeMode
+                                    ? (config.activePromo
+                                        ? `Free until ${config.freeEnd ? new Date(config.freeEnd).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' }) : 'Limited Time'}!`
+                                        : 'Free Access for Everyone!')
                                     : 'Best Value for Serious Gardeners'
                                 )
                             }
@@ -322,6 +327,6 @@ export const Premium = () => {
                     <p>Secured by Razorpay. By subscribing, you agree to our <a href="#" className="underline hover:text-emerald-400">Terms of Service</a> and <a href="#" className="underline hover:text-emerald-400">Privacy Policy</a>.</p>
                 </div>
             </div>
-        </div >
+        </div>
     );
 };
