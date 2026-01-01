@@ -482,6 +482,17 @@ try {
 }
 
 // Create Order
+// Check if Page is Restricted (Public)
+app.get('/api/system/is-restricted', async (req, res) => {
+    try {
+        const { path } = req.query;
+        const setting = await SystemSettings.findOne({ key: 'restricted_pages' });
+        const pages = setting ? setting.value : [];
+        const isRestricted = pages.includes(path);
+        res.json({ isRestricted });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
 // --- PREMIUM SETTINGS ROUTES ---
 
 // 1. Get Settings (Admin)
@@ -580,6 +591,63 @@ app.post('/api/payments/create-order', auth, async (req, res) => {
     } catch (error) {
         console.error("Order Error:", error);
         res.status(500).json({ error: error.message });
+    }
+});
+
+// --- ADMIN PAYMENTS & SETTINGS ---
+
+// Get All Payments & Premium Users
+app.get('/api/admin/payments', auth, admin, async (req, res) => {
+    try {
+        const payments = await Payment.find().sort({ date: -1 });
+        const premiumUsers = await User.find({ isPremium: true }).select('name email premiumType premiumExpiry');
+        res.json({ payments, premiumUsers });
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
+// Get Restricted Pages
+app.get('/api/admin/settings/restricted-pages', auth, admin, async (req, res) => {
+    try {
+        const setting = await SystemSettings.findOne({ key: 'restricted_pages' });
+        res.json({ pages: setting ? setting.value : [] });
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
+// Update Restricted Pages
+app.post('/api/admin/settings/restricted-pages', auth, admin, async (req, res) => {
+    try {
+        const { pages } = req.body;
+        await SystemSettings.updateOne(
+            { key: 'restricted_pages' },
+            { key: 'restricted_pages', value: pages },
+            { upsert: true }
+        );
+        res.json({ success: true, pages });
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
+// Renew/Gift Subscription (Manual)
+app.post('/api/admin/premium/renew', auth, admin, async (req, res) => {
+    try {
+        const { userId } = req.body;
+        const user = await User.findById(userId);
+        if (!user) return res.status(404).json({ error: "User not found" });
+
+        const now = new Date();
+        user.isPremium = true;
+        user.premiumType = 'gift';
+        user.premiumStartDate = now;
+        user.premiumExpiry = new Date(now.setFullYear(now.getFullYear() + 1)); // 1 Year gift
+        await user.save();
+        res.json({ success: true, message: "Renewed for 1 year" });
+    } catch (e) {
+        res.status(500).json({ error: e.message });
     }
 });
 
