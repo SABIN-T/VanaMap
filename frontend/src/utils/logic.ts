@@ -4,11 +4,6 @@ import type { Plant } from '../types';
  * CORTEX OS - INDEPENDENT BIO-SIMULATION ENGINE
  * 
  * Separates "Aptness" (General Compatibility) from "Room Simulation" (Survival Physics).
- * 
- * ROOM SIMULATION LOGIC:
- * Uses a "Stress Multiplier" approach.
- * Ideal conditions = 1.0x Plant Requirement.
- * Bad conditions = 1.5x, 2.0x, 3.0x Plant Requirement (Stress reduces efficiency).
  */
 
 // ==========================================
@@ -19,7 +14,7 @@ const getTempScore = (plant: Plant, avgTemp: number): number => {
     const min = plant.idealTempMin || 15;
     const max = plant.idealTempMax || 30;
     const optimal = (min + max) / 2;
-    const sigma = 5; // Standard tolerance for matching
+    const sigma = 5;
     const diff = avgTemp - optimal;
     return Math.exp(-(diff * diff) / (2 * sigma * sigma));
 };
@@ -123,7 +118,6 @@ const calculateStressFactor = (plant: Plant, temp: number, light: number): numbe
     stress += (lightDiff / 10) * 0.15;
 
     // 2. Temperature Stress
-    // Ideal range is safe. Outside range adds stress rapidly.
     const min = plant.idealTempMin || 15;
     const max = plant.idealTempMax || 30;
 
@@ -150,35 +144,32 @@ export const runRoomSimulationMC = (
     // 2. INDEPENDENT PLANT COUNT LOGIC
 
     // A. Base Demand (Wellness Standard)
-    // 8 Hours = Need ~3 Wellness Units (Plants).
-    // 2 Hours = Need ~1.
-    // Scale: Hours * 0.4
     let basePlantsNeeded = Math.max(1, hoursPerDay * 0.4);
 
-    // B. Room Buffer Logic (Free Pass for short stays)
-    // If < 2 hours, we reduce the need significantly
-    if (hoursPerDay < 2) {
+    // B. Room Buffer Logic (Scientific Freshness)
+    // Uses roomSize (m2) -> Volume -> Safe Fresh Hours
+    // 20m2 room ~ 2 hours safe. 40m2 room ~ 4 hours safe.
+    const roomVolLiters = roomSize * 2.5 * 1000;
+    // How many hours before CO2 > 1000ppm? (0.1% of volume)
+    const safeHours = (roomVolLiters * 0.001) / (23 * Math.max(1, peopleCount));
+
+    if (hoursPerDay < safeHours) {
         basePlantsNeeded = 1;
     }
 
     // C. Apply Plant Strength Multiplier
-    // Strong plants (high O2) reduce count. Weak plants increase it.
     let strengthMultiplier = 1.0;
-    if (plant.oxygenLevel === 'very-high') strengthMultiplier = 0.6; // Need fewer
+    if (plant.oxygenLevel === 'very-high') strengthMultiplier = 0.6;
     else if (plant.oxygenLevel === 'high') strengthMultiplier = 0.8;
-    else if (plant.oxygenLevel === 'low') strengthMultiplier = 1.2; // Need more
+    else if (plant.oxygenLevel === 'low') strengthMultiplier = 1.2;
 
     let plantsBeforeStress = basePlantsNeeded * strengthMultiplier * peopleCount;
 
     // D. APPLY SLIDER STRESS (The Physics Engine)
-    // If Light/AC are bad, the plant works less efficiently.
-    // Efficiency = 1.0 - Stress.
-    // Plants Needed = Base / Efficiency.
     const stress = calculateStressFactor(plant, avgTemp, lightLevel);
     const efficiency = 1.0 - stress;
 
     // Calculate final needed
-    // Example: Need 3. Eff 0.5 (Stress). New Need = 6.
     const finalPlantsNeeded = Math.ceil(plantsBeforeStress / Math.max(0.1, efficiency));
 
     // E. Total Output (Visual Stat)
