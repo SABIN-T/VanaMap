@@ -75,9 +75,6 @@ const getAQIScore = (plant: Plant, aqi: number): number => {
     const isPurifier = plant.medicinalValues?.includes('Air purification') ||
         plant.advantages?.some(a => a.toLowerCase().includes('purif'));
 
-    // Base score (everyone likes clean air)
-    let score = 1.0;
-
     // If air is bad (AQI > 100)
     if (aqi > 100) {
         if (isPurifier) return 1.2; // Bonus!
@@ -288,6 +285,16 @@ export const generatePlantInsights = (plant: Plant, avgTemp: number, avgHumidity
     const minHumidity = plant.minHumidity || 40;
     if (avgHumidity < minHumidity && !tip) {
         tip = `Humidity is low (${avgHumidity}%). This plant prefers >${minHumidity}%. Mist it!`;
+    }
+
+    // Air Quality insights
+    if (!tip && aqi > 100) {
+        const isPurifier = plant.medicinalValues?.includes('Air purification') ||
+            plant.advantages?.some(a => a.toLowerCase().includes('purif'));
+
+        if (isPurifier) {
+            tip = `Excellent choice! This plant will help combat the current high AQI (${aqi}).`;
+        }
     }
 
     if (!tip) {
