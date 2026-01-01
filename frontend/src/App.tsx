@@ -13,6 +13,7 @@ import { NetworkIndicator } from './components/common/NetworkIndicator';
 import { SystemGuard } from './components/common/SystemGuard';
 
 import { LocationNag } from './components/common/LocationNag';
+import { PermissionCenter } from './components/common/PermissionCenter';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
           <CartProvider>
             <Router>
               <LocationNag />
+              <PermissionCenter />
               <NetworkIndicator />
               <Toaster
                 position="top-center"

@@ -481,7 +481,6 @@ export const UserDashboard = () => {
                 <div className={styles.statCard}>
                     <div className={styles.statIcon} style={{ background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)', color: 'white' }}>
                         <Wind size={20} />
-
                     </div>
                     <div className={styles.statInfo}>
                         <div className={styles.statValue}>{((favoritePlants.length || items.length) * 1.2).toFixed(1)}L</div>
@@ -489,6 +488,20 @@ export const UserDashboard = () => {
                     </div>
                     <div className={styles.statTrend} style={{ color: '#3b82f6' }}>
                         Positive
+                    </div>
+                </div>
+
+                {/* Permissions Card */}
+                <div className={styles.statCard} onClick={() => window.dispatchEvent(new CustomEvent('toggleVanaPermissions'))} style={{ cursor: 'pointer', border: '1px dashed rgba(16, 185, 129, 0.3)' }}>
+                    <div className={styles.statIcon} style={{ background: 'linear-gradient(135deg, #818cf8 0%, #4f46e5 100%)', color: 'white' }}>
+                        <Shield size={20} />
+                    </div>
+                    <div className={styles.statInfo}>
+                        <div className={styles.statValue} style={{ fontSize: '0.9rem' }}>Privacy</div>
+                        <div className={styles.statLabel}>System Access</div>
+                    </div>
+                    <div className={styles.statTrend} style={{ color: '#10b981' }}>
+                        Manage
                     </div>
                 </div>
             </div>
