@@ -14,6 +14,9 @@ export interface WeatherResponse {
         is_day: number;
         time: string;
     };
+    current?: {
+        relative_humidity_2m: number;
+    };
     daily?: {
         time: string[];
         temperature_2m_max: number[];
@@ -22,6 +25,7 @@ export interface WeatherResponse {
     };
     avgTemp30Days?: number;
     avgHumidity30Days?: number;
+    humidity?: number;
     air_quality?: AirQuality;
 }
 
@@ -48,8 +52,9 @@ export const getAirQuality = async (lat: number, lng: number): Promise<AirQualit
 
 export const getWeather = async (lat: number, lng: number): Promise<WeatherResponse | null> => {
     try {
+        // Added &current=relative_humidity_2m to get live humidity
         const response = await fetch(
-            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true&daily=temperature_2m_max,temperature_2m_min,relative_humidity_2m_mean&past_days=30&timezone=auto`
+            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true&current=relative_humidity_2m&daily=temperature_2m_max,temperature_2m_min,relative_humidity_2m_mean&past_days=30&timezone=auto`
         );
         const data = await response.json();
 
@@ -60,6 +65,7 @@ export const getWeather = async (lat: number, lng: number): Promise<WeatherRespo
         let avgHumidity = 50;
 
         if (data.daily) {
+            // ... (keep existing daily logic) ... 
             if (data.daily.temperature_2m_max) {
                 const maxs = data.daily.temperature_2m_max;
                 const mins = data.daily.temperature_2m_min;
@@ -90,6 +96,8 @@ export const getWeather = async (lat: number, lng: number): Promise<WeatherRespo
             ...data,
             avgTemp30Days: avgTemp,
             avgHumidity30Days: avgHumidity,
+            // Map the fetched current humidity to the top-level property expected by UI
+            humidity: data.current?.relative_humidity_2m ?? avgHumidity,
             air_quality: airQuality || undefined
         };
     } catch (error) {
