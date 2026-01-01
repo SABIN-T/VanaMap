@@ -56,10 +56,12 @@ export const Premium = () => {
             });
 
             if (!result.ok) {
+                const errorData = await result.json().catch(() => ({}));
                 if (result.status === 503) {
-                    toast.error("Payment Gateway disabled by server. Please try again later.");
+                    toast.error("Payment Gateway disabled. Try again later.");
                 } else {
-                    toast.error("Order creation failed");
+                    console.error("Order Error:", errorData);
+                    toast.error(`Order Failed: ${errorData.error || result.statusText || "Server Error"}`);
                 }
                 setLoading(false);
                 return;
