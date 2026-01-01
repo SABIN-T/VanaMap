@@ -9,12 +9,27 @@ export const Premium = () => {
     const { user, refreshUser } = useAuth();
     const token = user?.token;
     const [loading, setLoading] = useState(false);
+    const [config, setConfig] = useState({ price: 10, activePromo: false, freeEnd: '' });
     const navigate = useNavigate();
 
     // Access Control
     const canView = user && (user.favorites?.length > 3 || user.isPremium || user.role === 'admin');
+    const API_URL = import.meta.env.VITE_API_URL || 'https://plantoxy.onrender.com/api';
 
     useEffect(() => {
+        // 1. Fetch Config (Price/Promo)
+        const fetchConfig = async () => {
+            try {
+                const res = await fetch(`${API_URL}/public/premium-config`);
+                const data = await res.json();
+                setConfig(data);
+            } catch (e) {
+                console.error("Config fetch failed", e);
+            }
+        };
+        fetchConfig();
+
+        // 2. Route Protection
         if (user && !canView && user.role !== 'admin') {
             toast("Add more than 3 plants to favorites to unlock Premium!", { icon: '🔒' });
             navigate('/');
@@ -34,8 +49,6 @@ export const Premium = () => {
         });
     };
 
-    const isPromoActive = new Date() < new Date('2024-02-01'); // Promo Disabled for Payment Testing
-
     const handlePaidSubscription = async () => {
         setLoading(true);
         const res = await loadRazorpay();
@@ -46,7 +59,6 @@ export const Premium = () => {
         }
 
         try {
-            const API_URL = import.meta.env.VITE_API_URL || 'https://plantoxy.onrender.com/api';
             const result = await fetch(`${API_URL}/payments/create-order`, {
                 method: 'POST',
                 headers: {
@@ -70,7 +82,7 @@ export const Premium = () => {
             const order = await result.json();
 
             const options = {
-                key: order.key, // Use the key provided by backend to ensure match
+                key: order.key, // Dynamic backend key
                 amount: order.amount,
                 currency: order.currency,
                 name: "VanaMap Premium",
@@ -121,21 +133,10 @@ export const Premium = () => {
         }
     };
 
-    const handlePayment = async () => {
-        if (!user) {
-            navigate('/auth', { state: { from: '/premium' } });
-            return;
-        }
-
-        if (!isPromoActive) {
-            await handlePaidSubscription();
-            return;
-        }
-
+    const handleFreeClaim = async () => {
         setLoading(true);
         try {
-            const API_URL = import.meta.env.VITE_API_URL || 'https://plantoxy.onrender.com/api';
-            const response = await fetch(`${API_URL}/payments/activate-free`, {
+            const response = await fetch(`${API_URL}/payments/claim-free`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -156,6 +157,19 @@ export const Premium = () => {
             toast.error("Something went wrong");
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handlePayment = async () => {
+        if (!user) {
+            navigate('/auth', { state: { from: '/premium' } });
+            return;
+        }
+
+        if (config.activePromo) {
+            await handleFreeClaim();
+        } else {
+            await handlePaidSubscription();
         }
     };
 
@@ -213,19 +227,22 @@ export const Premium = () => {
 
                     {/* Premium Plan */}
                     <div className={`${styles.card} ${styles.cardPremium}`}>
-                        {isPromoActive && <div className={styles.badge}>Limited Offer</div>}
+                        {config.activePromo && <div className={styles.badge}>Limited Offer</div>}
 
                         <div className={styles.planName}>
                             Premium <Crown size={24} fill="currentColor" className="text-yellow-400" />
                         </div>
 
                         <div className="flex items-baseline mb-1">
-                            <span className={styles.price}>{isPromoActive ? '₹0' : '₹10'}</span>
-                            <span className={styles.priceStrike}>{isPromoActive ? '₹10' : ''}</span>
+                            <span className={styles.price}>{config.activePromo ? '₹0' : `₹${config.price}`}</span>
+                            <span className={styles.priceStrike}>{config.activePromo ? `₹${config.price}` : ''}</span>
                             <span className={styles.priceDuration}>/mo</span>
                         </div>
                         <div className={styles.promoText}>
-                            {isPromoActive ? 'Free until Jan 31, 2026!' : 'Best Value for Serious Gardeners'}
+                            {config.activePromo
+                                ? `Free until ${config.freeEnd ? new Date(config.freeEnd).toLocaleDateString() : 'Limited Time'}!`
+                                : 'Best Value for Serious Gardeners'
+                            }
                         </div>
 
                         <ul className={styles.features}>
@@ -252,7 +269,7 @@ export const Premium = () => {
                             disabled={loading || user?.isPremium}
                             className={`${styles.button} ${user?.isPremium ? styles.btnActive : styles.btnPremium}`}
                         >
-                            {loading ? 'Processing...' : (user?.isPremium ? 'Premium Active' : (isPromoActive ? 'Claim Free Access Now' : 'Upgrade to Premium'))}
+                            {loading ? 'Processing...' : (user?.isPremium ? 'Premium Active' : (config.activePromo ? 'Claim Free Access Now' : 'Upgrade to Premium'))}
                         </button>
                     </div>
                 </div>

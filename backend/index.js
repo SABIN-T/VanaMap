@@ -482,37 +482,104 @@ try {
 }
 
 // Create Order
+// --- PREMIUM SETTINGS ROUTES ---
+
+// 1. Get Settings (Admin)
+app.get('/api/admin/settings/premium', auth, admin, async (req, res) => {
+    try {
+        const settings = await SystemSettings.find({ key: { $in: ['premium_price_inr', 'premium_is_free', 'premium_free_start', 'premium_free_end'] } });
+        const config = { price: 10, isFree: false, freeStart: null, freeEnd: null };
+        settings.forEach(s => {
+            if (s.key === 'premium_price_inr') config.price = s.value;
+            if (s.key === 'premium_is_free') config.isFree = s.value;
+            if (s.key === 'premium_free_start') config.freeStart = s.value;
+            if (s.key === 'premium_free_end') config.freeEnd = s.value;
+        });
+        res.json(config);
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// 2. Update Settings (Admin)
+app.post('/api/admin/settings/premium', auth, admin, async (req, res) => {
+    try {
+        const { price, isFree, freeStart, freeEnd } = req.body;
+        await SystemSettings.updateOne({ key: 'premium_price_inr' }, { key: 'premium_price_inr', value: price }, { upsert: true });
+        await SystemSettings.updateOne({ key: 'premium_is_free' }, { key: 'premium_is_free', value: isFree }, { upsert: true });
+        await SystemSettings.updateOne({ key: 'premium_free_start' }, { key: 'premium_free_start', value: freeStart }, { upsert: true });
+        await SystemSettings.updateOne({ key: 'premium_free_end' }, { key: 'premium_free_end', value: freeEnd }, { upsert: true });
+        res.json({ success: true, message: "Settings Updated" });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// 3. Public Config for Frontend
+app.get('/api/public/premium-config', async (req, res) => {
+    try {
+        const settings = await SystemSettings.find({ key: { $in: ['premium_price_inr', 'premium_is_free', 'premium_free_start', 'premium_free_end'] } });
+        let price = 10;
+        let isFree = false;
+        let freeStart = null;
+        let freeEnd = null;
+
+        settings.forEach(s => {
+            if (s.key === 'premium_price_inr') price = s.value;
+            if (s.key === 'premium_is_free') isFree = s.value;
+            if (s.key === 'premium_free_start') freeStart = s.value;
+            if (s.key === 'premium_free_end') freeEnd = s.value;
+        });
+
+        const now = new Date();
+        const activePromo = isFree && (!freeStart || new Date(freeStart) <= now) && (!freeEnd || new Date(freeEnd) >= now);
+
+        res.json({ price, activePromo, freeEnd });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// 4. Claim Free Premium
+app.post('/api/payments/claim-free', auth, async (req, res) => {
+    try {
+        const settings = await SystemSettings.find({ key: { $in: ['premium_is_free', 'premium_free_start', 'premium_free_end'] } });
+        let isFree = false, freeStart = null, freeEnd = null;
+
+        settings.forEach(s => {
+            if (s.key === 'premium_is_free') isFree = s.value;
+            if (s.key === 'premium_free_start') freeStart = s.value;
+            if (s.key === 'premium_free_end') freeEnd = s.value;
+        });
+
+        const now = new Date();
+        const isValid = isFree && (!freeStart || new Date(freeStart) <= now) && (!freeEnd || new Date(freeEnd) >= now);
+
+        if (!isValid) return res.status(400).json({ error: "Promo not active" });
+
+        const user = await User.findById(req.user.id);
+        user.isPremium = true;
+        user.premiumType = 'trial';
+        user.premiumStartDate = now;
+        user.premiumExpiry = new Date(now.setMonth(now.getMonth() + 1));
+        await user.save();
+        res.json({ success: true, message: "Free Access Activated!" });
+    } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// Create Order (Dynamic Price)
 app.post('/api/payments/create-order', auth, async (req, res) => {
     try {
+        const priceSetting = await SystemSettings.findOne({ key: 'premium_price_inr' });
+        const price = priceSetting ? parseInt(priceSetting.value) : 10;
+
         const options = {
-            amount: 1000, // amount in the smallest currency unit (10 INR) for testing or as per prompt "10rs per month" -> 1000 paise? prompt says "10rs per month". So 10 * 100 = 1000 paise.
+            amount: price * 100, // paise
             currency: "INR",
             receipt: `receipt_${Date.now()}`
         };
-        // If user wants free trial (Jan 1-31 2026 prompt mentions free purchase), the frontend should handle "Free" logic or we create a 0 amount order? Razorpay doesn't support 0 order for normal flows usually without subscription. 
-        // Prompt says: "premium is now free purchase by for 2026 jan 1 -31".
-        // Use a flag for free purchase or just bypass payment if frontend detects date/promo.
-        // For now, let's support standard payment flow. logic for Amount will be handled here.
 
-        // Check promo
-        const now = new Date();
-        const promoStart = new Date('2026-01-01');
-        const promoEnd = new Date('2026-01-31');
-
-        // User prompt says "now free purchase by for 2026 jan 1 -31 after that you should pay 10rs". 
-        // Interpreting "now free purchase... for 2026...". Maybe "It is free now". 
-        // If Free, we don't need Razorpay order. The frontend calls 'activate-free-premium'.
-        // But if we need Razorpay for PAID flow:
-
-        if (!razorpay) {
-            return res.status(503).json({ error: "Payment gateway not configured" });
-        }
+        if (!razorpay) return res.status(503).json({ error: "Payment gateway not configured" });
 
         const order = await razorpay.orders.create(options);
         res.json({ ...order, key: process.env.RAZORPAY_KEY_ID });
     } catch (error) {
-        console.log(error);
-        res.status(500).send(error);
+        console.error("Order Error:", error);
+        res.status(500).json({ error: error.message });
     }
 });
 
