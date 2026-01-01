@@ -107,17 +107,23 @@ export const EditPlant = () => {
         const tid = toast.loading("Saving changes...");
 
         try {
-            // Check if we need to send FormData (new image) or JSON
+            // Helper to remove immutable/system fields
+            const getCleanPayload = (source: Partial<Plant>) => {
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                const { _id, __v, createdAt, updatedAt, ...rest } = source as any;
+                return rest;
+            };
+
+            const payload = getCleanPayload(plant);
+
             if (imageFile) {
                 const formData = new FormData();
 
-                // Append all plant fields
-                Object.keys(plant).forEach(key => {
-                    const value = plant[key as keyof Plant];
+                Object.keys(payload).forEach(key => {
+                    const value = payload[key];
                     if (value === undefined || value === null) return;
 
-                    // Skip imageUrl if we have a new file (backend handles it)
-                    if (key === 'imageUrl') return;
+                    if (key === 'imageUrl') return; // Skip image URL (handled by file)
 
                     if (Array.isArray(value)) {
                         value.forEach(item => formData.append(key, String(item)));
@@ -131,15 +137,14 @@ export const EditPlant = () => {
                 formData.append('image', imageFile);
                 await updatePlant(id, formData);
             } else {
-                // No new image, send standard JSON
-                await updatePlant(id, plant);
+                await updatePlant(id, payload);
             }
 
             toast.success("Plant updated successfully", { id: tid });
             setTimeout(() => navigate('/admin/manage-plants'), 1000);
-        } catch (err) {
+        } catch (err: any) {
             console.error(err);
-            toast.error("Update failed", { id: tid });
+            toast.error(err.message || "Update failed", { id: tid });
             setSaving(false);
         }
     };
