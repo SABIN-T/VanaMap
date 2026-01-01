@@ -16,70 +16,101 @@ export const LocationNag = () => {
                 const status = await navigator.permissions.query({ name: 'geolocation' as PermissionName });
 
                 const handleStatusChange = () => {
-                    const hasNagged = sessionStorage.getItem('vanamap_location_nagged');
+                    const hasNagged = sessionStorage.getItem('vanamap_location_nagged_v2');
                     if (hasNagged) return;
 
                     if (status.state === 'denied') {
                         toast((t) => (
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                <MapPin size={20} className="text-amber-500" />
-                                <div>
-                                    <p style={{ margin: 0, fontWeight: 700, fontSize: '0.9rem' }}>Location Access Denied</p>
-                                    <p style={{ margin: 0, fontSize: '0.8rem', opacity: 0.8 }}>Enable GPS in browser settings for precise Plant Aptness scores.</p>
-                                    <button
-                                        onClick={() => {
-                                            toast.dismiss(t.id);
-                                            sessionStorage.setItem('vanamap_location_nagged', 'true');
-                                        }}
-                                        style={{
-                                            marginTop: '8px',
-                                            background: '#64748b',
-                                            color: 'white',
-                                            border: 'none',
-                                            padding: '4px 12px',
-                                            borderRadius: '4px',
-                                            fontSize: '0.75rem',
-                                            cursor: 'pointer'
-                                        }}
-                                    >
-                                        Dismiss
-                                    </button>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: '300px' }}>
+                                <div style={{ background: '#fef3c7', padding: '10px', borderRadius: '12px' }}>
+                                    <MapPin size={24} className="text-amber-600" />
+                                </div>
+                                <div style={{ flex: 1 }}>
+                                    <p style={{ margin: 0, fontWeight: 800, fontSize: '0.95rem', color: '#92400e' }}>GPS Access Blocked</p>
+                                    <p style={{ margin: '4px 0', fontSize: '0.8rem', color: '#b45309', lineHeight: 1.4 }}>
+                                        To see Survival Matches: <br />
+                                        <strong>Desktop:</strong> Click the <b>Lock</b> icon next to URL.<br />
+                                        <strong>Mobile:</strong> Check Site Settings in your browser.
+                                    </p>
+                                    <div style={{ display: 'flex', gap: '8px', marginTop: '8px' }}>
+                                        <button
+                                            onClick={() => {
+                                                toast.dismiss(t.id);
+                                                sessionStorage.setItem('vanamap_location_nagged_v2', 'true');
+                                            }}
+                                            style={{
+                                                background: '#f59e0b',
+                                                color: 'white',
+                                                border: 'none',
+                                                padding: '6px 14px',
+                                                borderRadius: '6px',
+                                                fontSize: '0.75rem',
+                                                fontWeight: 700,
+                                                cursor: 'pointer'
+                                            }}
+                                        >
+                                            I'll Fix It
+                                        </button>
+                                        <button
+                                            onClick={() => toast.dismiss(t.id)}
+                                            style={{
+                                                background: 'transparent',
+                                                color: '#b45309',
+                                                border: '1px solid #f59e0b',
+                                                padding: '6px 14px',
+                                                borderRadius: '6px',
+                                                fontSize: '0.75rem',
+                                                cursor: 'pointer'
+                                            }}
+                                        >
+                                            Later
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
-                        ), { duration: 8000, position: 'bottom-center' });
-                        sessionStorage.setItem('vanamap_location_nagged', 'true');
+                        ), { duration: 15000, position: 'top-center' });
+                        sessionStorage.setItem('vanamap_location_nagged_v2', 'true');
                     } else if (status.state === 'prompt') {
                         toast((t) => (
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                                <MapPin size={20} className="text-emerald-500 animate-bounce" />
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '4px' }}>
+                                <div className="animate-pulse" style={{ background: '#d1fae5', padding: '12px', borderRadius: '50%' }}>
+                                    <MapPin size={24} className="text-emerald-600" />
+                                </div>
                                 <div>
-                                    <p style={{ margin: 0, fontWeight: 700, fontSize: '0.9rem' }}>Enable Intelligent Match?</p>
-                                    <p style={{ margin: 0, fontSize: '0.8rem', opacity: 0.8 }}>Turn on location to see which plants thrive in your current atmosphere.</p>
+                                    <p style={{ margin: 0, fontWeight: 800, fontSize: '1rem', color: '#064e3b' }}>Connect to Local Climate?</p>
+                                    <p style={{ margin: '4px 0', fontSize: '0.85rem', color: '#065f46', opacity: 0.9 }}>
+                                        Enable location to unlock <b>precision growth data</b> for your zone.
+                                    </p>
                                     <button
                                         onClick={() => {
                                             toast.dismiss(t.id);
-                                            navigator.geolocation.getCurrentPosition(() => { }, () => { }); // Trigger native prompt
-                                            sessionStorage.setItem('vanamap_location_nagged', 'true');
+                                            navigator.geolocation.getCurrentPosition(
+                                                () => toast.success("Satellites Synced!"),
+                                                () => toast.error("Access failed. Check browser settings.")
+                                            );
+                                            sessionStorage.setItem('vanamap_location_nagged_v2', 'true');
                                         }}
                                         style={{
-                                            marginTop: '8px',
-                                            background: '#10b981',
+                                            marginTop: '10px',
+                                            background: 'linear-gradient(135deg, #10b981, #059669)',
                                             color: 'white',
                                             border: 'none',
-                                            padding: '6px 14px',
-                                            borderRadius: '6px',
-                                            fontSize: '0.8rem',
-                                            fontWeight: 700,
+                                            padding: '8px 20px',
+                                            borderRadius: '8px',
+                                            fontSize: '0.9rem',
+                                            fontWeight: 800,
                                             cursor: 'pointer',
-                                            boxShadow: '0 4px 12px rgba(16, 185, 129, 0.2)'
+                                            boxShadow: '0 4px 15px rgba(16, 185, 129, 0.4)',
+                                            display: 'block',
+                                            width: '100%'
                                         }}
                                     >
-                                        Enable Access
+                                        Allow Location Prompt
                                     </button>
                                 </div>
                             </div>
-                        ), { duration: 15000, position: 'bottom-center' });
-                        sessionStorage.setItem('vanamap_location_nagged', 'true');
+                        ), { duration: 20000, position: 'bottom-center' });
+                        sessionStorage.setItem('vanamap_location_nagged_v2', 'true');
                     }
                 };
 
