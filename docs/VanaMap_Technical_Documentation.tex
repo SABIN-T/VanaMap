@@ -1,0 +1,1237 @@
+\documentclass[12pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[margin=1in]{geometry}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{tcolorbox}
+\usepackage{enumitem}
+\usepackage{float}
+\usepackage{caption}
+\usepackage{subcaption}
+
+% Color definitions
+\definecolor{primarygreen}{RGB}{16,185,129}
+\definecolor{darkbg}{RGB}{15,23,42}
+\definecolor{codegreen}{RGB}{0,128,0}
+\definecolor{codegray}{RGB}{128,128,128}
+\definecolor{codepurple}{RGB}{139,92,246}
+\definecolor{backcolour}{RGB}{245,245,245}
+
+% Code listing style
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{codepurple},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{primarygreen},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle}
+
+% Header and footer
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\leftmark}
+\fancyhead[R]{VanaMap Technical Documentation}
+\fancyfoot[C]{\thepage}
+
+% Title formatting
+\titleformat{\chapter}[display]
+{\normalfont\huge\bfseries\color{primarygreen}}
+{\chaptertitlename\ \thechapter}{20pt}{\Huge}
+
+\begin{document}
+
+% Title Page
+\begin{titlepage}
+    \centering
+    \vspace*{2cm}
+    
+    {\Huge\bfseries VanaMap\par}
+    \vspace{0.5cm}
+    {\Large Intelligent Plant Discovery Platform\par}
+    \vspace{2cm}
+    
+    {\LARGE\bfseries Technical Documentation\par}
+    \vspace{0.5cm}
+    {\large Complete System Architecture, Simulation Methodology \& Feature Specification\par}
+    
+    \vspace{3cm}
+    
+    \begin{tcolorbox}[colback=primarygreen!10,colframe=primarygreen,width=0.8\textwidth]
+        \centering
+        \textbf{Version:} 1.0\\
+        \textbf{Date:} January 2026\\
+        \textbf{Platform:} Progressive Web Application\\
+        \textbf{Technology Stack:} React, TypeScript, Node.js, MongoDB
+    \end{tcolorbox}
+    
+    \vfill
+    
+    {\large \today\par}
+\end{titlepage}
+
+% Table of Contents
+\tableofcontents
+\newpage
+
+% Executive Summary
+\chapter*{Executive Summary}
+\addcontentsline{toc}{chapter}{Executive Summary}
+
+VanaMap is a cutting-edge, AI-powered plant discovery and e-commerce platform that revolutionizes how users find, purchase, and care for plants. By leveraging real-time climate data, advanced aptness algorithms, and location-based services, VanaMap provides personalized plant recommendations tailored to each user's specific environmental conditions.
+
+\section*{Key Innovations}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Climate-Aware Plant Matching:} Real-time weather simulation using 30-day historical data
+    \item \textbf{Intelligent Aptness Scoring:} Multi-factor algorithm considering temperature, humidity, sunlight, and air quality
+    \item \textbf{Augmented Reality Preview:} "Make It Real" AR feature for visualizing plants in user's space
+    \item \textbf{Gamification System:} Points, rankings, and achievements to encourage user engagement
+    \item \textbf{AI-Powered Assistant:} Integrated chatbot for plant care advice and recommendations
+\end{itemize}
+
+\section*{Target Audience}
+\begin{itemize}[leftmargin=*]
+    \item Home gardeners seeking climate-appropriate plants
+    \item Urban dwellers with limited gardening knowledge
+    \item Plant vendors looking to expand their digital presence
+    \item Environmental enthusiasts tracking their green impact
+\end{itemize}
+
+\newpage
+
+% Chapter 1: System Architecture
+\chapter{System Architecture}
+
+\section{Technology Stack}
+
+VanaMap is built on a modern, scalable technology stack designed for performance and user experience.
+
+\subsection{Frontend Architecture}
+\begin{tcolorbox}[colback=blue!5,colframe=blue!75!black,title=Frontend Technologies]
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Framework:} React 18.x with TypeScript
+    \item \textbf{Routing:} React Router v6
+    \item \textbf{State Management:} React Context API + Custom Hooks
+    \item \textbf{Styling:} CSS Modules with Glassmorphism Design System
+    \item \textbf{UI Components:} Lucide React Icons, Custom Component Library
+    \item \textbf{Notifications:} React Hot Toast
+    \item \textbf{AR Integration:} HTML5 Canvas + MediaDevices API
+    \item \textbf{Maps:} Leaflet.js with OpenStreetMap
+\end{itemize}
+\end{tcolorbox}
+
+\subsection{Backend Architecture}
+\begin{tcolorbox}[colback=green!5,colframe=green!75!black,title=Backend Technologies]
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Runtime:} Node.js with Express.js
+    \item \textbf{Database:} MongoDB with Mongoose ODM
+    \item \textbf{Authentication:} JWT (JSON Web Tokens)
+    \item \textbf{Email Service:} Nodemailer with SMTP
+    \item \textbf{File Upload:} Multer middleware
+    \item \textbf{Security:} bcrypt for password hashing, CORS enabled
+\end{itemize}
+\end{tcolorbox}
+
+\subsection{External APIs \& Services}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Weather Data:} Open-Meteo API (historical \& real-time climate data)
+    \item \textbf{Geocoding:} OpenStreetMap Nominatim API
+    \item \textbf{IP Geolocation:} ipapi.co (fallback for GPS denial)
+    \item \textbf{Location Services:} Overpass API for nearby garden centers
+    \item \textbf{AI Chatbot:} Google Gemini API (plant care assistant)
+    \item \textbf{Image Processing:} Remove.bg API (background removal for AR)
+\end{itemize}
+
+\section{Database Schema}
+
+\subsection{Plant Collection}
+\begin{lstlisting}[language=JavaScript, caption=Plant Schema]
+{
+  _id: ObjectId,
+  name: String,
+  scientificName: String,
+  description: String,
+  imageUrl: String,
+  category: String, // 'indoor' | 'outdoor'
+  sunlightRequirement: String, // 'low' | 'medium' | 'high'
+  wateringFrequency: String,
+  soilType: String,
+  growthRate: String,
+  maxHeight: String,
+  temperatureRange: {
+    min: Number,
+    max: Number
+  },
+  humidityRange: {
+    min: Number,
+    max: Number
+  },
+  airQualityTolerance: Number,
+  careLevel: String, // 'beginner' | 'intermediate' | 'expert'
+  benefits: [String],
+  toxicity: String,
+  createdAt: Date,
+  updatedAt: Date
+}
+\end{lstlisting}
+
+\subsection{User Collection}
+\begin{lstlisting}[language=JavaScript, caption=User Schema]
+{
+  _id: ObjectId,
+  name: String,
+  email: String (unique, indexed),
+  password: String (hashed),
+  role: String, // 'user' | 'vendor' | 'admin'
+  favorites: [ObjectId], // references to Plant._id
+  points: Number (default: 0),
+  createdAt: Date,
+  lastLogin: Date
+}
+\end{lstlisting}
+
+\subsection{Vendor Collection}
+\begin{lstlisting}[language=JavaScript, caption=Vendor Schema]
+{
+  _id: ObjectId,
+  userId: ObjectId, // reference to User._id
+  shopName: String,
+  phone: String,
+  address: String,
+  coordinates: {
+    latitude: Number,
+    longitude: Number
+  },
+  inventory: [{
+    plantId: ObjectId,
+    price: Number,
+    stock: Number,
+    availability: Boolean
+  }],
+  isApproved: Boolean (default: false),
+  rating: Number,
+  createdAt: Date
+}
+\end{lstlisting}
+
+\newpage
+
+% Chapter 2: Climate Simulation Engine
+\chapter{Climate Simulation \& Aptness Algorithm}
+
+\section{Overview}
+
+The core innovation of VanaMap is its climate-aware plant recommendation system. This system combines real-time weather data with historical climate patterns to calculate a personalized "Aptness Score" for each plant based on the user's location.
+
+\section{Data Acquisition Pipeline}
+
+\subsection{Location Detection}
+\begin{enumerate}[leftmargin=*]
+    \item \textbf{Primary Method:} HTML5 Geolocation API
+    \begin{itemize}
+        \item Requests user's GPS coordinates via \texttt{navigator.geolocation.getCurrentPosition()}
+        \item Timeout: 6 seconds for optimal UX
+        \item High accuracy mode enabled
+    \end{itemize}
+    
+    \item \textbf{Fallback Method:} IP-based Geolocation
+    \begin{itemize}
+        \item Triggered when GPS is denied, unavailable, or times out
+        \item Uses ipapi.co API to determine approximate location
+        \item Accuracy: City-level (typically within 50km)
+    \end{itemize}
+    
+    \item \textbf{Manual Entry:} City Search
+    \begin{itemize}
+        \item Geocoding via OpenStreetMap Nominatim API
+        \item Autocomplete suggestions for improved UX
+        \item Reverse geocoding for coordinate-to-city conversion
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Weather Data Retrieval}
+
+Once coordinates are obtained, the system fetches comprehensive climate data:
+
+\begin{tcolorbox}[colback=yellow!10,colframe=orange!75!black,title=Open-Meteo API Request]
+\textbf{Endpoint:} \texttt{https://api.open-meteo.com/v1/forecast}
+
+\textbf{Parameters:}
+\begin{itemize}[leftmargin=*]
+    \item \texttt{latitude}, \texttt{longitude}: User's coordinates
+    \item \texttt{daily}: temperature\_2m\_max, temperature\_2m\_min, relative\_humidity\_2m
+    \item \texttt{past\_days}: 30 (historical data for simulation)
+    \item \texttt{forecast\_days}: 1 (current conditions)
+\end{itemize}
+
+\textbf{Response Data:}
+\begin{itemize}[leftmargin=*]
+    \item 30-day historical temperature range
+    \item Current humidity percentage
+    \item Daily min/max temperature trends
+\end{itemize}
+\end{tcolorbox}
+
+\subsection{Air Quality Integration}
+
+Air quality data is fetched separately to assess pollution tolerance:
+
+\begin{lstlisting}[language=JavaScript, caption=Air Quality API Call]
+const aqiResponse = await fetch(
+  `https://air-quality-api.open-meteo.com/v1/air-quality?` +
+  `latitude=${lat}&longitude=${lon}&current=pm10,pm2_5,us_aqi`
+);
+const aqiData = await aqiResponse.json();
+const aqi = aqiData.current.us_aqi;
+\end{lstlisting}
+
+\section{30-Day Climate Simulation}
+
+\subsection{Temperature Averaging Algorithm}
+
+The system calculates a representative temperature by averaging 30 days of historical data:
+
+\begin{equation}
+T_{avg} = \frac{1}{30} \sum_{i=1}^{30} \frac{T_{max,i} + T_{min,i}}{2}
+\end{equation}
+
+Where:
+\begin{itemize}[leftmargin=*]
+    \item $T_{avg}$ = Average temperature over 30 days
+    \item $T_{max,i}$ = Maximum temperature on day $i$
+    \item $T_{min,i}$ = Minimum temperature on day $i$
+\end{itemize}
+
+\subsection{Humidity Calculation}
+
+Current relative humidity is used as the primary metric:
+
+\begin{equation}
+H_{current} = \text{relative\_humidity\_2m}[\text{latest}]
+\end{equation}
+
+\section{Aptness Score Calculation}
+
+\subsection{Multi-Factor Scoring System}
+
+The Aptness Score is a normalized value between 0-100 that represents how well a plant will thrive in the user's climate. It considers four primary factors:
+
+\begin{equation}
+\text{Aptness Score} = w_T \cdot S_T + w_H \cdot S_H + w_S \cdot S_S + w_A \cdot S_A
+\end{equation}
+
+Where:
+\begin{itemize}[leftmargin=*]
+    \item $S_T$ = Temperature compatibility score
+    \item $S_H$ = Humidity compatibility score
+    \item $S_S$ = Sunlight availability score
+    \item $S_A$ = Air quality tolerance score
+    \item $w_T, w_H, w_S, w_A$ = Weighting factors (sum to 1.0)
+\end{itemize}
+
+\subsection{Temperature Compatibility ($S_T$)}
+
+\begin{equation}
+S_T = \begin{cases}
+100 & \text{if } T_{min} \leq T_{avg} \leq T_{max} \\
+100 \cdot \left(1 - \frac{|T_{avg} - T_{nearest}|}{10}\right) & \text{otherwise}
+\end{cases}
+\end{equation}
+
+Where:
+\begin{itemize}[leftmargin=*]
+    \item $T_{min}, T_{max}$ = Plant's ideal temperature range
+    \item $T_{nearest}$ = Closest boundary of the ideal range
+    \item Penalty decreases linearly with distance from ideal range
+\end{itemize}
+
+\subsection{Humidity Compatibility ($S_H$)}
+
+\begin{equation}
+S_H = \begin{cases}
+100 & \text{if } H_{min} \leq H_{current} \leq H_{max} \\
+100 \cdot \left(1 - \frac{|H_{current} - H_{nearest}|}{20}\right) & \text{otherwise}
+\end{cases}
+\end{equation}
+
+\subsection{Sunlight Matching ($S_S$)}
+
+Sunlight is a categorical match:
+
+\begin{equation}
+S_S = \begin{cases}
+100 & \text{if user's sunlight filter matches plant requirement} \\
+50 & \text{if filter is "all" (neutral)} \\
+0 & \text{if mismatch}
+\end{cases}
+\end{equation}
+
+\subsection{Air Quality Tolerance ($S_A$)}
+
+\begin{equation}
+S_A = \begin{cases}
+100 & \text{if } \text{AQI} \leq \text{plant's tolerance threshold} \\
+100 \cdot \frac{\text{tolerance threshold}}{\text{AQI}} & \text{otherwise}
+\end{cases}
+\end{equation}
+
+\subsection{Normalization \& Ranking}
+
+After calculating raw scores for all plants, the system applies batch normalization:
+
+\begin{equation}
+\text{Normalized Score}_i = \frac{\text{Raw Score}_i - \min(\text{All Scores})}{\max(\text{All Scores}) - \min(\text{All Scores})} \times 100
+\end{equation}
+
+This ensures:
+\begin{itemize}[leftmargin=*]
+    \item The best-suited plant always scores 100
+    \item The least-suited plant scores 0
+    \item All other plants are distributed proportionally
+\end{itemize}
+
+\section{Real-World Example}
+
+\subsection{Scenario: User in Mumbai, India}
+
+\textbf{Detected Climate Data:}
+\begin{itemize}[leftmargin=*]
+    \item Average Temperature: 28.5°C
+    \item Humidity: 75\%
+    \item AQI: 120 (Moderate)
+    \item Sunlight: High (tropical region)
+\end{itemize}
+
+\textbf{Plant Evaluation: Monstera Deliciosa}
+\begin{itemize}[leftmargin=*]
+    \item Ideal Temp Range: 18-27°C
+    \item Ideal Humidity: 60-80\%
+    \item Sunlight Requirement: Medium
+    \item AQI Tolerance: 150
+\end{itemize}
+
+\textbf{Score Calculation:}
+\begin{align*}
+S_T &= 100 \cdot \left(1 - \frac{|28.5 - 27|}{10}\right) = 85 \\
+S_H &= 100 \quad (\text{75\% is within 60-80\%}) \\
+S_S &= 50 \quad (\text{medium sunlight, user has high}) \\
+S_A &= 100 \quad (\text{AQI 120 < tolerance 150}) \\
+\text{Raw Score} &= 0.4(85) + 0.3(100) + 0.2(50) + 0.1(100) = 84
+\end{align*}
+
+After normalization across all plants, this might result in a final Aptness Score of 78/100.
+
+\newpage
+
+% Chapter 3: Application Pages
+\chapter{Application Pages \& Features}
+
+\section{Home Page}
+
+\subsection{Hero Section}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Auto-Detect Climate:} GPS-based location detection with pulsating amber glow button
+    \item \textbf{Manual City Search:} Autocomplete search with geocoding
+    \item \textbf{Social Media Links:} Instagram, Facebook, YouTube integration
+\end{itemize}
+
+\subsection{Weather Dashboard}
+Displays after location is set:
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Location Card:} City name with premium "Change Location" pill button
+    \item \textbf{Temperature Card:} 30-day average with simulation base indicator
+    \item \textbf{Humidity Card:} Current moisture level percentage
+    \item \textbf{Air Quality Card:} AQI with color-coded status (Good/Moderate/Unhealthy)
+\end{itemize}
+
+\subsection{Plant Discovery Grid}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Filters:} All Plants / Indoor / Outdoor
+    \item \textbf{Sunlight Filter:} Low / Medium / High
+    \item \textbf{Plant Cards:} Image, name, aptness score (0-100), survival match indicator
+    \item \textbf{Sorting:} Automatically sorted by aptness score (descending)
+    \item \textbf{Actions:} Add to favorites (heart icon), view details, add to cart
+\end{itemize}
+
+\subsection{Aptness Explanation Panel}
+Interactive modal explaining:
+\begin{itemize}[leftmargin=*]
+    \item How aptness scores are calculated
+    \item What each factor (temperature, humidity, sunlight, AQI) means
+    \item Why certain plants score higher than others
+\end{itemize}
+
+\section{Shops Page}
+
+\subsection{Vendor Discovery}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Vendor Cards:} Shop name, location, rating, contact info
+    \item \textbf{Plant Inventory:} All plants available from each vendor with prices
+    \item \textbf{Filtering:} By plant type, price range, availability
+    \item \textbf{Cart Integration:} Add items directly to cart with vendor association
+\end{itemize}
+
+\subsection{Plant Details Modal}
+\begin{itemize}[leftmargin=*]
+    \item Full plant information (scientific name, care level, benefits)
+    \item Temperature and humidity requirements
+    \item Watering frequency and soil type
+    \item Toxicity warnings
+    \item Vendor availability and pricing
+\end{itemize}
+
+\section{Nearby Page}
+
+\subsection{Map-Based Shop Discovery}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Interactive Map:} Leaflet.js with OpenStreetMap tiles
+    \item \textbf{GPS Location:} Auto-detect user position with 8-second timeout
+    \item \textbf{IP Fallback:} Uses ipapi.co if GPS fails
+    \item \textbf{Search Radius:} Adjustable slider (1-50 km)
+    \item \textbf{Shop Markers:} Clickable pins showing garden centers and nurseries
+\end{itemize}
+
+\subsection{Overpass API Integration}
+Queries OpenStreetMap for:
+\begin{lstlisting}[language=JavaScript, caption=Overpass Query]
+[out:json];
+(
+  node["shop"="garden_centre"](around:5000,lat,lon);
+  way["shop"="garden_centre"](around:5000,lat,lon);
+  node["leisure"="garden"](around:5000,lat,lon);
+);
+out body;
+\end{lstlisting}
+
+\section{Cart Page}
+
+\subsection{Shopping Cart Features}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Persistent Storage:} localStorage for guest users, MongoDB for logged-in users
+    \item \textbf{Item Management:} Quantity adjustment, removal, vendor grouping
+    \item \textbf{Price Calculation:} Subtotal, tax (if applicable), total
+    \item \textbf{Checkout Flow:} Address entry, payment method selection (placeholder)
+    \item \textbf{Order Confirmation:} Email notification via Nodemailer
+\end{itemize}
+
+\subsection{Gamification Integration}
+\begin{itemize}[leftmargin=*]
+    \item +5 points for each item added to cart
+    \item Points displayed in real-time toast notifications
+    \item Contributes to user ranking on leaderboard
+\end{itemize}
+
+\section{User Dashboard}
+
+\subsection{Profile Management}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{User Info:} Name, email, role (user/vendor/admin)
+    \item \textbf{Security:} Password change modal with old password verification
+    \item \textbf{Gamification Stats:} Points, ranking, oxygen contribution
+\end{itemize}
+
+\subsection{Favorites Collection}
+\begin{itemize}[leftmargin=*]
+    \item Grid view of all favorited plants
+    \item Quick remove functionality
+    \item +10 points for each plant added to favorites
+\end{itemize}
+
+\subsection{Vendor Portal Access}
+For users with vendor role:
+\begin{itemize}[leftmargin=*]
+    \item Shop profile setup (name, phone, address)
+    \item GPS location detection for shop coordinates
+    \item Inventory management (add plants, set prices, stock levels)
+    \item Admin approval workflow
+\end{itemize}
+
+\subsection{Permission Center Integration}
+\begin{itemize}[leftmargin=*]
+    \item "Privacy \& System Access" card in stats board
+    \item Opens global permission management modal
+    \item Real-time status of Location, Notifications, Camera permissions
+\end{itemize}
+
+\section{Vendor Portal}
+
+\subsection{Inventory Management}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Add Plants:} Select from master plant database
+    \item \textbf{Set Pricing:} Custom price per plant
+    \item \textbf{Stock Control:} Quantity tracking, availability toggle
+    \item \textbf{Bulk Actions:} Multi-select for price updates or removal
+\end{itemize}
+
+\subsection{Shop Analytics}
+\begin{itemize}[leftmargin=*]
+    \item Total plants in inventory
+    \item Average price point
+    \item Most popular plants (based on cart additions)
+    \item Customer inquiries (via contact form)
+\end{itemize}
+
+\section{Admin Dashboard}
+
+\subsection{Plant Management}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Add New Plants:} Form with all required fields (name, category, temp range, etc.)
+    \item \textbf{Edit Existing:} Inline editing with validation
+    \item \textbf{Delete:} Soft delete with confirmation
+    \item \textbf{Image Upload:} Cloudinary or local storage integration
+\end{itemize}
+
+\subsection{Vendor Approval Workflow}
+\begin{itemize}[leftmargin=*]
+    \item List of pending vendor applications
+    \item Review shop details and location
+    \item Approve/Reject with email notification
+    \item Mark vendors as "Top Recommended"
+\end{itemize}
+
+\subsection{User Management}
+\begin{itemize}[leftmargin=*]
+    \item View all registered users
+    \item Role assignment (user/vendor/admin)
+    \item Password reset functionality
+    \item Account suspension/activation
+\end{itemize}
+
+\subsection{System Health Monitor}
+\begin{itemize}[leftmargin=*]
+    \item API latency metrics
+    \item Database load statistics
+    \item Error rate tracking
+    \item Live terminal log (hacker-chic aesthetic)
+\end{itemize}
+
+\section{Make It Real (AR Preview)}
+
+\subsection{AR Workflow}
+\begin{enumerate}[leftmargin=*]
+    \item User selects a plant from any page
+    \item Clicks "Make It Real" button
+    \item Camera permission requested
+    \item Live camera feed displayed
+    \item Plant image overlaid on camera view
+    \item User can:
+    \begin{itemize}
+        \item Adjust plant size (pinch/zoom)
+        \item Move plant position (drag)
+        \item Rotate plant (two-finger rotation)
+        \item Change pot color (color picker)
+    \end{itemize}
+    \item Capture photo with plant in scene
+    \item Download or share image
+\end{enumerate}
+
+\subsection{Technical Implementation}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Background Removal:} Remove.bg API to isolate plant
+    \item \textbf{Canvas Rendering:} HTML5 Canvas for compositing
+    \item \textbf{Touch Gestures:} Custom gesture handlers for mobile
+    \item \textbf{Image Export:} Canvas.toBlob() for high-quality download
+\end{itemize}
+
+\section{AI Doctor (Chatbot)}
+
+\subsection{Gemini AI Integration}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Model:} Google Gemini 1.5 Flash
+    \item \textbf{Context:} Pre-loaded with entire plant database
+    \item \textbf{Capabilities:}
+    \begin{itemize}
+        \item Plant care advice (watering, sunlight, soil)
+        \item Disease diagnosis from descriptions
+        \item Pest control recommendations
+        \item Seasonal planting tips
+        \item Climate-specific guidance
+    \end{itemize}
+\end{itemize}
+
+\subsection{Chat Interface}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Design:} Quantum Intelligence aesthetic with frosted glass
+    \item \textbf{Message Types:} User queries, AI responses, system notifications
+    \item \textbf{Features:}
+    \begin{itemize}
+        \item Markdown rendering for formatted responses
+        \item Code syntax highlighting for plant care schedules
+        \item Image upload for plant diagnosis
+        \item Conversation history (session-based)
+    \end{itemize}
+\end{itemize}
+
+\section{Leaderboard}
+
+\subsection{Gamification Rankings}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Sorting:} By total points (descending)
+    \item \textbf{Display:} Rank, username, points, badges
+    \item \textbf{Tiers:}
+    \begin{itemize}
+        \item 0-100 points: Seed
+        \item 100-500 points: Sprout
+        \item 500+ points: Elite
+    \end{itemize}
+    \item \textbf{Badges:} Awarded for milestones (10 favorites, 50 cart items, etc.)
+\end{itemize}
+
+\subsection{Point System}
+\begin{itemize}[leftmargin=*]
+    \item +10 points: Add plant to favorites
+    \item +5 points: Add item to cart
+    \item +2 points: Daily login
+    \item +50 points: Complete profile
+    \item +100 points: First purchase (future feature)
+\end{itemize}
+
+\section{Authentication Pages}
+
+\subsection{Login}
+\begin{itemize}[leftmargin=*]
+    \item Email and password fields
+    \item "Remember Me" checkbox
+    \item JWT token generation on success
+    \item Redirect to dashboard or previous page
+\end{itemize}
+
+\subsection{Sign Up}
+\begin{itemize}[leftmargin=*]
+    \item Name, email, password, confirm password
+    \item Role selection (user/vendor)
+    \item Email verification (optional)
+    \item Welcome email via Nodemailer
+\end{itemize}
+
+\subsection{Password Reset}
+\begin{itemize}[leftmargin=*]
+    \item Email entry for reset link
+    \item Temporary token generation
+    \item Secure reset form with token validation
+    \item Password strength indicator
+\end{itemize}
+
+\section{Static Pages}
+
+\subsection{About}
+\begin{itemize}[leftmargin=*]
+    \item Mission statement
+    \item Team information
+    \item Technology overview
+    \item Environmental impact statistics
+\end{itemize}
+
+\subsection{Contact}
+\begin{itemize}[leftmargin=*]
+    \item Contact form (name, email, message)
+    \item Email delivery via Nodemailer
+    \item Social media links
+    \item Office address (if applicable)
+\end{itemize}
+
+\subsection{Support}
+\begin{itemize}[leftmargin=*]
+    \item FAQ section
+    \item Troubleshooting guides
+    \item Video tutorials
+    \item Live chat integration (future)
+\end{itemize}
+
+\newpage
+
+% Chapter 4: Advanced Features
+\chapter{Advanced Features \& Integrations}
+
+\section{Permission Management System}
+
+\subsection{Global Permission Center}
+\begin{tcolorbox}[colback=purple!10,colframe=purple!75!black,title=Managed Permissions]
+\begin{enumerate}[leftmargin=*]
+    \item \textbf{Geolocation (GPS)}
+    \begin{itemize}
+        \item Required for: Climate detection, nearby shops
+        \item Status: Granted / Denied / Prompt / Unsupported
+        \item Enable Button: Triggers \texttt{navigator.geolocation.getCurrentPosition()}
+    \end{itemize}
+    
+    \item \textbf{Notifications}
+    \begin{itemize}
+        \item Required for: Order updates, rare plant alerts
+        \item Status: Based on \texttt{Notification.permission}
+        \item Enable Button: Calls \texttt{Notification.requestPermission()}
+    \end{itemize}
+    
+    \item \textbf{Camera}
+    \begin{itemize}
+        \item Required for: AR plant preview
+        \item Status: Queried via \texttt{navigator.permissions.query()}
+        \item Enable Button: Requests \texttt{navigator.mediaDevices.getUserMedia()}
+    \end{itemize}
+\end{enumerate}
+\end{tcolorbox}
+
+\subsection{Location Nag System}
+Proactive notification system with versioned prompts:
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Denied State:} Shows instructions for re-enabling in browser settings
+    \item \textbf{Prompt State:} Encourages enabling with "Allow Location Prompt" button
+    \item \textbf{Mobile Shortcut:} "Long-press app icon $\rightarrow$ Site Settings" tip
+    \item \textbf{Session Storage:} Prevents repeated nagging (v4 key)
+\end{itemize}
+
+\section{Responsive Design System}
+
+\subsection{Breakpoints}
+\begin{lstlisting}[language=CSS, caption=Media Query Strategy]
+/* Mobile First Approach */
+@media (min-width: 640px) { /* Tablet */ }
+@media (min-width: 1024px) { /* Desktop */ }
+@media (min-width: 1440px) { /* Large Desktop */ }
+\end{lstlisting}
+
+\subsection{Mobile Optimizations}
+\begin{itemize}[leftmargin=*]
+    \item Touch-optimized buttons (min 44x44px)
+    \item Swipe gestures for image galleries
+    \item Bottom navigation bar for key actions
+    \item Reduced animations for performance
+    \item Lazy loading for images and components
+\end{itemize}
+
+\section{Performance Optimizations}
+
+\subsection{Code Splitting}
+\begin{lstlisting}[language=JavaScript, caption=Lazy Loading Example]
+const PlantDetailsModal = lazy(() => 
+  import('./PlantDetailsModal').then(module => 
+    ({ default: module.PlantDetailsModal })
+  )
+);
+\end{lstlisting}
+
+\subsection{Caching Strategy}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Weather Data:} localStorage with 1-hour expiry
+    \item \textbf{Plant Database:} In-memory cache, refreshed on mount
+    \item \textbf{User Cart:} localStorage for guests, MongoDB for users
+    \item \textbf{API Responses:} Service worker caching (future PWA feature)
+\end{itemize}
+
+\subsection{Image Optimization}
+\begin{itemize}[leftmargin=*]
+    \item WebP format with JPEG fallback
+    \item Responsive images with \texttt{srcset}
+    \item Lazy loading with Intersection Observer
+    \item Placeholder blur effect during load
+\end{itemize}
+
+\section{Security Measures}
+
+\subsection{Authentication Security}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Password Hashing:} bcrypt with salt rounds = 10
+    \item \textbf{JWT Tokens:} 7-day expiry, HTTP-only cookies (recommended)
+    \item \textbf{CORS:} Whitelist of allowed origins
+    \item \textbf{Rate Limiting:} Max 100 requests/15 minutes per IP
+\end{itemize}
+
+\subsection{Data Validation}
+\begin{itemize}[leftmargin=*]
+    \item Server-side validation for all API endpoints
+    \item Mongoose schema validation
+    \item Input sanitization to prevent XSS
+    \item SQL injection prevention (NoSQL injection for MongoDB)
+\end{itemize}
+
+\section{Error Handling \& Logging}
+
+\subsection{Frontend Error Boundaries}
+\begin{lstlisting}[language=JavaScript, caption=Error Boundary Component]
+class ErrorBoundary extends React.Component {
+  componentDidCatch(error, errorInfo) {
+    console.error('Error caught:', error, errorInfo);
+    // Log to external service (e.g., Sentry)
+  }
+  
+  render() {
+    if (this.state.hasError) {
+      return <ErrorFallbackUI />;
+    }
+    return this.props.children;
+  }
+}
+\end{lstlisting}
+
+\subsection{Backend Logging}
+\begin{itemize}[leftmargin=*]
+    \item Winston logger for structured logs
+    \item Log levels: error, warn, info, debug
+    \item Separate log files for different modules
+    \item Rotation policy: daily, max 14 days retention
+\end{itemize}
+
+\newpage
+
+% Chapter 5: Future Enhancements
+\chapter{Future Enhancements \& Roadmap}
+
+\section{Planned Features}
+
+\subsection{Phase 1: Q1 2026}
+\begin{enumerate}[leftmargin=*]
+    \item \textbf{Payment Integration}
+    \begin{itemize}
+        \item Stripe/Razorpay for online payments
+        \item Order tracking system
+        \item Invoice generation
+    \end{itemize}
+    
+    \item \textbf{Push Notifications}
+    \begin{itemize}
+        \item Firebase Cloud Messaging
+        \item Order status updates
+        \item Rare plant availability alerts
+    \end{itemize}
+    
+    \item \textbf{Social Features}
+    \begin{itemize}
+        \item User profiles with plant collections
+        \item Follow other gardeners
+        \item Share plant care tips
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Phase 2: Q2 2026}
+\begin{enumerate}[leftmargin=*]
+    \item \textbf{Advanced AR}
+    \begin{itemize}
+        \item 3D plant models
+        \item Growth simulation over time
+        \item Multi-plant scene composition
+    \end{itemize}
+    
+    \item \textbf{Plant Care Reminders}
+    \begin{itemize}
+        \item Watering schedules
+        \item Fertilization alerts
+        \item Seasonal care tips
+    \end{itemize}
+    
+    \item \textbf{Community Forum}
+    \begin{itemize}
+        \item Q\&A section
+        \item Plant disease diagnosis crowdsourcing
+        \item User-generated content
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Phase 3: Q3 2026}
+\begin{enumerate}[leftmargin=*]
+    \item \textbf{Machine Learning Enhancements}
+    \begin{itemize}
+        \item Plant disease detection from images
+        \item Personalized recommendations based on user history
+        \item Predictive analytics for plant survival
+    \end{itemize}
+    
+    \item \textbf{Subscription Model}
+    \begin{itemize}
+        \item Premium features (advanced analytics, priority support)
+        \item Monthly plant delivery service
+        \item Exclusive access to rare species
+    \end{itemize}
+    
+    \item \textbf{Mobile App}
+    \begin{itemize}
+        \item Native iOS and Android apps
+        \item Offline mode for plant database
+        \item Improved AR performance
+    \end{itemize}
+\end{enumerate}
+
+\section{Scalability Considerations}
+
+\subsection{Database Optimization}
+\begin{itemize}[leftmargin=*]
+    \item Indexing on frequently queried fields (email, plantId, userId)
+    \item Sharding for horizontal scaling
+    \item Read replicas for load distribution
+    \item Caching layer with Redis
+\end{itemize}
+
+\subsection{API Performance}
+\begin{itemize}[leftmargin=*]
+    \item GraphQL for flexible data fetching
+    \item API versioning for backward compatibility
+    \item CDN for static assets
+    \item Load balancing across multiple servers
+\end{itemize}
+
+\subsection{Monitoring \& Analytics}
+\begin{itemize}[leftmargin=*]
+    \item Google Analytics for user behavior
+    \item Sentry for error tracking
+    \item New Relic for application performance monitoring
+    \item Custom dashboards for business metrics
+\end{itemize}
+
+\newpage
+
+% Chapter 6: Deployment
+\chapter{Deployment \& DevOps}
+
+\section{Hosting Infrastructure}
+
+\subsection{Current Setup}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Frontend:} Vercel (automatic deployments from Git)
+    \item \textbf{Backend:} Render / Railway (Node.js hosting)
+    \item \textbf{Database:} MongoDB Atlas (cloud-hosted)
+    \item \textbf{Static Assets:} Cloudinary / AWS S3
+\end{itemize}
+
+\subsection{CI/CD Pipeline}
+\begin{lstlisting}[language=bash, caption=GitHub Actions Workflow]
+name: Deploy to Production
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependencies
+        run: npm install
+      - name: Run tests
+        run: npm test
+      - name: Build
+        run: npm run build
+      - name: Deploy to Vercel
+        run: vercel --prod
+\end{lstlisting}
+
+\section{Environment Configuration}
+
+\subsection{Environment Variables}
+\begin{lstlisting}[caption=.env.example]
+# Database
+MONGODB_URI=mongodb+srv://user:pass@cluster.mongodb.net/vanamap
+
+# JWT
+JWT_SECRET=your-secret-key-here
+JWT_EXPIRES_IN=7d
+
+# Email
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=your-email@gmail.com
+SMTP_PASS=your-app-password
+
+# External APIs
+GEMINI_API_KEY=your-gemini-api-key
+REMOVEBG_API_KEY=your-removebg-api-key
+
+# Frontend
+REACT_APP_API_URL=https://api.vanamap.com
+REACT_APP_ENV=production
+\end{lstlisting}
+
+\section{Backup \& Recovery}
+
+\subsection{Database Backups}
+\begin{itemize}[leftmargin=*]
+    \item \textbf{Frequency:} Daily automated backups
+    \item \textbf{Retention:} 30 days
+    \item \textbf{Storage:} MongoDB Atlas automated backups + AWS S3
+    \item \textbf{Recovery:} Point-in-time restore capability
+\end{itemize}
+
+\subsection{Disaster Recovery Plan}
+\begin{enumerate}[leftmargin=*]
+    \item Identify failure (monitoring alerts)
+    \item Switch to backup server (if available)
+    \item Restore database from latest backup
+    \item Verify data integrity
+    \item Resume normal operations
+    \item Post-mortem analysis
+\end{enumerate}
+
+\newpage
+
+% Appendix
+\appendix
+
+\chapter{API Endpoints Reference}
+
+\section{Authentication Endpoints}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|p{6cm}|}
+\hline
+\textbf{Method} & \textbf{Endpoint} & \textbf{Description} \\
+\hline
+POST & /api/auth/register & Create new user account \\
+POST & /api/auth/login & Authenticate user, return JWT \\
+POST & /api/auth/logout & Invalidate JWT token \\
+POST & /api/auth/forgot-password & Send password reset email \\
+POST & /api/auth/reset-password & Reset password with token \\
+GET & /api/auth/me & Get current user profile \\
+\hline
+\end{tabular}
+\caption{Authentication API Endpoints}
+\end{table}
+
+\section{Plant Endpoints}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|p{6cm}|}
+\hline
+\textbf{Method} & \textbf{Endpoint} & \textbf{Description} \\
+\hline
+GET & /api/plants & Get all plants \\
+GET & /api/plants/:id & Get plant by ID \\
+POST & /api/plants & Create new plant (admin only) \\
+PUT & /api/plants/:id & Update plant (admin only) \\
+DELETE & /api/plants/:id & Delete plant (admin only) \\
+GET & /api/plants/search & Search plants by name \\
+\hline
+\end{tabular}
+\caption{Plant API Endpoints}
+\end{table}
+
+\section{Vendor Endpoints}
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|l|p{6cm}|}
+\hline
+\textbf{Method} & \textbf{Endpoint} & \textbf{Description} \\
+\hline
+GET & /api/vendors & Get all approved vendors \\
+GET & /api/vendors/:id & Get vendor by ID \\
+POST & /api/vendors & Create vendor profile \\
+PUT & /api/vendors/:id & Update vendor profile \\
+POST & /api/vendors/:id/inventory & Add plant to inventory \\
+DELETE & /api/vendors/:id/inventory/:plantId & Remove plant from inventory \\
+\hline
+\end{tabular}
+\caption{Vendor API Endpoints}
+\end{table}
+
+\chapter{Database Indexes}
+
+\section{Performance Indexes}
+
+\begin{lstlisting}[language=JavaScript, caption=MongoDB Index Definitions]
+// Users Collection
+db.users.createIndex({ email: 1 }, { unique: true });
+db.users.createIndex({ points: -1 }); // For leaderboard
+
+// Plants Collection
+db.plants.createIndex({ name: "text", scientificName: "text" });
+db.plants.createIndex({ category: 1 });
+
+// Vendors Collection
+db.vendors.createIndex({ userId: 1 });
+db.vendors.createIndex({ "coordinates.latitude": 1, "coordinates.longitude": 1 });
+db.vendors.createIndex({ isApproved: 1 });
+
+// Orders Collection (future)
+db.orders.createIndex({ userId: 1, createdAt: -1 });
+db.orders.createIndex({ status: 1 });
+\end{lstlisting}
+
+\chapter{Glossary}
+
+\begin{description}[leftmargin=3cm, style=nextline]
+    \item[Aptness Score] A normalized value (0-100) representing how well a plant will thrive in a user's specific climate conditions.
+    
+    \item[Glassmorphism] A UI design trend featuring frosted glass effects with blur, transparency, and subtle borders.
+    
+    \item[Geocoding] The process of converting addresses or place names into geographic coordinates (latitude, longitude).
+    
+    \item[JWT (JSON Web Token)] A compact, URL-safe token format for securely transmitting information between parties.
+    
+    \item[Progressive Web App (PWA)] A web application that uses modern web capabilities to deliver an app-like experience.
+    
+    \item[Reverse Geocoding] The process of converting geographic coordinates into human-readable addresses.
+    
+    \item[AQI (Air Quality Index)] A numerical scale used to communicate how polluted the air currently is or how polluted it is forecast to become.
+    
+    \item[Overpass API] A read-only API that serves up custom selected parts of the OpenStreetMap data.
+    
+    \item[Gamification] The application of game-design elements and principles in non-game contexts to increase user engagement.
+\end{description}
+
+\chapter{References}
+
+\begin{enumerate}[leftmargin=*]
+    \item Open-Meteo Weather API Documentation. \url{https://open-meteo.com/en/docs}
+    
+    \item OpenStreetMap Nominatim API. \url{https://nominatim.org/release-docs/latest/api/Overview/}
+    
+    \item Overpass API Documentation. \url{https://wiki.openstreetmap.org/wiki/Overpass_API}
+    
+    \item Google Gemini API Reference. \url{https://ai.google.dev/docs}
+    
+    \item React Documentation. \url{https://react.dev/}
+    
+    \item MongoDB Manual. \url{https://www.mongodb.com/docs/manual/}
+    
+    \item Express.js Guide. \url{https://expressjs.com/en/guide/routing.html}
+    
+    \item Leaflet.js Documentation. \url{https://leafletjs.com/reference.html}
+    
+    \item JWT.io Introduction. \url{https://jwt.io/introduction}
+    
+    \item Web Content Accessibility Guidelines (WCAG) 2.1. \url{https://www.w3.org/WAI/WCAG21/quickref/}
+\end{enumerate}
+
+\chapter{Acknowledgments}
+
+This project would not have been possible without the following open-source projects and APIs:
+
+\begin{itemize}[leftmargin=*]
+    \item \textbf{React Team} for the incredible frontend framework
+    \item \textbf{Open-Meteo} for providing free, high-quality weather data
+    \item \textbf{OpenStreetMap Contributors} for comprehensive mapping data
+    \item \textbf{Google Gemini Team} for the powerful AI capabilities
+    \item \textbf{MongoDB} for the flexible, scalable database solution
+    \item \textbf{Vercel} for seamless deployment and hosting
+    \item \textbf{The Open Source Community} for countless libraries and tools
+\end{itemize}
+
+\vspace{2cm}
+
+\begin{center}
+\textit{For questions, feedback, or contributions, please contact:}\\
+\vspace{0.5cm}
+\textbf{VanaMap Development Team}\\
+Email: \href{mailto:support@vanamap.com}{support@vanamap.com}\\
+Website: \url{https://vanamap.com}
+\end{center}
+
+\end{document}

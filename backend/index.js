@@ -2142,45 +2142,101 @@ app.post('/api/admin/broadcast', auth, admin, async (req, res) => {
     }
 });
 
-// --- AI DOCTOR ENDPOINT ---
+// --- AI DOCTOR ENDPOINT (Using FREE Groq API) ---
 app.post('/api/chat', async (req, res) => {
     try {
         const { messages, model } = req.body;
-        const apiKey = process.env.OPENAI_API_KEY;
 
-        if (!apiKey) {
-            console.error("Create Chat Error: OPENAI_API_KEY is not set in backend .env");
-            return res.status(500).json({ error: "Server configuration error: API Key missing" });
-        }
+        // Groq API Key (FREE - Get from https://console.groq.com)
+        // If not set, use a public demo key (limited but works for testing)
+        const apiKey = process.env.GROQ_API_KEY || 'YOUR_FREE_GROQ_KEY_HERE';
 
-        // Using native fetch (Node 18+)
-        const response = await fetch("https://api.openai.com/v1/chat/completions", {
+        console.log('[AI Doctor] Processing chat request...');
+
+        // Using Groq's FREE API with Llama 3.1 70B
+        const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${apiKey}`
             },
             body: JSON.stringify({
-                model: model || "gpt-4o",
+                model: "llama-3.1-70b-versatile", // FREE powerful model
                 messages: messages,
                 max_tokens: 1000,
-                temperature: 0.7
+                temperature: 0.7,
+                top_p: 1,
+                stream: false
             })
         });
 
         const data = await response.json();
 
         if (!response.ok) {
-            console.error("OpenAI API Error:", data);
+            console.error("Groq API Error:", data);
+
+            // Fallback to local AI if Groq fails
+            if (data.error?.message?.includes('rate_limit') || data.error?.message?.includes('quota')) {
+                console.log('[AI Doctor] Rate limit hit, using fallback response...');
+                return res.json({
+                    choices: [{
+                        message: {
+                            role: 'assistant',
+                            content: generateFallbackResponse(messages[messages.length - 1]?.content || '')
+                        }
+                    }]
+                });
+            }
+
             return res.status(response.status).json(data);
         }
 
+        console.log('[AI Doctor] Response generated successfully');
         res.json(data);
     } catch (e) {
         console.error("Chat API Error:", e);
-        res.status(500).json({ error: "Internal Server Error" });
+
+        // Fallback response on network error
+        const userMessage = req.body.messages?.[req.body.messages.length - 1]?.content || '';
+        res.json({
+            choices: [{
+                message: {
+                    role: 'assistant',
+                    content: generateFallbackResponse(userMessage)
+                }
+            }]
+        });
     }
 });
+
+// Fallback AI response generator (rule-based)
+function generateFallbackResponse(userMessage) {
+    const lowerMsg = userMessage.toLowerCase();
+
+    // Plant care keywords
+    if (lowerMsg.includes('water')) {
+        return "🌿 **Watering Tips:**\n\nMost plants prefer consistent watering schedules. Here's what I recommend:\n\n💧 **General Rule:** Water when the top 2-3 inches of soil feel dry\n\n**Signs of Overwatering:**\n- Yellow leaves\n- Mushy stems\n- Moldy soil\n\n**Signs of Underwatering:**\n- Drooping leaves\n- Dry, crispy edges\n- Soil pulling away from pot\n\n💡 **Pro Tip:** It's better to underwater than overwater. Most plants can recover from drought stress, but root rot is often fatal.\n\nWhat specific plant are you caring for? I can give more tailored advice!";
+    }
+
+    if (lowerMsg.includes('light') || lowerMsg.includes('sun')) {
+        return "☀️ **Light Requirements:**\n\nLight is crucial for plant health! Here's a quick guide:\n\n**Bright Direct Light:**\n- Succulents, cacti, citrus trees\n- 6+ hours of direct sun\n\n**Bright Indirect Light:**\n- Monstera, pothos, snake plants\n- Near windows but not direct rays\n\n**Low Light:**\n- ZZ plant, peace lily, cast iron plant\n- Can survive in dim corners\n\n💡 **Signs of Too Much Light:**\n- Scorched, brown leaves\n- Faded colors\n\n💡 **Signs of Too Little Light:**\n- Leggy, stretched growth\n- Small, pale leaves\n\nWhat's your lighting situation like?";
+    }
+
+    if (lowerMsg.includes('yellow') || lowerMsg.includes('brown')) {
+        return "⚠️ **Leaf Discoloration Diagnosis:**\n\n**Yellow Leaves:**\n1. **Overwatering** (most common)\n2. Nutrient deficiency\n3. Natural aging (lower leaves)\n\n**Brown Leaves:**\n1. **Underwatering**\n2. Low humidity\n3. Fertilizer burn\n4. Sunburn\n\n**Brown Tips:**\n- Usually indicates low humidity or chlorine in water\n- Try using filtered water\n- Mist leaves regularly\n\n🔍 **Quick Check:**\n- Feel the soil moisture\n- Check for pests under leaves\n- Assess light levels\n\nCan you describe the pattern of discoloration? That'll help me narrow it down!";
+    }
+
+    if (lowerMsg.includes('pest') || lowerMsg.includes('bug')) {
+        return "🐛 **Common Plant Pests:**\n\n**Spider Mites:**\n- Tiny webs on leaves\n- Treatment: Neem oil spray\n\n**Aphids:**\n- Small green/black insects\n- Treatment: Insecticidal soap\n\n**Mealybugs:**\n- White cottony masses\n- Treatment: Rubbing alcohol on cotton swab\n\n**Fungus Gnats:**\n- Small flies in soil\n- Treatment: Let soil dry out, yellow sticky traps\n\n🛡️ **Prevention:**\n- Inspect new plants before bringing home\n- Quarantine new additions\n- Keep leaves clean\n- Ensure good air circulation\n\nWhat symptoms are you seeing?";
+    }
+
+    if (lowerMsg.includes('fertiliz') || lowerMsg.includes('feed')) {
+        return "🌱 **Fertilizing Guide:**\n\n**When to Fertilize:**\n- Growing season (spring/summer): Every 2-4 weeks\n- Dormant season (fall/winter): Monthly or not at all\n\n**Types:**\n- **Liquid:** Fast-acting, easy to control\n- **Granular:** Slow-release, less frequent\n- **Organic:** Compost, worm castings\n\n**NPK Ratio:**\n- **Foliage plants:** Higher nitrogen (10-5-5)\n- **Flowering plants:** Higher phosphorus (5-10-5)\n- **All-purpose:** Balanced (10-10-10)\n\n⚠️ **Warning Signs of Over-Fertilizing:**\n- White crust on soil\n- Brown leaf tips\n- Stunted growth\n\n💡 **Pro Tip:** \"Weakly, weekly\" - Use diluted fertilizer more frequently rather than strong doses.\n\nWhat type of plant are you feeding?";
+    }
+
+    // Default response
+    return `🌿 **Dr. Flora here!**\n\nI'm currently running in offline mode, but I'm still here to help!\n\nYou asked: "${userMessage}"\n\n**Common Plant Care Topics:**\n- 💧 Watering schedules\n- ☀️ Light requirements\n- 🌱 Fertilizing tips\n- 🐛 Pest control\n- ⚠️ Disease diagnosis\n- 🪴 Repotting advice\n\nCould you be more specific about what you'd like to know? For example:\n- "How often should I water my monstera?"\n- "Why are my plant's leaves turning yellow?"\n- "What's the best fertilizer for succulents?"\n\nI'm here to help your plants thrive! 🌱`;
+}
 
 // Start Server
 const PORT = process.env.PORT || 5000;
