@@ -1728,12 +1728,17 @@ app.post('/api/auth/check-email', async (req, res) => {
             return res.json({ success: true, verified: true, role: 'admin', name: 'Master Admin' });
         }
 
-        const user = await User.findOne({
-            $or: [
-                { email: iden },
-                { phone: iden }
-            ]
-        });
+        // Phone fuzzy match (e.g. 98765 matches +9198765)
+        const isNumeric = /^\d+$/.test(iden.replace('+', ''));
+        const searchCriteria = [
+            { email: iden },
+            { phone: iden }
+        ];
+        if (isNumeric) {
+            searchCriteria.push({ phone: { $regex: iden.replace(/\+/g, '') + '$' } });
+        }
+
+        const user = await User.findOne({ $or: searchCriteria });
         if (!user) {
             return res.status(404).json({ error: "Access Denied: Account not found." });
         }
@@ -1762,12 +1767,16 @@ app.post('/api/auth/login', async (req, res) => {
             });
         }
 
-        const user = await User.findOne({
-            $or: [
-                { email: identifier },
-                { phone: identifier }
-            ]
-        });
+        const isNumeric = /^\d+$/.test(identifier.replace('+', ''));
+        const searchCriteria = [
+            { email: identifier },
+            { phone: identifier }
+        ];
+        if (isNumeric) {
+            searchCriteria.push({ phone: { $regex: identifier.replace(/\+/g, '') + '$' } });
+        }
+
+        const user = await User.findOne({ $or: searchCriteria });
 
         if (!user) return res.status(401).json({ error: "Account not found in ecosystem" });
 
