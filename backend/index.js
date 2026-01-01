@@ -342,6 +342,33 @@ const connectDB = async () => {
             serverSelectionTimeoutMS: 5000 // Fail fast if no connection
         });
         console.log('MongoDB Connected');
+
+        // Auto-seed database if empty
+        const plantCount = await Plant.countDocuments();
+        console.log(`📊 Current database: ${plantCount} plants`);
+
+        if (plantCount === 0) {
+            console.log('🌱 Database is empty. Auto-seeding from plant-data.js...');
+            try {
+                const { indoorPlants, outdoorPlants } = require('./plant-data');
+                const allPlants = [...indoorPlants, ...outdoorPlants];
+
+                const ops = allPlants.map(plant => ({
+                    updateOne: {
+                        filter: { id: plant.id },
+                        update: { $set: plant },
+                        upsert: true
+                    }
+                }));
+
+                const result = await Plant.bulkWrite(ops);
+                console.log(`✅ Auto-seeded ${result.upsertedCount} plants successfully!`);
+            } catch (seedErr) {
+                console.error('❌ Auto-seed failed:', seedErr.message);
+            }
+        } else {
+            console.log('✅ Database already populated');
+        }
     } catch (err) {
         console.error('MongoDB Connection Error:', err.message);
         // Do not exit process, let server run to serve /health
