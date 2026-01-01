@@ -69,38 +69,63 @@ export const calculateAptnessMC = (
     // Convert to 0-100 scale
     let score = avgEfficiency * 100;
 
-    // Apply biological modifiers
+    // Apply biological modifiers with STRONGER differentiation
     let modifier = 1.0;
     const desc = (plant.description || "").toLowerCase();
 
     // Hardy plants have higher resilience
-    if (desc.includes('hardy') || desc.includes('tough')) modifier += 0.05;
+    if (desc.includes('hardy') || desc.includes('tough')) modifier += 0.1;
 
     // Air purification synergy with AQI
     const isPurifier = plant.medicinalValues?.includes('Air purification') ||
         plant.advantages?.some(a => a.toLowerCase().includes('purif'));
 
-    if (aqi > 100 && isPurifier) modifier += 0.1;
-    else if (aqi > 150 && !isPurifier) modifier -= 0.15;
+    if (aqi > 100 && isPurifier) modifier += 0.2;
+    else if (aqi > 150 && !isPurifier) modifier -= 0.25;
 
-    // Apply temperature stress penalties
+    // STRONGER temperature stress penalties for better differentiation
     const tempMin = plant.idealTempMin || 15;
     const tempMax = plant.idealTempMax || 30;
 
     if (baseTemp < tempMin) {
-        const coldStress = (tempMin - baseTemp) / 10;
-        modifier -= Math.min(coldStress * 0.1, 0.3);
+        const coldStress = (tempMin - baseTemp);
+        modifier -= Math.min(coldStress * 0.05, 0.5); // Up to 50% penalty
     } else if (baseTemp > tempMax) {
-        const heatStress = (baseTemp - tempMax) / 10;
-        modifier -= Math.min(heatStress * 0.1, 0.3);
+        const heatStress = (baseTemp - tempMax);
+        modifier -= Math.min(heatStress * 0.05, 0.5); // Up to 50% penalty
+    } else {
+        // Bonus for being in ideal range
+        const tempRange = tempMax - tempMin;
+        const tempPosition = (baseTemp - tempMin) / tempRange;
+        // Best at middle of range
+        const idealBonus = 1 - Math.abs(tempPosition - 0.5) * 0.4;
+        modifier += idealBonus * 0.1;
     }
 
-    // Apply humidity stress penalties
+    // STRONGER humidity stress penalties
     const minHumidity = plant.minHumidity || 40;
+    const maxHumidity = 80; // Default max humidity
+
     if (baseHumidity < minHumidity) {
-        const dryStress = (minHumidity - baseHumidity) / 20;
-        modifier -= Math.min(dryStress * 0.1, 0.2);
+        const dryStress = (minHumidity - baseHumidity);
+        modifier -= Math.min(dryStress * 0.02, 0.4); // Up to 40% penalty
+    } else if (baseHumidity > maxHumidity) {
+        const wetStress = (baseHumidity - maxHumidity);
+        modifier -= Math.min(wetStress * 0.02, 0.3); // Up to 30% penalty
     }
+
+    // Light requirement matching
+    const lightReq = (plant as any).lightReq || 'medium';
+    if (lightReq === 'high') modifier += 0.05; // High light plants are generally more vigorous
+    if (lightReq === 'low') modifier -= 0.05; // Low light plants may be less vigorous
+
+    // Maintenance level (easier plants score slightly higher)
+    const maintenance = (plant as any).maintenance || 'medium';
+    if (maintenance === 'low') modifier += 0.05;
+    if (maintenance === 'high') modifier -= 0.05;
+
+    // Ensure modifier doesn't go below 0.1 or above 1.5
+    modifier = Math.max(0.1, Math.min(1.5, modifier));
 
     return Math.round(score * modifier * 10) / 10;
 };
