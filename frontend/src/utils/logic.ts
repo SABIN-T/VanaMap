@@ -164,7 +164,7 @@ export const calculateAptness = (
     currentTemp: number,
     aqi?: number,
     currentHumidity?: number,
-    lightPercent?: number,
+    _lightPercent?: number,
     useMonteCarlo: boolean = false,
     iterations?: number
 ): number => {
@@ -236,7 +236,7 @@ export const calculateO2Production = (
 
 export const calculatePlantsNeeded = (
     plant: Plant,
-    roomSize: number,
+    _roomSize: number,
     hoursPerDay: number = 8,
     peopleCount: number = 1
 ): { plantsNeeded: number; totalO2: number; isLethal: boolean } => {
@@ -250,4 +250,65 @@ export const calculatePlantsNeeded = (
         totalO2,
         isLethal: dailyO2PerPlant < 0
     };
+};
+
+// Room simulation for plant details modal
+export const runRoomSimulationMC = (
+    plant: Plant,
+    roomSize: number,
+    hoursPerDay: number,
+    peopleCount: number,
+    avgTemp: number,
+    avgHumidity: number,
+    aqi: number
+) => {
+    const aptness = calculateAptnessMC(plant, avgTemp, aqi, avgHumidity);
+    const { plantsNeeded, totalO2, isLethal } = calculatePlantsNeeded(plant, roomSize, hoursPerDay, peopleCount);
+
+    return {
+        aptness,
+        plantsNeeded,
+        totalO2,
+        isLethal
+    };
+};
+
+// Generate plant insights for details modal
+export const generatePlantInsights = (plant: Plant, avgTemp: number, avgHumidity: number, aqi: number) => {
+    const insights: string[] = [];
+
+    // Temperature insights
+    const idealMin = plant.idealTempMin || 15;
+    const idealMax = plant.idealTempMax || 30;
+    if (avgTemp >= idealMin && avgTemp <= idealMax) {
+        insights.push(`✅ Perfect temperature match (${idealMin}-${idealMax}°C)`);
+    } else if (avgTemp < idealMin) {
+        insights.push(`⚠️ Too cold - prefers ${idealMin}-${idealMax}°C`);
+    } else {
+        insights.push(`⚠️ Too warm - prefers ${idealMin}-${idealMax}°C`);
+    }
+
+    // Humidity insights
+    const minHumidity = plant.minHumidity || 40;
+    if (avgHumidity >= minHumidity) {
+        insights.push(`✅ Humidity is adequate (needs ${minHumidity}%+)`);
+    } else {
+        insights.push(`⚠️ Too dry - needs ${minHumidity}%+ humidity`);
+    }
+
+    // Air quality insights
+    const isPurifier = plant.medicinalValues?.includes('Air purification') ||
+        plant.advantages?.some(a => a.toLowerCase().includes('purif'));
+    if (isPurifier && aqi > 100) {
+        insights.push(`🌿 Excellent air purifier for your AQI (${aqi})`);
+    } else if (isPurifier) {
+        insights.push(`🌿 Natural air purifier`);
+    }
+
+    // Oxygen production insights
+    if (plant.oxygenLevel === 'very-high' || plant.oxygenLevel === 'high') {
+        insights.push(`💨 High oxygen producer`);
+    }
+
+    return insights;
 };
