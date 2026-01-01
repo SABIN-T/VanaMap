@@ -237,7 +237,7 @@ export const Premium = () => {
                             </li>
                             <li className={`${styles.featureItem} ${styles.premium}`}>
                                 <Bot size={18} className={styles.checkIcon} />
-                                <span>Dr. Flora: <strong>GPT-4o</strong> AI Diagnosis</span>
+                                <span>Dr. Flora: <strong>Groq AI</strong> (Llama 3.1 70B)</span>
                             </li>
                             <li className={`${styles.featureItem} ${styles.premium}`}>
                                 <Headset size={18} className={styles.checkIcon} />
