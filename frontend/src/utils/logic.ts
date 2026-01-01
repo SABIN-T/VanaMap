@@ -204,59 +204,10 @@ export const normalizeBatch = (scores: number[]): number[] => {
     if (maxScore === 0) return scores.map(() => 0);
     if (maxScore === minScore) return scores.map(() => 100.0); // All identical
 
-    // MOBILE OPTIMIZATION: Use simpler linear scaling for instant performance
-    const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-
-    if (isMobile) {
-        // Fast linear normalization (10-100 range)
-        return scores.map(s => {
-            const normalized = ((s - minScore) / (maxScore - minScore)) * 90 + 10;
-            return Math.round(normalized * 10) / 10;
-        });
-    }
-
-    // DESKTOP: Enhanced normalization for better visual differentiation
-    // Uses percentile-based adjustment for clearer tiers
-
-    // Sort scores to find percentiles
-    const sortedScores = [...scores].sort((a, b) => b - a);
-    const p90 = sortedScores[Math.floor(sortedScores.length * 0.1)] || maxScore;
-    const p50 = sortedScores[Math.floor(sortedScores.length * 0.5)] || maxScore;
-
+    // Simple linear normalization: 100% to 10% scale
+    // Top plant = 100%, Lowest plant = 10%, others scaled linearly
     return scores.map(s => {
-        // Linear normalization (0-100 scale)
-        let normalized = ((s - minScore) / (maxScore - minScore)) * 100;
-
-        // Apply gentle curve to enhance differentiation in the top tier
-        // Top 10% plants: 90-100%
-        // Middle plants: 50-90%
-        // Lower plants: 10-50%
-        if (s >= p90) {
-            // Top tier: map to 90-100
-            const topRange = maxScore - p90;
-            if (topRange > 0) {
-                normalized = 90 + ((s - p90) / topRange) * 10;
-            } else {
-                normalized = 100;
-            }
-        } else if (s >= p50) {
-            // Mid tier: map to 50-90
-            const midRange = p90 - p50;
-            if (midRange > 0) {
-                normalized = 50 + ((s - p50) / midRange) * 40;
-            } else {
-                normalized = 70;
-            }
-        } else {
-            // Lower tier: map to 10-50
-            const lowRange = p50 - minScore;
-            if (lowRange > 0) {
-                normalized = 10 + ((s - minScore) / lowRange) * 40;
-            } else {
-                normalized = 30;
-            }
-        }
-
+        const normalized = ((s - minScore) / (maxScore - minScore)) * 90 + 10;
         return Math.round(normalized * 10) / 10;
     });
 };

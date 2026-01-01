@@ -711,7 +711,7 @@ export const Home = () => {
                             <span className={styles.explainerTitle}>Understanding Aptness Scores</span>
                         </div>
                         <p className={styles.explainerText}>
-                            Aptness is a <strong>scientifically-calibrated biological compatibility metric</strong> based on direct biological efficiency calculations for your environment. The system evaluates temperature tolerance, humidity requirements, and day/night cycle impacts. Scores are distributed using <strong>percentile-based normalization</strong>: top 10% plants score 90-100%, middle tier 50-90%, and lower tier 10-50%, creating clear differentiation for easy decision-making.
+                            Aptness is a <strong>scientifically-calibrated biological compatibility metric</strong> based on direct biological efficiency calculations for your environment. The system evaluates temperature tolerance, humidity requirements, and day/night cycle impacts. Scores are scaled linearly from <strong>100% (best match) to 10% (lowest compatibility)</strong>, making it easy to compare plants at a glance.
                         </p>
                         <div className={styles.explainerLegend}>
                             <div className={styles.legendItem}>
