@@ -27,9 +27,19 @@ const getHumidityScore = (plant: Plant, avgHumidity: number): number => {
 
 const getLightScore = (plant: Plant, lightPercent: number): number => {
     const sun = (plant.sunlight || 'medium').toLowerCase();
+
+    // Lux Parsing (if available)
     let target = 50;
-    if (sun.includes('high') || sun.includes('direct') || sun.includes('bright')) target = 80;
-    else if (sun.includes('low') || sun.includes('shade')) target = 30;
+    const luxMatch = sun.match(/(\d+)\s*lux/i);
+
+    if (luxMatch) {
+        // Map 0-10000 Lux to 0-100%
+        const val = parseInt(luxMatch[1]);
+        target = Math.min(100, Math.max(1, val / 100));
+    } else {
+        if (sun.includes('high') || sun.includes('direct') || sun.includes('bright')) target = 80;
+        else if (sun.includes('low') || sun.includes('shade')) target = 30;
+    }
 
     // Standard matching curve for Aptness
     const diff = Math.abs(lightPercent - target);
@@ -107,11 +117,19 @@ export const normalizeBatch = (scores: number[]): number[] => {
 const calculateStressFactor = (plant: Plant, temp: number, light: number): number => {
     let stress = 0.0;
 
-    // 1. Light Stress (Direct, Linear Penalty)
+    // 1. Light Stress (Direct, Linear Penalty w/ Lux)
     const sun = (plant.sunlight || 'medium').toLowerCase();
     let idealLight = 50;
-    if (sun.includes('high') || sun.includes('bright')) idealLight = 80;
-    else if (sun.includes('low') || sun.includes('shade')) idealLight = 30;
+
+    // Parse Lux if available "2000 lux"
+    const luxMatch = sun.match(/(\d+)\s*lux/i);
+    if (luxMatch) {
+        const val = parseInt(luxMatch[1]);
+        idealLight = Math.min(100, Math.max(1, val / 100));
+    } else {
+        if (sun.includes('high') || sun.includes('bright')) idealLight = 80;
+        else if (sun.includes('low') || sun.includes('shade')) idealLight = 30;
+    }
 
     const lightDiff = Math.abs(light - idealLight);
     // Every 10% deviation adds 15% stress (Plant needs 15% more help)
@@ -127,8 +145,7 @@ const calculateStressFactor = (plant: Plant, temp: number, light: number): numbe
     if (temp < min) tempDiff = min - temp;
     else if (temp > max) tempDiff = temp - max;
 
-    // Curve: 2 degrees = 0.04 (4% stress). 5 degrees = 0.25 (25% stress). 10 degrees = 1.0 (Max).
-    // Formula: (Diff^2) / 100
+    // Curve: 2 degrees = 0.04 (4% stress). 5 degrees = 0.25 (25% stress).
     if (tempDiff > 0) {
         stress += (tempDiff * tempDiff) / 100;
     }
@@ -157,20 +174,21 @@ export const runRoomSimulationMC = (
 
     // B. Room Buffer Logic (Scientific Freshness)
     // Uses roomSize (m2) -> Volume -> Safe Fresh Hours
-    // 20m2 room ~ 2 hours safe. 40m2 room ~ 4 hours safe.
     const roomVolLiters = roomSize * 2.5 * 1000;
-    // How many hours before CO2 > 1000ppm? (0.1% of volume)
     const safeHours = (roomVolLiters * 0.001) / (23 * Math.max(1, peopleCount));
 
     if (hoursPerDay < safeHours) {
         basePlantsNeeded = 1;
     }
 
-    // C. Apply Plant Strength Multiplier
+    // C. Apply Plant Strength Multipliers (Proper Details)
     let strengthMultiplier = 1.0;
     if (plant.oxygenLevel === 'very-high') strengthMultiplier = 0.6;
     else if (plant.oxygenLevel === 'high') strengthMultiplier = 0.8;
     else if (plant.oxygenLevel === 'low') strengthMultiplier = 1.2;
+
+    // CAM / Nocturnal Bonus (Snake plants etc work at night)
+    if (plant.isNocturnal) strengthMultiplier *= 0.7; // ~30% Bonus!
 
     let plantsBeforeStress = basePlantsNeeded * strengthMultiplier * peopleCount;
 
