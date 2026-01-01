@@ -7,7 +7,7 @@ import { fetchPlants, fetchVendors } from '../services/api';
 import { getWeather, geocodeCity, reverseGeocode } from '../services/weather';
 import { calculateAptness, normalizeBatch } from '../utils/logic';
 import type { Plant, Vendor } from '../types';
-import { Sprout, MapPin, Thermometer, Wind, ArrowDown, Sparkles, Search, AlertCircle, Heart, Sun, Activity, GraduationCap, ShoppingBag, PlusCircle, MoveRight, MessageCircle, Droplets } from 'lucide-react';
+import { Sprout, MapPin, Thermometer, Wind, ArrowDown, Sparkles, Search, AlertCircle, Heart, Sun, Activity, GraduationCap, ShoppingBag, PlusCircle, MoveRight, MessageCircle, Droplets, Settings2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 // Lazy load modal for performance
 const PlantDetailsModal = lazy(() => import('../components/features/plants/PlantDetailsModal').then(module => ({ default: module.PlantDetailsModal })));
@@ -573,25 +573,26 @@ export const Home = () => {
                     ) : (
                         <div className={styles.weatherDashboard}>
                             <div className={styles.weatherCard}>
-                                <div className={styles.statIcon} style={{ background: 'rgba(56, 189, 248, 0.1)', color: '#38bdf8' }}>
+                                <div className={styles.statIcon} style={{ background: 'rgba(56, 189, 248, 0.15)', color: '#38bdf8' }}>
                                     <MapPin size={24} />
                                 </div>
                                 <div className={styles.statInfo}>
                                     <span className={styles.statLabel}>LOCATION</span>
-                                    <div className={styles.statValue} style={{ fontSize: '1.1rem' }}>
+                                    <div className={styles.statValue}>
                                         {weather.locationName || weather.city || 'Local Zone'}
                                     </div>
                                     <button onClick={() => {
                                         setWeather(null);
                                         localStorage.removeItem('vanamap_weather');
                                     }} className={styles.changeLocationBtn}>
+                                        <Settings2 size={12} />
                                         Change Location
                                     </button>
                                 </div>
                             </div>
 
                             <div className={styles.weatherCard}>
-                                <div className={styles.statIcon} style={{ background: 'rgba(250, 204, 21, 0.1)', color: '#facc15' }}>
+                                <div className={styles.statIcon} style={{ background: 'rgba(250, 204, 21, 0.15)', color: '#facc15' }}>
                                     <Thermometer size={24} />
                                 </div>
                                 <div className={styles.statInfo}>
@@ -599,12 +600,12 @@ export const Home = () => {
                                     <div className={styles.statValue}>
                                         {typeof weather.avgTemp30Days === 'number' ? weather.avgTemp30Days.toFixed(1) : '--'}°C
                                     </div>
-                                    <span style={{ color: '#94a3b8', fontSize: '0.7rem' }}>30-Day Simulation Base</span>
+                                    <span className={styles.statDescription}>30-Day Simulation Base</span>
                                 </div>
                             </div>
 
                             <div className={styles.weatherCard}>
-                                <div className={styles.statIcon} style={{ background: 'rgba(139, 92, 246, 0.1)', color: '#8b5cf6' }}>
+                                <div className={styles.statIcon} style={{ background: 'rgba(139, 92, 246, 0.15)', color: '#8b5cf6' }}>
                                     <Droplets size={24} />
                                 </div>
                                 <div className={styles.statInfo}>
@@ -612,13 +613,13 @@ export const Home = () => {
                                     <div className={styles.statValue}>
                                         {typeof weather.humidity === 'number' ? weather.humidity.toFixed(0) : '--'}%
                                     </div>
-                                    <span style={{ color: '#94a3b8', fontSize: '0.7rem' }}>Current Moisture Level</span>
+                                    <span className={styles.statDescription}>Current Moisture Level</span>
                                 </div>
                             </div>
 
                             <div className={styles.weatherCard}>
-                                <div className={`${styles.statIcon}`} style={{
-                                    background: `${getPollutionStatus(weather.air_quality?.aqi).color}15`,
+                                <div className={styles.statIcon} style={{
+                                    background: `${getPollutionStatus(weather.air_quality?.aqi).color}25`,
                                     color: getPollutionStatus(weather.air_quality?.aqi).color
                                 }}>
                                     <Activity size={24} />
@@ -628,7 +629,7 @@ export const Home = () => {
                                     <div className={styles.statValue}>
                                         {weather.air_quality?.aqi ?? 'N/A'}
                                     </div>
-                                    <span style={{ color: getPollutionStatus(weather.air_quality?.aqi).color, fontSize: '0.7rem', fontWeight: 800 }}>
+                                    <span className={styles.statDescription} style={{ color: getPollutionStatus(weather.air_quality?.aqi).color, fontWeight: 800 }}>
                                         {getPollutionStatus(weather.air_quality?.aqi).label.toUpperCase()}
                                     </span>
                                 </div>
