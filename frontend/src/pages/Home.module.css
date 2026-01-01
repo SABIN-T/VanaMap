@@ -134,8 +134,8 @@
 }
 
 .instagramIcon {
-    width: 56px;
-    height: 56px;
+    width: 44px;
+    height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -198,8 +198,8 @@
 }
 
 .whatsappIcon {
-    width: 56px;
-    height: 56px;
+    width: 44px;
+    height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -283,8 +283,8 @@
 /* Mobile optimization */
 @media (max-width: 640px) {
     .whatsappIcon {
-        width: 48px;
-        height: 48px;
+        width: 36px;
+        height: 36px;
     }
 
     .whatsappIcon svg {
@@ -306,8 +306,8 @@
 }
 
 .emailIcon {
-    width: 56px;
-    height: 56px;
+    width: 44px;
+    height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -377,8 +377,8 @@
 /* Mobile optimization */
 @media (max-width: 640px) {
     .emailIcon {
-        width: 48px;
-        height: 48px;
+        width: 36px;
+        height: 36px;
     }
 
     .emailIcon svg {
@@ -400,8 +400,8 @@
 }
 
 .twitterIcon {
-    width: 56px;
-    height: 56px;
+    width: 44px;
+    height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -471,8 +471,8 @@
 /* Mobile optimization */
 @media (max-width: 640px) {
     .twitterIcon {
-        width: 48px;
-        height: 48px;
+        width: 36px;
+        height: 36px;
     }
 
     .twitterIcon svg {
@@ -514,8 +514,8 @@
 /* Mobile optimization */
 @media (max-width: 640px) {
     .instagramIcon {
-        width: 48px;
-        height: 48px;
+        width: 36px;
+        height: 36px;
     }
 
     .instagramIcon svg {
