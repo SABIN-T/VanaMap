@@ -9,6 +9,7 @@
 
 [data-theme='light'] .homeContainer {
     background: radial-gradient(circle at top, #dcfce7 0%, #f0fdf4 100%);
+    color: #064e3b;
 }
 
 [data-theme='light'] .hero {
@@ -17,13 +18,19 @@
 }
 
 [data-theme='light'] .heroTitle {
-    background: linear-gradient(135deg, #064e3b 0%, #047857 100%);
+    background: linear-gradient(135deg, #022c22 0%, #064e3b 100%);
     -webkit-background-clip: text;
     background-clip: text;
 }
 
 [data-theme='light'] .heroSubtitle {
-    color: #047857;
+    color: #065f46;
+}
+
+[data-theme='light'] .heroBadge {
+    background: rgba(16, 185, 129, 0.15);
+    color: #065f46;
+    border-color: rgba(16, 185, 129, 0.3);
 }
 
 [data-theme='light'] .actionContainer {
@@ -48,7 +55,11 @@
 }
 
 [data-theme='light'] .searchInput::placeholder {
-    color: #059669;
+    color: #6b7280;
+}
+
+[data-theme='light'] .searchIcon {
+    color: #065f46;
 }
 
 [data-theme='light'] .suggestionsList {
@@ -63,11 +74,11 @@
 
 [data-theme='light'] .suggestionItem:hover {
     background: rgba(16, 185, 129, 0.15);
-    color: #064e3b;
+    color: #022c22;
 }
 
 [data-theme='light'] .divider span {
-    color: #059669;
+    color: #065f46;
 }
 
 [data-theme='light'] .ghostBtn {
@@ -410,4 +421,75 @@
 
 [data-theme='light'] .borderPrimary {
     border-color: rgba(16, 185, 129, 0.3);
+}
+
+/* ============================================
+   COMPREHENSIVE TEXT COLOR FIXES
+   Ensures NO cyan/turquoise text in light mode
+   ============================================ */
+
+[data-theme='light'] h1,
+[data-theme='light'] h2,
+[data-theme='light'] h3,
+[data-theme='light'] h4,
+[data-theme='light'] h5,
+[data-theme='light'] h6 {
+    color: #022c22 !important;
+}
+
+[data-theme='light'] p,
+[data-theme='light'] span,
+[data-theme='light'] div {
+    color: inherit;
+}
+
+/* Fix specific cyan/turquoise elements */
+[data-theme='light'] .cyan,
+[data-theme='light'] .turquoise,
+[data-theme='light'] .info,
+[data-theme='light'] .highlight {
+    color: #065f46 !important;
+}
+
+/* Weather and score indicators */
+[data-theme='light'] .score,
+[data-theme='light'] .percentage,
+[data-theme='light'] .metric {
+    color: #064e3b !important;
+}
+
+/* Labels and descriptions */
+[data-theme='light'] .label,
+[data-theme='light'] .description,
+[data-theme='light'] .caption {
+    color: #065f46 !important;
+}
+
+/* Status indicators */
+[data-theme='light'] .status,
+[data-theme='light'] .badge,
+[data-theme='light'] .tag {
+    color: #065f46 !important;
+}
+
+/* Links should be visible */
+[data-theme='light'] a {
+    color: #059669 !important;
+}
+
+[data-theme='light'] a:hover {
+    color: #064e3b !important;
+}
+
+/* Ensure all icon colors are visible */
+[data-theme='light'] svg {
+    color: #065f46;
+}
+
+/* Fix any remaining light text */
+[data-theme='light'] .text-light,
+[data-theme='light'] .text-white,
+[data-theme='light'] .text-gray-400,
+[data-theme='light'] .text-gray-500 {
+    color: #064e3b !important;
 }
