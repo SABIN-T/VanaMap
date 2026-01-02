@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Send, Sparkles, Leaf, Bot, User, Trash2, Download, Calendar, Globe, Camera, Mic, ShoppingCart } from 'lucide-react';
+import { Send, Sparkles, Leaf, Bot, User, Trash2, Download, Calendar, Globe, Camera, Mic, ShoppingCart, Volume2, VolumeX } from 'lucide-react';
 import { fetchPlants } from '../services/api';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
@@ -1022,25 +1022,119 @@ What would you like to know about your plants today?`;
         toast.success('Conversation exported!');
     };
 
+    // --- VOICE ASSISTANT (Dr. Flora's Voice) ---
+    const [voiceEnabled, setVoiceEnabled] = useState(false);
+    const [isSpeaking, setIsSpeaking] = useState(false);
+    const synth = window.speechSynthesis;
+
+    useEffect(() => {
+        // Preload voices
+        const loadVoices = () => {
+            const voices = synth.getVoices();
+            console.log("Available voices:", voices.map(v => v.name));
+        };
+        loadVoices();
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = loadVoices;
+        }
+        return () => {
+            synth.cancel(); // Stop speaking on unmount
+        }
+    }, []);
+
+    const speak = (text: string) => {
+        if (!voiceEnabled) return;
+
+        // Cancel any current speech
+        synth.cancel();
+
+        // Clean text for speech (remove markdown asterisks, emojis)
+        const speechText = text.replace(/\*/g, '').replace(/[\u{1F300}-\u{1F9FF}]/gu, '');
+
+        const utterance = new SpeechSynthesisUtterance(speechText);
+
+        // Voice Selection Strategy: Sweet, Female, Friendly
+        const voices = synth.getVoices();
+        // Priority list for "Sweet/Girlish" voices
+        const preferredVoices = [
+            voices.find(v => v.name.includes("Google US English")), // Often best quality
+            voices.find(v => v.name.includes("Samantha")), // macOS classic
+            voices.find(v => v.name.includes("Zira")), // Windows default female
+            voices.find(v => v.name.includes("Female")),
+            voices.find(v => v.lang.startsWith("en")) // Fallback english
+        ];
+
+        const selectedVoice = preferredVoices.find(v => v !== undefined);
+
+        if (selectedVoice) {
+            utterance.voice = selectedVoice;
+        }
+
+        // Tweak personality
+        utterance.pitch = 1.2; // Slightly higher "girlish/sweet" pitch
+        utterance.rate = 1.05; // "Talkative" / energetic pace
+        utterance.volume = 1.0;
+
+        utterance.onstart = () => setIsSpeaking(true);
+        utterance.onend = () => setIsSpeaking(false);
+        utterance.onerror = () => setIsSpeaking(false);
+
+        synth.speak(utterance);
+    };
+
+    const toggleVoice = () => {
+        if (voiceEnabled) {
+            synth.cancel();
+            setVoiceEnabled(false);
+            setIsSpeaking(false);
+            toast("Voice Assistant Disabled", { icon: '🔇' });
+        } else {
+            setVoiceEnabled(true);
+            toast("Dr. Flora's Voice Enabled! 🎧", { icon: '🗣️' });
+            speak("Hi there! I'm listening."); // Test phrase
+        }
+    };
+
+    // Auto-speak new AI messages
+    useEffect(() => {
+        const lastMsg = messages[messages.length - 1];
+        if (voiceEnabled && lastMsg.role === 'assistant' && lastMsg.id !== '1') {
+            // Check if it's a new message (simple check: logic handled by when messages update)
+            speak(lastMsg.content);
+        }
+    }, [messages, voiceEnabled]);
+
+
     return (
         <div className={styles.container}>
             <header className={styles.header}>
                 <div className={styles.headerContent}>
                     <div className={styles.logoSection}>
                         <div className={styles.logoIcon}>
-                            <Bot size={32} />
+                            <Bot size={24} />
                         </div>
                         <div>
                             <h1 className={styles.title}>AI Plant Doctor</h1>
-                            <p className={styles.subtitle}>Expert botanical consultation powered by AI</p>
+                            <div className={styles.subtitle}>
+                                Powered by Dr. Flora • VannaMap Intelligence
+                            </div>
                         </div>
                     </div>
+
                     <div className={styles.actions}>
-                        <button className={styles.actionBtn} onClick={handleExport} title="Export Chat">
-                            <Download size={18} />
+                        <button
+                            className={`${styles.actionBtn} ${voiceEnabled ? styles.active : ''}`}
+                            onClick={toggleVoice}
+                            title={voiceEnabled ? "Mute Voice" : "Enable Voice Assistant"}
+                            style={{ color: voiceEnabled ? '#10b981' : undefined, borderColor: voiceEnabled ? '#10b981' : undefined }}
+                        >
+                            {voiceEnabled ? <Volume2 size={18} /> : <VolumeX size={18} />}
                         </button>
                         <button className={styles.actionBtn} onClick={handleClear} title="Clear Chat">
                             <Trash2 size={18} />
+                        </button>
+                        <button className={styles.actionBtn} onClick={handleExport} title="Save Diagnosis">
+                            <Download size={18} />
                         </button>
                     </div>
                 </div>
