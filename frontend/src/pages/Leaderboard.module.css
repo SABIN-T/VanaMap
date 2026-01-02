@@ -24,6 +24,12 @@
     overflow-x: hidden;
 }
 
+/* Light Mode Container */
+[data-theme='light'] .container {
+    color: #064e3b;
+    background: radial-gradient(circle at top center, #dcfce7 0%, #f0fdf4 100%);
+}
+
 /* HEADER SECTION */
 .header {
     text-align: center;
@@ -1337,4 +1343,202 @@
         transform: scale(1);
         opacity: 1;
     }
+}
+
+/* ============================================
+   LIGHT MODE STYLES - Premium Green Theme
+   ============================================ */
+
+/* Quest Bar Light Mode */
+[data-theme='light'] .questBar {
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.95) 0%, rgba(236, 253, 245, 0.95) 100%);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    box-shadow: 0 20px 40px -10px rgba(16, 185, 129, 0.15);
+}
+
+[data-theme='light'] .questHeader {
+    color: #059669;
+    border-bottom-color: rgba(16, 185, 129, 0.15);
+}
+
+[data-theme='light'] .questItem {
+    background: rgba(16, 185, 129, 0.03);
+    border-color: rgba(16, 185, 129, 0.1);
+}
+
+[data-theme='light'] .questItem:hover {
+    background: rgba(16, 185, 129, 0.08);
+    border-color: rgba(16, 185, 129, 0.25);
+}
+
+[data-theme='light'] .questDone {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15) 0%, rgba(6, 78, 59, 0.08) 100%);
+    border-color: rgba(16, 185, 129, 0.3);
+}
+
+[data-theme='light'] .questTitle {
+    color: #064e3b;
+}
+
+[data-theme='light'] .questDesc {
+    color: #047857;
+}
+
+/* Podium Light Mode */
+[data-theme='light'] .podiumCard {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(16, 185, 129, 0.2);
+}
+
+[data-theme='light'] .gold {
+    background: linear-gradient(180deg, rgba(251, 191, 36, 0.25) 0%, rgba(255, 255, 255, 0.95) 100%);
+    border-color: rgba(251, 191, 36, 0.5);
+    box-shadow: 0 0 50px rgba(251, 191, 36, 0.2), inset 0 0 20px rgba(251, 191, 36, 0.1);
+}
+
+[data-theme='light'] .silver {
+    background: linear-gradient(180deg, rgba(148, 163, 184, 0.25) 0%, rgba(255, 255, 255, 0.95) 100%);
+    border-color: rgba(148, 163, 184, 0.5);
+}
+
+[data-theme='light'] .bronze {
+    background: linear-gradient(180deg, rgba(217, 119, 6, 0.25) 0%, rgba(255, 255, 255, 0.95) 100%);
+    border-color: rgba(217, 119, 6, 0.5);
+}
+
+[data-theme='light'] .userName {
+    color: #064e3b;
+}
+
+[data-theme='light'] .location {
+    color: #047857;
+}
+
+/* Title and Text Light Mode */
+[data-theme='light'] .title {
+    background: linear-gradient(135deg, #064e3b 0%, #047857 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+[data-theme='light'] .subtitle {
+    color: #059669;
+}
+
+[data-theme='light'] .sectionTitle {
+    color: #064e3b;
+    border-bottom-color: rgba(16, 185, 129, 0.15);
+}
+
+/* Leaderboard Rows Light Mode */
+[data-theme='light'] .row {
+    background: rgba(255, 255, 255, 0.7);
+    border-color: rgba(16, 185, 129, 0.1);
+}
+
+[data-theme='light'] .row:hover {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: rgba(16, 185, 129, 0.3);
+    box-shadow: 0 4px 20px rgba(16, 185, 129, 0.15);
+}
+
+[data-theme='light'] .rankNumber {
+    color: #059669;
+}
+
+[data-theme='light'] .smallAvatar {
+    background: rgba(16, 185, 129, 0.1);
+    color: #047857;
+}
+
+[data-theme='light'] .name {
+    color: #064e3b;
+}
+
+[data-theme='light'] .levelText {
+    color: #059669;
+}
+
+[data-theme='light'] .rowPoints {
+    color: #059669;
+}
+
+/* Info Cards Light Mode */
+[data-theme='light'] .infoCard,
+[data-theme='light'] .cityCard {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.9) 0%, rgba(236, 253, 245, 0.9) 100%);
+    border-color: rgba(16, 185, 129, 0.2);
+}
+
+[data-theme='light'] .infoCard:hover,
+[data-theme='light'] .cityCard:hover {
+    border-color: rgba(16, 185, 129, 0.3);
+}
+
+[data-theme='light'] .infoTitle {
+    color: #064e3b;
+}
+
+[data-theme='light'] .earnIcon {
+    background: rgba(16, 185, 129, 0.15);
+}
+
+[data-theme='light'] .cityIcon {
+    background: rgba(56, 189, 248, 0.15);
+}
+
+[data-theme='light'] .cityName {
+    color: #064e3b;
+}
+
+[data-theme='light'] .cityMeta {
+    color: #059669;
+}
+
+/* CTA Box Light Mode */
+[data-theme='light'] .ctaBox {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.2) 0%, rgba(6, 78, 59, 0.15) 100%);
+    border-color: rgba(16, 185, 129, 0.4);
+}
+
+[data-theme='light'] .ctaBtn {
+    background: #10b981;
+    color: #ffffff;
+    box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+}
+
+[data-theme='light'] .ctaBtn:hover {
+    box-shadow: 0 15px 35px rgba(16, 185, 129, 0.4);
+}
+
+/* Modal Light Mode */
+[data-theme='light'] .modalOverlay {
+    background: rgba(240, 253, 244, 0.9);
+}
+
+[data-theme='light'] .modalCard {
+    background: #ffffff;
+    border-color: rgba(251, 191, 36, 0.4);
+    box-shadow: 0 0 80px rgba(251, 191, 36, 0.2);
+}
+
+[data-theme='light'] .modalTitle {
+    background: linear-gradient(135deg, #064e3b 0%, #047857 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Badge Light Mode */
+[data-theme='light'] .badge {
+    background: rgba(16, 185, 129, 0.15);
+    border-color: rgba(16, 185, 129, 0.3);
+    color: #059669;
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.15);
+}
+
+/* Earn List Light Mode */
+[data-theme='light'] .earnList span {
+    color: #059669;
 }
