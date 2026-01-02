@@ -1,0 +1,413 @@
+/* ============================================
+   COMPREHENSIVE LIGHT MODE STYLES
+   Premium Green Botanical Theme
+   ============================================ */
+
+/* ============================================
+   HOME PAGE LIGHT MODE
+   ============================================ */
+
+[data-theme='light'] .homeContainer {
+    background: radial-gradient(circle at top, #dcfce7 0%, #f0fdf4 100%);
+}
+
+[data-theme='light'] .hero {
+    background: #f0fdf4;
+    background-image: radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.08) 0%, transparent 50%);
+}
+
+[data-theme='light'] .heroTitle {
+    background: linear-gradient(135deg, #064e3b 0%, #047857 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+[data-theme='light'] .heroSubtitle {
+    color: #047857;
+}
+
+[data-theme='light'] .actionContainer {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(16, 185, 129, 0.2);
+    box-shadow: 0 25px 50px -12px rgba(16, 185, 129, 0.15);
+}
+
+[data-theme='light'] .searchBox {
+    background: rgba(16, 185, 129, 0.05);
+    border-color: rgba(16, 185, 129, 0.2);
+}
+
+[data-theme='light'] .searchBox:focus-within {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: #10b981;
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
+}
+
+[data-theme='light'] .searchInput {
+    color: #064e3b;
+}
+
+[data-theme='light'] .searchInput::placeholder {
+    color: #059669;
+}
+
+[data-theme='light'] .suggestionsList {
+    background: #ffffff;
+    border-color: rgba(16, 185, 129, 0.2);
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.2);
+}
+
+[data-theme='light'] .suggestionItem {
+    color: #064e3b;
+}
+
+[data-theme='light'] .suggestionItem:hover {
+    background: rgba(16, 185, 129, 0.15);
+    color: #064e3b;
+}
+
+[data-theme='light'] .divider span {
+    color: #059669;
+}
+
+[data-theme='light'] .ghostBtn {
+    border-color: rgba(16, 185, 129, 0.2) !important;
+    color: #047857 !important;
+}
+
+[data-theme='light'] .ghostBtn:hover {
+    background: rgba(16, 185, 129, 0.1) !important;
+    color: #064e3b !important;
+    border-color: rgba(16, 185, 129, 0.3) !important;
+}
+
+/* ============================================
+   SHOPS PAGE LIGHT MODE
+   ============================================ */
+
+[data-theme='light'] .shopsContainer {
+    background: #f0fdf4;
+    color: #064e3b;
+}
+
+[data-theme='light'] .filterCard,
+[data-theme='light'] .plantCard {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(16, 185, 129, 0.15);
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.08);
+}
+
+[data-theme='light'] .filterCard:hover,
+[data-theme='light'] .plantCard:hover {
+    border-color: rgba(16, 185, 129, 0.3);
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.15);
+}
+
+/* ============================================
+   CART PAGE LIGHT MODE
+   ============================================ */
+
+[data-theme='light'] .cartContainer {
+    background: #f0fdf4;
+}
+
+[data-theme='light'] .cartItem {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(16, 185, 129, 0.15);
+}
+
+[data-theme='light'] .cartSummary {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: rgba(16, 185, 129, 0.2);
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.1);
+}
+
+/* ============================================
+   AUTH PAGE LIGHT MODE
+   ============================================ */
+
+[data-theme='light'] .authContainer {
+    background: radial-gradient(circle at center, #dcfce7 0%, #f0fdf4 100%);
+}
+
+[data-theme='light'] .authCard {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: rgba(16, 185, 129, 0.2);
+    box-shadow: 0 20px 50px rgba(16, 185, 129, 0.15);
+}
+
+[data-theme='light'] .authTitle {
+    color: #064e3b;
+}
+
+[data-theme='light'] .authInput {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(16, 185, 129, 0.2);
+    color: #064e3b;
+}
+
+[data-theme='light'] .authInput:focus {
+    border-color: #10b981;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+/* ============================================
+   AI DOCTOR LIGHT MODE
+   ============================================ */
+
+[data-theme='light'] .container {
+    background: #f0fdf4;
+    color: #064e3b;
+}
+
+[data-theme='light'] .header {
+    background: rgba(255, 255, 255, 0.9);
+    border-bottom-color: rgba(16, 185, 129, 0.15);
+}
+
+[data-theme='light'] .chatContainer {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+[data-theme='light'] .message {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(16, 185, 129, 0.15);
+}
+
+[data-theme='light'] .userMessage {
+    background: rgba(16, 185, 129, 0.1);
+    border-color: rgba(16, 185, 129, 0.25);
+}
+
+[data-theme='light'] .inputContainer {
+    background: rgba(255, 255, 255, 0.95);
+    border-top-color: rgba(16, 185, 129, 0.15);
+}
+
+/* ============================================
+   HEAVEN PAGE LIGHT MODE
+   ============================================ */
+
+[data-theme='light'] .heavenContainer {
+    background: radial-gradient(circle at top, #dcfce7 0%, #f0fdf4 100%);
+}
+
+[data-theme='light'] .gameCard {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(16, 185, 129, 0.2);
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.1);
+}
+
+/* ============================================
+   NEARBY PAGE LIGHT MODE
+   ============================================ */
+
+[data-theme='light'] .nearbyContainer {
+    background: #f0fdf4;
+}
+
+[data-theme='light'] .vendorCard {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(16, 185, 129, 0.15);
+}
+
+[data-theme='light'] .vendorCard:hover {
+    border-color: rgba(16, 185, 129, 0.3);
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.15);
+}
+
+/* ============================================
+   PREMIUM PAGE LIGHT MODE
+   ============================================ */
+
+[data-theme='light'] .premiumContainer {
+    background: radial-gradient(circle at top, #dcfce7 0%, #f0fdf4 100%);
+}
+
+[data-theme='light'] .pricingCard {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: rgba(16, 185, 129, 0.2);
+}
+
+[data-theme='light'] .featuredCard {
+    border-color: #10b981;
+    box-shadow: 0 20px 50px rgba(16, 185, 129, 0.2);
+}
+
+/* ============================================
+   USER DASHBOARD LIGHT MODE
+   ============================================ */
+
+[data-theme='light'] .dashboardContainer {
+    background: #f0fdf4;
+}
+
+[data-theme='light'] .statsCard {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(16, 185, 129, 0.15);
+}
+
+[data-theme='light'] .activityItem {
+    background: rgba(255, 255, 255, 0.7);
+    border-color: rgba(16, 185, 129, 0.1);
+}
+
+/* ============================================
+   VENDOR PORTAL LIGHT MODE
+   ============================================ */
+
+[data-theme='light'] .vendorContainer {
+    background: #f0fdf4;
+}
+
+[data-theme='light'] .inventoryCard {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(16, 185, 129, 0.15);
+}
+
+/* ============================================
+   PLANT CARD COMPONENT LIGHT MODE
+   ============================================ */
+
+[data-theme='light'] .plantCard {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: rgba(16, 185, 129, 0.15);
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.08);
+}
+
+[data-theme='light'] .plantCard:hover {
+    border-color: rgba(16, 185, 129, 0.3);
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.15);
+    transform: translateY(-4px);
+}
+
+[data-theme='light'] .plantName {
+    color: #064e3b;
+}
+
+[data-theme='light'] .plantPrice {
+    color: #059669;
+}
+
+[data-theme='light'] .plantTag {
+    background: rgba(16, 185, 129, 0.1);
+    color: #047857;
+    border-color: rgba(16, 185, 129, 0.2);
+}
+
+/* ============================================
+   MODAL COMPONENTS LIGHT MODE
+   ============================================ */
+
+[data-theme='light'] .modalOverlay {
+    background: rgba(240, 253, 244, 0.85);
+}
+
+[data-theme='light'] .modalContent {
+    background: #ffffff;
+    border-color: rgba(16, 185, 129, 0.2);
+    box-shadow: 0 25px 60px rgba(16, 185, 129, 0.2);
+}
+
+[data-theme='light'] .modalHeader {
+    border-bottom-color: rgba(16, 185, 129, 0.15);
+}
+
+[data-theme='light'] .modalTitle {
+    color: #064e3b;
+}
+
+[data-theme='light'] .modalBody {
+    color: #047857;
+}
+
+/* ============================================
+   ABOUT & CONTACT PAGES LIGHT MODE
+   ============================================ */
+
+[data-theme='light'] .aboutContainer,
+[data-theme='light'] .contactContainer {
+    background: #f0fdf4;
+}
+
+[data-theme='light'] .sectionCard {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(16, 185, 129, 0.15);
+}
+
+[data-theme='light'] .teamMember {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: rgba(16, 185, 129, 0.15);
+}
+
+/* ============================================
+   ADMIN PAGES LIGHT MODE
+   ============================================ */
+
+[data-theme='light'] .adminContainer {
+    background: #f0fdf4;
+}
+
+[data-theme='light'] .adminSidebar {
+    background: rgba(255, 255, 255, 0.95);
+    border-right-color: rgba(16, 185, 129, 0.15);
+}
+
+[data-theme='light'] .adminCard {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(16, 185, 129, 0.15);
+}
+
+[data-theme='light'] .adminTable {
+    background: rgba(255, 255, 255, 0.95);
+}
+
+[data-theme='light'] .adminTableRow:hover {
+    background: rgba(16, 185, 129, 0.05);
+}
+
+/* ============================================
+   GAMES & INTERACTIVE PAGES LIGHT MODE
+   ============================================ */
+
+[data-theme='light'] .gameContainer {
+    background: radial-gradient(circle at center, #dcfce7 0%, #f0fdf4 100%);
+}
+
+[data-theme='light'] .scoreCard {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: rgba(16, 185, 129, 0.2);
+}
+
+/* ============================================
+   UTILITY CLASSES LIGHT MODE
+   ============================================ */
+
+[data-theme='light'] .glass {
+    background: rgba(255, 255, 255, 0.85);
+    border-color: rgba(16, 185, 129, 0.2);
+}
+
+[data-theme='light'] .textPrimary {
+    color: #064e3b;
+}
+
+[data-theme='light'] .textSecondary {
+    color: #047857;
+}
+
+[data-theme='light'] .textMuted {
+    color: #059669;
+}
+
+[data-theme='light'] .bgPrimary {
+    background: #10b981;
+}
+
+[data-theme='light'] .bgSecondary {
+    background: #f0fdf4;
+}
+
+[data-theme='light'] .borderPrimary {
+    border-color: rgba(16, 185, 129, 0.3);
+}
