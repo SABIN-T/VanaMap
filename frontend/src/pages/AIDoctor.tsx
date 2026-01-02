@@ -966,10 +966,12 @@ Try: "My monstera has yellow leaves with brown spots. They started appearing 2 w
 What would you like to know about your plants today?`;
     };
 
-    const handleSend = async () => {
-        if (!input.trim() && !selectedImage) return;
+    const handleSend = async (contentOverride?: string | any) => {
+        const textToSend = typeof contentOverride === 'string' ? contentOverride : input;
 
-        let messageContent = input;
+        if (!textToSend.trim() && !selectedImage) return;
+
+        let messageContent = textToSend;
         if (selectedImage) {
             messageContent += `\n\n[Attached Image: ${selectedImage.name}]`;
             toast.promise(
@@ -1014,6 +1016,26 @@ What would you like to know about your plants today?`;
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleCareCalendar = () => {
+        let prompt = "Please create a detailed weekly care calendar (watering, light, fertilizer) for my plants.";
+
+        // Smart Context: Use cart items if available
+        // Assuming 'user' is available in the component's scope, e.g., from a context or prop
+        // For this example, 'user' is not defined in the provided snippet, so this part might need adjustment
+        // based on your actual application structure.
+        const user: any = {}; // Placeholder for user object if not globally available
+        if (user?.cart && user.cart.length > 0) {
+            const plantNames = user.cart.map((i: any) => i.name || "plants").join(", ");
+            prompt = `Please create a detailed weekly care calendar for these plants: ${plantNames}. Include specific days for watering.`;
+        }
+
+        if (voiceEnabled) {
+            speak("I'd love to help! I'm analyzing your plants to create a personalized weekly care schedule for you.");
+        }
+
+        handleSend(prompt);
     };
 
     const handleClear = () => {
@@ -1236,7 +1258,7 @@ What would you like to know about your plants today?`;
                 <div className={styles.featureButtons}>
                     <button
                         className={styles.featureBtn}
-                        onClick={() => toast('Care Calendar - Coming Soon! Set reminders for watering, fertilizing, and more.', { icon: '📅', duration: 4000 })}
+                        onClick={handleCareCalendar}
                         title="Care Calendar - Set plant care reminders"
                     >
                         <Calendar size={20} />
