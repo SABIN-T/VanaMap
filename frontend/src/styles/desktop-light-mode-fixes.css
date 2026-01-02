@@ -1,0 +1,234 @@
+/* ============================================
+   DESKTOP LIGHT MODE FIXES
+   Fix all dark/black cards on desktop view
+   ============================================ */
+
+/* Force all cards to white on desktop */
+[data-theme='light'] .card,
+[data-theme='light'] .info-card,
+[data-theme='light'] .weather-card,
+[data-theme='light'] .location-card,
+[data-theme='light'] .temperature-card,
+[data-theme='light'] .humidity-card,
+[data-theme='light'] .air-quality-card,
+[data-theme='light'] .stat-card,
+[data-theme='light'] .metric-card,
+[data-theme='light'] .data-card,
+[data-theme='light'] .weatherCard,
+[data-theme='light'] .explainerGlass {
+    background: #ffffff !important;
+    border: 1px solid rgba(16, 185, 129, 0.2) !important;
+    color: #064e3b !important;
+    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.08) !important;
+}
+
+/* Fix any dark panels/sections */
+[data-theme='light'] .panel,
+[data-theme='light'] .section,
+[data-theme='light'] .block,
+[data-theme='light'] .widget {
+    background: #ffffff !important;
+    color: #064e3b !important;
+}
+
+/* Fix dark backgrounds with inline styles - Slate colors */
+[data-theme='light'] div[style*="background: rgb(51, 65, 85)"],
+[data-theme='light'] div[style*="background: rgba(51, 65, 85"],
+[data-theme='light'] div[style*="background: #334155"],
+[data-theme='light'] div[style*="background: rgb(71, 85, 105)"],
+[data-theme='light'] div[style*="background: rgba(71, 85, 105"],
+[data-theme='light'] div[style*="background: #475569"],
+[data-theme='light'] div[style*="background: rgb(30, 41, 59)"],
+[data-theme='light'] div[style*="background: rgba(30, 41, 59"],
+[data-theme='light'] div[style*="background: #1e293b"] {
+    background: #ffffff !important;
+}
+
+/* Fix any remaining dark backgrounds */
+[data-theme='light'] div[style*="background: rgb(15"],
+[data-theme='light'] div[style*="background: rgba(15"],
+[data-theme='light'] div[style*="background: #0f"],
+[data-theme='light'] div[style*="background: #1e"],
+[data-theme='light'] div[style*="background: #020"],
+[data-theme='light'] div[style*="background: #030"],
+[data-theme='light'] div[style*="background: #1f"],
+[data-theme='light'] div[style*="background: #2d"],
+[data-theme='light'] div[style*="background: #334"],
+[data-theme='light'] div[style*="background: #475"] {
+    background: #ffffff !important;
+}
+
+/* Fix labels and headings in cards */
+[data-theme='light'] .card-label,
+[data-theme='light'] .card-title,
+[data-theme='light'] .section-label,
+[data-theme='light'] .label {
+    color: #065f46 !important;
+    opacity: 1 !important;
+}
+
+/* Fix main values/numbers in cards */
+[data-theme='light'] .card-value,
+[data-theme='light'] .metric-value,
+[data-theme='light'] .stat-value,
+[data-theme='light'] .value {
+    color: #064e3b !important;
+}
+
+/* Fix descriptions in cards */
+[data-theme='light'] .card-description,
+[data-theme='light'] .card-subtitle,
+[data-theme='light'] .description {
+    color: #065f46 !important;
+}
+
+/* Fix buttons inside dark cards */
+[data-theme='light'] .card button,
+[data-theme='light'] .panel button {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+    color: #ffffff !important;
+    border: none !important;
+}
+
+/* Fix links inside cards */
+[data-theme='light'] .card a,
+[data-theme='light'] .panel a {
+    color: #10b981 !important;
+}
+
+/* Fix icons in cards */
+[data-theme='light'] .card svg,
+[data-theme='light'] .card .icon,
+[data-theme='light'] .panel svg {
+    color: #10b981 !important;
+}
+
+/* Fix any text with light gray colors */
+[data-theme='light'] [style*="color: rgb(148, 163, 184)"],
+[data-theme='light'] [style*="color: #94a3b8"],
+[data-theme='light'] [style*="color: rgb(100, 116, 139)"],
+[data-theme='light'] [style*="color: #64748b"],
+[data-theme='light'] [style*="color: rgb(203, 213, 225)"],
+[data-theme='light'] [style*="color: #cbd5e1"],
+[data-theme='light'] [style*="color: rgb(226, 232, 240)"],
+[data-theme='light'] [style*="color: #e2e8f0"] {
+    color: #065f46 !important;
+}
+
+/* Fix white text */
+[data-theme='light'] [style*="color: rgb(255, 255, 255)"],
+[data-theme='light'] [style*="color: #fff"],
+[data-theme='light'] [style*="color: white"],
+[data-theme='light'] [style*="color: #ffffff"],
+[data-theme='light'] [style*="color: #f8fafc"] {
+    color: #064e3b !important;
+}
+
+/* Fix specific Home page elements */
+[data-theme='light'] .weatherDashboard,
+[data-theme='light'] .weather-dashboard {
+    background: transparent !important;
+}
+
+[data-theme='light'] .weatherCard,
+[data-theme='light'] .weather-card-item {
+    background: #ffffff !important;
+    border-color: rgba(16, 185, 129, 0.2) !important;
+}
+
+/* Fix location section */
+[data-theme='light'] .location-section,
+[data-theme='light'] .location-info {
+    background: #ffffff !important;
+    color: #064e3b !important;
+}
+
+/* Fix any glassmorphism that looks dark */
+[data-theme='light'] .glass,
+[data-theme='light'] .glass-card,
+[data-theme='light'] .frosted,
+[data-theme='light'] .blur-bg {
+    background: rgba(255, 255, 255, 0.95) !important;
+    backdrop-filter: blur(20px) !important;
+    -webkit-backdrop-filter: blur(20px) !important;
+    border: 1px solid rgba(16, 185, 129, 0.15) !important;
+}
+
+/* Fix permissions button and similar dark buttons */
+[data-theme='light'] .permissions-btn,
+[data-theme='light'] [class*="permission"],
+[data-theme='light'] .dark-btn {
+    background: #ffffff !important;
+    color: #064e3b !important;
+    border: 1px solid rgba(16, 185, 129, 0.2) !important;
+}
+
+/* Fix any elements with dark class names */
+[data-theme='light'] .dark,
+[data-theme='light'] .dark-mode,
+[data-theme='light'] .bg-dark,
+[data-theme='light'] .dark-bg {
+    background: #ffffff !important;
+    color: #064e3b !important;
+}
+
+/* Fix slate/gray backgrounds */
+[data-theme='light'] .bg-slate-700,
+[data-theme='light'] .bg-slate-600,
+[data-theme='light'] .bg-slate-500,
+[data-theme='light'] .bg-gray-700,
+[data-theme='light'] .bg-gray-600 {
+    background: #ffffff !important;
+}
+
+/* Fix text colors with Tailwind-like classes */
+[data-theme='light'] .text-slate-400,
+[data-theme='light'] .text-slate-300,
+[data-theme='light'] .text-gray-400,
+[data-theme='light'] .text-gray-300,
+[data-theme='light'] .text-white {
+    color: #065f46 !important;
+}
+
+/* Fix specific weather card elements */
+[data-theme='light'] .temperature-value,
+[data-theme='light'] .humidity-value,
+[data-theme='light'] .aqi-value {
+    color: #064e3b !important;
+    font-weight: 700 !important;
+}
+
+[data-theme='light'] .weather-label,
+[data-theme='light'] .metric-label {
+    color: #065f46 !important;
+    text-transform: uppercase !important;
+}
+
+/* Fix change location button */
+[data-theme='light'] .change-location-btn,
+[data-theme='light'] [class*="change-location"] {
+    background: rgba(16, 185, 129, 0.1) !important;
+    color: #10b981 !important;
+    border-color: rgba(16, 185, 129, 0.3) !important;
+}
+
+/* Fix air quality badge */
+[data-theme='light'] .aqi-badge,
+[data-theme='light'] .air-quality-badge {
+    background: rgba(251, 191, 36, 0.15) !important;
+    color: #92400e !important;
+    border-color: rgba(251, 191, 36, 0.3) !important;
+}
+
+/* Fix moderate/good/bad indicators */
+[data-theme='light'] .status-moderate {
+    color: #d97706 !important;
+}
+
+[data-theme='light'] .status-good {
+    color: #059669 !important;
+}
+
+[data-theme='light'] .status-bad {
+    color: #dc2626 !important;
+}
