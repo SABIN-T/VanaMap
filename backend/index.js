@@ -41,7 +41,7 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({
     storage: storage,
-    limits: { fileSize: 75 * 1024 * 1024 }
+    limits: { fileSize: 100 * 1024 * 1024 }
 });
 
 // --- AUTOMATED PREMIUM CHECK (Daily at Midnight) ---
@@ -299,10 +299,10 @@ app.use(helmet({
     contentSecurityPolicy: false,
     crossOriginEmbedderPolicy: false
 })); // Set security HTTP headers
-app.use(express.json({ limit: '50mb' })); // Body parser
+app.use(express.json({ limit: '100mb' })); // Body parser
 app.use(mongoSanitize()); // Data sanitization against NoSQL query injection
 app.use(xss()); // Data sanitization against XSS
-app.use(express.urlencoded({ limit: '50mb', extended: true }));
+app.use(express.urlencoded({ limit: '100mb', extended: true }));
 
 // --- MIDDLEWARES ---
 
