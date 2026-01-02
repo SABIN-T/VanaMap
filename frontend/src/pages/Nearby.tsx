@@ -60,7 +60,7 @@ export const Nearby = () => {
     const [loading, setLoading] = useState(false);
 
     // Initialize tab from navigation state or default to verified
-    const [activeTab, setActiveTab] = useState<'verified' | 'unverified' | 'all'>((location.state as { tab?: 'verified' | 'unverified' | 'all' })?.tab || 'verified');
+    const [activeTab, setActiveTab] = useState<'verified' | 'unverified' | 'all'>((location.state as { tab?: 'verified' | 'unverified' | 'all' })?.tab || 'all');
 
     const [manualSearchQuery, setManualSearchQuery] = useState('');
     const [searchRadius, setSearchRadius] = useState(50);
