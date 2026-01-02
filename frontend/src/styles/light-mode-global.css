@@ -92,6 +92,29 @@
     border-color: rgba(16, 185, 129, 0.3) !important;
 }
 
+/* Weather Cards & Explainer */
+[data-theme='light'] .weatherCard,
+[data-theme='light'] .explainerGlass,
+[data-theme='light'] .infoCard,
+[data-theme='light'] .statsCard,
+[data-theme='light'] .card {
+    background: #ffffff !important;
+    border-color: rgba(16, 185, 129, 0.2) !important;
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.1) !important;
+}
+
+[data-theme='light'] .weatherTitle,
+[data-theme='light'] .explainerTitle,
+[data-theme='light'] .cardTitle {
+    color: #064e3b !important;
+}
+
+[data-theme='light'] .weatherDesc,
+[data-theme='light'] .explainerDesc,
+[data-theme='light'] .cardDesc {
+    color: #065f46 !important;
+}
+
 /* ============================================
    SHOPS PAGE LIGHT MODE
    ============================================ */

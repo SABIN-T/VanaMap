@@ -1851,3 +1851,206 @@
         will-change: transform;
     }
 }
+
+/* ============================================
+   LIGHT MODE STYLES - Premium Green Theme
+   Matching Cart & Auth Page Aesthetic
+   ============================================ */
+
+[data-theme='light'] .homeContainer {
+    background: #d1f4e0;
+    color: #064e3b;
+}
+
+[data-theme='light'] .hero {
+    background: #d1f4e0;
+}
+
+[data-theme='light'] .heroTitle {
+    background: linear-gradient(135deg, #022c22 0%, #064e3b 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+[data-theme='light'] .heroSubtitle {
+    color: #065f46;
+}
+
+[data-theme='light'] .heroBadge {
+    background: rgba(16, 185, 129, 0.15);
+    color: #065f46;
+    border-color: rgba(16, 185, 129, 0.3);
+}
+
+[data-theme='light'] .actionContainer {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: rgba(16, 185, 129, 0.2);
+    box-shadow: 0 25px 50px -12px rgba(16, 185, 129, 0.2);
+}
+
+[data-theme='light'] .searchBox {
+    background: rgba(16, 185, 129, 0.05);
+    border-color: rgba(16, 185, 129, 0.2);
+}
+
+[data-theme='light'] .searchBox:focus-within {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: #10b981;
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
+}
+
+[data-theme='light'] .searchInput {
+    color: #064e3b;
+}
+
+[data-theme='light'] .searchInput::placeholder {
+    color: #6b7280;
+}
+
+[data-theme='light'] .searchIcon {
+    color: #065f46;
+}
+
+[data-theme='light'] .suggestionsList {
+    background: #ffffff;
+    border-color: rgba(16, 185, 129, 0.2);
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.2);
+}
+
+[data-theme='light'] .suggestionItem {
+    color: #064e3b;
+}
+
+[data-theme='light'] .suggestionItem:hover {
+    background: rgba(16, 185, 129, 0.15);
+    color: #022c22;
+}
+
+[data-theme='light'] .divider span {
+    color: #065f46;
+}
+
+[data-theme='light'] .ghostBtn {
+    border-color: rgba(16, 185, 129, 0.2);
+    color: #047857;
+}
+
+[data-theme='light'] .ghostBtn:hover {
+    background: rgba(16, 185, 129, 0.1);
+    color: #064e3b;
+    border-color: rgba(16, 185, 129, 0.3);
+}
+
+/* Weather Cards & Explainer */
+[data-theme='light'] .weatherCard,
+[data-theme='light'] .explainerGlass {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: rgba(16, 185, 129, 0.2);
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.1);
+}
+
+[data-theme='light'] .weatherTitle,
+[data-theme='light'] .explainerTitle {
+    color: #064e3b;
+}
+
+[data-theme='light'] .weatherDesc,
+[data-theme='light'] .explainerDesc {
+    color: #065f46;
+}
+
+/* Type Filter Cards */
+[data-theme='light'] .typeFilterCard {
+    background: #ffffff;
+    border-color: rgba(16, 185, 129, 0.2);
+}
+
+[data-theme='light'] .typeFilterCard:hover {
+    border-color: rgba(16, 185, 129, 0.4);
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.15);
+}
+
+[data-theme='light'] .typeFilterCard.active {
+    background: rgba(16, 185, 129, 0.1);
+    border-color: #10b981;
+}
+
+/* Category Cards */
+[data-theme='light'] .categoryCard {
+    background: #ffffff;
+    border-color: rgba(16, 185, 129, 0.2);
+}
+
+[data-theme='light'] .categoryCard:hover {
+    border-color: rgba(16, 185, 129, 0.3);
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.15);
+}
+
+[data-theme='light'] .categoryTitle {
+    color: #064e3b;
+}
+
+[data-theme='light'] .categoryDesc {
+    color: #065f46;
+}
+
+/* Plant Grid & Cards */
+[data-theme='light'] .grid {
+    background: transparent;
+}
+
+[data-theme='light'] .plantCardWrapper {
+    background: #ffffff;
+    border-color: rgba(16, 185, 129, 0.2);
+}
+
+[data-theme='light'] .plantCardWrapper:hover {
+    border-color: rgba(16, 185, 129, 0.3);
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.15);
+}
+
+[data-theme='light'] .plantName {
+    color: #064e3b;
+}
+
+[data-theme='light'] .plantScientific {
+    color: #065f46;
+}
+
+[data-theme='light'] .plantPrice {
+    color: #10b981;
+}
+
+/* Legend & Info */
+[data-theme='light'] .legendItem {
+    background: rgba(16, 185, 129, 0.05);
+    border-color: rgba(16, 185, 129, 0.2);
+}
+
+[data-theme='light'] .legendItem:hover {
+    background: rgba(16, 185, 129, 0.1);
+}
+
+[data-theme='light'] .legendText {
+    color: #064e3b;
+}
+
+/* Section Titles */
+[data-theme='light'] .sectionTitle,
+[data-theme='light'] .sectionHeading {
+    color: #064e3b;
+}
+
+/* Loading & Empty States */
+[data-theme='light'] .loadingText,
+[data-theme='light'] .emptyText {
+    color: #065f46;
+}
+
+/* Badges & Tags */
+[data-theme='light'] .badge,
+[data-theme='light'] .tag {
+    background: rgba(16, 185, 129, 0.15);
+    color: #065f46;
+    border-color: rgba(16, 185, 129, 0.3);
+}
