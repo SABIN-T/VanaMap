@@ -205,5 +205,13 @@ module.exports = {
         adminReply: String,
         repliedAt: Date,
         createdAt: { type: Date, default: Date.now }
+    })),
+    AIFeedback: mongoose.model('AIFeedback', new mongoose.Schema({
+        query: { type: String, required: true },
+        response: { type: String, required: true },
+        rating: { type: String, enum: ['positive', 'negative'], required: true },
+        correction: String, // If user provides a better answer
+        userId: String,
+        timestamp: { type: Date, default: Date.now }
     }))
 };

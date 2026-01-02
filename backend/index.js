@@ -2440,6 +2440,16 @@ app.post('/api/chat', async (req, res) => {
             `- ${p.name} (${p.scientificName}): Temp ${p.idealTempMin}-${p.idealTempMax}°C, Hum ${p.minHumidity}%, Light: ${p.sunlight}. Key: ${p.suitability?.join(', ')}.`
         ).join('\n');
 
+        // 2.5 Fetch 'Learned' Best Practices (Simulation of Daily Training)
+        // Retrieve random 5-star rated answers to guide the style/accuracy
+        const trainings = await AIFeedback.aggregate([
+            { $match: { rating: 'positive' } },
+            { $sample: { size: 2 } }
+        ]);
+        const learnedContext = trainings.length > 0
+            ? `\n\nCONTEXT - SUCCESSFUL DIAGNOSES (Learn from these past correct answers):\n${trainings.map(t => `Q: ${t.query}\nA: ${t.response}`).join('\n---\n')}`
+            : "";
+
         // 3. Construct the Master System Prompt
         const systemPrompt = `You are Dr. Flora, the Chief Botanist and AI Doctor for VanaMap (an advanced plant nursery).
         
@@ -2457,6 +2467,7 @@ app.post('/api/chat', async (req, res) => {
         Points: ${userContext?.points || 0}
         Cart Items (Plant IDs): ${userContext?.cart || 'Empty'}
         Favorites: ${userContext?.favorites || 'None'}
+        ${learnedContext}
         
          CONTEXT - VANAMAP INVENTORY (Recommend these when suitable):
         ${inventorySummary}
@@ -2518,15 +2529,33 @@ app.post('/api/chat', async (req, res) => {
 
     } catch (e) {
         console.error("Chat API Error:", e);
-        // Fallback
         res.json({
             choices: [{
                 message: {
-                    role: 'assistant',
-                    content: generateFallbackResponse(req.body.messages?.[req.body.messages.length - 1]?.content || '')
+                    role: "assistant",
+                    content: "⚠️ **Connection Error**\nDr. Flora is having trouble reaching her lab database. checking..."
                 }
             }]
         });
+    }
+});
+
+app.post('/api/chat/feedback', async (req, res) => {
+    try {
+        const { query, response, rating, userId } = req.body;
+        console.log(`[AI Learning] New feedback: ${rating} for "${query.substring(0, 20)}..."`);
+
+        await new AIFeedback({
+            query,
+            response,
+            rating,
+            userId
+        }).save();
+
+        res.json({ success: true, message: "Feedback recorded for training" });
+    } catch (e) {
+        console.error("Feedback Log Error:", e);
+        res.status(500).json({ error: "Failed to log feedback" });
     }
 });
 
