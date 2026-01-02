@@ -1023,7 +1023,7 @@ What would you like to know about your plants today?`;
     };
 
     // --- VOICE ASSISTANT (Dr. Flora's Voice) ---
-    const [voiceEnabled, setVoiceEnabled] = useState(false);
+    const [voiceEnabled, setVoiceEnabled] = useState(true);
     const [isSpeaking, setIsSpeaking] = useState(false);
     const synth = window.speechSynthesis;
 
