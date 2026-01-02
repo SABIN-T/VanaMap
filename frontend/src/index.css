@@ -5,6 +5,9 @@ html {
 /* Import comprehensive light mode styles */
 @import './styles/light-mode-global.css';
 
+/* Import premium high-end design system */
+@import './styles/premium-light-mode.css';
+
 :root {
   font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
