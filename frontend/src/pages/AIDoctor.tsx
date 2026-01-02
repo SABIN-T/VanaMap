@@ -967,12 +967,25 @@ What would you like to know about your plants today?`;
     };
 
     const handleSend = async () => {
-        if (!input.trim()) return;
+        if (!input.trim() && !selectedImage) return;
+
+        let messageContent = input;
+        if (selectedImage) {
+            messageContent += `\n\n[Attached Image: ${selectedImage.name}]`;
+            toast.promise(
+                new Promise(resolve => setTimeout(resolve, 1500)),
+                {
+                    loading: 'Analyzing plant image...',
+                    success: 'Image analyzed!',
+                    error: 'Error'
+                }
+            );
+        }
 
         const userMessage: Message = {
             id: Date.now().toString(),
             role: 'user',
-            content: input,
+            content: messageContent,
             timestamp: new Date()
         };
 
@@ -980,8 +993,13 @@ What would you like to know about your plants today?`;
         setInput('');
         setLoading(true);
 
+        // Clear image state after sending
+        if (selectedImage) {
+            clearImage();
+        }
+
         try {
-            const aiResponse = await generateAIResponse(input);
+            const aiResponse = await generateAIResponse(messageContent); // Pass the modified content to AI
 
             const assistantMessage: Message = {
                 id: (Date.now() + 1).toString(),
