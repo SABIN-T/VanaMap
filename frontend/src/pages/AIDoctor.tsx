@@ -1105,6 +1105,56 @@ What would you like to know about your plants today?`;
     }, [messages, voiceEnabled]);
 
 
+    // --- SPEECH RECOGNITION (Microphone Input) ---
+    const [isListening, setIsListening] = useState(false);
+    // Use a ref to keep track of the recognition instance
+    const recognitionRef = useRef<any>(null);
+
+    const toggleListening = () => {
+        if (isListening) {
+            recognitionRef.current?.stop();
+            setIsListening(false);
+            return;
+        }
+
+        const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+        if (!SpeechRecognition) {
+            toast.error("Your browser doesn't support speech recognition.");
+            return;
+        }
+
+        const recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.lang = 'en-US';
+
+        recognition.onstart = () => {
+            setIsListening(true);
+            if (voiceEnabled) speak("Listening...");
+            toast("Listening...", { icon: '🎤' });
+        };
+
+        recognition.onresult = (event: any) => {
+            const transcript = event.results[0][0].transcript;
+            setInput((prev) => prev + (prev ? ' ' : '') + transcript);
+        };
+
+        recognition.onerror = (event: any) => {
+            console.error("Speech recognition error", event.error);
+            setIsListening(false);
+            if (event.error === 'not-allowed') {
+                toast.error("Microphone access denied.");
+            }
+        };
+
+        recognition.onend = () => {
+            setIsListening(false);
+        };
+
+        recognitionRef.current = recognition;
+        recognition.start();
+    };
+
     return (
         <div className={styles.container}>
             <header className={styles.header}>
@@ -1251,6 +1301,19 @@ What would you like to know about your plants today?`;
                         onKeyPress={(e) => e.key === 'Enter' && !loading && handleSend()}
                         disabled={loading}
                     />
+                    <button
+                        className={styles.sendBtn}
+                        onClick={toggleListening}
+                        disabled={loading}
+                        style={{
+                            background: isListening ? '#ef4444' : undefined,
+                            transition: 'all 0.3s ease',
+                            animation: isListening ? 'pulse 1.5s infinite' : 'none'
+                        }}
+                        title={isListening ? "Stop Listening" : "Start Voice Input"}
+                    >
+                        <Mic size={20} />
+                    </button>
                     <button
                         className={styles.sendBtn}
                         onClick={handleSend}
