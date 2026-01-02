@@ -2450,6 +2450,13 @@ app.post('/api/chat', async (req, res) => {
         CONTEXT - USER LOCATION:
         ${userContext?.city ? `City: ${userContext.city}` : 'Location: Unknown (ask if relevant)'}
         ${userContext?.weather ? `Weather: ${userContext.weather.temp}°C, ${userContext.weather.condition}` : ''}
+
+        CONTEXT - USER PROFILE:
+        Name: ${userContext?.name || 'Friend'}
+        Role: ${userContext?.role || 'Guest'}
+        Points: ${userContext?.points || 0}
+        Cart Items (Plant IDs): ${userContext?.cart || 'Empty'}
+        Favorites: ${userContext?.favorites || 'None'}
         
          CONTEXT - VANAMAP INVENTORY (Recommend these when suitable):
         ${inventorySummary}
