@@ -1155,6 +1155,24 @@ What would you like to know about your plants today?`;
         recognition.start();
     };
 
+    // --- IMAGE UPLOAD (Plant Diagnosis) ---
+    const [selectedImage, setSelectedImage] = useState<File | null>(null);
+    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+    // Exposed to the window for the file input onChange handler (cleaner than inline)
+    useEffect(() => {
+        (window as any).setImageUpload = (file: File, url: string) => {
+            setSelectedImage(file);
+            setPreviewUrl(url);
+            toast.success("Image selected!");
+        };
+    }, []);
+
+    const clearImage = () => {
+        setSelectedImage(null);
+        setPreviewUrl(null);
+    };
+
     return (
         <div className={styles.container}>
             <header className={styles.header}>
@@ -1291,6 +1309,45 @@ What would you like to know about your plants today?`;
             </div>
 
             <div className={styles.inputContainer}>
+                {previewUrl && (
+                    <div className={styles.imagePreviewContainer} style={{
+                        position: 'absolute',
+                        bottom: '80px',
+                        left: '50%',
+                        transform: 'translateX(-50%)',
+                        zIndex: 10,
+                        background: '#1e293b',
+                        padding: '8px',
+                        borderRadius: '12px',
+                        boxShadow: '0 -4px 20px rgba(0,0,0,0.5)',
+                        border: '1px solid rgba(255,255,255,0.1)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '10px'
+                    }}>
+                        <img src={previewUrl} alt="Upload Preview" style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '8px' }} />
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                            <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Image selected</span>
+                            <button
+                                onClick={clearImage}
+                                style={{
+                                    background: '#ef4444',
+                                    color: 'white',
+                                    border: 'none',
+                                    borderRadius: '4px',
+                                    padding: '4px 8px',
+                                    fontSize: '0.75rem',
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '4px'
+                                }}
+                            >
+                                <Trash2 size={12} /> Remove
+                            </button>
+                        </div>
+                    </div>
+                )}
                 <div className={styles.inputWrapper}>
                     <input
                         type="text"
@@ -1301,6 +1358,40 @@ What would you like to know about your plants today?`;
                         onKeyPress={(e) => e.key === 'Enter' && !loading && handleSend()}
                         disabled={loading}
                     />
+                    <div className={styles.fileInputWrapper}>
+                        <input
+                            type="file"
+                            accept="image/*"
+                            id="image-upload"
+                            style={{ display: 'none' }}
+                            onChange={(e) => {
+                                const file = e.target.files?.[0];
+                                if (file) {
+                                    if (file.size > 5 * 1024 * 1024) {
+                                        toast.error("Image too large. Max 5MB.");
+                                        return;
+                                    }
+                                    const reader = new FileReader();
+                                    reader.onloadend = () => {
+                                        // Store file and preview
+                                        // Note: We'll need state for this
+                                        // For now, let's assume setUserImage and userImagePreview exist
+                                        // We will add them in the component body next
+                                        (window as any).setImageUpload(file, reader.result as string);
+                                    };
+                                    reader.readAsDataURL(file);
+                                }
+                            }}
+                        />
+                    </div>
+                    <button
+                        className={styles.sendBtn}
+                        onClick={() => document.getElementById('image-upload')?.click()}
+                        disabled={loading}
+                        title="Upload Plant Photo"
+                    >
+                        <Camera size={20} />
+                    </button>
                     <button
                         className={styles.sendBtn}
                         onClick={toggleListening}
