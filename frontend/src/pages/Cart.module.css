@@ -721,3 +721,228 @@
         gap: 0.75rem;
     }
 }
+
+/* ============================================
+   LIGHT MODE STYLES - Premium Green Theme
+   Matching Auth Page Aesthetic
+   ============================================ */
+
+[data-theme='light'] .container {
+    background: #d1f4e0;
+}
+
+[data-theme='light'] .glassPanel {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: rgba(16, 185, 129, 0.2);
+    box-shadow: 0 25px 50px -12px rgba(16, 185, 129, 0.2);
+}
+
+[data-theme='light'] .header {
+    border-bottom-color: rgba(16, 185, 129, 0.15);
+}
+
+[data-theme='light'] .backBtn {
+    background: rgba(16, 185, 129, 0.1);
+    color: #065f46;
+}
+
+[data-theme='light'] .backBtn:hover {
+    background: rgba(16, 185, 129, 0.2);
+    color: #064e3b;
+}
+
+[data-theme='light'] .titleMain {
+    background: linear-gradient(135deg, #022c22 0%, #064e3b 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+[data-theme='light'] .titleIcon {
+    color: #10b981;
+}
+
+[data-theme='light'] .itemCount {
+    background: rgba(16, 185, 129, 0.15);
+    color: #065f46;
+    border-color: rgba(16, 185, 129, 0.3);
+}
+
+[data-theme='light'] .multiVendorAlert {
+    background: rgba(56, 189, 248, 0.15);
+    border-color: rgba(56, 189, 248, 0.4);
+    color: #0369a1;
+}
+
+[data-theme='light'] .emptyTitle {
+    color: #064e3b;
+}
+
+[data-theme='light'] .emptyDesc {
+    color: #065f46;
+}
+
+[data-theme='light'] .vendorGroup {
+    background: #ffffff;
+    border-color: rgba(16, 185, 129, 0.2);
+}
+
+[data-theme='light'] .vendorGroup:hover {
+    box-shadow: 0 20px 40px -10px rgba(16, 185, 129, 0.15);
+    border-color: rgba(16, 185, 129, 0.3);
+}
+
+[data-theme='light'] .groupHeader {
+    background: rgba(16, 185, 129, 0.05);
+    border-bottom-color: rgba(16, 185, 129, 0.15);
+}
+
+[data-theme='light'] .vendorName {
+    color: #064e3b;
+}
+
+[data-theme='light'] .officialBadge {
+    background: rgba(16, 185, 129, 0.2);
+    color: #065f46;
+}
+
+[data-theme='light'] .partnerBadge {
+    background: rgba(251, 191, 36, 0.2);
+    color: #92400e;
+}
+
+[data-theme='light'] .vendorMeta {
+    color: #065f46;
+}
+
+[data-theme='light'] .loginPrompt {
+    color: #92400e;
+    background: rgba(251, 191, 36, 0.15);
+}
+
+[data-theme='light'] .itemCard {
+    background: rgba(16, 185, 129, 0.03);
+}
+
+[data-theme='light'] .itemCard:hover {
+    background: rgba(16, 185, 129, 0.08);
+}
+
+[data-theme='light'] .itemThumb {
+    border-color: rgba(16, 185, 129, 0.2);
+}
+
+[data-theme='light'] .itemName {
+    color: #064e3b;
+}
+
+[data-theme='light'] .itemScientific {
+    color: #065f46;
+}
+
+[data-theme='light'] .itemPrice {
+    color: #10b981;
+}
+
+[data-theme='light'] .comingSoonBadge {
+    background: rgba(16, 185, 129, 0.15);
+    border-color: rgba(16, 185, 129, 0.3);
+    color: #065f46;
+}
+
+[data-theme='light'] .stepper {
+    background: rgba(16, 185, 129, 0.08);
+    border-color: rgba(16, 185, 129, 0.2);
+}
+
+[data-theme='light'] .stepperBtn {
+    color: #065f46;
+}
+
+[data-theme='light'] .stepperBtn:hover {
+    background: rgba(16, 185, 129, 0.15);
+    color: #064e3b;
+}
+
+[data-theme='light'] .stepperBtn.add:hover {
+    background: rgba(16, 185, 129, 0.2);
+    color: #10b981;
+}
+
+[data-theme='light'] .quantityVal {
+    color: #064e3b;
+}
+
+[data-theme='light'] .removeBtn {
+    color: #dc2626;
+}
+
+[data-theme='light'] .groupFooter {
+    background: rgba(16, 185, 129, 0.05);
+    border-top-color: rgba(16, 185, 129, 0.15);
+}
+
+[data-theme='light'] .subtotalLabel {
+    color: #065f46;
+}
+
+[data-theme='light'] .subtotalValue {
+    color: #064e3b;
+}
+
+[data-theme='light'] .footerNote {
+    color: #065f46;
+    border-top-color: rgba(16, 185, 129, 0.2);
+}
+
+/* Lock Screen Light Mode */
+[data-theme='light'] .lockContainer {
+    background: #d1f4e0;
+}
+
+[data-theme='light'] .lockCard {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: rgba(16, 185, 129, 0.2);
+    box-shadow: 0 40px 80px -20px rgba(16, 185, 129, 0.3);
+}
+
+[data-theme='light'] .lockCard::before {
+    background: radial-gradient(circle at center, rgba(16, 185, 129, 0.1) 0%, transparent 60%);
+}
+
+[data-theme='light'] .lockTitle {
+    background: linear-gradient(135deg, #022c22 0%, #064e3b 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+
+[data-theme='light'] .lockDesc {
+    color: #065f46;
+}
+
+[data-theme='light'] .featureList {
+    background: rgba(16, 185, 129, 0.05);
+    border-color: rgba(16, 185, 129, 0.15);
+}
+
+[data-theme='light'] .featureItem {
+    color: #064e3b;
+}
+
+[data-theme='light'] .featureIcon {
+    color: #10b981;
+    background: rgba(16, 185, 129, 0.15);
+}
+
+[data-theme='light'] .loginBtn {
+    background: #10b981;
+    color: #ffffff;
+}
+
+[data-theme='light'] .signupBtn {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: #ffffff;
+}
+
+[data-theme='light'] .cloud {
+    color: rgba(16, 185, 129, 0.05);
+}
