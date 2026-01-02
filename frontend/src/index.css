@@ -14,6 +14,9 @@ html {
 /* Import desktop-specific light mode fixes */
 @import './styles/desktop-light-mode-fixes.css';
 
+/* Import ultimate light mode fix - FINAL OVERRIDE */
+@import './styles/ultimate-light-mode-fix.css';
+
 :root {
   font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;

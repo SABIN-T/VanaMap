@@ -1,0 +1,332 @@
+/* ============================================
+   ULTIMATE LIGHT MODE FIX - ALL DEVICES
+   Nuclear option: Force everything to white/light
+   ============================================ */
+
+/* Force ALL possible dark backgrounds to white */
+[data-theme='light'] div,
+[data-theme='light'] section,
+[data-theme='light'] article,
+[data-theme='light'] aside,
+[data-theme='light'] main,
+[data-theme='light'] header,
+[data-theme='light'] footer,
+[data-theme='light'] nav {
+    background-color: inherit !important;
+}
+
+/* Force all cards, panels, containers to white */
+[data-theme='light'] [class*="card"],
+[data-theme='light'] [class*="Card"],
+[data-theme='light'] [class*="panel"],
+[data-theme='light'] [class*="Panel"],
+[data-theme='light'] [class*="container"],
+[data-theme='light'] [class*="Container"],
+[data-theme='light'] [class*="wrapper"],
+[data-theme='light'] [class*="Wrapper"],
+[data-theme='light'] [class*="box"],
+[data-theme='light'] [class*="Box"],
+[data-theme='light'] [class*="item"],
+[data-theme='light'] [class*="Item"],
+[data-theme='light'] [class*="block"],
+[data-theme='light'] [class*="Block"] {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    border-color: rgba(16, 185, 129, 0.2) !important;
+}
+
+/* Override ALL inline dark backgrounds */
+[data-theme='light'] [style*="background"],
+[data-theme='light'] [style*="backgroundColor"],
+[data-theme='light'] [style*="background-color"] {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+}
+
+/* Specific dark color overrides */
+[data-theme='light'] [style*="rgb(15"],
+[data-theme='light'] [style*="rgb(30"],
+[data-theme='light'] [style*="rgb(31"],
+[data-theme='light'] [style*="rgb(45"],
+[data-theme='light'] [style*="rgb(51"],
+[data-theme='light'] [style*="rgb(71"],
+[data-theme='light'] [style*="rgba(15"],
+[data-theme='light'] [style*="rgba(30"],
+[data-theme='light'] [style*="rgba(31"],
+[data-theme='light'] [style*="rgba(45"],
+[data-theme='light'] [style*="rgba(51"],
+[data-theme='light'] [style*="rgba(71"] {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+}
+
+/* Hex dark colors */
+[data-theme='light'] [style*="#0f"],
+[data-theme='light'] [style*="#1e"],
+[data-theme='light'] [style*="#1f"],
+[data-theme='light'] [style*="#2d"],
+[data-theme='light'] [style*="#2e"],
+[data-theme='light'] [style*="#33"],
+[data-theme='light'] [style*="#47"],
+[data-theme='light'] [style*="#020"],
+[data-theme='light'] [style*="#030"] {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+}
+
+/* Force all text to dark colors */
+[data-theme='light'] [class*="text"],
+[data-theme='light'] [class*="Text"],
+[data-theme='light'] [class*="title"],
+[data-theme='light'] [class*="Title"],
+[data-theme='light'] [class*="heading"],
+[data-theme='light'] [class*="Heading"],
+[data-theme='light'] [class*="label"],
+[data-theme='light'] [class*="Label"] {
+    color: #064e3b !important;
+}
+
+/* Override light text colors */
+[data-theme='light'] [style*="color: rgb(255"],
+[data-theme='light'] [style*="color: #fff"],
+[data-theme='light'] [style*="color: white"],
+[data-theme='light'] [style*="color: rgb(226"],
+[data-theme='light'] [style*="color: rgb(203"],
+[data-theme='light'] [style*="color: rgb(148"],
+[data-theme='light'] [style*="color: rgb(100"],
+[data-theme='light'] [style*="color: #e2e"],
+[data-theme='light'] [style*="color: #cbd"],
+[data-theme='light'] [style*="color: #94a"],
+[data-theme='light'] [style*="color: #647"] {
+    color: #064e3b !important;
+}
+
+/* Force all headings */
+[data-theme='light'] h1,
+[data-theme='light'] h2,
+[data-theme='light'] h3,
+[data-theme='light'] h4,
+[data-theme='light'] h5,
+[data-theme='light'] h6 {
+    color: #064e3b !important;
+}
+
+/* Force all paragraphs and spans */
+[data-theme='light'] p,
+[data-theme='light'] span,
+[data-theme='light'] div,
+[data-theme='light'] label,
+[data-theme='light'] small {
+    color: inherit !important;
+}
+
+/* Ensure body text is dark */
+[data-theme='light'] body,
+[data-theme='light'] #root,
+[data-theme='light'] .app {
+    color: #064e3b !important;
+}
+
+/* Weather/Info specific cards */
+[data-theme='light'] [class*="weather"],
+[data-theme='light'] [class*="Weather"],
+[data-theme='light'] [class*="location"],
+[data-theme='light'] [class*="Location"],
+[data-theme='light'] [class*="temperature"],
+[data-theme='light'] [class*="Temperature"],
+[data-theme='light'] [class*="humidity"],
+[data-theme='light'] [class*="Humidity"],
+[data-theme='light'] [class*="quality"],
+[data-theme='light'] [class*="Quality"],
+[data-theme='light'] [class*="metric"],
+[data-theme='light'] [class*="Metric"],
+[data-theme='light'] [class*="stat"],
+[data-theme='light'] [class*="Stat"],
+[data-theme='light'] [class*="info"],
+[data-theme='light'] [class*="Info"] {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    color: #064e3b !important;
+}
+
+/* Glass/Frosted elements */
+[data-theme='light'] [class*="glass"],
+[data-theme='light'] [class*="Glass"],
+[data-theme='light'] [class*="frosted"],
+[data-theme='light'] [class*="Frosted"],
+[data-theme='light'] [class*="blur"],
+[data-theme='light'] [class*="Blur"] {
+    background: rgba(255, 255, 255, 0.95) !important;
+    background-color: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* Modals and overlays */
+[data-theme='light'] [class*="modal"],
+[data-theme='light'] [class*="Modal"],
+[data-theme='light'] [class*="overlay"],
+[data-theme='light'] [class*="Overlay"],
+[data-theme='light'] [class*="popup"],
+[data-theme='light'] [class*="Popup"],
+[data-theme='light'] [class*="dialog"],
+[data-theme='light'] [class*="Dialog"] {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+}
+
+/* Buttons */
+[data-theme='light'] button,
+[data-theme='light'] [class*="btn"],
+[data-theme='light'] [class*="Btn"],
+[data-theme='light'] [class*="button"],
+[data-theme='light'] [class*="Button"] {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+    background-color: #10b981 !important;
+    color: #ffffff !important;
+}
+
+/* Secondary buttons */
+[data-theme='light'] [class*="secondary"],
+[data-theme='light'] [class*="Secondary"],
+[data-theme='light'] [class*="outline"],
+[data-theme='light'] [class*="Outline"] {
+    background: rgba(16, 185, 129, 0.1) !important;
+    background-color: rgba(16, 185, 129, 0.1) !important;
+    color: #065f46 !important;
+}
+
+/* Input fields */
+[data-theme='light'] input,
+[data-theme='light'] textarea,
+[data-theme='light'] select {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    color: #064e3b !important;
+    border-color: rgba(16, 185, 129, 0.2) !important;
+}
+
+/* Lists */
+[data-theme='light'] ul,
+[data-theme='light'] ol,
+[data-theme='light'] li {
+    color: #065f46 !important;
+}
+
+/* Tables */
+[data-theme='light'] table {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+}
+
+[data-theme='light'] th {
+    background: rgba(16, 185, 129, 0.08) !important;
+    background-color: rgba(16, 185, 129, 0.08) !important;
+    color: #064e3b !important;
+}
+
+[data-theme='light'] td {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+    color: #065f46 !important;
+}
+
+/* Navigation */
+[data-theme='light'] nav,
+[data-theme='light'] [class*="nav"],
+[data-theme='light'] [class*="Nav"],
+[data-theme='light'] [class*="menu"],
+[data-theme='light'] [class*="Menu"] {
+    background: rgba(255, 255, 255, 0.95) !important;
+    background-color: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* Footer */
+[data-theme='light'] footer,
+[data-theme='light'] [class*="footer"],
+[data-theme='light'] [class*="Footer"] {
+    background: rgba(255, 255, 255, 0.95) !important;
+    background-color: rgba(255, 255, 255, 0.95) !important;
+    color: #065f46 !important;
+}
+
+/* Badges and tags */
+[data-theme='light'] [class*="badge"],
+[data-theme='light'] [class*="Badge"],
+[data-theme='light'] [class*="tag"],
+[data-theme='light'] [class*="Tag"],
+[data-theme='light'] [class*="chip"],
+[data-theme='light'] [class*="Chip"] {
+    background: rgba(16, 185, 129, 0.15) !important;
+    background-color: rgba(16, 185, 129, 0.15) !important;
+    color: #065f46 !important;
+}
+
+/* Icons */
+[data-theme='light'] svg,
+[data-theme='light'] [class*="icon"],
+[data-theme='light'] [class*="Icon"] {
+    color: #10b981 !important;
+    fill: currentColor !important;
+}
+
+/* Specific Tailwind/utility class overrides */
+[data-theme='light'] .bg-slate-700,
+[data-theme='light'] .bg-slate-600,
+[data-theme='light'] .bg-slate-500,
+[data-theme='light'] .bg-gray-700,
+[data-theme='light'] .bg-gray-600,
+[data-theme='light'] .bg-gray-800,
+[data-theme='light'] .bg-gray-900,
+[data-theme='light'] .bg-black,
+[data-theme='light'] .bg-dark {
+    background: #ffffff !important;
+    background-color: #ffffff !important;
+}
+
+[data-theme='light'] .text-white,
+[data-theme='light'] .text-gray-100,
+[data-theme='light'] .text-gray-200,
+[data-theme='light'] .text-gray-300,
+[data-theme='light'] .text-gray-400,
+[data-theme='light'] .text-slate-300,
+[data-theme='light'] .text-slate-400 {
+    color: #064e3b !important;
+}
+
+/* Mobile specific - extra aggressive */
+@media (max-width: 768px) {
+    [data-theme='light'] * {
+        background-color: inherit !important;
+    }
+
+    [data-theme='light'] [class*="card"],
+    [data-theme='light'] [class*="panel"],
+    [data-theme='light'] [class*="box"],
+    [data-theme='light'] [class*="item"] {
+        background: #ffffff !important;
+        background-color: #ffffff !important;
+    }
+}
+
+/* Tablet specific */
+@media (min-width: 769px) and (max-width: 1024px) {
+
+    [data-theme='light'] [class*="card"],
+    [data-theme='light'] [class*="panel"],
+    [data-theme='light'] [class*="box"],
+    [data-theme='light'] [class*="item"] {
+        background: #ffffff !important;
+        background-color: #ffffff !important;
+    }
+}
+
+/* Desktop specific */
+@media (min-width: 1025px) {
+
+    [data-theme='light'] [class*="card"],
+    [data-theme='light'] [class*="panel"],
+    [data-theme='light'] [class*="box"],
+    [data-theme='light'] [class*="item"] {
+        background: #ffffff !important;
+        background-color: #ffffff !important;
+    }
+}
