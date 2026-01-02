@@ -1126,7 +1126,12 @@ What would you like to know about your plants today?`;
                             className={`${styles.actionBtn} ${voiceEnabled ? styles.active : ''}`}
                             onClick={toggleVoice}
                             title={voiceEnabled ? "Mute Voice" : "Enable Voice Assistant"}
-                            style={{ color: voiceEnabled ? '#10b981' : undefined, borderColor: voiceEnabled ? '#10b981' : undefined }}
+                            style={{
+                                color: voiceEnabled ? '#10b981' : undefined,
+                                borderColor: voiceEnabled ? '#10b981' : undefined,
+                                boxShadow: isSpeaking ? '0 0 15px rgba(16, 185, 129, 0.4)' : 'none',
+                                transform: isSpeaking ? 'scale(1.1)' : undefined
+                            }}
                         >
                             {voiceEnabled ? <Volume2 size={18} /> : <VolumeX size={18} />}
                         </button>
