@@ -38,22 +38,46 @@ html {
 }
 
 [data-theme='light'] {
-  --color-bg: #ffffff;
-  --color-bg-alt: #f8fafc;
+  /* Premium Botanical Green Theme - Soft & Easy on Eyes */
+  --color-bg: #f0fdf4;
+  /* Very light mint green - main background */
+  --color-bg-alt: #dcfce7;
+  /* Soft green tint */
   --color-bg-card: #ffffff;
-  --color-bg-card-hover: #f1f5f9;
-  --color-text-main: #020617;
-  --color-text-muted: #334155;
-  --color-text-dim: #64748b;
-  --color-border: rgba(0, 0, 0, 0.08);
-  --glass-bg: rgba(255, 255, 255, 0.7);
-  --glass-border: 1px solid rgba(0, 0, 0, 0.05);
-  --glass-shadow: 0 20px 50px -12px rgba(15, 23, 42, 0.1);
-  --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  /* Pure white cards for contrast */
+  --color-bg-card-hover: #ecfdf5;
+  /* Light emerald on hover */
+  --color-text-main: #064e3b;
+  /* Deep forest green - primary text */
+  --color-text-muted: #047857;
+  /* Medium green - secondary text */
+  --color-text-dim: #059669;
+  /* Lighter green - tertiary text */
+  --color-border: rgba(16, 185, 129, 0.15);
+  /* Soft green border */
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  /* White glass with transparency */
+  --glass-border: 1px solid rgba(16, 185, 129, 0.2);
+  /* Green-tinted glass border */
+  --glass-shadow: 0 20px 50px -12px rgba(16, 185, 129, 0.15);
+  /* Soft green shadow */
+  --card-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.1), 0 4px 6px -2px rgba(16, 185, 129, 0.05);
+  /* Green-tinted card shadow */
+
+  /* Premium green accents for buttons and interactive elements */
+  --color-primary-light: #10b981;
+  /* Emerald for buttons */
+  --color-primary-hover: #059669;
+  /* Darker emerald on hover */
+  --color-accent-light: #34d399;
+  /* Light emerald accent */
 
   --map-bg: #f0fdf4;
+  /* Light mint for map background */
   --map-popup-bg: #ffffff;
-  --map-popup-text: #1f2937;
+  /* White popups */
+  --map-popup-text: #064e3b;
+  /* Deep green text */
 
   color-scheme: light;
 }

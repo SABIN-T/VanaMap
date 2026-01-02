@@ -7,11 +7,22 @@ export const MobileTabBar = () => {
     const location = useLocation();
     const { items } = useCart();
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+    const [theme, setTheme] = useState(document.documentElement.getAttribute('data-theme') || 'dark');
 
     useEffect(() => {
         const handleResize = () => setIsMobile(window.innerWidth <= 768);
         window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
+
+        // Watch for theme changes
+        const observer = new MutationObserver(() => {
+            setTheme(document.documentElement.getAttribute('data-theme') || 'dark');
+        });
+        observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+            observer.disconnect();
+        };
     }, []);
 
     // Hide on specific pages or if not mobile
@@ -28,6 +39,15 @@ export const MobileTabBar = () => {
 
     const isActive = (path: string) => location.pathname === path;
 
+    // Theme-specific styles
+    const isLight = theme === 'light';
+    const bgColor = isLight ? 'rgba(255, 255, 255, 0.9)' : 'rgba(15, 23, 42, 0.85)';
+    const borderColor = isLight ? 'rgba(16, 185, 129, 0.15)' : 'rgba(255, 255, 255, 0.08)';
+    const shadowColor = isLight ? 'rgba(16, 185, 129, 0.1)' : 'rgba(0,0,0,0.3)';
+    const activeColor = '#10b981';
+    const inactiveColor = isLight ? '#047857' : '#94a3b8';
+    const badgeBorder = isLight ? '#f0fdf4' : '#0f172a';
+
     return (
         <div style={{
             position: 'fixed',
@@ -35,16 +55,16 @@ export const MobileTabBar = () => {
             left: 0,
             width: '100%',
             height: '75px',
-            background: 'rgba(15, 23, 42, 0.85)',
+            background: bgColor,
             backdropFilter: 'blur(16px)',
             WebkitBackdropFilter: 'blur(16px)',
-            borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+            borderTop: `1px solid ${borderColor}`,
             display: 'grid',
             gridTemplateColumns: `repeat(${tabs.length}, 1fr)`,
             alignItems: 'center',
             paddingBottom: 'env(safe-area-inset-bottom)',
             zIndex: 10000,
-            boxShadow: '0 -4px 20px rgba(0,0,0,0.3)',
+            boxShadow: `0 -4px 20px ${shadowColor}`,
             transition: 'all 0.3s ease'
         }}>
             {tabs.map((tab) => (
@@ -57,7 +77,7 @@ export const MobileTabBar = () => {
                         alignItems: 'center',
                         justifyContent: 'center',
                         textDecoration: 'none',
-                        color: isActive(tab.path) ? '#10b981' : '#94a3b8',
+                        color: isActive(tab.path) ? activeColor : inactiveColor,
                         transition: 'all 0.2s ease',
                         gap: '4px'
                     }}
@@ -79,7 +99,7 @@ export const MobileTabBar = () => {
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                border: '2px solid #0f172a'
+                                border: `2px solid ${badgeBorder}`
                             }}>
                                 {tab.badge}
                             </span>
