@@ -41,7 +41,7 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({
     storage: storage,
-    limits: { fileSize: 50 * 1024 * 1024 }
+    limits: { fileSize: 75 * 1024 * 1024 }
 });
 
 // --- AUTOMATED PREMIUM CHECK (Daily at Midnight) ---
