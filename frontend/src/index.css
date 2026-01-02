@@ -42,14 +42,15 @@ html {
 
 [data-theme='light'] {
   /* Premium Botanical Green Theme - Enhanced Contrast */
-  --color-bg: #f0fdf4;
-  /* Very light mint green - main background */
-  --color-bg-alt: #dcfce7;
-  /* Soft green tint */
+  /* UPDATED: Using soft mint green background like Auth page */
+  --color-bg: #d1f4e0;
+  /* Soft mint green - main background (matches Auth page) */
+  --color-bg-alt: #c7f0d8;
+  /* Slightly darker mint for variation */
   --color-bg-card: #ffffff;
-  /* Pure white cards for contrast */
-  --color-bg-card-hover: #ecfdf5;
-  /* Light emerald on hover */
+  /* Pure white cards for maximum contrast */
+  --color-bg-card-hover: #f0fdf4;
+  /* Very light mint on hover */
 
   /* UPDATED: Much darker text colors for better readability */
   --color-text-main: #064e3b;
@@ -61,8 +62,8 @@ html {
 
   --color-border: rgba(16, 185, 129, 0.15);
   /* Soft green border */
-  --glass-bg: rgba(255, 255, 255, 0.85);
-  /* White glass with transparency */
+  --glass-bg: rgba(255, 255, 255, 0.95);
+  /* Almost opaque white glass */
   --glass-border: 1px solid rgba(16, 185, 129, 0.2);
   /* Green-tinted glass border */
   --glass-shadow: 0 20px 50px -12px rgba(16, 185, 129, 0.15);
@@ -88,8 +89,8 @@ html {
   --color-placeholder: #6b7280;
   /* Gray for placeholders */
 
-  --map-bg: #f0fdf4;
-  /* Light mint for map background */
+  --map-bg: #d1f4e0;
+  /* Soft mint for map background */
   --map-popup-bg: #ffffff;
   /* White popups */
   --map-popup-text: #064e3b;

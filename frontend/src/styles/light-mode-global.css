@@ -8,13 +8,13 @@
    ============================================ */
 
 [data-theme='light'] .homeContainer {
-    background: radial-gradient(circle at top, #dcfce7 0%, #f0fdf4 100%);
+    background: #d1f4e0;
     color: #064e3b;
 }
 
 [data-theme='light'] .hero {
-    background: #f0fdf4;
-    background-image: radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.08) 0%, transparent 50%);
+    background: #d1f4e0;
+    background-image: none;
 }
 
 [data-theme='light'] .heroTitle {
@@ -97,13 +97,13 @@
    ============================================ */
 
 [data-theme='light'] .shopsContainer {
-    background: #f0fdf4;
+    background: #d1f4e0;
     color: #064e3b;
 }
 
 [data-theme='light'] .filterCard,
 [data-theme='light'] .plantCard {
-    background: rgba(255, 255, 255, 0.9);
+    background: #ffffff;
     border-color: rgba(16, 185, 129, 0.15);
     box-shadow: 0 4px 15px rgba(16, 185, 129, 0.08);
 }
@@ -119,47 +119,18 @@
    ============================================ */
 
 [data-theme='light'] .cartContainer {
-    background: #f0fdf4;
+    background: #d1f4e0;
 }
 
 [data-theme='light'] .cartItem {
-    background: rgba(255, 255, 255, 0.9);
+    background: #ffffff;
     border-color: rgba(16, 185, 129, 0.15);
 }
 
 [data-theme='light'] .cartSummary {
-    background: rgba(255, 255, 255, 0.95);
+    background: #ffffff;
     border-color: rgba(16, 185, 129, 0.2);
     box-shadow: 0 10px 30px rgba(16, 185, 129, 0.1);
-}
-
-/* ============================================
-   AUTH PAGE LIGHT MODE
-   ============================================ */
-
-[data-theme='light'] .authContainer {
-    background: radial-gradient(circle at center, #dcfce7 0%, #f0fdf4 100%);
-}
-
-[data-theme='light'] .authCard {
-    background: rgba(255, 255, 255, 0.95);
-    border-color: rgba(16, 185, 129, 0.2);
-    box-shadow: 0 20px 50px rgba(16, 185, 129, 0.15);
-}
-
-[data-theme='light'] .authTitle {
-    color: #064e3b;
-}
-
-[data-theme='light'] .authInput {
-    background: rgba(255, 255, 255, 0.9);
-    border-color: rgba(16, 185, 129, 0.2);
-    color: #064e3b;
-}
-
-[data-theme='light'] .authInput:focus {
-    border-color: #10b981;
-    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
 }
 
 /* ============================================
@@ -167,12 +138,12 @@
    ============================================ */
 
 [data-theme='light'] .container {
-    background: #f0fdf4;
+    background: #d1f4e0;
     color: #064e3b;
 }
 
 [data-theme='light'] .header {
-    background: rgba(255, 255, 255, 0.9);
+    background: #ffffff;
     border-bottom-color: rgba(16, 185, 129, 0.15);
 }
 
@@ -181,7 +152,7 @@
 }
 
 [data-theme='light'] .message {
-    background: rgba(255, 255, 255, 0.9);
+    background: #ffffff;
     border-color: rgba(16, 185, 129, 0.15);
 }
 
@@ -191,7 +162,7 @@
 }
 
 [data-theme='light'] .inputContainer {
-    background: rgba(255, 255, 255, 0.95);
+    background: #ffffff;
     border-top-color: rgba(16, 185, 129, 0.15);
 }
 
@@ -200,11 +171,11 @@
    ============================================ */
 
 [data-theme='light'] .heavenContainer {
-    background: radial-gradient(circle at top, #dcfce7 0%, #f0fdf4 100%);
+    background: #d1f4e0;
 }
 
 [data-theme='light'] .gameCard {
-    background: rgba(255, 255, 255, 0.9);
+    background: #ffffff;
     border-color: rgba(16, 185, 129, 0.2);
     box-shadow: 0 10px 30px rgba(16, 185, 129, 0.1);
 }
@@ -214,11 +185,11 @@
    ============================================ */
 
 [data-theme='light'] .nearbyContainer {
-    background: #f0fdf4;
+    background: #d1f4e0;
 }
 
 [data-theme='light'] .vendorCard {
-    background: rgba(255, 255, 255, 0.9);
+    background: #ffffff;
     border-color: rgba(16, 185, 129, 0.15);
 }
 
@@ -232,11 +203,11 @@
    ============================================ */
 
 [data-theme='light'] .premiumContainer {
-    background: radial-gradient(circle at top, #dcfce7 0%, #f0fdf4 100%);
+    background: #d1f4e0;
 }
 
 [data-theme='light'] .pricingCard {
-    background: rgba(255, 255, 255, 0.95);
+    background: #ffffff;
     border-color: rgba(16, 185, 129, 0.2);
 }
 
@@ -250,16 +221,16 @@
    ============================================ */
 
 [data-theme='light'] .dashboardContainer {
-    background: #f0fdf4;
+    background: #d1f4e0;
 }
 
 [data-theme='light'] .statsCard {
-    background: rgba(255, 255, 255, 0.9);
+    background: #ffffff;
     border-color: rgba(16, 185, 129, 0.15);
 }
 
 [data-theme='light'] .activityItem {
-    background: rgba(255, 255, 255, 0.7);
+    background: #ffffff;
     border-color: rgba(16, 185, 129, 0.1);
 }
 
@@ -268,11 +239,11 @@
    ============================================ */
 
 [data-theme='light'] .vendorContainer {
-    background: #f0fdf4;
+    background: #d1f4e0;
 }
 
 [data-theme='light'] .inventoryCard {
-    background: rgba(255, 255, 255, 0.9);
+    background: #ffffff;
     border-color: rgba(16, 185, 129, 0.15);
 }
 
@@ -281,7 +252,7 @@
    ============================================ */
 
 [data-theme='light'] .plantCard {
-    background: rgba(255, 255, 255, 0.95);
+    background: #ffffff;
     border-color: rgba(16, 185, 129, 0.15);
     box-shadow: 0 4px 15px rgba(16, 185, 129, 0.08);
 }
@@ -311,7 +282,7 @@
    ============================================ */
 
 [data-theme='light'] .modalOverlay {
-    background: rgba(240, 253, 244, 0.85);
+    background: rgba(209, 244, 224, 0.85);
 }
 
 [data-theme='light'] .modalContent {
@@ -338,16 +309,16 @@
 
 [data-theme='light'] .aboutContainer,
 [data-theme='light'] .contactContainer {
-    background: #f0fdf4;
+    background: #d1f4e0;
 }
 
 [data-theme='light'] .sectionCard {
-    background: rgba(255, 255, 255, 0.9);
+    background: #ffffff;
     border-color: rgba(16, 185, 129, 0.15);
 }
 
 [data-theme='light'] .teamMember {
-    background: rgba(255, 255, 255, 0.95);
+    background: #ffffff;
     border-color: rgba(16, 185, 129, 0.15);
 }
 
@@ -356,21 +327,21 @@
    ============================================ */
 
 [data-theme='light'] .adminContainer {
-    background: #f0fdf4;
+    background: #d1f4e0;
 }
 
 [data-theme='light'] .adminSidebar {
-    background: rgba(255, 255, 255, 0.95);
+    background: #ffffff;
     border-right-color: rgba(16, 185, 129, 0.15);
 }
 
 [data-theme='light'] .adminCard {
-    background: rgba(255, 255, 255, 0.9);
+    background: #ffffff;
     border-color: rgba(16, 185, 129, 0.15);
 }
 
 [data-theme='light'] .adminTable {
-    background: rgba(255, 255, 255, 0.95);
+    background: #ffffff;
 }
 
 [data-theme='light'] .adminTableRow:hover {
@@ -382,11 +353,11 @@
    ============================================ */
 
 [data-theme='light'] .gameContainer {
-    background: radial-gradient(circle at center, #dcfce7 0%, #f0fdf4 100%);
+    background: #d1f4e0;
 }
 
 [data-theme='light'] .scoreCard {
-    background: rgba(255, 255, 255, 0.95);
+    background: #ffffff;
     border-color: rgba(16, 185, 129, 0.2);
 }
 
