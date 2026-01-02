@@ -2417,17 +2417,63 @@ app.post('/api/admin/broadcast', auth, admin, async (req, res) => {
 });
 
 // --- AI DOCTOR ENDPOINT (Using FREE Groq API) ---
+// --- AI DOCTOR ENDPOINT (Using FREE Groq API) ---
 app.post('/api/chat', async (req, res) => {
     try {
-        const { messages, model } = req.body;
+        const { messages, userContext } = req.body;
 
         // Groq API Key (FREE - Get from https://console.groq.com)
-        // If not set, use a public demo key (limited but works for testing)
-        const apiKey = process.env.GROQ_API_KEY || 'YOUR_FREE_GROQ_KEY_HERE';
+        const apiKey = process.env.GROQ_API_KEY;
 
         console.log('[AI Doctor] Processing chat request...');
+        if (userContext) console.log(`[AI Doctor] Context: ${JSON.stringify(userContext)}`);
 
-        // Using Groq's FREE API with Llama 3.3 70B (Latest)
+        // 1. Fetch relevant plant data from OUR database (The "Website Analysis" part)
+        // We select key fields to keep token usage efficient
+        const inventory = await Plant.find()
+            .select('name scientificName description idealTempMin idealTempMax minHumidity sunlight suitability medicinalValues')
+            .limit(40) // Limit to 40 popular plants to fit in context
+            .lean();
+
+        // 2. Create a compressed inventory summary
+        const inventorySummary = inventory.map(p =>
+            `- ${p.name} (${p.scientificName}): Temp ${p.idealTempMin}-${p.idealTempMax}°C, Hum ${p.minHumidity}%, Light: ${p.sunlight}. Key: ${p.suitability?.join(', ')}.`
+        ).join('\n');
+
+        // 3. Construct the Master System Prompt
+        const systemPrompt = `You are Dr. Flora, the Chief Botanist and AI Doctor for VanaMap (an advanced plant nursery).
+        
+        YOUR OBJECTIVE:
+        Provide expert, friendly, and scientifically and accurate plant care advice.
+        ALWAYS give a specific suggestion or solution. Never say "I don't know" - offer the best general advice if specific data is missing.
+        
+        CONTEXT - USER LOCATION:
+        ${userContext?.city ? `City: ${userContext.city}` : 'Location: Unknown (ask if relevant)'}
+        ${userContext?.weather ? `Weather: ${userContext.weather.temp}°C, ${userContext.weather.condition}` : ''}
+        
+         CONTEXT - VANAMAP INVENTORY (Recommend these when suitable):
+        ${inventorySummary}
+        
+        GUIDELINES:
+        1. **Analyze the Website/Inventory**: Use the provided inventory list to recommend SPECIFIC plants we sell if they match the user's needs.
+        2. **Location-Based**: Only suggest plants that will thrive in the user's reported weather/location (unless they are for indoor use).
+        3. **Diseases & Nature**: If the user describes symptoms, diagnose based on:
+           - Yellow leaves: Overwatering (most likely) or Nitrogen deficiency.
+           - Brown spots: Fungal or Sunburn.
+           - Drooping: Thirst or Root Rot.
+        4. **Environment**: Explain *why* a plant is good (e.g., "absorbs toxins," "produces oxygen at night").
+        5. **Persona**: Warm, encouraging, academic but accessible. Use emojis 🌿 caused by strict biology.
+        
+        Format your response with clear headings and bullet points.`;
+
+        // 4. Update the messages array with the enhanced system prompt
+        // We replace the frontend's system prompt or prepend ours
+        const enhancedMessages = [
+            { role: "system", content: systemPrompt },
+            ...messages.filter(m => m.role !== 'system')
+        ];
+
+        // 5. Call Groq API
         const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
             method: "POST",
             headers: {
@@ -2435,12 +2481,10 @@ app.post('/api/chat', async (req, res) => {
                 "Authorization": `Bearer ${apiKey}`
             },
             body: JSON.stringify({
-                model: "llama-3.3-70b-versatile", // Latest supported model
-                messages: messages,
+                model: "llama-3.3-70b-versatile",
+                messages: enhancedMessages,
                 max_tokens: 1000,
-                temperature: 0.7,
-                top_p: 1,
-                stream: false
+                temperature: 0.7
             })
         });
 
@@ -2448,35 +2492,31 @@ app.post('/api/chat', async (req, res) => {
 
         if (!response.ok) {
             console.error("Groq API Error:", data);
-
-            // Fallback to local AI if Groq fails
-            if (data.error?.message?.includes('rate_limit') || data.error?.message?.includes('quota')) {
-                console.log('[AI Doctor] Rate limit hit, using fallback response...');
+            // Rate limit handling
+            if (data.error?.message?.includes('rate_limit')) {
                 return res.json({
                     choices: [{
                         message: {
                             role: 'assistant',
-                            content: generateFallbackResponse(messages[messages.length - 1]?.content || '')
+                            content: "🌿 **Dr. Flora is currently busy with other patients!** (Rate Limit Reached)\n\nHowever, here is some general advice:\n\nIf your plant has **yellow leaves**, it's likely overwatering. Let the soil dry out completely.\nIf it has **crispy brown edges**, it needs more humidity or water.\n\nPlease try asking again in 1 minute!"
                         }
                     }]
                 });
             }
-
-            return res.status(response.status).json(data);
+            throw new Error(data.error?.message || "Groq API Failed");
         }
 
-        console.log('[AI Doctor] Response generated successfully');
+        console.log('[AI Doctor] Success!');
         res.json(data);
+
     } catch (e) {
         console.error("Chat API Error:", e);
-
-        // Fallback response on network error
-        const userMessage = req.body.messages?.[req.body.messages.length - 1]?.content || '';
+        // Fallback
         res.json({
             choices: [{
                 message: {
                     role: 'assistant',
-                    content: generateFallbackResponse(userMessage)
+                    content: generateFallbackResponse(req.body.messages?.[req.body.messages.length - 1]?.content || '')
                 }
             }]
         });

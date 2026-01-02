@@ -123,7 +123,19 @@ Respond naturally as Dr. Flora would:`;
                             role: "user",
                             content: userMessage
                         }
-                    ]
+                    ],
+                    userContext: (() => {
+                        try {
+                            const cache = localStorage.getItem('weather_cache');
+                            if (cache) {
+                                const data = JSON.parse(cache);
+                                return {
+                                    city: data.city || data.name,
+                                    weather: { temp: data.temp || data.temperature, condition: data.condition || data.weather }
+                                };
+                            }
+                        } catch (e) { return null; }
+                    })()
                 })
             });
 
