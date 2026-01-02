@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Send, Sparkles, Leaf, Bot, User, Trash2, Download, Calendar, Globe, Camera, Mic, ShoppingCart } from 'lucide-react';
 import { fetchPlants } from '../services/api';
 import toast from 'react-hot-toast';
+import { useAuth } from '../context/AuthContext';
 import styles from './AIDoctor.module.css';
 
 interface Message {
@@ -12,6 +13,7 @@ interface Message {
 }
 
 export const AIDoctor = () => {
+    const { user } = useAuth();
     const [messages, setMessages] = useState<Message[]>([
         {
             id: '1',
@@ -119,153 +121,154 @@ Respond naturally as Dr. Flora would:`;
                             role: "system",
                             content: `You are Dr. Flora, a warm and knowledgeable botanist. ${conversationalPrompt}`
                         },
-                        {
-                            role: "user",
-                            content: userMessage
+
+                                // User Profile Context
+                                if(user) {
+                        context.name = user.name;
+                        context.role = user.role;
+                        context.points = user.points;
+                        // Send cart summary for "suggest what to buy" logic
+                        if (user.cart && user.cart.length > 0) {
+                            context.cart = user.cart.map((c: any) => c.plantId).join(', '); // Just IDs or names if available
                         }
-                    ],
-                    userContext: (() => {
-                        try {
-                            const cache = localStorage.getItem('weather_cache');
-                            if (cache) {
-                                const data = JSON.parse(cache);
-                                return {
-                                    city: data.city || data.name,
-                                    weather: { temp: data.temp || data.temperature, condition: data.condition || data.weather }
-                                };
-                            }
-                        } catch (e) { return null; }
-                    })()
-                })
-            });
+                        // Send favorites
+                        if (user.favorites && user.favorites.length > 0) {
+                            context.favorites = user.favorites.join(', ');
+                        }
+                    }
+                } catch(e) { console.error(e); }
+                            return context;
+            })()
+        })
+    });
 
-            console.log('[AI Doctor] Response status:', response.status);
+    console.log('[AI Doctor] Response status:', response.status);
 
-            if (response.ok) {
-                const data = await response.json();
-                console.log('[AI Doctor] Response data:', data);
+    if (response.ok) {
+        const data = await response.json();
+        console.log('[AI Doctor] Response data:', data);
 
-                const aiText = data.choices?.[0]?.message?.content || "";
+        const aiText = data.choices?.[0]?.message?.content || "";
 
-                // Validate response quality
-                if (aiText.length > 5) {
-                    // Format the response nicely
-                    return formatHumanLikeResponse(aiText);
-                } else {
-                    console.error('[AI Doctor] Empty or invalid response');
-                    toast.error("Dr. Flora didn't respond. Please try again.");
-                }
-            } else {
-                const errorText = await response.text();
-                console.error("AI Doctor Server Error:", errorText);
-                toast.error("Dr. Flora is having trouble connecting to the server.");
-            }
-        } catch (error) {
-            console.error("AI Doctor Network Error:", error);
-            toast.error("Network error. Please try again.");
+        // Validate response quality
+        if (aiText.length > 5) {
+            // Format the response nicely
+            return formatHumanLikeResponse(aiText);
+        } else {
+            console.error('[AI Doctor] Empty or invalid response');
+            toast.error("Dr. Flora didn't respond. Please try again.");
         }
+    } else {
+        const errorText = await response.text();
+        console.error("AI Doctor Server Error:", errorText);
+        toast.error("Dr. Flora is having trouble connecting to the server.");
+    }
+} catch (error) {
+    console.error("AI Doctor Network Error:", error);
+    toast.error("Network error. Please try again.");
+}
 
-        return null; // Failed
+return null; // Failed
+};
+
+const formatHumanLikeResponse = (aiText: string): string => {
+    // Add friendly formatting
+    let formatted = `🌿 **Dr. Flora says:**\n\n`;
+
+    // Clean up and format the AI response
+    const paragraphs = aiText.split('\n').filter(p => p.trim().length > 0);
+
+    paragraphs.forEach(para => {
+        // Add emoji to key sections
+        if (para.toLowerCase().includes('water')) {
+            formatted += `💧 ${para}\n\n`;
+        } else if (para.toLowerCase().includes('light') || para.toLowerCase().includes('sun')) {
+            formatted += `☀️ ${para}\n\n`;
+        } else if (para.toLowerCase().includes('tip') || para.toLowerCase().includes('remember')) {
+            formatted += `💡 ${para}\n\n`;
+        } else if (para.toLowerCase().includes('problem') || para.toLowerCase().includes('issue')) {
+            formatted += `⚠️ ${para}\n\n`;
+        } else {
+            formatted += `${para}\n\n`;
+        }
+    });
+
+    // Add a friendly closing
+    formatted += `---\n`;
+    formatted += `🌱 *Feel free to ask me anything else about your plants! I'm here to help them thrive.*`;
+
+    return formatted;
+};
+
+// Quick Response Handler for Simple Questions
+const getQuickResponse = (lowerMsg: string, originalMsg: string): string | null => {
+    // User introducing themselves - extract name and respond naturally
+    if (/my name is|i'm|i am|this is|call me/i.test(lowerMsg)) {
+        // Extract the name
+        const nameMatch = originalMsg.match(/(?:my name is|i'm|i am|this is|call me)\s+([a-z]+)/i);
+        if (nameMatch && nameMatch[1]) {
+            const userName = nameMatch[1];
+            return `Nice to meet you, ${userName}! I'm Dr. Flora. How can I help you with your plants today?`;
+        }
+        return `Nice to meet you! I'm Dr. Flora. What can I help you with today?`;
+    }
+
+    // Name questions - asking about AI's name
+    if (/what.*your.*name|who.*are.*you|your.*name/.test(lowerMsg) && !/my name|i'm|i am/.test(lowerMsg)) {
+        return `I'm Dr. Flora, your plant care expert. What can I help you with today?`;
+    }
+
+    // Greetings - keep it simple and friendly
+    if (/^(hi|hello|hey|greetings|good morning|good afternoon|good evening)[\s!.?]*$/i.test(lowerMsg)) {
+        return `Hello! Great to see you! What plant question can I help you with?`;
+    }
+
+    // Thanks
+    if (/^(thank|thanks|thx|ty|appreciate)[\s!.?]*$/i.test(lowerMsg)) {
+        return `You're welcome! Happy to help anytime!`;
+    }
+
+    // How are you
+    if (/how.*are.*you|how.*you.*doing/.test(lowerMsg)) {
+        return `I'm doing great, thanks! Ready to help with your plants. What's on your mind?`;
+    }
+
+    // What can you do / help with
+    if (/what.*can.*you.*do|what.*help|your.*purpose|can.*you.*help/.test(lowerMsg)) {
+        return `I'm here to help with all your plant care needs!\n\nI can assist with:\n\nDiagnosing Problems:\n• Yellow or brown leaves\n• Pest identification\n• Disease treatment\n\nCare Guidance:\n• Watering schedules\n• Light requirements\n• Fertilizer recommendations\n\nPlant Selection:\n• Best plants for your space\n• Beginner-friendly options\n• Air purifying plants\n\nWhat would you like to know?`;
+    }
+
+    // Goodbye
+    if (/^(bye|goodbye|see you|later|gtg|gotta go)[\s!.?]*$/i.test(lowerMsg)) {
+        return `Happy gardening! Come back anytime you need help!`;
+    }
+
+    return null; // No quick response, continue to AI
+};
+
+const generateAIResponse = async (userMessage: string): Promise<string> => {
+    const lowerMsg = userMessage.toLowerCase();
+
+    // STEP 1: Contextual Analysis - Extract key information
+    const context = {
+        hasSymptoms: /yellow|brown|spot|wilt|droop|curl|dying|dead|sick/.test(lowerMsg),
+        hasPest: /bug|pest|insect|mite|aphid|scale|mealybug|fungus gnat/.test(lowerMsg),
+        hasWaterIssue: /water|overwater|underwater|soggy|dry|droop/.test(lowerMsg),
+        hasLightIssue: /light|sun|shade|dark|bright|pale|leggy/.test(lowerMsg),
+        isGeneralCare: /care|how to|maintain|grow|propagate/.test(lowerMsg),
+        mentionsTimeframe: /week|month|day|recently|sudden|gradual/.test(lowerMsg),
     };
 
-    const formatHumanLikeResponse = (aiText: string): string => {
-        // Add friendly formatting
-        let formatted = `🌿 **Dr. Flora says:**\n\n`;
+    // STEP 2: Check for specific plant in database with fuzzy matching
+    const plantMatch = plants.find(p =>
+        lowerMsg.includes(p.name.toLowerCase()) ||
+        (p.scientificName && lowerMsg.includes(p.scientificName.toLowerCase())) ||
+        (p.commonNames && p.commonNames.some((cn: string) => lowerMsg.includes(cn.toLowerCase())))
+    );
 
-        // Clean up and format the AI response
-        const paragraphs = aiText.split('\n').filter(p => p.trim().length > 0);
-
-        paragraphs.forEach(para => {
-            // Add emoji to key sections
-            if (para.toLowerCase().includes('water')) {
-                formatted += `💧 ${para}\n\n`;
-            } else if (para.toLowerCase().includes('light') || para.toLowerCase().includes('sun')) {
-                formatted += `☀️ ${para}\n\n`;
-            } else if (para.toLowerCase().includes('tip') || para.toLowerCase().includes('remember')) {
-                formatted += `💡 ${para}\n\n`;
-            } else if (para.toLowerCase().includes('problem') || para.toLowerCase().includes('issue')) {
-                formatted += `⚠️ ${para}\n\n`;
-            } else {
-                formatted += `${para}\n\n`;
-            }
-        });
-
-        // Add a friendly closing
-        formatted += `---\n`;
-        formatted += `🌱 *Feel free to ask me anything else about your plants! I'm here to help them thrive.*`;
-
-        return formatted;
-    };
-
-    // Quick Response Handler for Simple Questions
-    const getQuickResponse = (lowerMsg: string, originalMsg: string): string | null => {
-        // User introducing themselves - extract name and respond naturally
-        if (/my name is|i'm|i am|this is|call me/i.test(lowerMsg)) {
-            // Extract the name
-            const nameMatch = originalMsg.match(/(?:my name is|i'm|i am|this is|call me)\s+([a-z]+)/i);
-            if (nameMatch && nameMatch[1]) {
-                const userName = nameMatch[1];
-                return `Nice to meet you, ${userName}! I'm Dr. Flora. How can I help you with your plants today?`;
-            }
-            return `Nice to meet you! I'm Dr. Flora. What can I help you with today?`;
-        }
-
-        // Name questions - asking about AI's name
-        if (/what.*your.*name|who.*are.*you|your.*name/.test(lowerMsg) && !/my name|i'm|i am/.test(lowerMsg)) {
-            return `I'm Dr. Flora, your plant care expert. What can I help you with today?`;
-        }
-
-        // Greetings - keep it simple and friendly
-        if (/^(hi|hello|hey|greetings|good morning|good afternoon|good evening)[\s!.?]*$/i.test(lowerMsg)) {
-            return `Hello! Great to see you! What plant question can I help you with?`;
-        }
-
-        // Thanks
-        if (/^(thank|thanks|thx|ty|appreciate)[\s!.?]*$/i.test(lowerMsg)) {
-            return `You're welcome! Happy to help anytime!`;
-        }
-
-        // How are you
-        if (/how.*are.*you|how.*you.*doing/.test(lowerMsg)) {
-            return `I'm doing great, thanks! Ready to help with your plants. What's on your mind?`;
-        }
-
-        // What can you do / help with
-        if (/what.*can.*you.*do|what.*help|your.*purpose|can.*you.*help/.test(lowerMsg)) {
-            return `I'm here to help with all your plant care needs!\n\nI can assist with:\n\nDiagnosing Problems:\n• Yellow or brown leaves\n• Pest identification\n• Disease treatment\n\nCare Guidance:\n• Watering schedules\n• Light requirements\n• Fertilizer recommendations\n\nPlant Selection:\n• Best plants for your space\n• Beginner-friendly options\n• Air purifying plants\n\nWhat would you like to know?`;
-        }
-
-        // Goodbye
-        if (/^(bye|goodbye|see you|later|gtg|gotta go)[\s!.?]*$/i.test(lowerMsg)) {
-            return `Happy gardening! Come back anytime you need help!`;
-        }
-
-        return null; // No quick response, continue to AI
-    };
-
-    const generateAIResponse = async (userMessage: string): Promise<string> => {
-        const lowerMsg = userMessage.toLowerCase();
-
-        // STEP 1: Contextual Analysis - Extract key information
-        const context = {
-            hasSymptoms: /yellow|brown|spot|wilt|droop|curl|dying|dead|sick/.test(lowerMsg),
-            hasPest: /bug|pest|insect|mite|aphid|scale|mealybug|fungus gnat/.test(lowerMsg),
-            hasWaterIssue: /water|overwater|underwater|soggy|dry|droop/.test(lowerMsg),
-            hasLightIssue: /light|sun|shade|dark|bright|pale|leggy/.test(lowerMsg),
-            isGeneralCare: /care|how to|maintain|grow|propagate/.test(lowerMsg),
-            mentionsTimeframe: /week|month|day|recently|sudden|gradual/.test(lowerMsg),
-        };
-
-        // STEP 2: Check for specific plant in database with fuzzy matching
-        const plantMatch = plants.find(p =>
-            lowerMsg.includes(p.name.toLowerCase()) ||
-            (p.scientificName && lowerMsg.includes(p.scientificName.toLowerCase())) ||
-            (p.commonNames && p.commonNames.some((cn: string) => lowerMsg.includes(cn.toLowerCase())))
-        );
-
-        if (plantMatch) {
-            // Enhanced plant-specific response with contextual advice
-            let response = `🌱 **${plantMatch.name}** ${plantMatch.scientificName ? `(*${plantMatch.scientificName}*)` : ''}
+    if (plantMatch) {
+        // Enhanced plant-specific response with contextual advice
+        let response = `🌱 **${plantMatch.name}** ${plantMatch.scientificName ? `(*${plantMatch.scientificName}*)` : ''}
 
 📋 **Plant Profile:**
 ${plantMatch.description || 'A resilient and beautiful plant species.'}
@@ -281,21 +284,21 @@ ${plantMatch.description || 'A resilient and beautiful plant species.'}
 ${plantMatch.medicinalValues?.length ? `\n💊 **Medicinal Properties:**\n${plantMatch.medicinalValues.map((v: string) => `  • ${v}`).join('\n')}` : ''}
 ${plantMatch.advantages?.length ? `\n✨ **Key Benefits:**\n${plantMatch.advantages.map((a: string) => `  • ${a}`).join('\n')}` : ''}`;
 
-            // Add contextual troubleshooting if symptoms detected
-            if (context.hasSymptoms) {
-                response += `\n\n🔍 **Troubleshooting for ${plantMatch.name}:**`;
-                if (lowerMsg.includes('yellow')) {
-                    response += `\n• **Yellow leaves** → Likely overwatering or nitrogen deficiency. Check soil moisture and reduce watering frequency.`;
-                }
-                if (lowerMsg.includes('brown')) {
-                    response += `\n• **Brown tips/edges** → Low humidity or fluoride in water. Mist regularly and use filtered water.`;
-                }
-                if (lowerMsg.includes('droop') || lowerMsg.includes('wilt')) {
-                    response += `\n• **Drooping/Wilting** → Either underwatered or root rot from overwatering. Check soil and roots.`;
-                }
+        // Add contextual troubleshooting if symptoms detected
+        if (context.hasSymptoms) {
+            response += `\n\n🔍 **Troubleshooting for ${plantMatch.name}:**`;
+            if (lowerMsg.includes('yellow')) {
+                response += `\n• **Yellow leaves** → Likely overwatering or nitrogen deficiency. Check soil moisture and reduce watering frequency.`;
             }
+            if (lowerMsg.includes('brown')) {
+                response += `\n• **Brown tips/edges** → Low humidity or fluoride in water. Mist regularly and use filtered water.`;
+            }
+            if (lowerMsg.includes('droop') || lowerMsg.includes('wilt')) {
+                response += `\n• **Drooping/Wilting** → Either underwatered or root rot from overwatering. Check soil and roots.`;
+            }
+        }
 
-            response += `\n\n💡 **Pro Care Tips:**
+        response += `\n\n💡 **Pro Care Tips:**
 - Monitor soil moisture with finger test (2 inches deep)
 - Rotate plant weekly for even growth
 - Clean leaves monthly to maximize photosynthesis
@@ -303,336 +306,336 @@ ${plantMatch.advantages?.length ? `\n✨ **Key Benefits:**\n${plantMatch.advanta
 
 Need more specific help? Describe your plant's symptoms in detail!`;
 
-            return response;
-        }
-
-        // STEP 2.3: Quick Response Handler for Simple Questions
-        const quickResponse = getQuickResponse(lowerMsg, userMessage);
-        if (quickResponse) {
-            return quickResponse;
-        }
-
-        // STEP 2.5: Plant Recommendation Engine for "best plant for X" queries
-        const isRecommendationQuery = /best|recommend|suggest|good|suitable|ideal|perfect/.test(lowerMsg) &&
-            (/plant|flower|herb|tree|succulent|fern/.test(lowerMsg) || /for/.test(lowerMsg));
-
-        if (isRecommendationQuery) {
-            return generatePlantRecommendations(userMessage, plants);
-        }
-
-        // STEP 3: Advanced symptom-based diagnosis with logical reasoning
-        if (context.hasSymptoms || context.hasPest) {
-            return generateDiagnosticResponse(userMessage, context);
-        }
-
-        // STEP 4: Advanced AI with Human-like Conversation
-        try {
-            // Try multiple free AI models for best results
-            const aiResponse = await getHumanLikeAIResponse(userMessage);
-            if (aiResponse) {
-                return aiResponse;
-            }
-        } catch (e) {
-            console.error('AI API error:', e);
-        }
-
-        // STEP 5: Intelligent fallback with context awareness
-        return generateFallbackResponse(userMessage);
-    };
-
-    // Plant Recommendation Engine
-    const generatePlantRecommendations = (userMessage: string, plantDatabase: any[]): string => {
-        const lowerMsg = userMessage.toLowerCase();
-
-        // Analyze query for specific requirements
-        const requirements = {
-            highHumidity: /high.*humid|humid.*area|tropical|moisture|wet/.test(lowerMsg),
-            lowHumidity: /low.*humid|dry.*air|arid|desert/.test(lowerMsg),
-            lowLight: /low.*light|shade|dark|no.*sun|indirect/.test(lowerMsg),
-            brightLight: /bright|sunny|direct.*sun|full.*sun/.test(lowerMsg),
-            lowMaintenance: /easy|beginner|low.*maintenance|hard.*kill|forgiving/.test(lowerMsg),
-            airPurifying: /air.*purif|clean.*air|oxygen|filter/.test(lowerMsg),
-            petSafe: /pet.*safe|cat|dog|non.*toxic/.test(lowerMsg),
-            indoor: /indoor|house|apartment|office/.test(lowerMsg),
-            outdoor: /outdoor|garden|patio|balcony/.test(lowerMsg),
-            flowering: /flower|bloom|blossom/.test(lowerMsg),
-            medicinal: /medicinal|healing|health|medicine/.test(lowerMsg),
-        };
-
-        let recommendations: any[] = [];
-        let criteriaText = '';
-
-        // Filter plants based on requirements
-        if (requirements.highHumidity) {
-            criteriaText = 'High Humidity Environments';
-            recommendations = plantDatabase.filter(p => (p.minHumidity || 0) >= 60)
-                .sort((a, b) => (b.minHumidity || 0) - (a.minHumidity || 0))
-                .slice(0, 8);
-
-            // Add known high-humidity lovers even if not in filtered results
-            const highHumidityDefaults = [
-                { name: 'Boston Fern', humidity: '70%+', care: 'Keep soil moist, mist daily', why: 'Thrives in bathroom humidity' },
-                { name: 'Peace Lily', humidity: '60%+', care: 'Water weekly, tolerates low light', why: 'Excellent air purifier for humid spaces' },
-                { name: 'Calathea', humidity: '60-80%', care: 'Filtered water, indirect light', why: 'Stunning foliage, loves moisture' },
-                { name: 'Orchids', humidity: '50-70%', care: 'Water weekly, bright indirect light', why: 'Beautiful blooms in humid conditions' },
-                { name: 'Monstera Deliciosa', humidity: '60%+', care: 'Water when top 2" dry', why: 'Large tropical leaves, fast-growing' },
-                { name: 'Pothos', humidity: '50-70%', care: 'Very forgiving, low light OK', why: 'Nearly indestructible, trails beautifully' },
-            ];
-
-            if (recommendations.length < 3) {
-                return generateDefaultRecommendations(criteriaText, highHumidityDefaults);
-            }
-        }
-
-        if (requirements.lowLight) {
-            criteriaText = 'Low Light Conditions';
-            const lowLightDefaults = [
-                { name: 'Snake Plant (Sansevieria)', light: 'Low to bright', care: 'Water every 2-4 weeks', why: 'Extremely tolerant, air purifying' },
-                { name: 'ZZ Plant', light: 'Low to medium', care: 'Water monthly', why: 'Glossy leaves, drought tolerant' },
-                { name: 'Pothos', light: 'Low to bright', care: 'Water weekly', why: 'Trails beautifully, very forgiving' },
-                { name: 'Cast Iron Plant', light: 'Low', care: 'Water every 2 weeks', why: 'Lives up to its name - indestructible' },
-                { name: 'Chinese Evergreen', light: 'Low to medium', care: 'Keep soil moist', why: 'Colorful foliage, low maintenance' },
-                { name: 'Peace Lily', light: 'Low to medium', care: 'Water weekly', why: 'White blooms, air purifying' },
-            ];
-            return generateDefaultRecommendations(criteriaText, lowLightDefaults);
-        }
-
-        if (requirements.lowMaintenance) {
-            criteriaText = 'Low Maintenance / Beginner-Friendly';
-            const easyPlants = [
-                { name: 'Snake Plant', difficulty: 'Very Easy', care: 'Water every 2-4 weeks, any light', why: 'Survives neglect, air purifying' },
-                { name: 'Pothos', difficulty: 'Very Easy', care: 'Water weekly, low to bright light', why: 'Grows in water or soil, hard to kill' },
-                { name: 'Spider Plant', difficulty: 'Very Easy', care: 'Water weekly, indirect light', why: 'Produces baby plants, air purifying' },
-                { name: 'ZZ Plant', difficulty: 'Very Easy', care: 'Water monthly, low light OK', why: 'Drought tolerant, glossy leaves' },
-                { name: 'Succulents (Jade, Aloe)', difficulty: 'Easy', care: 'Water every 2-3 weeks, bright light', why: 'Stores water, minimal care' },
-                { name: 'Rubber Plant', difficulty: 'Easy', care: 'Water when dry, bright indirect', why: 'Large glossy leaves, forgiving' },
-            ];
-            return generateDefaultRecommendations(criteriaText, easyPlants);
-        }
-
-        if (requirements.airPurifying) {
-            criteriaText = 'Air Purifying Plants';
-            const airPurifiers = [
-                { name: 'Snake Plant', benefit: 'Removes formaldehyde, benzene', bonus: 'Releases O₂ at night', care: 'Very low maintenance' },
-                { name: 'Peace Lily', benefit: 'Removes ammonia, benzene, formaldehyde', bonus: 'Beautiful white blooms', care: 'Moderate water needs' },
-                { name: 'Spider Plant', benefit: 'Removes carbon monoxide, xylene', bonus: 'Produces baby plants', care: 'Very easy to grow' },
-                { name: 'Boston Fern', benefit: 'Removes formaldehyde, xylene', bonus: 'Natural humidifier', care: 'Needs high humidity' },
-                { name: 'Rubber Plant', benefit: 'Removes formaldehyde', bonus: 'Large, attractive leaves', care: 'Easy care' },
-                { name: 'Aloe Vera', benefit: 'Removes formaldehyde, benzene', bonus: 'Medicinal gel in leaves', care: 'Minimal watering' },
-            ];
-
-            let response = `🌿 **Best Air Purifying Plants for ${criteriaText}**\n\n`;
-            response += `*Based on NASA Clean Air Study and scientific research*\n\n`;
-
-            airPurifiers.forEach((plant, i) => {
-                response += `**${i + 1}. ${plant.name}**\n`;
-                response += `   🔬 **Removes:** ${plant.benefit}\n`;
-                response += `   ✨ **Bonus:** ${plant.bonus}\n`;
-                response += `   🌱 **Care:** ${plant.care}\n\n`;
-            });
-
-            response += `💡 **Pro Tips for Maximum Air Purification:**\n`;
-            response += `• Use 1 plant per 100 sq ft for best results\n`;
-            response += `• Combine multiple species for broader toxin removal\n`;
-            response += `• Keep leaves clean - dust blocks air filtration\n`;
-            response += `• Larger plants = more air cleaning power\n\n`;
-
-            response += `📊 **Effectiveness Ranking:**\n`;
-            response += `1. Snake Plant - Best overall, works 24/7\n`;
-            response += `2. Peace Lily - Highest toxin removal rate\n`;
-            response += `3. Spider Plant - Best for small spaces\n\n`;
-
-            response += `Want specific care instructions for any of these? Just ask!`;
-            return response;
-        }
-
-        // If we have database matches, use them
-        if (recommendations.length > 0) {
-            let response = `🌿 **Top Plant Recommendations for ${criteriaText}**\n\n`;
-            response += `*Based on your plant database*\n\n`;
-
-            recommendations.slice(0, 6).forEach((plant, i) => {
-                response += `**${i + 1}. ${plant.name}**`;
-                if (plant.scientificName) response += ` (*${plant.scientificName}*)`;
-                response += `\n`;
-                if (plant.description) response += `   ${plant.description.substring(0, 100)}...\n`;
-                response += `   🌡️ Temp: ${plant.idealTempMin || 18}-${plant.idealTempMax || 28}°C\n`;
-                response += `   💧 Humidity: ${plant.minHumidity || 40}%+\n`;
-                response += `   ☀️ Light: ${plant.sunlight || 'Moderate'}\n\n`;
-            });
-
-            response += `💡 Want detailed care instructions for any of these? Just ask about the specific plant!`;
-            return response;
-        }
-
-        // Fallback: General recommendations based on query
-        return generateGeneralRecommendations();
-    };
-
-    const generateDefaultRecommendations = (criteria: string, plants: any[]): string => {
-        let response = `🌿 **Best Plants for ${criteria}**\n\n`;
-        response += `*Expert-curated recommendations*\n\n`;
-
-        plants.forEach((plant, i) => {
-            response += `**${i + 1}. ${plant.name}**\n`;
-            Object.keys(plant).forEach(key => {
-                if (key !== 'name' && key !== 'why') {
-                    const label = key.charAt(0).toUpperCase() + key.slice(1);
-                    response += `   📌 **${label}:** ${plant[key]}\n`;
-                }
-            });
-            if (plant.why) {
-                response += `   ✨ **Why it's great:** ${plant.why}\n`;
-            }
-            response += `\n`;
-        });
-
-        response += `💡 **Quick Care Tips:**\n`;
-        if (criteria.includes('Humidity')) {
-            response += `• Group plants together to create microclimate\n`;
-            response += `• Use pebble trays with water for extra humidity\n`;
-            response += `• Mist leaves 2-3 times weekly\n`;
-            response += `• Consider a humidifier for optimal growth\n`;
-        } else if (criteria.includes('Low Light')) {
-            response += `• Rotate plants weekly for even growth\n`;
-            response += `• Clean leaves monthly to maximize light absorption\n`;
-            response += `• Reduce watering in low light (slower growth = less water)\n`;
-            response += `• Consider LED grow lights for darker corners\n`;
-        } else if (criteria.includes('Beginner')) {
-            response += `• Start with 1-2 plants to build confidence\n`;
-            response += `• Set phone reminders for watering\n`;
-            response += `• Use moisture meter to avoid overwatering\n`;
-            response += `• Don't panic if a leaf dies - it's normal!\n`;
-        }
-
-        response += `\n🎯 **Success Rate:** These plants have 90%+ survival rate for beginners!\n\n`;
-        response += `Want specific care instructions for any plant? Just ask!`;
-
         return response;
+    }
+
+    // STEP 2.3: Quick Response Handler for Simple Questions
+    const quickResponse = getQuickResponse(lowerMsg, userMessage);
+    if (quickResponse) {
+        return quickResponse;
+    }
+
+    // STEP 2.5: Plant Recommendation Engine for "best plant for X" queries
+    const isRecommendationQuery = /best|recommend|suggest|good|suitable|ideal|perfect/.test(lowerMsg) &&
+        (/plant|flower|herb|tree|succulent|fern/.test(lowerMsg) || /for/.test(lowerMsg));
+
+    if (isRecommendationQuery) {
+        return generatePlantRecommendations(userMessage, plants);
+    }
+
+    // STEP 3: Advanced symptom-based diagnosis with logical reasoning
+    if (context.hasSymptoms || context.hasPest) {
+        return generateDiagnosticResponse(userMessage, context);
+    }
+
+    // STEP 4: Advanced AI with Human-like Conversation
+    try {
+        // Try multiple free AI models for best results
+        const aiResponse = await getHumanLikeAIResponse(userMessage);
+        if (aiResponse) {
+            return aiResponse;
+        }
+    } catch (e) {
+        console.error('AI API error:', e);
+    }
+
+    // STEP 5: Intelligent fallback with context awareness
+    return generateFallbackResponse(userMessage);
+};
+
+// Plant Recommendation Engine
+const generatePlantRecommendations = (userMessage: string, plantDatabase: any[]): string => {
+    const lowerMsg = userMessage.toLowerCase();
+
+    // Analyze query for specific requirements
+    const requirements = {
+        highHumidity: /high.*humid|humid.*area|tropical|moisture|wet/.test(lowerMsg),
+        lowHumidity: /low.*humid|dry.*air|arid|desert/.test(lowerMsg),
+        lowLight: /low.*light|shade|dark|no.*sun|indirect/.test(lowerMsg),
+        brightLight: /bright|sunny|direct.*sun|full.*sun/.test(lowerMsg),
+        lowMaintenance: /easy|beginner|low.*maintenance|hard.*kill|forgiving/.test(lowerMsg),
+        airPurifying: /air.*purif|clean.*air|oxygen|filter/.test(lowerMsg),
+        petSafe: /pet.*safe|cat|dog|non.*toxic/.test(lowerMsg),
+        indoor: /indoor|house|apartment|office/.test(lowerMsg),
+        outdoor: /outdoor|garden|patio|balcony/.test(lowerMsg),
+        flowering: /flower|bloom|blossom/.test(lowerMsg),
+        medicinal: /medicinal|healing|health|medicine/.test(lowerMsg),
     };
 
-    const generateGeneralRecommendations = (): string => {
-        return `🌿 **Plant Recommendations**\n\n` +
-            `I'd love to help you find the perfect plant! To give you the best recommendations, please tell me:\n\n` +
-            `**Environment:**\n` +
-            `• Light level? (bright/medium/low)\n` +
-            `• Humidity? (high/normal/dry)\n` +
-            `• Indoor or outdoor?\n` +
-            `• Temperature range?\n\n` +
-            `**Your Preferences:**\n` +
-            `• Experience level? (beginner/intermediate/expert)\n` +
-            `• Maintenance preference? (low/moderate/high)\n` +
-            `• Any specific features? (flowering/air purifying/edible)\n` +
-            `• Space available? (small pot/large floor plant)\n\n` +
-            `**Example queries:**\n` +
-            `• "Best plants for high humidity bathroom"\n` +
-            `• "Low maintenance plants for office desk"\n` +
-            `• "Air purifying plants for bedroom"\n` +
-            `• "Flowering plants for bright window"\n\n` +
-            `The more details you provide, the better I can match you with your perfect plant companion! 🌱`;
-    };
+    let recommendations: any[] = [];
+    let criteriaText = '';
 
-    // New helper function for diagnostic responses
-    const generateDiagnosticResponse = (userMessage: string, context: any): string => {
-        const lowerMsg = userMessage.toLowerCase();
+    // Filter plants based on requirements
+    if (requirements.highHumidity) {
+        criteriaText = 'High Humidity Environments';
+        recommendations = plantDatabase.filter(p => (p.minHumidity || 0) >= 60)
+            .sort((a, b) => (b.minHumidity || 0) - (a.minHumidity || 0))
+            .slice(0, 8);
 
-        let diagnosis = `🔬 **Advanced Plant Diagnostic Analysis**\n\n`;
-        diagnosis += `📊 **Symptom Analysis:**\n`;
+        // Add known high-humidity lovers even if not in filtered results
+        const highHumidityDefaults = [
+            { name: 'Boston Fern', humidity: '70%+', care: 'Keep soil moist, mist daily', why: 'Thrives in bathroom humidity' },
+            { name: 'Peace Lily', humidity: '60%+', care: 'Water weekly, tolerates low light', why: 'Excellent air purifier for humid spaces' },
+            { name: 'Calathea', humidity: '60-80%', care: 'Filtered water, indirect light', why: 'Stunning foliage, loves moisture' },
+            { name: 'Orchids', humidity: '50-70%', care: 'Water weekly, bright indirect light', why: 'Beautiful blooms in humid conditions' },
+            { name: 'Monstera Deliciosa', humidity: '60%+', care: 'Water when top 2" dry', why: 'Large tropical leaves, fast-growing' },
+            { name: 'Pothos', humidity: '50-70%', care: 'Very forgiving, low light OK', why: 'Nearly indestructible, trails beautifully' },
+        ];
 
-        // Symptom detection with probability scoring
-        const symptoms: { symptom: string; likelihood: string; causes: string[] }[] = [];
-
-        if (lowerMsg.includes('yellow')) {
-            symptoms.push({
-                symptom: 'Yellowing Leaves (Chlorosis)',
-                likelihood: 'High Confidence',
-                causes: ['Overwatering (80%)', 'Nitrogen deficiency (15%)', 'Natural aging (5%)']
-            });
+        if (recommendations.length < 3) {
+            return generateDefaultRecommendations(criteriaText, highHumidityDefaults);
         }
+    }
 
-        if (lowerMsg.includes('brown') && (lowerMsg.includes('spot') || lowerMsg.includes('patch'))) {
-            symptoms.push({
-                symptom: 'Brown Spots/Patches',
-                likelihood: 'High Confidence',
-                causes: ['Fungal infection (60%)', 'Bacterial leaf spot (25%)', 'Sunburn (15%)']
-            });
-        }
+    if (requirements.lowLight) {
+        criteriaText = 'Low Light Conditions';
+        const lowLightDefaults = [
+            { name: 'Snake Plant (Sansevieria)', light: 'Low to bright', care: 'Water every 2-4 weeks', why: 'Extremely tolerant, air purifying' },
+            { name: 'ZZ Plant', light: 'Low to medium', care: 'Water monthly', why: 'Glossy leaves, drought tolerant' },
+            { name: 'Pothos', light: 'Low to bright', care: 'Water weekly', why: 'Trails beautifully, very forgiving' },
+            { name: 'Cast Iron Plant', light: 'Low', care: 'Water every 2 weeks', why: 'Lives up to its name - indestructible' },
+            { name: 'Chinese Evergreen', light: 'Low to medium', care: 'Keep soil moist', why: 'Colorful foliage, low maintenance' },
+            { name: 'Peace Lily', light: 'Low to medium', care: 'Water weekly', why: 'White blooms, air purifying' },
+        ];
+        return generateDefaultRecommendations(criteriaText, lowLightDefaults);
+    }
 
-        if (lowerMsg.includes('droop') || lowerMsg.includes('wilt')) {
-            symptoms.push({
-                symptom: 'Wilting/Drooping',
-                likelihood: 'High Confidence',
-                causes: ['Underwatering (50%)', 'Root rot from overwatering (35%)', 'Heat stress (15%)']
-            });
-        }
+    if (requirements.lowMaintenance) {
+        criteriaText = 'Low Maintenance / Beginner-Friendly';
+        const easyPlants = [
+            { name: 'Snake Plant', difficulty: 'Very Easy', care: 'Water every 2-4 weeks, any light', why: 'Survives neglect, air purifying' },
+            { name: 'Pothos', difficulty: 'Very Easy', care: 'Water weekly, low to bright light', why: 'Grows in water or soil, hard to kill' },
+            { name: 'Spider Plant', difficulty: 'Very Easy', care: 'Water weekly, indirect light', why: 'Produces baby plants, air purifying' },
+            { name: 'ZZ Plant', difficulty: 'Very Easy', care: 'Water monthly, low light OK', why: 'Drought tolerant, glossy leaves' },
+            { name: 'Succulents (Jade, Aloe)', difficulty: 'Easy', care: 'Water every 2-3 weeks, bright light', why: 'Stores water, minimal care' },
+            { name: 'Rubber Plant', difficulty: 'Easy', care: 'Water when dry, bright indirect', why: 'Large glossy leaves, forgiving' },
+        ];
+        return generateDefaultRecommendations(criteriaText, easyPlants);
+    }
 
-        if (lowerMsg.includes('curl')) {
-            symptoms.push({
-                symptom: 'Leaf Curling',
-                likelihood: 'Moderate Confidence',
-                causes: ['Pest infestation (40%)', 'Underwatering (30%)', 'Heat stress (20%)', 'Viral infection (10%)']
-            });
-        }
+    if (requirements.airPurifying) {
+        criteriaText = 'Air Purifying Plants';
+        const airPurifiers = [
+            { name: 'Snake Plant', benefit: 'Removes formaldehyde, benzene', bonus: 'Releases O₂ at night', care: 'Very low maintenance' },
+            { name: 'Peace Lily', benefit: 'Removes ammonia, benzene, formaldehyde', bonus: 'Beautiful white blooms', care: 'Moderate water needs' },
+            { name: 'Spider Plant', benefit: 'Removes carbon monoxide, xylene', bonus: 'Produces baby plants', care: 'Very easy to grow' },
+            { name: 'Boston Fern', benefit: 'Removes formaldehyde, xylene', bonus: 'Natural humidifier', care: 'Needs high humidity' },
+            { name: 'Rubber Plant', benefit: 'Removes formaldehyde', bonus: 'Large, attractive leaves', care: 'Easy care' },
+            { name: 'Aloe Vera', benefit: 'Removes formaldehyde, benzene', bonus: 'Medicinal gel in leaves', care: 'Minimal watering' },
+        ];
 
-        symptoms.forEach((s, i) => {
-            diagnosis += `\n${i + 1}. **${s.symptom}** (${s.likelihood})\n`;
-            diagnosis += `   Probable causes:\n`;
-            s.causes.forEach(cause => diagnosis += `   • ${cause}\n`);
+        let response = `🌿 **Best Air Purifying Plants for ${criteriaText}**\n\n`;
+        response += `*Based on NASA Clean Air Study and scientific research*\n\n`;
+
+        airPurifiers.forEach((plant, i) => {
+            response += `**${i + 1}. ${plant.name}**\n`;
+            response += `   🔬 **Removes:** ${plant.benefit}\n`;
+            response += `   ✨ **Bonus:** ${plant.bonus}\n`;
+            response += `   🌱 **Care:** ${plant.care}\n\n`;
         });
 
-        diagnosis += `\n🎯 **Recommended Action Plan:**\n\n`;
-        diagnosis += `**Immediate Steps (Next 24 hours):**\n`;
-        diagnosis += `1. Check soil moisture 2 inches deep - should be slightly moist, not soggy\n`;
-        diagnosis += `2. Inspect leaves (top and bottom) for pests with magnifying glass\n`;
-        diagnosis += `3. Assess light exposure - is plant getting appropriate light for its species?\n`;
-        diagnosis += `4. Check drainage holes - ensure water can escape freely\n\n`;
+        response += `💡 **Pro Tips for Maximum Air Purification:**\n`;
+        response += `• Use 1 plant per 100 sq ft for best results\n`;
+        response += `• Combine multiple species for broader toxin removal\n`;
+        response += `• Keep leaves clean - dust blocks air filtration\n`;
+        response += `• Larger plants = more air cleaning power\n\n`;
 
-        diagnosis += `**Treatment Protocol (Week 1):**\n`;
-        if (context.hasWaterIssue || lowerMsg.includes('yellow') || lowerMsg.includes('wilt')) {
-            diagnosis += `• Adjust watering: If soil is wet, stop watering. If dry, water thoroughly.\n`;
-            diagnosis += `• Ensure pot has drainage holes and use well-draining soil mix\n`;
+        response += `📊 **Effectiveness Ranking:**\n`;
+        response += `1. Snake Plant - Best overall, works 24/7\n`;
+        response += `2. Peace Lily - Highest toxin removal rate\n`;
+        response += `3. Spider Plant - Best for small spaces\n\n`;
+
+        response += `Want specific care instructions for any of these? Just ask!`;
+        return response;
+    }
+
+    // If we have database matches, use them
+    if (recommendations.length > 0) {
+        let response = `🌿 **Top Plant Recommendations for ${criteriaText}**\n\n`;
+        response += `*Based on your plant database*\n\n`;
+
+        recommendations.slice(0, 6).forEach((plant, i) => {
+            response += `**${i + 1}. ${plant.name}**`;
+            if (plant.scientificName) response += ` (*${plant.scientificName}*)`;
+            response += `\n`;
+            if (plant.description) response += `   ${plant.description.substring(0, 100)}...\n`;
+            response += `   🌡️ Temp: ${plant.idealTempMin || 18}-${plant.idealTempMax || 28}°C\n`;
+            response += `   💧 Humidity: ${plant.minHumidity || 40}%+\n`;
+            response += `   ☀️ Light: ${plant.sunlight || 'Moderate'}\n\n`;
+        });
+
+        response += `💡 Want detailed care instructions for any of these? Just ask about the specific plant!`;
+        return response;
+    }
+
+    // Fallback: General recommendations based on query
+    return generateGeneralRecommendations();
+};
+
+const generateDefaultRecommendations = (criteria: string, plants: any[]): string => {
+    let response = `🌿 **Best Plants for ${criteria}**\n\n`;
+    response += `*Expert-curated recommendations*\n\n`;
+
+    plants.forEach((plant, i) => {
+        response += `**${i + 1}. ${plant.name}**\n`;
+        Object.keys(plant).forEach(key => {
+            if (key !== 'name' && key !== 'why') {
+                const label = key.charAt(0).toUpperCase() + key.slice(1);
+                response += `   📌 **${label}:** ${plant[key]}\n`;
+            }
+        });
+        if (plant.why) {
+            response += `   ✨ **Why it's great:** ${plant.why}\n`;
         }
-        if (context.hasPest || lowerMsg.includes('curl')) {
-            diagnosis += `• Apply neem oil solution (1 tsp per liter water) - spray all surfaces\n`;
-            diagnosis += `• Isolate plant from others to prevent spread\n`;
-        }
-        if (lowerMsg.includes('brown') && lowerMsg.includes('spot')) {
-            diagnosis += `• Remove affected leaves with sterilized scissors\n`;
-            diagnosis += `• Apply copper-based fungicide if fungal infection suspected\n`;
-            diagnosis += `• Improve air circulation around plant\n`;
-        }
+        response += `\n`;
+    });
 
-        diagnosis += `\n**Monitoring (Weeks 2-4):**\n`;
-        diagnosis += `• Document changes with photos every 3 days\n`;
-        diagnosis += `• Adjust care based on plant response\n`;
-        diagnosis += `• New growth should appear healthy if treatment is working\n\n`;
+    response += `💡 **Quick Care Tips:**\n`;
+    if (criteria.includes('Humidity')) {
+        response += `• Group plants together to create microclimate\n`;
+        response += `• Use pebble trays with water for extra humidity\n`;
+        response += `• Mist leaves 2-3 times weekly\n`;
+        response += `• Consider a humidifier for optimal growth\n`;
+    } else if (criteria.includes('Low Light')) {
+        response += `• Rotate plants weekly for even growth\n`;
+        response += `• Clean leaves monthly to maximize light absorption\n`;
+        response += `• Reduce watering in low light (slower growth = less water)\n`;
+        response += `• Consider LED grow lights for darker corners\n`;
+    } else if (criteria.includes('Beginner')) {
+        response += `• Start with 1-2 plants to build confidence\n`;
+        response += `• Set phone reminders for watering\n`;
+        response += `• Use moisture meter to avoid overwatering\n`;
+        response += `• Don't panic if a leaf dies - it's normal!\n`;
+    }
 
-        diagnosis += `⚠️ **Warning Signs to Watch:**\n`;
-        diagnosis += `• Rapid spread of symptoms = urgent intervention needed\n`;
-        diagnosis += `• Mushy stems/roots = severe root rot, may need repotting\n`;
-        diagnosis += `• No improvement after 2 weeks = reassess diagnosis\n\n`;
+    response += `\n🎯 **Success Rate:** These plants have 90%+ survival rate for beginners!\n\n`;
+    response += `Want specific care instructions for any plant? Just ask!`;
 
-        diagnosis += `💡 **Prevention for Future:**\n`;
-        diagnosis += `• Establish consistent watering schedule\n`;
-        diagnosis += `• Quarantine new plants for 2 weeks\n`;
-        diagnosis += `• Clean leaves monthly to prevent pest buildup\n`;
-        diagnosis += `• Use sterilized tools for pruning\n\n`;
+    return response;
+};
 
-        diagnosis += `📝 **Need more help?** Describe:\n`;
-        diagnosis += `1. When did symptoms first appear?\n`;
-        diagnosis += `2. Recent changes in care or environment?\n`;
-        diagnosis += `3. Plant's location and light conditions?\n`;
-        diagnosis += `4. Current watering frequency?`;
+const generateGeneralRecommendations = (): string => {
+    return `🌿 **Plant Recommendations**\n\n` +
+        `I'd love to help you find the perfect plant! To give you the best recommendations, please tell me:\n\n` +
+        `**Environment:**\n` +
+        `• Light level? (bright/medium/low)\n` +
+        `• Humidity? (high/normal/dry)\n` +
+        `• Indoor or outdoor?\n` +
+        `• Temperature range?\n\n` +
+        `**Your Preferences:**\n` +
+        `• Experience level? (beginner/intermediate/expert)\n` +
+        `• Maintenance preference? (low/moderate/high)\n` +
+        `• Any specific features? (flowering/air purifying/edible)\n` +
+        `• Space available? (small pot/large floor plant)\n\n` +
+        `**Example queries:**\n` +
+        `• "Best plants for high humidity bathroom"\n` +
+        `• "Low maintenance plants for office desk"\n` +
+        `• "Air purifying plants for bedroom"\n` +
+        `• "Flowering plants for bright window"\n\n` +
+        `The more details you provide, the better I can match you with your perfect plant companion! 🌱`;
+};
 
-        return diagnosis;
-    };
+// New helper function for diagnostic responses
+const generateDiagnosticResponse = (userMessage: string, context: any): string => {
+    const lowerMsg = userMessage.toLowerCase();
 
-    const generateFallbackResponse = (userMessage: string): string => {
-        const lowerMsg = userMessage.toLowerCase();
+    let diagnosis = `🔬 **Advanced Plant Diagnostic Analysis**\n\n`;
+    diagnosis += `📊 **Symptom Analysis:**\n`;
 
-        // Enhanced disease/symptom response
-        if (lowerMsg.includes('disease') || lowerMsg.includes('sick') || lowerMsg.includes('dying')) {
-            return `🔬 **Comprehensive Plant Disease Guide**
+    // Symptom detection with probability scoring
+    const symptoms: { symptom: string; likelihood: string; causes: string[] }[] = [];
+
+    if (lowerMsg.includes('yellow')) {
+        symptoms.push({
+            symptom: 'Yellowing Leaves (Chlorosis)',
+            likelihood: 'High Confidence',
+            causes: ['Overwatering (80%)', 'Nitrogen deficiency (15%)', 'Natural aging (5%)']
+        });
+    }
+
+    if (lowerMsg.includes('brown') && (lowerMsg.includes('spot') || lowerMsg.includes('patch'))) {
+        symptoms.push({
+            symptom: 'Brown Spots/Patches',
+            likelihood: 'High Confidence',
+            causes: ['Fungal infection (60%)', 'Bacterial leaf spot (25%)', 'Sunburn (15%)']
+        });
+    }
+
+    if (lowerMsg.includes('droop') || lowerMsg.includes('wilt')) {
+        symptoms.push({
+            symptom: 'Wilting/Drooping',
+            likelihood: 'High Confidence',
+            causes: ['Underwatering (50%)', 'Root rot from overwatering (35%)', 'Heat stress (15%)']
+        });
+    }
+
+    if (lowerMsg.includes('curl')) {
+        symptoms.push({
+            symptom: 'Leaf Curling',
+            likelihood: 'Moderate Confidence',
+            causes: ['Pest infestation (40%)', 'Underwatering (30%)', 'Heat stress (20%)', 'Viral infection (10%)']
+        });
+    }
+
+    symptoms.forEach((s, i) => {
+        diagnosis += `\n${i + 1}. **${s.symptom}** (${s.likelihood})\n`;
+        diagnosis += `   Probable causes:\n`;
+        s.causes.forEach(cause => diagnosis += `   • ${cause}\n`);
+    });
+
+    diagnosis += `\n🎯 **Recommended Action Plan:**\n\n`;
+    diagnosis += `**Immediate Steps (Next 24 hours):**\n`;
+    diagnosis += `1. Check soil moisture 2 inches deep - should be slightly moist, not soggy\n`;
+    diagnosis += `2. Inspect leaves (top and bottom) for pests with magnifying glass\n`;
+    diagnosis += `3. Assess light exposure - is plant getting appropriate light for its species?\n`;
+    diagnosis += `4. Check drainage holes - ensure water can escape freely\n\n`;
+
+    diagnosis += `**Treatment Protocol (Week 1):**\n`;
+    if (context.hasWaterIssue || lowerMsg.includes('yellow') || lowerMsg.includes('wilt')) {
+        diagnosis += `• Adjust watering: If soil is wet, stop watering. If dry, water thoroughly.\n`;
+        diagnosis += `• Ensure pot has drainage holes and use well-draining soil mix\n`;
+    }
+    if (context.hasPest || lowerMsg.includes('curl')) {
+        diagnosis += `• Apply neem oil solution (1 tsp per liter water) - spray all surfaces\n`;
+        diagnosis += `• Isolate plant from others to prevent spread\n`;
+    }
+    if (lowerMsg.includes('brown') && lowerMsg.includes('spot')) {
+        diagnosis += `• Remove affected leaves with sterilized scissors\n`;
+        diagnosis += `• Apply copper-based fungicide if fungal infection suspected\n`;
+        diagnosis += `• Improve air circulation around plant\n`;
+    }
+
+    diagnosis += `\n**Monitoring (Weeks 2-4):**\n`;
+    diagnosis += `• Document changes with photos every 3 days\n`;
+    diagnosis += `• Adjust care based on plant response\n`;
+    diagnosis += `• New growth should appear healthy if treatment is working\n\n`;
+
+    diagnosis += `⚠️ **Warning Signs to Watch:**\n`;
+    diagnosis += `• Rapid spread of symptoms = urgent intervention needed\n`;
+    diagnosis += `• Mushy stems/roots = severe root rot, may need repotting\n`;
+    diagnosis += `• No improvement after 2 weeks = reassess diagnosis\n\n`;
+
+    diagnosis += `💡 **Prevention for Future:**\n`;
+    diagnosis += `• Establish consistent watering schedule\n`;
+    diagnosis += `• Quarantine new plants for 2 weeks\n`;
+    diagnosis += `• Clean leaves monthly to prevent pest buildup\n`;
+    diagnosis += `• Use sterilized tools for pruning\n\n`;
+
+    diagnosis += `📝 **Need more help?** Describe:\n`;
+    diagnosis += `1. When did symptoms first appear?\n`;
+    diagnosis += `2. Recent changes in care or environment?\n`;
+    diagnosis += `3. Plant's location and light conditions?\n`;
+    diagnosis += `4. Current watering frequency?`;
+
+    return diagnosis;
+};
+
+const generateFallbackResponse = (userMessage: string): string => {
+    const lowerMsg = userMessage.toLowerCase();
+
+    // Enhanced disease/symptom response
+    if (lowerMsg.includes('disease') || lowerMsg.includes('sick') || lowerMsg.includes('dying')) {
+        return `🔬 **Comprehensive Plant Disease Guide**
 
 **Common Symptoms & Treatments:**
 
@@ -685,11 +688,11 @@ Need more specific help? Describe your plant's symptoms in detail!`;
 - **Critical (Act Now):** Mushy stems, foul odor, rapid leaf drop
 - **Urgent (24-48 hrs):** Widespread yellowing, visible pests
 - **Monitor (1 week):** Few affected leaves, slow changes`;
-        }
+    }
 
-        // Enhanced watering guide
-        if (lowerMsg.includes('water') || lowerMsg.includes('watering')) {
-            return `💧 **Complete Watering Mastery Guide**
+    // Enhanced watering guide
+    if (lowerMsg.includes('water') || lowerMsg.includes('watering')) {
+        return `💧 **Complete Watering Mastery Guide**
 
 **The Golden Rule:** Water based on soil moisture, NOT a schedule!
 
@@ -746,11 +749,11 @@ Need more specific help? Describe your plant's symptoms in detail!`;
 - Pot size matters: Larger pots = less frequent watering
 
 💡 **Pro Tip:** Most houseplants die from overwatering, not underwatering. When in doubt, wait another day!`;
-        }
+    }
 
-        // Enhanced light guide
-        if (lowerMsg.includes('light') || lowerMsg.includes('sun')) {
-            return `☀️ **Complete Light Requirements Guide**
+    // Enhanced light guide
+    if (lowerMsg.includes('light') || lowerMsg.includes('sun')) {
+        return `☀️ **Complete Light Requirements Guide**
 
 **Understanding Light Levels:**
 
@@ -808,11 +811,11 @@ Need more specific help? Describe your plant's symptoms in detail!`;
 - **Rotate:** Turn plants 90° weekly for even growth
 
 💡 **Pro Tip:** Use a light meter app (free on smartphones) to measure foot-candles and optimize placement!`;
-        }
+    }
 
-        // Enhanced fertilizer guide  
-        if (lowerMsg.includes('fertilizer') || lowerMsg.includes('nutrients') || lowerMsg.includes('feed')) {
-            return `🌱 **Complete Fertilizer & Nutrition Guide**
+    // Enhanced fertilizer guide  
+    if (lowerMsg.includes('fertilizer') || lowerMsg.includes('nutrients') || lowerMsg.includes('feed')) {
+        return `🌱 **Complete Fertilizer & Nutrition Guide**
 
 **NPK Explained (The Numbers on Fertilizer):**
 - **N (Nitrogen):** Promotes leaf and stem growth (green, lush foliage)
@@ -887,10 +890,10 @@ Need more specific help? Describe your plant's symptoms in detail!`;
 - **Fix:** Flush soil with 3x pot volume of water, skip fertilizing for 2 months
 
 💡 **Pro Tip:** Healthy soil = healthy plants. Consider repotting in fresh soil annually instead of heavy fertilizing!`;
-        }
+    }
 
-        // Default comprehensive response
-        return `🌿 **Dr. Flora's Intelligent Plant Care System**
+    // Default comprehensive response
+    return `🌿 **Dr. Flora's Intelligent Plant Care System**
 
 I'm your AI plant doctor with expertise in:
 
@@ -946,203 +949,203 @@ Try: "My monstera has yellow leaves with brown spots. They started appearing 2 w
 💡 **Remember:** I analyze your questions using pattern recognition, symptom correlation, and botanical science. The more specific you are, the better I can help!
 
 What would you like to know about your plants today?`;
+};
+
+const handleSend = async () => {
+    if (!input.trim()) return;
+
+    const userMessage: Message = {
+        id: Date.now().toString(),
+        role: 'user',
+        content: input,
+        timestamp: new Date()
     };
 
-    const handleSend = async () => {
-        if (!input.trim()) return;
+    setMessages(prev => [...prev, userMessage]);
+    setInput('');
+    setLoading(true);
 
-        const userMessage: Message = {
-            id: Date.now().toString(),
-            role: 'user',
-            content: input,
+    try {
+        const aiResponse = await generateAIResponse(input);
+
+        const assistantMessage: Message = {
+            id: (Date.now() + 1).toString(),
+            role: 'assistant',
+            content: aiResponse,
             timestamp: new Date()
         };
 
-        setMessages(prev => [...prev, userMessage]);
-        setInput('');
-        setLoading(true);
+        setMessages(prev => [...prev, assistantMessage]);
+    } catch (error) {
+        toast.error('Failed to get response. Please try again.');
+    } finally {
+        setLoading(false);
+    }
+};
 
-        try {
-            const aiResponse = await generateAIResponse(input);
+const handleClear = () => {
+    setMessages([{
+        id: '1',
+        role: 'assistant',
+        content: "🌿 Chat cleared! How can I help your plants today?",
+        timestamp: new Date()
+    }]);
+    toast.success('Conversation cleared');
+};
 
-            const assistantMessage: Message = {
-                id: (Date.now() + 1).toString(),
-                role: 'assistant',
-                content: aiResponse,
-                timestamp: new Date()
-            };
+const handleExport = () => {
+    const transcript = messages.map(m =>
+        `[${m.timestamp.toLocaleTimeString()}] ${m.role === 'user' ? 'You' : 'Dr. Flora'}: ${m.content}`
+    ).join('\n\n');
 
-            setMessages(prev => [...prev, assistantMessage]);
-        } catch (error) {
-            toast.error('Failed to get response. Please try again.');
-        } finally {
-            setLoading(false);
-        }
-    };
+    const blob = new Blob([transcript], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `plant-consultation-${Date.now()}.txt`;
+    a.click();
+    toast.success('Conversation exported!');
+};
 
-    const handleClear = () => {
-        setMessages([{
-            id: '1',
-            role: 'assistant',
-            content: "🌿 Chat cleared! How can I help your plants today?",
-            timestamp: new Date()
-        }]);
-        toast.success('Conversation cleared');
-    };
-
-    const handleExport = () => {
-        const transcript = messages.map(m =>
-            `[${m.timestamp.toLocaleTimeString()}] ${m.role === 'user' ? 'You' : 'Dr. Flora'}: ${m.content}`
-        ).join('\n\n');
-
-        const blob = new Blob([transcript], { type: 'text/plain' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `plant-consultation-${Date.now()}.txt`;
-        a.click();
-        toast.success('Conversation exported!');
-    };
-
-    return (
-        <div className={styles.container}>
-            <header className={styles.header}>
-                <div className={styles.headerContent}>
-                    <div className={styles.logoSection}>
-                        <div className={styles.logoIcon}>
-                            <Bot size={32} />
-                        </div>
-                        <div>
-                            <h1 className={styles.title}>AI Plant Doctor</h1>
-                            <p className={styles.subtitle}>Expert botanical consultation powered by AI</p>
-                        </div>
+return (
+    <div className={styles.container}>
+        <header className={styles.header}>
+            <div className={styles.headerContent}>
+                <div className={styles.logoSection}>
+                    <div className={styles.logoIcon}>
+                        <Bot size={32} />
                     </div>
-                    <div className={styles.actions}>
-                        <button className={styles.actionBtn} onClick={handleExport} title="Export Chat">
-                            <Download size={18} />
-                        </button>
-                        <button className={styles.actionBtn} onClick={handleClear} title="Clear Chat">
-                            <Trash2 size={18} />
-                        </button>
+                    <div>
+                        <h1 className={styles.title}>AI Plant Doctor</h1>
+                        <p className={styles.subtitle}>Expert botanical consultation powered by AI</p>
                     </div>
                 </div>
-            </header>
-
-            {/* Advanced Features Toolbar */}
-            <div className={styles.featuresToolbar}>
-                <div className={styles.featureButtons}>
-                    <button
-                        className={styles.featureBtn}
-                        onClick={() => toast('Care Calendar - Coming Soon! Set reminders for watering, fertilizing, and more.', { icon: '📅', duration: 4000 })}
-                        title="Care Calendar - Set plant care reminders"
-                    >
-                        <Calendar size={20} />
-                        <span>Care Calendar</span>
+                <div className={styles.actions}>
+                    <button className={styles.actionBtn} onClick={handleExport} title="Export Chat">
+                        <Download size={18} />
                     </button>
-
-                    <button
-                        className={styles.featureBtn}
-                        onClick={() => toast('Multi-Language Support - Coming Soon! Chat in 50+ languages including all Indian languages.', { icon: '🌍', duration: 4000 })}
-                        title="Multi-Language - 50+ languages"
-                    >
-                        <Globe size={20} />
-                        <span>Language</span>
-                    </button>
-
-                    <button
-                        className={styles.featureBtn}
-                        onClick={() => toast('Image Recognition - Coming Soon! Upload plant photos for instant diagnosis.', { icon: '📸', duration: 4000 })}
-                        title="Image Recognition - Diagnose from photos"
-                    >
-                        <Camera size={20} />
-                        <span>Scan Plant</span>
-                    </button>
-
-                    <button
-                        className={styles.featureBtn}
-                        onClick={() => toast('Voice Input - Coming Soon! Talk to Dr. Flora hands-free!', { icon: '🎤', duration: 4000 })}
-                        title="Voice Input - Hands-free chat"
-                    >
-                        <Mic size={20} />
-                        <span>Voice</span>
-                    </button>
-
-                    <button
-                        className={styles.featureBtn}
-                        onClick={() => toast('Shopping Assistant - Coming Soon! Find best deals on plants and supplies.', { icon: '🛒', duration: 4000 })}
-                        title="Shopping Assistant - Find best deals"
-                    >
-                        <ShoppingCart size={20} />
-                        <span>Shop</span>
+                    <button className={styles.actionBtn} onClick={handleClear} title="Clear Chat">
+                        <Trash2 size={18} />
                     </button>
                 </div>
             </div>
+        </header>
 
-            <div className={styles.chatContainer}>
-                <div className={styles.messagesWrapper}>
-                    {messages.map((message) => (
-                        <div
-                            key={message.id}
-                            className={`${styles.message} ${message.role === 'user' ? styles.userMessage : styles.assistantMessage}`}
-                        >
-                            <div className={styles.messageIcon}>
-                                {message.role === 'user' ? <User size={20} /> : <Leaf size={20} />}
-                            </div>
-                            <div className={styles.messageContent}>
-                                <div className={styles.messageHeader}>
-                                    <span className={styles.messageSender}>
-                                        {message.role === 'user' ? 'You' : 'Dr. Flora'}
-                                    </span>
-                                    <span className={styles.messageTime}>
-                                        {message.timestamp.toLocaleTimeString()}
-                                    </span>
-                                </div>
-                                <div className={styles.messageText}>
-                                    {message.content.split('\n').map((line, i) => (
-                                        <p key={i}>{line}</p>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                    {loading && (
-                        <div className={`${styles.message} ${styles.assistantMessage}`}>
-                            <div className={styles.messageIcon}>
-                                <Leaf size={20} />
-                            </div>
-                            <div className={styles.messageContent}>
-                                <div className={styles.typing}>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                    <div ref={messagesEndRef} />
-                </div>
-            </div>
+        {/* Advanced Features Toolbar */}
+        <div className={styles.featuresToolbar}>
+            <div className={styles.featureButtons}>
+                <button
+                    className={styles.featureBtn}
+                    onClick={() => toast('Care Calendar - Coming Soon! Set reminders for watering, fertilizing, and more.', { icon: '📅', duration: 4000 })}
+                    title="Care Calendar - Set plant care reminders"
+                >
+                    <Calendar size={20} />
+                    <span>Care Calendar</span>
+                </button>
 
-            <div className={styles.inputContainer}>
-                <div className={styles.inputWrapper}>
-                    <input
-                        type="text"
-                        className={styles.input}
-                        placeholder="Ask about plant care, diseases, or specific plants..."
-                        value={input}
-                        onChange={(e) => setInput(e.target.value)}
-                        onKeyPress={(e) => e.key === 'Enter' && !loading && handleSend()}
-                        disabled={loading}
-                    />
-                    <button
-                        className={styles.sendBtn}
-                        onClick={handleSend}
-                        disabled={loading || !input.trim()}
-                    >
-                        {loading ? <Sparkles size={20} className={styles.sparkle} /> : <Send size={20} />}
-                    </button>
-                </div>
+                <button
+                    className={styles.featureBtn}
+                    onClick={() => toast('Multi-Language Support - Coming Soon! Chat in 50+ languages including all Indian languages.', { icon: '🌍', duration: 4000 })}
+                    title="Multi-Language - 50+ languages"
+                >
+                    <Globe size={20} />
+                    <span>Language</span>
+                </button>
+
+                <button
+                    className={styles.featureBtn}
+                    onClick={() => toast('Image Recognition - Coming Soon! Upload plant photos for instant diagnosis.', { icon: '📸', duration: 4000 })}
+                    title="Image Recognition - Diagnose from photos"
+                >
+                    <Camera size={20} />
+                    <span>Scan Plant</span>
+                </button>
+
+                <button
+                    className={styles.featureBtn}
+                    onClick={() => toast('Voice Input - Coming Soon! Talk to Dr. Flora hands-free!', { icon: '🎤', duration: 4000 })}
+                    title="Voice Input - Hands-free chat"
+                >
+                    <Mic size={20} />
+                    <span>Voice</span>
+                </button>
+
+                <button
+                    className={styles.featureBtn}
+                    onClick={() => toast('Shopping Assistant - Coming Soon! Find best deals on plants and supplies.', { icon: '🛒', duration: 4000 })}
+                    title="Shopping Assistant - Find best deals"
+                >
+                    <ShoppingCart size={20} />
+                    <span>Shop</span>
+                </button>
             </div>
         </div>
-    );
+
+        <div className={styles.chatContainer}>
+            <div className={styles.messagesWrapper}>
+                {messages.map((message) => (
+                    <div
+                        key={message.id}
+                        className={`${styles.message} ${message.role === 'user' ? styles.userMessage : styles.assistantMessage}`}
+                    >
+                        <div className={styles.messageIcon}>
+                            {message.role === 'user' ? <User size={20} /> : <Leaf size={20} />}
+                        </div>
+                        <div className={styles.messageContent}>
+                            <div className={styles.messageHeader}>
+                                <span className={styles.messageSender}>
+                                    {message.role === 'user' ? 'You' : 'Dr. Flora'}
+                                </span>
+                                <span className={styles.messageTime}>
+                                    {message.timestamp.toLocaleTimeString()}
+                                </span>
+                            </div>
+                            <div className={styles.messageText}>
+                                {message.content.split('\n').map((line, i) => (
+                                    <p key={i}>{line}</p>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                ))}
+                {loading && (
+                    <div className={`${styles.message} ${styles.assistantMessage}`}>
+                        <div className={styles.messageIcon}>
+                            <Leaf size={20} />
+                        </div>
+                        <div className={styles.messageContent}>
+                            <div className={styles.typing}>
+                                <span></span>
+                                <span></span>
+                                <span></span>
+                            </div>
+                        </div>
+                    </div>
+                )}
+                <div ref={messagesEndRef} />
+            </div>
+        </div>
+
+        <div className={styles.inputContainer}>
+            <div className={styles.inputWrapper}>
+                <input
+                    type="text"
+                    className={styles.input}
+                    placeholder="Ask about plant care, diseases, or specific plants..."
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && !loading && handleSend()}
+                    disabled={loading}
+                />
+                <button
+                    className={styles.sendBtn}
+                    onClick={handleSend}
+                    disabled={loading || !input.trim()}
+                >
+                    {loading ? <Sparkles size={20} className={styles.sparkle} /> : <Send size={20} />}
+                </button>
+            </div>
+        </div>
+    </div>
+);
 };
