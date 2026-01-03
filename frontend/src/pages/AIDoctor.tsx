@@ -28,6 +28,7 @@ export const AIDoctor = () => {
     const [loading, setLoading] = useState(false);
 
     const messagesEndRef = useRef<HTMLDivElement>(null);
+    const lastSpokenMessageIdRef = useRef<string | null>(null);
 
     const [neuralMeta, setNeuralMeta] = useState<{ current: number; max: number } | null>(null);
 
@@ -416,8 +417,11 @@ export const AIDoctor = () => {
     useEffect(() => {
         const lastMsg = messages[messages.length - 1];
         if (voiceEnabled && lastMsg.role === 'assistant' && lastMsg.id !== '1') {
-            // Check if it's a new message (simple check: logic handled by when messages update)
-            speak(lastMsg.content);
+            // Prevent repeating the same message ID
+            if (lastSpokenMessageIdRef.current !== lastMsg.id) {
+                lastSpokenMessageIdRef.current = lastMsg.id;
+                speak(lastMsg.content);
+            }
         }
     }, [messages, voiceEnabled]);
 
