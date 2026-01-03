@@ -254,24 +254,32 @@ export const AIDoctor = () => {
             .replace(/\be\.g\.\s*/gi, 'for example ')
             .replace(/\bi\.e\.\s*/gi, 'that is ')
             // Add natural pauses and breathing patterns for human-like speech
-            .replace(/([.!?])\s+/g, '$1. ') // Natural pause after sentences
-            .replace(/,\s+/g, ', ') // Comma pause
-            .replace(/:\s+/g, ': ') // Colon pause
-            .replace(/;\s+/g, '; ') // Semicolon pause
-            // Add micro-pauses for natural breathing
-            .replace(/\b(and|but|so|because|however|therefore)\b/gi, ' $1 ') // Pause around connectors
-            .replace(/\b(well|um|uh|like|you know)\b/gi, '$1, ') // Natural filler words
+            .replace(/([.!?])\s+/g, '$1 ')
+            .replace(/,\s+/g, ', ')
+            .replace(/:\s+/g, ': ')
+            .replace(/;\s+/g, '; ')
+            .replace(/\b(and|but|so|because|however|therefore)\b/gi, ' $1 ')
+            .replace(/\b(well|um|uh|like|you know)\b/gi, '$1, ')
             .trim();
 
-        // Split into SMALLER chunks (phrases, not just sentences) for more natural delivery
-        // This mimics how humans speak in thought groups, not full sentences
-        const phrases = cleanText.split(/([,.!?;:])/g).filter(p => p.trim());
-
-        // Reconstruct into natural speech units
+        // Split into SMALLER chunks (phrases) for natural breathing
+        const phrases = cleanText.split(/([,.!?;:])/g);
         const speechUnits: string[] = [];
-        for (let i = 0; i < phrases.length; i += 2) {
-            const phrase = phrases[i] + (phrases[i + 1] || '');
-            if (phrase.trim()) speechUnits.push(phrase.trim());
+
+        for (let i = 0; i < phrases.length; i++) {
+            let chunk = phrases[i]?.trim();
+            if (!chunk) continue;
+
+            // If the chunk is JUST punctuation, glue it to the PREVIOUS word chunk
+            // This prevents the AI from reading symbols as words
+            if (/^[,.!?;:]+$/.test(chunk)) {
+                if (speechUnits.length > 0) {
+                    speechUnits[speechUnits.length - 1] += chunk;
+                }
+                continue; // Skip pushing punctuation-only chunks
+            }
+
+            speechUnits.push(chunk);
         }
 
         // 2. Premium Voice Selection - Prioritize Neural/Natural voices
