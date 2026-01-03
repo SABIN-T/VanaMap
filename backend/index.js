@@ -2592,17 +2592,22 @@ Response: "I can't help with that, but I'm great at helping plants thrive! 🌿 
             ...messages.filter(m => m.role !== 'system')
         ];
 
-        let model = "llama-3.1-8b-instant"; // Primary Model (Lightweight & Fast)
+        // --- MODEL SELECTION ---
+        // Text Primary: Llama 3.3 70B (State of the art intelligence)
+        // Vision Primary: Llama 3.2 90B (Best for plant identification)
+        let model = "llama-3.3-70b-versatile";
 
-        // 4.5 Handle Image Analysis (Vision Model)
         if (image) {
-            console.log('[AI Doctor] switching to Vision Model');
+            console.log('[AI Doctor] Vision request detected. Using Llama 3.2 90B Vision.');
             model = "llama-3.2-90b-vision-preview";
 
             // Attach image to the last user message
             const lastMsgIndex = enhancedMessages.length - 1;
             if (enhancedMessages[lastMsgIndex].role === 'user') {
-                const textContent = enhancedMessages[lastMsgIndex].content;
+                const textContent = typeof enhancedMessages[lastMsgIndex].content === 'string'
+                    ? enhancedMessages[lastMsgIndex].content
+                    : "Analyze this plant image.";
+
                 enhancedMessages[lastMsgIndex].content = [
                     { type: "text", text: textContent },
                     { type: "image_url", image_url: { url: image } }
@@ -2610,36 +2615,35 @@ Response: "I can't help with that, but I'm great at helping plants thrive! 🌿 
             }
         }
 
-        // 5. Call Groq API (Dual-Engine Reliability)
+        // 5. Call Groq API (Multi-Stage Fallback Architecture)
         const callGroq = async (targetModel) => {
             try {
                 const resp = await fetch("https://api.groq.com/openai/v1/chat/completions", {
                     method: "POST",
-                    headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey} ` },
+                    headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` },
                     body: JSON.stringify({
                         model: targetModel,
-                        messages: enhancedMessages, // Passed by reference, modification affects subsequent calls
-                        max_tokens: 1000,
+                        messages: enhancedMessages,
+                        max_tokens: 1024,
                         temperature: 0.7
                     })
                 });
 
                 const json = await resp.json();
 
-                // Extract Neural Usage Metadata (Rate Limits) for Frontend Display
+                // Extract Neural Usage Metadata
                 const usageMeta = {
                     remaining: resp.headers.get('x-ratelimit-remaining-tokens') || resp.headers.get('x-ratelimit-remaining-tokens-on-demand'),
                     limit: resp.headers.get('x-ratelimit-limit-tokens') || resp.headers.get('x-ratelimit-limit-tokens-on-demand'),
                     reset: resp.headers.get('x-ratelimit-reset-tokens'),
-                    total_usage: json.usage // Standard OpenAI usage object
+                    total_usage: json.usage
                 };
 
-                // Inject usage meta into response data so frontend knows the "Real-time Battery Level"
                 if (json && typeof json === 'object') {
                     json.usageMeta = usageMeta;
                 }
 
-                return { ok: resp.ok, data: json };
+                return { ok: resp.ok, data: json, status: resp.status };
             } catch (err) {
                 return { ok: false, data: { error: { message: err.message } } };
             }
@@ -2647,29 +2651,35 @@ Response: "I can't help with that, but I'm great at helping plants thrive! 🌿 
 
         let result = await callGroq(model);
 
-        // 5.1 Aggressive Fallback Logic
-        // If Primary Model fails (Rate Limit, Decommissioned, Server Error), switch to Backup
+        // --- TRIPLE-STAGE FALLBACK LOGIC ---
         if (!result.ok || result.data.error) {
-            console.warn(`[AI Doctor] Primary model ${model} failed.Switching to Backup Engine(Llama 3.1)...Code: `, result.data.error?.code || 'Unknown');
+            console.warn(`[AI Doctor] Primary model ${model} failed (Status: ${result.status}). Trying fallback...`);
 
-            const backupModel = "gemma-7b-it"; // Different model family for true fallback
+            // FALLBACK STAGE 1: Fast Vision (If image exists)
+            if (image && model === "llama-3.2-90b-vision-preview") {
+                const fasterVisionModel = "llama-3.2-11b-vision-preview";
+                console.log(`[AI Doctor] Vision Fallback: Trying ${fasterVisionModel}`);
+                result = await callGroq(fasterVisionModel);
+            }
 
-            // Special Handling: If original request was Vision (Image), fallback model (Text-Only) will crash if it sees "image_url".
-            // We must strip the image and just answer the text query.
-            if (image) {
+            // FALLBACK STAGE 2: High-Speed Text-Only (Final Stand)
+            if (!result.ok || result.data.error) {
+                console.warn('[AI Doctor] Vision falling back to High-Speed Text Engine.');
+
+                const bulletproofModel = "llama-3.1-8b-instant";
+
+                // Strip image if it still exists in the message structure
                 const lastIdx = enhancedMessages.length - 1;
                 const lastMsg = enhancedMessages[lastIdx];
                 if (Array.isArray(lastMsg.content)) {
                     const textPart = lastMsg.content.find(c => c.type === 'text');
                     if (textPart) {
-                        console.log('[AI Doctor] Downgrading Vision request to Text-Only for fallback.');
-                        lastMsg.content = textPart.text; // Replace array with string
+                        lastMsg.content = textPart.text + " (Note: I am currently analyzing your description only as my vision module is temporarily offline.)";
                     }
                 }
-            }
 
-            // Retry with Backup
-            result = await callGroq(backupModel);
+                result = await callGroq(bulletproofModel);
+            }
         }
 
         // 6. Handle Final Result
