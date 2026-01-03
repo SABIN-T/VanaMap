@@ -2471,10 +2471,14 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
             }
         }
 
-        // 1. Fetch Contexts
+        // 1. Fetch Contexts & Log Audit
         const floraResult = await FloraIntelligence.getRelevantFloraContext(messages);
         const floraKnowledge = floraResult.context;
         const matchedFloraBatch = floraResult.matches;
+
+        console.log(`[Dr. Flora Audit] Query: "${lastMsg?.content?.substring(0, 50)}..."`);
+        console.log(`[Dr. Flora Audit] Image Attached: ${!!image}`);
+        console.log(`[Dr. Flora Audit] Flora Matches: ${matchedFloraBatch.map(p => p.commonName).join(', ') || 'None'}`);
 
         const userPersonalData = await FloraIntelligence.getUserPersonalContext(req.user?.id);
 
@@ -2684,7 +2688,7 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
 
             // Inject multi-image support
             result.data.choices[0].message.images = [fluxUrl, sdxlUrl];
-            // Backward compatibility
+            // Backward compatibility & Primary display
             result.data.choices[0].message.image = fluxUrl;
 
             // Remove the [GENERATE:...] tag from the visible text
@@ -2692,10 +2696,8 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
 
             // Overwrite response content
             result.data.choices[0].message.content = aiContent;
-            // Inject the generated image URL!
-            result.data.choices[0].message.image = imageUrl;
 
-            console.log(`[Flux.1 Dev] Image integrated: ${imageUrl}`);
+            console.log(`[Flux.1 Dev] Dual-AI Images integrated: ${fluxUrl} and ${sdxlUrl}`);
         }
 
         console.log('[AI Doctor] Success!');

@@ -28,10 +28,13 @@ const FloraIntelligence = {
         const matches = worldFlora.filter(plant => {
             const sciName = plant.scientificName.toLowerCase();
             const comName = plant.commonName.toLowerCase();
+            const words = comName.split(' ').concat(sciName.split(' ')).filter(w => w.length > 3);
 
-            // Check if scientific or common name is in user query (min 4 chars for safety)
-            return (sciName.length > 3 && fullText.includes(sciName)) ||
-                (comName.length > 3 && fullText.includes(comName));
+            // 1. Direct inclusion (Strong match)
+            if (fullText.includes(sciName) || fullText.includes(comName)) return true;
+
+            // 2. Keyword inclusion (Fuzzy match)
+            return words.some(word => fullText.includes(word));
         }).slice(0, 8); // Limit to top 8 matches to keep context window manageable
 
         if (matches.length === 0) return { context: "", matches: [] };

@@ -89,15 +89,18 @@ export const AIDoctor = () => {
 
         try {
             // Include the new user message in the API call
+            // We ensure that if there's an image, it's sent along with the history
             const conversationHistory = [...messages, userMessage].map(m => ({
                 role: m.role,
-                content: m.content
+                content: m.content,
+                // If the message has an image, the backend can now potentially use it
+                metadata: m.image ? { hasImage: true } : undefined
             }));
 
             const response = await chatWithDrFlora(
                 conversationHistory,
                 { timezone: Intl.DateTimeFormat().resolvedOptions().timeZone },
-                base64Image
+                base64Image // Current turn image
             );
 
             console.log('[AI Doctor] Raw API Response:', response); // Debugging
@@ -200,11 +203,17 @@ export const AIDoctor = () => {
             toast.loading("Preparing high-quality PNG...", { id: `dl-${messageId}`, duration: 2000 });
 
             let href = base64OrUrl;
+            const baseUrl = API_URL.replace(/\/api$/, '');
 
-            // If it's a remote URL, use our backend proxy to ensure download works reliably (CORS bypass)
-            if (base64OrUrl.startsWith('http')) {
-                const baseUrl = API_URL.replace(/\/api$/, '');
-                href = `${baseUrl}/api/proxy-image?url=${encodeURIComponent(base64OrUrl)}`;
+            // If it's a relative URL or a remote URL, we need to handle it properly
+            if (base64OrUrl.startsWith('/') || base64OrUrl.startsWith('http')) {
+                // If relative, prepend baseUrl
+                const fullUrl = base64OrUrl.startsWith('/') ? `${baseUrl}${base64OrUrl}` : base64OrUrl;
+
+                // Use our proxy for reliability if it's external, otherwise use directly if already local
+                href = base64OrUrl.startsWith('http')
+                    ? `${baseUrl}/api/proxy-image?url=${encodeURIComponent(base64OrUrl)}`
+                    : fullUrl;
 
                 const link = document.createElement('a');
                 link.href = href;
