@@ -16,6 +16,69 @@ interface Message {
     images?: string[]; // Support for multiple AI models (Flux & SDXL)
 }
 
+const ImageLoader = ({ idx }: { idx: number }) => {
+    const [progress, setProgress] = useState(0);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setProgress(old => {
+                if (old >= 95) return old;
+                // Random jump to simulate network traffic
+                const jump = Math.floor(Math.random() * 5) + 1;
+                return Math.min(old + jump, 95);
+            });
+        }, 300); // Update every 300ms
+        return () => clearInterval(interval);
+    }, []);
+
+    return (
+        <div style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(255,255,255,0.85)',
+            backdropFilter: 'blur(8px)',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '12px',
+            zIndex: 5,
+            transition: 'opacity 0.3s'
+        }}>
+            <div style={{ animation: 'spin 1.5s linear infinite', display: 'flex', color: '#059669' }}>
+                <Loader2 size={42} />
+            </div>
+            <div style={{ textAlign: 'center' }}>
+                <div style={{ fontSize: '1rem', fontWeight: 800, color: '#059669', marginBottom: '4px' }}>
+                    {idx === 0 ? 'Painting Botanical Art...' : 'Developing Photo...'}
+                </div>
+                <div style={{ fontSize: '0.8rem', color: '#64748b' }}>
+                    Estimated Progress: {progress}%
+                </div>
+                {/* Visual Progress Bar */}
+                <div style={{
+                    width: '120px',
+                    height: '4px',
+                    background: '#e2e8f0',
+                    borderRadius: '2px',
+                    marginTop: '8px',
+                    overflow: 'hidden'
+                }}>
+                    <div style={{
+                        width: `${progress}%`,
+                        height: '100%',
+                        background: '#10b981',
+                        transition: 'width 0.3s ease-out'
+                    }} />
+                </div>
+            </div>
+        </div>
+    );
+};
+
 export const AIDoctor = () => {
     const { user } = useAuth();
     const [messages, setMessages] = useState<Message[]>([
@@ -885,32 +948,7 @@ export const AIDoctor = () => {
                                                     </button>
 
                                                     {(!loadedImageIds.has(imageKey)) && (
-                                                        <div style={{
-                                                            position: 'absolute',
-                                                            top: 0,
-                                                            left: 0,
-                                                            right: 0,
-                                                            bottom: 0,
-                                                            background: 'rgba(255,255,255,0.85)',
-                                                            backdropFilter: 'blur(8px)',
-                                                            display: 'flex',
-                                                            flexDirection: 'column',
-                                                            alignItems: 'center',
-                                                            justifyContent: 'center',
-                                                            gap: '12px',
-                                                            zIndex: 5,
-                                                            transition: 'opacity 0.3s'
-                                                        }}>
-                                                            <div style={{ animation: 'spin 1.5s linear infinite', display: 'flex', color: '#059669' }}>
-                                                                <Loader2 size={42} />
-                                                            </div>
-                                                            <div style={{ textAlign: 'center' }}>
-                                                                <div style={{ fontSize: '1rem', fontWeight: 800, color: '#059669', marginBottom: '4px' }}>
-                                                                    {idx === 0 ? 'Painting Botanical Art...' : 'Developing Photo...'}
-                                                                </div>
-                                                                <div style={{ fontSize: '0.8rem', color: '#64748b' }}>Please wait...</div>
-                                                            </div>
-                                                        </div>
+                                                        <ImageLoader idx={idx} />
                                                     )}
                                                 </div>
                                             );
