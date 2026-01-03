@@ -430,6 +430,11 @@ export const AIDoctor = () => {
 
         recognition.onstart = () => {
             setIsListening(true);
+            // Stop AI from speaking when user starts talking
+            if (synth.speaking) {
+                synth.cancel();
+                setIsSpeaking(false);
+            }
             toast("🎤 Listening... Speak now!", {
                 icon: '👂',
                 duration: 3000,
@@ -441,22 +446,16 @@ export const AIDoctor = () => {
         };
 
         recognition.onresult = (event: any) => {
-            let transcript = '';
+            // Only process FINAL results to avoid duplication
+            const lastResult = event.results[event.results.length - 1];
 
-            // Collect all results (interim + final)
-            for (let i = 0; i < event.results.length; i++) {
-                transcript += event.results[i][0].transcript;
-            }
+            if (lastResult.isFinal) {
+                const transcript = lastResult[0].transcript.trim();
 
-            // Update input field with recognized text
-            if (transcript.trim()) {
-                setInput((prev) => {
-                    const newText = prev ? prev + ' ' + transcript : transcript;
-                    return newText;
-                });
+                if (transcript) {
+                    // Replace input entirely with final transcript (no appending)
+                    setInput(transcript);
 
-                // Show what was recognized
-                if (event.results[event.results.length - 1].isFinal) {
                     toast.success(`Heard: "${transcript}"`, {
                         icon: '✅',
                         duration: 2000
@@ -588,6 +587,27 @@ export const AIDoctor = () => {
                         >
                             {voiceEnabled ? <Volume2 size={18} /> : <VolumeX size={18} />}
                         </button>
+
+                        {/* Stop Speaking Button (only shows when AI is speaking) */}
+                        {isSpeaking && (
+                            <button
+                                className={styles.actionBtn}
+                                onClick={() => {
+                                    synth.cancel();
+                                    setIsSpeaking(false);
+                                    toast.success("Stopped speaking");
+                                }}
+                                style={{
+                                    color: '#ef4444',
+                                    borderColor: '#fecaca',
+                                    background: '#fef2f2',
+                                    animation: 'pulse 2s infinite'
+                                }}
+                                title="Stop Speaking"
+                            >
+                                <VolumeX size={18} />
+                            </button>
+                        )}
 
                         {/* Language Toggle */}
                         <div style={{ position: 'relative' }}>
