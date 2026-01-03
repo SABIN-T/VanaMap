@@ -2431,6 +2431,22 @@ app.post('/api/chat', async (req, res) => {
         console.log('[AI Doctor] Processing chat request...');
         if (userContext) console.log(`[AI Doctor] Context: ${JSON.stringify(userContext)}`);
 
+        // 0. FAST PATH: Instant Response for Greetings (Saves AI Tokens & Latency)
+        const lastMsg = messages[messages.length - 1];
+        if (lastMsg && lastMsg.role === 'user' && !image) {
+            const txt = (typeof lastMsg.content === 'string' ? lastMsg.content : '').toLowerCase().trim().replace(/[^a-z]/g, '');
+            if (['hi', 'hello', 'hey', 'helo', 'holla', 'greetings', 'namaste'].includes(txt)) {
+                return res.json({
+                    choices: [{
+                        message: {
+                            role: 'assistant',
+                            content: "🌿 Hello! I'm Dr. Flora, your AI Plant Doctor. I have extensive knowledge about plant care, diseases, and treatments. How can I help your plants thrive today?"
+                        }
+                    }]
+                });
+            }
+        }
+
         // 1. Fetch relevant plant data from OUR database (The "Website Analysis" part)
         // We select key fields to keep token usage efficient
         const inventory = await Plant.find()
