@@ -137,7 +137,7 @@ export const AIDoctor = () => {
             // Start a countdown if there's an image
             if (assistantMessage.image) {
                 const msgId = assistantMessage.id;
-                setImageTimers(prev => ({ ...prev, [msgId]: 7 })); // Start at 7 seconds
+                setImageTimers(prev => ({ ...prev, [msgId]: 10 })); // Accurate 10s estimate
                 const interval = setInterval(() => {
                     setImageTimers(prev => {
                         const current = prev[msgId];

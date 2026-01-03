@@ -2678,10 +2678,9 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
             const enhancedPrompt = FloraIntelligence.enhanceGenerationPrompt(prompt, matchedFloraBatch);
             const seed = Math.floor(Math.random() * 1000000);
 
-            // MULTI-AI FALLBACK SYSTEM: Use our proxy to handle rate limits
-            // Instead of a direct link, we provide a proxied link that can failover between Flux and SDXL
+            // SPEED OPTIMIZED: Using 896x896 for faster rendering while maintaining quality
             const baseUrl = process.env.NODE_ENV === 'production' ? 'https://plantoxy.onrender.com' : 'http://localhost:5000';
-            const imageUrl = `${baseUrl}/api/generate-image?prompt=${encodeURIComponent(enhancedPrompt)}&seed=${seed}&width=1024&height=1024`;
+            const imageUrl = `${baseUrl}/api/generate-image?prompt=${encodeURIComponent(enhancedPrompt)}&seed=${seed}&width=896&height=896`;
 
             // Remove the [GENERATE:...] tag from the visible text
             aiContent = aiContent.replace(generateRegex, "").trim();
@@ -2918,12 +2917,12 @@ process.on('unhandledRejection', (err) => {
     console.error('UNHANDLED REJECTION! 💥', err);
 });
 
-// --- MULTI-AI IMAGE GENERATION ENGINE (With Auto-Fallback) ---
+// --- MULTI-AI IMAGE GENERATION ENGINE (Speed Optimized Version) ---
 app.get('/api/generate-image', async (req, res) => {
-    const { prompt, seed, width = 1024, height = 1024 } = req.query;
+    const { prompt, seed, width = 896, height = 896 } = req.query;
 
-    // Priority List of Models
-    const models = ['flux', 'turbo', 'flux-realism', 'any'];
+    // Speed-First Priority: Turbo is much faster for real-time chat
+    const models = ['turbo', 'flux', 'flux-realism', 'any'];
 
     for (const model of models) {
         try {
