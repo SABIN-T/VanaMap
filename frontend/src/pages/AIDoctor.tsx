@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Send, Sparkles, Leaf, Bot, User, Trash2, Download, Calendar, Globe, Camera, Mic, ShoppingCart, Volume2, VolumeX } from 'lucide-react';
-import { fetchPlants } from '../services/api';
+import { fetchPlants, chatWithDrFlora } from '../services/api';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
 import styles from './AIDoctor.module.css';
@@ -974,16 +974,21 @@ What would you like to know about your plants today?`;
         if (!textToSend.trim() && !selectedImage) return;
 
         let messageContent = textToSend;
+        let base64Image: string | null = null;
+
         if (selectedImage) {
-            messageContent += `\n\n[Attached Image: ${selectedImage.name}]`;
-            toast.promise(
-                new Promise(resolve => setTimeout(resolve, 1500)),
-                {
-                    loading: 'Analyzing plant image...',
-                    success: 'Image analyzed!',
-                    error: 'Error'
-                }
-            );
+            try {
+                const reader = new FileReader();
+                base64Image = await new Promise((resolve, reject) => {
+                    reader.onload = () => resolve(reader.result as string);
+                    reader.onerror = reject;
+                    reader.readAsDataURL(selectedImage);
+                });
+                messageContent += `\n\n[Attached Image]`;
+            } catch (e) {
+                toast.error("Failed to process image");
+                return;
+            }
         }
 
         const userMessage: Message = {
@@ -997,24 +1002,36 @@ What would you like to know about your plants today?`;
         setInput('');
         setLoading(true);
 
-        // Clear image state after sending
-        if (selectedImage) {
-            clearImage();
-        }
+        const activeImage = selectedImage;
+        clearImage();
 
         try {
-            const aiResponse = await generateAIResponse(messageContent); // Pass the modified content to AI
+            const response = await chatWithDrFlora(
+                messages.map(m => ({ role: m.role, content: m.content })),
+                { timezone: Intl.DateTimeFormat().resolvedOptions().timeZone },
+                base64Image
+            );
+
+            const aiText = response.choices?.[0]?.message?.content || "I couldn't analyze that. Please try again.";
 
             const assistantMessage: Message = {
                 id: (Date.now() + 1).toString(),
                 role: 'assistant',
-                content: aiResponse,
+                content: aiText,
                 timestamp: new Date()
             };
 
             setMessages(prev => [...prev, assistantMessage]);
+            if (voiceEnabled) speak(aiText);
+
         } catch (error) {
-            toast.error('Failed to get response. Please try again.');
+            console.error(error);
+            setMessages(prev => [...prev, {
+                id: (Date.now() + 1).toString(),
+                role: 'assistant',
+                content: "⚠️ **Dr. Flora is offline.** Please check your connection or try again later.",
+                timestamp: new Date()
+            }]);
         } finally {
             setLoading(false);
         }
@@ -1211,19 +1228,41 @@ What would you like to know about your plants today?`;
     // --- IMAGE UPLOAD (Plant Diagnosis) ---
     const [selectedImage, setSelectedImage] = useState<File | null>(null);
     const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
 
-    // Exposed to the window for the file input onChange handler (cleaner than inline)
-    useEffect(() => {
-        (window as any).setImageUpload = (file: File, url: string) => {
+    const handleScanClick = () => {
+        if (fileInputRef.current) {
+            fileInputRef.current.click();
+        }
+    };
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            // Validate file type
+            if (!file.type.startsWith('image/')) {
+                toast.error("Please select an image file.");
+                return;
+            }
+
+            // Validate file size (max 5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                toast.error("Image too large. Please select an image under 5MB.");
+                return;
+            }
+
+            const url = URL.createObjectURL(file);
             setSelectedImage(file);
             setPreviewUrl(url);
-            toast.success("Image selected!");
-        };
-    }, []);
+            toast.success("Image added! Type your question and send.");
+        }
+    };
 
     const clearImage = () => {
         setSelectedImage(null);
+        if (previewUrl) URL.revokeObjectURL(previewUrl);
         setPreviewUrl(null);
+        if (fileInputRef.current) fileInputRef.current.value = '';
     };
 
     return (
@@ -1310,12 +1349,19 @@ What would you like to know about your plants today?`;
 
                     <button
                         className={styles.featureBtn}
-                        onClick={() => toast('Image Recognition - Coming Soon! Upload plant photos for instant diagnosis.', { icon: '📸', duration: 4000 })}
-                        title="Image Recognition - Diagnose from photos"
+                        onClick={handleScanClick}
+                        title="Scan Plant - Diagnose from photos"
                     >
                         <Camera size={20} />
                         <span>Scan Plant</span>
                     </button>
+                    <input
+                        type="file"
+                        ref={fileInputRef}
+                        onChange={handleFileChange}
+                        accept="image/*"
+                        style={{ display: 'none' }}
+                    />
 
                     <button
                         className={styles.featureBtn}

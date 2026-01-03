@@ -2420,7 +2420,7 @@ app.post('/api/admin/broadcast', auth, admin, async (req, res) => {
 // --- AI DOCTOR ENDPOINT (Using FREE Groq API) ---
 app.post('/api/chat', async (req, res) => {
     try {
-        const { messages, userContext } = req.body;
+        const { messages, userContext, image } = req.body;
 
         // Groq API Key (FREE - Get from https://console.groq.com)
         const apiKey = process.env.GROQ_API_KEY;
@@ -2477,12 +2477,29 @@ app.post('/api/chat', async (req, res) => {
 
         If the user asks "Hi" or vague greeting: Respond with "Hello! I am Dr. Flora. How can I help your plants today?"`;
 
-        // 4. Update the messages array with the enhanced system prompt
-        // We replace the frontend's system prompt or prepend ours
+        // 4. Update the messages array
         const enhancedMessages = [
             { role: "system", content: systemPrompt },
             ...messages.filter(m => m.role !== 'system')
         ];
+
+        let model = "llama-3.3-70b-versatile";
+
+        // 4.5 Handle Image Analysis (Vision Model)
+        if (image) {
+            console.log('[AI Doctor] switching to Vision Model');
+            model = "llama-3.2-11b-vision-preview";
+
+            // Attach image to the last user message
+            const lastMsgIndex = enhancedMessages.length - 1;
+            if (enhancedMessages[lastMsgIndex].role === 'user') {
+                const textContent = enhancedMessages[lastMsgIndex].content;
+                enhancedMessages[lastMsgIndex].content = [
+                    { type: "text", text: textContent },
+                    { type: "image_url", image_url: { url: image } }
+                ];
+            }
+        }
 
         // 5. Call Groq API
         const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
@@ -2492,7 +2509,7 @@ app.post('/api/chat', async (req, res) => {
                 "Authorization": `Bearer ${apiKey}`
             },
             body: JSON.stringify({
-                model: "llama-3.3-70b-versatile",
+                model: model,
                 messages: enhancedMessages,
                 max_tokens: 1000,
                 temperature: 0.7

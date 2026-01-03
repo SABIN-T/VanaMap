@@ -636,5 +636,16 @@ export const broadcastMessage = async (data: { type: string, targetId?: string, 
     return res.json();
 };
 
+// --- AI DOCTOR ---
+export const chatWithDrFlora = async (messages: any[], userContext: any, image?: string | null) => {
+    const res = await fetch(`${API_URL}/chat`, {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify({ messages, userContext, image })
+    });
+    if (!res.ok) throw new Error("AI Service Unavailable");
+    return res.json();
+};
+
 
 
