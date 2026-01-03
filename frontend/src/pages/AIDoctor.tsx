@@ -799,7 +799,14 @@ export const AIDoctor = () => {
                                                     minHeight: '200px'
                                                 }}>
                                                     <img
-                                                        src={imgUrl && imgUrl.startsWith('/') ? `${API_URL.replace(/\/api$/, '')}${imgUrl}` : imgUrl}
+                                                        src={(() => {
+                                                            if (!imgUrl) return '';
+                                                            if (imgUrl.startsWith('http')) return imgUrl;
+                                                            // Robust URL cleaning: remove trailing slashes from base, remove /api suffix if present
+                                                            const cleanBase = API_URL.replace(/\/+$/, '').replace(/\/api$/, '');
+                                                            const cleanPath = imgUrl.startsWith('/') ? imgUrl : `/${imgUrl}`;
+                                                            return `${cleanBase}${cleanPath}`;
+                                                        })()}
                                                         alt={`Plant view ${idx + 1}`}
                                                         onLoad={() => {
                                                             setLoadedImageIds(prev => new Set(prev).add(imageKey));
