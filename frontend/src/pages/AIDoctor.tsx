@@ -317,11 +317,10 @@ export const AIDoctor = () => {
             const utterance = new SpeechSynthesisUtterance(unit.trim());
             if (preferredVoice) utterance.voice = preferredVoice;
 
-            // --- Extreme Human Emotional Tuning ---
-            const microPitch = (Math.random() - 0.5) * 0.1;
-            const microRate = (Math.random() - 0.5) * 0.08;
+            // --- Human Imperfection & Texture Modulation ---
+            const microPitch = (Math.random() - 0.5) * 0.12;
+            const microRate = (Math.random() - 0.5) * 0.1;
 
-            // Global Tone shifts based on user mood
             let basePitch = 1.2;
             let baseRate = 1.0;
             let baseVolume = 1.0;
@@ -336,32 +335,33 @@ export const AIDoctor = () => {
 
             const lowerUnit = unit.toLowerCase();
 
-            // EXTREME TRIGGER BLOCKS
-            if (lowerUnit.includes('haha') || lowerUnit.includes('hehe') || lowerUnit.includes('lol') || lowerUnit.includes('funny') || lowerUnit.includes('oops')) {
-                basePitch = 1.6; // High, joyful pitch
-                baseRate = 1.3;  // Fast, energetic rate
-                baseVolume = 1.1;
+            // 💭 THINKING FILLER MODULATION
+            if (lowerUnit.match(/\b(um|uh|well|hmm)\b/)) {
+                basePitch *= 0.85; baseRate *= 0.8; baseVolume *= 0.8;
             }
-            else if (lowerUnit.includes('oh my gosh') || lowerUnit.includes('wow') || lowerUnit.includes('yay') || lowerUnit.includes('amazing') || lowerUnit.includes('incredible') || lowerUnit.includes('!')) {
-                basePitch = 1.5; // Very cheerful
-                baseRate = 1.2;  // High energy
-                baseVolume = 1.15;
+
+            // 🤫 WHISPER / SOFT MODE
+            if (lowerUnit.includes('(softly)') || lowerUnit.includes('shh')) {
+                basePitch *= 0.82; baseRate *= 0.88; baseVolume *= 0.55;
             }
-            else if (lowerUnit.includes('aww') || lowerUnit.includes('poor') || lowerUnit.includes('sad') || lowerUnit.includes('died') || lowerUnit.includes('sorry') || lowerUnit.includes('unfortunately')) {
-                basePitch = 0.6; // Deeply somber, very low pitch
-                baseRate = 0.7;  // Slow, heavy heart
-                baseVolume = 0.85;
+
+            // EXTREME EMOTIONAL TRIGGERS
+            if (lowerUnit.includes('haha') || lowerUnit.includes('hehe') || lowerUnit.includes('lol')) {
+                basePitch = 1.6; baseRate = 1.35; baseVolume = 1.15;
             }
-            else if (lowerUnit.includes('worry') || lowerUnit.includes('fix') || lowerUnit.includes('together') || lowerUnit.includes('okay') || lowerUnit.includes('alright') || lowerUnit.includes('🤗') || lowerUnit.includes('help')) {
-                basePitch = 1.1; // Gentle and comforting
-                baseRate = 0.85; // Slow and reassuring
-                baseVolume = 0.95;
+            else if (lowerUnit.includes('wow') || lowerUnit.includes('yay') || lowerUnit.includes('!') || lowerUnit.includes('amazing')) {
+                basePitch = 1.5; baseRate = 1.25; baseVolume = 1.2;
+            }
+            else if (lowerUnit.includes('sad') || lowerUnit.includes('died') || lowerUnit.includes('sorry') || lowerUnit.includes('poor')) {
+                basePitch = 0.65; baseRate = 0.75; baseVolume = 0.85;
+            }
+            else if (lowerUnit.includes('worry') || lowerUnit.includes('fix') || lowerUnit.includes('together') || lowerUnit.includes('okay')) {
+                basePitch = 1.1; baseRate = 0.85; baseVolume = 0.95;
             }
 
             // Questions - Rising excitement/curiosity
             if (unit.includes('?')) {
-                basePitch += 0.2; // Pronounced rise at the end
-                baseRate -= 0.05; // Thoughtful pause
+                basePitch += 0.25; baseRate -= 0.05;
             }
 
             utterance.pitch = basePitch + microPitch;
@@ -375,7 +375,12 @@ export const AIDoctor = () => {
                 utterance.onerror = () => setIsSpeaking(false);
             }
 
-            synth.speak(utterance);
+            // Breath/Thought Pacing
+            if (unit.length > 50 || unit.includes('.') || unit.includes('!')) {
+                setTimeout(() => synth.speak(utterance), 20);
+            } else {
+                synth.speak(utterance);
+            }
         });
     };
 
