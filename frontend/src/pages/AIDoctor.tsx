@@ -202,6 +202,15 @@ export const AIDoctor = () => {
                 timestamp: new Date()
             };
 
+            // Debug logging for image generation
+            if (assistantMessage.images || assistantMessage.image) {
+                console.log('[AI Doctor] 🎨 Images detected in response:');
+                console.log('  - Single image:', assistantMessage.image);
+                console.log('  - Multiple images:', assistantMessage.images);
+                console.log('  - Total images:', assistantMessage.images?.length || (assistantMessage.image ? 1 : 0));
+            } else {
+                console.log('[AI Doctor] ℹ️ No images in this response');
+            }
 
 
             setMessages(prev => [...prev, assistantMessage]);
