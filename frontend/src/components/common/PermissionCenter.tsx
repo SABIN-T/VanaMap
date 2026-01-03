@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { MapPin, Bell, Camera, ShieldCheck, Info, Bot } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import styles from './PermissionCenter.module.css';
 import toast from 'react-hot-toast';
 
@@ -12,6 +12,12 @@ export const PermissionCenter = () => {
     const [cam, setCam] = useState<PermissionState>('prompt');
     const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation();
+
+    // Only show on Home page
+    if (location.pathname !== '/' && !isOpen) {
+        return null;
+    }
 
     const checkPermissions = async () => {
         // Geolocation
