@@ -14,11 +14,6 @@ export const PermissionCenter = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    // Only show on Home page
-    if (location.pathname !== '/' && !isOpen) {
-        return null;
-    }
-
     const checkPermissions = async () => {
         // Geolocation
         if ('permissions' in navigator) {
@@ -89,6 +84,12 @@ export const PermissionCenter = () => {
             default: return styles.statusUnsupported;
         }
     };
+
+    // Only show on Home page (unless modal is open)
+    // Moving this check AFTER all hooks to prevent "Rendered fewer hooks than expected" error
+    if (location.pathname !== '/' && !isOpen) {
+        return null;
+    }
 
     if (!isOpen) {
         return (
