@@ -2657,13 +2657,20 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
 
         // --- TRIPLE-STAGE FALLBACK LOGIC ---
         if (!result.ok || result.data.error) {
-            console.warn(`[AI Doctor] Primary model ${model} failed (Status: ${result.status}). Trying fallback...`);
+            console.warn(`[AI Doctor] Primary model ${model} failed (Status: ${result.status}). Trying fallback sequence...`);
 
-            // FALLBACK STAGE 1: Fast Vision (If image exists)
+            // FALLBACK STAGE 1: Standard Vision (11B)
             if (image && model === "llama-3.2-90b-vision-preview") {
-                const fasterVisionModel = "llama-3.2-11b-vision-preview";
-                console.log(`[AI Doctor] Vision Fallback: Trying ${fasterVisionModel}`);
-                result = await callGroq(fasterVisionModel);
+                const expert2 = "llama-3.2-11b-vision-preview";
+                console.log(`[AI Doctor] ⚠️ Vision Fallback 1: Engaging Field Botanist (${expert2})`);
+                result = await callGroq(expert2);
+
+                // FALLBACK STAGE 2: Open Source Vision (LLaVA - The "Analyst")
+                if (!result.ok || result.data.error) {
+                    const expert3 = "llava-v1.5-7b-4096-preview";
+                    console.log(`[AI Doctor] ⚠️⚠️ Vision Fallback 2: Engaging Research Analyst (${expert3})`);
+                    result = await callGroq(expert3);
+                }
             }
 
             // FALLBACK STAGE 2: High-Speed Text-Only (Final Stand)
