@@ -2673,8 +2673,11 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
                     body: JSON.stringify({
                         model: targetModel,
                         messages: payloadMessages,
-                        max_tokens: 1024,
-                        temperature: 0.7
+                        max_tokens: 8192,  // UPGRADED: 8x more tokens for ultra-detailed responses
+                        temperature: 0.3,  // UPGRADED: Lower for maximum accuracy and consistency
+                        top_p: 0.9,        // UPGRADED: Nucleus sampling for quality control
+                        frequency_penalty: 0.3,  // UPGRADED: Reduce repetition
+                        presence_penalty: 0.2    // UPGRADED: Encourage diverse vocabulary
                     })
                 });
 
