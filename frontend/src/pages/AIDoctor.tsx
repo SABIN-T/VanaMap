@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Send, Sparkles, Leaf, Bot, User, Trash2, Download, Calendar, Globe, Camera, Mic, ShoppingCart, Volume2, VolumeX } from 'lucide-react';
+import { Send, Sparkles, Leaf, Bot, User, Trash2, Download, Calendar, Globe, Camera, Mic, Volume2, VolumeX } from 'lucide-react';
 import { chatWithDrFlora } from '../services/api';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
@@ -355,7 +355,7 @@ export const AIDoctor = () => {
                         <button
                             className={styles.actionBtn}
                             onClick={toggleVoice}
-                            style={voiceEnabled ? { color: '#10b981', borderColor: '#bbf7d0', background: '#f0fdf4' } : {}}
+                            style={voiceEnabled ? { color: '#10b981', borderColor: '#bbf7d0', background: '#f0fdf4', boxShadow: isSpeaking ? '0 0 10px rgba(16, 185, 129, 0.3)' : 'none' } : {}}
                             title="Voice Output"
                         >
                             {voiceEnabled ? <Volume2 size={18} /> : <VolumeX size={18} />}
@@ -366,7 +366,7 @@ export const AIDoctor = () => {
                             <button
                                 className={styles.actionBtn}
                                 onClick={() => setShowLanguageMenu(!showLanguageMenu)}
-                                title="Language"
+                                title={`Language: ${selectedLanguage}`}
                             >
                                 <Globe size={18} />
                             </button>
