@@ -223,12 +223,26 @@ export const AIDoctor = () => {
         // Cancel any current speech
         synth.cancel();
 
-        // 1. Advanced Text Cleanup & Pronunciation Fixes
+        // 1. Advanced Text Cleanup & Convert Emotions to Speakable Sounds
         let cleanText = text
             .replace(/\*/g, '') // Remove bold/italic markers
             .replace(/[#\-]/g, '') // Remove headers/lists
             .replace(/\[.*?\]/g, '') // Remove [Citation] or [Image] tags
-            .replace(/[\u{1F300}-\u{1F9FF}]/gu, '') // Remove emojis
+            // Convert emotional expressions to speakable sounds
+            .replace(/\*giggles\*/gi, 'hehe') // *giggles* → "hehe"
+            .replace(/\*laughs\*/gi, 'haha') // *laughs* → "haha"
+            .replace(/\*happy dance\*/gi, 'yay!') // *happy dance* → "yay!"
+            .replace(/\*sighs\*/gi, 'hmm') // *sighs* → "hmm"
+            .replace(/\*gasps\*/gi, 'oh!') // *gasps* → "oh!"
+            .replace(/\*chuckles\*/gi, 'hehe') // *chuckles* → "hehe"
+            // Keep natural interjections
+            .replace(/haha+/gi, (match) => match.toLowerCase()) // Normalize "haha"
+            .replace(/hehe+/gi, (match) => match.toLowerCase()) // Normalize "hehe"
+            .replace(/aww+/gi, (match) => match.toLowerCase()) // Normalize "aww"
+            .replace(/omg/gi, 'oh my gosh') // OMG → speakable
+            .replace(/lol/gi, 'haha') // LOL → "haha"
+            // Remove remaining emojis AFTER converting text emotions
+            .replace(/[\u{1F300}-\u{1F9FF}]/gu, '')
             // Fix common pronunciation issues
             .replace(/\bDr\.\s*/gi, 'Doctor ') // "Dr." → "Doctor"
             .replace(/\bMr\.\s*/gi, 'Mister ')
@@ -284,21 +298,20 @@ export const AIDoctor = () => {
             // Dynamic adjustments based on content and EMOTIONS
             const lowerSentence = sentence.toLowerCase();
 
-            // LAUGHING/PLAYFUL - lighter, faster, higher
-            if (lowerSentence.includes('haha') || lowerSentence.includes('lol') ||
-                lowerSentence.includes('*giggles*') || lowerSentence.includes('😄') ||
-                lowerSentence.includes('funny') || lowerSentence.includes('oops')) {
-                basePitch = 1.28; // Higher, playful
-                baseRate = 1.08;  // Faster, energetic
+            // LAUGHING/PLAYFUL - lighter, faster, higher (EXTREME for authenticity)
+            if (lowerSentence.includes('haha') || lowerSentence.includes('hehe') ||
+                lowerSentence.includes('lol') || lowerSentence.includes('funny') ||
+                lowerSentence.includes('oops')) {
+                basePitch = 1.35; // Very high, playful (sounds like actual laughter)
+                baseRate = 1.15;  // Fast, energetic
             }
 
             // EXCITEMENT/CELEBRATION - very high pitch & faster
-            if (lowerSentence.includes('omg') || lowerSentence.includes('wow') ||
-                lowerSentence.includes('yay') || lowerSentence.includes('🎉') ||
-                lowerSentence.includes('amazing') || lowerSentence.includes('incredible') ||
-                lowerSentence.includes('*happy dance*')) {
-                basePitch = 1.3;  // Very cheerful!
-                baseRate = 1.12;  // Excited pace
+            if (lowerSentence.includes('oh my gosh') || lowerSentence.includes('wow') ||
+                lowerSentence.includes('yay') || lowerSentence.includes('amazing') ||
+                lowerSentence.includes('incredible')) {
+                basePitch = 1.32; // Very cheerful!
+                baseRate = 1.13;  // Excited pace
             }
 
             // General excitement/Important info
@@ -315,12 +328,11 @@ export const AIDoctor = () => {
                 baseRate = 0.98;  // Slightly slower for clarity
             }
 
-            // SADNESS/EMPATHY - lower, slower, gentle
-            if (lowerSentence.includes('aww') || lowerSentence.includes('🥺') ||
-                lowerSentence.includes('poor') || lowerSentence.includes('sad') ||
-                lowerSentence.includes('died') || lowerSentence.includes('💔')) {
-                basePitch = 1.05; // Lower, more somber
-                baseRate = 0.9;   // Slower, more gentle
+            // SADNESS/EMPATHY - lower, slower, gentle (EXTREME for emotion)
+            if (lowerSentence.includes('aww') || lowerSentence.includes('poor') ||
+                lowerSentence.includes('sad') || lowerSentence.includes('died')) {
+                basePitch = 1.0;  // Much lower, more somber (sounds sad)
+                baseRate = 0.85;  // Very slow, more gentle
             }
 
             // Reassurance/Comfort - softer, slower, very gentle
