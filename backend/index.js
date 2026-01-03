@@ -2425,8 +2425,18 @@ app.post('/api/chat', async (req, res) => {
     try {
         const { messages, userContext, image } = req.body;
 
+        // Validation
+        if (!messages || !Array.isArray(messages) || messages.length === 0) {
+            return res.status(400).json({ error: 'Messages array is required' });
+        }
+
         // Groq API Key (FREE - Get from https://console.groq.com)
         const apiKey = process.env.GROQ_API_KEY;
+
+        if (!apiKey) {
+            console.error('[AI Doctor] GROQ_API_KEY not configured');
+            return res.status(500).json({ error: 'AI service not configured' });
+        }
 
         console.log('[AI Doctor] Processing chat request...');
         if (userContext) console.log(`[AI Doctor] Context: ${JSON.stringify(userContext)}`);
@@ -2461,15 +2471,19 @@ app.post('/api/chat', async (req, res) => {
 
         // 2.5 Fetch 'Learned' Best Practices (Simulation of Daily Training)
         // Retrieve random 5-star rated answers to guide the style/accuracy
-        const trainings = await AIFeedback.aggregate([
-            { $match: { rating: 'positive' } },
-            { $sample: { size: 2 } }
-        ]);
-        const learnedContext = trainings.length > 0
-            ? `\n\nCONTEXT - SUCCESSFUL DIAGNOSES (Learn from these past correct answers):\n${trainings.map(t => `Q: ${t.query}\nA: ${t.response}`).join('\n---\n')}`
-            : "";
+        let learnedContext = "";
+        try {
+            const trainings = await AIFeedback.aggregate([
+                { $match: { rating: 'positive' } },
+                { $sample: { size: 2 } }
+            ]);
+            if (trainings.length > 0) {
+                learnedContext = `\n\nCONTEXT - SUCCESSFUL DIAGNOSES (Learn from these past correct answers):\n${trainings.map(t => `Q: ${t.query}\nA: ${t.response}`).join('\n---\n')}`;
+            }
+        } catch (err) {
+            console.warn('[AI Doctor] Could not fetch training data:', err.message);
+        }
 
-        // 3. Construct the Master System Prompt
         // 3. Construct the Master System Prompt
         const systemPrompt = `You are Dr. Flora, the Chief Botanist for VanaMap.
 
@@ -2477,7 +2491,7 @@ app.post('/api/chat', async (req, res) => {
         Provide concise, professional, and actionable plant advice.
         
         STRICT RESPONSE GUIDELINES:
-        1. **NO PREAMBLE**: Did NOT start with "Dr. Flora says:" or "Hello". Start directly with the answer.
+        1. **NO PREAMBLE**: Do NOT start with "Dr. Flora says:" or "Hello". Start directly with the answer.
         2. **CONCISENESS**: Keep responses short (5-6 lines) unless the user specifically asks for a detailed guide.
         3. **FORMATTING**: Use clean Markdown.
            - Use *bold* for key terms.
@@ -2564,7 +2578,7 @@ app.post('/api/chat', async (req, res) => {
         if (!result.ok || result.data.error) {
             console.warn(`[AI Doctor] Primary model ${model} failed. Switching to Backup Engine (Llama 3.1)... Code:`, result.data.error?.code || 'Unknown');
 
-            const backupModel = "llama-3.1-8b-instant";
+            const backupModel = "gemma-7b-it"; // Different model family for true fallback
 
             // Special Handling: If original request was Vision (Image), fallback model (Text-Only) will crash if it sees "image_url".
             // We must strip the image and just answer the text query.

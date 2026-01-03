@@ -80,8 +80,14 @@ export const AIDoctor = () => {
         clearImage();
 
         try {
+            // Include the new user message in the API call
+            const conversationHistory = [...messages, userMessage].map(m => ({
+                role: m.role,
+                content: m.content
+            }));
+
             const response = await chatWithDrFlora(
-                messages.map(m => ({ role: m.role, content: m.content })),
+                conversationHistory,
                 { timezone: Intl.DateTimeFormat().resolvedOptions().timeZone },
                 base64Image
             );
