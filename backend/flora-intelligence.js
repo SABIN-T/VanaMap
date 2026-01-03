@@ -11,7 +11,16 @@ const FloraIntelligence = {
      */
     async getRelevantFloraContext(userMessages) {
         const fullText = userMessages
-            .map(m => (typeof m.content === 'string' ? m.content : m.content.map(c => c.text).join(' ')))
+            .map(m => {
+                if (typeof m.content === 'string') return m.content;
+                if (Array.isArray(m.content)) {
+                    return m.content
+                        .filter(c => c.type === 'text')
+                        .map(c => c.text)
+                        .join(' ');
+                }
+                return '';
+            })
             .join(' ')
             .toLowerCase();
 
@@ -25,12 +34,13 @@ const FloraIntelligence = {
                 (comName.length > 3 && fullText.includes(comName));
         }).slice(0, 8); // Limit to top 8 matches to keep context window manageable
 
-        if (matches.length === 0) return "";
+        if (matches.length === 0) return { context: "", matches: [] };
 
-        return `\n\n🔬 SCIENTIFIC DATA FROM WORLD FLORA INDEX (Matched for this conversation):\n${matches.map(p =>
+        const context = `\n\n🔬 SCIENTIFIC DATA FROM WORLD FLORA INDEX (Matched for this conversation):\n${matches.map(p =>
             `- ${p.scientificName} (${p.commonName}): Flower: ${p.flowerType}, Venation: ${p.leafVenation}, Oxygen: ${p.oxygenOutput}ml/h, Light: ${p.lightRequirement}, Source: ${p.verifiedSource}`
-        ).join('\n')
-            }`;
+        ).join('\n')}`;
+
+        return { context, matches };
     },
 
     /**
