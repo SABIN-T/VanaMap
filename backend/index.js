@@ -2504,7 +2504,7 @@ app.post('/api/chat', async (req, res) => {
             ...messages.filter(m => m.role !== 'system')
         ];
 
-        let model = "llama-3.3-70b-versatile"; // Primary Model
+        let model = "llama-3.1-8b-instant"; // Primary Model (Lightweight & Fast)
 
         // 4.5 Handle Image Analysis (Vision Model)
         if (image) {
