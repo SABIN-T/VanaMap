@@ -848,6 +848,7 @@ export const AIDoctor = () => {
                                                     <img
                                                         src={(() => {
                                                             if (!imgUrl) return '';
+                                                            if (imgUrl.startsWith('data:')) return imgUrl; // Handle Base64 User Uploads
                                                             if (imgUrl.startsWith('http')) return imgUrl;
                                                             // Robust URL cleaning: remove trailing slashes from base, remove /api suffix if present
                                                             const cleanBase = API_URL.replace(/\/+$/, '').replace(/\/api$/, '');

@@ -2553,6 +2553,12 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
         3. SYNTHESIZE: Combine the verified data (e.g., Oxygen output, Venation) with your general knowledge.
         4. VISUALIZE: If an image is needed, plan the [GENERATE] tag with specific anatomical details found in the dossier.
 
+        👁️ VISION DIAGNOSIS PROTOCOL (IF IMAGE UPLOADED):
+        Step 1: VERIFY SPECIES. Is this what the user claimed? (e.g., "Confirmed: Monstera deliciosa var. Borsigiana").
+        Step 2: SCAN FOR PATHOGENS. Analyze leaves for fungi, pests (e.g., mealybugs), or nutrient deficiencies (chlorosis).
+        Step 3: ASSESS VITALITY. Rate the plant's health (e.g., "Turgidity: Low", "Leaf Color: 70% Green").
+        Step 4: PRESCRIBE TREATMENT. Give actionable steps based on visual evidence.
+
         💬 RESPONSE STYLE:
         - Be highly intelligent but accessible (like a friendly Oxford professor).
         - Use emojis sparingly but effectively (🌿, 🔬).
