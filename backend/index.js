@@ -2560,7 +2560,10 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
 
         const enhancedMessages = [
             { role: "system", content: systemPrompt },
-            ...messages.filter(m => m.role !== 'system')
+            ...messages.filter(m => m.role !== 'system').map(m => ({
+                role: m.role,
+                content: m.content
+            }))
         ];
 
         // --- MODEL SELECTION ---
