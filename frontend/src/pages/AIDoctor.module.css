@@ -266,10 +266,12 @@
 .textInput {
     flex: 1;
     border: none;
-    background: transparent;
+    background: #ffffff !important;
+    /* Force white background to override any dark mode defaults */
     padding: 0.6rem 0.5rem;
     font-size: 0.95rem;
-    color: #1e293b;
+    color: #0f172a !important;
+    /* Force dark text */
     font-family: inherit;
     resize: none;
     max-height: 120px;

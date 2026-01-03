@@ -85,7 +85,19 @@ export const AIDoctor = () => {
                 base64Image
             );
 
-            const aiText = response.choices?.[0]?.message?.content || "I couldn't analyze that. Please try again.";
+            console.log('[AI Doctor] Raw API Response:', response); // Debugging
+
+            let aiText = response.choices?.[0]?.message?.content;
+
+            if (!aiText) {
+                // Fallbacks for edge cases (Refusals, unexpected format)
+                if (response.refusal) {
+                    aiText = `I cannot analyze this image: ${response.refusal}`;
+                } else {
+                    aiText = "I couldn't analyze that. Please ensure the image is clear or try again.";
+                }
+                console.warn('[AI Doctor] Empty content received', response);
+            }
 
             const assistantMessage: Message = {
                 id: (Date.now() + 1).toString(),
