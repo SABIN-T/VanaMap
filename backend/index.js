@@ -2651,6 +2651,154 @@ app.post('/api/chat/feedback', async (req, res) => {
     }
 });
 
+// --- AI-POWERED TRANSLATION ENDPOINTS ---
+// Context-aware translation for botanical terms and plant descriptions
+
+app.post('/api/translate', async (req, res) => {
+    try {
+        const { text, targetLang, context } = req.body;
+
+        if (!text || !targetLang) {
+            return res.status(400).json({ error: 'Text and target language required' });
+        }
+
+        const apiKey = process.env.GROQ_API_KEY;
+        if (!apiKey) {
+            return res.status(500).json({ error: 'Translation service not configured' });
+        }
+
+        // Language name mapping for better AI understanding
+        const langNames = {
+            'hi': 'Hindi', 'bn': 'Bengali', 'te': 'Telugu', 'mr': 'Marathi', 'ta': 'Tamil',
+            'ur': 'Urdu', 'gu': 'Gujarati', 'kn': 'Kannada', 'ml': 'Malayalam', 'or': 'Odia',
+            'pa': 'Punjabi', 'as': 'Assamese', 'es': 'Spanish', 'fr': 'French', 'de': 'German',
+            'it': 'Italian', 'pt': 'Portuguese', 'ru': 'Russian', 'ja': 'Japanese', 'ko': 'Korean',
+            'zh': 'Chinese', 'ar': 'Arabic'
+        };
+
+        const targetLanguageName = langNames[targetLang] || targetLang;
+        const contextHint = context === 'botanical'
+            ? 'This is botanical/plant-related content. Preserve scientific names and technical terms accurately.'
+            : '';
+
+        const prompt = `Translate the following English text to ${targetLanguageName}. ${contextHint}
+
+IMPORTANT RULES:
+1. Maintain the original meaning and tone
+2. Keep botanical/scientific names in their original form (e.g., "Monstera deliciosa" stays as is)
+3. Preserve formatting (line breaks, bullet points)
+4. Use natural, fluent ${targetLanguageName}
+5. For plant care instructions, use culturally appropriate terms
+
+Text to translate:
+${text}
+
+Provide ONLY the translation, no explanations.`;
+
+        const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${apiKey}`
+            },
+            body: JSON.stringify({
+                model: "llama-3.1-8b-instant",
+                messages: [{ role: "user", content: prompt }],
+                max_tokens: 1500,
+                temperature: 0.3 // Lower temperature for more accurate translations
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.choices && data.choices[0] && data.choices[0].message) {
+            const translatedText = data.choices[0].message.content.trim();
+            res.json({ translatedText });
+        } else {
+            throw new Error('Translation failed');
+        }
+
+    } catch (error) {
+        console.error('Translation error:', error);
+        res.status(500).json({ error: 'Translation failed', originalText: req.body.text });
+    }
+});
+
+app.post('/api/translate-batch', async (req, res) => {
+    try {
+        const { texts, targetLang, context } = req.body;
+
+        if (!texts || !Array.isArray(texts) || !targetLang) {
+            return res.status(400).json({ error: 'Texts array and target language required' });
+        }
+
+        const apiKey = process.env.GROQ_API_KEY;
+        if (!apiKey) {
+            return res.status(500).json({ error: 'Translation service not configured' });
+        }
+
+        const langNames = {
+            'hi': 'Hindi', 'bn': 'Bengali', 'te': 'Telugu', 'mr': 'Marathi', 'ta': 'Tamil',
+            'ur': 'Urdu', 'gu': 'Gujarati', 'kn': 'Kannada', 'ml': 'Malayalam', 'or': 'Odia',
+            'pa': 'Punjabi', 'as': 'Assamese', 'es': 'Spanish', 'fr': 'French', 'de': 'German',
+            'it': 'Italian', 'pt': 'Portuguese', 'ru': 'Russian', 'ja': 'Japanese', 'ko': 'Korean',
+            'zh': 'Chinese', 'ar': 'Arabic'
+        };
+
+        const targetLanguageName = langNames[targetLang] || targetLang;
+        const contextHint = context === 'botanical'
+            ? 'This is botanical/plant-related content. Preserve scientific names accurately.'
+            : '';
+
+        // Batch translate for efficiency
+        const numberedTexts = texts.map((t, i) => `${i + 1}. ${t}`).join('\n');
+
+        const prompt = `Translate the following numbered English texts to ${targetLanguageName}. ${contextHint}
+
+RULES:
+1. Preserve scientific/botanical names
+2. Keep the numbering format
+3. Use natural ${targetLanguageName}
+
+Texts:
+${numberedTexts}
+
+Provide translations in the same numbered format.`;
+
+        const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${apiKey}`
+            },
+            body: JSON.stringify({
+                model: "llama-3.1-8b-instant",
+                messages: [{ role: "user", content: prompt }],
+                max_tokens: 2000,
+                temperature: 0.3
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.choices && data.choices[0] && data.choices[0].message) {
+            const translatedText = data.choices[0].message.content.trim();
+            // Parse numbered responses
+            const translations = translatedText.split('\n')
+                .filter(line => /^\d+\./.test(line))
+                .map(line => line.replace(/^\d+\.\s*/, '').trim());
+
+            res.json({ translations: translations.length === texts.length ? translations : texts });
+        } else {
+            throw new Error('Batch translation failed');
+        }
+
+    } catch (error) {
+        console.error('Batch translation error:', error);
+        res.status(500).json({ error: 'Batch translation failed', translations: req.body.texts });
+    }
+});
+
 // Fallback AI response generator (rule-based)
 function generateFallbackResponse(userMessage) {
     const lowerMsg = userMessage.toLowerCase();

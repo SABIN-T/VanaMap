@@ -125,7 +125,7 @@ export class TranslationService {
         document.documentElement.setAttribute('lang', this.currentLanguage);
     }
 
-    // Translate text using Google Translate API (free tier)
+    // Translate text using AI for context-aware, accurate translations
     static async translate(text: string, targetLang?: SupportedLanguage): Promise<string> {
         const target = targetLang || this.currentLanguage;
 
@@ -134,27 +134,86 @@ export class TranslationService {
             return text;
         }
 
+        // If text is empty or too short, return as is
+        if (!text || text.trim().length < 2) {
+            return text;
+        }
+
         try {
-            // Using MyMemory Translation API (free, no key required)
-            const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|${target}`;
-            const response = await fetch(url);
+            // Use AI-powered translation for context awareness
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
+            const response = await fetch(`${API_URL}/translate`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    text,
+                    targetLang: target,
+                    context: 'botanical' // Helps AI understand plant-related terms
+                })
+            });
 
             if (response.ok) {
                 const data = await response.json();
-                if (data.responseData && data.responseData.translatedText) {
-                    return data.responseData.translatedText;
+                if (data.translatedText) {
+                    return data.translatedText;
                 }
             }
         } catch (error) {
-            console.error('Translation error:', error);
+            console.error('AI Translation error:', error);
+
+            // Fallback to MyMemory API if AI fails
+            try {
+                const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=en|${target}`;
+                const response = await fetch(url);
+
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.responseData && data.responseData.translatedText) {
+                        return data.responseData.translatedText;
+                    }
+                }
+            } catch (fallbackError) {
+                console.error('Fallback translation error:', fallbackError);
+            }
         }
 
-        // Fallback: return original text
+        // Last resort: return original text
         return text;
     }
 
-    // Translate multiple texts in batch
+    // Translate multiple texts in batch with context
     static async translateBatch(texts: string[], targetLang?: SupportedLanguage): Promise<string[]> {
+        const target = targetLang || this.currentLanguage;
+
+        if (target === 'en') {
+            return texts;
+        }
+
+        try {
+            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
+            const response = await fetch(`${API_URL}/translate-batch`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    texts,
+                    targetLang: target,
+                    context: 'botanical'
+                })
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                if (data.translations && Array.isArray(data.translations)) {
+                    return data.translations;
+                }
+            }
+        } catch (error) {
+            console.error('Batch translation error:', error);
+        }
+
+        // Fallback to individual translations
         const promises = texts.map(text => this.translate(text, targetLang));
         return Promise.all(promises);
     }
