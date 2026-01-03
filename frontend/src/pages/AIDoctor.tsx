@@ -27,6 +27,7 @@ export const AIDoctor = () => {
     ]);
     const [downloadingIds, setDownloadingIds] = useState<Set<string>>(new Set());
     const [loadedImageIds, setLoadedImageIds] = useState<Set<string>>(new Set());
+    const [imageTimers, setImageTimers] = useState<Record<string, number>>({});
     const [input, setInput] = useState('');
     const [loading, setLoading] = useState(false);
 
@@ -132,6 +133,22 @@ export const AIDoctor = () => {
                 image: response.choices?.[0]?.message?.image, // CAPTURE GENERATED IMAGE
                 timestamp: new Date()
             };
+
+            // Start a countdown if there's an image
+            if (assistantMessage.image) {
+                const msgId = assistantMessage.id;
+                setImageTimers(prev => ({ ...prev, [msgId]: 7 })); // Start at 7 seconds
+                const interval = setInterval(() => {
+                    setImageTimers(prev => {
+                        const current = prev[msgId];
+                        if (current <= 1) {
+                            clearInterval(interval);
+                            return prev;
+                        }
+                        return { ...prev, [msgId]: current - 1 };
+                    });
+                }, 1000);
+            }
 
             setMessages(prev => [...prev, assistantMessage]);
 
@@ -779,6 +796,7 @@ export const AIDoctor = () => {
                                         <button
                                             onClick={() => downloadImage(message.image!, message.id)}
                                             disabled={downloadingIds.has(message.id)}
+                                            className={styles.downloadBtn}
                                             style={{
                                                 position: 'absolute',
                                                 bottom: '12px',
@@ -810,7 +828,7 @@ export const AIDoctor = () => {
                                             title={downloadingIds.has(message.id) ? "Downloading..." : "Download PNG"}
                                         >
                                             {(downloadingIds.has(message.id) || !loadedImageIds.has(message.id)) ? (
-                                                <Loader2 size={20} className={styles.rotating} style={{ animation: 'spin 1.5s linear infinite' }} />
+                                                <Loader2 size={20} className={styles.rotating} />
                                             ) : (
                                                 <Download size={20} />
                                             )}
@@ -828,8 +846,13 @@ export const AIDoctor = () => {
                                                 gap: '8px',
                                                 color: '#64748b'
                                             }}>
-                                                <Loader2 size={32} style={{ animation: 'spin 1.5s linear infinite' }} />
-                                                <span style={{ fontSize: '0.75rem', fontWeight: 500 }}>Rendering Art...</span>
+                                                <Loader2 size={32} className={styles.rotating} />
+                                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                                    <span style={{ fontSize: '0.8rem', fontWeight: 600, color: '#059669' }}>Rendering Art...</span>
+                                                    {imageTimers[message.id] > 0 && (
+                                                        <span style={{ fontSize: '0.7rem', color: '#94a3b8' }}>Est. time: {imageTimers[message.id]}s</span>
+                                                    )}
+                                                </div>
                                             </div>
                                         )}
                                     </div>
