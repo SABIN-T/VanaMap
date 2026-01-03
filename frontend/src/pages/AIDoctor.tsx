@@ -12,6 +12,7 @@ interface Message {
     role: 'user' | 'assistant';
     content: string;
     timestamp: Date;
+    image?: string; // Base64 image data
 }
 
 export const AIDoctor = () => {
@@ -49,7 +50,7 @@ export const AIDoctor = () => {
 
         if (!textToSend.trim() && !selectedImage) return;
 
-        let messageContent = textToSend;
+        let messageContent = textToSend || "What plant is this?"; // Default question if only image
         let base64Image: string | null = null;
 
         if (selectedImage) {
@@ -60,7 +61,7 @@ export const AIDoctor = () => {
                     reader.onerror = reject;
                     reader.readAsDataURL(selectedImage);
                 });
-                messageContent += `\n\n[Attached Image]`;
+                // Don't add text, just store image
             } catch (e) {
                 toast.error("Failed to process image");
                 return;
@@ -71,7 +72,8 @@ export const AIDoctor = () => {
             id: Date.now().toString(),
             role: 'user',
             content: messageContent,
-            timestamp: new Date()
+            timestamp: new Date(),
+            image: base64Image || undefined // Store image in message
         };
 
         setMessages(prev => [...prev, userMessage]);
@@ -687,6 +689,22 @@ export const AIDoctor = () => {
                                 <div className={styles.messageSender}>
                                     {message.role === 'user' ? 'You' : 'Dr. Flora'} • {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                 </div>
+                                {/* Display uploaded image if present */}
+                                {message.image && (
+                                    <div style={{ marginBottom: '0.75rem' }}>
+                                        <img
+                                            src={message.image}
+                                            alt="Uploaded plant"
+                                            style={{
+                                                maxWidth: '100%',
+                                                maxHeight: '400px',
+                                                borderRadius: '12px',
+                                                objectFit: 'contain',
+                                                border: '1px solid rgba(255,255,255,0.1)'
+                                            }}
+                                        />
+                                    </div>
+                                )}
                                 <div className={styles.messageText}>
                                     <ReactMarkdown remarkPlugins={[remarkGfm]}>
                                         {message.content}
