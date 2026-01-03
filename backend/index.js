@@ -2448,10 +2448,10 @@ app.post('/api/chat', async (req, res) => {
         }
 
         // 1. Fetch relevant plant data from OUR database (The "Website Analysis" part)
-        // We select key fields to keep token usage efficient
+        // Optimization: Reduced to 12 popular plants to save Token Usage (TPD) and prevent Rate Limits.
         const inventory = await Plant.find()
             .select('name scientificName description idealTempMin idealTempMax minHumidity sunlight suitability medicinalValues')
-            .limit(40) // Limit to 40 popular plants to fit in context
+            .limit(12)
             .lean();
 
         // 2. Create a compressed inventory summary
