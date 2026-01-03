@@ -203,38 +203,61 @@ export const AIDoctor = () => {
         // Cancel any current speech
         synth.cancel();
 
-        // Clean text for speech (remove markdown asterisks, emojis)
-        const speechText = text.replace(/\*/g, '').replace(/[\u{1F300}-\u{1F9FF}]/gu, '');
+        // 1. Text Cleanup & Sentence Splitting
+        // Remove markdown, emojis, source citations
+        const cleanText = text
+            .replace(/\*/g, '') // Remove bold/italic markers
+            .replace(/[#\-]/g, '') // Remove headers/lists
+            .replace(/\[.*?\]/g, '') // Remove [Citation] or [Image] tags
+            .replace(/[\u{1F300}-\u{1F9FF}]/gu, '') // Remove emojis
+            .trim();
 
-        const utterance = new SpeechSynthesisUtterance(speechText);
+        // Split into sentences for natural pausing
+        // Matches periods, exclamations, questions followed by space or end of string
+        const sentences = cleanText.match(/[^.!?]+[.!?]+(?:\s|$)|[^.!?]+$/g) || [cleanText];
 
-        // Voice Selection Strategy: Sweet, Female, Friendly
+        // 2. Voice Selection - Prioritize "Natural" / "Neural" voices
         const voices = synth.getVoices();
-        // Priority list for "Sweet/Girlish" voices
-        const preferredVoices = [
-            voices.find(v => v.name.includes("Google US English")), // Often best quality
-            voices.find(v => v.name.includes("Samantha")), // macOS classic
-            voices.find(v => v.name.includes("Zira")), // Windows default female
-            voices.find(v => v.name.includes("Female")),
-            voices.find(v => v.lang.startsWith("en")) // Fallback english
-        ];
+        const preferredVoice =
+            voices.find(v => v.name.includes("Natural") && v.lang.startsWith("en")) || // e.g., Edge Microsoft Natural
+            voices.find(v => v.name.includes("Google US English")) || // Chrome Standard
+            voices.find(v => v.name.includes("Samantha")) || // macOS
+            voices.find(v => v.name.includes("Zira")) || // Windows
+            voices.find(v => v.lang.startsWith("en-US")) ||
+            voices.find(v => v.lang.startsWith("en"));
 
-        const selectedVoice = preferredVoices.find(v => v !== undefined);
+        // 3. Speak Sentence-by-Sentence
+        sentences.forEach((sentence, index) => {
+            if (!sentence.trim()) return;
 
-        if (selectedVoice) {
-            utterance.voice = selectedVoice;
-        }
+            const utterance = new SpeechSynthesisUtterance(sentence.trim());
 
-        // Tweak personality
-        utterance.pitch = 1.2; // Slightly higher "girlish/sweet" pitch
-        utterance.rate = 1.05; // "Talkative" / energetic pace
-        utterance.volume = 1.0;
+            if (preferredVoice) utterance.voice = preferredVoice;
 
-        utterance.onstart = () => setIsSpeaking(true);
-        utterance.onend = () => setIsSpeaking(false);
-        utterance.onerror = () => setIsSpeaking(false);
+            // --- Personality Tuning ---
+            // A slightly higher pitch (1.05-1.1) is often perceived as friendlier/helpful
+            // A rate > 1.0 reduces the "robotic drag" effect
+            utterance.pitch = 1.1;
+            utterance.rate = 1.1;
+            utterance.volume = 1.0;
 
-        synth.speak(utterance);
+            // Add subtle intonation changes for questions (simulated by slight pitch boost)
+            if (sentence.includes('?')) {
+                utterance.pitch = 1.15;
+            }
+
+            // Tracking speaking state (only on the first/last sentence to avoid flickering)
+            if (index === 0) utterance.onstart = () => setIsSpeaking(true);
+            if (index === sentences.length - 1) {
+                utterance.onend = () => setIsSpeaking(false);
+                utterance.onerror = () => setIsSpeaking(false);
+            }
+
+            synth.speak(utterance);
+
+            // Note: The browser automatically adds a tiny pause between queued utterances,
+            // which creates the "natural breath" effect we want!
+        });
     };
 
     const toggleVoice = () => {
