@@ -253,13 +253,26 @@ export const AIDoctor = () => {
             .replace(/\betc\.\s*/gi, 'et cetera ')
             .replace(/\be\.g\.\s*/gi, 'for example ')
             .replace(/\bi\.e\.\s*/gi, 'that is ')
-            // Add natural pauses for better flow
-            .replace(/([.!?])\s+/g, '$1 ... ') // Slight pause after sentences
-            .replace(/,\s+/g, ', ') // Ensure comma spacing
+            // Add natural pauses and breathing patterns for human-like speech
+            .replace(/([.!?])\s+/g, '$1. ') // Natural pause after sentences
+            .replace(/,\s+/g, ', ') // Comma pause
+            .replace(/:\s+/g, ': ') // Colon pause
+            .replace(/;\s+/g, '; ') // Semicolon pause
+            // Add micro-pauses for natural breathing
+            .replace(/\b(and|but|so|because|however|therefore)\b/gi, ' $1 ') // Pause around connectors
+            .replace(/\b(well|um|uh|like|you know)\b/gi, '$1, ') // Natural filler words
             .trim();
 
-        // Split into sentences for natural pausing
-        const sentences = cleanText.match(/[^.!?]+[.!?]+(?:\s|$)|[^.!?]+$/g) || [cleanText];
+        // Split into SMALLER chunks (phrases, not just sentences) for more natural delivery
+        // This mimics how humans speak in thought groups, not full sentences
+        const phrases = cleanText.split(/([,.!?;:])/g).filter(p => p.trim());
+
+        // Reconstruct into natural speech units
+        const speechUnits: string[] = [];
+        for (let i = 0; i < phrases.length; i += 2) {
+            const phrase = phrases[i] + (phrases[i + 1] || '');
+            if (phrase.trim()) speechUnits.push(phrase.trim());
+        }
 
         // 2. Premium Voice Selection - Prioritize Neural/Natural voices
         const voices = synth.getVoices();
@@ -281,80 +294,93 @@ export const AIDoctor = () => {
             voices.find(v => v.lang.startsWith("en-US")) ||
             voices.find(v => v.lang.startsWith("en"));
 
-        // 3. Speak Sentence-by-Sentence with Dynamic Expression
-        sentences.forEach((sentence, index) => {
-            if (!sentence.trim()) return;
+        // 3. Speak Phrase-by-Phrase with Dynamic Expression & Micro-Variations
+        speechUnits.forEach((unit: string, index: number) => {
+            if (!unit.trim()) return;
 
-            const utterance = new SpeechSynthesisUtterance(sentence.trim());
+            const utterance = new SpeechSynthesisUtterance(unit.trim());
 
             if (preferredVoice) utterance.voice = preferredVoice;
 
-            // --- Enhanced Personality Tuning for Loveable Kindness & Warmth ---
+            // --- Ultra-Realistic Human Voice Tuning ---
 
-            // Base settings for a warm, kind, nurturing voice (like a caring friend)
-            let basePitch = 1.2;  // Sweet, friendly pitch
-            let baseRate = 1.0;   // Calm, not rushed - gives time to absorb
+            // Add MICRO-VARIATIONS to avoid robotic consistency
+            // Real humans vary slightly in pitch and speed - this is KEY to sounding human
+            const microPitchVariation = (Math.random() - 0.5) * 0.05; // ±0.025 variation
+            const microRateVariation = (Math.random() - 0.5) * 0.04;  // ±0.02 variation
+
+            // Base settings with natural variation
+            let basePitch = 1.2 + microPitchVariation;  // Sweet, friendly with variation
+            let baseRate = 1.0 + microRateVariation;    // Calm with natural variation
 
             // Dynamic adjustments based on content and EMOTIONS
-            const lowerSentence = sentence.toLowerCase();
+            const lowerUnit = unit.toLowerCase();
+
+            // Word emphasis: If a word is ALL CAPS, slightly increase pitch/volume
+            const words = unit.split(' ');
+            const hasEmphasis = words.some(w => w.length > 1 && w === w.toUpperCase() && /[A-Z]/.test(w));
+            if (hasEmphasis) {
+                basePitch += 0.05;
+                baseRate += 0.02;
+            }
 
             // LAUGHING/PLAYFUL - lighter, faster, higher (EXTREME for authenticity)
-            if (lowerSentence.includes('haha') || lowerSentence.includes('hehe') ||
-                lowerSentence.includes('lol') || lowerSentence.includes('funny') ||
-                lowerSentence.includes('oops')) {
+            if (lowerUnit.includes('haha') || lowerUnit.includes('hehe') ||
+                lowerUnit.includes('lol') || lowerUnit.includes('funny') ||
+                lowerUnit.includes('oops')) {
                 basePitch = 1.35; // Very high, playful (sounds like actual laughter)
                 baseRate = 1.15;  // Fast, energetic
             }
 
             // EXCITEMENT/CELEBRATION - very high pitch & faster
-            if (lowerSentence.includes('oh my gosh') || lowerSentence.includes('wow') ||
-                lowerSentence.includes('yay') || lowerSentence.includes('amazing') ||
-                lowerSentence.includes('incredible')) {
+            if (lowerUnit.includes('oh my gosh') || lowerUnit.includes('wow') ||
+                lowerUnit.includes('yay') || lowerUnit.includes('amazing') ||
+                lowerUnit.includes('incredible')) {
                 basePitch = 1.32; // Very cheerful!
                 baseRate = 1.13;  // Excited pace
             }
 
             // General excitement/Important info
-            if (lowerSentence.includes('!') || lowerSentence.includes('great') ||
-                lowerSentence.includes('perfect') || lowerSentence.includes('excellent') ||
-                lowerSentence.includes('wonderful')) {
+            if (lowerUnit.includes('!') || lowerUnit.includes('great') ||
+                lowerUnit.includes('perfect') || lowerUnit.includes('excellent') ||
+                lowerUnit.includes('wonderful')) {
                 basePitch = 1.25; // Extra cheerful
                 baseRate = 1.05;  // Energetic but not rushed
             }
 
             // Questions - gentle rising intonation
-            if (sentence.includes('?')) {
+            if (unit.includes('?')) {
                 basePitch = 1.22; // Curious, inviting
                 baseRate = 0.98;  // Slightly slower for clarity
             }
 
             // SADNESS/EMPATHY - lower, slower, gentle (EXTREME for emotion)
-            if (lowerSentence.includes('aww') || lowerSentence.includes('poor') ||
-                lowerSentence.includes('sad') || lowerSentence.includes('died')) {
+            if (lowerUnit.includes('aww') || lowerUnit.includes('poor') ||
+                lowerUnit.includes('sad') || lowerUnit.includes('died')) {
                 basePitch = 1.0;  // Much lower, more somber (sounds sad)
                 baseRate = 0.85;  // Very slow, more gentle
             }
 
             // Reassurance/Comfort - softer, slower, very gentle
-            if (lowerSentence.includes('worry') || lowerSentence.includes('fix') ||
-                lowerSentence.includes('help') || lowerSentence.includes('together') ||
-                lowerSentence.includes('okay') || lowerSentence.includes('alright') ||
-                lowerSentence.includes('🤗')) {
+            if (lowerUnit.includes('worry') || lowerUnit.includes('fix') ||
+                lowerUnit.includes('help') || lowerUnit.includes('together') ||
+                lowerUnit.includes('okay') || lowerUnit.includes('alright') ||
+                lowerUnit.includes('🤗')) {
                 basePitch = 1.15; // Softer, more soothing
                 baseRate = 0.95;  // Slower, more comforting
             }
 
             // Empathy/Understanding - warm and gentle
-            if (lowerSentence.includes('sorry') || lowerSentence.includes('unfortunately') ||
-                lowerSentence.includes('understand') || lowerSentence.includes('i know')) {
+            if (lowerUnit.includes('sorry') || lowerUnit.includes('unfortunately') ||
+                lowerUnit.includes('understand') || lowerUnit.includes('i know')) {
                 basePitch = 1.1;  // Lower, more empathetic
                 baseRate = 0.93;  // Slower, more thoughtful
             }
 
             // Encouragement - uplifting and positive
-            if (lowerSentence.includes('you can') || lowerSentence.includes('you got') ||
-                lowerSentence.includes('doing great') || lowerSentence.includes('good job') ||
-                lowerSentence.includes('proud')) {
+            if (lowerUnit.includes('you can') || lowerUnit.includes('you got') ||
+                lowerUnit.includes('doing great') || lowerUnit.includes('good job') ||
+                lowerUnit.includes('proud')) {
                 basePitch = 1.23; // Uplifting
                 baseRate = 1.02;  // Confident pace
             }
@@ -365,7 +391,7 @@ export const AIDoctor = () => {
 
             // Tracking speaking state
             if (index === 0) utterance.onstart = () => setIsSpeaking(true);
-            if (index === sentences.length - 1) {
+            if (index === speechUnits.length - 1) {
                 utterance.onend = () => setIsSpeaking(false);
                 utterance.onerror = () => setIsSpeaking(false);
             }
