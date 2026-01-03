@@ -266,25 +266,12 @@ export const AIDoctor = () => {
             .replace(/\b(well|um|uh|like|you know)\b/gi, '$1, ')
             .trim();
 
-        // Split into SMALLER chunks (phrases) for natural breathing
-        const phrases = cleanText.split(/([,.!?;:])/g);
-        const speechUnits: string[] = [];
-
-        for (let i = 0; i < phrases.length; i++) {
-            let chunk = phrases[i]?.trim();
-            if (!chunk) continue;
-
-            // If the chunk is JUST punctuation, glue it to the PREVIOUS word chunk
-            // This prevents the AI from reading symbols as words
-            if (/^[,.!?;:]+$/.test(chunk)) {
-                if (speechUnits.length > 0) {
-                    speechUnits[speechUnits.length - 1] += chunk;
-                }
-                continue; // Skip pushing punctuation-only chunks
-            }
-
-            speechUnits.push(chunk);
-        }
+        // Split into natural speech units (sentences/phrases) without creating duplicates
+        // Split on sentence boundaries but keep the punctuation with the sentence
+        const speechUnits: string[] = cleanText
+            .split(/(?<=[.!?])\s+/)  // Split after punctuation followed by space
+            .filter(unit => unit.trim().length > 0)  // Remove empty units
+            .map(unit => unit.trim());  // Clean up whitespace
 
         // 2. Multi-Language Accent & Voice Selection
         const voices = synth.getVoices();
@@ -328,8 +315,12 @@ export const AIDoctor = () => {
         if (lastUserMsg.includes('sad') || lastUserMsg.includes('died') || lastUserMsg.includes('poor') || lastUserMsg.includes('help')) globalMood = 'concerned';
         if (lastUserMsg.includes('happy') || lastUserMsg.includes('yay') || lastUserMsg.includes('great')) globalMood = 'joyful';
 
+        // Remove any duplicate units (safety check)
+        const uniqueUnits = [...new Set(speechUnits)];
+        console.log('[Voice] Speech units:', uniqueUnits);
+
         // 4. Speak Phrase-by-Phrase with EXTREME Expression
-        speechUnits.forEach((unit: string, index: number) => {
+        uniqueUnits.forEach((unit: string, index: number) => {
             if (!unit.trim()) return;
 
             const utterance = new SpeechSynthesisUtterance(unit.trim());
@@ -389,7 +380,7 @@ export const AIDoctor = () => {
 
             // Tracking speaking state
             if (index === 0) utterance.onstart = () => setIsSpeaking(true);
-            if (index === speechUnits.length - 1) {
+            if (index === uniqueUnits.length - 1) {
                 utterance.onend = () => setIsSpeaking(false);
                 utterance.onerror = () => setIsSpeaking(false);
             }
