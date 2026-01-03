@@ -2579,10 +2579,20 @@ Response: "I can't help with that, but I'm great at helping plants thrive! 🌿 
         - Plant identification, diseases, pests
             - Propagation, repotting, pruning
             - Plant recommendations for specific conditions
-                - General botany and plant science
-                    - VanaMap plant inventory(what plants are available)
+            - General botany and plant science
+            - VanaMap plant inventory(what plants are available)
+            - **FLUX.1 DEV IMAGE GENERATION**: You can generate stunning, realistic images of plants, gardens, or botanical illustrations.
+
+        🎨 **FLUX.1 DEV IMAGE GENERATION PROTOCOL**:
+        - Use this when a user asks to see a plant, a garden design, or a specific botanical detail.
+        - To generate an image, you MUST include this exact tag in your response: [GENERATE: a very detailed, descriptive prompt for Flux.1 Dev]
+        - Your response should still be warm and helpful.
         
-        If the user asks "Hi" or vague greeting: Respond with "Hello! I am Dr. Flora. How can I help your plants today?"`;
+        Example:
+        User: "Show me a beautiful zen garden with bonsai trees."
+        Dr. Flora: "Oh, I love zen gardens! They are so peaceful. Let me create a vision of that for you... [GENERATE: A serene Japanese zen garden at sunset, featuring perfectly pruned ancient juniper bonsai trees on mossy rocks, raked white sand patterns, a small stone lantern, soft golden hour lighting, cinematic photorealistic style, 8k resolution] There you go! Isn't it breath-taking? 🧘‍♂️✨"
+
+        If the user asks \"Hi\" or vague greeting: Respond with \"Hello! I am Dr. Flora. How can I help your plants today?\"`;
 
         // 4. Construct the messages array
         console.log('[AI Doctor] Processing request. System Prompt defined.');
@@ -2688,16 +2698,38 @@ Response: "I can't help with that, but I'm great at helping plants thrive! 🌿 
 
             // Rate Limit specific message
             if (result.data.error?.message?.includes('rate_limit')) {
-                return res.json({
-                    choices: [{
-                        message: {
-                            role: 'assistant',
-                            content: "🌿 **Dr. Flora is currently busy!** (High Traffic)\n\nPlease try asking again in 30 seconds."
-                        }
-                    }]
+                return res.status(429).json({
+                    error: 'Dr. Flora is a bit overwhelmed right now! 🌿 (Rate Limit reached)',
+                    retryAfter: result.data.error?.message?.match(/try again in ([\d.]+s)/)?.[1] || '60s'
                 });
             }
-            throw new Error(result.data.error?.message || "All AI Models Failed");
+
+            return res.status(result.status || 500).json(result.data);
+        }
+
+        // --- FLUX.1 DEV IMAGE GENERATION INTERVENTION ---
+        let aiContent = result.data.choices[0]?.message?.content || "";
+        const generateRegex = /\[GENERATE:\s*(.+?)\]/i;
+        const match = aiContent.match(generateRegex);
+
+        if (match) {
+            const prompt = match[1].trim();
+            console.log(`[Flux.1 Dev] Generating image for prompt: ${prompt}`);
+
+            // Generate a clean image URL using Pollinations Flux Engine
+            // Flux.1 Dev equivalent on Pollinations
+            const seed = Math.floor(Math.random() * 1000000);
+            const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?model=flux&seed=${seed}&width=1024&height=1024&nologo=true`;
+
+            // Remove the [GENERATE:...] tag from the visible text
+            aiContent = aiContent.replace(generateRegex, "").trim();
+
+            // Overwrite response content
+            result.data.choices[0].message.content = aiContent;
+            // Inject the generated image URL!
+            result.data.choices[0].message.image = imageUrl;
+
+            console.log(`[Flux.1 Dev] Image integrated: ${imageUrl}`);
         }
 
         console.log('[AI Doctor] Success!');
