@@ -372,31 +372,82 @@ export const AIDoctor = () => {
 
         const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
         if (!SpeechRecognition) {
-            toast.error("Your browser doesn't support speech recognition.");
+            toast.error("Your browser doesn't support speech recognition. Try Chrome or Edge!");
             return;
         }
 
         const recognition = new SpeechRecognition();
-        recognition.continuous = false;
-        recognition.interimResults = false;
-        recognition.lang = 'en-US';
+
+        // Enhanced Configuration for Better Recognition
+        recognition.continuous = false; // Stop after one phrase
+        recognition.interimResults = true; // Show real-time results
+
+        // Auto-detect user's language or use browser default
+        // Supports: en-US, hi-IN, es-ES, fr-FR, de-DE, ja-JP, zh-CN, ar-SA, etc.
+        const userLang = navigator.language || 'en-US';
+        recognition.lang = userLang;
+
+        console.log(`[Voice Input] Using language: ${userLang}`);
 
         recognition.onstart = () => {
             setIsListening(true);
-            if (voiceEnabled) speak("Listening...");
-            toast("Listening...", { icon: '🎤' });
+            toast("🎤 Listening... Speak now!", {
+                icon: '👂',
+                duration: 3000,
+                style: {
+                    background: '#10b981',
+                    color: 'white'
+                }
+            });
         };
 
         recognition.onresult = (event: any) => {
-            const transcript = event.results[0][0].transcript;
-            setInput((prev) => prev + (prev ? ' ' : '') + transcript);
+            let transcript = '';
+
+            // Collect all results (interim + final)
+            for (let i = 0; i < event.results.length; i++) {
+                transcript += event.results[i][0].transcript;
+            }
+
+            // Update input field with recognized text
+            if (transcript.trim()) {
+                setInput((prev) => {
+                    const newText = prev ? prev + ' ' + transcript : transcript;
+                    return newText;
+                });
+
+                // Show what was recognized
+                if (event.results[event.results.length - 1].isFinal) {
+                    toast.success(`Heard: "${transcript}"`, {
+                        icon: '✅',
+                        duration: 2000
+                    });
+                }
+            }
         };
 
         recognition.onerror = (event: any) => {
-            console.error("Speech recognition error", event.error);
+            console.error("Speech recognition error:", event.error);
             setIsListening(false);
-            if (event.error === 'not-allowed') {
-                toast.error("Microphone access denied.");
+
+            // User-friendly error messages
+            switch (event.error) {
+                case 'not-allowed':
+                case 'permission-denied':
+                    toast.error("🚫 Microphone access denied. Please allow microphone in browser settings.");
+                    break;
+                case 'no-speech':
+                    toast("No speech detected. Please try again.", { icon: '🤔' });
+                    break;
+                case 'network':
+                    toast.error("Network error. Check your internet connection.");
+                    break;
+                case 'language-not-supported':
+                    toast.error(`Language ${userLang} not supported. Switching to English.`);
+                    recognition.lang = 'en-US';
+                    break;
+                default:
+                    toast.error(`Speech recognition error: ${event.error}`);
             }
         };
 
@@ -405,7 +456,14 @@ export const AIDoctor = () => {
         };
 
         recognitionRef.current = recognition;
-        recognition.start();
+
+        try {
+            recognition.start();
+        } catch (error) {
+            console.error("Failed to start recognition:", error);
+            toast.error("Could not start voice recognition. Please try again.");
+            setIsListening(false);
+        }
     };
 
     // --- IMAGE UPLOAD (Plant Diagnosis) ---
