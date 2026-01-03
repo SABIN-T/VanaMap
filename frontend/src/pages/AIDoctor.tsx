@@ -902,28 +902,31 @@ export const AIDoctor = () => {
                                                         <span>Save PNG</span>
                                                     </button>
 
-                                                    {(!loadedImageIds.has(imageKey) && (imageTimers[message.id] > 0)) && (
+                                                    {(!loadedImageIds.has(imageKey)) && (
                                                         <div style={{
                                                             position: 'absolute',
                                                             top: 0,
                                                             left: 0,
                                                             right: 0,
                                                             bottom: 0,
-                                                            background: 'rgba(255,255,255,0.8)',
-                                                            backdropFilter: 'blur(5px)',
+                                                            background: 'rgba(255,255,255,0.85)',
+                                                            backdropFilter: 'blur(8px)',
                                                             display: 'flex',
                                                             flexDirection: 'column',
                                                             alignItems: 'center',
                                                             justifyContent: 'center',
                                                             gap: '12px',
-                                                            zIndex: 5
+                                                            zIndex: 5,
+                                                            transition: 'opacity 0.3s'
                                                         }}>
                                                             <div style={{ animation: 'spin 1.5s linear infinite', display: 'flex', color: '#059669' }}>
-                                                                <Loader2 size={36} />
+                                                                <Loader2 size={42} />
                                                             </div>
                                                             <div style={{ textAlign: 'center' }}>
-                                                                <div style={{ fontSize: '0.9rem', fontWeight: 800, color: '#059669' }}>Painting...</div>
-                                                                <div style={{ fontSize: '0.75rem', color: '#64748b' }}>{imageTimers[message.id]}s left</div>
+                                                                <div style={{ fontSize: '1rem', fontWeight: 800, color: '#059669', marginBottom: '4px' }}>
+                                                                    {idx === 0 ? 'Painting Botanical Art...' : 'Developing Photo...'}
+                                                                </div>
+                                                                <div style={{ fontSize: '0.8rem', color: '#64748b' }}>Please wait...</div>
                                                             </div>
                                                         </div>
                                                     )}
