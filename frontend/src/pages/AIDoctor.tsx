@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { Send, Sparkles, Leaf, Bot, User, Trash2, Download, Calendar, Globe, Camera, Mic, Volume2, VolumeX, Zap } from 'lucide-react';
 import { chatWithDrFlora } from '../services/api';
 import toast from 'react-hot-toast';
@@ -29,6 +29,7 @@ export const AIDoctor = () => {
 
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const lastSpokenMessageIdRef = useRef<string | null>(null);
+    const timeoutIdsRef = useRef<number[]>([]);
 
     const [neuralMeta, setNeuralMeta] = useState<{ current: number; max: number } | null>(null);
 
@@ -128,7 +129,6 @@ export const AIDoctor = () => {
             };
 
             setMessages(prev => [...prev, assistantMessage]);
-            if (voiceEnabled) speak(aiText);
 
         } catch (error) {
             console.error(error);
@@ -154,10 +154,6 @@ export const AIDoctor = () => {
         if (user?.cart && user.cart.length > 0) {
             const plantNames = user.cart.map((i: any) => i.name || "plants").join(", ");
             prompt = `Please create a detailed weekly care calendar for these plants: ${plantNames}. Include specific days for watering.`;
-        }
-
-        if (voiceEnabled) {
-            speak("I'd love to help! I'm analyzing your plants to create a personalized weekly care schedule for you.");
         }
 
         handleSend(prompt);
@@ -214,12 +210,19 @@ export const AIDoctor = () => {
             speechSynthesis.onvoiceschanged = loadVoices;
         }
         return () => {
+            // Cleanup on unmount
             synth.cancel(); // Stop speaking on unmount
+            timeoutIdsRef.current.forEach(id => clearTimeout(id)); // Clear all pending timeouts
+            timeoutIdsRef.current = [];
         }
     }, []);
 
-    const speak = (text: string) => {
+    const speak = useCallback((text: string) => {
         if (!voiceEnabled) return;
+
+        // Clear any pending timeouts
+        timeoutIdsRef.current.forEach(id => clearTimeout(id));
+        timeoutIdsRef.current = [];
 
         // Cancel any current speech
         synth.cancel();
@@ -391,14 +394,15 @@ export const AIDoctor = () => {
                 utterance.onerror = () => setIsSpeaking(false);
             }
 
-            // Breath/Thought Pacing
+            // Breath/Thought Pacing with proper cleanup
             if (unit.length > 50 || unit.includes('.') || unit.includes('!')) {
-                setTimeout(() => synth.speak(utterance), 20);
+                const timeoutId = window.setTimeout(() => synth.speak(utterance), 20);
+                timeoutIdsRef.current.push(timeoutId);
             } else {
                 synth.speak(utterance);
             }
         });
-    };
+    }, [voiceEnabled, messages]);
 
     const toggleVoice = () => {
         if (voiceEnabled) {
@@ -409,7 +413,6 @@ export const AIDoctor = () => {
         } else {
             setVoiceEnabled(true);
             toast("Dr. Flora's Voice Enabled! 🎧", { icon: '🗣️' });
-            speak("Hi there! I'm listening."); // Test phrase
         }
     };
 
