@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { MapPin, Bell, Camera, ShieldCheck, Info } from 'lucide-react';
+import { MapPin, Bell, Camera, ShieldCheck, Info, Bot } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import styles from './PermissionCenter.module.css';
 import toast from 'react-hot-toast';
 
@@ -10,6 +11,7 @@ export const PermissionCenter = () => {
     const [notif, setNotif] = useState<PermissionState>('prompt');
     const [cam, setCam] = useState<PermissionState>('prompt');
     const [isOpen, setIsOpen] = useState(false);
+    const navigate = useNavigate();
 
     const checkPermissions = async () => {
         // Geolocation
@@ -84,10 +86,23 @@ export const PermissionCenter = () => {
 
     if (!isOpen) {
         return (
-            <button className={styles.fab} onClick={() => setIsOpen(true)}>
-                <ShieldCheck size={20} />
-                <span>Permissions</span>
-            </button>
+            <>
+                {/* AI Doctor Bot Button */}
+                <button
+                    className={styles.aiFab}
+                    onClick={() => navigate('/heaven/ai-doctor')}
+                    title="AI Plant Doctor"
+                >
+                    <Bot size={20} />
+                    <span>AI Doctor</span>
+                </button>
+
+                {/* Permissions Button */}
+                <button className={styles.fab} onClick={() => setIsOpen(true)}>
+                    <ShieldCheck size={20} />
+                    <span>Permissions</span>
+                </button>
+            </>
         );
     }
 

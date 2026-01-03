@@ -250,9 +250,41 @@
     background: #0f172a;
 }
 
+/* AI Doctor Bot Button */
+.aiFab {
+    position: fixed;
+    bottom: 9rem;
+    right: 1.5rem;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 0.75rem 1.25rem;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 700;
+    font-size: 0.85rem;
+    box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);
+    cursor: pointer;
+    z-index: 900;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.aiFab:hover {
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 15px 35px rgba(16, 185, 129, 0.5);
+    background: linear-gradient(135deg, #059669 0%, #047857 100%);
+}
+
 @media (max-width: 640px) {
     .fab {
         bottom: 6rem;
+        right: 1rem;
+    }
+
+    .aiFab {
+        bottom: 10rem;
         right: 1rem;
     }
 }
