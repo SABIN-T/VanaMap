@@ -2418,6 +2418,9 @@ app.post('/api/admin/broadcast', auth, admin, async (req, res) => {
 
 // --- AI DOCTOR ENDPOINT (Using FREE Groq API) ---
 // --- AI DOCTOR ENDPOINT (Using FREE Groq API) ---
+// Ensure large payloads (images) are parsed correctly for this route
+app.use('/api/chat', express.json({ limit: '50mb' }));
+
 app.post('/api/chat', async (req, res) => {
     try {
         const { messages, userContext, image } = req.body;
@@ -2565,7 +2568,7 @@ app.post('/api/chat', async (req, res) => {
             choices: [{
                 message: {
                     role: "assistant",
-                    content: "⚠️ **Connection Error**\nDr. Flora is having trouble reaching her lab database. checking..."
+                    content: "I seem to be having trouble connecting to my knowledge base at the moment. Please try asking your question again in a few moments."
                 }
             }]
         });
