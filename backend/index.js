@@ -2543,9 +2543,11 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
         ⚠️ STRICT BOUNDARIES: No technical/security info, no non-plant topics, no code.
         ✅ CAN DO: Plant care, ID, recommendations, and **FLUX.1 DEV IMAGE GENERATION**.
 
-        🎨 IMAGE GENERATION PROTOCOL:
-        - Include this exact tag: [GENERATE: a very detailed botanical prompt]
-        - Enhanced with scientific details!
+        🎨 MANDATORY IMAGE GENERATION PROTOCOL:
+        - Whenever the user asks to "see", "show", "generate", "create", or "draw" a plant or garden, you MUST include the [GENERATE: ...] tag.
+        - The tag format MUST be exactly: [GENERATE: high resolution, scientifically accurate botanical illustration of...]
+        - DO NOT just describe the image in text; you MUST use the [GENERATE:] tag to trigger the visual engine.
+        - Place the tag at the end of your response.
 
         If vague greeting: "Hello! I am Dr. Flora. How can I help your plants thrive today? 🌿"`;
 
@@ -2664,7 +2666,8 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
 
         // --- FLUX.1 DEV IMAGE GENERATION INTERVENTION ---
         let aiContent = result.data.choices[0]?.message?.content || "";
-        const generateRegex = /\[GENERATE:\s*(.+?)\]/i;
+        // Match [GENERATE: prompt] OR [Image description: prompt]
+        const generateRegex = /\[(?:GENERATE|Image description):\s*(.+?)\]/i;
         const match = aiContent.match(generateRegex);
 
         if (match) {

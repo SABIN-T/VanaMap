@@ -127,6 +127,7 @@ export const AIDoctor = () => {
                 id: (Date.now() + 1).toString(),
                 role: 'assistant',
                 content: aiText,
+                image: response.choices?.[0]?.message?.image, // CAPTURE GENERATED IMAGE
                 timestamp: new Date()
             };
 
