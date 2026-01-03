@@ -5820,5 +5820,4 @@ const worldFlora = [
         "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
     }
 ];
-m o d u l e . e x p o r t s   =   w o r l d F l o r a ;  
- 
+module.exports = worldFlora;
