@@ -28,7 +28,7 @@ export const AIDoctor = () => {
     ]);
     const [downloadingIds, setDownloadingIds] = useState<Set<string>>(new Set());
     const [loadedImageIds, setLoadedImageIds] = useState<Set<string>>(new Set());
-    const [imageTimers, setImageTimers] = useState<Record<string, number>>({});
+
     const [input, setInput] = useState('');
     const [loading, setLoading] = useState(false);
 
@@ -139,23 +139,7 @@ export const AIDoctor = () => {
                 timestamp: new Date()
             };
 
-            // Start a countdown if there's an image
-            if (assistantMessage.image) {
-                const msgId = assistantMessage.id;
-                setImageTimers(prev => ({ ...prev, [msgId]: 10 }));
-                const interval = setInterval(() => {
-                    setImageTimers(prev => {
-                        const current = prev[msgId];
-                        if (current === undefined || current <= 1) {
-                            clearInterval(interval);
-                            // Auto-set as loaded if it takes too long to avoid getting stuck
-                            setLoadedImageIds(old => new Set(old).add(msgId));
-                            return { ...prev, [msgId]: 0 };
-                        }
-                        return { ...prev, [msgId]: current - 1 };
-                    });
-                }, 1000);
-            }
+
 
             setMessages(prev => [...prev, assistantMessage]);
 
@@ -810,9 +794,7 @@ export const AIDoctor = () => {
                                                         alt={`Plant view ${idx + 1}`}
                                                         onLoad={() => {
                                                             setLoadedImageIds(prev => new Set(prev).add(imageKey));
-                                                            if (idx === (message.images?.length || 1) - 1) {
-                                                                setImageTimers(prev => ({ ...prev, [message.id]: 0 }));
-                                                            }
+
                                                         }}
                                                         onError={(e) => {
                                                             console.warn("Primary image load failed. Attempting fallback...");
