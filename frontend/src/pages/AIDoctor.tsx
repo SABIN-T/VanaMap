@@ -165,10 +165,37 @@ export const AIDoctor = () => {
         setMessages([{
             id: '1',
             role: 'assistant',
-            content: "🌿 Chat cleared! How can I help your plants today?",
+            content: "Welcome back! 🌿 I hope your garden is thriving today. How can I help your green friends?",
             timestamp: new Date()
         }]);
-        toast.success('Conversation cleared');
+    };
+
+    const downloadImage = async (base64OrUrl: string, filename: string) => {
+        try {
+            let href = base64OrUrl;
+
+            // If it's a remote URL, fetch it and convert to blob to ensure download works correctly (CORS)
+            if (base64OrUrl.startsWith('http')) {
+                const response = await fetch(base64OrUrl);
+                const blob = await response.blob();
+                href = URL.createObjectURL(blob);
+            }
+
+            const link = document.createElement('a');
+            link.href = href;
+            link.download = filename.endsWith('.png') ? filename : `${filename}.png`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            // Clean up object URL if we created one
+            if (base64OrUrl.startsWith('http')) {
+                URL.revokeObjectURL(href);
+            }
+        } catch (error) {
+            console.error('Download failed:', error);
+            toast.error('Failed to download image');
+        }
     };
 
     const handleExport = () => {
@@ -691,18 +718,53 @@ export const AIDoctor = () => {
                                 </div>
                                 {/* Display uploaded image if present */}
                                 {message.image && (
-                                    <div style={{ marginBottom: '0.75rem' }}>
+                                    <div style={{
+                                        marginBottom: '0.75rem',
+                                        position: 'relative',
+                                        background: message.role === 'assistant' ? '#f8fafc' : 'rgba(0,0,0,0.1)',
+                                        borderRadius: '16px',
+                                        padding: '4px',
+                                        border: '1px solid rgba(0,0,0,0.05)',
+                                        display: 'inline-block',
+                                        maxWidth: '100%'
+                                    }}>
                                         <img
                                             src={message.image}
-                                            alt="Uploaded plant"
+                                            alt="Plant view"
                                             style={{
                                                 maxWidth: '100%',
                                                 maxHeight: '400px',
                                                 borderRadius: '12px',
                                                 objectFit: 'contain',
-                                                border: '1px solid rgba(255,255,255,0.1)'
+                                                display: 'block',
+                                                boxShadow: '0 4px 12px rgba(0,0,0,0.08)'
                                             }}
                                         />
+                                        <button
+                                            onClick={() => downloadImage(message.image!, `DrFlora_${message.id}`)}
+                                            style={{
+                                                position: 'absolute',
+                                                bottom: '12px',
+                                                right: '12px',
+                                                background: 'rgba(255, 255, 255, 0.9)',
+                                                border: 'none',
+                                                borderRadius: '50%',
+                                                width: '36px',
+                                                height: '36px',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'center',
+                                                cursor: 'pointer',
+                                                boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                                                color: '#059669',
+                                                transition: 'transform 0.2s'
+                                            }}
+                                            onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
+                                            onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                                            title="Download PNG"
+                                        >
+                                            <Download size={18} />
+                                        </button>
                                     </div>
                                 )}
                                 <div className={styles.messageText}>

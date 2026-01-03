@@ -2677,7 +2677,7 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
 
             // Generate a clean image URL using Pollinations Flux Engine
             const seed = Math.floor(Math.random() * 1000000);
-            const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(enhancedPrompt)}?model=flux&seed=${seed}&width=1024&height=1024&nologo=true`;
+            const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(enhancedPrompt)}?model=flux&seed=${seed}&width=1024&height=1024&nologo=true&format=png`;
 
             // Remove the [GENERATE:...] tag from the visible text
             aiContent = aiContent.replace(generateRegex, "").trim();
