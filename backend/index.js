@@ -2483,13 +2483,16 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
         const userPersonalData = await FloraIntelligence.getUserPersonalContext(req.user?.id);
 
         // 2. Fetch VanaMap Inventory Summary (12 plants for context)
+        // UPGRADE: Fetch deep biometric data for morphological verification
         const inventory = await Plant.find()
-            .select('name scientificName description idealTempMin idealTempMax minHumidity sunlight suitability medicinalValues price type')
+            .select('name scientificName description idealTempMin idealTempMax minHumidity sunlight suitability medicinalValues price type foliageTexture leafShape stemStructure overallHabit biometricFeatures')
             .limit(12)
             .lean();
 
         const inventorySummary = inventory.map(p =>
-            `- ${p.name} ($${p.price}): ${p.scientificName}, Temp ${p.idealTempMin}-${p.idealTempMax}°C, [${p.type}]`
+            `- ${p.name} ($${p.price}): ${p.scientificName}, [Type: ${p.type}].
+               Morphology: ${p.foliageTexture || 'N/A'} foliage, ${p.leafShape || 'N/A'} leaves, ${p.stemStructure || 'N/A'} stem.
+               Habit: ${p.overallHabit || 'N/A'}. Features: ${(p.biometricFeatures || []).join(', ')}.`
         ).join('\n');
 
         // 3. Fetch 'Learned' Best Practices
@@ -2530,13 +2533,7 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
         🔬 WORLD FLORA INDEX KNOWLEDGE BASE (5,839 SPECIES):
         ${floraKnowledge}
         
-        CLINICAL DIAGNOSTIC PROTOCOL:
-        1. **Botanical ID**: Scientific + Common name (Confidence %).
-        2. **Vital Signs**: Leaf color, turgidity, stem structure, soil surface.
-        3. **Diagnostic**: 0-100 Health Score. List Stress Factors.
-        4. **Prescription**: Exact care steps (Water/Light).
-        
-        INVENTORY CONTEXT (VanaMap Catalog):
+        📚 INTERNAL STOCK & BIOMETRIC DATA (VanaMap Catalog):
         ${inventorySummary}
 
         USER CONTEXT (Your Garden Memory):
@@ -2554,9 +2551,18 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
         4. VISUALIZE: If an image is needed, plan the [GENERATE] tag with specific anatomical details found in the dossier.
 
         👁️ VISION DIAGNOSIS PROTOCOL (IF IMAGE UPLOADED):
-        Step 1: VERIFY SPECIES. Is this what the user claimed? (e.g., "Confirmed: Monstera deliciosa var. Borsigiana").
-        Step 2: SCAN FOR PATHOGENS. Analyze leaves for fungi, pests (e.g., mealybugs), or nutrient deficiencies (chlorosis).
-        Step 3: ASSESS VITALITY. Rate the plant's health (e.g., "Turgidity: Low", "Leaf Color: 70% Green").
+        Step 1: DEEP MORPHOLOGICAL SCAN.
+           - Compare visual traits against known scientific data:
+             * Leaf Color (Variegation, Undertones)
+             * Leaf Shape (Ovate, Lanceolate, etc.)
+             * Flower Color & Structure (if present)
+             * Stem/trunk Texture (Woody, Succulent, etc.)
+             * Root System hints (Aerial roots, tuberous, etc.)
+        Step 2: VERIFY AGAINST DATABASE.
+           - Does this match 'inventorySummary' biometrics? (e.g. "Matches Stock #104 Biometrics").
+           - If not in stock, verify against `floraKnowledge` (Venation, Inflorescence).
+           - Finally, cross-check against your EXTERNAL scientific training (RHS/Kew Gardens data).
+        Step 3: CONFIRM IDENTITY. State the Scientific Name with % Confidence based on traits.
         Step 4: PRESCRIBE TREATMENT. Give actionable steps based on visual evidence.
 
         💬 RESPONSE STYLE:
