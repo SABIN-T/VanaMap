@@ -2522,61 +2522,72 @@ app.post('/api/chat', async (req, res) => {
             }
         }
 
-        // 5. Call Groq API
-        const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${apiKey}`
-            },
-            body: JSON.stringify({
-                model: model,
-                messages: enhancedMessages,
-                max_tokens: 1000,
-                temperature: 0.7
-            })
-        });
+        // 5. Call Groq API (Dual-Engine Reliability)
+        const callGroq = async (targetModel) => {
+            try {
+                const resp = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` },
+                    body: JSON.stringify({
+                        model: targetModel,
+                        messages: enhancedMessages, // Passed by reference, modification affects subsequent calls
+                        max_tokens: 1000,
+                        temperature: 0.7
+                    })
+                });
+                return { ok: resp.ok, data: await resp.json() };
+            } catch (err) {
+                return { ok: false, data: { error: { message: err.message } } };
+            }
+        };
 
-        let data = await response.json();
+        let result = await callGroq(model);
 
-        // 5.1 Auto-Retry for Decommissioned Models
-        if (data.error && data.error.code === 'model_decommissioned') {
-            console.warn(`[AI Doctor] Model ${model} decommissioned. Retrying with fallback...`);
+        // 5.1 Aggressive Fallback Logic
+        // If Primary Model fails (Rate Limit, Decommissioned, Server Error), switch to Backup
+        if (!result.ok || result.data.error) {
+            console.warn(`[AI Doctor] Primary model ${model} failed. Switching to Backup Engine (Llama 3.1)... Code:`, result.data.error?.code || 'Unknown');
+
             const backupModel = "llama-3.1-8b-instant";
-            response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${apiKey}`
-                },
-                body: JSON.stringify({
-                    model: backupModel,
-                    messages: enhancedMessages,
-                    max_tokens: 1000,
-                    temperature: 0.7
-                })
-            });
-            data = await response.json();
+
+            // Special Handling: If original request was Vision (Image), fallback model (Text-Only) will crash if it sees "image_url".
+            // We must strip the image and just answer the text query.
+            if (image) {
+                const lastIdx = enhancedMessages.length - 1;
+                const lastMsg = enhancedMessages[lastIdx];
+                if (Array.isArray(lastMsg.content)) {
+                    const textPart = lastMsg.content.find(c => c.type === 'text');
+                    if (textPart) {
+                        console.log('[AI Doctor] Downgrading Vision request to Text-Only for fallback.');
+                        lastMsg.content = textPart.text; // Replace array with string
+                    }
+                }
+            }
+
+            // Retry with Backup
+            result = await callGroq(backupModel);
         }
 
-        if (!response.ok) {
-            console.error("Groq API Error:", data);
-            // Rate limit handling
-            if (data.error?.message?.includes('rate_limit')) {
+        // 6. Handle Final Result
+        if (!result.ok) {
+            console.error("Groq API Fatal Error:", result.data);
+
+            // Rate Limit specific message
+            if (result.data.error?.message?.includes('rate_limit')) {
                 return res.json({
                     choices: [{
                         message: {
                             role: 'assistant',
-                            content: "🌿 **Dr. Flora is currently busy with other patients!** (Rate Limit Reached)\n\nHowever, here is some general advice:\n\nIf your plant has **yellow leaves**, it's likely overwatering. Let the soil dry out completely.\nIf it has **crispy brown edges**, it needs more humidity or water.\n\nPlease try asking again in 1 minute!"
+                            content: "🌿 **Dr. Flora is currently busy!** (High Traffic)\n\nPlease try asking again in 30 seconds."
                         }
                     }]
                 });
             }
-            throw new Error(data.error?.message || "Groq API Failed");
+            throw new Error(result.data.error?.message || "All AI Models Failed");
         }
 
         console.log('[AI Doctor] Success!');
-        res.json(data);
+        res.json(result.data);
 
     } catch (e) {
         console.error("Chat API Error:", e);
