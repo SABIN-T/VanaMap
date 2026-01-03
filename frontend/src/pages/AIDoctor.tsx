@@ -340,93 +340,115 @@ export const AIDoctor = () => {
 
     return (
         <div className={styles.container}>
+            {/* Header */}
             <header className={styles.header}>
                 <div className={styles.headerContent}>
-                    <div className={styles.logoSection}>
-                        <div className={styles.logoIcon}>
-                            <Bot size={24} />
-                        </div>
-                        <div>
-                            <h1 className={styles.title}>AI Plant Doctor</h1>
-                            <div className={styles.subtitle}>
-                                Powered by Dr. Flora • VannaMap Intelligence
-                            </div>
-                        </div>
+                    <div className={styles.logoIcon}>
+                        <Bot size={20} />
+                    </div>
+                    <div className={styles.titleBlock}>
+                        <h1 className={styles.title}>Dr. Flora</h1>
+                        <span className={styles.subtitle}>AI Plant Specialist • VanaMap</span>
                     </div>
 
                     <div className={styles.actions}>
                         <button
-                            className={`${styles.actionBtn} ${voiceEnabled ? styles.active : ''}`}
+                            className={styles.actionBtn}
                             onClick={toggleVoice}
-                            title={voiceEnabled ? "Mute Voice" : "Enable Voice Assistant"}
-                            style={{
-                                color: voiceEnabled ? '#10b981' : undefined,
-                                borderColor: voiceEnabled ? '#10b981' : undefined,
-                                boxShadow: isSpeaking ? '0 0 15px rgba(16, 185, 129, 0.4)' : 'none',
-                                transform: isSpeaking ? 'scale(1.1)' : undefined
-                            }}
+                            style={voiceEnabled ? { color: '#10b981', borderColor: '#bbf7d0', background: '#f0fdf4' } : {}}
+                            title="Voice Output"
                         >
                             {voiceEnabled ? <Volume2 size={18} /> : <VolumeX size={18} />}
                         </button>
-                        <button className={styles.actionBtn} onClick={handleClear} title="Clear Chat">
-                            <Trash2 size={18} />
+
+                        {/* Language Toggle */}
+                        <div style={{ position: 'relative' }}>
+                            <button
+                                className={styles.actionBtn}
+                                onClick={() => setShowLanguageMenu(!showLanguageMenu)}
+                                title="Language"
+                            >
+                                <Globe size={18} />
+                            </button>
+                            {showLanguageMenu && (
+                                <div style={{
+                                    position: 'absolute', top: '100%', right: 0, marginTop: '8px',
+                                    background: 'white', border: '1px solid #e2e8f0', borderRadius: '12px',
+                                    padding: '4px', display: 'flex', flexDirection: 'column', gap: '2px',
+                                    width: '160px', maxHeight: '300px', overflowY: 'auto', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)', zIndex: 100
+                                }}>
+                                    {languages.map(lang => (
+                                        <button key={lang} onClick={() => { setSelectedLanguage(lang); setShowLanguageMenu(false); }}
+                                            style={{ textAlign: 'left', padding: '8px 12px', background: 'transparent', border: 'none', fontSize: '0.85rem', cursor: 'pointer', borderRadius: '8px', color: '#334155' }}
+                                            onMouseEnter={(e) => e.currentTarget.style.background = '#f1f5f9'}
+                                            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
+                                        >
+                                            {lang}
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+
+                        <button className={styles.actionBtn} onClick={handleCareCalendar} title="Care Calendar">
+                            <Calendar size={18} />
                         </button>
-                        <button className={styles.actionBtn} onClick={handleExport} title="Save Diagnosis">
+
+                        <button className={styles.actionBtn} onClick={handleExport} title="Export Chat">
                             <Download size={18} />
+                        </button>
+                        <button className={styles.actionBtn} onClick={handleClear} title="Clear">
+                            <Trash2 size={18} />
                         </button>
                     </div>
                 </div>
             </header>
 
-            {/* Advanced Features Toolbar */}
-            <div className={styles.featuresToolbar}>
-                <div className={styles.featureButtons}>
-                    <button
-                        className={styles.featureBtn}
-                        onClick={handleCareCalendar}
-                        title="Care Calendar - Set plant care reminders"
-                    >
-                        <Calendar size={20} />
-                        <span>Care Calendar</span>
-                    </button>
-
-                    <button
-                        className={styles.featureBtn}
-                        onClick={() => setShowLanguageMenu(!showLanguageMenu)}
-                        title="Multi-Language Support"
-                        style={{ position: 'relative' }}
-                    >
-                        <Globe size={20} />
-                        <span>{selectedLanguage.split(' ')[0]}</span>
-
-                        {/* Language Dropdown */}
-                        {showLanguageMenu && (
-                            <div className={styles.languageDropdown}>
-                                {languages.map((lang) => (
-                                    <button
-                                        key={lang}
-                                        className={styles.langOption}
-                                        onClick={(e) => {
-                                            e.stopPropagation();
-                                            setSelectedLanguage(lang);
-                                            setShowLanguageMenu(false);
-                                            toast.success(`Language set to ${lang.split(' ')[0]}`, { icon: '🌍' });
-                                        }}
-                                    >
-                                        {lang}
-                                    </button>
-                                ))}
+            {/* Chat Area */}
+            <div className={styles.chatContainer}>
+                <div className={styles.messagesWrapper}>
+                    {messages.map((message) => (
+                        <div key={message.id} className={`${styles.message} ${message.role === 'user' ? styles.userMessage : styles.assistantMessage}`}>
+                            <div className={styles.messageIcon}>
+                                {message.role === 'user' ? <User size={16} /> : <Leaf size={16} />}
                             </div>
-                        )}
-                    </button>
+                            <div className={styles.messageContent}>
+                                <div className={styles.messageSender}>
+                                    {message.role === 'user' ? 'You' : 'Dr. Flora'} • {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                </div>
+                                <div className={styles.messageText}>
+                                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                        {message.content}
+                                    </ReactMarkdown>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
 
+                    {loading && (
+                        <div className={`${styles.message} ${styles.assistantMessage}`}>
+                            <div className={styles.messageIcon}><Leaf size={16} /></div>
+                            <div className={styles.messageContent}>
+                                <div className={`${styles.messageText} ${styles.typing}`}>
+                                    <span></span><span></span><span></span>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                    <div ref={messagesEndRef} />
+                </div>
+            </div>
+
+            {/* Input Dock */}
+            <div className={styles.inputContainer}>
+                <div className={styles.inputDock}>
+                    {/* Tool Buttons */}
                     <button
-                        className={styles.featureBtn}
+                        className={styles.toolBtn}
                         onClick={handleScanClick}
-                        title="Scan Plant - Diagnose from photos"
+                        title="Identify Plant (Scan)"
                     >
                         <Camera size={20} />
-                        <span>Scan Plant</span>
                     </button>
                     <input
                         type="file"
@@ -437,173 +459,49 @@ export const AIDoctor = () => {
                     />
 
                     <button
-                        className={styles.featureBtn}
-                        onClick={() => toast('Voice Input - Coming Soon! Talk to Dr. Flora hands-free!', { icon: '🎤', duration: 4000 })}
-                        title="Voice Input - Hands-free chat"
+                        className={styles.toolBtn}
+                        onClick={toggleListening}
+                        style={isListening ? { color: '#ef4444', background: '#fef2f2' } : {}}
+                        title="Voice Input"
                     >
                         <Mic size={20} />
-                        <span>Voice</span>
                     </button>
 
-                    <button
-                        className={styles.featureBtn}
-                        onClick={() => toast('Shopping Assistant - Coming Soon! Find best deals on plants and supplies.', { icon: '🛒', duration: 4000 })}
-                        title="Shopping Assistant - Find best deals"
-                    >
-                        <ShoppingCart size={20} />
-                        <span>Shop</span>
-                    </button>
-                </div>
-            </div>
-
-            <div className={styles.chatContainer}>
-                <div className={styles.messagesWrapper}>
-                    {messages.map((message) => (
-                        <div
-                            key={message.id}
-                            className={`${styles.message} ${message.role === 'user' ? styles.userMessage : styles.assistantMessage}`}
-                        >
-                            <div className={styles.messageIcon}>
-                                {message.role === 'user' ? <User size={20} /> : <Leaf size={20} />}
-                            </div>
-                            <div className={styles.messageContent}>
-                                <div className={styles.messageHeader}>
-                                    <span className={styles.messageSender}>
-                                        {message.role === 'user' ? 'You' : 'Dr. Flora'}
-                                    </span>
-                                    <span className={styles.messageTime}>
-                                        {message.timestamp.toLocaleTimeString()}
-                                    </span>
-                                </div>
-                                <div className={styles.messageText}>
-                                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                                        {message.content}
-                                    </ReactMarkdown>
+                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                        {previewUrl && (
+                            <div className={styles.previewArea}>
+                                <div className={styles.previewBadge}>
+                                    <img src={previewUrl} className={styles.previewThumb} alt="Scan" />
+                                    <span>Image attached</span>
+                                    <button onClick={clearImage} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#0284c7', marginLeft: 'auto' }}>
+                                        <Trash2 size={14} />
+                                    </button>
                                 </div>
                             </div>
-                        </div>
-                    ))}
-                    {loading && (
-                        <div className={`${styles.message} ${styles.assistantMessage}`}>
-                            <div className={styles.messageIcon}>
-                                <Leaf size={20} />
-                            </div>
-                            <div className={styles.messageContent}>
-                                <div className={styles.typing}>
-                                    <span></span>
-                                    <span></span>
-                                    <span></span>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                    <div ref={messagesEndRef} />
-                </div>
-            </div>
-
-            <div className={styles.inputContainer}>
-                {previewUrl && (
-                    <div className={styles.imagePreviewContainer} style={{
-                        position: 'absolute',
-                        bottom: '80px',
-                        left: '50%',
-                        transform: 'translateX(-50%)',
-                        zIndex: 10,
-                        background: '#1e293b',
-                        padding: '8px',
-                        borderRadius: '12px',
-                        boxShadow: '0 -4px 20px rgba(0,0,0,0.5)',
-                        border: '1px solid rgba(255,255,255,0.1)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '10px'
-                    }}>
-                        <img src={previewUrl} alt="Upload Preview" style={{ width: '60px', height: '60px', objectFit: 'cover', borderRadius: '8px' }} />
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                            <span style={{ fontSize: '0.8rem', color: '#94a3b8' }}>Image selected</span>
-                            <button
-                                onClick={clearImage}
-                                style={{
-                                    background: '#ef4444',
-                                    color: 'white',
-                                    border: 'none',
-                                    borderRadius: '4px',
-                                    padding: '4px 8px',
-                                    fontSize: '0.75rem',
-                                    cursor: 'pointer',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '4px'
-                                }}
-                            >
-                                <Trash2 size={12} /> Remove
-                            </button>
-                        </div>
-                    </div>
-                )}
-                <div className={styles.inputWrapper}>
-                    <input
-                        type="text"
-                        className={styles.input}
-                        placeholder="Ask about plant care, diseases, or specific plants..."
-                        value={input}
-                        onChange={(e) => setInput(e.target.value)}
-                        onKeyPress={(e) => e.key === 'Enter' && !loading && handleSend()}
-                        disabled={loading}
-                    />
-                    <div className={styles.fileInputWrapper}>
-                        <input
-                            type="file"
-                            accept="image/*"
-                            id="image-upload"
-                            style={{ display: 'none' }}
-                            onChange={(e) => {
-                                const file = e.target.files?.[0];
-                                if (file) {
-                                    if (file.size > 5 * 1024 * 1024) {
-                                        toast.error("Image too large. Max 5MB.");
-                                        return;
-                                    }
-                                    const reader = new FileReader();
-                                    reader.onloadend = () => {
-                                        // Store file and preview
-                                        // Note: We'll need state for this
-                                        // For now, let's assume setUserImage and userImagePreview exist
-                                        // We will add them in the component body next
-                                        (window as any).setImageUpload(file, reader.result as string);
-                                    };
-                                    reader.readAsDataURL(file);
+                        )}
+                        <textarea
+                            className={styles.textInput}
+                            placeholder="Type a message..."
+                            value={input}
+                            onChange={(e) => setInput(e.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter' && !e.shiftKey) {
+                                    e.preventDefault();
+                                    if (!loading) handleSend();
                                 }
                             }}
+                            disabled={loading}
+                            rows={1}
+                            style={{ height: 'auto', minHeight: '44px' }}
                         />
                     </div>
+
                     <button
                         className={styles.sendBtn}
-                        onClick={() => document.getElementById('image-upload')?.click()}
-                        disabled={loading}
-                        title="Upload Plant Photo"
+                        onClick={() => handleSend()}
+                        disabled={loading || (!input.trim() && !selectedImage)}
                     >
-                        <Camera size={20} />
-                    </button>
-                    <button
-                        className={styles.sendBtn}
-                        onClick={toggleListening}
-                        disabled={loading}
-                        style={{
-                            background: isListening ? '#ef4444' : undefined,
-                            transition: 'all 0.3s ease',
-                            animation: isListening ? 'pulse 1.5s infinite' : 'none'
-                        }}
-                        title={isListening ? "Stop Listening" : "Start Voice Input"}
-                    >
-                        <Mic size={20} />
-                    </button>
-                    <button
-                        className={styles.sendBtn}
-                        onClick={handleSend}
-                        disabled={loading || !input.trim()}
-                    >
-                        {loading ? <Sparkles size={20} className={styles.sparkle} /> : <Send size={20} />}
+                        {loading ? <Sparkles size={18} /> : <Send size={18} />}
                     </button>
                 </div>
             </div>
