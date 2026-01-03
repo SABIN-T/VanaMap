@@ -281,13 +281,30 @@ export const AIDoctor = () => {
             let basePitch = 1.2;  // Sweet, friendly pitch
             let baseRate = 1.0;   // Calm, not rushed - gives time to absorb
 
-            // Dynamic adjustments based on content
+            // Dynamic adjustments based on content and EMOTIONS
             const lowerSentence = sentence.toLowerCase();
 
-            // Excitement/Celebration - higher pitch & slightly faster
+            // LAUGHING/PLAYFUL - lighter, faster, higher
+            if (lowerSentence.includes('haha') || lowerSentence.includes('lol') ||
+                lowerSentence.includes('*giggles*') || lowerSentence.includes('😄') ||
+                lowerSentence.includes('funny') || lowerSentence.includes('oops')) {
+                basePitch = 1.28; // Higher, playful
+                baseRate = 1.08;  // Faster, energetic
+            }
+
+            // EXCITEMENT/CELEBRATION - very high pitch & faster
+            if (lowerSentence.includes('omg') || lowerSentence.includes('wow') ||
+                lowerSentence.includes('yay') || lowerSentence.includes('🎉') ||
+                lowerSentence.includes('amazing') || lowerSentence.includes('incredible') ||
+                lowerSentence.includes('*happy dance*')) {
+                basePitch = 1.3;  // Very cheerful!
+                baseRate = 1.12;  // Excited pace
+            }
+
+            // General excitement/Important info
             if (lowerSentence.includes('!') || lowerSentence.includes('great') ||
                 lowerSentence.includes('perfect') || lowerSentence.includes('excellent') ||
-                lowerSentence.includes('wonderful') || lowerSentence.includes('amazing')) {
+                lowerSentence.includes('wonderful')) {
                 basePitch = 1.25; // Extra cheerful
                 baseRate = 1.05;  // Energetic but not rushed
             }
@@ -298,10 +315,19 @@ export const AIDoctor = () => {
                 baseRate = 0.98;  // Slightly slower for clarity
             }
 
+            // SADNESS/EMPATHY - lower, slower, gentle
+            if (lowerSentence.includes('aww') || lowerSentence.includes('🥺') ||
+                lowerSentence.includes('poor') || lowerSentence.includes('sad') ||
+                lowerSentence.includes('died') || lowerSentence.includes('💔')) {
+                basePitch = 1.05; // Lower, more somber
+                baseRate = 0.9;   // Slower, more gentle
+            }
+
             // Reassurance/Comfort - softer, slower, very gentle
             if (lowerSentence.includes('worry') || lowerSentence.includes('fix') ||
                 lowerSentence.includes('help') || lowerSentence.includes('together') ||
-                lowerSentence.includes('okay') || lowerSentence.includes('alright')) {
+                lowerSentence.includes('okay') || lowerSentence.includes('alright') ||
+                lowerSentence.includes('🤗')) {
                 basePitch = 1.15; // Softer, more soothing
                 baseRate = 0.95;  // Slower, more comforting
             }
@@ -315,7 +341,8 @@ export const AIDoctor = () => {
 
             // Encouragement - uplifting and positive
             if (lowerSentence.includes('you can') || lowerSentence.includes('you got') ||
-                lowerSentence.includes('doing great') || lowerSentence.includes('good job')) {
+                lowerSentence.includes('doing great') || lowerSentence.includes('good job') ||
+                lowerSentence.includes('proud')) {
                 basePitch = 1.23; // Uplifting
                 baseRate = 1.02;  // Confident pace
             }
