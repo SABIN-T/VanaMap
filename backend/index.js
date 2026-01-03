@@ -2419,7 +2419,7 @@ app.post('/api/admin/broadcast', auth, admin, async (req, res) => {
 // --- AI DOCTOR ENDPOINT (Using FREE Groq API) ---
 // --- AI DOCTOR ENDPOINT (Using FREE Groq API) ---
 // Ensure large payloads (images) are parsed correctly for this route
-app.use('/api/chat', express.json({ limit: '50mb' }));
+app.use('/api/chat', express.json({ limit: '20mb' }));
 
 app.post('/api/chat', async (req, res) => {
     try {
