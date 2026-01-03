@@ -2488,7 +2488,7 @@ app.post('/api/chat', async (req, res) => {
         // 4.5 Handle Image Analysis (Vision Model)
         if (image) {
             console.log('[AI Doctor] switching to Vision Model');
-            model = "llama-3.2-11b-vision-preview";
+            model = "llama-3.2-90b-vision-preview";
 
             // Attach image to the last user message
             const lastMsgIndex = enhancedMessages.length - 1;
