@@ -2620,14 +2620,15 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
         }
 
         // 5. Call Groq API (Multi-Stage Fallback Architecture)
-        const callGroq = async (targetModel) => {
+        const callGroq = async (targetModel, customMessages = null) => {
             try {
+                const payloadMessages = customMessages || enhancedMessages;
                 const resp = await fetch("https://api.groq.com/openai/v1/chat/completions", {
                     method: "POST",
                     headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` },
                     body: JSON.stringify({
                         model: targetModel,
-                        messages: enhancedMessages,
+                        messages: payloadMessages,
                         max_tokens: 1024,
                         temperature: 0.7
                     })
@@ -2653,7 +2654,57 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
             }
         };
 
-        let result = await callGroq(model);
+        // --- ENSEMBLE LOGIC (The "Council of Experts") ---
+        let result;
+
+        // If this is a vision request, use PARALLEL ENSEMBLE
+        if (image && model === "llama-3.2-90b-vision-preview") {
+            console.log('[AI Doctor] 🧠 Starting Neural Ensemble Analysis (Parallel Execution)...');
+
+            const experts = [
+                { id: "llama-3.2-90b-vision-preview", role: "Senior Botanist" },
+                { id: "llama-3.2-11b-vision-preview", role: "Field Scout" },
+                { id: "llava-v1.5-7b-4096-preview", role: "Research Analyst" }
+            ];
+
+            const visionResults = await Promise.all(experts.map(async (expert) => {
+                console.log(`[AI Doctor] ⚡ Triggering ${expert.role}...`);
+                const expertResponse = await callGroq(expert.id);
+                return {
+                    model: expert.role,
+                    content: expertResponse.ok ? expertResponse.data.choices[0]?.message?.content : null
+                };
+            }));
+
+            const validOpinions = visionResults.filter(r => r.content);
+            console.log(`[AI Doctor] 🧠 Ensemble: ${validOpinions.length}/${experts.length} experts reported.`);
+
+            if (validOpinions.length > 0) {
+                console.log('[AI Doctor] 🖋️ Synthesizing Final Diagnosis...');
+
+                const synthesisPrompt = `You are Dr. Flora. Synthesize these plant analyses into ONE PERFECT answer:
+
+${validOpinions.map((op, i) => `EXPERT ${i + 1} (${op.model}): ${op.content}`).join('\n\n')}
+
+INSTRUCTIONS:
+- Compare findings. If they agree, output with high confidence.
+- If they disagree, decide the correct answer.
+- EXPLAIN the scientific name (Etymology).
+- Use [GENERATE] tag if visual needed.`;
+
+                const synthesisMessages = [
+                    { role: "system", content: systemPrompt },
+                    { role: "user", content: synthesisPrompt }
+                ];
+
+                result = await callGroq("llama-3.3-70b-versatile", synthesisMessages);
+            } else {
+                console.warn('[AI Doctor] All ensemble experts failed.');
+                result = { ok: false };
+            }
+        } else {
+            result = await callGroq(model);
+        }
 
         // --- TRIPLE-STAGE FALLBACK LOGIC ---
         if (!result.ok || result.data.error) {
