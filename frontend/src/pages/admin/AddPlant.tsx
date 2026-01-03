@@ -144,6 +144,24 @@ const extractPlantDataFromAI = (aiResponse: string): Partial<Plant> => {
     const featMatch = aiResponse.match(/(?:distinctive|features?)[:\s]+([^\n]+(?:\n[^\n]+)*?)(?=\n\n|\n[A-Z]|$)/i);
     if (featMatch) data.biometricFeatures = featMatch[1].split(/[,;.\n]/).map(v => v.trim().replace(/^[-•*]\s*/, '')).filter(v => v.length > 5 && v.length < 80);
 
+    // Extract pet safety
+    if (aiResponse.match(/\b(pet safe|pet friendly|non-toxic to pets|safe for pets)\b/i)) {
+        data.petFriendly = true;
+    } else if (aiResponse.match(/\b(toxic to pets|poisonous to pets|harmful to pets|not pet safe)\b/i)) {
+        data.petFriendly = false;
+    }
+
+    // Extract nocturnal/CAM photosynthesis
+    if (aiResponse.match(/\b(CAM|nocturnal|night oxygen|produces oxygen at night)\b/i)) {
+        data.isNocturnal = true;
+    }
+
+    // Extract ecosystem
+    if (aiResponse.match(/\b(tropical|rainforest)\b/i)) data.ecosystem = 'Tropical';
+    else if (aiResponse.match(/\b(desert|arid)\b/i)) data.ecosystem = 'Desert';
+    else if (aiResponse.match(/\b(temperate|woodland)\b/i)) data.ecosystem = 'Temperate';
+    else if (aiResponse.match(/\b(mediterranean)\b/i)) data.ecosystem = 'Mediterranean';
+
     return data;
 };
 
@@ -231,6 +249,9 @@ Include the following details in a structured format:
 - Temperature Range: (in Celsius, format: XX-XX°C)
 - Humidity: (percentage)
 - Oxygen Level: (low, moderate, high, or very-high)
+- Pet Safety: (Is it safe for pets? toxic or non-toxic)
+- CAM Photosynthesis: (Does it produce oxygen at night?)
+- Ecosystem: (Tropical, Desert, Temperate, or Mediterranean)
 - Medicinal Values: (comma-separated list)
 - Benefits/Advantages: (comma-separated list)
 - Lifespan: (e.g., Perennial, Annual, etc.)
