@@ -2675,12 +2675,13 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
             console.log(`[Flux.1 Dev] Generating image for prompt: ${prompt}`);
 
             // ADVANCEMENT: Enhance the user prompt with botanical intelligence
-            // We pass matchedFloraBatch as a hint for the enhancement
             const enhancedPrompt = FloraIntelligence.enhanceGenerationPrompt(prompt, matchedFloraBatch);
-
-            // Generate a clean image URL using Pollinations Flux Engine
             const seed = Math.floor(Math.random() * 1000000);
-            const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(enhancedPrompt)}?model=flux&seed=${seed}&width=1024&height=1024&nologo=true&format=png`;
+
+            // MULTI-AI FALLBACK SYSTEM: Use our proxy to handle rate limits
+            // Instead of a direct link, we provide a proxied link that can failover between Flux and SDXL
+            const baseUrl = process.env.NODE_ENV === 'production' ? 'https://plantoxy.onrender.com' : 'http://localhost:5000';
+            const imageUrl = `${baseUrl}/api/generate-image?prompt=${encodeURIComponent(enhancedPrompt)}&seed=${seed}&width=1024&height=1024`;
 
             // Remove the [GENERATE:...] tag from the visible text
             aiContent = aiContent.replace(generateRegex, "").trim();
@@ -2917,12 +2918,58 @@ process.on('unhandledRejection', (err) => {
     console.error('UNHANDLED REJECTION! 💥', err);
 });
 
+// --- MULTI-AI IMAGE GENERATION ENGINE (With Auto-Fallback) ---
+app.get('/api/generate-image', async (req, res) => {
+    const { prompt, seed, width = 1024, height = 1024 } = req.query;
+
+    // Priority List of Models
+    const models = ['flux', 'turbo', 'flux-realism', 'any'];
+
+    for (const model of models) {
+        try {
+            console.log(`[Multi-AI] Attempting generation with model: ${model}`);
+            const pollinationsUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?model=${model}&seed=${seed}&width=${width}&height=${height}&nologo=true&format=png`;
+
+            const response = await fetch(pollinationsUrl);
+
+            // If the response is not OK (like a 429 Rate Limit), try next model
+            if (!response.ok) {
+                console.warn(`[Multi-AI] Model ${model} failed (Status: ${response.status}). Trying fallback...`);
+                continue;
+            }
+
+            // Check if it's the specific "Rate Limit" image (sometimes Pollinations returns 200 with an error image)
+            // We can check Content-Length or just hope SDXL/Turbo has different limits
+            const buffer = await response.arrayBuffer();
+            const imageBuffer = Buffer.from(buffer);
+
+            // If the buffer is suspiciously small (like the "Rate Limit" placeholder), try next
+            if (imageBuffer.length < 50000 && model === 'flux') { // Real Flux images are usually > 200KB
+                console.warn(`[Multi-AI] Model ${model} returned a suspiciously small image. Likely rate-limited. Trying fallback...`);
+                continue;
+            }
+
+            // Success! Send the image
+            res.set('Content-Type', 'image/png');
+            res.set('Cache-Control', 'public, max-age=86400'); // Cache for 24h
+            return res.send(imageBuffer);
+
+        } catch (err) {
+            console.error(`[Multi-AI] Error with model ${model}:`, err.message);
+            continue;
+        }
+    }
+
+    res.status(500).json({ error: 'All image generation models are currently limited. Please try again later.' });
+});
+
 // --- IMAGE PROXY FOR RELIABLE DOWNLOADS ---
 app.get('/api/proxy-image', async (req, res) => {
     try {
         const { url } = req.query;
         if (!url) return res.status(400).json({ error: 'URL is required' });
 
+        // If it's a generate-image URL, handle it recursively or just fetch it
         console.log(`[Proxy] Fetching image for download: ${url}`);
         const response = await fetch(url);
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
