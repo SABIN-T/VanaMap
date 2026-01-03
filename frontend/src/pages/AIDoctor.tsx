@@ -90,11 +90,13 @@ export const AIDoctor = () => {
             let aiText = response.choices?.[0]?.message?.content;
 
             if (!aiText) {
-                // Fallbacks for edge cases (Refusals, unexpected format)
+                // Context-aware Fallbacks
                 if (response.refusal) {
-                    aiText = `I cannot analyze this image: ${response.refusal}`;
+                    aiText = `I cannot answer that: ${response.refusal}`;
+                } else if (base64Image) {
+                    aiText = "I couldn't analyze the image. Please ensure it's clear and contains a plant.";
                 } else {
-                    aiText = "I couldn't analyze that. Please ensure the image is clear or try again.";
+                    aiText = "I apologize, I'm having trouble connecting right now. Please try asking again.";
                 }
                 console.warn('[AI Doctor] Empty content received', response);
             }
