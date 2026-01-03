@@ -2596,10 +2596,10 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
         let model = "llama-3.3-70b-versatile";
 
         if (image) {
-            console.log('[AI Doctor] Vision request detected. Using LLaVA 1.5 7B (Free Open Model).');
-            // User requested "other free model" -> Switching to LLaVA (Large Language-and-Vision Assistant)
-            // This is a powerful, free, open-source alternative for visual analysis.
-            model = "llava-v1.5-7b-4096-preview";
+            console.log('[AI Doctor] Vision request detected. engaging Llama 3.2 90B Vision (Advanced).');
+            // Reverting to the absolute BEST model for accuracy as requested:
+            // "Llama 3.2 90B Vision" is currently SOTA (State of the Art) for visual reasoning.
+            model = "llama-3.2-90b-vision-preview";
 
             // Attach image to the last user message
             const lastMsgIndex = enhancedMessages.length - 1;
