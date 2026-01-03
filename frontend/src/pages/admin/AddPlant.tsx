@@ -1,8 +1,8 @@
 import { useState, useRef } from 'react';
 import { Button } from '../../components/common/Button';
-import { addPlant, fetchPlants } from '../../services/api';
+import { addPlant, fetchPlants, chatWithDrFlora } from '../../services/api';
 import { AdminLayout } from './AdminLayout';
-import { Search, Upload, Thermometer, Wind, Droplets, Leaf, ArrowRight, Sparkles, ScanLine } from 'lucide-react';
+import { Search, Upload, Thermometer, Wind, Droplets, Leaf, ArrowRight, Sparkles, ScanLine, Bot } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { INDIAN_PLANT_DB } from '../../data/indianPlants';
 import type { Plant } from '../../types';
@@ -30,6 +30,66 @@ const smartFillPlant = (sciName: string) => {
         };
     }
     return null;
+};
+
+// AI-powered plant data extraction
+const extractPlantDataFromAI = (aiResponse: string): Partial<Plant> => {
+    const data: Partial<Plant> = {};
+
+    // Extract scientific name
+    const sciMatch = aiResponse.match(/scientific name[:\s]+([A-Z][a-z]+(?: [a-z]+)?)/i);
+    if (sciMatch) data.scientificName = sciMatch[1];
+
+    // Extract common name
+    const nameMatch = aiResponse.match(/common name[:\s]+([^\n.]+)/i);
+    if (nameMatch) data.name = nameMatch[1].trim();
+
+    // Extract description (look for descriptive paragraphs)
+    const descMatch = aiResponse.match(/(?:description|about)[:\s]+([^\n]+(?:\n[^\n]+)*?)(?=\n\n|\n[A-Z]|$)/i);
+    if (descMatch) data.description = descMatch[1].trim().replace(/\n/g, ' ');
+
+    // Extract type
+    if (aiResponse.match(/indoor/i)) data.type = 'indoor';
+    if (aiResponse.match(/outdoor/i)) data.type = 'outdoor';
+
+    // Extract sunlight
+    if (aiResponse.match(/full sun|direct sun/i)) data.sunlight = 'direct';
+    else if (aiResponse.match(/bright|high light/i)) data.sunlight = 'high';
+    else if (aiResponse.match(/medium|partial|indirect/i)) data.sunlight = 'medium';
+    else if (aiResponse.match(/low light|shade/i)) data.sunlight = 'low';
+
+    // Extract temperature range
+    const tempMatch = aiResponse.match(/(\d+)[-–](\d+)°?[CF]/i);
+    if (tempMatch) {
+        data.idealTempMin = parseInt(tempMatch[1]);
+        data.idealTempMax = parseInt(tempMatch[2]);
+    }
+
+    // Extract humidity
+    const humidMatch = aiResponse.match(/humidity[:\s]+(\d+)/i);
+    if (humidMatch) data.minHumidity = parseInt(humidMatch[1]);
+
+    // Extract medicinal values
+    const medMatch = aiResponse.match(/medicinal[:\s]+([^\n]+)/i);
+    if (medMatch) {
+        data.medicinalValues = medMatch[1].split(/[,;]/).map(v => v.trim()).filter(Boolean);
+    }
+
+    // Extract advantages/benefits
+    const advMatch = aiResponse.match(/(?:benefits?|advantages?)[:\s]+([^\n]+(?:\n[^\n]+)*?)(?=\n\n|\n[A-Z]|$)/i);
+    if (advMatch) {
+        data.advantages = advMatch[1].split(/[,;.\n]/).map(v => v.trim()).filter(v => v.length > 3);
+    }
+
+    // Extract lifespan
+    const lifeMatch = aiResponse.match(/lifespan[:\s]+([^\n.]+)/i);
+    if (lifeMatch) data.lifespan = lifeMatch[1].trim();
+
+    // Extract leaf shape
+    const leafMatch = aiResponse.match(/leaf shape[:\s]+([^\n.]+)/i);
+    if (leafMatch) data.leafShape = leafMatch[1].trim();
+
+    return data;
 };
 
 const compressImage = (file: File): Promise<string> => {
@@ -90,6 +150,85 @@ export const AddPlant = () => {
     });
 
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const [aiLoading, setAiLoading] = useState(false);
+
+    const handleAIAutoFill = async () => {
+        if (!scientificNameSearch.trim()) {
+            toast.error("Please enter a plant name first");
+            return;
+        }
+
+        setAiLoading(true);
+        const tid = toast.loading("🤖 Dr. Flora is researching...");
+
+        try {
+            // Create a structured prompt for Dr. Flora
+            const prompt = `Please provide comprehensive information about the plant: "${scientificNameSearch}". 
+
+Include the following details in a structured format:
+- Common Name:
+- Scientific Name:
+- Description: (2-3 sentences about the plant)
+- Type: (indoor or outdoor)
+- Sunlight: (low, medium, high, or direct)
+- Temperature Range: (in Celsius, format: XX-XX°C)
+- Humidity: (percentage)
+- Oxygen Level: (low, moderate, high, or very-high)
+- Medicinal Values: (comma-separated list)
+- Benefits/Advantages: (comma-separated list)
+- Lifespan: (e.g., Perennial, Annual, etc.)
+- Leaf Shape: (e.g., Ovate, Lanceolate)
+- Stem Structure: (e.g., Woody, Herbaceous)
+- Growth Habit: (e.g., Climbing, Bushy)
+- Distinctive Features: (comma-separated)
+
+Please be specific and accurate.`;
+
+            const response = await chatWithDrFlora(
+                [{ role: 'user', content: prompt }],
+                { timezone: Intl.DateTimeFormat().resolvedOptions().timeZone }
+            );
+
+            const aiText = response.choices?.[0]?.message?.content;
+
+            if (!aiText) {
+                toast.error("Dr. Flora couldn't find information", { id: tid });
+                return;
+            }
+
+            // Extract data from AI response
+            const extractedData = extractPlantDataFromAI(aiText);
+
+            // Merge with existing data
+            setNewPlant(prev => ({
+                ...prev,
+                ...extractedData,
+                // Preserve existing values if AI didn't provide them
+                name: extractedData.name || prev.name,
+                scientificName: extractedData.scientificName || prev.scientificName,
+                description: extractedData.description || prev.description,
+                type: extractedData.type || prev.type,
+                sunlight: extractedData.sunlight || prev.sunlight,
+                idealTempMin: extractedData.idealTempMin || prev.idealTempMin,
+                idealTempMax: extractedData.idealTempMax || prev.idealTempMax,
+                minHumidity: extractedData.minHumidity || prev.minHumidity,
+                medicinalValues: extractedData.medicinalValues || prev.medicinalValues,
+                advantages: extractedData.advantages || prev.advantages,
+                lifespan: extractedData.lifespan || prev.lifespan,
+                leafShape: extractedData.leafShape || prev.leafShape
+            }));
+
+            toast.success(`✨ Auto-filled by Dr. Flora!`, { id: tid });
+            console.log('[AI Auto-Fill] Extracted data:', extractedData);
+            console.log('[AI Auto-Fill] Full response:', aiText);
+
+        } catch (error) {
+            console.error('[AI Auto-Fill] Error:', error);
+            toast.error("Dr. Flora is unavailable. Try manual entry.", { id: tid });
+        } finally {
+            setAiLoading(false);
+        }
+    };
 
     const handleSmartFill = () => {
         if (!scientificNameSearch) return;
@@ -260,21 +399,41 @@ export const AddPlant = () => {
                             <div className={styles.smartSearchWrapper}>
                                 <div className="flex justify-between items-baseline mb-2">
                                     <label className="text-sm text-emerald-500 font-bold uppercase tracking-wider">Quick Populator</label>
-                                    {scientificNameSearch && (
-                                        <button
-                                            type="button"
-                                            onClick={handleSmartFill}
-                                            className="text-xs bg-emerald-500/10 text-emerald-400 px-3 py-1 rounded-full uppercase font-bold tracking-widest hover:bg-emerald-500/20 transition-all flex items-center gap-1"
-                                        >
-                                            Auto-Fill <ArrowRight size={12} />
-                                        </button>
-                                    )}
+                                    <div className="flex gap-2">
+                                        {scientificNameSearch && (
+                                            <>
+                                                <button
+                                                    type="button"
+                                                    onClick={handleSmartFill}
+                                                    className="text-xs bg-emerald-500/10 text-emerald-400 px-3 py-1 rounded-full uppercase font-bold tracking-widest hover:bg-emerald-500/20 transition-all flex items-center gap-1"
+                                                >
+                                                    DB Fill <ArrowRight size={12} />
+                                                </button>
+                                                <button
+                                                    type="button"
+                                                    onClick={handleAIAutoFill}
+                                                    disabled={aiLoading}
+                                                    className="text-xs bg-violet-500/10 text-violet-400 px-3 py-1 rounded-full uppercase font-bold tracking-widest hover:bg-violet-500/20 transition-all flex items-center gap-1 disabled:opacity-50 disabled:cursor-not-allowed"
+                                                >
+                                                    {aiLoading ? (
+                                                        <>
+                                                            <span className="animate-spin">⚙️</span> AI Thinking...
+                                                        </>
+                                                    ) : (
+                                                        <>
+                                                            <Bot size={12} /> AI Auto-Fill
+                                                        </>
+                                                    )}
+                                                </button>
+                                            </>
+                                        )}
+                                    </div>
                                 </div>
                                 <div className="relative">
                                     <input
                                         value={scientificNameSearch}
                                         onChange={(e) => setScientificNameSearch(e.target.value)}
-                                        placeholder="Type a scientific name (e.g. Ocimum)..."
+                                        placeholder="Type a plant name (e.g. Tulsi, Rose, Aloe Vera)..."
                                         className={styles.smartSearchInput}
                                     />
                                     <Search size={22} className={styles.smartSearchIcon} />
