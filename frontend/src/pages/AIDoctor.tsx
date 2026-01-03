@@ -275,40 +275,49 @@ export const AIDoctor = () => {
 
             if (preferredVoice) utterance.voice = preferredVoice;
 
-            // --- Enhanced Personality Tuning for Warmth & Expressiveness ---
+            // --- Enhanced Personality Tuning for Loveable Kindness & Warmth ---
 
-            // Base settings for a warm, friendly female voice
-            let basePitch = 1.15; // Slightly higher = friendlier, more approachable
-            let baseRate = 1.05;  // Slightly faster = more energetic, less robotic
+            // Base settings for a warm, kind, nurturing voice (like a caring friend)
+            let basePitch = 1.2;  // Sweet, friendly pitch
+            let baseRate = 1.0;   // Calm, not rushed - gives time to absorb
 
             // Dynamic adjustments based on content
             const lowerSentence = sentence.toLowerCase();
 
-            // Excitement/Important info - higher pitch & faster
+            // Excitement/Celebration - higher pitch & slightly faster
             if (lowerSentence.includes('!') || lowerSentence.includes('great') ||
-                lowerSentence.includes('perfect') || lowerSentence.includes('excellent')) {
-                basePitch = 1.2;
-                baseRate = 1.1;
+                lowerSentence.includes('perfect') || lowerSentence.includes('excellent') ||
+                lowerSentence.includes('wonderful') || lowerSentence.includes('amazing')) {
+                basePitch = 1.25; // Extra cheerful
+                baseRate = 1.05;  // Energetic but not rushed
             }
 
-            // Questions - rising intonation
+            // Questions - gentle rising intonation
             if (sentence.includes('?')) {
-                basePitch = 1.25; // Higher pitch for questions
-                baseRate = 1.0;   // Slightly slower for clarity
+                basePitch = 1.22; // Curious, inviting
+                baseRate = 0.98;  // Slightly slower for clarity
             }
 
-            // Warnings/Caution - lower pitch, slower
-            if (lowerSentence.includes('warning') || lowerSentence.includes('careful') ||
-                lowerSentence.includes('avoid') || lowerSentence.includes('danger')) {
-                basePitch = 0.95;
-                baseRate = 0.95;
+            // Reassurance/Comfort - softer, slower, very gentle
+            if (lowerSentence.includes('worry') || lowerSentence.includes('fix') ||
+                lowerSentence.includes('help') || lowerSentence.includes('together') ||
+                lowerSentence.includes('okay') || lowerSentence.includes('alright')) {
+                basePitch = 1.15; // Softer, more soothing
+                baseRate = 0.95;  // Slower, more comforting
             }
 
-            // Empathy/Comfort - softer, slower
+            // Empathy/Understanding - warm and gentle
             if (lowerSentence.includes('sorry') || lowerSentence.includes('unfortunately') ||
-                lowerSentence.includes('understand')) {
-                basePitch = 1.05;
-                baseRate = 0.98;
+                lowerSentence.includes('understand') || lowerSentence.includes('i know')) {
+                basePitch = 1.1;  // Lower, more empathetic
+                baseRate = 0.93;  // Slower, more thoughtful
+            }
+
+            // Encouragement - uplifting and positive
+            if (lowerSentence.includes('you can') || lowerSentence.includes('you got') ||
+                lowerSentence.includes('doing great') || lowerSentence.includes('good job')) {
+                basePitch = 1.23; // Uplifting
+                baseRate = 1.02;  // Confident pace
             }
 
             utterance.pitch = basePitch;
