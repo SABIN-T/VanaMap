@@ -2679,7 +2679,9 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
             const seed = Math.floor(Math.random() * 1000000);
 
             // SPEED OPTIMIZED: Using 896x896 for faster rendering while maintaining quality
-            const baseUrl = process.env.NODE_ENV === 'production' ? 'https://plantoxy.onrender.com' : 'http://localhost:5000';
+            const host = req.get('host');
+            const protocol = req.protocol === 'https' || req.get('x-forwarded-proto') === 'https' ? 'https' : 'http';
+            const baseUrl = `${protocol}://${host}`;
             const imageUrl = `${baseUrl}/api/generate-image?prompt=${encodeURIComponent(enhancedPrompt)}&seed=${seed}&width=896&height=896`;
 
             // Remove the [GENERATE:...] tag from the visible text

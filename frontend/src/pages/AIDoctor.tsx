@@ -137,13 +137,15 @@ export const AIDoctor = () => {
             // Start a countdown if there's an image
             if (assistantMessage.image) {
                 const msgId = assistantMessage.id;
-                setImageTimers(prev => ({ ...prev, [msgId]: 10 })); // Accurate 10s estimate
+                setImageTimers(prev => ({ ...prev, [msgId]: 10 }));
                 const interval = setInterval(() => {
                     setImageTimers(prev => {
                         const current = prev[msgId];
-                        if (current <= 1) {
+                        if (current === undefined || current <= 1) {
                             clearInterval(interval);
-                            return prev;
+                            // Auto-set as loaded if it takes too long to avoid getting stuck
+                            setLoadedImageIds(old => new Set(old).add(msgId));
+                            return { ...prev, [msgId]: 0 };
                         }
                         return { ...prev, [msgId]: current - 1 };
                     });
@@ -781,77 +783,89 @@ export const AIDoctor = () => {
                                         <img
                                             src={message.image}
                                             alt="Plant view"
-                                            onLoad={() => setLoadedImageIds(prev => new Set(prev).add(message.id))}
+                                            onLoad={() => {
+                                                setLoadedImageIds(prev => new Set(prev).add(message.id));
+                                                setImageTimers(prev => ({ ...prev, [message.id]: 0 }));
+                                            }}
+                                            onError={(e) => {
+                                                console.error("Image failed in chat");
+                                                setLoadedImageIds(prev => new Set(prev).add(message.id));
+                                                setImageTimers(prev => ({ ...prev, [message.id]: 0 }));
+                                                e.currentTarget.style.opacity = '1';
+                                            }}
                                             style={{
                                                 maxWidth: '100%',
                                                 maxHeight: '400px',
                                                 borderRadius: '12px',
                                                 objectFit: 'contain',
                                                 display: 'block',
-                                                opacity: loadedImageIds.has(message.id) ? 1 : 0.3,
-                                                transition: 'opacity 0.3s ease-in-out',
-                                                boxShadow: '0 4px 12px rgba(0,0,0,0.08)'
+                                                opacity: loadedImageIds.has(message.id) ? 1 : 0.4,
+                                                transition: 'all 0.5s ease',
+                                                boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
                                             }}
                                         />
                                         <button
                                             onClick={() => downloadImage(message.image!, message.id)}
                                             disabled={downloadingIds.has(message.id)}
-                                            className={styles.downloadBtn}
                                             style={{
                                                 position: 'absolute',
                                                 bottom: '12px',
                                                 right: '12px',
-                                                background: 'rgba(255, 255, 255, 0.95)',
+                                                background: '#059669',
+                                                color: 'white',
                                                 border: 'none',
-                                                borderRadius: '50%',
-                                                width: '40px',
-                                                height: '40px',
+                                                borderRadius: '30px',
+                                                padding: '10px 18px',
                                                 display: 'flex',
                                                 alignItems: 'center',
-                                                justifyContent: 'center',
+                                                gap: '10px',
                                                 cursor: downloadingIds.has(message.id) ? 'wait' : 'pointer',
-                                                boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-                                                color: '#059669',
-                                                transition: 'all 0.2s',
-                                                zIndex: 5
+                                                boxShadow: '0 8px 16px rgba(5, 150, 105, 0.3)',
+                                                transition: 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+                                                zIndex: 10,
+                                                fontSize: '0.85rem',
+                                                fontWeight: 700
                                             }}
                                             onMouseEnter={(e) => {
                                                 if (!downloadingIds.has(message.id)) {
-                                                    e.currentTarget.style.transform = 'scale(1.1)';
-                                                    e.currentTarget.style.background = '#fff';
+                                                    e.currentTarget.style.transform = 'scale(1.05) translateY(-2px)';
+                                                    e.currentTarget.style.background = '#047857';
                                                 }
                                             }}
                                             onMouseLeave={(e) => {
-                                                e.currentTarget.style.transform = 'scale(1)';
-                                                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.95)';
+                                                e.currentTarget.style.transform = 'scale(1) translateY(0)';
+                                                e.currentTarget.style.background = '#059669';
                                             }}
-                                            title={downloadingIds.has(message.id) ? "Downloading..." : "Download PNG"}
                                         >
-                                            {(downloadingIds.has(message.id) || !loadedImageIds.has(message.id)) ? (
-                                                <Loader2 size={20} className={styles.rotating} />
+                                            {downloadingIds.has(message.id) ? (
+                                                <Loader2 size={18} className={styles.rotating} />
                                             ) : (
-                                                <Download size={20} />
+                                                <Download size={18} />
                                             )}
+                                            <span>{downloadingIds.has(message.id) ? 'Saving...' : 'Save PNG'}</span>
                                         </button>
 
-                                        {!loadedImageIds.has(message.id) && (
+                                        {(!loadedImageIds.has(message.id) && (imageTimers[message.id] > 0)) && (
                                             <div style={{
                                                 position: 'absolute',
-                                                top: '50%',
-                                                left: '50%',
-                                                transform: 'translate(-50%, -50%)',
+                                                top: 0,
+                                                left: 0,
+                                                right: 0,
+                                                bottom: 0,
+                                                background: 'rgba(255,255,255,0.75)',
+                                                backdropFilter: 'blur(3px)',
+                                                borderRadius: '12px',
                                                 display: 'flex',
                                                 flexDirection: 'column',
                                                 alignItems: 'center',
-                                                gap: '8px',
-                                                color: '#64748b'
+                                                justifyContent: 'center',
+                                                gap: '15px',
+                                                zIndex: 5
                                             }}>
-                                                <Loader2 size={32} className={styles.rotating} />
-                                                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                                                    <span style={{ fontSize: '0.8rem', fontWeight: 600, color: '#059669' }}>Rendering Art...</span>
-                                                    {imageTimers[message.id] > 0 && (
-                                                        <span style={{ fontSize: '0.7rem', color: '#94a3b8' }}>Est. time: {imageTimers[message.id]}s</span>
-                                                    )}
+                                                <Loader2 size={40} className={styles.rotating} color="#059669" />
+                                                <div style={{ textAlign: 'center' }}>
+                                                    <div style={{ fontSize: '1rem', fontWeight: 800, color: '#059669', letterSpacing: '-0.5px' }}>Dr. Flora is Painting...</div>
+                                                    <div style={{ fontSize: '0.8rem', color: '#64748b', marginTop: '4px' }}>Rendering: {imageTimers[message.id]}s left</div>
                                                 </div>
                                             </div>
                                         )}
