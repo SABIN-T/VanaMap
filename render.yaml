@@ -13,8 +13,33 @@ services:
         value: 3.9.0
     autoDeploy: true
 
-  # (Optional) Node Backend if you want to define it here too
-  # - type: web
-  #   name: vanamap-backend
-  #   env: node
-  #   ...
+  # Node Backend Service
+  - type: web
+    name: vanamap-backend
+    env: node
+    region: oregon
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: node index.js
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: NODE_VERSION
+        value: 18.x
+    autoDeploy: true
+
+  # React Frontend (Static Site)
+  - type: static
+    name: vanamap-frontend
+    env: static
+    region: oregon
+    plan: free
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
+    autoDeploy: true
