@@ -2478,12 +2478,14 @@ app.post('/api/chat', async (req, res) => {
         If the user asks "Hi" or vague greeting: Respond with "Hello! I am Dr. Flora. How can I help your plants today?"`;
 
         // 4. Update the messages array
+        console.log('[AI Doctor] Processing request. Messages:', messages?.length, 'Image:', !!image);
+
         const enhancedMessages = [
             { role: "system", content: systemPrompt },
             ...messages.filter(m => m.role !== 'system')
         ];
 
-        let model = "llama-3.3-70b-versatile";
+        let model = "mixtral-8x7b-32768"; // Using Mixtral for reliable text chat
 
         // 4.5 Handle Image Analysis (Vision Model)
         if (image) {
