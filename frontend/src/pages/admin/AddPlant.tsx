@@ -36,9 +36,27 @@ const smartFillPlant = (sciName: string) => {
 const extractPlantDataFromAI = (aiResponse: string): Partial<Plant> => {
     const data: Partial<Plant> = {};
 
-    // Extract scientific name
-    const sciMatch = aiResponse.match(/scientific name[:\s]+([A-Z][a-z]+(?: [a-z]+)?)/i);
-    if (sciMatch) data.scientificName = sciMatch[1];
+    // Extract scientific name - multiple strategies for robustness
+    // Strategy 1: Look for "Scientific Name:" label
+    let sciMatch = aiResponse.match(/scientific name[:\s]+([A-Z][a-z]+(?:\s+[a-z]+)?(?:\s+[a-z]+)?)/i);
+    if (sciMatch) {
+        data.scientificName = sciMatch[1].trim();
+    } else {
+        // Strategy 2: Look for binomial nomenclature pattern (Genus species)
+        sciMatch = aiResponse.match(/\b([A-Z][a-z]+\s+[a-z]+)\b/);
+        if (sciMatch && !sciMatch[1].match(/Common Name|Type|Indoor|Outdoor|Description|Benefits|Medicinal/i)) {
+            data.scientificName = sciMatch[1].trim();
+        }
+    }
+
+    // Strategy 3: If still not found, check first few lines for binomial name
+    if (!data.scientificName) {
+        const firstLines = aiResponse.split('\n').slice(0, 3).join(' ');
+        const binomialMatch = firstLines.match(/\b([A-Z][a-z]+\s+[a-z]+)\b/);
+        if (binomialMatch && !binomialMatch[1].match(/Common Name|Type|Indoor|Outdoor/i)) {
+            data.scientificName = binomialMatch[1].trim();
+        }
+    }
 
     // Extract common name
     const nameMatch = aiResponse.match(/common name[:\s]+([^\n.]+)/i);
@@ -202,9 +220,11 @@ export const AddPlant = () => {
             // Create a structured prompt for Dr. Flora
             const prompt = `Please provide comprehensive information about the plant: "${scientificNameSearch}". 
 
+IMPORTANT: Start your response with the scientific name in binomial nomenclature format (Genus species).
+
 Include the following details in a structured format:
+- Scientific Name: (MUST be in binomial nomenclature format, e.g., Rosa damascena)
 - Common Name:
-- Scientific Name:
 - Description: (2-3 sentences about the plant)
 - Type: (indoor or outdoor)
 - Sunlight: (low, medium, high, or direct)
