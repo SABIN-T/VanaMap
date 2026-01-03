@@ -302,100 +302,71 @@ export const AIDoctor = () => {
             voices.find(v => v.lang.startsWith("en-US")) ||
             voices.find(v => v.lang.startsWith("en"));
 
-        // 3. Speak Phrase-by-Phrase with Dynamic Expression & Micro-Variations
+        // 3. Detect Global Emotional Mood from the last user message
+        const userMessages = messages.filter(m => m.role === 'user');
+        const lastUserMsg = userMessages[userMessages.length - 1]?.content.toLowerCase() || '';
+
+        let globalMood = 'natural';
+        if (lastUserMsg.includes('sad') || lastUserMsg.includes('died') || lastUserMsg.includes('poor') || lastUserMsg.includes('help')) globalMood = 'concerned';
+        if (lastUserMsg.includes('happy') || lastUserMsg.includes('yay') || lastUserMsg.includes('great')) globalMood = 'joyful';
+
+        // 4. Speak Phrase-by-Phrase with EXTREME Expression
         speechUnits.forEach((unit: string, index: number) => {
             if (!unit.trim()) return;
 
             const utterance = new SpeechSynthesisUtterance(unit.trim());
-
             if (preferredVoice) utterance.voice = preferredVoice;
 
-            // --- Ultra-Realistic Human Voice Tuning ---
+            // --- Extreme Human Emotional Tuning ---
+            const microPitch = (Math.random() - 0.5) * 0.1;
+            const microRate = (Math.random() - 0.5) * 0.08;
 
-            // Add MICRO-VARIATIONS to avoid robotic consistency
-            // Real humans vary slightly in pitch and speed - this is KEY to sounding human
-            const microPitchVariation = (Math.random() - 0.5) * 0.05; // ±0.025 variation
-            const microRateVariation = (Math.random() - 0.5) * 0.04;  // ±0.02 variation
+            // Global Tone shifts based on user mood
+            let basePitch = 1.2;
+            let baseRate = 1.0;
+            let baseVolume = 1.0;
 
-            // Base settings with natural variation
-            let basePitch = 1.2 + microPitchVariation;  // Sweet, friendly with variation
-            let baseRate = 1.0 + microRateVariation;    // Calm with natural variation
+            if (globalMood === 'joyful') {
+                basePitch = 1.4; // Happier base
+                baseRate = 1.1;
+            } else if (globalMood === 'concerned') {
+                basePitch = 1.0; // Sober base
+                baseRate = 0.9;
+            }
 
-            // Dynamic adjustments based on content and EMOTIONS
             const lowerUnit = unit.toLowerCase();
 
-            // Word emphasis: If a word is ALL CAPS, slightly increase pitch/volume
-            const words = unit.split(' ');
-            const hasEmphasis = words.some(w => w.length > 1 && w === w.toUpperCase() && /[A-Z]/.test(w));
-            if (hasEmphasis) {
-                basePitch += 0.05;
-                baseRate += 0.02;
+            // EXTREME TRIGGER BLOCKS
+            if (lowerUnit.includes('haha') || lowerUnit.includes('hehe') || lowerUnit.includes('lol') || lowerUnit.includes('funny') || lowerUnit.includes('oops')) {
+                basePitch = 1.6; // High, joyful pitch
+                baseRate = 1.3;  // Fast, energetic rate
+                baseVolume = 1.1;
+            }
+            else if (lowerUnit.includes('oh my gosh') || lowerUnit.includes('wow') || lowerUnit.includes('yay') || lowerUnit.includes('amazing') || lowerUnit.includes('incredible') || lowerUnit.includes('!')) {
+                basePitch = 1.5; // Very cheerful
+                baseRate = 1.2;  // High energy
+                baseVolume = 1.15;
+            }
+            else if (lowerUnit.includes('aww') || lowerUnit.includes('poor') || lowerUnit.includes('sad') || lowerUnit.includes('died') || lowerUnit.includes('sorry') || lowerUnit.includes('unfortunately')) {
+                basePitch = 0.6; // Deeply somber, very low pitch
+                baseRate = 0.7;  // Slow, heavy heart
+                baseVolume = 0.85;
+            }
+            else if (lowerUnit.includes('worry') || lowerUnit.includes('fix') || lowerUnit.includes('together') || lowerUnit.includes('okay') || lowerUnit.includes('alright') || lowerUnit.includes('🤗') || lowerUnit.includes('help')) {
+                basePitch = 1.1; // Gentle and comforting
+                baseRate = 0.85; // Slow and reassuring
+                baseVolume = 0.95;
             }
 
-            // LAUGHING/PLAYFUL - lighter, faster, higher (EXTREME for authenticity)
-            if (lowerUnit.includes('haha') || lowerUnit.includes('hehe') ||
-                lowerUnit.includes('lol') || lowerUnit.includes('funny') ||
-                lowerUnit.includes('oops')) {
-                basePitch = 1.35; // Very high, playful (sounds like actual laughter)
-                baseRate = 1.15;  // Fast, energetic
-            }
-
-            // EXCITEMENT/CELEBRATION - very high pitch & faster
-            if (lowerUnit.includes('oh my gosh') || lowerUnit.includes('wow') ||
-                lowerUnit.includes('yay') || lowerUnit.includes('amazing') ||
-                lowerUnit.includes('incredible')) {
-                basePitch = 1.32; // Very cheerful!
-                baseRate = 1.13;  // Excited pace
-            }
-
-            // General excitement/Important info
-            if (lowerUnit.includes('!') || lowerUnit.includes('great') ||
-                lowerUnit.includes('perfect') || lowerUnit.includes('excellent') ||
-                lowerUnit.includes('wonderful')) {
-                basePitch = 1.25; // Extra cheerful
-                baseRate = 1.05;  // Energetic but not rushed
-            }
-
-            // Questions - gentle rising intonation
+            // Questions - Rising excitement/curiosity
             if (unit.includes('?')) {
-                basePitch = 1.22; // Curious, inviting
-                baseRate = 0.98;  // Slightly slower for clarity
+                basePitch += 0.2; // Pronounced rise at the end
+                baseRate -= 0.05; // Thoughtful pause
             }
 
-            // SADNESS/EMPATHY - lower, slower, gentle (EXTREME for emotion)
-            if (lowerUnit.includes('aww') || lowerUnit.includes('poor') ||
-                lowerUnit.includes('sad') || lowerUnit.includes('died')) {
-                basePitch = 1.0;  // Much lower, more somber (sounds sad)
-                baseRate = 0.85;  // Very slow, more gentle
-            }
-
-            // Reassurance/Comfort - softer, slower, very gentle
-            if (lowerUnit.includes('worry') || lowerUnit.includes('fix') ||
-                lowerUnit.includes('help') || lowerUnit.includes('together') ||
-                lowerUnit.includes('okay') || lowerUnit.includes('alright') ||
-                lowerUnit.includes('🤗')) {
-                basePitch = 1.15; // Softer, more soothing
-                baseRate = 0.95;  // Slower, more comforting
-            }
-
-            // Empathy/Understanding - warm and gentle
-            if (lowerUnit.includes('sorry') || lowerUnit.includes('unfortunately') ||
-                lowerUnit.includes('understand') || lowerUnit.includes('i know')) {
-                basePitch = 1.1;  // Lower, more empathetic
-                baseRate = 0.93;  // Slower, more thoughtful
-            }
-
-            // Encouragement - uplifting and positive
-            if (lowerUnit.includes('you can') || lowerUnit.includes('you got') ||
-                lowerUnit.includes('doing great') || lowerUnit.includes('good job') ||
-                lowerUnit.includes('proud')) {
-                basePitch = 1.23; // Uplifting
-                baseRate = 1.02;  // Confident pace
-            }
-
-            utterance.pitch = basePitch;
-            utterance.rate = baseRate;
-            utterance.volume = 1.0;
+            utterance.pitch = basePitch + microPitch;
+            utterance.rate = baseRate + microRate;
+            utterance.volume = baseVolume;
 
             // Tracking speaking state
             if (index === 0) utterance.onstart = () => setIsSpeaking(true);
