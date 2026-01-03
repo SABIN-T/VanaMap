@@ -282,25 +282,39 @@ export const AIDoctor = () => {
             speechUnits.push(chunk);
         }
 
-        // 2. Premium Voice Selection - Prioritize Neural/Natural voices
+        // 2. Multi-Language Accent & Voice Selection
         const voices = synth.getVoices();
 
-        // Try to find the best quality voice in order of preference
+        // Detect language of the text
+        const detectLanguage = (text: string) => {
+            if (/[\u0900-\u097F]/.test(text)) return 'hi-IN'; // Hindi
+            if (/[\u4E00-\u9FFF]/.test(text)) return 'zh-CN'; // Chinese
+            if (/[\u3040-\u30FF]/.test(text)) return 'ja-JP'; // Japanese
+            if (/[\u0600-\u06FF]/.test(text)) return 'ar-SA'; // Arabic
+            if (/[\u0400-\u04FF]/.test(text)) return 'ru-RU'; // Russian
+            // Fallback to browser language if Latin-based, or default English
+            return navigator.language || 'en-US';
+        };
+
+        const targetLang = detectLanguage(cleanText);
+        const langCode = targetLang.split('-')[0];
+
+        // Find the absolute best voice for this specific language/accent
         const preferredVoice =
-            // Premium Neural voices (Edge, Chrome)
+            // 1. Natural/Neural for the specific language
+            voices.find(v => v.lang.startsWith(langCode) && (v.name.includes("Natural") || v.name.includes("Neural")) && v.name.includes("Female")) ||
+            voices.find(v => v.lang.startsWith(langCode) && (v.name.includes("Natural") || v.name.includes("Neural"))) ||
+            // 2. High-quality platform specific triggers
+            voices.find(v => v.lang.startsWith(langCode) && (v.name.includes("Google") || v.name.includes("Microsoft"))) ||
+            // 3. Generic language match
+            voices.find(v => v.lang.startsWith(langCode) && v.name.toLowerCase().includes("female")) ||
+            voices.find(v => v.lang.startsWith(langCode)) ||
+            // 4. Ultimate English fallback (if target lang not found)
             voices.find(v => v.name.includes("Natural") && v.name.includes("Female") && v.lang.startsWith("en")) ||
-            voices.find(v => v.name.includes("Neural") && v.lang.startsWith("en")) ||
-            voices.find(v => v.name.includes("Natural") && v.lang.startsWith("en")) ||
-            // High-quality platform voices
-            voices.find(v => v.name.includes("Google UK English Female")) ||
-            voices.find(v => v.name.includes("Google US English")) ||
-            voices.find(v => v.name.includes("Samantha")) || // macOS - very natural
-            voices.find(v => v.name.includes("Ava")) || // macOS premium
-            voices.find(v => v.name.includes("Zira")) || // Windows
-            // Fallback to any English female voice
-            voices.find(v => v.name.toLowerCase().includes("female") && v.lang.startsWith("en")) ||
             voices.find(v => v.lang.startsWith("en-US")) ||
             voices.find(v => v.lang.startsWith("en"));
+
+        if (preferredVoice) console.log(`[Voice System] Speaking in ${targetLang} accent using: ${preferredVoice.name}`);
 
         // 3. Detect Global Emotional Mood from the last user message
         const userMessages = messages.filter(m => m.role === 'user');
@@ -315,6 +329,7 @@ export const AIDoctor = () => {
             if (!unit.trim()) return;
 
             const utterance = new SpeechSynthesisUtterance(unit.trim());
+            utterance.lang = targetLang; // Match browser engine to text language
             if (preferredVoice) utterance.voice = preferredVoice;
 
             // --- Human Imperfection & Texture Modulation ---
@@ -445,7 +460,7 @@ export const AIDoctor = () => {
                 synth.cancel();
                 setIsSpeaking(false);
             }
-            toast("🎤 Listening... Speak now!", {
+            toast(`🎤 Listening in ${userLang}...`, {
                 icon: '👂',
                 duration: 3000,
                 style: {
