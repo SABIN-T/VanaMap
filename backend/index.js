@@ -2560,7 +2560,7 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
              * Root System hints (Aerial roots, tuberous, etc.)
         Step 2: VERIFY AGAINST DATABASE.
            - Does this match 'inventorySummary' biometrics? (e.g. "Matches Stock #104 Biometrics").
-           - If not in stock, verify against `floraKnowledge` (Venation, Inflorescence).
+           - If not in stock, verify against 'floraKnowledge' (Venation, Inflorescence).
            - Finally, cross-check against your EXTERNAL scientific training (RHS/Kew Gardens data).
         Step 3: CONFIRM IDENTITY. State the Scientific Name with % Confidence based on traits.
         Step 4: PRESCRIBE TREATMENT. Give actionable steps based on visual evidence.
