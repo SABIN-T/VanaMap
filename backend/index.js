@@ -2485,7 +2485,7 @@ app.post('/api/chat', async (req, res) => {
             ...messages.filter(m => m.role !== 'system')
         ];
 
-        let model = "mixtral-8x7b-32768"; // Using Mixtral for reliable text chat
+        let model = "llama-3.3-70b-versatile"; // Primary Model
 
         // 4.5 Handle Image Analysis (Vision Model)
         if (image) {
@@ -2518,7 +2518,27 @@ app.post('/api/chat', async (req, res) => {
             })
         });
 
-        const data = await response.json();
+        let data = await response.json();
+
+        // 5.1 Auto-Retry for Decommissioned Models
+        if (data.error && data.error.code === 'model_decommissioned') {
+            console.warn(`[AI Doctor] Model ${model} decommissioned. Retrying with fallback...`);
+            const backupModel = "llama-3.1-8b-instant";
+            response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${apiKey}`
+                },
+                body: JSON.stringify({
+                    model: backupModel,
+                    messages: enhancedMessages,
+                    max_tokens: 1000,
+                    temperature: 0.7
+                })
+            });
+            data = await response.json();
+        }
 
         if (!response.ok) {
             console.error("Groq API Error:", data);
