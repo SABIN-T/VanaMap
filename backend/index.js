@@ -2699,7 +2699,7 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
 
             // RELIABILITY UPGRADE: Return two images (Flux + SDXL) for a better comparison
             const fluxUrl = `/api/generate-image?prompt=${encodeURIComponent(enhancedPrompt)}&seed=${seed}&width=896&height=896&model=flux`;
-            const sdxlUrl = `/api/generate-image?prompt=${encodeURIComponent(enhancedPrompt)}&seed=${seed + 1}&width=896&height=896&model=turbo`;
+            const sdxlUrl = `/api/generate-image?prompt=${encodeURIComponent(enhancedPrompt)}&seed=${seed + 1}&width=896&height=896&model=flux-realism`;
 
             // Inject multi-image support
             result.data.choices[0].message.images = [fluxUrl, sdxlUrl];
