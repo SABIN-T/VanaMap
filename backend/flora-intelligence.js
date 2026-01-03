@@ -81,13 +81,16 @@ const FloraIntelligence = {
         // If we matched a specific plant, we can inject scientific details into the Flux prompt
         let enhanced = userPrompt;
 
+        // Base style for maximum realism
+        const realismKeywords = "Hyper-realistic cinematic photography, shot on 35mm lens, f/1.8, bokeh background, macro details, ultra-high resolution, 8k, highly detailed textures, realistic lighting, subsurface scattering, professional botanical photography, National Geographic style.";
+
         if (matchedFlora && matchedFlora.length > 0) {
             const bestMatch = matchedFlora[0];
-            enhanced = `A scientifically accurate botanical illustration of ${bestMatch.scientificName} (${bestMatch.commonName}). 
-            Features: ${bestMatch.flowerType} flowers, ${bestMatch.leafVenation} leaf venation. 
-            Style: Cinematic photorealistic, professional botanical photography, sharp focus, 8k resolution, micro-details. ${userPrompt}`;
+            enhanced = `${realismKeywords} A real-life close-up of ${bestMatch.scientificName} (${bestMatch.commonName}). 
+            Botanical accuracy: ${bestMatch.flowerType} flowers, ${bestMatch.leafVenation} leaf venation. 
+            The plant is in its natural environment, sun-drenched, with dew drops on leaves, sharp focus on the textures. ${userPrompt}`;
         } else {
-            enhanced = `Realistic botanical photography, high-end garden design, ${userPrompt}, 8k, cinematic lighting, sharp details.`;
+            enhanced = `${realismKeywords} Real-life professional photography of a plant or garden. ${userPrompt}, cinematic lighting, sharp details, extreme realism.`;
         }
 
         return enhanced;
