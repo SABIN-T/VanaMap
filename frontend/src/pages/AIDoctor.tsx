@@ -200,53 +200,45 @@ export const AIDoctor = () => {
     const downloadImage = async (base64OrUrl: string, messageId: string) => {
         try {
             setDownloadingIds(prev => new Set(prev).add(messageId));
-            toast.loading("Preparing high-quality PNG...", { id: `dl-${messageId}`, duration: 2000 });
+            toast.loading("Preparing high-quality PNG...", { id: `dl-${messageId}` });
 
-            let href = base64OrUrl;
-            const baseUrl = API_URL.replace(/\/api$/, '');
+            // Robust URL resolution
+            let urlToFetch = base64OrUrl;
+            if (base64OrUrl.startsWith('/')) {
+                const baseUrl = API_URL.replace(/\/api$/, '');
+                urlToFetch = `${baseUrl}${base64OrUrl}`;
+            }
 
-            // If it's a relative URL or a remote URL, we need to handle it properly
-            if (base64OrUrl.startsWith('/') || base64OrUrl.startsWith('http')) {
-                // If relative, prepend baseUrl
-                const fullUrl = base64OrUrl.startsWith('/') ? `${baseUrl}${base64OrUrl}` : base64OrUrl;
-
-                // Use our proxy for reliability if it's external, otherwise use directly if already local
-                href = base64OrUrl.startsWith('http')
-                    ? `${baseUrl}/api/proxy-image?url=${encodeURIComponent(base64OrUrl)}`
-                    : fullUrl;
-
+            // Check if it's base64 data
+            if (urlToFetch.startsWith('data:')) {
                 const link = document.createElement('a');
-                link.href = href;
-                link.download = `DrFlora_Botanical_${messageId}.png`;
+                link.href = urlToFetch;
+                link.download = `DrFlora_Scan_${messageId}.png`;
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
-
-                setTimeout(() => {
-                    setDownloadingIds(prev => {
-                        const next = new Set(prev);
-                        next.delete(messageId);
-                        return next;
-                    });
-                    toast.success("Download started! 🌿", { id: `dl-${messageId}` });
-                }, 1500);
+                completeDownload(messageId);
                 return;
             }
 
-            // For local base64 images
+            // For http/https URLs (including our backend generated ones), fetch as Blob
+            const response = await fetch(urlToFetch);
+            if (!response.ok) throw new Error(`Download failed: ${response.statusText}`);
+
+            const blob = await response.blob();
+            const blobUrl = window.URL.createObjectURL(blob);
+
             const link = document.createElement('a');
-            link.href = href;
-            link.download = `DrFlora_Scan_${messageId}.png`;
+            link.href = blobUrl;
+            link.download = `DrFlora_Botanical_${messageId}.png`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
 
-            setDownloadingIds(prev => {
-                const next = new Set(prev);
-                next.delete(messageId);
-                return next;
-            });
-            toast.success("Image saved! ✅", { id: `dl-${messageId}` });
+            // Cleanup
+            window.URL.revokeObjectURL(blobUrl);
+            completeDownload(messageId);
+
         } catch (error) {
             console.error('Download failed:', error);
             setDownloadingIds(prev => {
@@ -259,6 +251,14 @@ export const AIDoctor = () => {
         }
     };
 
+    const completeDownload = (messageId: string) => {
+        setDownloadingIds(prev => {
+            const next = new Set(prev);
+            next.delete(messageId);
+            return next;
+        });
+        toast.success("Image saved! ✅", { id: `dl-${messageId}` });
+    };
     const handleExport = () => {
         const transcript = messages.map(m =>
             `[${m.timestamp.toLocaleTimeString()}] ${m.role === 'user' ? 'You' : 'Dr. Flora'}: ${m.content}`
@@ -815,8 +815,28 @@ export const AIDoctor = () => {
                                                             }
                                                         }}
                                                         onError={(e) => {
+                                                            console.warn("Primary image load failed. Attempting fallback...");
                                                             setLoadedImageIds(prev => new Set(prev).add(imageKey));
                                                             e.currentTarget.style.opacity = '1';
+
+                                                            // Auto-fallback to direct Pollinations URL if backend proxy fails
+                                                            const src = e.currentTarget.src;
+                                                            if (src.includes('/api/generate-image')) {
+                                                                try {
+                                                                    const url = new URL(src);
+                                                                    const params = new URLSearchParams(url.search);
+                                                                    const prompt = params.get('prompt');
+                                                                    const model = params.get('model') || 'flux';
+                                                                    const seed = params.get('seed') || '42';
+
+                                                                    if (prompt) {
+                                                                        const directUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?model=${model}&seed=${seed}&width=896&height=896&nologo=true`;
+                                                                        e.currentTarget.src = directUrl;
+                                                                    }
+                                                                } catch (err) {
+                                                                    console.error("Fallback failed", err);
+                                                                }
+                                                            }
                                                         }}
                                                         style={{
                                                             width: '100%',
