@@ -2,7 +2,7 @@ import type { Plant, Vendor } from '../types';
 
 import { PLANTS } from '../data/mocks';
 
-const API_URL = import.meta.env.VITE_API_URL || 'https://plantoxy.onrender.com/api';
+export const API_URL = import.meta.env.VITE_API_URL || 'https://plantoxy.onrender.com/api';
 
 const getHeaders = () => {
     const saved = localStorage.getItem('user');

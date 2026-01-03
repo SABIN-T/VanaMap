@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { Send, Sparkles, Leaf, Bot, User, Trash2, Download, Calendar, Globe, Camera, Mic, Volume2, VolumeX, Zap } from 'lucide-react';
-import { chatWithDrFlora } from '../services/api';
+import { chatWithDrFlora, API_URL } from '../services/api';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
 import styles from './AIDoctor.module.css';
@@ -175,27 +175,33 @@ export const AIDoctor = () => {
         try {
             let href = base64OrUrl;
 
-            // If it's a remote URL, fetch it and convert to blob to ensure download works correctly (CORS)
+            // If it's a remote URL, use our backend proxy to ensure download works reliably (CORS bypass)
             if (base64OrUrl.startsWith('http')) {
-                const response = await fetch(base64OrUrl);
-                const blob = await response.blob();
-                href = URL.createObjectURL(blob);
+                // Use the API_URL we exported, stripping /api if it's already there to avoid duplication
+                const baseUrl = API_URL.replace(/\/api$/, '');
+                href = `${baseUrl}/api/proxy-image?url=${encodeURIComponent(base64OrUrl)}`;
+
+                // Trigger download via direct window navigation or a hidden link
+                const link = document.createElement('a');
+                link.href = href;
+                link.download = filename.endsWith('.png') ? filename : `${filename}.png`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                return;
             }
 
+            // For local base64 images
             const link = document.createElement('a');
             link.href = href;
             link.download = filename.endsWith('.png') ? filename : `${filename}.png`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-
-            // Clean up object URL if we created one
-            if (base64OrUrl.startsWith('http')) {
-                URL.revokeObjectURL(href);
-            }
         } catch (error) {
             console.error('Download failed:', error);
-            toast.error('Failed to download image');
+            // Last resort: open in new tab
+            window.open(base64OrUrl, '_blank');
         }
     };
 

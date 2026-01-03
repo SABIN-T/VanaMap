@@ -2917,6 +2917,30 @@ process.on('unhandledRejection', (err) => {
     console.error('UNHANDLED REJECTION! 💥', err);
 });
 
+// --- IMAGE PROXY FOR RELIABLE DOWNLOADS ---
+app.get('/api/proxy-image', async (req, res) => {
+    try {
+        const { url } = req.query;
+        if (!url) return res.status(400).json({ error: 'URL is required' });
+
+        console.log(`[Proxy] Fetching image for download: ${url}`);
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+        const arrayBuffer = await response.arrayBuffer();
+        const buffer = Buffer.from(arrayBuffer);
+        const contentType = response.headers.get('content-type') || 'image/png';
+
+        res.set('Content-Type', contentType);
+        res.set('Content-Disposition', 'attachment; filename="DrFlora-Botanical-Art.png"');
+        res.set('Access-Control-Allow-Origin', '*');
+        res.send(buffer);
+    } catch (err) {
+        console.error('[Proxy Error]', err.message);
+        res.status(500).json({ error: 'Failed to proxy image' });
+    }
+});
+
 app.get('/debug-env', (req, res) => {
     // SECURITY: Do not expose full values in prod, just presence
     res.json({
