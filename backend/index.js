@@ -16,6 +16,7 @@ const svgCaptcha = require('svg-captcha');
 const cron = require('node-cron');
 const Parser = require('rss-parser');
 const parser = new Parser();
+const FloraIntelligence = require('./flora-intelligence');
 
 // --- CLOUDINARY CONFIGURATION ---
 const cloudinary = require('cloudinary').v2;
@@ -2421,7 +2422,27 @@ app.post('/api/admin/broadcast', auth, admin, async (req, res) => {
 // Ensure large payloads (images) are parsed correctly for this route
 app.use('/api/chat', express.json({ limit: '20mb' }));
 
-app.post('/api/chat', async (req, res) => {
+/**
+ * Optional Auth Middleware for AI Doctor to enable personalization
+ */
+const optionalAuth = (req, res, next) => {
+    const token = req.header('Authorization')?.replace('Bearer ', '');
+    if (!token) {
+        req.user = null;
+        return next();
+    }
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET);
+        req.user = decoded;
+        next();
+    } catch (ex) {
+        req.user = null;
+        next();
+    }
+};
+
+
+app.post('/api/chat', optionalAuth, async (req, res) => {
     try {
         const { messages, userContext, image } = req.body;
 
@@ -2484,7 +2505,15 @@ app.post('/api/chat', async (req, res) => {
             console.warn('[AI Doctor] Could not fetch training data:', err.message);
         }
 
-        // 3. Construct the Master System Prompt
+        // 2. Fetch Advanced Contexts (The Advancement Boost)
+        const floraKnowledge = await FloraIntelligence.getRelevantFloraContext(messages);
+        const userPersonalData = await FloraIntelligence.getUserPersonalContext(req.user?.id);
+
+        // 3. Get Inventory Context (VanaMap specific)
+        const inventory = await Plant.find().limit(12).select('name id price type').lean();
+        const inventorySummary = inventory.map(p => `${p.name} ($${p.price}) - [${p.type}]`).join(', ');
+
+        // 3. Construct the Master System Prompt (PRO VERSION)
         const systemPrompt = `YOUR PERSONA (THE HUMAN SOUL):
         - You aren't just an AI; you are Dr. Flora, who grew up in your grandmother's greenhouse.
         - You remember the smell of damp earth and the sound of rain on glass.
@@ -2528,15 +2557,15 @@ Success → "Amazing! 🎉 What's your secret? Share with other plant parents!"
 
 REMEMBER: Never give a "final" answer.Always keep conversation alive! 💬✨
 
-        🔬 WORLD FLORA INDEX DATABASE (5,839 VERIFIED SPECIES):
-        When identifying plants from images, cross-reference with this scientific database:
+        🔬 WORLD FLORA INDEX KNOWLEDGE BASE:
+        When identifying plants from images or answering questions, refer to this scientific data:
+        ${floraKnowledge}
         
-        IDENTIFICATION PROTOCOL:
-        1. Analyze visual characteristics (leaf shape, flower type, venation pattern)
-        2. Match against World Flora Index botanical data
-        3. Verify with scientific sources (NASA, RHS, USDA, etc.)
-        4. Provide scientific name + common name
-        5. Include confidence level and alternative possibilities
+        PROTOCOL FOR IMAGE ANALYSIS (CLINICAL DIAGNOSTIC):
+        1. **Botanical ID**: Scientific name + Common name + Confidence level (%).
+        2. **Vital Signs**: Assess leaf color, turgidity, stem structure, and soil surface.
+        3. **Diagnostic**: 0-100 Health Score. List Stress Factors (e.g., "Under-watering", "Scale Insects").
+        4. **Prescription**: Exact watering frequency and light adjustment in Lux.
         
         KEY BOTANICAL CHARACTERISTICS TO LOOK FOR:
         - Flower Type: (Raceme, Panicle, Spadix, Capitulum, Solitary, Cyme, Umbel, etc.)
@@ -2544,18 +2573,13 @@ REMEMBER: Never give a "final" answer.Always keep conversation alive! 💬✨
         - Inflorescence Pattern: (Simple, Raceme, Panicle, Spadix, Umbel, etc.)
         - Growth Habit: (Climbing, Bushy, Upright, Trailing, etc.)
         
-        EXAMPLE IDENTIFICATION:
-        "Looking at your plant, I can see parallel leaf venation and sword-like upright leaves. 
-        Cross-referencing with the World Flora Index, this matches Sansevieria trifasciata 
-        (Snake Plant) - verified by NASA Clean Air Study (1989). The raceme flower type and 
-        simple inflorescence pattern confirm this identification with 95% confidence."
-        
         INVENTORY CONTEXT:
         ${inventorySummary}
 
-        USER CONTEXT:
-        ${userContext?.city ? `Location: ${userContext.city}` : ''}
-        ${userContext?.cart ? `Plants they're interested in: ${userContext.cart}` : ''}
+        USER CONTEXT (Drawn from their profile):
+        ${userPersonalData}
+        ${userContext?.city ? `User's reported Current City: ${userContext.city}` : ''}
+        ${userContext?.cart ? `User's local interests: ${userContext.cart}` : ''}
 
         ⚠️ STRICT BOUNDARIES - What You CANNOT Answer:
         
@@ -2588,10 +2612,6 @@ Response: "I can't help with that, but I'm great at helping plants thrive! 🌿 
         - To generate an image, you MUST include this exact tag in your response: [GENERATE: a very detailed, descriptive prompt for Flux.1 Dev]
         - Your response should still be warm and helpful.
         
-        Example:
-        User: "Show me a beautiful zen garden with bonsai trees."
-        Dr. Flora: "Oh, I love zen gardens! They are so peaceful. Let me create a vision of that for you... [GENERATE: A serene Japanese zen garden at sunset, featuring perfectly pruned ancient juniper bonsai trees on mossy rocks, raked white sand patterns, a small stone lantern, soft golden hour lighting, cinematic photorealistic style, 8k resolution] There you go! Isn't it breath-taking? 🧘‍♂️✨"
-
         If the user asks \"Hi\" or vague greeting: Respond with \"Hello! I am Dr. Flora. How can I help your plants today?\"`;
 
         // 4. Construct the messages array
@@ -2716,10 +2736,12 @@ Response: "I can't help with that, but I'm great at helping plants thrive! 🌿 
             const prompt = match[1].trim();
             console.log(`[Flux.1 Dev] Generating image for prompt: ${prompt}`);
 
+            // ADVANCEMENT: Enhance the user prompt with botanical intelligence
+            const enhancedPrompt = FloraIntelligence.enhanceGenerationPrompt(prompt, []); // Empty matches for now as we don't store them in closure here
+
             // Generate a clean image URL using Pollinations Flux Engine
-            // Flux.1 Dev equivalent on Pollinations
             const seed = Math.floor(Math.random() * 1000000);
-            const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?model=flux&seed=${seed}&width=1024&height=1024&nologo=true`;
+            const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(enhancedPrompt)}?model=flux&seed=${seed}&width=1024&height=1024&nologo=true`;
 
             // Remove the [GENERATE:...] tag from the visible text
             aiContent = aiContent.replace(generateRegex, "").trim();
