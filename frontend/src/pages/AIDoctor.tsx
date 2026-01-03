@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { Send, Sparkles, Leaf, Bot, User, Trash2, Download, Calendar, Globe, Camera, Mic, Volume2, VolumeX, Zap } from 'lucide-react';
+import { Send, Sparkles, Leaf, Bot, User, Trash2, Download, Calendar, Globe, Camera, Mic, Volume2, VolumeX, Zap, Loader2 } from 'lucide-react';
 import { chatWithDrFlora, API_URL } from '../services/api';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
@@ -12,7 +12,7 @@ interface Message {
     role: 'user' | 'assistant';
     content: string;
     timestamp: Date;
-    image?: string; // Base64 image data
+    image?: string;
 }
 
 export const AIDoctor = () => {
@@ -25,6 +25,8 @@ export const AIDoctor = () => {
             timestamp: new Date()
         }
     ]);
+    const [downloadingIds, setDownloadingIds] = useState<Set<string>>(new Set());
+    const [loadedImageIds, setLoadedImageIds] = useState<Set<string>>(new Set());
     const [input, setInput] = useState('');
     const [loading, setLoading] = useState(false);
 
@@ -171,36 +173,58 @@ export const AIDoctor = () => {
         }]);
     };
 
-    const downloadImage = async (base64OrUrl: string, filename: string) => {
+    const downloadImage = async (base64OrUrl: string, messageId: string) => {
         try {
+            setDownloadingIds(prev => new Set(prev).add(messageId));
+            toast.loading("Preparing high-quality PNG...", { id: `dl-${messageId}`, duration: 2000 });
+
             let href = base64OrUrl;
 
             // If it's a remote URL, use our backend proxy to ensure download works reliably (CORS bypass)
             if (base64OrUrl.startsWith('http')) {
-                // Use the API_URL we exported, stripping /api if it's already there to avoid duplication
                 const baseUrl = API_URL.replace(/\/api$/, '');
                 href = `${baseUrl}/api/proxy-image?url=${encodeURIComponent(base64OrUrl)}`;
 
-                // Trigger download via direct window navigation or a hidden link
                 const link = document.createElement('a');
                 link.href = href;
-                link.download = filename.endsWith('.png') ? filename : `${filename}.png`;
+                link.download = `DrFlora_Botanical_${messageId}.png`;
                 document.body.appendChild(link);
                 link.click();
                 document.body.removeChild(link);
+
+                setTimeout(() => {
+                    setDownloadingIds(prev => {
+                        const next = new Set(prev);
+                        next.delete(messageId);
+                        return next;
+                    });
+                    toast.success("Download started! 🌿", { id: `dl-${messageId}` });
+                }, 1500);
                 return;
             }
 
             // For local base64 images
             const link = document.createElement('a');
             link.href = href;
-            link.download = filename.endsWith('.png') ? filename : `${filename}.png`;
+            link.download = `DrFlora_Scan_${messageId}.png`;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
+
+            setDownloadingIds(prev => {
+                const next = new Set(prev);
+                next.delete(messageId);
+                return next;
+            });
+            toast.success("Image saved! ✅", { id: `dl-${messageId}` });
         } catch (error) {
             console.error('Download failed:', error);
-            // Last resort: open in new tab
+            setDownloadingIds(prev => {
+                const next = new Set(prev);
+                next.delete(messageId);
+                return next;
+            });
+            toast.error('Download failed. Opening in new tab...', { id: `dl-${messageId}` });
             window.open(base64OrUrl, '_blank');
         }
     };
@@ -733,45 +757,81 @@ export const AIDoctor = () => {
                                         padding: '4px',
                                         border: '1px solid rgba(0,0,0,0.05)',
                                         display: 'inline-block',
-                                        maxWidth: '100%'
+                                        maxWidth: '100%',
+                                        minWidth: '100px',
+                                        minHeight: '100px'
                                     }}>
                                         <img
                                             src={message.image}
                                             alt="Plant view"
+                                            onLoad={() => setLoadedImageIds(prev => new Set(prev).add(message.id))}
                                             style={{
                                                 maxWidth: '100%',
                                                 maxHeight: '400px',
                                                 borderRadius: '12px',
                                                 objectFit: 'contain',
                                                 display: 'block',
+                                                opacity: loadedImageIds.has(message.id) ? 1 : 0.3,
+                                                transition: 'opacity 0.3s ease-in-out',
                                                 boxShadow: '0 4px 12px rgba(0,0,0,0.08)'
                                             }}
                                         />
                                         <button
-                                            onClick={() => downloadImage(message.image!, `DrFlora_${message.id}`)}
+                                            onClick={() => downloadImage(message.image!, message.id)}
+                                            disabled={downloadingIds.has(message.id)}
                                             style={{
                                                 position: 'absolute',
                                                 bottom: '12px',
                                                 right: '12px',
-                                                background: 'rgba(255, 255, 255, 0.9)',
+                                                background: 'rgba(255, 255, 255, 0.95)',
                                                 border: 'none',
                                                 borderRadius: '50%',
-                                                width: '36px',
-                                                height: '36px',
+                                                width: '40px',
+                                                height: '40px',
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 justifyContent: 'center',
-                                                cursor: 'pointer',
-                                                boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+                                                cursor: downloadingIds.has(message.id) ? 'wait' : 'pointer',
+                                                boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
                                                 color: '#059669',
-                                                transition: 'transform 0.2s'
+                                                transition: 'all 0.2s',
+                                                zIndex: 5
                                             }}
-                                            onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.1)'}
-                                            onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
-                                            title="Download PNG"
+                                            onMouseEnter={(e) => {
+                                                if (!downloadingIds.has(message.id)) {
+                                                    e.currentTarget.style.transform = 'scale(1.1)';
+                                                    e.currentTarget.style.background = '#fff';
+                                                }
+                                            }}
+                                            onMouseLeave={(e) => {
+                                                e.currentTarget.style.transform = 'scale(1)';
+                                                e.currentTarget.style.background = 'rgba(255, 255, 255, 0.95)';
+                                            }}
+                                            title={downloadingIds.has(message.id) ? "Downloading..." : "Download PNG"}
                                         >
-                                            <Download size={18} />
+                                            {(downloadingIds.has(message.id) || !loadedImageIds.has(message.id)) ? (
+                                                <Loader2 size={20} className={styles.rotating} style={{ animation: 'spin 1.5s linear infinite' }} />
+                                            ) : (
+                                                <Download size={20} />
+                                            )}
                                         </button>
+
+                                        {!loadedImageIds.has(message.id) && (
+                                            <div style={{
+                                                position: 'absolute',
+                                                top: '50%',
+                                                left: '50%',
+                                                transform: 'translate(-50%, -50%)',
+                                                display: 'flex',
+                                                flexDirection: 'column',
+                                                alignItems: 'center',
+                                                gap: '8px',
+                                                color: '#64748b'
+                                            }}>
+                                                <Loader2 size={32} style={{ animation: 'spin 1.5s linear infinite' }} />
+                                                <span style={{ fontSize: '0.75rem', fontWeight: 500 }}>Rendering Art...</span>
+                                            </div>
+                                        )}
                                     </div>
                                 )}
                                 <div className={styles.messageText}>
