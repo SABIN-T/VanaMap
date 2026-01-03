@@ -890,8 +890,8 @@ export const AIDoctor = () => {
                                                             borderRadius: '12px',
                                                             objectFit: 'contain',
                                                             display: 'block',
-                                                            opacity: loadedImageIds.has(imageKey) ? 1 : 0.4,
-                                                            transition: 'all 0.5s ease',
+                                                            opacity: 1,
+                                                            transition: 'none',
                                                             boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
                                                         }}
                                                     />
