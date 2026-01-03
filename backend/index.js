@@ -2562,7 +2562,11 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
            - Does this match 'inventorySummary' biometrics? (e.g. "Matches Stock #104 Biometrics").
            - If not in stock, verify against 'floraKnowledge' (Venation, Inflorescence).
            - Finally, cross-check against your EXTERNAL scientific training (RHS/Kew Gardens data).
-        Step 3: CONFIRM IDENTITY. State the Scientific Name with % Confidence based on traits.
+        Step 3: CONFIRM IDENTITY & ETYMOLOGY (The 'Why').
+           - State the Scientific Name.
+           - **CRITICAL**: DECODE the name. Explain the Latin/Greek meaning.
+             (e.g., "Named *Monstera* (Latin for 'monstrous') because of its unusually large, slashed leaves.")
+           - Connect the name directly to the specific visual traits you see in the image.
         Step 4: PRESCRIBE TREATMENT. Give actionable steps based on visual evidence.
 
         💬 RESPONSE STYLE:
