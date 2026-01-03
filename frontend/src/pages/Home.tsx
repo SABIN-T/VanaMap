@@ -265,6 +265,9 @@ export const Home = () => {
         }
     }, [weather]);
 
+    // DISABLED: Auto-detect on mount
+    // Location detection now only happens when user clicks the GPS button
+    /*
     useEffect(() => {
         // Auto-detect on mount if nothing is cached
         const hasNoLocation = !localStorage.getItem('vanamap_weather');
@@ -287,6 +290,7 @@ export const Home = () => {
             return () => clearTimeout(timer);
         }
     }, []);
+    */
 
     const handleAddToCart = (plant: Plant) => {
         // Navigate to Shops page with the selected plant ID to open it immediately
