@@ -2535,7 +2535,23 @@ app.post('/api/chat', async (req, res) => {
                         temperature: 0.7
                     })
                 });
-                return { ok: resp.ok, data: await resp.json() };
+
+                const json = await resp.json();
+
+                // Extract Neural Usage Metadata (Rate Limits) for Frontend Display
+                const usageMeta = {
+                    remaining: resp.headers.get('x-ratelimit-remaining-tokens') || resp.headers.get('x-ratelimit-remaining-tokens-on-demand'),
+                    limit: resp.headers.get('x-ratelimit-limit-tokens') || resp.headers.get('x-ratelimit-limit-tokens-on-demand'),
+                    reset: resp.headers.get('x-ratelimit-reset-tokens'),
+                    total_usage: json.usage // Standard OpenAI usage object
+                };
+
+                // Inject usage meta into response data so frontend knows the "Real-time Battery Level"
+                if (json && typeof json === 'object') {
+                    json.usageMeta = usageMeta;
+                }
+
+                return { ok: resp.ok, data: json };
             } catch (err) {
                 return { ok: false, data: { error: { message: err.message } } };
             }

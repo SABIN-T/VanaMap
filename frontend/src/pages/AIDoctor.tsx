@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Send, Sparkles, Leaf, Bot, User, Trash2, Download, Calendar, Globe, Camera, Mic, Volume2, VolumeX } from 'lucide-react';
+import { Send, Sparkles, Leaf, Bot, User, Trash2, Download, Calendar, Globe, Camera, Mic, Volume2, VolumeX, Zap } from 'lucide-react';
 import { chatWithDrFlora } from '../services/api';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
@@ -29,6 +29,7 @@ export const AIDoctor = () => {
 
     const messagesEndRef = useRef<HTMLDivElement>(null);
 
+    const [neuralMeta, setNeuralMeta] = useState<{ current: number; max: number } | null>(null);
 
 
     const scrollToBottom = () => {
@@ -86,6 +87,17 @@ export const AIDoctor = () => {
             );
 
             console.log('[AI Doctor] Raw API Response:', response); // Debugging
+
+            // --- Update Neural Energy Levels ---
+            if (response.usageMeta) {
+                const remaining = parseInt(response.usageMeta.remaining || '0') || 0;
+                const limit = parseInt(response.usageMeta.limit || '100000') || 100000;
+                setNeuralMeta({ current: remaining, max: limit });
+
+                if (remaining > 0 && remaining < 20000) {
+                    toast("⚠️ Neural Energy Low!", { icon: '⚡' });
+                }
+            }
 
             let aiText = response.choices?.[0]?.message?.content;
 
@@ -389,6 +401,27 @@ export const AIDoctor = () => {
                     </div>
 
                     <div className={styles.actions}>
+                        {/* Neural Energy Display */}
+                        {neuralMeta && (
+                            <div style={{
+                                fontSize: 'clamp(10px, 2vw, 12px)',
+                                padding: '4px 10px',
+                                background: neuralMeta.current < 20000 ? '#fef2f2' : 'rgba(255,255,255,0.6)',
+                                color: neuralMeta.current < 20000 ? '#ef4444' : '#10b981',
+                                borderRadius: '99px',
+                                border: `1px solid ${neuralMeta.current < 20000 ? '#fecaca' : '#bbf7d0'}`,
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '4px',
+                                fontWeight: 600,
+                                marginRight: '8px',
+                                backdropFilter: 'blur(4px)',
+                                boxShadow: '0 2px 5px rgba(0,0,0,0.05)'
+                            }} title={`Daily Neural Operations Remaining: ${neuralMeta.current.toLocaleString()}`}>
+                                <Zap size={14} fill={neuralMeta.current < 20000 ? "#ef4444" : "#10b981"} />
+                                <span>{(neuralMeta.current / 1000).toFixed(1)}k Ops</span>
+                            </div>
+                        )}
                         <button
                             className={styles.actionBtn}
                             onClick={toggleVoice}
