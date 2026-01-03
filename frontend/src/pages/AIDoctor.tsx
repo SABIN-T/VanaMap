@@ -848,7 +848,7 @@ export const AIDoctor = () => {
                                                         textTransform: 'uppercase',
                                                         letterSpacing: '0.5px'
                                                     }}>
-                                                        {idx === 0 ? '🎨 Botanical Art (Flux)' : '📸 Photo Realism (SDXL)'}
+                                                        {idx === 0 ? '🎨 Botanical Art (Flux)' : '📸 Ultra-Realism (Pro)'}
                                                     </div>
 
                                                     <button
