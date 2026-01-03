@@ -90,17 +90,17 @@ export const PermissionCenter = () => {
                 {/* AI Doctor Bot Button */}
                 <button
                     className={styles.aiFab}
-                    onClick={() => navigate('/heaven/ai-doctor')}
+                    onClick={() => navigate('/admin/ai-doctor')}
                     title="AI Plant Doctor"
                 >
                     <Bot size={20} />
-                    <span>AI Doctor</span>
+                    <span className={styles.fabText}>AI Doctor</span>
                 </button>
 
                 {/* Permissions Button */}
-                <button className={styles.fab} onClick={() => setIsOpen(true)}>
+                <button className={styles.fab} onClick={() => setIsOpen(true)} title="Permissions">
                     <ShieldCheck size={20} />
-                    <span>Permissions</span>
+                    <span className={styles.fabText}>Permissions</span>
                 </button>
             </>
         );
