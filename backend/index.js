@@ -2678,11 +2678,14 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
             const enhancedPrompt = FloraIntelligence.enhanceGenerationPrompt(prompt, matchedFloraBatch);
             const seed = Math.floor(Math.random() * 1000000);
 
-            // SPEED OPTIMIZED: Using 896x896 for faster rendering while maintaining quality
-            const host = req.get('host');
-            const protocol = req.protocol === 'https' || req.get('x-forwarded-proto') === 'https' ? 'https' : 'http';
-            const baseUrl = `${protocol}://${host}`;
-            const imageUrl = `${baseUrl}/api/generate-image?prompt=${encodeURIComponent(enhancedPrompt)}&seed=${seed}&width=896&height=896`;
+            // RELIABILITY UPGRADE: Return two images (Flux + SDXL) for a better comparison
+            const fluxUrl = `/api/generate-image?prompt=${encodeURIComponent(enhancedPrompt)}&seed=${seed}&width=896&height=896&model=flux`;
+            const sdxlUrl = `/api/generate-image?prompt=${encodeURIComponent(enhancedPrompt)}&seed=${seed + 1}&width=896&height=896&model=turbo`;
+
+            // Inject multi-image support
+            result.data.choices[0].message.images = [fluxUrl, sdxlUrl];
+            // Backward compatibility
+            result.data.choices[0].message.image = fluxUrl;
 
             // Remove the [GENERATE:...] tag from the visible text
             aiContent = aiContent.replace(generateRegex, "").trim();
@@ -2919,12 +2922,12 @@ process.on('unhandledRejection', (err) => {
     console.error('UNHANDLED REJECTION! 💥', err);
 });
 
-// --- MULTI-AI IMAGE GENERATION ENGINE (Speed Optimized Version) ---
+// --- MULTI-AI IMAGE GENERATION ENGINE (Dual-Model Support) ---
 app.get('/api/generate-image', async (req, res) => {
-    const { prompt, seed, width = 896, height = 896 } = req.query;
+    const { prompt, seed, width = 896, height = 896, model: requestedModel } = req.query;
 
-    // Speed-First Priority: Turbo is much faster for real-time chat
-    const models = ['turbo', 'flux', 'flux-realism', 'any'];
+    // Fixed model sequence: if a model is requested, try it first, then fallback
+    const models = requestedModel ? [requestedModel, 'turbo', 'flux', 'any'] : ['turbo', 'flux', 'flux-realism', 'any'];
 
     for (const model of models) {
         try {

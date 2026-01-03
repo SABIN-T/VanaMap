@@ -13,6 +13,7 @@ interface Message {
     content: string;
     timestamp: Date;
     image?: string;
+    images?: string[]; // Support for multiple AI models (Flux & SDXL)
 }
 
 export const AIDoctor = () => {
@@ -130,7 +131,8 @@ export const AIDoctor = () => {
                 id: (Date.now() + 1).toString(),
                 role: 'assistant',
                 content: aiText,
-                image: response.choices?.[0]?.message?.image, // CAPTURE GENERATED IMAGE
+                image: response.choices?.[0]?.message?.image,
+                images: response.choices?.[0]?.message?.images, // CAPTURE BOTH FLUX & SDXL
                 timestamp: new Date()
             };
 
@@ -767,108 +769,131 @@ export const AIDoctor = () => {
                                     {message.role === 'user' ? 'You' : 'Dr. Flora'} • {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                 </div>
                                 {/* Display uploaded image if present */}
-                                {message.image && (
+                                {((message.images && message.images.length > 0) || message.image) && (
                                     <div style={{
+                                        display: 'grid',
+                                        gridTemplateColumns: (message.images && message.images.length > 1) ? 'repeat(auto-fit, minmax(280px, 1fr))' : '1fr',
+                                        gap: '12px',
                                         marginBottom: '0.75rem',
-                                        position: 'relative',
-                                        background: message.role === 'assistant' ? '#f8fafc' : 'rgba(0,0,0,0.1)',
-                                        borderRadius: '16px',
-                                        padding: '4px',
-                                        border: '1px solid rgba(0,0,0,0.05)',
-                                        display: 'inline-block',
-                                        maxWidth: '100%',
-                                        minWidth: '100px',
-                                        minHeight: '100px'
+                                        width: '100%'
                                     }}>
-                                        <img
-                                            src={message.image}
-                                            alt="Plant view"
-                                            onLoad={() => {
-                                                setLoadedImageIds(prev => new Set(prev).add(message.id));
-                                                setImageTimers(prev => ({ ...prev, [message.id]: 0 }));
-                                            }}
-                                            onError={(e) => {
-                                                console.error("Image failed in chat");
-                                                setLoadedImageIds(prev => new Set(prev).add(message.id));
-                                                setImageTimers(prev => ({ ...prev, [message.id]: 0 }));
-                                                e.currentTarget.style.opacity = '1';
-                                            }}
-                                            style={{
-                                                maxWidth: '100%',
-                                                maxHeight: '400px',
-                                                borderRadius: '12px',
-                                                objectFit: 'contain',
-                                                display: 'block',
-                                                opacity: loadedImageIds.has(message.id) ? 1 : 0.4,
-                                                transition: 'all 0.5s ease',
-                                                boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
-                                            }}
-                                        />
-                                        <button
-                                            onClick={() => downloadImage(message.image!, message.id)}
-                                            disabled={downloadingIds.has(message.id)}
-                                            style={{
-                                                position: 'absolute',
-                                                bottom: '12px',
-                                                right: '12px',
-                                                background: '#059669',
-                                                color: 'white',
-                                                border: 'none',
-                                                borderRadius: '30px',
-                                                padding: '10px 18px',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                gap: '10px',
-                                                cursor: downloadingIds.has(message.id) ? 'wait' : 'pointer',
-                                                boxShadow: '0 8px 16px rgba(5, 150, 105, 0.3)',
-                                                transition: 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)',
-                                                zIndex: 10,
-                                                fontSize: '0.85rem',
-                                                fontWeight: 700
-                                            }}
-                                            onMouseEnter={(e) => {
-                                                if (!downloadingIds.has(message.id)) {
-                                                    e.currentTarget.style.transform = 'scale(1.05) translateY(-2px)';
-                                                    e.currentTarget.style.background = '#047857';
-                                                }
-                                            }}
-                                            onMouseLeave={(e) => {
-                                                e.currentTarget.style.transform = 'scale(1) translateY(0)';
-                                                e.currentTarget.style.background = '#059669';
-                                            }}
-                                        >
-                                            {downloadingIds.has(message.id) ? (
-                                                <Loader2 size={18} className={styles.rotating} />
-                                            ) : (
-                                                <Download size={18} />
-                                            )}
-                                            <span>{downloadingIds.has(message.id) ? 'Saving...' : 'Save PNG'}</span>
-                                        </button>
+                                        {(message.images && message.images.length > 0 ? message.images : [message.image]).map((imgUrl, idx) => {
+                                            const imageKey = `${message.id}-${idx}`;
+                                            return (
+                                                <div key={imageKey} style={{
+                                                    position: 'relative',
+                                                    background: message.role === 'assistant' ? '#f8fafc' : 'rgba(0,0,0,0.1)',
+                                                    borderRadius: '16px',
+                                                    padding: '4px',
+                                                    border: '1px solid rgba(0,0,0,0.05)',
+                                                    overflow: 'hidden',
+                                                    minHeight: '200px'
+                                                }}>
+                                                    <img
+                                                        src={imgUrl && imgUrl.startsWith('/') ? `${API_URL.replace(/\/api$/, '')}${imgUrl}` : imgUrl}
+                                                        alt={`Plant view ${idx + 1}`}
+                                                        onLoad={() => {
+                                                            setLoadedImageIds(prev => new Set(prev).add(imageKey));
+                                                            if (idx === (message.images?.length || 1) - 1) {
+                                                                setImageTimers(prev => ({ ...prev, [message.id]: 0 }));
+                                                            }
+                                                        }}
+                                                        onError={(e) => {
+                                                            setLoadedImageIds(prev => new Set(prev).add(imageKey));
+                                                            e.currentTarget.style.opacity = '1';
+                                                        }}
+                                                        style={{
+                                                            width: '100%',
+                                                            maxHeight: '400px',
+                                                            borderRadius: '12px',
+                                                            objectFit: 'contain',
+                                                            display: 'block',
+                                                            opacity: loadedImageIds.has(imageKey) ? 1 : 0.4,
+                                                            transition: 'all 0.5s ease',
+                                                            boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
+                                                        }}
+                                                    />
 
-                                        {(!loadedImageIds.has(message.id) && (imageTimers[message.id] > 0)) && (
-                                            <div style={{
-                                                position: 'absolute',
-                                                top: 0,
-                                                left: 0,
-                                                right: 0,
-                                                bottom: 0,
-                                                background: 'rgba(255,255,255,0.75)',
-                                                backdropFilter: 'blur(3px)',
-                                                borderRadius: '12px',
-                                                display: 'flex',
-                                                flexDirection: 'column',
-                                                alignItems: 'center',
-                                                justifyContent: 'center',
-                                                gap: '15px',
-                                                zIndex: 5
-                                            }}>
-                                                <Loader2 size={40} className={styles.rotating} color="#059669" />
-                                                <div style={{ textAlign: 'center' }}>
-                                                    <div style={{ fontSize: '1rem', fontWeight: 800, color: '#059669', letterSpacing: '-0.5px' }}>Dr. Flora is Painting...</div>
-                                                    <div style={{ fontSize: '0.8rem', color: '#64748b', marginTop: '4px' }}>Rendering: {imageTimers[message.id]}s left</div>
+                                                    <div style={{
+                                                        position: 'absolute',
+                                                        top: '12px',
+                                                        left: '12px',
+                                                        background: 'rgba(5, 150, 105, 0.9)',
+                                                        color: 'white',
+                                                        padding: '4px 10px',
+                                                        borderRadius: '20px',
+                                                        fontSize: '0.7rem',
+                                                        fontWeight: 800,
+                                                        backdropFilter: 'blur(8px)',
+                                                        boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
+                                                        zIndex: 8,
+                                                        textTransform: 'uppercase',
+                                                        letterSpacing: '0.5px'
+                                                    }}>
+                                                        {idx === 0 ? '🎨 Botanical Art (Flux)' : '📸 Photo Realism (SDXL)'}
+                                                    </div>
+
+                                                    <button
+                                                        onClick={() => downloadImage(imgUrl!, imageKey)}
+                                                        disabled={downloadingIds.has(imageKey)}
+                                                        style={{
+                                                            position: 'absolute',
+                                                            bottom: '12px',
+                                                            right: '12px',
+                                                            background: '#059669',
+                                                            color: 'white',
+                                                            border: 'none',
+                                                            borderRadius: '30px',
+                                                            padding: '8px 14px',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            gap: '8px',
+                                                            cursor: downloadingIds.has(imageKey) ? 'wait' : 'pointer',
+                                                            boxShadow: '0 6px 15px rgba(5, 150, 105, 0.4)',
+                                                            zIndex: 10,
+                                                            fontSize: '0.8rem',
+                                                            fontWeight: 700,
+                                                            transition: 'all 0.2s'
+                                                        }}
+                                                    >
+                                                        {downloadingIds.has(imageKey) ? (
+                                                            <div style={{ animation: 'spin 1s linear infinite', display: 'flex' }}>
+                                                                <Loader2 size={16} />
+                                                            </div>
+                                                        ) : (
+                                                            <Download size={16} />
+                                                        )}
+                                                        <span>Save PNG</span>
+                                                    </button>
+
+                                                    {(!loadedImageIds.has(imageKey) && (imageTimers[message.id] > 0)) && (
+                                                        <div style={{
+                                                            position: 'absolute',
+                                                            top: 0,
+                                                            left: 0,
+                                                            right: 0,
+                                                            bottom: 0,
+                                                            background: 'rgba(255,255,255,0.8)',
+                                                            backdropFilter: 'blur(5px)',
+                                                            display: 'flex',
+                                                            flexDirection: 'column',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'center',
+                                                            gap: '12px',
+                                                            zIndex: 5
+                                                        }}>
+                                                            <div style={{ animation: 'spin 1.5s linear infinite', display: 'flex', color: '#059669' }}>
+                                                                <Loader2 size={36} />
+                                                            </div>
+                                                            <div style={{ textAlign: 'center' }}>
+                                                                <div style={{ fontSize: '0.9rem', fontWeight: 800, color: '#059669' }}>Painting...</div>
+                                                                <div style={{ fontSize: '0.75rem', color: '#64748b' }}>{imageTimers[message.id]}s left</div>
+                                                            </div>
+                                                        </div>
+                                                    )}
                                                 </div>
-                                            </div>
-                                        )}
+                                            );
+                                        })}
                                     </div>
                                 )}
                                 <div className={styles.messageText}>
@@ -897,7 +922,6 @@ export const AIDoctor = () => {
             {/* Input Dock */}
             <div className={styles.inputContainer}>
                 <div className={styles.inputDock}>
-                    {/* Tool Buttons */}
                     <button
                         className={styles.toolBtn}
                         onClick={handleScanClick}
