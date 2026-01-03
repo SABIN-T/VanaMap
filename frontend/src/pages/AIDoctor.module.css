@@ -331,8 +331,40 @@
     color: #e2e8f0;
     font-family: 'Inter', sans-serif;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    white-space: pre-wrap;
-    /* Preserve formatting */
+}
+
+/* Markdown Styles within Message Bubbles */
+.messageText p {
+    margin-bottom: 0.75rem;
+}
+
+.messageText p:last-child {
+    margin-bottom: 0;
+}
+
+.messageText ul,
+.messageText ol {
+    margin-bottom: 0.75rem;
+    padding-left: 1.5rem;
+}
+
+.messageText li {
+    margin-bottom: 0.25rem;
+}
+
+.messageText strong {
+    font-weight: 700;
+    color: #fff;
+    /* Highlight bold text */
+}
+
+.messageText h1,
+.messageText h2,
+.messageText h3 {
+    font-weight: 700;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+    font-size: 1.1em;
 }
 
 /* AI Message Bubble - Premium Glassmorphism */

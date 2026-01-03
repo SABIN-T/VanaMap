@@ -4,6 +4,8 @@ import { fetchPlants } from '../services/api';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
 import styles from './AIDoctor.module.css';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 interface Message {
     id: string;
@@ -1355,9 +1357,9 @@ What would you like to know about your plants today?`;
                                     </span>
                                 </div>
                                 <div className={styles.messageText}>
-                                    {message.content.split('\n').map((line, i) => (
-                                        <p key={i}>{line}</p>
-                                    ))}
+                                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                        {message.content}
+                                    </ReactMarkdown>
                                 </div>
                             </div>
                         </div>
