@@ -44,50 +44,87 @@ const extractPlantDataFromAI = (aiResponse: string): Partial<Plant> => {
     const nameMatch = aiResponse.match(/common name[:\s]+([^\n.]+)/i);
     if (nameMatch) data.name = nameMatch[1].trim();
 
-    // Extract description (look for descriptive paragraphs)
+    // Extract description
     const descMatch = aiResponse.match(/(?:description|about)[:\s]+([^\n]+(?:\n[^\n]+)*?)(?=\n\n|\n[A-Z]|$)/i);
-    if (descMatch) data.description = descMatch[1].trim().replace(/\n/g, ' ');
+    if (descMatch) data.description = descMatch[1].trim().replace(/\n/g, ' ').substring(0, 500);
 
     // Extract type
-    if (aiResponse.match(/indoor/i)) data.type = 'indoor';
-    if (aiResponse.match(/outdoor/i)) data.type = 'outdoor';
+    if (aiResponse.match(/\b(indoor|houseplant)\b/i)) data.type = 'indoor';
+    if (aiResponse.match(/\b(outdoor|garden)\b/i)) data.type = 'outdoor';
 
     // Extract sunlight
-    if (aiResponse.match(/full sun|direct sun/i)) data.sunlight = 'direct';
-    else if (aiResponse.match(/bright|high light/i)) data.sunlight = 'high';
-    else if (aiResponse.match(/medium|partial|indirect/i)) data.sunlight = 'medium';
-    else if (aiResponse.match(/low light|shade/i)) data.sunlight = 'low';
+    if (aiResponse.match(/\b(full sun|direct sunlight|direct sun)\b/i)) data.sunlight = 'direct';
+    else if (aiResponse.match(/\b(bright|high light)\b/i)) data.sunlight = 'high';
+    else if (aiResponse.match(/\b(medium|moderate|partial|indirect)\b/i)) data.sunlight = 'medium';
+    else if (aiResponse.match(/\b(low light|shade)\b/i)) data.sunlight = 'low';
 
-    // Extract temperature range
-    const tempMatch = aiResponse.match(/(\d+)[-–](\d+)°?[CF]/i);
+    // Extract temperature
+    const tempMatch = aiResponse.match(/(\d+)[-–to\s]+(\d+)\s*°?[CF]/i);
     if (tempMatch) {
-        data.idealTempMin = parseInt(tempMatch[1]);
-        data.idealTempMax = parseInt(tempMatch[2]);
-    }
+        let min = parseInt(tempMatch[1]);
+        let max = parseInt(tempMatch[2]);
+        if (min > 50) { min = Math.round((min - 32) * 5 / 9); max = Math.round((max - 32) * 5 / 9); }
+        data.idealTempMin = min;
+        data.idealTempMax = max;
+    } else { data.idealTempMin = 18; data.idealTempMax = 30; }
 
     // Extract humidity
     const humidMatch = aiResponse.match(/humidity[:\s]+(\d+)/i);
     if (humidMatch) data.minHumidity = parseInt(humidMatch[1]);
+    else if (aiResponse.match(/\bhigh humidity\b/i)) data.minHumidity = 70;
+    else if (aiResponse.match(/\bmoderate humidity\b/i)) data.minHumidity = 50;
+    else data.minHumidity = 40;
+
+    // Extract oxygen level
+    if (aiResponse.match(/\b(excellent|very high|purifier|air purifying)\b/i)) data.oxygenLevel = 'very-high';
+    else if (aiResponse.match(/\bhigh oxygen\b/i)) data.oxygenLevel = 'high';
+    else data.oxygenLevel = 'moderate';
+
+    // Extract price
+    const priceMatch = aiResponse.match(/(?:price|cost|₹|Rs\.?)[:\s]*(\d+)/i);
+    data.price = priceMatch ? parseInt(priceMatch[1]) : 150;
 
     // Extract medicinal values
     const medMatch = aiResponse.match(/medicinal[:\s]+([^\n]+)/i);
-    if (medMatch) {
-        data.medicinalValues = medMatch[1].split(/[,;]/).map(v => v.trim()).filter(Boolean);
-    }
+    if (medMatch) data.medicinalValues = medMatch[1].split(/[,;]/).map(v => v.trim()).filter(Boolean);
 
-    // Extract advantages/benefits
-    const advMatch = aiResponse.match(/(?:benefits?|advantages?)[:\s]+([^\n]+(?:\n[^\n]+)*?)(?=\n\n|\n[A-Z]|$)/i);
-    if (advMatch) {
-        data.advantages = advMatch[1].split(/[,;.\n]/).map(v => v.trim()).filter(v => v.length > 3);
-    }
+    // Extract advantages
+    const advMatch = aiResponse.match(/(?:benefits?|advantages?|uses)[:\s]+([^\n]+(?:\n[^\n]+)*?)(?=\n\n|\n[A-Z]|$)/i);
+    if (advMatch) data.advantages = advMatch[1].split(/[,;.\n]/).map(v => v.trim().replace(/^[-•*]\s*/, '')).filter(v => v.length > 5 && v.length < 100);
 
     // Extract lifespan
     const lifeMatch = aiResponse.match(/lifespan[:\s]+([^\n.]+)/i);
     if (lifeMatch) data.lifespan = lifeMatch[1].trim();
+    else if (aiResponse.match(/\bperennial\b/i)) data.lifespan = 'Perennial (10+ years)';
+    else if (aiResponse.match(/\bannual\b/i)) data.lifespan = 'Annual (1 year)';
 
     // Extract leaf shape
     const leafMatch = aiResponse.match(/leaf shape[:\s]+([^\n.]+)/i);
     if (leafMatch) data.leafShape = leafMatch[1].trim();
+    else if (aiResponse.match(/\bovate\b/i)) data.leafShape = 'Ovate';
+
+    // Extract stem structure
+    const stemMatch = aiResponse.match(/stem[:\s]+([^\n.]+)/i);
+    if (stemMatch) data.stemStructure = stemMatch[1].trim();
+    else if (aiResponse.match(/\bwoody\b/i)) data.stemStructure = 'Woody';
+    else if (aiResponse.match(/\bherbaceous\b/i)) data.stemStructure = 'Herbaceous';
+    else if (aiResponse.match(/\bsucculent\b/i)) data.stemStructure = 'Succulent';
+
+    // Extract growth habit
+    const habitMatch = aiResponse.match(/(?:growth habit|habit)[:\s]+([^\n.]+)/i);
+    if (habitMatch) data.overallHabit = habitMatch[1].trim();
+    else if (aiResponse.match(/\b(climbing|vine)\b/i)) data.overallHabit = 'Climbing';
+    else if (aiResponse.match(/\bbushy\b/i)) data.overallHabit = 'Bushy';
+    else if (aiResponse.match(/\bupright\b/i)) data.overallHabit = 'Upright';
+
+    // Extract foliage texture
+    if (aiResponse.match(/\bglossy\b/i)) data.foliageTexture = 'Glossy';
+    else if (aiResponse.match(/\bmatte\b/i)) data.foliageTexture = 'Matte';
+    else if (aiResponse.match(/\bfuzzy\b/i)) data.foliageTexture = 'Fuzzy';
+
+    // Extract distinctive features
+    const featMatch = aiResponse.match(/(?:distinctive|features?)[:\s]+([^\n]+(?:\n[^\n]+)*?)(?=\n\n|\n[A-Z]|$)/i);
+    if (featMatch) data.biometricFeatures = featMatch[1].split(/[,;.\n]/).map(v => v.trim().replace(/^[-•*]\s*/, '')).filter(v => v.length > 5 && v.length < 80);
 
     return data;
 };
@@ -209,13 +246,19 @@ Please be specific and accurate.`;
                 description: extractedData.description || prev.description,
                 type: extractedData.type || prev.type,
                 sunlight: extractedData.sunlight || prev.sunlight,
+                price: extractedData.price || prev.price,
                 idealTempMin: extractedData.idealTempMin || prev.idealTempMin,
                 idealTempMax: extractedData.idealTempMax || prev.idealTempMax,
                 minHumidity: extractedData.minHumidity || prev.minHumidity,
+                oxygenLevel: extractedData.oxygenLevel || prev.oxygenLevel,
                 medicinalValues: extractedData.medicinalValues || prev.medicinalValues,
                 advantages: extractedData.advantages || prev.advantages,
                 lifespan: extractedData.lifespan || prev.lifespan,
-                leafShape: extractedData.leafShape || prev.leafShape
+                leafShape: extractedData.leafShape || prev.leafShape,
+                stemStructure: extractedData.stemStructure || prev.stemStructure,
+                overallHabit: extractedData.overallHabit || prev.overallHabit,
+                foliageTexture: extractedData.foliageTexture || prev.foliageTexture,
+                biometricFeatures: extractedData.biometricFeatures || prev.biometricFeatures
             }));
 
             toast.success(`✨ Auto-filled by Dr. Flora!`, { id: tid });
