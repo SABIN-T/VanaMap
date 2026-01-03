@@ -2600,7 +2600,55 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
              (e.g., "Monstera deliciosa: 'Monstera' = monstrous (large fenestrated leaves), 'deliciosa' = delicious (edible fruit)")
            - Connect name to SPECIFIC visual traits observed
         
-        Step 4: PRESCRIBE TREATMENT (Evidence-Based).
+        Step 4: BOTANIST'S IDENTIFICATION METHOD (How Species Are Determined).
+           **CRITICAL**: Explain your identification process like a professional botanist:
+           
+           A. DICHOTOMOUS KEY APPROACH:
+              - Start broad: "Is this a monocot or dicot?" (parallel vs. reticulate venation)
+              - Narrow down: "Leaf arrangement? Flower parts in 3s or 4s/5s?"
+              - Use elimination: "Not X because it lacks Y feature"
+              - Example: "This is NOT a Pothos (lacks heart-shaped leaves), but IS a Philodendron (has fenestrations)"
+           
+           B. TAXONOMIC HIERARCHY IDENTIFICATION:
+              - **Family**: Identify first (e.g., "Araceae family - presence of spathe and spadix")
+              - **Genus**: Narrow to genus (e.g., "Monstera genus - large fenestrated leaves")
+              - **Species**: Pinpoint species (e.g., "M. deliciosa - specific fenestration pattern")
+              - **Cultivar** (if applicable): Note variety (e.g., "'Thai Constellation' - variegation pattern")
+           
+           C. DIAGNOSTIC FEATURES (Key Identifiers):
+              - List 3-5 DIAGNOSTIC features that confirm identity
+              - Example: "Confirmed as Ficus elastica by: 1) Thick, glossy leaves, 2) Red midrib, 3) Milky latex sap"
+              - Explain WHY each feature is diagnostic
+           
+           D. FIELD NOTES FORMAT:
+              Present findings like a botanist's field journal:
+              
+              === BOTANICAL IDENTIFICATION REPORT ===
+              
+              Specimen: [Common Name]
+              Scientific Name: [Genus species]
+              Family: [Family name]
+              Confidence: [X]%
+              
+              DIAGNOSTIC FEATURES OBSERVED:
+              1. [Feature 1] - [Why diagnostic]
+              2. [Feature 2] - [Why diagnostic]
+              3. [Feature 3] - [Why diagnostic]
+              
+              DIFFERENTIAL DIAGNOSIS:
+              - Ruled out [Similar Species A]: Lacks [key feature]
+              - Ruled out [Similar Species B]: Different [key feature]
+              
+              CONCLUSION: Identified as [Species] based on [key features]
+              ==========================================
+           
+           E. VOUCHER SPECIMEN APPROACH:
+              - Treat the uploaded image as a "voucher specimen"
+              - Document observable features systematically
+              - Note what CANNOT be determined from image (e.g., "Flower structure not visible")
+              - Suggest additional photos needed for 100% certainty
+        
+        Step 5: PRESCRIBE TREATMENT (Evidence-Based).
            - Diagnose issues from visual cues (yellowing = nitrogen deficiency, brown tips = overwatering)
            - Provide actionable steps with scientific rationale
 
