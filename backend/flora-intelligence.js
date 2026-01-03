@@ -39,8 +39,12 @@ const FloraIntelligence = {
 
         if (matches.length === 0) return { context: "", matches: [] };
 
-        const context = `\n\n🔬 SCIENTIFIC DATA FROM WORLD FLORA INDEX (Matched for this conversation):\n${matches.map(p =>
-            `- ${p.scientificName} (${p.commonName}): Flower: ${p.flowerType}, Venation: ${p.leafVenation}, Oxygen: ${p.oxygenOutput}ml/h, Light: ${p.lightRequirement}, Source: ${p.verifiedSource}`
+        const context = `\n\n🔬 SCIENTIFIC DOSSIER (Verified World Flora Data):\n${matches.map(p =>
+            `• [ID: ${p.scientificName}] matches "${p.commonName}". 
+               - Anatomy: ${p.flowerType} flowers, ${p.leafVenation} venation, ${p.inflorescencePattern} pattern.
+               - Physiology: Produces ${p.oxygenOutput}ml O2/h. AC Tolerance: ${p.acTolerance}.
+               - Care: Requires ${p.lightRequirement}. Aptness Score: ${p.aptness}/100.
+               - Source: Verified by ${p.verifiedSource}.`
         ).join('\n')}`;
 
         return { context, matches };
