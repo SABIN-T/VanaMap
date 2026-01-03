@@ -2852,11 +2852,18 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
 
 ${validOpinions.map((op, i) => `EXPERT ${i + 1} (${op.model}): ${op.content}`).join('\n\n')}
 
-INSTRUCTIONS:
-- Compare findings. If they agree, output with high confidence.
-- If they disagree, decide the correct answer.
-- EXPLAIN the scientific name (Etymology).
-- Use [GENERATE] tag if visual needed.`;
+CRITICAL INSTRUCTIONS:
+1. Compare all expert findings and create a unified identification
+2. If experts agree, output with HIGH confidence (95%+)
+3. If experts disagree, use your advanced knowledge to determine the correct species
+4. EXPLAIN the scientific name (Etymology) - connect Latin/Greek roots to visual traits
+5. Provide COMPLETE nomenclature (Scientific name + Hindi + Regional + Trade names)
+6. **MANDATORY**: Include a [GENERATE: ...] tag with ultra-detailed botanical illustration prompt
+   - The [GENERATE] tag MUST describe the identified plant with maximum botanical detail
+   - Include leaf venation, flower anatomy, growth habit, accurate colors
+   - Example: [GENERATE: ultra high resolution botanical illustration of Monstera deliciosa showing fenestrated leaves with pinnate venation, aerial roots, and climbing growth habit]
+
+REMEMBER: Your response must include BOTH the identification analysis AND the [GENERATE] tag for visualization!`;
 
                 const synthesisMessages = [
                     { role: "system", content: systemPrompt },
