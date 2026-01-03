@@ -14,6 +14,7 @@ import { SystemGuard } from './components/common/SystemGuard';
 
 import { LocationNag } from './components/common/LocationNag';
 import { PermissionCenter } from './components/common/PermissionCenter';
+import { InAppBrowserGuard } from './components/common/InAppBrowserGuard';
 
 function App() {
   return (
@@ -21,40 +22,42 @@ function App() {
       <SystemGuard>
         <AuthProvider>
           <CartProvider>
-            <Router>
-              <LocationNag />
-              <PermissionCenter />
-              <NetworkIndicator />
-              <Toaster
-                position="top-center"
-                toastOptions={{
-                  style: {
-                    background: '#ffffff',
-                    color: '#0f172a',
-                    border: '1px solid rgba(0,0,0,0.1)',
-                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
-                  },
-                  success: {
-                    iconTheme: {
-                      primary: '#10b981',
-                      secondary: '#fff',
+            <InAppBrowserGuard>
+              <Router>
+                <LocationNag />
+                <PermissionCenter />
+                <NetworkIndicator />
+                <Toaster
+                  position="top-center"
+                  toastOptions={{
+                    style: {
+                      background: '#ffffff',
+                      color: '#0f172a',
+                      border: '1px solid rgba(0,0,0,0.1)',
+                      boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
                     },
-                  },
-                  error: {
-                    iconTheme: {
-                      primary: '#ef4444',
-                      secondary: '#fff',
+                    success: {
+                      iconTheme: {
+                        primary: '#10b981',
+                        secondary: '#fff',
+                      },
+                    },
+                    error: {
+                      iconTheme: {
+                        primary: '#ef4444',
+                        secondary: '#fff',
+                      }
                     }
-                  }
-                }}
-              />
-              <Navbar />
-              <MobileTabBar />
-              <SwipeNavigator />
-              <InstallPrompt />
+                  }}
+                />
+                <Navbar />
+                <MobileTabBar />
+                <SwipeNavigator />
+                <InstallPrompt />
 
-              <AnimatedRoutes />
-            </Router>
+                <AnimatedRoutes />
+              </Router>
+            </InAppBrowserGuard>
           </CartProvider>
         </AuthProvider>
       </SystemGuard>
