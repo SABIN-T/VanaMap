@@ -2664,7 +2664,8 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
             const experts = [
                 { id: "llama-3.2-90b-vision-preview", role: "Senior Botanist" },
                 { id: "llama-3.2-11b-vision-preview", role: "Field Scout" },
-                { id: "llava-v1.5-7b-4096-preview", role: "Research Analyst" }
+                { id: "llava-v1.5-7b-4096-preview", role: "Research Analyst" },
+                { id: "qwen2-vl-7b-instruct", role: "Vision-Language Expert" }
             ];
 
             const visionResults = await Promise.all(experts.map(async (expert) => {
