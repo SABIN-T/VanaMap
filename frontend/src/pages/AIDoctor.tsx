@@ -1067,6 +1067,17 @@ What would you like to know about your plants today?`;
     const [isSpeaking, setIsSpeaking] = useState(false);
     const synth = window.speechSynthesis;
 
+    // --- LANGUAGE SELECTION ---
+    const [selectedLanguage, setSelectedLanguage] = useState('English');
+    const [showLanguageMenu, setShowLanguageMenu] = useState(false);
+
+    const languages = [
+        'English', 'हिंदी (Hindi)', 'മലയാളം (Malayalam)', 'தமிழ் (Tamil)',
+        'తెలుగు (Telugu)', 'ಕನ್ನಡ (Kannada)', 'বাংলা (Bengali)', 'মराठी (Marathi)',
+        'ગુજરાતી (Gujarati)', 'ਪੰਜਾਬੀ (Punjabi)', 'Español', 'Français', 'Deutsch',
+        '中文', '日本語', 'العربية'
+    ];
+
     useEffect(() => {
         // Preload voices
         const loadVoices = () => {
@@ -1267,11 +1278,32 @@ What would you like to know about your plants today?`;
 
                     <button
                         className={styles.featureBtn}
-                        onClick={() => toast('Multi-Language Support - Coming Soon! Chat in 50+ languages including all Indian languages.', { icon: '🌍', duration: 4000 })}
-                        title="Multi-Language - 50+ languages"
+                        onClick={() => setShowLanguageMenu(!showLanguageMenu)}
+                        title="Multi-Language Support"
+                        style={{ position: 'relative' }}
                     >
                         <Globe size={20} />
-                        <span>Language</span>
+                        <span>{selectedLanguage.split(' ')[0]}</span>
+
+                        {/* Language Dropdown */}
+                        {showLanguageMenu && (
+                            <div className={styles.languageDropdown}>
+                                {languages.map((lang) => (
+                                    <button
+                                        key={lang}
+                                        className={styles.langOption}
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            setSelectedLanguage(lang);
+                                            setShowLanguageMenu(false);
+                                            toast.success(`Language set to ${lang.split(' ')[0]}`, { icon: '🌍' });
+                                        }}
+                                    >
+                                        {lang}
+                                    </button>
+                                ))}
+                            </div>
+                        )}
                     </button>
 
                     <button
