@@ -2588,19 +2588,88 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
              * Height estimation (if visible)
              * Branching pattern
         
-        Step 2: CROSS-REFERENCE VERIFICATION (Triple-Check).
-           - Match biometrics against 'inventorySummary' (Stock database)
-           - Verify against 'floraKnowledge' (5,839 species index)
-           - Cross-check with EXTERNAL training (RHS, Kew Gardens, USDA Plant Database)
-           - **CRITICAL**: If 2+ features match a species, confidence ≥ 85%
         
-        Step 3: CONFIRM IDENTITY & ETYMOLOGY (The 'Why').
-           - State the Scientific Name with confidence percentage
-           - **DECODE the name**: Explain Latin/Greek roots
-             (e.g., "Monstera deliciosa: 'Monstera' = monstrous (large fenestrated leaves), 'deliciosa' = delicious (edible fruit)")
-           - Connect name to SPECIFIC visual traits observed
+        Step 2: PART-BY-PART ANALYSIS (Systematic Examination).
+           **CRITICAL**: Analyze EACH plant part SEPARATELY, then synthesize:
+           
+           A. LEAF ANALYSIS CONCLUSION:
+              - Based on leaf features alone, possible species: [List 2-3 candidates]
+              - Key diagnostic: [Most important leaf feature]
+              - Confidence from leaves: [X]%
+           
+           B. STEM ANALYSIS CONCLUSION:
+              - Based on stem features alone, possible species: [List 2-3 candidates]
+              - Key diagnostic: [Most important stem feature]
+              - Confidence from stem: [X]%
+           
+           C. FLOWER ANALYSIS CONCLUSION (if visible):
+              - Based on flower features alone, possible species: [List 2-3 candidates]
+              - Key diagnostic: [Most important flower feature]
+              - Confidence from flowers: [X]%
+           
+           D. ROOT/BASE ANALYSIS CONCLUSION (if visible):
+              - Based on root features alone, possible species: [List 2-3 candidates]
+              - Key diagnostic: [Most important root feature]
+              - Confidence from roots: [X]%
+           
+           E. SYNTHESIS OF PARTS:
+              - Species that appear in MULTIPLE part analyses: [Final candidates]
+              - Conflicting evidence (if any): [Explain discrepancies]
+              - Overall morphological confidence: [X]%
         
-        Step 4: BOTANIST'S IDENTIFICATION METHOD (How Species Are Determined).
+        Step 3: COMPREHENSIVE MULTI-SOURCE VERIFICATION (Exhaustive Search).
+           **CRITICAL**: Search FULL database + EXTERNAL sources before finalizing:
+           
+           A. INTERNAL DATABASE SEARCH (Complete Scan):
+              - Search ALL entries in 'inventorySummary' (not just first 12)
+              - Search FULL 'floraKnowledge' (all 5,839 species)
+              - Match against biometric features database
+              - Result: [Species found/not found in internal DB]
+           
+           B. EXTERNAL SCIENTIFIC DATABASE VERIFICATION:
+              Cross-reference with your training data from:
+              - **GBIF** (Global Biodiversity Information Facility): [Match Y/N]
+              - **iNaturalist**: Community observations [Match Y/N]
+              - **POWO** (Plants of the World Online - Kew Gardens): [Match Y/N]
+              - **TROPICOS** (Missouri Botanical Garden): [Match Y/N]
+              - **USDA Plants Database**: [Match Y/N]
+              - **RHS Plant Finder**: [Match Y/N]
+           
+           C. SCIENTIFIC LITERATURE VERIFICATION:
+              - Check against botanical keys in training (Flora of [Region])
+              - Verify with taxonomic revisions
+              - Confirm current accepted name (not synonym)
+              - Result: [Confirmed/Needs review]
+           
+           D. IMAGE SIMILARITY VERIFICATION:
+              - Compare uploaded image features with known specimens in training
+              - Visual match confidence: [X]%
+              - Similar species ruled out: [List]
+           
+           E. MULTI-SOURCE CONSENSUS:
+              - Sources agreeing on identification: [X out of Y sources]
+              - **FINALIZATION RULE**: Only finalize if ≥3 sources agree
+              - Confidence score: [X]%
+        
+        Step 4: CONFIRM IDENTITY WITH COMPLETE NOMENCLATURE.
+           **CRITICAL**: Provide FULL scientific + local names:
+           
+           A. SCIENTIFIC NOMENCLATURE:
+              - **Accepted Scientific Name**: [Genus species Authority Year]
+              - **Family**: [Family name]
+              - **Order**: [Order name]
+              - **Synonyms** (if any): [Old/alternative names]
+              - **Common Name** (English): [Name]
+           
+           B. LOCAL/REGIONAL NAMES:
+              - **Hindi**: [Name]
+              - **Regional** (if known): [Name in local language]
+              - **Vernacular**: [Traditional/folk name]
+              - **Trade Name**: [Nursery/commercial name]
+           
+           C. ETYMOLOGY (The 'Why'):
+        
+        Step 5: BOTANIST'S IDENTIFICATION METHOD (How Species Are Determined).
            **CRITICAL**: Explain your identification process like a professional botanist:
            
            A. DICHOTOMOUS KEY APPROACH:
