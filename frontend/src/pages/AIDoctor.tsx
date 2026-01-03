@@ -223,30 +223,51 @@ export const AIDoctor = () => {
         // Cancel any current speech
         synth.cancel();
 
-        // 1. Text Cleanup & Sentence Splitting
-        // Remove markdown, emojis, source citations
-        const cleanText = text
+        // 1. Advanced Text Cleanup & Pronunciation Fixes
+        let cleanText = text
             .replace(/\*/g, '') // Remove bold/italic markers
             .replace(/[#\-]/g, '') // Remove headers/lists
             .replace(/\[.*?\]/g, '') // Remove [Citation] or [Image] tags
             .replace(/[\u{1F300}-\u{1F9FF}]/gu, '') // Remove emojis
+            // Fix common pronunciation issues
+            .replace(/\bDr\.\s*/gi, 'Doctor ') // "Dr." → "Doctor"
+            .replace(/\bMr\.\s*/gi, 'Mister ')
+            .replace(/\bMs\.\s*/gi, 'Miss ')
+            .replace(/\bMrs\.\s*/gi, 'Missus ')
+            .replace(/\bSt\.\s*/gi, 'Saint ')
+            .replace(/\bAve\.\s*/gi, 'Avenue ')
+            .replace(/\betc\.\s*/gi, 'et cetera ')
+            .replace(/\be\.g\.\s*/gi, 'for example ')
+            .replace(/\bi\.e\.\s*/gi, 'that is ')
+            // Add natural pauses for better flow
+            .replace(/([.!?])\s+/g, '$1 ... ') // Slight pause after sentences
+            .replace(/,\s+/g, ', ') // Ensure comma spacing
             .trim();
 
         // Split into sentences for natural pausing
-        // Matches periods, exclamations, questions followed by space or end of string
         const sentences = cleanText.match(/[^.!?]+[.!?]+(?:\s|$)|[^.!?]+$/g) || [cleanText];
 
-        // 2. Voice Selection - Prioritize "Natural" / "Neural" voices
+        // 2. Premium Voice Selection - Prioritize Neural/Natural voices
         const voices = synth.getVoices();
+
+        // Try to find the best quality voice in order of preference
         const preferredVoice =
-            voices.find(v => v.name.includes("Natural") && v.lang.startsWith("en")) || // e.g., Edge Microsoft Natural
-            voices.find(v => v.name.includes("Google US English")) || // Chrome Standard
-            voices.find(v => v.name.includes("Samantha")) || // macOS
+            // Premium Neural voices (Edge, Chrome)
+            voices.find(v => v.name.includes("Natural") && v.name.includes("Female") && v.lang.startsWith("en")) ||
+            voices.find(v => v.name.includes("Neural") && v.lang.startsWith("en")) ||
+            voices.find(v => v.name.includes("Natural") && v.lang.startsWith("en")) ||
+            // High-quality platform voices
+            voices.find(v => v.name.includes("Google UK English Female")) ||
+            voices.find(v => v.name.includes("Google US English")) ||
+            voices.find(v => v.name.includes("Samantha")) || // macOS - very natural
+            voices.find(v => v.name.includes("Ava")) || // macOS premium
             voices.find(v => v.name.includes("Zira")) || // Windows
+            // Fallback to any English female voice
+            voices.find(v => v.name.toLowerCase().includes("female") && v.lang.startsWith("en")) ||
             voices.find(v => v.lang.startsWith("en-US")) ||
             voices.find(v => v.lang.startsWith("en"));
 
-        // 3. Speak Sentence-by-Sentence
+        // 3. Speak Sentence-by-Sentence with Dynamic Expression
         sentences.forEach((sentence, index) => {
             if (!sentence.trim()) return;
 
@@ -254,19 +275,47 @@ export const AIDoctor = () => {
 
             if (preferredVoice) utterance.voice = preferredVoice;
 
-            // --- Personality Tuning ---
-            // A slightly higher pitch (1.05-1.1) is often perceived as friendlier/helpful
-            // A rate > 1.0 reduces the "robotic drag" effect
-            utterance.pitch = 1.1;
-            utterance.rate = 1.1;
-            utterance.volume = 1.0;
+            // --- Enhanced Personality Tuning for Warmth & Expressiveness ---
 
-            // Add subtle intonation changes for questions (simulated by slight pitch boost)
-            if (sentence.includes('?')) {
-                utterance.pitch = 1.15;
+            // Base settings for a warm, friendly female voice
+            let basePitch = 1.15; // Slightly higher = friendlier, more approachable
+            let baseRate = 1.05;  // Slightly faster = more energetic, less robotic
+
+            // Dynamic adjustments based on content
+            const lowerSentence = sentence.toLowerCase();
+
+            // Excitement/Important info - higher pitch & faster
+            if (lowerSentence.includes('!') || lowerSentence.includes('great') ||
+                lowerSentence.includes('perfect') || lowerSentence.includes('excellent')) {
+                basePitch = 1.2;
+                baseRate = 1.1;
             }
 
-            // Tracking speaking state (only on the first/last sentence to avoid flickering)
+            // Questions - rising intonation
+            if (sentence.includes('?')) {
+                basePitch = 1.25; // Higher pitch for questions
+                baseRate = 1.0;   // Slightly slower for clarity
+            }
+
+            // Warnings/Caution - lower pitch, slower
+            if (lowerSentence.includes('warning') || lowerSentence.includes('careful') ||
+                lowerSentence.includes('avoid') || lowerSentence.includes('danger')) {
+                basePitch = 0.95;
+                baseRate = 0.95;
+            }
+
+            // Empathy/Comfort - softer, slower
+            if (lowerSentence.includes('sorry') || lowerSentence.includes('unfortunately') ||
+                lowerSentence.includes('understand')) {
+                basePitch = 1.05;
+                baseRate = 0.98;
+            }
+
+            utterance.pitch = basePitch;
+            utterance.rate = baseRate;
+            utterance.volume = 1.0;
+
+            // Tracking speaking state
             if (index === 0) utterance.onstart = () => setIsSpeaking(true);
             if (index === sentences.length - 1) {
                 utterance.onend = () => setIsSpeaking(false);
@@ -274,9 +323,6 @@ export const AIDoctor = () => {
             }
 
             synth.speak(utterance);
-
-            // Note: The browser automatically adds a tiny pause between queued utterances,
-            // which creates the "natural breath" effect we want!
         });
     };
 
