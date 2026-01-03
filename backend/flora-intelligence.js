@@ -81,19 +81,40 @@ const FloraIntelligence = {
      * Generates an advanced scientific prompt for Flux.1 image generation.
      */
     enhanceGenerationPrompt(userPrompt, matchedFlora) {
-        // If we matched a specific plant, we can inject scientific details into the Flux prompt
         let enhanced = userPrompt;
 
-        // Base style for maximum realism
+        // Base style for maximum realism and clarity
         const realismKeywords = "Hyper-realistic cinematic photography, shot on 35mm lens, f/1.8, bokeh background, macro details, ultra-high resolution, 8k, highly detailed textures, realistic lighting, subsurface scattering, professional botanical photography, National Geographic style.";
 
+        let selectedPlant = null;
+
+        // SMART MATCHING: Don't just take the first plant. Check which plant is actually in the prompt.
         if (matchedFlora && matchedFlora.length > 0) {
-            const bestMatch = matchedFlora[0];
-            enhanced = `${realismKeywords} A real-life close-up of ${bestMatch.scientificName} (${bestMatch.commonName}). 
-            Botanical accuracy: ${bestMatch.flowerType} flowers, ${bestMatch.leafVenation} leaf venation. 
-            The plant is in its natural environment, sun-drenched, with dew drops on leaves, sharp focus on the textures. ${userPrompt}`;
+            const lowerPrompt = userPrompt.toLowerCase();
+
+            // Find the best match in the batch that is actually mentioned in the prompt
+            selectedPlant = matchedFlora.find(p => {
+                const sciName = p.scientificName.toLowerCase();
+                const comName = p.commonName.toLowerCase();
+                return lowerPrompt.includes(sciName) || lowerPrompt.includes(comName) || lowerPrompt.includes(comName.split(' ')[0]);
+            });
+
+            // If no specific match found in prompt, but we have a strong single context (only 1-2 matches), trust the context
+            if (!selectedPlant && matchedFlora.length <= 2) {
+                selectedPlant = matchedFlora[0];
+            }
+        }
+
+        if (selectedPlant) {
+            enhanced = `${realismKeywords} A real-life close-up of ${selectedPlant.scientificName} (${selectedPlant.commonName}). 
+            Botanical accuracy: ${selectedPlant.flowerType} flowers, ${selectedPlant.leafVenation} leaf venation. 
+            The plant is in its natural environment, sun-drenched, with dew drops on leaves, sharp focus on the textures. 
+            Detailed Description: ${userPrompt}`;
         } else {
-            enhanced = `${realismKeywords} Real-life professional photography of a plant or garden. ${userPrompt}, cinematic lighting, sharp details, extreme realism.`;
+            // Fallback for when we can't find specific scientific data but still want high quality
+            enhanced = `${realismKeywords} Real-life professional photography of a plant or garden. 
+            Subject analysis: ${userPrompt}. 
+            Cinematic lighting, sharp details, extreme realism.`;
         }
 
         return enhanced;
