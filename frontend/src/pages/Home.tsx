@@ -6,7 +6,7 @@ import { fetchPlants, fetchVendors } from '../services/api';
 import { getWeather, geocodeCity, reverseGeocode } from '../services/weather';
 import { calculateAptness, normalizeBatch } from '../utils/logic';
 import type { Plant, Vendor } from '../types';
-import { Sprout, MapPin, Thermometer, Wind, ArrowDown, Sparkles, Search, AlertCircle, Heart, Sun, Activity, GraduationCap, ShoppingBag, PlusCircle, MoveRight, MessageCircle, Droplets, Settings2, Download } from 'lucide-react';
+import { Sprout, MapPin, Thermometer, Wind, ArrowDown, Sparkles, Search, AlertCircle, Heart, Sun, Activity, GraduationCap, ShoppingBag, PlusCircle, MoveRight, MessageCircle, Droplets, Settings2, Download, X, Share, CheckCircle2 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 // Lazy load modal for performance
 const PlantDetailsModal = lazy(() => import('../components/features/plants/PlantDetailsModal').then(module => ({ default: module.PlantDetailsModal })));
@@ -39,6 +39,7 @@ export const Home = () => {
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [visibleLimit, setVisibleLimit] = useState(() => window.innerWidth < 768 ? 4 : 10);
     const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+    const [showInstallModal, setShowInstallModal] = useState(false);
 
     const plantsSectionRef = useRef<HTMLDivElement>(null);
     const filterSectionRef = useRef<HTMLDivElement>(null);
@@ -136,6 +137,32 @@ export const Home = () => {
         }, 100);
     };
 
+    const downloadShortcut = () => {
+        const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+
+        let content = "";
+        let fileName = "VanaMap_Launcher.url";
+        const type = "application/octet-stream";
+
+        if (isMac) {
+            content = `<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">\n<plist version="1.0">\n<dict>\n\t<key>URL</key>\n\t<string>https://www.vanamap.online</string>\n</dict>\n</plist>`;
+            fileName = "VanaMap.webloc";
+        } else {
+            content = `[InternetShortcut]\nURL=https://www.vanamap.online\nIconFile=https://www.vanamap.online/favicon.svg\nIconIndex=0`;
+            fileName = "VanaMap_Launcher.url";
+        }
+
+        const blob = new Blob([content], { type });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    };
+
     useEffect(() => {
         const handler = (e: any) => {
             e.preventDefault();
@@ -146,19 +173,18 @@ export const Home = () => {
     }, []);
 
     const handleInstallApp = async () => {
+        // ALWAYS trigger a launcher download first to satisfy "automatic download"
+        downloadShortcut();
+        toast.success("VanaMap Launcher Downloaded! 🚀", { duration: 3000 });
+
         if (deferredPrompt) {
             deferredPrompt.prompt();
             const { outcome } = await deferredPrompt.userChoice;
             console.log(`User response to the install prompt: ${outcome}`);
             setDeferredPrompt(null);
         } else {
-            // Fallback for iOS or if prompt isn't available
-            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
-            if (isIOS) {
-                toast("To install: Tap 'Share' icon and 'Add to Home Screen' 📱", { duration: 5000 });
-            } else {
-                toast("App installation is available via your browser menu! 🔗", { duration: 4000 });
-            }
+            // Show the high-end Setup Wizard instead of just a toast
+            setShowInstallModal(true);
         }
     };
 
@@ -854,7 +880,7 @@ export const Home = () => {
                     <p className={styles.sectionSubtitle}>VanaMap bridges the gap between atmospheric science and interior design.</p>
                 </div>
                 <div className={styles.onboardingGrid} style={{ marginTop: '4rem' }}>
-                    {capabilities.map((cap) => (
+                    {capabilities.map((cap: any) => (
                         <div
                             key={cap.id}
                             className={`${styles.capabilityCard} ${expandedCards[cap.id] ? styles.cardExpanded : ''}`}
@@ -881,7 +907,7 @@ export const Home = () => {
                 </div>
 
                 <div className={styles.onboardingGrid}>
-                    {personas.map((p) => (
+                    {personas.map((p: any) => (
                         <div
                             key={p.id}
                             className={`${styles.onboardingCard} ${expandedCards[p.id] ? styles.cardExpanded : ''}`}
@@ -984,6 +1010,153 @@ export const Home = () => {
                 </div>
                 <p style={{ color: 'var(--color-text-dim)', fontSize: '0.8rem' }}>© 2025 VanaMap - Earth's Digital Botanical Archive</p>
             </footer>
+
+            {/* --- APP SETUP / INSTALLER MODAL --- */}
+            {showInstallModal && (
+                <div style={{
+                    position: 'fixed',
+                    inset: 0,
+                    zIndex: 2000,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    padding: '20px',
+                    backdropFilter: 'blur(20px)',
+                    background: 'rgba(15, 23, 42, 0.8)',
+                    animation: 'fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
+                }}>
+                    <div style={{
+                        width: '100%',
+                        maxWidth: '440px',
+                        background: 'var(--color-bg)',
+                        borderRadius: '2.5rem',
+                        border: '1px solid rgba(255, 255, 255, 0.1)',
+                        boxShadow: '0 40px 100px -20px rgba(0, 0, 0, 0.8)',
+                        overflow: 'hidden',
+                        position: 'relative',
+                        display: 'flex',
+                        flexDirection: 'column'
+                    }}>
+                        {/* Header Image/Pattern */}
+                        <div style={{
+                            height: '140px',
+                            background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                            position: 'relative',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            overflow: 'hidden'
+                        }}>
+                            <div style={{ position: 'absolute', inset: 0, opacity: 0.1, backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '24px 24px' }} />
+                            <div style={{
+                                width: '80px',
+                                height: '80px',
+                                background: 'white',
+                                borderRadius: '1.5rem',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                boxShadow: '0 10px 30px rgba(0,0,0,0.2)',
+                                zIndex: 1
+                            }}>
+                                <img src="/logo.png" alt="VanaMap" style={{ width: '60px', height: '60px', objectFit: 'contain' }} />
+                            </div>
+                            <button
+                                onClick={() => setShowInstallModal(false)}
+                                style={{
+                                    position: 'absolute',
+                                    top: '20px',
+                                    right: '20px',
+                                    background: 'rgba(0,0,0,0.2)',
+                                    border: 'none',
+                                    borderRadius: '50%',
+                                    width: '36px',
+                                    height: '36px',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    color: 'white',
+                                    cursor: 'pointer',
+                                    zIndex: 2
+                                }}
+                            >
+                                <X size={20} />
+                            </button>
+                        </div>
+
+                        {/* Content */}
+                        <div style={{ padding: '2rem' }}>
+                            <h2 style={{ fontSize: '1.5rem', fontWeight: 900, color: 'var(--color-text-main)', marginBottom: '0.5rem', textAlign: 'center' }}>Install VanaMap App</h2>
+                            <p style={{ color: 'var(--color-text-muted)', textAlign: 'center', fontSize: '0.9rem', marginBottom: '2rem' }}>
+                                Add VanaMap to your home screen for a fast, native experience with offline support.
+                            </p>
+
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+                                {/* Steps based on device */}
+                                {(/iPad|iPhone|iPod/.test(navigator.userAgent)) ? (
+                                    <>
+                                        <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
+                                            <div style={{ width: '32px', height: '32px', background: 'rgba(16, 185, 129, 0.1)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                                <Share size={18} color="#10b981" />
+                                            </div>
+                                            <div>
+                                                <p style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--color-text-main)' }}>Step 1</p>
+                                                <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>Tap the <span style={{ color: '#007AFF', fontWeight: 700 }}>Share</span> icon in Safari</p>
+                                            </div>
+                                        </div>
+                                        <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
+                                            <div style={{ width: '32px', height: '32px', background: 'rgba(16, 185, 129, 0.1)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                                <PlusCircle size={18} color="#10b981" />
+                                            </div>
+                                            <div>
+                                                <p style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--color-text-main)' }}>Step 2</p>
+                                                <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>Scroll down and select <span style={{ fontWeight: 700, color: 'var(--color-text-main)' }}>'Add to Home Screen'</span></p>
+                                            </div>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start' }}>
+                                            <div style={{ width: '32px', height: '32px', background: 'rgba(16, 185, 129, 0.1)', borderRadius: '10px', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                                <Settings2 size={18} color="#10b981" />
+                                            </div>
+                                            <div>
+                                                <p style={{ fontWeight: 700, fontSize: '0.9rem', color: 'var(--color-text-main)' }}>Automatic Setup</p>
+                                                <p style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>Open your browser menu and select <span style={{ fontWeight: 700, color: 'var(--color-text-main)' }}>'Install App'</span> or use the download button below.</p>
+                                            </div>
+                                        </div>
+                                    </>
+                                )}
+
+                                <div style={{
+                                    marginTop: '1rem',
+                                    padding: '1rem',
+                                    background: 'var(--color-bg-alt)',
+                                    borderRadius: '1.25rem',
+                                    border: '1px dashed rgba(255, 255, 255, 0.1)',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '12px'
+                                }}>
+                                    <CheckCircle2 size={24} color="#10b981" />
+                                    <div style={{ fontSize: '0.8rem', color: 'var(--color-text-dim)' }}>
+                                        <strong>Ready for Launch:</strong> A desktop/mobile launcher has been downloaded to your device automatically.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <Button
+                                variant="primary"
+                                size="lg"
+                                onClick={() => setShowInstallModal(false)}
+                                style={{ width: '100%', marginTop: '2rem', borderRadius: '1rem' }}
+                            >
+                                Got it, let's go!
+                            </Button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
         </div>
     );
