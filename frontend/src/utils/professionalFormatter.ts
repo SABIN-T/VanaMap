@@ -14,7 +14,7 @@ export class ProfessionalFormatter {
         const sections: FormattedSection[] = [];
 
         // Clean up the text first
-        let cleanText = this.removeMarkdown(aiText);
+        const cleanText = this.removeMarkdown(aiText);
 
         // Split into logical sections
         const lines = cleanText.split('\n').filter(line => line.trim().length > 0);

@@ -92,7 +92,7 @@ export function highlightKeyTerms(text: string): Array<{ text: string, bold: boo
     ];
 
     const segments: Array<{ text: string, bold: boolean }> = [];
-    let remaining = text;
+    const remaining = text;
 
     for (const term of keyTerms) {
         const regex = new RegExp(`\\b(${term})\\b`, 'gi');

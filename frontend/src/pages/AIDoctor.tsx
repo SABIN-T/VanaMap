@@ -112,12 +112,12 @@ export const AIDoctor = () => {
 
     // Web Search for Scientific Plant Data
 
-    const handleSend = async (contentOverride?: string | any) => {
+    const handleSend = async (contentOverride?: string) => {
         const textToSend = typeof contentOverride === 'string' ? contentOverride : input;
 
         if (!textToSend.trim() && !selectedImage) return;
 
-        let messageContent = textToSend || "What plant is this?"; // Default question if only image
+        const messageContent = textToSend || "What plant is this?"; // Default question if only image
         let base64Image: string | null = null;
 
         if (selectedImage) {
@@ -374,7 +374,7 @@ export const AIDoctor = () => {
         synth.cancel();
 
         // 1. Advanced Text Cleanup & Convert Emotions to Speakable Sounds
-        let cleanText = text
+        const cleanText = text
             .replace(/\*/g, '') // Remove bold/italic markers
             .replace(/[#\-]/g, '') // Remove headers/lists
             .replace(/\[.*?\]/g, '') // Remove [Citation] or [Image] tags
@@ -569,7 +569,7 @@ export const AIDoctor = () => {
     // --- SPEECH RECOGNITION (Microphone Input) ---
     const [isListening, setIsListening] = useState(false);
     // Use a ref to keep track of the recognition instance
-    const recognitionRef = useRef<any>(null);
+    const recognitionRef = useRef<SpeechRecognition | null>(null);
 
     const toggleListening = () => {
         if (isListening) {
@@ -614,7 +614,7 @@ export const AIDoctor = () => {
             });
         };
 
-        recognition.onresult = (event: any) => {
+        recognition.onresult = (event: SpeechRecognitionEvent) => {
             // Only process FINAL results to avoid duplication
             const lastResult = event.results[event.results.length - 1];
 
@@ -633,7 +633,7 @@ export const AIDoctor = () => {
             }
         };
 
-        recognition.onerror = (event: any) => {
+        recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
             console.error("Speech recognition error:", event.error);
             setIsListening(false);
 

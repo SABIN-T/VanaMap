@@ -211,7 +211,7 @@ export const runRoomSimulationMC = (
     // CAM / Nocturnal Bonus (Snake plants etc work at night)
     if (plant.isNocturnal) strengthMultiplier *= 0.7;
 
-    let plantsBeforeStress = basePlantsNeeded * strengthMultiplier * peopleCount;
+    const plantsBeforeStress = basePlantsNeeded * strengthMultiplier * peopleCount;
 
     // D. APPLY SLIDER STRESS (The Physics Engine)
     const stress = calculateStressFactor(plant, avgTemp, lightLevel);

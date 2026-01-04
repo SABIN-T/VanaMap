@@ -458,11 +458,11 @@ export const MakeItReal = () => {
         if (!cCtx) return;
 
         // Draw Composition (Matching CSS Logic)
-        let plantW = potW * 0.75;
-        let plantH = (plantImg.height / plantImg.width) * plantW;
+        const plantW = potW * 0.75;
+        const plantH = (plantImg.height / plantImg.width) * plantW;
 
-        let cCenter = compCanvas.width / 2;
-        let cBase = compCanvas.height / 2;
+        const cCenter = compCanvas.width / 2;
+        const cBase = compCanvas.height / 2;
 
         let centerShiftY = 0;
 
