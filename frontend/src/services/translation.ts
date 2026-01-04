@@ -208,6 +208,30 @@ export class TranslationService {
             return texts;
         }
 
+        const cacheKey = `/translate/${target}`;
+        const results: string[] = new Array(texts.length).fill('');
+        const missingIndices: number[] = [];
+        const missingTexts: string[] = [];
+
+        // 1. Check cache for each text
+        texts.forEach((text, index) => {
+            const cached = translationCache.get(cacheKey, { text });
+            if (cached) {
+                results[index] = cached;
+            } else {
+                missingIndices.push(index);
+                missingTexts.push(text);
+            }
+        });
+
+        // 2. If everything is cached, return immediately
+        if (missingTexts.length === 0) {
+            console.log(`[Translation Cache] ✅ BATCH HIT - all ${texts.length} items from cache`);
+            return results;
+        }
+
+        console.log(`[Translation Cache] ⚠️ BATCH MISS - fetching ${missingTexts.length}/${texts.length} items`);
+
         try {
             const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
@@ -215,7 +239,7 @@ export class TranslationService {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    texts,
+                    texts: missingTexts,
                     targetLang: target,
                     context: 'botanical'
                 })
@@ -224,15 +248,24 @@ export class TranslationService {
             if (response.ok) {
                 const data = await response.json();
                 if (data.translations && Array.isArray(data.translations)) {
-                    return data.translations;
+                    // 3. Store new translations in cache and merge with results
+                    data.translations.forEach((translation: string, i: number) => {
+                        const originalText = missingTexts[i];
+                        translationCache.set(cacheKey, translation, { text: originalText });
+                        results[missingIndices[i]] = translation;
+                    });
+                    return results;
                 }
             }
         } catch (error) {
             console.error('Batch translation error:', error);
         }
 
-        // Fallback to individual translations
-        const promises = texts.map(text => this.translate(text, targetLang));
+        // Fallback to individual translations (which also use cache)
+        const promises = texts.map((text, i) => {
+            if (results[i]) return Promise.resolve(results[i]);
+            return this.translate(text, targetLang);
+        });
         return Promise.all(promises);
     }
 

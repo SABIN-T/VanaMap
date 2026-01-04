@@ -1,6 +1,6 @@
 import type { Plant, Vendor } from '../types';
-
 import { PLANTS } from '../data/mocks';
+import { plantCache, apiCache, cachedFetch } from '../utils/universalCache'; // 🚀 Performance boost!
 
 export const API_URL = import.meta.env.VITE_API_URL || 'https://plantoxy.onrender.com/api';
 
@@ -20,12 +20,13 @@ const getHeaders = () => {
 
 export const fetchPlants = async (): Promise<Plant[]> => {
     try {
-        const response = await fetch(`${API_URL}/plants`);
-        if (!response.ok) {
-            console.warn("API Error, falling back to mocks.");
-            return PLANTS; // Fallback to mocks on server error
-        }
-        return await response.json();
+        const data = await cachedFetch(
+            `${API_URL}/plants`,
+            { method: 'GET' },
+            {},
+            plantCache
+        );
+        return data;
     } catch (error) {
         console.error("Error fetching plants, using mocks:", error);
         return PLANTS; // Fallback to mocks on network error
@@ -45,9 +46,12 @@ export const fetchUsers = async (): Promise<unknown[]> => {
 
 export const fetchVendors = async (): Promise<Vendor[]> => {
     try {
-        const response = await fetch(`${API_URL}/vendors`);
-        if (!response.ok) throw new Error('Failed to fetch vendors');
-        const data = await response.json();
+        const data = await cachedFetch(
+            `${API_URL}/vendors`,
+            { method: 'GET' },
+            {},
+            apiCache
+        );
         return data;
     } catch (error) {
         console.error("Error fetching vendors:", error);
