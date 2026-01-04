@@ -3,6 +3,9 @@
  * Handles service worker registration, updates, and lifecycle events
  */
 
+// Declare gtag as optional global
+declare const gtag: ((...args: any[]) => void) | undefined;
+
 interface PWAConfig {
     onSuccess?: (registration: ServiceWorkerRegistration) => void;
     onUpdate?: (registration: ServiceWorkerRegistration) => void;
@@ -252,8 +255,8 @@ class PWAManager {
         }
 
         try {
-            await this.registration.sync.register('sync-cart');
-            await this.registration.sync.register('sync-favorites');
+            await (this.registration as any).sync.register('sync-cart');
+            await (this.registration as any).sync.register('sync-favorites');
             console.log('[PWA] Background sync registered');
         } catch (error) {
             console.error('[PWA] Background sync registration failed:', error);
@@ -354,11 +357,11 @@ class PWAManager {
             if (!deferredPrompt) return;
 
             deferredPrompt.prompt();
-            const { outcome } = await deferredPrompt.userChoice;
+            const result: any = await deferredPrompt.userChoice;
 
-            console.log('[PWA] Install prompt outcome:', outcome);
+            console.log('[PWA] Install prompt outcome:', result.outcome);
 
-            if (outcome === 'accepted') {
+            if (result.outcome === 'accepted') {
                 console.log('[PWA] User accepted install');
             } else {
                 console.log('[PWA] User dismissed install');
@@ -432,7 +435,7 @@ class PWAManager {
                 userVisibleOnly: true,
                 applicationServerKey: this.urlBase64ToUint8Array(
                     import.meta.env.VITE_VAPID_PUBLIC_KEY || ''
-                )
+                ) as any
             });
 
             console.log('[PWA] Push subscription created');
@@ -501,7 +504,7 @@ class PWAManager {
                 }
             };
 
-            navigator.serviceWorker.controller.postMessage(
+            navigator.serviceWorker.controller!.postMessage(
                 { type: 'GET_CACHE_SIZE' },
                 [messageChannel.port2]
             );
@@ -534,10 +537,10 @@ class PWAManager {
 
 // Export singleton instance
 export const pwaManager = new PWAManager({
-    onSuccess: (registration) => {
+    onSuccess: () => {
         console.log('[PWA] ✓ PWA initialized successfully');
     },
-    onUpdate: (registration) => {
+    onUpdate: () => {
         console.log('[PWA] ⚡ Update available');
     },
     onOffline: () => {
@@ -556,3 +559,4 @@ if (import.meta.env.PROD) {
 }
 
 export default pwaManager;
+

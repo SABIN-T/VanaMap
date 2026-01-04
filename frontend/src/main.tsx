@@ -16,8 +16,8 @@ import('./utils/pwa').then(({ pwaManager }) => {
   // PWA will auto-register in production
   console.log('[App] PWA Manager loaded');
 
-  // Optional: Request notification permission after user interaction
-  // pwaManager.requestNotificationPermission();
+  // Store reference for potential future use
+  (window as any).__pwaManager = pwaManager;
 }).catch((error) => {
   console.warn('[App] PWA Manager failed to load:', error);
 });
