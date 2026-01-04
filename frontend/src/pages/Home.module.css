@@ -53,7 +53,9 @@
     animation: sway 6s ease-in-out infinite alternate;
     transition: filter 0.3s ease, transform 0.3s ease;
     cursor: pointer;
-    filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.3));
+    /* mix-blend-mode: screen makes black backgrounds transparent in dark mode */
+    mix-blend-mode: screen;
+    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.6));
 }
 
 .hangingPlant:hover {
