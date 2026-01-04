@@ -21,18 +21,38 @@ export const LocationNag = () => {
 
                     if (status.state === 'denied') {
                         toast((t) => (
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', minWidth: '300px' }}>
-                                <div style={{ background: '#fef3c7', padding: '10px', borderRadius: '12px' }}>
-                                    <MapPin size={24} className="text-amber-600" />
+                            <div style={{
+                                display: 'flex',
+                                alignItems: 'flex-start',
+                                gap: '10px',
+                                maxWidth: 'calc(100vw - 2rem)',
+                                fontSize: '0.85rem'
+                            }}>
+                                <div style={{
+                                    background: '#fef3c7',
+                                    padding: '8px',
+                                    borderRadius: '10px',
+                                    flexShrink: 0
+                                }}>
+                                    <MapPin size={20} className="text-amber-600" />
                                 </div>
-                                <div style={{ flex: 1 }}>
-                                    <p style={{ margin: 0, fontWeight: 800, fontSize: '0.95rem', color: '#92400e' }}>GPS Access Blocked</p>
-                                    <p style={{ margin: '4px 0', fontSize: '0.8rem', color: '#b45309', lineHeight: 1.4 }}>
-                                        To see Survival Matches: <br />
-                                        <strong>Mobile:</strong> Long-press app icon (Site Settings) OR check Browser Settings {'>'} Location.<br />
-                                        <strong>Desktop:</strong> Click the <b>Lock</b> icon next to URL.
+                                <div style={{ flex: 1, minWidth: 0 }}>
+                                    <p style={{
+                                        margin: 0,
+                                        fontWeight: 700,
+                                        fontSize: '0.9rem',
+                                        color: '#92400e'
+                                    }}>GPS Access Blocked</p>
+                                    <p style={{
+                                        margin: '4px 0',
+                                        fontSize: '0.75rem',
+                                        color: '#b45309',
+                                        lineHeight: 1.3
+                                    }}>
+                                        <strong>Mobile:</strong> Long-press app icon → Site Settings<br />
+                                        <strong>Desktop:</strong> Click Lock icon next to URL
                                     </p>
-                                    <div style={{ display: 'flex', gap: '8px', marginTop: '8px' }}>
+                                    <div style={{ display: 'flex', gap: '6px', marginTop: '6px' }}>
                                         <button
                                             onClick={() => {
                                                 toast.dismiss(t.id);
@@ -42,14 +62,14 @@ export const LocationNag = () => {
                                                 background: '#f59e0b',
                                                 color: 'white',
                                                 border: 'none',
-                                                padding: '6px 14px',
+                                                padding: '5px 12px',
                                                 borderRadius: '6px',
-                                                fontSize: '0.75rem',
+                                                fontSize: '0.7rem',
                                                 fontWeight: 700,
                                                 cursor: 'pointer'
                                             }}
                                         >
-                                            I'll Fix It
+                                            Got It
                                         </button>
                                         <button
                                             onClick={() => toast.dismiss(t.id)}
@@ -57,9 +77,9 @@ export const LocationNag = () => {
                                                 background: 'transparent',
                                                 color: '#b45309',
                                                 border: '1px solid #f59e0b',
-                                                padding: '6px 14px',
+                                                padding: '5px 12px',
                                                 borderRadius: '6px',
-                                                fontSize: '0.75rem',
+                                                fontSize: '0.7rem',
                                                 cursor: 'pointer'
                                             }}
                                         >
@@ -68,48 +88,70 @@ export const LocationNag = () => {
                                     </div>
                                 </div>
                             </div>
-                        ), { duration: 15000, position: 'top-center' });
+                        ), { duration: 12000, position: 'bottom-center', style: { marginBottom: '80px' } });
                         sessionStorage.setItem('vanamap_location_nagged_v4', 'true');
                     } else if (status.state === 'prompt') {
                         toast((t) => (
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', padding: '4px' }}>
-                                <div className="animate-pulse" style={{ background: '#d1fae5', padding: '12px', borderRadius: '50%' }}>
-                                    <MapPin size={24} className="text-emerald-600" />
+                            <div style={{
+                                display: 'flex',
+                                alignItems: 'flex-start',
+                                gap: '12px',
+                                padding: '4px',
+                                maxWidth: 'calc(100vw - 2rem)'
+                            }}>
+                                <div className="animate-pulse" style={{
+                                    background: '#d1fae5',
+                                    padding: '10px',
+                                    borderRadius: '50%',
+                                    flexShrink: 0
+                                }}>
+                                    <MapPin size={20} className="text-emerald-600" />
                                 </div>
-                                <div>
-                                    <p style={{ margin: 0, fontWeight: 800, fontSize: '1rem', color: '#064e3b' }}>Connect to Local Climate?</p>
-                                    <p style={{ margin: '4px 0', fontSize: '0.85rem', color: '#065f46', opacity: 0.9 }}>
-                                        Enable location in your <b>Browser Settings</b> to unlock precision data.
+                                <div style={{ flex: 1, minWidth: 0 }}>
+                                    <p style={{
+                                        margin: 0,
+                                        fontWeight: 700,
+                                        fontSize: '0.9rem',
+                                        color: '#064e3b'
+                                    }}>Enable Location?</p>
+                                    <p style={{
+                                        margin: '4px 0',
+                                        fontSize: '0.75rem',
+                                        color: '#065f46',
+                                        opacity: 0.9,
+                                        lineHeight: 1.3
+                                    }}>
+                                        Get climate data for your area
                                     </p>
                                     <button
                                         onClick={() => {
                                             toast.dismiss(t.id);
                                             navigator.geolocation.getCurrentPosition(
-                                                () => toast.success("Satellites Synced!"),
-                                                () => toast.error("Access blocked. Check Browser Settings.")
+                                                () => toast.success("Location enabled!"),
+                                                () => toast.error("Access blocked. Check settings.")
                                             );
                                             sessionStorage.setItem('vanamap_location_nagged_v4', 'true');
                                         }}
                                         style={{
-                                            marginTop: '10px',
+                                            marginTop: '8px',
                                             background: 'linear-gradient(135deg, #10b981, #059669)',
                                             color: 'white',
                                             border: 'none',
-                                            padding: '8px 20px',
+                                            padding: '7px 16px',
                                             borderRadius: '8px',
-                                            fontSize: '0.9rem',
-                                            fontWeight: 800,
+                                            fontSize: '0.8rem',
+                                            fontWeight: 700,
                                             cursor: 'pointer',
-                                            boxShadow: '0 4px 15px rgba(16, 185, 129, 0.4)',
+                                            boxShadow: '0 4px 15px rgba(16, 185, 129, 0.3)',
                                             display: 'block',
                                             width: '100%'
                                         }}
                                     >
-                                        Allow Location Prompt
+                                        Allow Location
                                     </button>
                                 </div>
                             </div>
-                        ), { duration: 20000, position: 'bottom-center' });
+                        ), { duration: 15000, position: 'bottom-center', style: { marginBottom: '80px' } });
                         sessionStorage.setItem('vanamap_location_nagged_v4', 'true');
                     }
                 };
