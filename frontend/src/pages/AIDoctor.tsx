@@ -221,7 +221,7 @@ export const AIDoctor = () => {
                 if (response.refusal) {
                     aiText = `I cannot answer that: ${response.refusal}`;
                 } else if (base64Image) {
-                    aiText = "I couldn't analyze the image. Please ensure it's clear and contains a plant.";
+                    aiText = "I apologize, but I couldn't process this photo. **Please give a proper image to analyze** (ensure the plant is well-lit and clearly visible).";
                 } else {
                     aiText = "I apologize, I'm having trouble connecting right now. Please try asking again.";
                 }
@@ -279,7 +279,7 @@ export const AIDoctor = () => {
                     const fallbackAssistantMessage: Message = {
                         id: (Date.now() + 2).toString(),
                         role: 'assistant',
-                        content: `⚠️ **Image Analysis Limit Reached.** I've switched to basic text mode to help you.\n\n${fallbackResponse.choices?.[0]?.message?.content}`,
+                        content: `⚠️ **I had trouble with that photo.** Please **give a proper image to analyze** for a better diagnosis. In the meantime, I've used my text-only knowledge to help you:\n\n${fallbackResponse.choices?.[0]?.message?.content}`,
                         timestamp: new Date()
                     };
                     setMessages(prev => [...prev, fallbackAssistantMessage]);
