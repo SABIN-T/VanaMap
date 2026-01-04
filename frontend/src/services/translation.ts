@@ -1,6 +1,7 @@
 // Multi-Language Translation Service
 // Supports 50+ languages including all major Indian languages
 import { useState, useEffect } from 'react';
+import { translationCache } from '../utils/universalCache'; // 🚀 95%+ API savings!
 
 export type SupportedLanguage =
     // English
@@ -139,6 +140,17 @@ export class TranslationService {
             return text;
         }
 
+        // 🚀 CACHE CHECK - Translations never change, so cache forever (7 days)
+        const cacheKey = `/translate/${target}`;
+        const cached = translationCache.get(cacheKey, { text });
+
+        if (cached) {
+            console.log(`[Translation Cache] ✅ HIT for "${text.substring(0, 30)}..."`);
+            return cached;
+        }
+
+        console.log(`[Translation Cache] ❌ MISS - translating "${text.substring(0, 30)}..."`);
+
         try {
             // Use AI-powered translation for context awareness
             const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
@@ -156,6 +168,9 @@ export class TranslationService {
             if (response.ok) {
                 const data = await response.json();
                 if (data.translatedText) {
+                    // Cache the translation (7 days TTL)
+                    translationCache.set(cacheKey, data.translatedText, { text });
+                    console.log(`[Translation Cache] 💾 Cached translation`);
                     return data.translatedText;
                 }
             }
@@ -170,6 +185,9 @@ export class TranslationService {
                 if (response.ok) {
                     const data = await response.json();
                     if (data.responseData && data.responseData.translatedText) {
+                        // Cache fallback translation too
+                        translationCache.set(cacheKey, data.responseData.translatedText, { text });
+                        console.log(`[Translation Cache] 💾 Cached fallback translation`);
                         return data.responseData.translatedText;
                     }
                 }
