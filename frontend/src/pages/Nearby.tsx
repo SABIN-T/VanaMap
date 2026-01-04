@@ -49,37 +49,71 @@ export const Nearby = () => {
     const [activeTab, setActiveTab] = useState<'verified' | 'unverified' | 'all'>((location.state as { tab?: 'verified' | 'unverified' | 'all' })?.tab || 'all');
 
     const [manualSearchQuery, setManualSearchQuery] = useState('');
+    const [suggestions, setSuggestions] = useState<any[]>([]);
+    const [showSuggestions, setShowSuggestions] = useState(false);
     const [searchRadius, setSearchRadius] = useState(50);
     const [isScanningPublic, setIsScanningPublic] = useState(false);
     const hasInitialLocateRef = useRef(false);
 
-    const handleManualLocationSearch = async () => {
-        if (!manualSearchQuery.trim()) return;
+    // Fetch suggestions as user types (debounced)
+    useEffect(() => {
+        const timer = setTimeout(async () => {
+            if (manualSearchQuery.length > 2 && showSuggestions) {
+                try {
+                    const response = await fetch(
+                        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(manualSearchQuery)}&limit=5`
+                    );
+                    const data = await response.json();
+                    setSuggestions(data);
+                } catch (e) {
+                    console.warn("Suggestion fetch failed", e);
+                }
+            } else {
+                setSuggestions([]);
+            }
+        }, 500);
+
+        return () => clearTimeout(timer);
+    }, [manualSearchQuery, showSuggestions]);
+
+    const handleManualLocationSearch = async (overrideQuery?: string, coords?: { lat: number; lng: number }) => {
+        const query = overrideQuery || manualSearchQuery;
+        if (!query.trim()) return;
         setLoading(true);
-        const tid = toast.loading(`Scanning satellite data for "${manualSearchQuery}"...`);
+        const tid = toast.loading(`Scanning satellite data for "${query}"...`);
 
         try {
-            // Forward Geocoding with cache
-            const data = await cachedFetch<any>(
-                `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(manualSearchQuery)}`,
-                { method: 'GET' },
-                { q: manualSearchQuery },
-                locationCache
-            );
+            let latitude: number, longitude: number, displayName: string;
 
-            if (data && data.length > 0) {
-                const { lat, lon, display_name } = data[0];
-                const latitude = parseFloat(lat);
-                const longitude = parseFloat(lon);
-
-                setPosition([latitude, longitude]);
-                setPlaceName(display_name.split(',')[0]); // Take safe first part
-                toast.success("Target area locked!", { id: tid });
-
-                await fetchAllData(latitude, longitude, searchRadius, true);
+            if (coords) {
+                latitude = coords.lat;
+                longitude = coords.lng;
+                displayName = query;
             } else {
-                toast.error("Location signature not found.", { id: tid });
+                // Forward Geocoding with cache
+                const data = await cachedFetch<any>(
+                    `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}`,
+                    { method: 'GET' },
+                    { q: query },
+                    locationCache
+                );
+
+                if (data && data.length > 0) {
+                    latitude = parseFloat(data[0].lat);
+                    longitude = parseFloat(data[0].lon);
+                    displayName = data[0].display_name;
+                } else {
+                    toast.error("Location signature not found.", { id: tid });
+                    setLoading(false);
+                    return;
+                }
             }
+
+            setPosition([latitude, longitude]);
+            setPlaceName(displayName.split(',')[0]); // Take safe first part
+            toast.success("Target area locked!", { id: tid });
+
+            await fetchAllData(latitude, longitude, searchRadius, true);
         } catch (e) {
             console.error(e);
             toast.error("Network triangulation failed.", { id: tid });
@@ -324,10 +358,35 @@ out center;
                                     placeholder="Search city, neighborhood, or zip..."
                                     value={manualSearchQuery}
                                     onChange={(e) => setManualSearchQuery(e.target.value)}
-                                    onKeyDown={(e) => e.key === 'Enter' && handleManualLocationSearch()}
+                                    onFocus={() => setShowSuggestions(true)}
+                                    onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter') {
+                                            setShowSuggestions(false);
+                                            handleManualLocationSearch();
+                                        }
+                                    }}
                                 />
+                                {showSuggestions && suggestions.length > 0 && (
+                                    <ul className={styles.suggestionsList}>
+                                        {suggestions.map((place: any, i) => (
+                                            <li key={i} className={styles.suggestionItem} onClick={() => {
+                                                const cityName = place.display_name.split(',')[0];
+                                                setManualSearchQuery(cityName);
+                                                setShowSuggestions(false);
+                                                handleManualLocationSearch(cityName, {
+                                                    lat: parseFloat(place.lat),
+                                                    lng: parseFloat(place.lon)
+                                                });
+                                            }}>
+                                                <MapPin size={16} style={{ marginRight: '10px', color: 'var(--color-primary)' }} />
+                                                <span style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{place.display_name}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
                             </div>
-                            <Button onClick={handleManualLocationSearch} disabled={loading} size="sm" style={{ minWidth: '100px', height: '48px' }}>
+                            <Button onClick={() => handleManualLocationSearch()} disabled={loading} size="sm" style={{ minWidth: '100px', height: '48px' }}>
                                 {loading ? <RefreshCw className="animate-spin" size={20} /> : 'Search'}
                             </Button>
                         </div>
