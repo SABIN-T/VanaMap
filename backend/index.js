@@ -1398,30 +1398,28 @@ app.get('/api/news', async (req, res) => {
                 });
             });
         });
-    }
+
+        // specific filtering for nature/plants
+        const keywords = ['plant', 'tree', 'forest', 'garden', 'flower', 'nature', 'species', 'conservation', 'climate'];
+        const filteredNews = allNews.filter(item => {
+            const text = (item.title + ' ' + item.snippet).toLowerCase();
+            return keywords.some(k => text.includes(k));
         });
 
-// specific filtering for nature/plants
-const keywords = ['plant', 'tree', 'forest', 'garden', 'flower', 'nature', 'species', 'conservation', 'climate'];
-const filteredNews = allNews.filter(item => {
-    const text = (item.title + ' ' + item.snippet).toLowerCase();
-    return keywords.some(k => text.includes(k));
-});
+        // Sort by date and take top 10
+        filteredNews.sort((a, b) => b.pubDate - a.pubDate);
+        const topNews = filteredNews.slice(0, 10);
 
-// Sort by date and take top 10
-filteredNews.sort((a, b) => b.pubDate - a.pubDate);
-const topNews = filteredNews.slice(0, 10);
+        newsCache = {
+            data: topNews,
+            lastUpdated: now
+        };
 
-newsCache = {
-    data: topNews,
-    lastUpdated: now
-};
-
-res.json(topNews);
+        res.json(topNews);
     } catch (error) {
-    console.error('Error fetching news:', error);
-    res.status(500).json({ error: 'Failed to fetch news' });
-}
+        console.error('Error fetching news:', error);
+        res.status(500).json({ error: 'Failed to fetch news' });
+    }
 });
 
 // --- PLANT ROUTES ---
