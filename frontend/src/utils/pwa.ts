@@ -300,52 +300,77 @@ class PWAManager {
         installButton.innerHTML = `
       <div style="
         position: fixed;
-        bottom: 80px;
-        right: 20px;
+        bottom: 90px;
+        left: 50%;
+        transform: translateX(-50%);
         background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
         color: white;
-        padding: 1rem 1.5rem;
-        border-radius: 12px;
-        box-shadow: 0 10px 30px rgba(99, 102, 241, 0.4);
+        padding: 0.75rem 1rem;
+        border-radius: 16px;
+        box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4);
         z-index: 9999;
-        cursor: pointer;
-        animation: pulse 2s infinite;
-        max-width: 300px;
+        animation: slideUpFade 0.4s ease-out;
+        max-width: calc(100vw - 2rem);
+        width: auto;
       ">
-        <div style="display: flex; align-items: center; gap: 1rem;">
-          <div style="flex: 1;">
-            <strong>Install VanaMap</strong>
-            <p style="margin: 0.25rem 0 0; font-size: 0.85rem; opacity: 0.9;">
-              Add to home screen for quick access
-            </p>
+        <div style="display: flex; align-items: center; gap: 0.75rem; justify-content: space-between;">
+          <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+              <polyline points="7 10 12 15 17 10"></polyline>
+              <line x1="12" y1="15" x2="12" y2="3"></line>
+            </svg>
+            <div style="flex: 1; min-width: 0;">
+              <div style="font-weight: 700; font-size: 0.9rem; white-space: nowrap;">Install VanaMap</div>
+              <div style="font-size: 0.75rem; opacity: 0.9; white-space: nowrap;">Quick access</div>
+            </div>
           </div>
-          <button id="install-btn" style="
-            background: white;
-            color: #4f46e5;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-          ">
-            Install
-          </button>
-          <button id="dismiss-install" style="
-            background: transparent;
-            color: white;
-            border: none;
-            padding: 0.5rem;
-            cursor: pointer;
-            font-size: 1.2rem;
-          ">
-            ✕
-          </button>
+          <div style="display: flex; gap: 0.5rem; align-items: center;">
+            <button id="install-btn" style="
+              background: white;
+              color: #4f46e5;
+              border: none;
+              padding: 0.5rem 0.875rem;
+              border-radius: 10px;
+              font-weight: 700;
+              font-size: 0.85rem;
+              cursor: pointer;
+              white-space: nowrap;
+            ">
+              Install
+            </button>
+            <button id="dismiss-install" style="
+              background: transparent;
+              color: white;
+              border: none;
+              padding: 0.25rem;
+              cursor: pointer;
+              font-size: 1.25rem;
+              line-height: 1;
+              opacity: 0.8;
+            ">
+              ✕
+            </button>
+          </div>
         </div>
       </div>
       <style>
-        @keyframes pulse {
-          0%, 100% { transform: scale(1); }
-          50% { transform: scale(1.02); }
+        @keyframes slideUpFade {
+          from {
+            transform: translateX(-50%) translateY(20px);
+            opacity: 0;
+          }
+          to {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+          }
+        }
+        
+        @media (max-width: 640px) {
+          #pwa-install-button > div {
+            bottom: 80px !important;
+            padding: 0.625rem 0.875rem !important;
+          }
         }
       </style>
     `;
@@ -376,6 +401,14 @@ class PWAManager {
             localStorage.setItem('pwa-install-dismissed', 'true');
             installButton.remove();
         });
+
+        // Auto-dismiss after 15 seconds
+        setTimeout(() => {
+            if (document.getElementById('pwa-install-button')) {
+                installButton.style.animation = 'slideUpFade 0.3s ease-out reverse';
+                setTimeout(() => installButton.remove(), 300);
+            }
+        }, 15000);
     }
 
     /**
