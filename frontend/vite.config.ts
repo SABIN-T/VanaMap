@@ -3,7 +3,43 @@ import react from '@vitejs/plugin-react'
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    {
+      name: 'inline-css',
+      apply: 'build',
+      enforce: 'post',
+      generateBundle(_, bundle) {
+        const htmlFile = bundle['index.html'];
+        if (!htmlFile) return;
+
+        // Identify CSS files
+        const cssFiles = Object.keys(bundle).filter(key => key.endsWith('.css'));
+
+        cssFiles.forEach(cssFileName => {
+          const cssAsset = bundle[cssFileName];
+          if (!cssAsset || !('source' in cssAsset)) return;
+
+          const cssContent = cssAsset.source;
+          const htmlSource = htmlFile.source as string;
+
+          // Regex to find the link tag pointing to this CSS file
+          // Matches: <link rel="stylesheet" crossorigin href="/assets/index-XXXX.css">
+          // We handle potential leading ./ or /
+          const filename = cssFileName.split('/').pop();
+          const regex = new RegExp(`<link[^>]*href="[./]*assets/${filename}"[^>]*>`, 'g');
+
+          if (regex.test(htmlSource)) {
+            // Replace link with style tag
+            htmlFile.source = htmlSource.replace(regex, `<style>${cssContent}</style>`);
+            // Remove the external CSS file from the output
+            delete bundle[cssFileName];
+            console.log(`[Vite] Inlined ${cssFileName} into index.html`);
+          }
+        });
+      }
+    }
+  ],
   build: {
     rollupOptions: {
       output: {
