@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext';
 import styles from './AIDoctor.module.css';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { mlCache } from '../utils/mlCache'; // ML-powered response cache
 
 interface Message {
     id: string;
@@ -183,6 +184,36 @@ export const AIDoctor = () => {
         clearImage();
 
         try {
+            // 🤖 ML CACHE CHECK - Try to find similar past response
+            // Only check cache for text-only queries (not images)
+            if (!base64Image) {
+                const cachedResponse = mlCache.findSimilar(messageContent);
+
+                if (cachedResponse) {
+                    // Cache hit! Reuse past response
+                    console.log('[ML Cache] ✅ Cache HIT - Reusing response');
+
+                    const cachedMessage: Message = {
+                        id: (Date.now() + 1).toString(),
+                        role: 'assistant',
+                        content: cachedResponse.response + '\n\n_💡 Instant response from learned knowledge_',
+                        timestamp: new Date()
+                    };
+
+                    setMessages(prev => [...prev, cachedMessage]);
+                    setLoading(false);
+
+                    toast.success('⚡ Instant response (saved API call!)', {
+                        duration: 2000,
+                        icon: '🧠'
+                    });
+
+                    return; // Skip API call entirely!
+                }
+
+                console.log('[ML Cache] ❌ Cache MISS - Calling API');
+            }
+
             // Include the new user message in the API call
             // We ensure that if there's an image, it's sent along with the history
             const conversationHistory = [...messages, userMessage].map(m => ({
@@ -262,6 +293,13 @@ export const AIDoctor = () => {
 
 
             setMessages(prev => [...prev, assistantMessage]);
+
+            // 🤖 ML CACHE STORAGE - Save response for future reuse
+            // Only cache text-only responses (not image-based)
+            if (!base64Image && aiText && messageContent) {
+                mlCache.add(messageContent, aiText);
+                console.log('[ML Cache] 💾 Response cached for future use');
+            }
 
         } catch (error: any) {
             console.error('[AI Doctor] Error:', error);
