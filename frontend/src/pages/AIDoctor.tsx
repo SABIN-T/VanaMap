@@ -202,7 +202,17 @@ export const AIDoctor = () => {
                 timestamp: new Date()
             };
 
-            // Debug logging for image generation
+            // Enhanced debug logging for image generation
+            console.log('[AI Doctor] 📦 Full API Response:', {
+                hasChoices: !!response.choices,
+                choicesLength: response.choices?.length,
+                messageContent: response.choices?.[0]?.message?.content?.substring(0, 100) + '...',
+                hasImage: !!response.choices?.[0]?.message?.image,
+                hasImages: !!response.choices?.[0]?.message?.images,
+                imageUrl: response.choices?.[0]?.message?.image,
+                imagesArray: response.choices?.[0]?.message?.images
+            });
+
             if (assistantMessage.images || assistantMessage.image) {
                 console.log('[AI Doctor] 🎨 Images detected in response:');
                 console.log('  - Single image:', assistantMessage.image);
@@ -210,6 +220,7 @@ export const AIDoctor = () => {
                 console.log('  - Total images:', assistantMessage.images?.length || (assistantMessage.image ? 1 : 0));
             } else {
                 console.log('[AI Doctor] ℹ️ No images in this response');
+                console.log('[AI Doctor] 🔍 Checking for GENERATE tag in content:', aiText?.includes('[GENERATE'));
             }
 
 

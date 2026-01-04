@@ -2934,12 +2934,22 @@ REMEMBER: Your response must include BOTH the identification analysis AND the [G
 
         // --- FLUX.1 DEV IMAGE GENERATION INTERVENTION ---
         let aiContent = result.data.choices[0]?.message?.content || "";
-        // Match [GENERATE: prompt] OR [Image description: prompt]
-        const generateRegex = /\[(?:GENERATE|Image description):\s*(.+?)\]/i;
+
+        // Match [GENERATE: prompt] OR [Image description: prompt] (with multi-line support)
+        // This regex now handles multi-line content including bullet points
+        const generateRegex = /\[(?:GENERATE|Image description):\s*([\s\S]+?)\]/i;
         const match = aiContent.match(generateRegex);
 
         if (match) {
-            const prompt = match[1].trim();
+            let prompt = match[1].trim();
+
+            // Clean up the prompt: remove bullet points and excessive newlines
+            prompt = prompt
+                .replace(/^[\s•\-*]+/gm, '') // Remove bullet points at start of lines
+                .replace(/\n+/g, ' ') // Replace newlines with spaces
+                .replace(/\s+/g, ' ') // Normalize multiple spaces
+                .trim();
+
             console.log(`[Flux.1 Dev] Generating image for prompt: ${prompt}`);
 
             // ADVANCEMENT: Enhance the user prompt with botanical intelligence
@@ -2955,14 +2965,24 @@ REMEMBER: Your response must include BOTH the identification analysis AND the [G
             // Backward compatibility & Primary display
             result.data.choices[0].message.image = fluxUrl;
 
-            // Remove the [GENERATE:...] tag from the visible text
+            // Remove the [GENERATE:...] tag from the visible text (handle multi-line)
             aiContent = aiContent.replace(generateRegex, "").trim();
 
             // Overwrite response content
             result.data.choices[0].message.content = aiContent;
 
             console.log(`[Flux.1 Dev] Dual-AI Images integrated: ${fluxUrl} and ${sdxlUrl}`);
+        } else {
+            console.log('[Flux.1 Dev] No GENERATE tag found in response');
         }
+
+        // Debug: Log the final response structure
+        console.log('[AI Doctor] Response structure:', {
+            hasImages: !!result.data.choices[0]?.message?.images,
+            imageCount: result.data.choices[0]?.message?.images?.length || 0,
+            hasImage: !!result.data.choices[0]?.message?.image,
+            contentLength: result.data.choices[0]?.message?.content?.length || 0
+        });
 
         console.log('[AI Doctor] Success!');
         res.json(result.data);
