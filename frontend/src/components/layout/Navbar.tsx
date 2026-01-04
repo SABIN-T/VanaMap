@@ -90,7 +90,7 @@ export const Navbar = () => {
                             </button>
                         </div>
                     ) : (
-                        <Link to="/auth" className="btn btn-primary" style={{ padding: '0.4rem 1.25rem', fontSize: '0.85rem' }}>Login</Link>
+                        <Link to="/auth" className={`${styles.loginBtn} btn btn-primary`} style={{ padding: '0.4rem 1.25rem', fontSize: '0.85rem' }}>Login</Link>
                     )}
                 </div>
 

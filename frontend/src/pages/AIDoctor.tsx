@@ -99,7 +99,28 @@ export const AIDoctor = () => {
     const lastSpokenMessageIdRef = useRef<string | null>(null);
     const timeoutIdsRef = useRef<number[]>([]);
 
-    const [neuralMeta, setNeuralMeta] = useState<{ current: number; max: number } | null>(null);
+    const [neuralMeta, setNeuralMeta] = useState<{ current: number; max: number } | null>(() => {
+        const saved = localStorage.getItem('drflora_neural_meta');
+        if (saved) {
+            try {
+                return JSON.parse(saved);
+            } catch (e) {
+                return null;
+            }
+        }
+        return null;
+    });
+
+    // Proactive check: If Neural Energy is 0, we track it locally
+    const [isAnalysisLimited, setIsAnalysisLimited] = useState(false);
+
+    useEffect(() => {
+        if (neuralMeta && neuralMeta.current <= 0) {
+            setIsAnalysisLimited(true);
+        } else {
+            setIsAnalysisLimited(false);
+        }
+    }, [neuralMeta]);
 
 
     const scrollToBottom = () => {
@@ -140,8 +161,17 @@ export const AIDoctor = () => {
             role: 'user',
             content: messageContent,
             timestamp: new Date(),
-            image: base64Image || undefined // Store image in message
+            image: base64Image || undefined
         };
+
+        // Proactive Guard: Check if user is trying an expensive operation (Image/Analysis) while limited
+        if (base64Image && isAnalysisLimited) {
+            toast.error("🎨 Neural analysis limit reached! Switching to text-only mode.", { icon: '📊' });
+            // Remove image but keep text
+            base64Image = null;
+            userMessage.image = undefined;
+            userMessage.content = textToSend || "Please help me with this plant (limit reached, sending text only)";
+        }
 
         setMessages(prev => [...prev, userMessage]);
         setInput('');
@@ -172,9 +202,14 @@ export const AIDoctor = () => {
             if (response.usageMeta) {
                 const remaining = parseInt(response.usageMeta.remaining || '0') || 0;
                 const limit = parseInt(response.usageMeta.limit || '100000') || 100000;
-                setNeuralMeta({ current: remaining, max: limit });
+                const newMeta = { current: remaining, max: limit };
+                setNeuralMeta(newMeta);
+                localStorage.setItem('drflora_neural_meta', JSON.stringify(newMeta));
 
-                if (remaining > 0 && remaining < 20000) {
+                if (remaining <= 0) {
+                    setIsAnalysisLimited(true);
+                    toast("🚫 Neural capacity reached for today. Basic text mode active.", { icon: '⚠️' });
+                } else if (remaining < 20000) {
                     toast("⚠️ Neural Energy Low!", { icon: '⚡' });
                 }
             }
@@ -226,12 +261,39 @@ export const AIDoctor = () => {
 
             setMessages(prev => [...prev, assistantMessage]);
 
-        } catch (error) {
-            console.error(error);
+        } catch (error: any) {
+            console.error('[AI Doctor] Error:', error);
+
+            // AUTO-RECOVERY: If it failed with an image, try one last time WITHOUT image (TEXT-ONLY)
+            if (base64Image && !isAnalysisLimited) {
+                console.log('[AI Doctor] Image analysis failed, attempting Text-Only fallback...');
+                setIsAnalysisLimited(true); // Don't try again this session
+                setLoading(true);
+                try {
+                    const fallbackResponse = await chatWithDrFlora(
+                        messages.map(m => ({ role: m.role, content: m.content })),
+                        { timezone: Intl.DateTimeFormat().resolvedOptions().timeZone },
+                        null // No image
+                    );
+
+                    const fallbackAssistantMessage: Message = {
+                        id: (Date.now() + 2).toString(),
+                        role: 'assistant',
+                        content: `⚠️ **Image Analysis Limit Reached.** I've switched to basic text mode to help you.\n\n${fallbackResponse.choices?.[0]?.message?.content}`,
+                        timestamp: new Date()
+                    };
+                    setMessages(prev => [...prev, fallbackAssistantMessage]);
+                    setLoading(false);
+                    return;
+                } catch (fallbackErr) {
+                    console.error('[AI Doctor] Text fallback also failed');
+                }
+            }
+
             setMessages(prev => [...prev, {
                 id: (Date.now() + 1).toString(),
                 role: 'assistant',
-                content: "⚠️ **Dr. Flora is offline.** Please check your connection or try again later.",
+                content: "⚠️ **Dr. Flora is momentarily offline.** I'm undergoing a neural recalibration. Please try again with simple text or check back in a few minutes.",
                 timestamp: new Date()
             }]);
         } finally {

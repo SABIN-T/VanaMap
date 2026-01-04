@@ -643,7 +643,13 @@ export const chatWithDrFlora = async (messages: any[], userContext: any, image?:
         headers: getHeaders(),
         body: JSON.stringify({ messages, userContext, image })
     });
-    if (!res.ok) throw new Error("AI Service Unavailable");
+
+    if (!res.ok) {
+        if (res.status === 429) {
+            throw new Error("Neural Limit Reached");
+        }
+        throw new Error("AI Service Unavailable");
+    }
     return res.json();
 };
 
