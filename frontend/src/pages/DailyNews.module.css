@@ -3,126 +3,251 @@
     --bg-dark: #0f172a;
     --accent: #38bdf8;
     --card-bg: rgba(30, 41, 59, 0.7);
-    --border: rgba(255, 255, 255, 0.1);
+    --border: rgba(255, 255, 255, 0.08);
+    /* Lighter border for subtlety */
 
     min-height: 100vh;
     background: radial-gradient(circle at top right, #1e293b, var(--bg-dark));
     color: white;
-    font-family: 'Inter', sans-serif;
-    padding-top: 6rem;
-    padding-bottom: 4rem;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    padding-top: 5rem;
+    /* Reduced top padding */
+    padding-bottom: 2rem;
 }
 
 .header {
     text-align: center;
-    margin-bottom: 4rem;
+    margin-bottom: 2.5rem;
+    /* Tighter header spacing */
+    padding: 0 1rem;
 }
 
 .title {
-    font-size: 3.5rem;
+    font-size: 2.5rem;
+    /* Reduced from 3.5rem for better mobile fit */
     font-weight: 800;
     background: linear-gradient(135deg, #fff, #94a3b8);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+    /* Tighten letter spacing */
 }
 
 .subtitle {
     color: #94a3b8;
-    font-size: 1.2rem;
+    font-size: 1rem;
+    max-width: 600px;
+    margin: 0 auto;
 }
 
 .newsGrid {
-    max-width: 1200px;
+    max-width: 1400px;
+    /* Wider container for desktop density */
     margin: 0 auto;
-    padding: 0 2rem;
+    padding: 0 1rem;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 2.5rem;
+    /* More compact columns, starting at 280px */
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    /* Tighter gap */
 }
 
 .newsCard {
     background: var(--card-bg);
     border: 1px solid var(--border);
-    border-radius: 20px;
+    border-radius: 16px;
+    /* Slightly reduced radius */
     overflow: hidden;
-    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     backdrop-filter: blur(10px);
+    display: flex;
+    flex-direction: column;
 }
 
 .newsCard:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-    border-color: var(--accent);
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px -8px rgba(0, 0, 0, 0.4);
+    border-color: rgba(56, 189, 248, 0.5);
 }
 
 .imageWrapper {
-    height: 240px;
+    height: 180px;
+    /* Reduced from 240px */
     overflow: hidden;
     position: relative;
+    flex-shrink: 0;
 }
 
 .newsImage {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.6s ease;
+    transition: transform 0.5s ease;
 }
 
 .newsCard:hover .newsImage {
-    transform: scale(1.1);
+    transform: scale(1.05);
 }
 
 .category {
     position: absolute;
-    top: 1rem;
-    left: 1rem;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(4px);
-    padding: 0.25rem 0.75rem;
-    border-radius: 20px;
-    font-size: 0.8rem;
-    font-weight: 600;
+    bottom: 0.75rem;
+    /* Move to bottom left of image for better readability overlay */
+    left: 0.75rem;
+    top: auto;
+    background: rgba(15, 23, 42, 0.85);
+    /* Darker, more legible background */
+    backdrop-filter: blur(8px);
+    padding: 0.2rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.7rem;
+    font-weight: 700;
     color: var(--accent);
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.05em;
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .content {
-    padding: 2rem;
+    padding: 1.25rem;
+    /* Compact padding */
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .date {
     color: #64748b;
-    font-size: 0.9rem;
+    font-size: 0.75rem;
     margin-bottom: 0.5rem;
     display: block;
+    font-weight: 500;
 }
 
 .headline {
-    font-size: 1.5rem;
+    font-size: 1.15rem;
+    /* More compact headline */
     font-weight: 700;
-    margin-bottom: 1rem;
-    line-height: 1.3;
+    margin-bottom: 0.75rem;
+    line-height: 1.35;
+    color: #f1f5f9;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    /* Limit to 2 lines */
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .excerpt {
-    color: #cbd5e1;
-    line-height: 1.6;
-    margin-bottom: 1.5rem;
+    color: #94a3b8;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    /* Limit snippet length */
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    flex-grow: 1;
 }
 
 .readMore {
     color: var(--accent);
+    font-size: 0.85rem;
     text-decoration: none;
     font-weight: 600;
     display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    transition: gap 0.3s;
+    gap: 0.25rem;
+    transition: gap 0.2s;
+    margin-top: auto;
+    /* Push to bottom */
+    padding-top: 0.5rem;
 }
 
 .readMore:hover {
-    gap: 0.8rem;
+    gap: 0.5rem;
+    color: #7dd3fc;
+}
+
+/* --- Responsive Transformations --- */
+
+/* Mobile Phones (Android/iOS Common Sizes) */
+@media (max-width: 640px) {
+    .container {
+        padding-top: 4.5rem;
+    }
+
+    .title {
+        font-size: 2rem;
+    }
+
+    .newsGrid {
+        grid-template-columns: 1fr;
+        /* Single column on mobile */
+        gap: 1rem;
+        padding: 0 1rem;
+    }
+
+    /* Horizontal Card Layout for Mobile Landscape or Large Phones */
+    .newsCard {
+        flex-direction: row;
+        /* Horizontal style for density */
+        height: 140px;
+        align-items: stretch;
+    }
+
+    .imageWrapper {
+        width: 120px;
+        height: auto;
+    }
+
+    .content {
+        padding: 0.75rem;
+        justify-content: center;
+    }
+
+    .headline {
+        font-size: 1rem;
+        margin-bottom: 0.25rem;
+        -webkit-line-clamp: 2;
+        line-clamp: 2;
+    }
+
+    .excerpt {
+        display: none;
+        /* Hide excerpt on very compact mobile views */
+    }
+
+    .date {
+        margin-bottom: 0.25rem;
+    }
+
+    .category {
+        display: none;
+        /* Hide category tag on tiny mobile cards to save space */
+    }
+}
+
+/* Small Foldables / Older Androids */
+@media (max-width: 380px) {
+    .newsCard {
+        height: auto;
+        min-height: 130px;
+    }
+
+    .headline {
+        font-size: 0.95rem;
+    }
+}
+
+/* Tablets / Desktop */
+@media (min-width: 1024px) {
+    .newsGrid {
+        gap: 2rem;
+    }
 }

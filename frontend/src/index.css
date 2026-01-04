@@ -133,6 +133,14 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Global Compactness for Mobile Information Density */
+@media (max-width: 640px) {
+  html {
+    font-size: 14px;
+    /* Down from default 16px to fit more content */
+  }
+}
+
 .app-shell {
   width: 100%;
   min-height: 100vh;
