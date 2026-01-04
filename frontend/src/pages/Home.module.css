@@ -25,46 +25,6 @@
     /* Optimization */
 }
 
-/* --- HANGING PLANTS MAIN (STRETCHED ACROSS TOP) --- */
-.hangingPlantsMainContainer {
-    position: absolute;
-    top: -5px;
-    left: 0;
-    width: 100%;
-    z-index: 5;
-    pointer-events: none;
-    display: none;
-    /* Desktop only */
-    justify-content: center;
-    overflow: visible;
-}
-
-@media (min-width: 1024px) {
-    .hangingPlantsMainContainer {
-        display: flex;
-    }
-}
-
-.hangingPlantsMain {
-    width: 90%;
-    max-width: 1200px;
-    height: auto;
-    transform-origin: top center;
-    animation: swayMain 8s ease-in-out infinite alternate;
-    filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.4));
-    opacity: 0.95;
-}
-
-@keyframes swayMain {
-    0% {
-        transform: rotate(-0.5deg) translateY(0);
-    }
-
-    100% {
-        transform: rotate(0.5deg) translateY(2px);
-    }
-}
-
 @media (min-width: 1024px) {
     .hero {
         padding: 5rem 10vw;
