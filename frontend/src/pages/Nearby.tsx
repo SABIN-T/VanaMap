@@ -91,7 +91,7 @@ export const Nearby = () => {
                 setPlaceName(display_name.split(',')[0]); // Take safe first part
                 toast.success("Target area locked!", { id: tid });
 
-                await fetchAllData(latitude, longitude, searchRadius);
+                await fetchAllData(latitude, longitude, searchRadius, true);
             } else {
                 toast.error("Location signature not found.", { id: tid });
             }
@@ -103,7 +103,7 @@ export const Nearby = () => {
         }
     };
 
-    const fetchAllData = async (lat: number, lng: number, radiusKm: number) => {
+    const fetchAllData = async (lat: number, lng: number, radiusKm: number, forceRefresh = false) => {
         setLoading(true);
         setIsScanningPublic(true); // Start background scan tracker
 
@@ -116,7 +116,8 @@ export const Nearby = () => {
                     `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`,
                     { method: 'GET' },
                     { lat, lng },
-                    locationCache
+                    locationCache,
+                    forceRefresh
                 );
                 if (geoData.address) {
                     const city = geoData.address.city || geoData.address.town || geoData.address.village || geoData.address.suburb || "Unknown Area";
@@ -142,7 +143,6 @@ export const Nearby = () => {
                 .sort((a, b) => (a.distance || 0) - (b.distance || 0));
 
             setNearbyVendors(nearbyBackend);
-            setLoading(false); // <--- UNBLOCK UI FOR VERIFIED VENDORS IMMEDIATELY
 
             // 2. Fetch OSM Data (Slower)
             const radiusMeters = radiusKm * 1000;
@@ -166,7 +166,8 @@ out skel qt;
                     `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(overpassQuery)}`,
                     { method: 'GET' },
                     { query: overpassQuery },
-                    locationCache
+                    locationCache,
+                    forceRefresh
                 );
                 if (osmData.elements) {
                     unverifiedVendors = osmData.elements
@@ -204,19 +205,16 @@ out skel qt;
             } catch (err) { console.error("OSM Error", err); }
 
             // 3. Merge and Update with Public Data
-            // We re-filter everything to ensure distance correctness and sort order
             const nearbyPublic = unverifiedVendors
                 .filter(v => getDistanceFromLatLonInKm(lat, lng, v.latitude, v.longitude) <= radiusKm)
                 .map(v => ({ ...v, distance: getDistanceFromLatLonInKm(lat, lng, v.latitude, v.longitude) }));
 
-            // Merge with previous backend results (re-calculate backend to be safe or use state setter)
-            // Using state setter is safer if user moved map, but here we are in one flow.
-            // Actually, we can just re-merge nearbyBackend and nearbyPublic.
-
             const combined = [...nearbyBackend, ...nearbyPublic].sort((a, b) => (a.distance || 0) - (b.distance || 0));
             setNearbyVendors(combined);
+            setLoading(false); // ALL data is ready now (verified + public)
 
         } catch (e) {
+            console.error("Fetch Data Error", e);
             setLoading(false);
         } finally {
             setIsScanningPublic(false);
@@ -227,6 +225,11 @@ out skel qt;
         if (loading) return;
         const tid = isManual ? toast.loading("Syncing with satellite...") : null;
         setLoading(true);
+
+        if (isManual) {
+            // Force refresh when manual button is clicked
+            locationCache.clear();
+        }
 
         if (!navigator.geolocation) {
             if (tid) toast.error("GPS Not Supported", { id: tid });
@@ -239,7 +242,7 @@ out skel qt;
                 const { latitude, longitude } = pos.coords;
                 setPosition([latitude, longitude]);
                 if (tid) toast.success("Satellites locked!", { id: tid });
-                await fetchAllData(latitude, longitude, searchRadius);
+                await fetchAllData(latitude, longitude, searchRadius, isManual);
             },
             async (err) => {
                 console.warn(`GPS failed: ${err.message}. Trying IP fallback...`);
@@ -250,7 +253,7 @@ out skel qt;
                         const { latitude, longitude, city } = data;
                         setPosition([latitude, longitude]);
                         if (tid) toast.success(`Located via IP: ${city || "approximate"}`, { id: tid });
-                        await fetchAllData(latitude, longitude, searchRadius);
+                        await fetchAllData(latitude, longitude, searchRadius, isManual);
                     } else {
                         throw new Error("No data");
                     }
@@ -262,7 +265,7 @@ out skel qt;
             },
             { enableHighAccuracy: true, timeout: 8000 }
         );
-    }, [loading, searchRadius]); // Added searchRadius dependency
+    }, [loading, searchRadius]);
 
     useEffect(() => {
         if (!hasInitialLocateRef.current) {
