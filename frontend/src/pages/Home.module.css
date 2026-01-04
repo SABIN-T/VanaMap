@@ -25,48 +25,6 @@
     /* Optimization */
 }
 
-/* --- PREMIUM HANGING PLANTS ROW (ACROSS TOP) --- */
-.hangingPlantsRowContainer {
-    position: absolute;
-    top: -10px;
-    left: 0;
-    width: 100%;
-    z-index: 5;
-    pointer-events: none;
-    display: none;
-    /* Desktop immersive effect */
-    justify-content: center;
-    overflow: visible;
-}
-
-@media (min-width: 1024px) {
-    .hangingPlantsRowContainer {
-        display: flex;
-    }
-}
-
-.hangingPlantsRow {
-    width: 100%;
-    max-width: 1600px;
-    height: auto;
-    transform-origin: top center;
-    animation: swayRow 10s ease-in-out infinite alternate;
-    /* mix-blend-mode: screen turns the black background transparent */
-    mix-blend-mode: screen;
-    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.4));
-    opacity: 0.9;
-}
-
-@keyframes swayRow {
-    0% {
-        transform: scale(1.05) rotate(-0.3deg);
-    }
-
-    100% {
-        transform: scale(1.05) rotate(0.3deg);
-    }
-}
-
 @media (min-width: 1024px) {
     .hero {
         padding: 5rem 10vw;
