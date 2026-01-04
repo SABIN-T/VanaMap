@@ -1,8 +1,8 @@
 // Service Worker for VanaMap PWA
-// Version: 3.0.0
+// Version: 3.1.0
 // Advanced caching strategies with offline support
 
-const CACHE_VERSION = 'vanamap-v3.0.0';
+const CACHE_VERSION = 'vanamap-v3.1.0';
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const DYNAMIC_CACHE = `${CACHE_VERSION}-dynamic`;
 const IMAGE_CACHE = `${CACHE_VERSION}-images`;
@@ -43,7 +43,7 @@ const CACHE_DURATION = {
 // INSTALL EVENT - Cache static assets
 // ============================================
 self.addEventListener('install', (event) => {
-    console.log('[SW] Installing Service Worker v3.0.0...');
+    console.log('[SW] Installing Service Worker v3.1.0...');
 
     event.waitUntil(
         caches.open(STATIC_CACHE)
@@ -65,7 +65,7 @@ self.addEventListener('install', (event) => {
 // ACTIVATE EVENT - Clean up old caches
 // ============================================
 self.addEventListener('activate', (event) => {
-    console.log('[SW] Activating Service Worker v3.0.0...');
+    console.log('[SW] Activating Service Worker v3.1.0...');
 
     event.waitUntil(
         caches.keys()
@@ -122,11 +122,12 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // Static assets (JS, CSS) - Stale While Revalidate
+    // Static assets (JS, CSS) - Network First (CHANGED from Stale While Revalidate)
+    // This ensures users always get the latest version after deployment
     if (request.destination === 'script' ||
         request.destination === 'style' ||
         /\.(js|css)$/i.test(url.pathname)) {
-        event.respondWith(staleWhileRevalidateStrategy(request, STATIC_CACHE));
+        event.respondWith(networkFirstStrategy(request, STATIC_CACHE));
         return;
     }
 
