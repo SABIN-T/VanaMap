@@ -28,7 +28,7 @@ html {
   --color-secondary: #059669;
   --color-accent: #0ea5e9;
   /* Sky Blue */
-  --gradient-primary: linear-gradient(135deg, #10b981 0%, #3b82f6 100%);
+  --gradient-primary: linear-gradient(135deg, #10b981 0%, #059669 100%);
   --radius-full: 9999px;
 
   /* Dark Theme Tokens (Default) */
@@ -198,7 +198,7 @@ body {
 
 .btn-primary {
   background: var(--gradient-primary);
-  color: #000;
+  color: #fff;
   border: none;
 }
 
