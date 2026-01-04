@@ -26,9 +26,79 @@ import('./utils/pwa').then(({ pwaManager }) => {
 window.addEventListener('unhandledrejection', (event) => {
   if (event.reason?.name === 'ChunkLoadError' ||
     (event.reason?.message && event.reason.message.includes('Failed to fetch dynamically imported module'))) {
-    console.warn("Chunk load failed. Latest system assets could not be retrieved automatically.");
-    // window.location.reload(); // Disabled to prevent infinite reload loops
+
+    event.preventDefault(); // Prevent error from showing in console
+
+    console.warn('[App] Dynamic import failed - clearing cache and reloading...');
+
+    // Check if we've already tried reloading
+    const reloadAttempts = parseInt(sessionStorage.getItem('vanamap_reload_attempts') || '0');
+
+    if (reloadAttempts < 2) {
+      // Increment reload counter
+      sessionStorage.setItem('vanamap_reload_attempts', String(reloadAttempts + 1));
+
+      // Clear service worker caches and reload
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then((registrations) => {
+          Promise.all(registrations.map(reg => reg.unregister())).then(() => {
+            caches.keys().then((cacheNames) => {
+              Promise.all(cacheNames.map(name => caches.delete(name))).then(() => {
+                console.log('[App] Caches cleared, reloading...');
+                window.location.reload();
+              });
+            });
+          });
+        });
+      } else {
+        // No service worker, just reload
+        window.location.reload();
+      }
+    } else {
+      // Too many reload attempts, show error to user
+      console.error('[App] Failed to load after multiple attempts. Please clear your browser cache manually.');
+      sessionStorage.removeItem('vanamap_reload_attempts');
+
+      // Show user-friendly error
+      const errorDiv = document.createElement('div');
+      errorDiv.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        z-index: 99999;
+        max-width: 400px;
+        text-align: center;
+      `;
+      errorDiv.innerHTML = `
+        <h2 style="margin: 0 0 1rem; color: #dc2626;">Update Required</h2>
+        <p style="margin: 0 0 1.5rem; color: #64748b;">
+          VanaMap has been updated. Please clear your browser cache and refresh the page.
+        </p>
+        <button onclick="window.location.reload(true)" style="
+          background: #10b981;
+          color: white;
+          border: none;
+          padding: 0.75rem 1.5rem;
+          border-radius: 8px;
+          font-weight: 700;
+          cursor: pointer;
+        ">
+          Refresh Now
+        </button>
+      `;
+      document.body.appendChild(errorDiv);
+    }
   }
+});
+
+// Clear reload counter on successful load
+window.addEventListener('load', () => {
+  sessionStorage.removeItem('vanamap_reload_attempts');
 });
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
