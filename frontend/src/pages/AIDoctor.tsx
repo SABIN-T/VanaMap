@@ -123,6 +123,8 @@ export const AIDoctor = () => {
     }, [neuralMeta]);
 
 
+    const [showLimitInfo, setShowLimitInfo] = useState(false);
+
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
     };
@@ -806,23 +808,26 @@ export const AIDoctor = () => {
                     <div className={styles.actions}>
                         {/* Neural Energy Display */}
                         {neuralMeta && (
-                            <div style={{
-                                fontSize: 'clamp(10px, 2vw, 12px)',
-                                padding: '4px 10px',
-                                background: neuralMeta.current < 20000 ? '#fef2f2' : 'rgba(255,255,255,0.6)',
-                                color: neuralMeta.current < 20000 ? '#ef4444' : '#10b981',
-                                borderRadius: '99px',
-                                border: `1px solid ${neuralMeta.current < 20000 ? '#fecaca' : '#bbf7d0'}`,
-                                display: 'flex',
-                                alignItems: 'center',
-                                gap: '4px',
-                                fontWeight: 600,
-                                marginRight: '8px',
-                                backdropFilter: 'blur(4px)',
-                                boxShadow: '0 2px 5px rgba(0,0,0,0.05)'
-                            }} title={`Daily Neural Operations Remaining: ${neuralMeta.current.toLocaleString()}`}>
-                                <Zap size={14} fill={neuralMeta.current < 20000 ? "#ef4444" : "#10b981"} />
-                                <span>{(neuralMeta.current / 1000).toFixed(1)}k Ops</span>
+                            <div
+                                onClick={() => setShowLimitInfo(true)}
+                                style={{
+                                    fontSize: 'clamp(10px, 2vw, 12px)',
+                                    padding: '4px 10px',
+                                    background: (neuralMeta.current < 20000 || isAnalysisLimited) ? '#fef2f2' : 'rgba(255,255,255,0.6)',
+                                    color: (neuralMeta.current < 20000 || isAnalysisLimited) ? '#ef4444' : '#10b981',
+                                    borderRadius: '99px',
+                                    border: `1px solid ${(neuralMeta.current < 20000 || isAnalysisLimited) ? '#fecaca' : '#bbf7d0'}`,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '4px',
+                                    fontWeight: 600,
+                                    marginRight: '8px',
+                                    backdropFilter: 'blur(4px)',
+                                    boxShadow: '0 2px 5px rgba(0,0,0,0.05)',
+                                    cursor: 'pointer'
+                                }} title={`Click to see how to increase limits`}>
+                                <Zap size={14} fill={(neuralMeta.current < 20000 || isAnalysisLimited) ? "#ef4444" : "#10b981"} />
+                                <span>{isAnalysisLimited ? "LIMIT REACHED" : `${(neuralMeta.current / 1000).toFixed(1)}k Ops`}</span>
                             </div>
                         )}
                         <button
@@ -1130,6 +1135,86 @@ export const AIDoctor = () => {
                     </button>
                 </div>
             </div>
+            {/* Neural Energy & Settings Overlay (Tooltip/Modal) */}
+            {showLimitInfo && (
+                <div className={styles.overlay} onClick={() => setShowLimitInfo(false)}>
+                    <div className={styles.modal} onClick={e => e.stopPropagation()}>
+                        <div className={styles.modalHeader}>
+                            <h2 style={{ display: 'flex', alignItems: 'center', gap: '10px', margin: 0, fontSize: '1.15rem' }}>
+                                <Zap size={20} color="#10b981" fill="#10b981" />
+                                Neural Energy Insights
+                            </h2>
+                            <button className={styles.closeBtn} onClick={() => setShowLimitInfo(false)}>&times;</button>
+                        </div>
+                        <div className={styles.modalContent}>
+                            <p style={{ color: '#64748b', fontSize: '0.875rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>
+                                Dr. Flora's advanced botanical reasoning and image analysis require significant "Neural Energy". Daily limits help us maintain service for all gardeners.
+                            </p>
+
+                            <div style={{
+                                background: '#f8fafc',
+                                padding: '1.25rem',
+                                borderRadius: '1rem',
+                                border: '1px solid #e2e8f0',
+                                marginBottom: '1.5rem'
+                            }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '0.85rem' }}>
+                                    <span style={{ fontWeight: 700 }}>Daily Capacity:</span>
+                                    <span style={{ color: isAnalysisLimited ? '#ef4444' : '#10b981', fontWeight: 800 }}>
+                                        {isAnalysisLimited ? "Neural Exhausted" : `${((neuralMeta?.current || 0) / (neuralMeta?.max || 1) * 100).toFixed(1)}%`}
+                                    </span>
+                                </div>
+                                <div style={{ width: '100%', height: '8px', background: '#e2e8f0', borderRadius: '4px', overflow: 'hidden' }}>
+                                    <div style={{
+                                        width: `${((neuralMeta?.current || 0) / (neuralMeta?.max || 1) * 100)}%`,
+                                        height: '100%',
+                                        background: isAnalysisLimited ? '#ef4444' : '#10b981',
+                                        transition: 'width 0.8s cubic-bezier(0.16, 1, 0.3, 1)'
+                                    }} />
+                                </div>
+                                <p style={{ fontSize: '0.7rem', color: '#94a3b8', marginTop: '10px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                    <Sparkles size={12} />
+                                    Resets every 24 hours at midnight UTC.
+                                </p>
+                            </div>
+
+                            <h3 style={{ fontSize: '0.9rem', fontWeight: 800, color: '#1e293b', marginBottom: '0.75rem' }}>How to increase your limit?</h3>
+                            <ul style={{ paddingLeft: '1.2rem', color: '#475569', fontSize: '0.825rem', lineHeight: 1.8, marginBottom: '1.5rem' }}>
+                                <li><strong>✨ Upgrade to Premium</strong>: Instant 10x capacity boost and priority analysis.</li>
+                                <li><strong>🛍️ Shopping Activity</strong>: Active buyers earn "Energy Credits" over time.</li>
+                                <li><strong>🌿 Patience</strong>: Limits reset daily. Small gardens grow best with time!</li>
+                            </ul>
+
+                            {!user?.isPremium && (
+                                <button
+                                    className={styles.premiumBtn}
+                                    onClick={() => {
+                                        window.location.href = '/premium';
+                                    }}
+                                    style={{
+                                        width: '100%',
+                                        background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                                        color: 'white',
+                                        border: 'none',
+                                        padding: '1rem',
+                                        borderRadius: '0.75rem',
+                                        fontWeight: 800,
+                                        fontSize: '0.9rem',
+                                        cursor: 'pointer',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'center',
+                                        gap: '10px'
+                                    }}
+                                >
+                                    <Sparkles size={18} />
+                                    Experience Infinite Wisdom
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 };
