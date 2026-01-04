@@ -2040,3 +2040,108 @@
     color: #065f46;
     border-color: rgba(16, 185, 129, 0.3);
 }
+
+/* --- Desktop Background Animations --- */
+.desktopAnimationOverlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+@media (min-width: 1024px) {
+    .desktopAnimationOverlay {
+        display: block;
+    }
+}
+
+.floatingElement {
+    position: absolute;
+    opacity: 0.15;
+    color: var(--color-primary);
+    filter: blur(1px);
+    animation: drift 20s linear infinite;
+}
+
+.leaf1 {
+    top: 15%;
+    left: 5%;
+    animation-duration: 25s;
+}
+
+.leaf2 {
+    top: 65%;
+    left: 85%;
+    animation-duration: 30s;
+}
+
+.leaf3 {
+    top: 35%;
+    left: 75%;
+    animation-duration: 28s;
+    opacity: 0.1;
+}
+
+.leaf4 {
+    top: 85%;
+    left: 15%;
+    animation-duration: 35s;
+}
+
+.glowingOrb1 {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(16, 185, 129, 0.08) 0%, transparent 70%);
+    top: -100px;
+    right: -100px;
+    filter: blur(60px);
+    animation: pulseOrb 10s ease-in-out infinite;
+}
+
+.glowingOrb2 {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(56, 189, 248, 0.05) 0%, transparent 70%);
+    bottom: -50px;
+    left: -50px;
+    filter: blur(50px);
+    animation: pulseOrb 12s ease-in-out infinite reverse;
+}
+
+@keyframes drift {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+        opacity: 0.15;
+    }
+
+    33% {
+        transform: translate(30px, -50px) rotate(10deg);
+    }
+
+    66% {
+        transform: translate(-20px, -100px) rotate(-10deg);
+    }
+
+    100% {
+        transform: translate(0, -150px) rotate(0deg);
+        opacity: 0;
+    }
+}
+
+@keyframes pulseOrb {
+
+    0%,
+    100% {
+        transform: scale(1) translate(0, 0);
+        opacity: 0.6;
+    }
+
+    50% {
+        transform: scale(1.1) translate(20px, -20px);
+        opacity: 0.8;
+    }
+}

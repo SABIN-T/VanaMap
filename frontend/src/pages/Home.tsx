@@ -6,7 +6,7 @@ import { fetchPlants, fetchVendors } from '../services/api';
 import { getWeather, geocodeCity, reverseGeocode } from '../services/weather';
 import { calculateAptness, normalizeBatch } from '../utils/logic';
 import type { Plant, Vendor } from '../types';
-import { Sprout, MapPin, Thermometer, Wind, ArrowDown, Sparkles, Search, AlertCircle, Heart, Sun, Activity, GraduationCap, ShoppingBag, PlusCircle, MoveRight, MessageCircle, Droplets, Settings2, Download, X, Share, CheckCircle2 } from 'lucide-react';
+import { Sprout, MapPin, Thermometer, Wind, ArrowDown, Sparkles, Search, AlertCircle, Heart, Sun, Activity, GraduationCap, ShoppingBag, PlusCircle, MoveRight, MessageCircle, Droplets, Settings2, Download, X, Share, CheckCircle2, Leaf } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 // Lazy load modal for performance
 const PlantDetailsModal = lazy(() => import('../components/features/plants/PlantDetailsModal').then(module => ({ default: module.PlantDetailsModal })));
@@ -416,6 +416,16 @@ export const Home = () => {
 
     return (
         <div className={styles.homeContainer}>
+            {/* Desktop Background Animations */}
+            <div className={styles.desktopAnimationOverlay}>
+                <div className={`${styles.floatingElement} ${styles.leaf1}`}><Sprout size={48} /></div>
+                <div className={`${styles.floatingElement} ${styles.leaf2}`}><Leaf size={40} /></div>
+                <div className={`${styles.floatingElement} ${styles.leaf3}`}><Activity size={56} /></div>
+                <div className={`${styles.floatingElement} ${styles.leaf4}`}><Wind size={44} /></div>
+                <div className={styles.glowingOrb1} />
+                <div className={styles.glowingOrb2} />
+            </div>
+
             {selectedPlant && (
                 <Suspense fallback={<div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.8)', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2000, backdropFilter: 'blur(10px)' }}>Starting Simulation...</div>}>
                     <PlantDetailsModal
