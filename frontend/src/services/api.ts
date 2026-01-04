@@ -637,6 +637,16 @@ export const broadcastMessage = async (data: { type: string, targetId?: string, 
 };
 
 // --- AI DOCTOR ---
+export const analyzeScene = async (image: string, plantName: string) => {
+    const res = await fetch(`${API_URL}/make-it-real/analyze`, {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify({ image, plantName })
+    });
+    if (!res.ok) throw new Error("Scene analysis failed");
+    return res.json();
+};
+
 export const chatWithDrFlora = async (messages: any[], userContext: any, image?: string | null) => {
     const res = await fetch(`${API_URL}/chat`, {
         method: 'POST',

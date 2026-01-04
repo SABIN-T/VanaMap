@@ -1,9 +1,9 @@
 import { useState, useRef, useEffect, type MouseEvent, type TouchEvent } from 'react';
 import styles from './MakeItReal.module.css';
-import { fetchPlants } from '../services/api';
+import { fetchPlants, analyzeScene } from '../services/api';
 import type { Plant } from '../types';
 import toast from 'react-hot-toast';
-import { Search, ArrowLeft, ScanLine, Sparkles } from 'lucide-react';
+import { Search, ArrowLeft, ScanLine, Sparkles, BrainCircuit, Activity, Sun } from 'lucide-react';
 
 /* 
  * 🧠 MakeItReal v3.0 - Neural Studio
@@ -20,6 +20,8 @@ export const MakeItReal = () => {
     // Core Data
     const [selectedPlant, setSelectedPlant] = useState<Plant | null>(null);
     const [cutoutUrl, setCutoutUrl] = useState<string | null>(null);
+    const [sceneAnalysis, setSceneAnalysis] = useState<any>(null);
+    const [isAnalyzing, setIsAnalyzing] = useState(false);
 
     // Studio State
     const videoRef = useRef<HTMLVideoElement>(null);
@@ -400,6 +402,36 @@ export const MakeItReal = () => {
         }
     };
 
+    const runNeuralAnalysis = async () => {
+        if (!videoRef.current || !selectedPlant) return;
+        setIsAnalyzing(true);
+        const toastId = toast.loading("Dr. Flora is scanning your room...", { icon: '🧠' });
+
+        try {
+            const video = videoRef.current;
+            const canvas = document.createElement('canvas');
+            canvas.width = 600;
+            canvas.height = 600 * (video.videoHeight / video.videoWidth);
+            const ctx = canvas.getContext('2d');
+            ctx?.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const screenshot = canvas.toDataURL('image/jpeg', 0.6);
+
+            const analysis = await analyzeScene(screenshot, selectedPlant.name);
+            setSceneAnalysis(analysis);
+            toast.success("Scene intelligence synced.", { id: toastId });
+
+            // Automated Placement: If lighting is good in a specific spot, nudge it
+            if (analysis.lightScore >= 80) {
+                toast("✨ Optimal spot detected!", { icon: '🎯' });
+            }
+        } catch (e) {
+            console.error("Analysis failed", e);
+            toast.error("Neural sync interrupted.", { id: toastId });
+        } finally {
+            setIsAnalyzing(false);
+        }
+    };
+
     // --- CAMERA STUDIO LOGIC ---
     const captureScene = async () => {
         if (!videoRef.current || !cutoutUrl) return;
@@ -710,7 +742,30 @@ export const MakeItReal = () => {
                             <button className={styles.captureBtn} onClick={captureScene} title="Take Photo">
                                 <div className={styles.captureInner} />
                             </button>
+
+                            <button
+                                className={`${styles.glassBtn} ${isAnalyzing ? styles.scanning : ''}`}
+                                onClick={runNeuralAnalysis}
+                                disabled={isAnalyzing}
+                                title="Neural Scene Analysis"
+                            >
+                                <BrainCircuit size={20} color={sceneAnalysis ? '#10b981' : '#fff'} />
+                            </button>
                         </div>
+
+                        {sceneAnalysis && (
+                            <div className={styles.analysisOverlay}>
+                                <div className={styles.analysisRow}>
+                                    <Sun size={14} />
+                                    <span>Light: <strong>{sceneAnalysis.lightScore}%</strong> ({sceneAnalysis.lightingCondition})</span>
+                                </div>
+                                <div className={styles.analysisRow}>
+                                    <Activity size={14} />
+                                    <span>Aptness: <strong>{sceneAnalysis.aptnessScore}/100</strong></span>
+                                </div>
+                                <p className={styles.placementNote}>{sceneAnalysis.suggestedPlacement}</p>
+                            </div>
+                        )}
                     </div>
                 </div>
             )}

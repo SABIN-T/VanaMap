@@ -2497,20 +2497,69 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
 
         // 3. Fetch 'Learned' Best Practices
         let learnedContext = "";
-        try {
-            const trainings = await AIFeedback.aggregate([
-                { $match: { rating: 'positive' } },
-                { $sample: { size: 2 } }
-            ]);
-            if (trainings.length > 0) {
-                learnedContext = `\n\nSUCCESSFUL DIAGNOSES EXAMPLES:\n${trainings.map(t => `Q: ${t.query}\nA: ${t.response}`).join('\n---\n')}`;
-            }
-        } catch (err) {
-            console.warn('[AI Doctor] Could not fetch training data:', err.message);
-        }
+        // --- MAKE IT REAL: NEURAL SCENE ANALYSIS ---
+        app.post('/api/make-it-real/analyze', async (req, res) => {
+            try {
+                const { image, plantName, timezone } = req.body;
+                if (!image) return res.status(400).json({ error: "Missing scene data" });
 
-        // 4. Construct System Prompt (PREMIUM "HUMAN SOUL" VERSION)
-        const systemPrompt = `YOUR PERSONA (THE HUMAN SOUL):
+                console.log(`[Neural Studio] Analyzing scene for: ${plantName}`);
+
+                const groq = new (require('groq-sdk'))({ apiKey: process.env.GROQ_API_KEY });
+
+                // Use Llama 3.2 Vision for spatial and light analysis
+                const response = await groq.chat.completions.create({
+                    model: "llama-3.2-90b-vision-preview",
+                    messages: [
+                        {
+                            role: "user",
+                            content: [
+                                {
+                                    type: "text",
+                                    text: `Analyze this room for placing a ${plantName}. 
+                            Provide a JSON response with:
+                            1. "lightingCondition": (e.g. "Low/Indirect/Bright")
+                            2. "lightScore": (0-100)
+                            3. "suggestedPlacement": (Brief advice on where to put it in this specific camera view)
+                            4. "aptnessScore": (0-100 based on the environment vs the plant's needs)
+                            5. "spatialNotes": (Any obstacles or floor/table detection notes)
+                            Return ONLY valid JSON.`
+                                },
+                                {
+                                    type: "image_url",
+                                    image_url: { url: image }
+                                }
+                            ]
+                        }
+                    ],
+                    response_format: { type: "json_object" }
+                });
+
+                const analysis = JSON.parse(response.choices[0].message.content);
+                res.json(analysis);
+
+            } catch (err) {
+                console.error('[Neural Studio] Analysis Error:', err);
+                res.status(500).json({ error: "Scene parsing failed" });
+            }
+        });
+
+        // --- AI DOCTOR: Dr. Flora ---
+        app.post('/api/chat', optionalAuth, async (req, res) => {
+            try {
+                const trainings = await AIFeedback.aggregate([
+                    { $match: { rating: 'positive' } },
+                    { $sample: { size: 2 } }
+                ]);
+                if (trainings.length > 0) {
+                    learnedContext = `\n\nSUCCESSFUL DIAGNOSES EXAMPLES:\n${trainings.map(t => `Q: ${t.query}\nA: ${t.response}`).join('\n---\n')}`;
+                }
+            } catch (err) {
+                console.warn('[AI Doctor] Could not fetch training data:', err.message);
+            }
+
+            // 4. Construct System Prompt (PREMIUM "HUMAN SOUL" VERSION)
+            const systemPrompt = `YOUR PERSONA (THE HUMAN SOUL):
         - You aren't just an AI; you are Dr. Flora, who grew up in your grandmother's greenhouse.
         - You remember the smell of damp earth and the sound of rain on glass.
         - You are humanly imperfect: sometimes you "think out loud", you get genuinely excited about small things, and you might say "um" or "oh, wait!" if you remember something important.
@@ -2744,111 +2793,111 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
 
         If vague greeting: "Hello! I am Dr. Flora. How can I help your plants thrive today? 🌿"`;
 
-        // 4. Construct the messages array
-        console.log('[AI Doctor] Processing request. System Prompt defined.');
+            // 4. Construct the messages array
+            console.log('[AI Doctor] Processing request. System Prompt defined.');
 
-        const enhancedMessages = [
-            { role: "system", content: systemPrompt },
-            ...messages.filter(m => m.role !== 'system').map(m => ({
-                role: m.role,
-                content: m.content
-            }))
-        ];
-
-        // --- MODEL SELECTION ---
-        // Text Primary: Llama 3.3 70B (State of the art intelligence)
-        // Vision Primary: Llama 3.2 90B (Best for plant identification)
-        let model = "llama-3.3-70b-versatile";
-
-        if (image) {
-            console.log('[AI Doctor] Vision request detected. engaging Llama 3.2 90B Vision (Advanced).');
-            // Reverting to the absolute BEST model for accuracy as requested:
-            // "Llama 3.2 90B Vision" is currently SOTA (State of the Art) for visual reasoning.
-            model = "llama-3.2-90b-vision-preview";
-
-            // Attach image to the last user message
-            const lastMsgIndex = enhancedMessages.length - 1;
-            if (enhancedMessages[lastMsgIndex].role === 'user') {
-                const textContent = typeof enhancedMessages[lastMsgIndex].content === 'string'
-                    ? enhancedMessages[lastMsgIndex].content
-                    : "Analyze this plant image.";
-
-                enhancedMessages[lastMsgIndex].content = [
-                    { type: "text", text: textContent },
-                    { type: "image_url", image_url: { url: image } }
-                ];
-            }
-        }
-
-        // 5. Call Groq API (Multi-Stage Fallback Architecture)
-        const callGroq = async (targetModel, customMessages = null) => {
-            try {
-                const payloadMessages = customMessages || enhancedMessages;
-                const resp = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` },
-                    body: JSON.stringify({
-                        model: targetModel,
-                        messages: payloadMessages,
-                        max_tokens: 8192,  // UPGRADED: 8x more tokens for ultra-detailed responses
-                        temperature: 0.3,  // UPGRADED: Lower for maximum accuracy and consistency
-                        top_p: 0.9,        // UPGRADED: Nucleus sampling for quality control
-                        frequency_penalty: 0.3,  // UPGRADED: Reduce repetition
-                        presence_penalty: 0.2    // UPGRADED: Encourage diverse vocabulary
-                    })
-                });
-
-                const json = await resp.json();
-
-                // Extract Neural Usage Metadata
-                const usageMeta = {
-                    remaining: resp.headers.get('x-ratelimit-remaining-tokens') || resp.headers.get('x-ratelimit-remaining-tokens-on-demand'),
-                    limit: resp.headers.get('x-ratelimit-limit-tokens') || resp.headers.get('x-ratelimit-limit-tokens-on-demand'),
-                    reset: resp.headers.get('x-ratelimit-reset-tokens'),
-                    total_usage: json.usage
-                };
-
-                if (json && typeof json === 'object') {
-                    json.usageMeta = usageMeta;
-                }
-
-                return { ok: resp.ok, data: json, status: resp.status };
-            } catch (err) {
-                return { ok: false, data: { error: { message: err.message } } };
-            }
-        };
-
-        // --- ENSEMBLE LOGIC (The "Council of Experts") ---
-        let result;
-
-        // If this is a vision request, use PARALLEL ENSEMBLE
-        if (image && model === "llama-3.2-90b-vision-preview") {
-            console.log('[AI Doctor] 🧠 Starting Neural Ensemble Analysis (Parallel Execution)...');
-
-            const experts = [
-                { id: "llama-3.2-90b-vision-preview", role: "Senior Botanist" },
-                { id: "llama-3.2-11b-vision-preview", role: "Field Scout" },
-                { id: "llava-v1.5-7b-4096-preview", role: "Research Analyst" },
-                { id: "qwen2-vl-7b-instruct", role: "Vision-Language Expert" },
-                { id: "meta-llama/llama-4-scout-17b-16e-instruct", role: "Advanced Multimodal Specialist" }
+            const enhancedMessages = [
+                { role: "system", content: systemPrompt },
+                ...messages.filter(m => m.role !== 'system').map(m => ({
+                    role: m.role,
+                    content: m.content
+                }))
             ];
 
-            const visionResults = await Promise.all(experts.map(async (expert) => {
-                console.log(`[AI Doctor] ⚡ Triggering ${expert.role}...`);
-                const expertResponse = await callGroq(expert.id);
-                return {
-                    model: expert.role,
-                    content: expertResponse.ok ? expertResponse.data.choices[0]?.message?.content : null
-                };
-            }));
+            // --- MODEL SELECTION ---
+            // Text Primary: Llama 3.3 70B (State of the art intelligence)
+            // Vision Primary: Llama 3.2 90B (Best for plant identification)
+            let model = "llama-3.3-70b-versatile";
 
-            const validOpinions = visionResults.filter(r => r.content);
-            console.log(`[AI Doctor] 🧠 Ensemble: ${validOpinions.length}/${experts.length} experts reported.`);
+            if (image) {
+                console.log('[AI Doctor] Vision request detected. engaging Llama 3.2 90B Vision (Advanced).');
+                // Reverting to the absolute BEST model for accuracy as requested:
+                // "Llama 3.2 90B Vision" is currently SOTA (State of the Art) for visual reasoning.
+                model = "llama-3.2-90b-vision-preview";
 
-            if (validOpinions.length > 0) {
-                console.log('[AI Doctor] 🖋️ Synthesizing Final Diagnosis...');
+                // Attach image to the last user message
+                const lastMsgIndex = enhancedMessages.length - 1;
+                if (enhancedMessages[lastMsgIndex].role === 'user') {
+                    const textContent = typeof enhancedMessages[lastMsgIndex].content === 'string'
+                        ? enhancedMessages[lastMsgIndex].content
+                        : "Analyze this plant image.";
 
-                const synthesisPrompt = `You are Dr. Flora. Synthesize these plant analyses into ONE PERFECT answer:
+                    enhancedMessages[lastMsgIndex].content = [
+                        { type: "text", text: textContent },
+                        { type: "image_url", image_url: { url: image } }
+                    ];
+                }
+            }
+
+            // 5. Call Groq API (Multi-Stage Fallback Architecture)
+            const callGroq = async (targetModel, customMessages = null) => {
+                try {
+                    const payloadMessages = customMessages || enhancedMessages;
+                    const resp = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json", "Authorization": `Bearer ${apiKey}` },
+                        body: JSON.stringify({
+                            model: targetModel,
+                            messages: payloadMessages,
+                            max_tokens: 8192,  // UPGRADED: 8x more tokens for ultra-detailed responses
+                            temperature: 0.3,  // UPGRADED: Lower for maximum accuracy and consistency
+                            top_p: 0.9,        // UPGRADED: Nucleus sampling for quality control
+                            frequency_penalty: 0.3,  // UPGRADED: Reduce repetition
+                            presence_penalty: 0.2    // UPGRADED: Encourage diverse vocabulary
+                        })
+                    });
+
+                    const json = await resp.json();
+
+                    // Extract Neural Usage Metadata
+                    const usageMeta = {
+                        remaining: resp.headers.get('x-ratelimit-remaining-tokens') || resp.headers.get('x-ratelimit-remaining-tokens-on-demand'),
+                        limit: resp.headers.get('x-ratelimit-limit-tokens') || resp.headers.get('x-ratelimit-limit-tokens-on-demand'),
+                        reset: resp.headers.get('x-ratelimit-reset-tokens'),
+                        total_usage: json.usage
+                    };
+
+                    if (json && typeof json === 'object') {
+                        json.usageMeta = usageMeta;
+                    }
+
+                    return { ok: resp.ok, data: json, status: resp.status };
+                } catch (err) {
+                    return { ok: false, data: { error: { message: err.message } } };
+                }
+            };
+
+            // --- ENSEMBLE LOGIC (The "Council of Experts") ---
+            let result;
+
+            // If this is a vision request, use PARALLEL ENSEMBLE
+            if (image && model === "llama-3.2-90b-vision-preview") {
+                console.log('[AI Doctor] 🧠 Starting Neural Ensemble Analysis (Parallel Execution)...');
+
+                const experts = [
+                    { id: "llama-3.2-90b-vision-preview", role: "Senior Botanist" },
+                    { id: "llama-3.2-11b-vision-preview", role: "Field Scout" },
+                    { id: "llava-v1.5-7b-4096-preview", role: "Research Analyst" },
+                    { id: "qwen2-vl-7b-instruct", role: "Vision-Language Expert" },
+                    { id: "meta-llama/llama-4-scout-17b-16e-instruct", role: "Advanced Multimodal Specialist" }
+                ];
+
+                const visionResults = await Promise.all(experts.map(async (expert) => {
+                    console.log(`[AI Doctor] ⚡ Triggering ${expert.role}...`);
+                    const expertResponse = await callGroq(expert.id);
+                    return {
+                        model: expert.role,
+                        content: expertResponse.ok ? expertResponse.data.choices[0]?.message?.content : null
+                    };
+                }));
+
+                const validOpinions = visionResults.filter(r => r.content);
+                console.log(`[AI Doctor] 🧠 Ensemble: ${validOpinions.length}/${experts.length} experts reported.`);
+
+                if (validOpinions.length > 0) {
+                    console.log('[AI Doctor] 🖋️ Synthesizing Final Diagnosis...');
+
+                    const synthesisPrompt = `You are Dr. Flora. Synthesize these plant analyses into ONE PERFECT answer:
 
 ${validOpinions.map((op, i) => `EXPERT ${i + 1} (${op.model}): ${op.content}`).join('\n\n')}
 
@@ -2865,140 +2914,140 @@ CRITICAL INSTRUCTIONS:
 
 REMEMBER: Your response must include BOTH the identification analysis AND the [GENERATE] tag for visualization!`;
 
-                const synthesisMessages = [
-                    { role: "system", content: systemPrompt },
-                    { role: "user", content: synthesisPrompt }
-                ];
+                    const synthesisMessages = [
+                        { role: "system", content: systemPrompt },
+                        { role: "user", content: synthesisPrompt }
+                    ];
 
-                result = await callGroq("llama-3.3-70b-versatile", synthesisMessages);
-            } else {
-                console.warn('[AI Doctor] All ensemble experts failed.');
-                result = { ok: false };
-            }
-        } else {
-            result = await callGroq(model);
-        }
-
-        // --- TRIPLE-STAGE FALLBACK LOGIC ---
-        if (!result.ok || result.data.error) {
-            console.warn(`[AI Doctor] Primary model ${model} failed (Status: ${result.status}). Trying fallback sequence...`);
-
-            // FALLBACK STAGE 1: Standard Vision (11B)
-            if (image && model === "llama-3.2-90b-vision-preview") {
-                const expert2 = "llama-3.2-11b-vision-preview";
-                console.log(`[AI Doctor] ⚠️ Vision Fallback 1: Engaging Field Botanist (${expert2})`);
-                result = await callGroq(expert2);
-
-                // FALLBACK STAGE 2: Open Source Vision (LLaVA - The "Analyst")
-                if (!result.ok || result.data.error) {
-                    const expert3 = "llava-v1.5-7b-4096-preview";
-                    console.log(`[AI Doctor] ⚠️⚠️ Vision Fallback 2: Engaging Research Analyst (${expert3})`);
-                    result = await callGroq(expert3);
+                    result = await callGroq("llama-3.3-70b-versatile", synthesisMessages);
+                } else {
+                    console.warn('[AI Doctor] All ensemble experts failed.');
+                    result = { ok: false };
                 }
+            } else {
+                result = await callGroq(model);
             }
 
-            // FALLBACK STAGE 2: High-Speed Text-Only (Final Stand)
+            // --- TRIPLE-STAGE FALLBACK LOGIC ---
             if (!result.ok || result.data.error) {
-                console.warn('[AI Doctor] Vision falling back to High-Speed Text Engine.');
+                console.warn(`[AI Doctor] Primary model ${model} failed (Status: ${result.status}). Trying fallback sequence...`);
 
-                const bulletproofModel = "llama-3.1-8b-instant";
+                // FALLBACK STAGE 1: Standard Vision (11B)
+                if (image && model === "llama-3.2-90b-vision-preview") {
+                    const expert2 = "llama-3.2-11b-vision-preview";
+                    console.log(`[AI Doctor] ⚠️ Vision Fallback 1: Engaging Field Botanist (${expert2})`);
+                    result = await callGroq(expert2);
 
-                // Strip image if it still exists in the message structure
-                const lastIdx = enhancedMessages.length - 1;
-                const lastMsg = enhancedMessages[lastIdx];
-                if (Array.isArray(lastMsg.content)) {
-                    const textPart = lastMsg.content.find(c => c.type === 'text');
-                    if (textPart) {
-                        lastMsg.content = textPart.text + " (Note: I am currently analyzing your description only as my vision module is temporarily offline.)";
+                    // FALLBACK STAGE 2: Open Source Vision (LLaVA - The "Analyst")
+                    if (!result.ok || result.data.error) {
+                        const expert3 = "llava-v1.5-7b-4096-preview";
+                        console.log(`[AI Doctor] ⚠️⚠️ Vision Fallback 2: Engaging Research Analyst (${expert3})`);
+                        result = await callGroq(expert3);
                     }
                 }
 
-                result = await callGroq(bulletproofModel);
-            }
-        }
+                // FALLBACK STAGE 2: High-Speed Text-Only (Final Stand)
+                if (!result.ok || result.data.error) {
+                    console.warn('[AI Doctor] Vision falling back to High-Speed Text Engine.');
 
-        // 6. Handle Final Result
-        if (!result.ok) {
-            console.error("Groq API Fatal Error:", result.data);
+                    const bulletproofModel = "llama-3.1-8b-instant";
 
-            // Rate Limit specific message
-            if (result.data.error?.message?.includes('rate_limit')) {
-                return res.status(429).json({
-                    error: 'Dr. Flora is a bit overwhelmed right now! 🌿 (Rate Limit reached)',
-                    retryAfter: result.data.error?.message?.match(/try again in ([\d.]+s)/)?.[1] || '60s'
-                });
-            }
+                    // Strip image if it still exists in the message structure
+                    const lastIdx = enhancedMessages.length - 1;
+                    const lastMsg = enhancedMessages[lastIdx];
+                    if (Array.isArray(lastMsg.content)) {
+                        const textPart = lastMsg.content.find(c => c.type === 'text');
+                        if (textPart) {
+                            lastMsg.content = textPart.text + " (Note: I am currently analyzing your description only as my vision module is temporarily offline.)";
+                        }
+                    }
 
-            return res.status(result.status || 500).json(result.data);
-        }
-
-        // --- FLUX.1 DEV IMAGE GENERATION INTERVENTION ---
-        let aiContent = result.data.choices[0]?.message?.content || "";
-
-        // Match [GENERATE: prompt] OR [Image description: prompt] (with multi-line support)
-        // This regex now handles multi-line content including bullet points
-        const generateRegex = /\[(?:GENERATE|Image description):\s*([\s\S]+?)\]/i;
-        const match = aiContent.match(generateRegex);
-
-        if (match) {
-            let prompt = match[1].trim();
-
-            // Clean up the prompt: remove bullet points and excessive newlines
-            prompt = prompt
-                .replace(/^[\s•\-*]+/gm, '') // Remove bullet points at start of lines
-                .replace(/\n+/g, ' ') // Replace newlines with spaces
-                .replace(/\s+/g, ' ') // Normalize multiple spaces
-                .trim();
-
-            console.log(`[Flux.1 Dev] Generating image for prompt: ${prompt}`);
-
-            // ADVANCEMENT: Enhance the user prompt with botanical intelligence
-            const enhancedPrompt = FloraIntelligence.enhanceGenerationPrompt(prompt, matchedFloraBatch);
-            const seed = Math.floor(Math.random() * 1000000);
-
-            // RELIABILITY UPGRADE: Return two images (Flux + SDXL) for a better comparison
-            const fluxUrl = `/api/generate-image?prompt=${encodeURIComponent(enhancedPrompt)}&seed=${seed}&width=896&height=896&model=flux`;
-            const sdxlUrl = `/api/generate-image?prompt=${encodeURIComponent(enhancedPrompt)}&seed=${seed + 1}&width=896&height=896&model=flux-realism&enhance=true`;
-
-            // Inject multi-image support
-            result.data.choices[0].message.images = [fluxUrl, sdxlUrl];
-            // Backward compatibility & Primary display
-            result.data.choices[0].message.image = fluxUrl;
-
-            // Remove the [GENERATE:...] tag from the visible text (handle multi-line)
-            aiContent = aiContent.replace(generateRegex, "").trim();
-
-            // Overwrite response content
-            result.data.choices[0].message.content = aiContent;
-
-            console.log(`[Flux.1 Dev] Dual-AI Images integrated: ${fluxUrl} and ${sdxlUrl}`);
-        } else {
-            console.log('[Flux.1 Dev] No GENERATE tag found in response');
-        }
-
-        // Debug: Log the final response structure
-        console.log('[AI Doctor] Response structure:', {
-            hasImages: !!result.data.choices[0]?.message?.images,
-            imageCount: result.data.choices[0]?.message?.images?.length || 0,
-            hasImage: !!result.data.choices[0]?.message?.image,
-            contentLength: result.data.choices[0]?.message?.content?.length || 0
-        });
-
-        console.log('[AI Doctor] Success!');
-        res.json(result.data);
-
-    } catch (e) {
-        console.error("Chat API Error:", e);
-        res.json({
-            choices: [{
-                message: {
-                    role: "assistant",
-                    content: "I seem to be having trouble connecting to my knowledge base at the moment. Please try asking your question again in a few moments."
+                    result = await callGroq(bulletproofModel);
                 }
-            }]
-        });
-    }
-});
+            }
+
+            // 6. Handle Final Result
+            if (!result.ok) {
+                console.error("Groq API Fatal Error:", result.data);
+
+                // Rate Limit specific message
+                if (result.data.error?.message?.includes('rate_limit')) {
+                    return res.status(429).json({
+                        error: 'Dr. Flora is a bit overwhelmed right now! 🌿 (Rate Limit reached)',
+                        retryAfter: result.data.error?.message?.match(/try again in ([\d.]+s)/)?.[1] || '60s'
+                    });
+                }
+
+                return res.status(result.status || 500).json(result.data);
+            }
+
+            // --- FLUX.1 DEV IMAGE GENERATION INTERVENTION ---
+            let aiContent = result.data.choices[0]?.message?.content || "";
+
+            // Match [GENERATE: prompt] OR [Image description: prompt] (with multi-line support)
+            // This regex now handles multi-line content including bullet points
+            const generateRegex = /\[(?:GENERATE|Image description):\s*([\s\S]+?)\]/i;
+            const match = aiContent.match(generateRegex);
+
+            if (match) {
+                let prompt = match[1].trim();
+
+                // Clean up the prompt: remove bullet points and excessive newlines
+                prompt = prompt
+                    .replace(/^[\s•\-*]+/gm, '') // Remove bullet points at start of lines
+                    .replace(/\n+/g, ' ') // Replace newlines with spaces
+                    .replace(/\s+/g, ' ') // Normalize multiple spaces
+                    .trim();
+
+                console.log(`[Flux.1 Dev] Generating image for prompt: ${prompt}`);
+
+                // ADVANCEMENT: Enhance the user prompt with botanical intelligence
+                const enhancedPrompt = FloraIntelligence.enhanceGenerationPrompt(prompt, matchedFloraBatch);
+                const seed = Math.floor(Math.random() * 1000000);
+
+                // RELIABILITY UPGRADE: Return two images (Flux + SDXL) for a better comparison
+                const fluxUrl = `/api/generate-image?prompt=${encodeURIComponent(enhancedPrompt)}&seed=${seed}&width=896&height=896&model=flux`;
+                const sdxlUrl = `/api/generate-image?prompt=${encodeURIComponent(enhancedPrompt)}&seed=${seed + 1}&width=896&height=896&model=flux-realism&enhance=true`;
+
+                // Inject multi-image support
+                result.data.choices[0].message.images = [fluxUrl, sdxlUrl];
+                // Backward compatibility & Primary display
+                result.data.choices[0].message.image = fluxUrl;
+
+                // Remove the [GENERATE:...] tag from the visible text (handle multi-line)
+                aiContent = aiContent.replace(generateRegex, "").trim();
+
+                // Overwrite response content
+                result.data.choices[0].message.content = aiContent;
+
+                console.log(`[Flux.1 Dev] Dual-AI Images integrated: ${fluxUrl} and ${sdxlUrl}`);
+            } else {
+                console.log('[Flux.1 Dev] No GENERATE tag found in response');
+            }
+
+            // Debug: Log the final response structure
+            console.log('[AI Doctor] Response structure:', {
+                hasImages: !!result.data.choices[0]?.message?.images,
+                imageCount: result.data.choices[0]?.message?.images?.length || 0,
+                hasImage: !!result.data.choices[0]?.message?.image,
+                contentLength: result.data.choices[0]?.message?.content?.length || 0
+            });
+
+            console.log('[AI Doctor] Success!');
+            res.json(result.data);
+
+        } catch (e) {
+            console.error("Chat API Error:", e);
+            res.json({
+                choices: [{
+                    message: {
+                        role: "assistant",
+                        content: "I seem to be having trouble connecting to my knowledge base at the moment. Please try asking your question again in a few moments."
+                    }
+                }]
+            });
+        }
+    });
 
 app.post('/api/chat/feedback', async (req, res) => {
     try {
