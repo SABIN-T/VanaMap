@@ -914,7 +914,7 @@ export const Home = () => {
             </div>
 
             {/* MOVED: Intelligence Section (Core Capabilities) */}
-            <div className={styles.intelligenceSection} style={{ marginTop: '0' }}>
+            <div className={styles.intelligenceSection} style={{ marginTop: '0', contentVisibility: 'auto', containIntrinsicSize: '0 400px' }}>
                 <div className={styles.sectionHeader}>
                     <span className={styles.sectionBadge}>CORE CAPABILITIES</span>
                     <h2 className={styles.sectionTitle}>Built for Deep Biological Insights</h2>
@@ -940,7 +940,7 @@ export const Home = () => {
             </div>
 
             {/* MOVED: Onboarding Section (Personas) */}
-            <section className={styles.onboardingSection}>
+            <section className={styles.onboardingSection} style={{ contentVisibility: 'auto', containIntrinsicSize: '0 500px' }}>
                 <div className={styles.sectionHeader}>
                     <span className={styles.sectionBadge}>WHO ARE YOU?</span>
                     <h2 className={styles.sectionTitle}>Designed for our Community</h2>

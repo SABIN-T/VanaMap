@@ -9,7 +9,6 @@
 }
 
 /* --- HERO SECTION --- */
-/* --- HERO SECTION --- */
 .hero {
     min-height: 85vh;
     display: flex;
@@ -19,10 +18,17 @@
     position: relative;
     overflow: hidden;
     background: var(--color-bg);
-    /* Simplified background for performance */
     background-image: radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
     contain: layout paint;
-    /* Optimization */
+}
+
+@media (max-width: 768px) {
+    .hero {
+        background-image: none !important;
+        /* Save paint on mobile */
+        min-height: 70vh;
+        /* Shorter hero for mobile */
+    }
 }
 
 @media (min-width: 1024px) {

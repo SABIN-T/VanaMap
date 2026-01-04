@@ -12,10 +12,12 @@ const API_CACHE = `${CACHE_VERSION}-api`;
 const STATIC_ASSETS = [
     '/',
     '/index.html',
+    '/logo.png?v=4',
     '/offline.html',
     '/manifest.json',
     '/icons/icon-192x192.png',
-    '/icons/icon-512x512.png'
+    '/icons/icon-512x512.png',
+    'https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Outfit:wght@500;700;800&display=swap'
 ];
 
 // API endpoints to cache
@@ -126,7 +128,15 @@ self.addEventListener('fetch', (event) => {
     // This ensures users always get the latest version after deployment
     if (request.destination === 'script' ||
         request.destination === 'style' ||
-        /\.(js|css)$/i.test(url.pathname)) {
+        request.destination === 'font' ||
+        /\.(js|css|woff2?|ttf|otf)$/i.test(url.pathname)) {
+
+        // Fonts should be Cache First for performance
+        if (request.destination === 'font' || /\.(woff2?|ttf|otf)$/i.test(url.pathname) || url.hostname.includes('fonts.gstatic.com')) {
+            event.respondWith(cacheFirstStrategy(request, STATIC_CACHE));
+            return;
+        }
+
         event.respondWith(networkFirstStrategy(request, STATIC_CACHE));
         return;
     }
