@@ -11,12 +11,16 @@ import { ThemeProvider } from './context/ThemeContext';
 
 const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "480996649148-rkab0dbajc5n6q2lhvjjjkog2in6oh5u.apps.googleusercontent.com";
 
-// Register Service Worker for PWA
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').catch(() => { });
-  });
-}
+// Initialize PWA with advanced features
+import('./utils/pwa').then(({ pwaManager }) => {
+  // PWA will auto-register in production
+  console.log('[App] PWA Manager loaded');
+
+  // Optional: Request notification permission after user interaction
+  // pwaManager.requestNotificationPermission();
+}).catch((error) => {
+  console.warn('[App] PWA Manager failed to load:', error);
+});
 
 // Global handler for Vite dynamic import errors (Mismatch after new deployment)
 window.addEventListener('unhandledrejection', (event) => {
