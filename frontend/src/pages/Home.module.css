@@ -25,64 +25,6 @@
     /* Optimization */
 }
 
-/* --- HANGING PLANT (DESKTOP ONLY) --- */
-.hangingPlantContainer {
-    position: absolute;
-    top: -20px;
-    left: 45%;
-    transform: translateX(-50%);
-    width: 320px;
-    height: auto;
-    z-index: 5;
-    pointer-events: auto;
-    /* Enable hover on the plant area */
-    display: none;
-    /* Hide by default */
-}
-
-@media (min-width: 1024px) {
-    .hangingPlantContainer {
-        display: block;
-    }
-}
-
-.hangingPlant {
-    width: 100%;
-    height: auto;
-    transform-origin: top center;
-    animation: sway 6s ease-in-out infinite alternate;
-    transition: filter 0.3s ease, transform 0.3s ease;
-    cursor: pointer;
-    /* mix-blend-mode: screen makes black backgrounds transparent in dark mode */
-    mix-blend-mode: screen;
-    filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.6));
-}
-
-.hangingPlant:hover {
-    animation: swayIntense 3s ease-in-out infinite alternate;
-    filter: drop-shadow(0 30px 45px rgba(0, 0, 0, 0.4));
-}
-
-@keyframes sway {
-    0% {
-        transform: rotate(-1.5deg);
-    }
-
-    100% {
-        transform: rotate(1.5deg);
-    }
-}
-
-@keyframes swayIntense {
-    0% {
-        transform: rotate(-4deg) scale(1.02);
-    }
-
-    100% {
-        transform: rotate(4deg) scale(1.02);
-    }
-}
-
 @media (min-width: 1024px) {
     .hero {
         padding: 5rem 10vw;

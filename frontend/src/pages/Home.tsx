@@ -429,9 +429,6 @@ export const Home = () => {
             )}
 
             <section className={styles.hero}>
-                <div className={styles.hangingPlantContainer}>
-                    <img src="/images/hanging-pothos.png" alt="Hanging Pothos" className={styles.hangingPlant} />
-                </div>
                 <div className={styles.heroContent}>
                     <div className={styles.heroMainStack}>
                         {/* Premium Instagram Icon */}
