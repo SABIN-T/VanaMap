@@ -1363,40 +1363,65 @@ app.get('/api/news', async (req, res) => {
         const allNews = [];
 
         feeds.forEach(feed => {
-            if (feed && feed.items) {
-                feed.items.forEach(item => {
-                    allNews.push({
-                        title: item.title,
-                        link: item.link,
-                        pubDate: new Date(item.pubDate),
-                        source: feed.title || 'Nature News',
-                        snippet: item.contentSnippet || item.content || ''
-                    });
+            if (feed && feed.items) feed.items.forEach(item => {
+                // Try to find an image
+                let imageUrl = null;
+                if (item.enclosure && item.enclosure.url && item.enclosure.type && item.enclosure.type.startsWith('image')) {
+                    imageUrl = item.enclosure.url;
+                } else if (item['media:content'] && item['media:content'].$ && item['media:content'].$.url) {
+                    imageUrl = item['media:content'].$.url;
+                } else if (item['media:thumbnail'] && item['media:thumbnail'].$ && item['media:thumbnail'].$.url) {
+                    imageUrl = item['media:thumbnail'].$.url;
+                } else if (item.content) {
+                    const imgMatch = item.content.match(/<img[^>]+src="([^">]+)"/);
+                    if (imgMatch) imageUrl = imgMatch[1];
+                }
+
+                // Fallback to random nature element if no image found
+                if (!imageUrl) {
+                    imageUrl = `https://images.unsplash.com/photo-${[
+                        '1542601906990-b4d3fb778b09', // Forest
+                        '1441974231531-c6227db76b6e', // Woods
+                        '1470058869958-2a77ade41c02', // Jungle
+                        '1501854140884-074cf2b2b3b6', // Leaves
+                        '1466692476868-aef1dfb1e735'  // Garden
+                    ][Math.floor(Math.random() * 5)]}?w=800&q=80`;
+                }
+
+                allNews.push({
+                    title: item.title,
+                    link: item.link,
+                    pubDate: new Date(item.pubDate),
+                    source: feed.title || 'Nature News',
+                    snippet: item.contentSnippet || item.content || '',
+                    image: imageUrl
                 });
-            }
+            });
         });
-
-        // specific filtering for nature/plants
-        const keywords = ['plant', 'tree', 'forest', 'garden', 'flower', 'nature', 'species', 'conservation', 'climate'];
-        const filteredNews = allNews.filter(item => {
-            const text = (item.title + ' ' + item.snippet).toLowerCase();
-            return keywords.some(k => text.includes(k));
-        });
-
-        // Sort by date and take top 10
-        filteredNews.sort((a, b) => b.pubDate - a.pubDate);
-        const topNews = filteredNews.slice(0, 10);
-
-        newsCache = {
-            data: topNews,
-            lastUpdated: now
-        };
-
-        res.json(topNews);
-    } catch (error) {
-        console.error('Error fetching news:', error);
-        res.status(500).json({ error: 'Failed to fetch news' });
     }
+        });
+
+// specific filtering for nature/plants
+const keywords = ['plant', 'tree', 'forest', 'garden', 'flower', 'nature', 'species', 'conservation', 'climate'];
+const filteredNews = allNews.filter(item => {
+    const text = (item.title + ' ' + item.snippet).toLowerCase();
+    return keywords.some(k => text.includes(k));
+});
+
+// Sort by date and take top 10
+filteredNews.sort((a, b) => b.pubDate - a.pubDate);
+const topNews = filteredNews.slice(0, 10);
+
+newsCache = {
+    data: topNews,
+    lastUpdated: now
+};
+
+res.json(topNews);
+    } catch (error) {
+    console.error('Error fetching news:', error);
+    res.status(500).json({ error: 'Failed to fetch news' });
+}
 });
 
 // --- PLANT ROUTES ---
