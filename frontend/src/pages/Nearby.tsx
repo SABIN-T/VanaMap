@@ -11,6 +11,7 @@ import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import toast from 'react-hot-toast';
 import styles from './Nearby.module.css';
+import { locationCache, cachedFetch } from '../utils/universalCache'; // 🚀 Boost map speed!
 
 interface OSMElement {
     id: number;
@@ -73,9 +74,13 @@ export const Nearby = () => {
         const tid = toast.loading(`Scanning satellite data for "${manualSearchQuery}"...`);
 
         try {
-            // Forward Geocoding
-            const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(manualSearchQuery)}`);
-            const data = await res.json();
+            // Forward Geocoding with cache
+            const data = await cachedFetch<any>(
+                `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(manualSearchQuery)}`,
+                { method: 'GET' },
+                { q: manualSearchQuery },
+                locationCache
+            );
 
             if (data && data.length > 0) {
                 const { lat, lon, display_name } = data[0];
@@ -105,10 +110,14 @@ export const Nearby = () => {
         let verifiedVendors: Vendor[] = [];
 
         try {
-            // Reverse Geocoding
+            // Reverse Geocoding with cache
             try {
-                const geoRes = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
-                const geoData = await geoRes.json();
+                const geoData = await cachedFetch<any>(
+                    `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`,
+                    { method: 'GET' },
+                    { lat, lng },
+                    locationCache
+                );
                 if (geoData.address) {
                     const city = geoData.address.city || geoData.address.town || geoData.address.village || geoData.address.suburb || "Unknown Area";
                     setPlaceName(city);
@@ -153,8 +162,12 @@ out skel qt;
 
             let unverifiedVendors: Vendor[] = [];
             try {
-                const osmRes = await fetch(`https://overpass-api.de/api/interpreter?data=${encodeURIComponent(overpassQuery)}`);
-                const osmData = await osmRes.json();
+                const osmData = await cachedFetch<any>(
+                    `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(overpassQuery)}`,
+                    { method: 'GET' },
+                    { query: overpassQuery },
+                    locationCache
+                );
                 if (osmData.elements) {
                     unverifiedVendors = osmData.elements
                         .filter((el: OSMElement) => {
