@@ -12,6 +12,7 @@ import { useNavigate } from 'react-router-dom';
 const PlantDetailsModal = lazy(() => import('../components/features/plants/PlantDetailsModal').then(module => ({ default: module.PlantDetailsModal })));
 import { PlantSkeleton } from '../components/features/plants/PlantSkeleton';
 import styles from './Home.module.css';
+import { plantCache, apiCache } from '../utils/universalCache'; // 🚀 Performance boost!
 
 export const Home = () => {
     const [plants, setPlants] = useState<Plant[]>([]);
@@ -95,16 +96,46 @@ export const Home = () => {
             }, 3500);
 
             try {
+                // 🚀 CACHE CHECK - Try cache first
+                const cachedPlants = plantCache.get('/api/plants', {});
+                const cachedVendors = apiCache.get('/api/vendors', {});
+
+                if (cachedPlants && cachedVendors) {
+                    // Cache HIT - Instant load!
+                    console.log('[Cache] ✅ Using cached data - instant load!');
+                    setPlants(cachedPlants);
+                    setVendors(cachedVendors);
+                    setPlantsLoading(false);
+                    setIsSlowLoading(false);
+                    clearTimeout(timer);
+
+                    toast.success('⚡ Loaded from cache!', {
+                        duration: 1500,
+                        icon: '🚀'
+                    });
+                    return;
+                }
+
+                // Cache MISS - Fetch from API
+                console.log('[Cache] ❌ Cache miss - fetching from API');
+
                 const [data, vendorData] = await Promise.all([
                     fetchPlants(),
                     fetchVendors()
                 ]);
+
+                // Store in cache for next time
+                plantCache.set('/api/plants', data, {});
+                apiCache.set('/api/vendors', vendorData, {});
+                console.log('[Cache] 💾 Data cached for future use');
+
                 setVendors(vendorData);
                 if (data.length === 0) {
                     const { PLANTS } = await import('../data/mocks');
                     await import('../services/api').then(api => api.seedDatabase(PLANTS, []));
                     const newData = await fetchPlants();
                     setPlants(newData);
+                    plantCache.set('/api/plants', newData, {}); // Cache the seeded data
                     localStorage.setItem('vanamap_plants_cache', JSON.stringify(newData));
                 } else {
                     if (!isFromCache || JSON.stringify(data) !== localStorage.getItem('vanamap_plants_cache')) {

@@ -5,6 +5,7 @@ import { Search, ShoppingBag, AlertCircle } from 'lucide-react';
 import { PlantVendorsModal } from '../components/features/market/PlantVendorsModal';
 import { useNavigate, useLocation } from 'react-router-dom';
 import styles from './Shops.module.css';
+import { plantCache, apiCache } from '../utils/universalCache'; // 🚀 Performance boost!
 
 export const Shops = () => {
     const navigate = useNavigate();
@@ -25,10 +26,51 @@ export const Shops = () => {
         const slowTimer = setTimeout(() => setIsSlow(true), 3000);
 
         try {
+            // 🚀 CACHE CHECK - Try cache first
+            const cachedPlants = plantCache.get('/api/plants', {});
+            const cachedVendors = apiCache.get('/api/vendors', {});
+
+            if (cachedPlants && cachedVendors) {
+                // Cache HIT - Instant load!
+                console.log('[Cache] ✅ Shops loaded from cache - instant!');
+                setPlants(cachedPlants);
+                setVendors(cachedVendors.filter((v: Vendor) => v.verified));
+                setLoading(false);
+                setIsSlow(false);
+                clearTimeout(slowTimer);
+
+                // Check for auto-open request
+                if (location.state && (location.state as any).openPlantId) {
+                    const targetId = (location.state as any).openPlantId;
+                    const found = cachedPlants.find((p: Plant) => p.id === targetId);
+                    if (found) {
+                        setSelectedPlant(found);
+                        window.history.replaceState({}, document.title);
+                    }
+                }
+
+                import('react-hot-toast').then(({ default: toast }) => {
+                    toast.success('⚡ Loaded from cache!', {
+                        duration: 1500,
+                        icon: '🏪'
+                    });
+                });
+
+                return;
+            }
+
+            // Cache MISS - Fetch from API
+            console.log('[Cache] ❌ Cache miss - fetching shops from API');
+
             const [plantsData, vendorsData] = await Promise.all([
                 fetchPlants(),
                 fetchVendors()
             ]);
+
+            // Store in cache for next time
+            plantCache.set('/api/plants', plantsData, {});
+            apiCache.set('/api/vendors', vendorsData, {});
+            console.log('[Cache] 💾 Shops data cached for future use');
 
             if (plantsData.length === 0) {
                 // Potential silent fail or empty DB
