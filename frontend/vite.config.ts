@@ -18,9 +18,12 @@ export default defineConfig({
 
         cssFiles.forEach(cssFileName => {
           const cssAsset = bundle[cssFileName];
-          if (!cssAsset || !('source' in cssAsset)) return;
+          if (!cssAsset || cssAsset.type !== 'asset') return;
 
           const cssContent = cssAsset.source;
+          // Ensure htmlFile is also treated as an asset
+          if (htmlFile.type !== 'asset') return;
+
           const htmlSource = htmlFile.source as string;
 
           // Regex to find the link tag pointing to this CSS file
