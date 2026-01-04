@@ -1,13 +1,12 @@
-import { useState, useEffect, useRef, lazy, Suspense, useMemo } from 'react';
+import { useState, useRef, useEffect, useMemo, lazy, Suspense } from 'react';
 import toast from 'react-hot-toast';
-import { QRCodeSVG } from 'qrcode.react';
 import { PlantCard } from '../components/features/plants/PlantCard';
 import { Button } from '../components/common/Button';
 import { fetchPlants, fetchVendors } from '../services/api';
 import { getWeather, geocodeCity, reverseGeocode } from '../services/weather';
 import { calculateAptness, normalizeBatch } from '../utils/logic';
 import type { Plant, Vendor } from '../types';
-import { Sprout, MapPin, Thermometer, Wind, ArrowDown, Sparkles, Search, AlertCircle, Heart, Sun, Activity, GraduationCap, ShoppingBag, PlusCircle, MoveRight, MessageCircle, Droplets, Settings2 } from 'lucide-react';
+import { Sprout, MapPin, Thermometer, Wind, ArrowDown, Sparkles, Search, AlertCircle, Heart, Sun, Activity, GraduationCap, ShoppingBag, PlusCircle, MoveRight, MessageCircle, Droplets, Settings2, Download } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 // Lazy load modal for performance
 const PlantDetailsModal = lazy(() => import('../components/features/plants/PlantDetailsModal').then(module => ({ default: module.PlantDetailsModal })));
@@ -39,6 +38,7 @@ export const Home = () => {
     const [suggestions, setSuggestions] = useState<any[]>([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [visibleLimit, setVisibleLimit] = useState(() => window.innerWidth < 768 ? 4 : 10);
+    const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
 
     const plantsSectionRef = useRef<HTMLDivElement>(null);
     const filterSectionRef = useRef<HTMLDivElement>(null);
@@ -134,6 +134,32 @@ export const Home = () => {
         setTimeout(() => {
             filterSectionRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }, 100);
+    };
+
+    useEffect(() => {
+        const handler = (e: any) => {
+            e.preventDefault();
+            setDeferredPrompt(e);
+        };
+        window.addEventListener('beforeinstallprompt', handler);
+        return () => window.removeEventListener('beforeinstallprompt', handler);
+    }, []);
+
+    const handleInstallApp = async () => {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            console.log(`User response to the install prompt: ${outcome}`);
+            setDeferredPrompt(null);
+        } else {
+            // Fallback for iOS or if prompt isn't available
+            const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream;
+            if (isIOS) {
+                toast("To install: Tap 'Share' icon and 'Add to Home Screen' 📱", { duration: 5000 });
+            } else {
+                toast("App installation is available via your browser menu! 🔗", { duration: 4000 });
+            }
+        }
     };
 
     useEffect(() => {
@@ -923,10 +949,27 @@ export const Home = () => {
             }}>
                 <div style={{ display: 'flex', gap: '4rem', flexWrap: 'wrap', justifyContent: 'center', marginBottom: '4rem' }}>
                     <div>
-                        <p style={{ color: 'var(--color-text-dim)', fontSize: '0.9rem', marginBottom: '1rem' }}>Get it on Mobile</p>
-                        <div style={{ padding: '0.75rem', background: 'white', border: '1px solid var(--color-border)', borderRadius: '1rem', display: 'inline-block' }}>
-                            <QRCodeSVG value="https://www.vanamap.online" size={120} />
-                        </div>
+                        <p style={{ color: 'var(--color-text-dim)', fontSize: '0.9rem', marginBottom: '1rem' }}>Experience VanaMap Everywhere</p>
+                        <Button
+                            variant="primary"
+                            size="lg"
+                            onClick={handleInstallApp}
+                            style={{
+                                borderRadius: '1rem',
+                                padding: '1rem 2rem',
+                                background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                                boxShadow: '0 10px 20px rgba(16, 185, 129, 0.2)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '10px'
+                            }}
+                        >
+                            <Download size={20} />
+                            Download VanaMap App
+                        </Button>
+                        <p style={{ color: 'var(--color-text-dim)', fontSize: '0.75rem', marginTop: '1rem', opacity: 0.7 }}>
+                            Desktop or Mobile • No Store Required
+                        </p>
                     </div>
 
                     <div style={{ textAlign: 'left' }}>
