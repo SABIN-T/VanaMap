@@ -200,12 +200,10 @@ body {
   background: var(--gradient-primary);
   color: #000;
   border: none;
-  box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3), 0 2px 4px -1px rgba(16, 185, 129, 0.2);
 }
 
 .btn-primary:hover {
   transform: translateY(-3px);
-  box-shadow: 0 15px 30px -5px rgba(16, 185, 129, 0.4);
 }
 
 .btn-outline {
@@ -219,18 +217,16 @@ body {
   border-color: var(--color-primary);
   color: var(--color-primary);
   background: rgba(16, 185, 129, 0.1);
-  box-shadow: 0 0 20px rgba(16, 185, 129, 0.1);
 }
 
 /* Light Mode Button Styles */
 [data-theme='light'] .btn-primary {
   background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   color: #ffffff;
-  box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.4), 0 2px 4px -1px rgba(16, 185, 129, 0.3);
 }
 
 [data-theme='light'] .btn-primary:hover {
-  box-shadow: 0 15px 30px -5px rgba(16, 185, 129, 0.5);
+  transform: translateY(-3px);
 }
 
 [data-theme='light'] .btn-outline {
@@ -242,7 +238,6 @@ body {
   border-color: #10b981;
   color: #064e3b;
   background: rgba(16, 185, 129, 0.15);
-  box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
 }
 
 /* Leaflet Overrides */
