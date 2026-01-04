@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
-import { fetchVendors, seedDatabase, logVendorContact } from '../services/api';
+import { fetchVendors, logVendorContact } from '../services/api';
 import { getDistanceFromLatLonInKm, formatDistance } from '../utils/logic';
 import type { Vendor } from '../types';
 import { MessageCircle, MapPin, ExternalLink, RefreshCw, AlertCircle, Star, Sparkles, Search, Zap } from 'lucide-react';
@@ -13,23 +13,7 @@ import toast from 'react-hot-toast';
 import styles from './Nearby.module.css';
 import { locationCache, cachedFetch } from '../utils/universalCache'; // 🚀 Boost map speed!
 
-interface OSMElement {
-    id: number;
-    lat: number;
-    lon: number;
-    tags?: {
-        name?: string;
-        shop?: string;
-        landuse?: string;
-        "addr:full"?: string;
-        "addr:street"?: string;
-        "addr:city"?: string;
-        phone?: string;
-        "contact:phone"?: string;
-        "contact:whatsapp"?: string;
-        [key: string]: string | undefined;
-    };
-}
+// Geocoding helper removed or handled inline
 
 // Leaflet icon setup
 import icon from 'leaflet/dist/images/marker-icon.png';
@@ -59,6 +43,7 @@ export const Nearby = () => {
     const [placeName, setPlaceName] = useState<string>("");
     const [nearbyVendors, setNearbyVendors] = useState<Vendor[]>([]);
     const [loading, setLoading] = useState(false);
+    const [loadingStatus, setLoadingStatus] = useState("Scanning nearby network...");
 
     // Initialize tab from navigation state or default to verified
     const [activeTab, setActiveTab] = useState<'verified' | 'unverified' | 'all'>((location.state as { tab?: 'verified' | 'unverified' | 'all' })?.tab || 'all');
@@ -105,63 +90,56 @@ export const Nearby = () => {
 
     const fetchAllData = async (lat: number, lng: number, radiusKm: number, forceRefresh = false) => {
         setLoading(true);
-        setIsScanningPublic(true); // Start background scan tracker
+        setIsScanningPublic(true);
+        setLoadingStatus(`Exploring your area (${radiusKm}km)...`);
 
-        let verifiedVendors: Vendor[] = [];
+        const expansionSteps = [radiusKm, 100, 250, 500];
+        let currentStepIndex = 0;
+        let allFoundVendors: Vendor[] = [];
 
+        // 0. Update Place Name (Reverse Geocoding)
         try {
-            // Reverse Geocoding with cache
+            const geoData = await cachedFetch<any>(
+                `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`,
+                { method: 'GET' },
+                { lat, lng },
+                locationCache,
+                forceRefresh
+            );
+            if (geoData.address) {
+                const city = geoData.address.city || geoData.address.town || geoData.address.village || geoData.address.suburb || "Unknown Area";
+                setPlaceName(city);
+            }
+        } catch (e) {
+            console.warn("Geocoding failed", e);
+        }
+
+        while (currentStepIndex < expansionSteps.length) {
+            const currentRadius = expansionSteps[currentStepIndex];
+            setLoadingStatus(`Scanning ${currentRadius}km radius for vendors...`);
+
             try {
-                const geoData = await cachedFetch<any>(
-                    `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`,
-                    { method: 'GET' },
-                    { lat, lng },
-                    locationCache,
-                    forceRefresh
-                );
-                if (geoData.address) {
-                    const city = geoData.address.city || geoData.address.town || geoData.address.village || geoData.address.suburb || "Unknown Area";
-                    setPlaceName(city);
-                }
-            } catch (e) {
-                console.warn("Geocoding failed", e);
-            }
+                // 1. Fetch Backend Data
+                let allBackendVendors = await fetchVendors();
+                const nearbyBackend = allBackendVendors
+                    .filter(v => v.verified === true && getDistanceFromLatLonInKm(lat, lng, v.latitude, v.longitude) <= currentRadius)
+                    .map(v => ({ ...v, distance: getDistanceFromLatLonInKm(lat, lng, v.latitude, v.longitude) }));
 
-            // 1. Fetch Backend Data (Fast)
-            let allVendors = await fetchVendors();
-            if (allVendors.length === 0) {
-                const { VENDORS } = await import('../data/mocks');
-                seedDatabase([], VENDORS);
-                allVendors = await fetchVendors();
-            }
-            verifiedVendors = allVendors.filter(v => v.verified === true);
-
-            // Initial Render with Verified Data ONLY
-            const nearbyBackend = verifiedVendors
-                .filter(v => getDistanceFromLatLonInKm(lat, lng, v.latitude, v.longitude) <= radiusKm)
-                .map(v => ({ ...v, distance: getDistanceFromLatLonInKm(lat, lng, v.latitude, v.longitude) }))
-                .sort((a, b) => (a.distance || 0) - (b.distance || 0));
-
-            setNearbyVendors(nearbyBackend);
-
-            // 2. Fetch OSM Data (Slower)
-            const radiusMeters = radiusKm * 1000;
-            const overpassQuery = `
-[out:json][timeout:25];
+                // 2. Fetch OSM Data
+                const radiusMeters = currentRadius * 1000;
+                const overpassQuery = `
+[out:json][timeout:30];
 (
-    node["shop"="garden_centre"](around:${radiusMeters},${lat},${lng});
-    node["shop"="garden"](around:${radiusMeters},${lat},${lng});
+    node["shop"~"garden_centre|garden|florist|flower"](around:${radiusMeters},${lat},${lng});
+    way["shop"~"garden_centre|garden|florist|flower"](around:${radiusMeters},${lat},${lng});
     node["leisure"="garden"](around:${radiusMeters},${lat},${lng});
     node["tourism"="botanical_garden"](around:${radiusMeters},${lat},${lng});
-    node["landuse"="plant_nursery"]["name"](around:${radiusMeters},${lat},${lng});
+    node["landuse"="plant_nursery"](around:${radiusMeters},${lat},${lng});
+    node["nursery"="plant"](around:${radiusMeters},${lat},${lng});
 );
-out body;
->;
-out skel qt;
+out center;
 `;
-
-            let unverifiedVendors: Vendor[] = [];
-            try {
+                let unverifiedVendors: Vendor[] = [];
                 const osmData = await cachedFetch<any>(
                     `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(overpassQuery)}`,
                     { method: 'GET' },
@@ -169,29 +147,26 @@ out skel qt;
                     locationCache,
                     forceRefresh
                 );
+
                 if (osmData.elements) {
                     unverifiedVendors = osmData.elements
-                        .filter((el: OSMElement) => {
-                            if (!el.lat || !el.lon) return false;
+                        .filter((el: any) => (el.lat || (el.center && el.center.lat)))
+                        .map((el: any) => {
                             const tags = el.tags || {};
-                            const name = tags.name || "Unknown Garden";
-                            const nameLower = name.toLowerCase();
-                            const excludeKeywords = ['hardware', 'supermarket', 'grocery', 'general store', 'convenience', 'department store'];
-                            if (excludeKeywords.some(keyword => nameLower.includes(keyword))) return false;
-                            return true;
-                        })
-                        .map((el: OSMElement) => {
-                            const tags = el.tags || {};
+                            const latVal = el.lat || el.center.lat;
+                            const lonVal = el.lon || el.center.lon;
                             let category = "Garden";
-                            if (tags.shop === 'garden_centre' || tags.landuse === 'plant_nursery') {
+                            if (tags.shop && (tags.shop.includes('garden') || tags.shop.includes('florist') || tags.shop.includes('flower'))) {
                                 category = "Plant Shop";
+                            } else if (tags.landuse === 'plant_nursery' || tags.nursery === 'plant') {
+                                category = "Nursery";
                             }
 
                             return {
                                 id: `osm-${el.id}`,
                                 name: tags.name || (category === 'Garden' ? "Public Garden" : "Local Nursery"),
-                                latitude: el.lat,
-                                longitude: el.lon,
+                                latitude: latVal,
+                                longitude: lonVal,
                                 address: tags["addr:full"] || tags["addr:street"] || tags["addr:city"] || (category === 'Garden' ? "Public Space" : "Local Listing"),
                                 phone: tags.phone || tags["contact:phone"] || "N/A",
                                 whatsapp: tags["contact:whatsapp"] || "",
@@ -202,23 +177,42 @@ out skel qt;
                             };
                         });
                 }
-            } catch (err) { console.error("OSM Error", err); }
 
-            // 3. Merge and Update with Public Data
-            const nearbyPublic = unverifiedVendors
-                .filter(v => getDistanceFromLatLonInKm(lat, lng, v.latitude, v.longitude) <= radiusKm)
-                .map(v => ({ ...v, distance: getDistanceFromLatLonInKm(lat, lng, v.latitude, v.longitude) }));
+                const nearbyPublic = unverifiedVendors
+                    .map(v => ({ ...v, distance: getDistanceFromLatLonInKm(lat, lng, v.latitude, v.longitude) }))
+                    .filter(v => (v.distance || 0) <= currentRadius);
 
-            const combined = [...nearbyBackend, ...nearbyPublic].sort((a, b) => (a.distance || 0) - (b.distance || 0));
-            setNearbyVendors(combined);
-            setLoading(false); // ALL data is ready now (verified + public)
+                allFoundVendors = [...nearbyBackend, ...nearbyPublic].sort((a, b) => (a.distance || 0) - (b.distance || 0));
 
-        } catch (e) {
-            console.error("Fetch Data Error", e);
-            setLoading(false);
-        } finally {
-            setIsScanningPublic(false);
+                if (allFoundVendors.length > 0) {
+                    setNearbyVendors(allFoundVendors);
+                    if (currentRadius > radiusKm) {
+                        toast.success(`Broadened search to ${currentRadius}km to find matches!`, { icon: '🔍' });
+                        setSearchRadius(currentRadius); // Sync UI slider
+                    }
+                    break; // STOP searching if we found something
+                }
+
+                // If no results, try next expansion step
+                currentStepIndex++;
+                if (currentStepIndex < expansionSteps.length) {
+                    setLoadingStatus(`No luck at ${currentRadius}km. Expanding search to ${expansionSteps[currentStepIndex]}km...`);
+                    await new Promise(r => setTimeout(r, 500)); // Brief pause for UX visibility
+                }
+
+            } catch (err) {
+                console.error("Expand Search Error", err);
+                currentStepIndex++; // Continue to next step even on error
+            }
         }
+
+        if (allFoundVendors.length === 0) {
+            setNearbyVendors([]);
+            toast.error("Exhausted all corners. No shops found in a 500km radius.", { duration: 5000 });
+        }
+
+        setLoading(false);
+        setIsScanningPublic(false);
     };
 
     const handleGetLocation = useCallback((isManual = false) => {
@@ -476,8 +470,8 @@ out skel qt;
                             <div className="pulse-fast" style={{ display: 'inline-block', marginBottom: '1rem' }}>
                                 <Zap size={56} color="#facc15" fill="#facc15" style={{ filter: 'drop-shadow(0 0 10px #facc15)' }} />
                             </div>
-                            <h3 style={{ color: '#facc15', margin: '0 0 0.5rem', fontWeight: 800 }}>Searching for Vendors...</h3>
-                            <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>Scanning nearby network at lightning speed</p>
+                            <h3 style={{ color: '#facc15', margin: '0 0 0.5rem', fontWeight: 800 }}>{loadingStatus}</h3>
+                            <p style={{ color: 'var(--color-text-muted)', fontSize: '0.9rem' }}>Searching every corner for a vendor...</p>
                             <style>{`
                                 @keyframes pulseFast {
                                     0% { transform: scale(1); opacity: 1; }
