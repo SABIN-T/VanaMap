@@ -343,7 +343,7 @@ export const AIDoctor = () => {
     // --- VOICE ASSISTANT (Dr. Flora's Voice) ---
     const [voiceEnabled, setVoiceEnabled] = useState(true);
     const [isSpeaking, setIsSpeaking] = useState(false);
-    const synth = window.speechSynthesis;
+    const synth = typeof window !== 'undefined' ? window.speechSynthesis : undefined;
 
     // --- LANGUAGE SELECTION ---
     const [selectedLanguage, setSelectedLanguage] = useState('English');
@@ -359,16 +359,17 @@ export const AIDoctor = () => {
     useEffect(() => {
         // Preload voices
         const loadVoices = () => {
+            if (!synth) return;
             const voices = synth.getVoices();
             console.log("Available voices:", voices.map(v => v.name));
         };
         loadVoices();
-        if (speechSynthesis.onvoiceschanged !== undefined) {
-            speechSynthesis.onvoiceschanged = loadVoices;
+        if (synth && (synth as any).onvoiceschanged !== undefined) {
+            (synth as any).onvoiceschanged = loadVoices;
         }
         return () => {
             // Cleanup on unmount
-            synth.cancel(); // Stop speaking on unmount
+            if (synth) synth.cancel(); // Stop speaking on unmount
             timeoutIdsRef.current.forEach(id => clearTimeout(id)); // Clear all pending timeouts
             timeoutIdsRef.current = [];
         }
@@ -382,7 +383,7 @@ export const AIDoctor = () => {
         timeoutIdsRef.current = [];
 
         // Cancel any current speech
-        synth.cancel();
+        if (synth) synth.cancel();
 
         // 1. Advanced Text Cleanup & Convert Emotions to Speakable Sounds
         const cleanText = text
@@ -431,6 +432,7 @@ export const AIDoctor = () => {
             .map(unit => unit.trim());  // Clean up whitespace
 
         // 2. Multi-Language Accent & Voice Selection
+        if (!synth) return;
         const voices = synth.getVoices();
 
         // Detect language of the text
@@ -544,17 +546,19 @@ export const AIDoctor = () => {
 
             // Breath/Thought Pacing with proper cleanup
             if (unit.length > 50 || unit.includes('.') || unit.includes('!')) {
-                const timeoutId = window.setTimeout(() => synth.speak(utterance), 20);
+                const timeoutId = window.setTimeout(() => {
+                    if (synth) synth.speak(utterance);
+                }, 20);
                 timeoutIdsRef.current.push(timeoutId);
             } else {
-                synth.speak(utterance);
+                if (synth) synth.speak(utterance);
             }
         });
-    }, [voiceEnabled, messages]);
+    }, [voiceEnabled, messages, synth]);
 
     const toggleVoice = () => {
         if (voiceEnabled) {
-            synth.cancel();
+            if (synth) synth.cancel();
             setVoiceEnabled(false);
             setIsSpeaking(false);
             toast("Voice Assistant Disabled", { icon: '🔇' });
@@ -611,7 +615,7 @@ export const AIDoctor = () => {
         recognition.onstart = () => {
             setIsListening(true);
             // Stop AI from speaking when user starts talking
-            if (synth.speaking) {
+            if (synth && synth.speaking) {
                 synth.cancel();
                 setIsSpeaking(false);
             }
@@ -773,7 +777,7 @@ export const AIDoctor = () => {
                             <button
                                 className={styles.actionBtn}
                                 onClick={() => {
-                                    synth.cancel();
+                                    if (synth) synth.cancel();
                                     setIsSpeaking(false);
                                     toast.success("Stopped speaking");
                                 }}
