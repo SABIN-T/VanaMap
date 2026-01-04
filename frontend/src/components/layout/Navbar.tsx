@@ -36,7 +36,7 @@ export const Navbar = () => {
                 </div>
                 <div className={styles.logoText}>
                     <span className={styles.brandName}>VanaMap</span>
-                    <span className={styles.tagline}>The Forest Land for Future</span>
+                    <span className={styles.tagline}>Place, Plant & Planter</span>
                 </div>
             </Link>
 
