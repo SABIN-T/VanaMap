@@ -60,7 +60,7 @@ export const ManageUsers = () => {
             toast.success("Security Credentials Updated", { id: tid, icon: '🔐' });
             setResetPwd("");
             setSelectedUser(null);
-        } catch (err) {
+        } catch {
             toast.error("Update prevented by security policy", { id: tid });
         }
     };
@@ -73,7 +73,7 @@ export const ManageUsers = () => {
             await adminResetPassword(selectedUser.id, '123456');
             toast.success("Password Reset to '123456'", { id: tid });
             setSelectedUser(null);
-        } catch (e) { toast.error("Reset Failed"); }
+        } catch { toast.error("Reset Failed"); }
     };
 
     const handleDelete = async () => {
@@ -85,7 +85,7 @@ export const ManageUsers = () => {
             toast.success("User Deleted", { id: tid });
             setSelectedUser(null);
             loadUsers();
-        } catch (e) { toast.error("Delete Failed", { id: tid }); }
+        } catch { toast.error("Delete Failed", { id: tid }); }
     };
 
     return (
@@ -122,7 +122,7 @@ export const ManageUsers = () => {
                                                         const { deleteNotification } = await import('../../services/api');
                                                         await deleteNotification(alert._id);
                                                         loadAlerts();
-                                                    } catch (e) { toast.error("Reset Failed"); }
+                                                    } catch { toast.error("Reset Failed"); }
                                                 }
                                             } else {
                                                 toast.error("User not found in directory. Try searching manually.");
@@ -141,7 +141,7 @@ export const ManageUsers = () => {
                                                 await deleteNotification(alert._id);
                                                 loadAlerts();
                                                 toast.success("Alert cleared");
-                                            } catch (e) {
+                                            } catch {
                                                 toast.error("Failed to clear alert");
                                             }
                                         }}
@@ -280,7 +280,7 @@ export const ManageUsers = () => {
                                                 await giftPremium(selectedUser.id);
                                                 toast.success("Premium Gifted! 🎁", { id: tid });
                                                 loadUsers(); // Refresh to see updated status if we show it
-                                            } catch (e) {
+                                            } catch {
                                                 toast.error("Failed to gift premium", { id: tid });
                                             }
                                         }}

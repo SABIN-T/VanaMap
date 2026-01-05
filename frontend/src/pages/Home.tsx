@@ -27,7 +27,7 @@ export const Home = () => {
         const cached = localStorage.getItem('vanamap_weather');
         try {
             return cached ? JSON.parse(cached) : null;
-        } catch (e) {
+        } catch {
             return null;
         }
     });
@@ -86,7 +86,7 @@ export const Home = () => {
                     setPlantsLoading(false);
                     setIsFromCache(true);
                 }
-            } catch (e) {
+            } catch {
                 console.error("Cache corrupted");
             }
         }
@@ -432,7 +432,7 @@ export const Home = () => {
         // Simple biological simulation - instant for both mobile and desktop
         // 1. Calculate raw high-precision absolute scores
         const scoredRaw = filtered.map(p => {
-            const rawScore = calculateAptness(p, weather.avgTemp30Days, weather.air_quality?.aqi, weather.avgHumidity30Days, undefined, true);
+            const rawScore = calculateAptness(p, weather.avgTemp30Days, weather.air_quality?.aqi, weather.avgHumidity30Days, undefined);
             return { ...p, rawScore };
         });
 

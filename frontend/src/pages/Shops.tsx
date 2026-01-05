@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import type { Plant, Vendor } from '../types';
 import { fetchPlants, fetchVendors, logSearch } from '../services/api';
 import { Search, ShoppingBag, AlertCircle } from 'lucide-react';
@@ -129,7 +129,7 @@ export const Shops = () => {
         return () => clearTimeout(timer);
     }, [searchQuery]);
 
-    const getStockStatus = (plant: Plant) => {
+    const getStockStatus = useCallback((plant: Plant) => {
         const selling = vendors.filter(v => v.inventory?.some(i => i.plantId === plant.id && i.inStock));
         let count = 0;
         selling.forEach(v => {
@@ -138,7 +138,7 @@ export const Shops = () => {
             count += (typeof qty === 'number' ? qty : 1);
         });
         return { inStock: count > 0, count };
-    };
+    }, [vendors]);
 
     const getPriceInfo = (plant: Plant) => {
         // Collect all potential prices
@@ -183,7 +183,7 @@ export const Shops = () => {
 
             return matchesCategory && matchesSearch && matchesStock;
         });
-    }, [plants, activeCategory, searchQuery, stockFilter, vendors]);
+    }, [plants, activeCategory, searchQuery, stockFilter, vendors, getStockStatus]);
 
     return (
         <div className={styles.shopContainer}>

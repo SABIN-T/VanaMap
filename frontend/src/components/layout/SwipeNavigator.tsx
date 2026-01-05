@@ -1,6 +1,9 @@
 import { useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+// Navigation Order (Matches MobileTabBar)
+const tabs = ['/', '/nearby', '/shops', '/leaderboard', '/heaven', '/cart'];
+
 export const SwipeNavigator = () => {
     const navigate = useNavigate();
 
@@ -11,8 +14,6 @@ export const SwipeNavigator = () => {
     const touchEndY = useRef<number | null>(null);
 
     // Navigation Order (Matches MobileTabBar)
-    // Navigation Order (Matches MobileTabBar)
-    const tabs = ['/', '/nearby', '/shops', '/leaderboard', '/heaven', '/cart'];
     const minSwipeDistance = 70; // px
 
     useEffect(() => {

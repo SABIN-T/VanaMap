@@ -36,7 +36,7 @@ export const CustomerSupport = () => {
         try {
             const data = await fetchSupportTickets();
             setTickets(data);
-        } catch (e) {
+        } catch {
             toast.error('Failed to load tickets');
         } finally {
             setLoading(false);
@@ -56,7 +56,7 @@ export const CustomerSupport = () => {
             setReplyText('');
             setSelectedTicket(null);
             loadTickets();
-        } catch (e) {
+        } catch {
             toast.error('Failed to send reply', { id: tid });
         }
     };

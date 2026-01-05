@@ -155,7 +155,7 @@ export const Nearby = () => {
 
             try {
                 // 1. Fetch Backend Data
-                let allBackendVendors = await fetchVendors();
+                const allBackendVendors = await fetchVendors();
                 const nearbyBackend = allBackendVendors
                     .filter(v => v.verified === true && getDistanceFromLatLonInKm(lat, lng, v.latitude, v.longitude) <= currentRadius)
                     .map(v => ({ ...v, distance: getDistanceFromLatLonInKm(lat, lng, v.latitude, v.longitude) }));

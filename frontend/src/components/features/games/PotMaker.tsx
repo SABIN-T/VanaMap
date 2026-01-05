@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, useEffect } from 'react';
+import { useState, useRef, useCallback, useEffect, useMemo } from 'react';
 import { Upload, Camera, Save, ShoppingCart, Layers, RotateCcw, X, Check, Move, Maximize, RotateCw } from 'lucide-react';
 import toast from 'react-hot-toast';
 import Cropper from 'react-easy-crop';
@@ -58,10 +58,12 @@ const TexturedCylinder = ({
     offsetY,
     rotation
 }: TexturedCylinderProps) => {
-    const texture = useLoader(THREE.TextureLoader, textureUrl) as THREE.Texture;
+    const baseTexture = useLoader(THREE.TextureLoader, textureUrl) as THREE.Texture;
+    const texture = useMemo(() => baseTexture.clone(), [baseTexture]);
 
     useEffect(() => {
         if (texture) {
+            // eslint-disable-next-line
             texture.wrapS = THREE.ClampToEdgeWrapping;
             texture.wrapT = THREE.ClampToEdgeWrapping;
             texture.anisotropy = 16;

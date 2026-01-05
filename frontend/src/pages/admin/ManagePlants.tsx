@@ -13,6 +13,12 @@ export const ManagePlants = () => {
     const [searchQuery, setSearchQuery] = useState("");
     const navigate = useNavigate();
 
+    const loadPlants = async () => {
+        const data = await fetchPlants();
+        setAllPlants(data);
+        setFilteredPlants(data);
+    };
+
     useEffect(() => {
         loadPlants();
     }, []);
@@ -29,12 +35,6 @@ export const ManagePlants = () => {
             ));
         }
     }, [searchQuery, allPlants]);
-
-    const loadPlants = async () => {
-        const data = await fetchPlants();
-        setAllPlants(data);
-        setFilteredPlants(data);
-    };
 
     const handleEdit = (plant: Plant) => {
         navigate(`/admin/edit-plant/${plant.id}`);

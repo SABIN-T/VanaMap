@@ -30,11 +30,14 @@ export const UserDashboard = () => {
         name: '', phone: '', address: '', latitude: null, longitude: null
     });
     const [detectingLoc, setDetectingLoc] = useState(false);
+    const [showCollectionModal, setShowCollectionModal] = useState(false);
 
-    if (!user) {
-        navigate('/login');
-        return null;
-    }
+    // Redirect if not logged in - Handle purely with useEffect to avoid conditional returns before hooks
+    useEffect(() => {
+        if (!user && !loading) {
+            navigate('/login');
+        }
+    }, [user, loading, navigate]);
 
     // Fetch Rank
     useEffect(() => {
@@ -88,7 +91,7 @@ export const UserDashboard = () => {
             }
         };
         loadVendorData();
-    }, [user]);
+    }, [user, navigate]);
 
     const detectLocation = () => {
         setDetectingLoc(true);
@@ -107,7 +110,7 @@ export const UserDashboard = () => {
                 } else {
                     toast.error("Could not detect location automatically.");
                 }
-            } catch (err) {
+            } catch {
                 toast.error("Location detection failed. Please enter coordinates manually.");
             } finally {
                 setDetectingLoc(false);
@@ -157,7 +160,7 @@ export const UserDashboard = () => {
             } else {
                 toast.error("Failed to update profile", { id: tid });
             }
-        } catch (e) {
+        } catch {
             toast.error("Network error saving profile", { id: tid });
         }
     };
@@ -179,7 +182,7 @@ export const UserDashboard = () => {
             }
         };
         loadData();
-    }, [user?.email]); // Only reload if user email changes, simplified dependency
+    }, [user]); // Only reload if user email changes, simplified dependency
 
     // Compute favorites from allPlants based on user.favorites IDs
     const favoritePlants = allPlants.filter(p => user?.favorites?.includes(p.id));
@@ -207,7 +210,7 @@ export const UserDashboard = () => {
             } else {
                 toast.error(res.error || "Failed to update", { id: tid });
             }
-        } catch (err) {
+        } catch {
             toast.error("System error updating password", { id: tid });
         }
     };
@@ -220,13 +223,7 @@ export const UserDashboard = () => {
         );
     }
 
-    if (!user) {
-        navigate('/auth');
-        return null;
-    }
-
-    // Layout State
-    const [showCollectionModal, setShowCollectionModal] = useState(false);
+    if (!user) return null;
 
     return (
         <div className={styles.container}>

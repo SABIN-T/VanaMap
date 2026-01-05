@@ -5,6 +5,8 @@ import { Crown, Check, Shield, Zap, Heart, Bot, Headset } from 'lucide-react';
 import toast from 'react-hot-toast';
 import styles from './Premium.module.css';
 
+const API_URL = import.meta.env.VITE_API_URL || 'https://plantoxy.onrender.com/api';
+
 export const Premium = () => {
     const { user, refreshUser } = useAuth();
     const token = user?.token;
@@ -18,7 +20,6 @@ export const Premium = () => {
 
     // Access Control
     const canView = user && (user.favorites?.length > 3 || user.isPremium || user.role === 'admin');
-    const API_URL = import.meta.env.VITE_API_URL || 'https://plantoxy.onrender.com/api';
 
     useEffect(() => {
         // 1. Fetch Config (Price/Promo)

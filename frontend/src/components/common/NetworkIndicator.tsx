@@ -20,7 +20,7 @@ export const NetworkIndicator: React.FC = () => {
         };
 
         const updateConnection = () => {
-            // @ts-ignore - Network Information API
+            // @ts-expect-error - Network Information API
             const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
             if (conn) {
                 const isSlowConn = conn.effectiveType === '2g' || conn.effectiveType === 'slow-2g';
@@ -39,7 +39,7 @@ export const NetworkIndicator: React.FC = () => {
         window.addEventListener('offline', handleOffline);
 
         // Slow connection check
-        // @ts-ignore
+        // @ts-expect-error - Network Information API
         const conn = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
         if (conn) {
             conn.addEventListener('change', updateConnection);

@@ -43,7 +43,7 @@ export const ManageVendors = () => {
             await updateVendor(v.id, { verified: newStatus });
             toast.success(newStatus ? "Partner Verified" : "Verification Revoked", { id: tid });
             loadVendors();
-        } catch (e) { toast.error("Status Update Failed", { id: tid }); }
+        } catch { toast.error("Status Update Failed", { id: tid }); }
     };
 
     const toggleRecommendation = async (v: Vendor) => {
@@ -52,7 +52,7 @@ export const ManageVendors = () => {
             await updateVendor(v.id, { highlyRecommended: newStatus });
             if (newStatus) toast.success("Marked as Top Partner!", { icon: '🌟' });
             loadVendors();
-        } catch (e) { toast.error("Promotion Failed"); }
+        } catch { toast.error("Promotion Failed"); }
     };
 
     const handleDelete = async (id: string) => {
@@ -62,7 +62,7 @@ export const ManageVendors = () => {
             await deleteVendor(id);
             toast.success("Partner Removed", { id: tid });
             loadVendors();
-        } catch (e) { toast.error("Deletion failed", { id: tid }); }
+        } catch { toast.error("Deletion failed", { id: tid }); }
     };
 
     const handlePasswordResetClick = (vendor: Vendor) => {
@@ -80,7 +80,7 @@ export const ManageVendors = () => {
             await adminResetPassword(selectedVendorForReset.id, newPassword || '123456');
             toast.success("Password Reset Successfully!", { id: tid });
             setShowResetModal(false);
-        } catch (e) {
+        } catch {
             toast.error("Failed to reset password. Is this a linked account?", { id: tid });
         }
     };

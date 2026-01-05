@@ -97,6 +97,42 @@ export const AIDoctor = () => {
     const [input, setInput] = useState('');
     const [loading, setLoading] = useState(false);
 
+    // --- IMAGE UPLOAD (Plant Diagnosis) ---
+    const [selectedImage, setSelectedImage] = useState<File | null>(null);
+    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+    const fileInputRef = useRef<HTMLInputElement>(null);
+
+    const clearImage = () => {
+        setSelectedImage(null);
+        if (previewUrl) URL.revokeObjectURL(previewUrl);
+        setPreviewUrl(null);
+        if (fileInputRef.current) fileInputRef.current.value = '';
+    };
+
+    const handleScanClick = () => {
+        if (fileInputRef.current) {
+            fileInputRef.current.click();
+        }
+    };
+
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            if (!file.type.startsWith('image/')) {
+                toast.error("Please select an image file.");
+                return;
+            }
+            if (file.size > 5 * 1024 * 1024) {
+                toast.error("Image too large. Please select an image under 5MB.");
+                return;
+            }
+            const url = URL.createObjectURL(file);
+            setSelectedImage(file);
+            setPreviewUrl(url);
+            toast.success("Image added! Type your question and send.");
+        }
+    };
+
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const lastSpokenMessageIdRef = useRef<string | null>(null);
     const timeoutIdsRef = useRef<number[]>([]);
@@ -106,7 +142,7 @@ export const AIDoctor = () => {
         if (saved) {
             try {
                 return JSON.parse(saved);
-            } catch (e) {
+            } catch {
                 return null;
             }
         }
@@ -153,8 +189,7 @@ export const AIDoctor = () => {
                     reader.onerror = reject;
                     reader.readAsDataURL(selectedImage);
                 });
-                // Don't add text, just store image
-            } catch (e) {
+            } catch {
                 toast.error("Failed to process image");
                 return;
             }
@@ -326,17 +361,18 @@ export const AIDoctor = () => {
                     setMessages(prev => [...prev, fallbackAssistantMessage]);
                     setLoading(false);
                     return;
-                } catch (fallbackErr) {
-                    console.error('[AI Doctor] Text fallback also failed');
+                    // Don't add text, just store image
+                } catch {
+                    console.error("Text fallback failed");
                 }
-            }
 
-            setMessages(prev => [...prev, {
-                id: (Date.now() + 1).toString(),
-                role: 'assistant',
-                content: "⚠️ **Dr. Flora is momentarily offline.** I'm undergoing a neural recalibration. Please try again with simple text or check back in a few minutes.",
-                timestamp: new Date()
-            }]);
+                setMessages(prev => [...prev, {
+                    id: (Date.now() + 1).toString(),
+                    role: 'assistant',
+                    content: "⚠️ **Dr. Flora is momentarily offline.** I'm undergoing a neural recalibration. Please try again with simple text or check back in a few minutes.",
+                    timestamp: new Date()
+                }]);
+            }
         } finally {
             setLoading(false);
         }
@@ -478,7 +514,7 @@ export const AIDoctor = () => {
         }
     }, []);
 
-    const speak = useCallback((text: string) => {
+    const speak = useCallback((text: string, globalMood: string = 'natural') => {
         if (!voiceEnabled) return;
 
         // Clear any pending timeouts
@@ -491,7 +527,7 @@ export const AIDoctor = () => {
         // 1. Advanced Text Cleanup & Convert Emotions to Speakable Sounds
         const cleanText = text
             .replace(/\*/g, '') // Remove bold/italic markers
-            .replace(/[#\-]/g, '') // Remove headers/lists
+            .replace(/[#-]/g, '') // Remove headers/lists
             .replace(/\[.*?\]/g, '') // Remove [Citation] or [Image] tags
             // Convert emotional expressions to speakable sounds
             .replace(/\*giggles\*/gi, 'hehe') // *giggles* → "hehe"
@@ -569,13 +605,10 @@ export const AIDoctor = () => {
 
         if (preferredVoice) console.log(`[Voice System] Speaking in ${targetLang} accent using: ${preferredVoice.name}`);
 
-        // 3. Detect Global Emotional Mood from the last user message
-        const userMessages = messages.filter(m => m.role === 'user');
-        const lastUserMsg = userMessages[userMessages.length - 1]?.content.toLowerCase() || '';
-
-        let globalMood = 'natural';
-        if (lastUserMsg.includes('sad') || lastUserMsg.includes('died') || lastUserMsg.includes('poor') || lastUserMsg.includes('help')) globalMood = 'concerned';
-        if (lastUserMsg.includes('happy') || lastUserMsg.includes('yay') || lastUserMsg.includes('great')) globalMood = 'joyful';
+        // 3. Detect Global Emotional Mood passed as argument
+        // const userMessages = messages.filter(m => m.role === 'user');
+        // const lastUserMsg = userMessages[userMessages.length - 1]?.content.toLowerCase() || '';
+        // Moved to call site to avoid dependency loop
 
         // Remove any duplicate units (safety check)
         const uniqueUnits = [...new Set(speechUnits)];
@@ -657,7 +690,7 @@ export const AIDoctor = () => {
                 if (synth) synth.speak(utterance);
             }
         });
-    }, [voiceEnabled, messages, synth]);
+    }, [voiceEnabled, synth]);
 
     const toggleVoice = () => {
         if (voiceEnabled) {
@@ -678,10 +711,18 @@ export const AIDoctor = () => {
             // Prevent repeating the same message ID
             if (lastSpokenMessageIdRef.current !== lastMsg.id) {
                 lastSpokenMessageIdRef.current = lastMsg.id;
-                speak(lastMsg.content);
+
+                // Calculate mood here
+                const userMessages = messages.filter(m => m.role === 'user');
+                const lastUserMsg = userMessages[userMessages.length - 1]?.content.toLowerCase() || '';
+                let globalMood = 'natural';
+                if (lastUserMsg.includes('sad') || lastUserMsg.includes('died') || lastUserMsg.includes('poor') || lastUserMsg.includes('help')) globalMood = 'concerned';
+                if (lastUserMsg.includes('happy') || lastUserMsg.includes('yay') || lastUserMsg.includes('great')) globalMood = 'joyful';
+
+                speak(lastMsg.content, globalMood);
             }
         }
-    }, [messages, voiceEnabled]);
+    }, [messages, voiceEnabled, speak]);
 
 
     // --- SPEECH RECOGNITION (Microphone Input) ---
@@ -791,45 +832,7 @@ export const AIDoctor = () => {
         }
     };
 
-    // --- IMAGE UPLOAD (Plant Diagnosis) ---
-    const [selectedImage, setSelectedImage] = useState<File | null>(null);
-    const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-    const fileInputRef = useRef<HTMLInputElement>(null);
 
-    const handleScanClick = () => {
-        if (fileInputRef.current) {
-            fileInputRef.current.click();
-        }
-    };
-
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (file) {
-            // Validate file type
-            if (!file.type.startsWith('image/')) {
-                toast.error("Please select an image file.");
-                return;
-            }
-
-            // Validate file size (max 5MB)
-            if (file.size > 5 * 1024 * 1024) {
-                toast.error("Image too large. Please select an image under 5MB.");
-                return;
-            }
-
-            const url = URL.createObjectURL(file);
-            setSelectedImage(file);
-            setPreviewUrl(url);
-            toast.success("Image added! Type your question and send.");
-        }
-    };
-
-    const clearImage = () => {
-        setSelectedImage(null);
-        if (previewUrl) URL.revokeObjectURL(previewUrl);
-        setPreviewUrl(null);
-        if (fileInputRef.current) fileInputRef.current.value = '';
-    };
 
     return (
         <div className={styles.container}>

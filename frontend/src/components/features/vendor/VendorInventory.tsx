@@ -18,6 +18,31 @@ export const VendorInventory = ({ vendor, onUpdate }: VendorInventoryProps) => {
     const [editValues, setEditValues] = useState<Record<string, { price: string, quantity: string, inStock: boolean }>>({});
 
     useEffect(() => {
+        const loadPlants = async () => {
+            try {
+                const data = await fetchPlants();
+                setPlants(data);
+
+                // Initialize edit values from existing inventory
+                const initialEdits: Record<string, { price: string, quantity: string, inStock: boolean }> = {};
+                if (vendor.inventory) {
+                    vendor.inventory.forEach(item => {
+                        initialEdits[item.plantId] = {
+                            price: item.price.toString(),
+                            quantity: ((item as any).quantity || 0).toString(),
+                            inStock: item.inStock
+                        };
+                    });
+                }
+                setEditValues(initialEdits);
+            } catch (err) {
+                console.error(err);
+                toast.error("Failed to load plant catalog");
+            } finally {
+                setLoading(false);
+            }
+        };
+
         // Restore state after forced refresh
         const restoreState = sessionStorage.getItem('vendor_restore');
         if (restoreState) {
@@ -47,31 +72,6 @@ export const VendorInventory = ({ vendor, onUpdate }: VendorInventoryProps) => {
             setEditValues(prev => ({ ...prev, ...serverState }));
         }
     }, [vendor, plants]);
-
-    const loadPlants = async () => {
-        try {
-            const data = await fetchPlants();
-            setPlants(data);
-
-            // Initialize edit values from existing inventory
-            const initialEdits: Record<string, { price: string, quantity: string, inStock: boolean }> = {};
-            if (vendor.inventory) {
-                vendor.inventory.forEach(item => {
-                    initialEdits[item.plantId] = {
-                        price: item.price.toString(),
-                        quantity: ((item as any).quantity || 0).toString(),
-                        inStock: item.inStock
-                    };
-                });
-            }
-            setEditValues(initialEdits);
-        } catch (err) {
-            console.error(err);
-            toast.error("Failed to load plant catalog");
-        } finally {
-            setLoading(false);
-        }
-    };
 
     const handleFieldChange = (plantId: string, field: 'price' | 'quantity', val: string) => {
         setEditValues(prev => ({

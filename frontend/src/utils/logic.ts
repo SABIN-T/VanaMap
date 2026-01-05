@@ -62,9 +62,7 @@ export const calculateAptness = (
     currentTemp: number,
     aqi: number = 20,
     currentHumidity: number = 50,
-    lightPercent: number = 70,
-    _unused: any = null,
-    _unused2: any = null
+    lightPercent: number = 70
 ): number => {
     const sTemp = getTempScore(plant, currentTemp);
     const sHum = getHumidityScore(plant, currentHumidity);

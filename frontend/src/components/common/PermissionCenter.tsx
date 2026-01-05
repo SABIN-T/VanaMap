@@ -23,7 +23,7 @@ export const PermissionCenter = () => {
                 const geoStatus = await navigator.permissions.query({ name: 'geolocation' as PermissionName });
                 setGeo(geoStatus.state as PermissionState);
                 geoStatus.onchange = () => setGeo(geoStatus.state as PermissionState);
-            } catch (e) { setGeo('unsupported'); }
+            } catch { setGeo('unsupported'); }
 
             // Notifications
             try {
@@ -33,20 +33,20 @@ export const PermissionCenter = () => {
                 } else {
                     setNotif('unsupported');
                 }
-            } catch (e) { setNotif('unsupported'); }
+            } catch { setNotif('unsupported'); }
 
             // Camera & Mic
             try {
                 const camStatus = await navigator.permissions.query({ name: 'camera' as PermissionName });
                 setCam(camStatus.state as PermissionState);
                 camStatus.onchange = () => setCam(camStatus.state as PermissionState);
-            } catch (e) { setCam('prompt'); }
+            } catch { setCam('prompt'); }
 
             try {
                 const micStatus = await navigator.permissions.query({ name: 'microphone' as PermissionName });
                 setMic(micStatus.state as PermissionState);
                 micStatus.onchange = () => setMic(micStatus.state as PermissionState);
-            } catch (e) { setMic('prompt'); }
+            } catch { setMic('prompt'); }
         }
     }, []);
 
@@ -92,7 +92,7 @@ export const PermissionCenter = () => {
             stream.getTracks().forEach(track => track.stop());
             setCam('granted');
             return true;
-        } catch (e) {
+        } catch {
             setCam('denied');
             return false;
         }
@@ -104,7 +104,7 @@ export const PermissionCenter = () => {
             stream.getTracks().forEach(track => track.stop());
             setMic('granted');
             return true;
-        } catch (e) {
+        } catch {
             setMic('denied');
             return false;
         }
@@ -119,7 +119,7 @@ export const PermissionCenter = () => {
             await requestNotif();
             toast.success("All Systems Go! 🚀", { id: toastId });
             localStorage.setItem('vanamap_setup_complete', 'true');
-        } catch (err) {
+        } catch {
             toast.error("Some permissions were skipped.", { id: toastId });
         }
     };

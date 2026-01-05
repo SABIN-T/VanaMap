@@ -1,5 +1,5 @@
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { Camera, RefreshCw, Check, Search, Plus, ScanLine, Leaf, Image as ImageIcon, Activity, Target, Filter } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { AdminLayout } from './AdminLayout';
@@ -10,6 +10,7 @@ import { worldFlora } from '../../data/worldFlora';
 export const PlantIdentifier = () => {
     const videoRef = useRef<HTMLVideoElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
+    const streamRef = useRef<MediaStream | null>(null);
     const [stream, setStream] = useState<MediaStream | null>(null);
     const [capturedImages, setCapturedImages] = useState({
         full: null as string | null,
@@ -31,40 +32,43 @@ export const PlantIdentifier = () => {
 
     const navigate = useNavigate();
 
+    const startCamera = useCallback(async () => {
+        try {
+            const mediaStream = await navigator.mediaDevices.getUserMedia({
+                video: {
+                    facingMode: 'environment',
+                    width: { ideal: 1920 },
+                    height: { ideal: 1080 }
+                }
+            });
+            streamRef.current = mediaStream;
+            setStream(mediaStream);
+            if (videoRef.current) {
+                videoRef.current.srcObject = mediaStream;
+            }
+        } catch (err) {
+            toast.error("Camera permission denied");
+        }
+    }, []);
+
+    const stopCamera = useCallback(() => {
+        if (streamRef.current) {
+            streamRef.current.getTracks().forEach(track => track.stop());
+            streamRef.current = null;
+            setStream(null);
+        }
+    }, []);
+
     useEffect(() => {
         startCamera();
         return () => stopCamera();
-    }, []);
+    }, [startCamera, stopCamera]);
 
     useEffect(() => {
         fetchPlants().then(setDbPlants).catch(console.error);
     }, []);
 
-    const startCamera = async () => {
-        try {
-            const stream = await navigator.mediaDevices.getUserMedia({
-                video: {
-                    facingMode: 'environment',
-                    width: { ideal: 1920 },
-                    height: { ideal: 1080 }
-                    // Removes any potential default filters
-                }
-            });
-            setStream(stream);
-            if (videoRef.current) {
-                videoRef.current.srcObject = stream;
-            }
-        } catch (err) {
-            toast.error("Camera permission denied");
-        }
-    };
 
-    const stopCamera = () => {
-        if (stream) {
-            stream.getTracks().forEach(track => track.stop());
-            setStream(null);
-        }
-    };
 
     const handleFocus = async () => {
         if (!stream) return;
@@ -108,7 +112,6 @@ export const PlantIdentifier = () => {
         const frame = context.getImageData(0, 0, canvasRef.current.width, canvasRef.current.height);
         const data = frame.data;
         let r, g, b, avg;
-        let colorSum = 0;
         let brightnessSum = 0;
 
         // Sample every 100th pixel for speed
@@ -117,7 +120,6 @@ export const PlantIdentifier = () => {
             g = data[x + 1];
             b = data[x + 2];
             avg = (r + g + b) / 3;
-            colorSum += avg;
             brightnessSum += avg;
         }
 

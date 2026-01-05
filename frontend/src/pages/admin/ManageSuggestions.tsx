@@ -14,7 +14,7 @@ export const ManageSuggestions = () => {
             if (Array.isArray(data)) {
                 setSuggestions(data);
             }
-        } catch (err) {
+        } catch {
             toast.error("Failed to load suggestions");
         } finally {
             setLoading(false);
@@ -130,7 +130,7 @@ export const ManageSuggestions = () => {
                                                 await updateSuggestion(s._id, { status: 'approved' });
                                                 toast.success("Suggestion Approved", { id: tid });
                                                 fetchSuggestions();
-                                            } catch (e) { toast.error("Failed to approve", { id: tid }); }
+                                            } catch { toast.error("Failed to approve", { id: tid }); }
                                         }}
                                     >
                                         <CheckCircle size={16} /> APPROVE
@@ -150,7 +150,7 @@ export const ManageSuggestions = () => {
                                             await deleteSuggestion(s._id);
                                             toast.success("Suggestion Removed", { id: tid });
                                             setSuggestions(prev => prev.filter(item => item._id !== s._id));
-                                        } catch (e) { toast.error("Failed to remove", { id: tid }); }
+                                        } catch { toast.error("Failed to remove", { id: tid }); }
                                     }}
                                 >
                                     <XCircle size={16} />

@@ -46,7 +46,7 @@ export const Auth = () => {
             setCountry(india.name);
             setPhoneCode(india.phonecode);
         }
-    }, []);
+    }, [selectedCountry]);
 
     // Handle country change
     const handleCountryChange = (isoCode: string) => {
@@ -99,7 +99,7 @@ export const Auth = () => {
             const api = await import('../services/api');
             await api.nudgeAdmin(email);
             toast.success("Admin will change the password to 123456 for this email shortly. Please try after 1hr.", { id: tid, duration: 6000 });
-        } catch (e) { toast.error("Failed to signal admin", { id: tid }); }
+        } catch { toast.error("Failed to signal admin", { id: tid }); }
     };
 
     const [showPassword, setShowPassword] = useState(false);
@@ -221,7 +221,7 @@ export const Auth = () => {
                 await api.resetPassword(email, password);
                 toast.success("Password Updated! Please Login.", { id: tid });
                 setView('login');
-            } catch (err) {
+            } catch {
                 toast.error("Reset Failed. Try again.", { id: tid });
             }
         }
@@ -369,7 +369,7 @@ export const Auth = () => {
 
                                                         toast.success("Location Detected!", { id: tid });
                                                     }
-                                                } catch (e) {
+                                                } catch {
                                                     toast.error("Failed to detect address", { id: tid });
                                                 }
                                             }, () => toast.error("Permission denied", { id: tid }));

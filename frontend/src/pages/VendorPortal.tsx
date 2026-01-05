@@ -77,13 +77,7 @@ export const VendorPortal = () => {
         address: ''
     });
 
-    useEffect(() => {
-        if (user?.role === 'vendor' || user?.role === 'admin') {
-            loadVendorData();
-        }
-    }, [user]);
-
-    const loadVendorData = async () => {
+    const loadVendorData = useCallback(async () => {
         const vendors = await fetchVendors();
         if (!user) return;
 
@@ -103,7 +97,15 @@ export const VendorPortal = () => {
                 setMarkerPos(new L.LatLng(myVendor.latitude, myVendor.longitude));
             }
         }
-    };
+    }, [user]);
+
+    useEffect(() => {
+        if (user?.role === 'vendor' || user?.role === 'admin') {
+            loadVendorData();
+        }
+    }, [user, loadVendorData]);
+
+
 
     const handleAutoLocate = useCallback(() => {
         if (isLocating) return;

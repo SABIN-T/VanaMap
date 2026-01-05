@@ -35,10 +35,9 @@ export interface ShoppingRecommendation {
 export class ShoppingAssistantService {
 
     // Search for products
-    static async searchProducts(query: string, _category?: string): Promise<ProductDeal[]> {
+    static async searchProducts(query: string, category?: string): Promise<ProductDeal[]> {
         // In production, integrate with actual e-commerce APIs
         // For now, return mock data with real-like structure
-        // Note: category parameter will be used when integrating real e-commerce API
 
         const mockProducts: ProductDeal[] = [
             {
@@ -82,6 +81,10 @@ export class ShoppingAssistantService {
                 location: 'Bangalore, Karnataka'
             }
         ];
+
+        if (category) {
+            return mockProducts.filter(p => p.category === category);
+        }
 
         return mockProducts;
     }
@@ -175,11 +178,12 @@ export class ShoppingAssistantService {
     }
 
     // Track price history (mock)
-    static getPriceHistory(_productId: string): {
+    static getPriceHistory(productId: string): {
         date: Date;
         price: number;
     }[] {
         // Note: productId will be used when integrating real price tracking API
+        console.log("Fetching price history for:", productId);
         const history = [];
         const today = new Date();
 
@@ -229,7 +233,7 @@ export function useShoppingAssistant() {
             const results = await ShoppingAssistantService.searchProducts(query, category);
             setProducts(results);
             return results;
-        } catch (err) {
+        } catch {
             setError('Failed to search products');
             return [];
         } finally {
@@ -243,7 +247,7 @@ export function useShoppingAssistant() {
             const deals = await ShoppingAssistantService.getBestDeals(category);
             setBestDeals(deals);
             return deals;
-        } catch (err) {
+        } catch {
             setError('Failed to load deals');
             return [];
         } finally {
@@ -258,7 +262,7 @@ export function useShoppingAssistant() {
             const comparison = await ShoppingAssistantService.comparePrices(productName);
             setProducts(comparison);
             return comparison;
-        } catch (err) {
+        } catch {
             setError('Failed to compare prices');
             return [];
         } finally {
