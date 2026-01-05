@@ -3172,14 +3172,73 @@ app.post('/api/chat/feedback', async (req, res) => {
 
 // --- VOICE SYNTHESIS (ELEVENLABS) ---
 
-// Curated list of high-quality Female voices for Dr. Flora
-const AVAILABLE_VOICES = [
-    { id: "XB0fDUnXU5powFXDhCwa", name: "Charlotte", style: "Mystical & Soothing", description: "The classic voice of Dr. Flora." },
-    { id: "21m00Tcm4TlvDq8ikWAM", name: "Rachel", style: "Narrative & Clear", description: "Professional and well-articulated." },
-    { id: "AZnzlk1XvdvUeBnXmlld", name: "Domi", style: "Strong & Emotive", description: "Engaging and confident presence." },
-    { id: "MF3mGyEYCl7XYWbV9V6O", name: "Elli", style: "Warm & Friendly", description: "Younger, cheerful energy." },
-    { id: "piTKgcLEGmPE4e6mEKli", name: "Nicole", style: "Whisper & Calm", description: "Perfect for relaxing plant care advice." }
-];
+// Advanced Voice Personality Configurations
+// Each voice has unique tonal characteristics for distinct experiences
+const VOICE_PERSONALITIES = {
+    "XB0fDUnXU5powFXDhCwa": { // Charlotte - Mystical & Soothing
+        name: "Charlotte",
+        style: "Mystical & Soothing",
+        description: "The classic voice of Dr. Flora.",
+        settings: {
+            stability: 0.65,           // Higher stability for calm, consistent tone
+            similarity_boost: 0.85,    // Strong character adherence for mystical quality
+            style: 0.40,               // Moderate style for soothing expression
+            use_speaker_boost: true    // Enhanced clarity
+        }
+    },
+    "21m00Tcm4TlvDq8ikWAM": { // Rachel - Narrative & Clear
+        name: "Rachel",
+        style: "Narrative & Clear",
+        description: "Professional and well-articulated.",
+        settings: {
+            stability: 0.75,           // Very stable for professional delivery
+            similarity_boost: 0.80,    // Strong character for clear articulation
+            style: 0.25,               // Lower style for neutral, professional tone
+            use_speaker_boost: true
+        }
+    },
+    "AZnzlk1XvdvUeBnXmlld": { // Domi - Strong & Emotive
+        name: "Domi",
+        style: "Strong & Emotive",
+        description: "Engaging and confident presence.",
+        settings: {
+            stability: 0.45,           // Lower stability for more emotional variation
+            similarity_boost: 0.75,    // Balanced for expressive delivery
+            style: 0.65,               // Higher style for emotive expression
+            use_speaker_boost: true
+        }
+    },
+    "MF3mGyEYCl7XYWbV9V6O": { // Elli - Warm & Friendly
+        name: "Elli",
+        style: "Warm & Friendly",
+        description: "Younger, cheerful energy.",
+        settings: {
+            stability: 0.50,           // Moderate stability for friendly variation
+            similarity_boost: 0.70,    // Balanced for warm, natural tone
+            style: 0.55,               // Higher style for cheerful expression
+            use_speaker_boost: true
+        }
+    },
+    "piTKgcLEGmPE4e6mEKli": { // Nicole - Whisper & Calm
+        name: "Nicole",
+        style: "Whisper & Calm",
+        description: "Perfect for relaxing plant care advice.",
+        settings: {
+            stability: 0.70,           // High stability for consistent whisper
+            similarity_boost: 0.90,    // Very high for authentic whisper quality
+            style: 0.30,               // Lower style for gentle, calm delivery
+            use_speaker_boost: false   // No boost for natural whisper
+        }
+    }
+};
+
+// Curated list for frontend display
+const AVAILABLE_VOICES = Object.entries(VOICE_PERSONALITIES).map(([id, config]) => ({
+    id,
+    name: config.name,
+    style: config.style,
+    description: config.description
+}));
 
 app.get('/api/chat/voices', (req, res) => {
     res.json(AVAILABLE_VOICES);
@@ -3187,7 +3246,7 @@ app.get('/api/chat/voices', (req, res) => {
 
 app.post('/api/chat/speak', auth, async (req, res) => {
     try {
-        const { text, voiceId } = req.body; // Use voiceId if provided
+        const { text, voiceId } = req.body;
         const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY;
 
         if (!text) return res.status(400).json({ error: "Text required" });
@@ -3195,8 +3254,13 @@ app.post('/api/chat/speak', auth, async (req, res) => {
 
         // Use requested voice or fallback to Charlotte
         const targetVoiceId = voiceId || "XB0fDUnXU5powFXDhCwa";
+        const voiceConfig = VOICE_PERSONALITIES[targetVoiceId];
 
-        console.log(`[Dr. Flora Voice] Synthesizing: "${text.substring(0, 30)}..." using Voice ID: ${targetVoiceId}`);
+        if (!voiceConfig) {
+            return res.status(400).json({ error: "Invalid voice ID" });
+        }
+
+        console.log(`[Dr. Flora Voice] Synthesizing with ${voiceConfig.name} (${voiceConfig.style}): "${text.substring(0, 30)}..."`);
 
         const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${targetVoiceId}/stream`, {
             method: 'POST',
@@ -3207,12 +3271,9 @@ app.post('/api/chat/speak', auth, async (req, res) => {
             },
             body: JSON.stringify({
                 text: text,
-                model_id: "eleven_monolingual_v1", // High quality, low latency
-                voice_settings: {
-                    stability: 0.5,       // Balance emotion/stability
-                    similarity_boost: 0.75 // Strong character adherence
-                },
-                optimize_streaming_latency: 4 // Max performance for real-time feel
+                model_id: "eleven_turbo_v2_5", // Latest model for best quality
+                voice_settings: voiceConfig.settings,
+                optimize_streaming_latency: 3 // Optimized for quality + speed
             })
         });
 
@@ -3223,11 +3284,16 @@ app.post('/api/chat/speak', auth, async (req, res) => {
 
         // Pipe the audio directly to the client
         res.setHeader('Content-Type', 'audio/mpeg');
+        res.setHeader('X-Voice-Name', voiceConfig.name);
+        res.setHeader('X-Voice-Style', voiceConfig.style);
+
         const { pipeline } = require('stream');
         const { promisify } = require('util');
         const streamPipeline = promisify(pipeline);
 
         await streamPipeline(response.body, res);
+
+        console.log(`[Dr. Flora Voice] ✓ Successfully synthesized with ${voiceConfig.name}`);
 
     } catch (e) {
         console.error("Voice Error:", e.message);
