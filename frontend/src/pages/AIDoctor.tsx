@@ -509,28 +509,29 @@ export const AIDoctor = () => {
         setIsSpeaking(false);
     }, []);
 
-    const speak = useCallback(async (text: string) => {
+    const speak = useCallback(async (text: string, overrideVoiceId?: string) => {
         if (!voiceEnabled) return;
 
         stopSpeaking();
         setIsSpeaking(true);
+
+        const targetVoiceId = overrideVoiceId || selectedVoiceId;
 
         try {
             const response = await fetch(`${API_URL}/chat/speak`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${localStorage.getItem('token')}` // Ensure auth if needed
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
                 },
                 body: JSON.stringify({
                     text,
-                    voiceId: selectedVoiceId
+                    voiceId: targetVoiceId
                 })
             });
 
             if (!response.ok) throw new Error("Voice synthesis failed");
 
-            // Play the audio blob
             const blob = await response.blob();
             const url = URL.createObjectURL(blob);
             const audio = new Audio(url);
@@ -546,7 +547,6 @@ export const AIDoctor = () => {
         } catch (error) {
             console.error("Voice Error:", error);
             setIsSpeaking(false);
-            // Fallback to browser synthesis if server fails
             const utterance = new SpeechSynthesisUtterance(text);
             window.speechSynthesis.speak(utterance);
         }
@@ -558,8 +558,8 @@ export const AIDoctor = () => {
         setIsVoiceSelectorOpen(false);
         toast.success("Voice updated! 🎙️");
 
-        // Preview
-        speak("Hello, do you like my new voice?");
+        // Preview with the NEW voice ID immediately
+        speak("Hello, do you like my new voice?", voiceId);
     };
 
     const toggleVoice = () => {
