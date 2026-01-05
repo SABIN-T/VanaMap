@@ -2851,6 +2851,8 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
             }
         }
 
+        const openRouterApiKey = process.env.OPENROUTER_API_KEY;
+
         // 5. Call Groq API (Multi-Stage Fallback Architecture)
         const callGroq = async (targetModel, customMessages = null) => {
             try {
@@ -2861,11 +2863,11 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
                     body: JSON.stringify({
                         model: targetModel,
                         messages: payloadMessages,
-                        max_tokens: 8192,  // UPGRADED: 8x more tokens for ultra-detailed responses
-                        temperature: 0.3,  // UPGRADED: Lower for maximum accuracy and consistency
-                        top_p: 0.9,        // UPGRADED: Nucleus sampling for quality control
-                        frequency_penalty: 0.3,  // UPGRADED: Reduce repetition
-                        presence_penalty: 0.2    // UPGRADED: Encourage diverse vocabulary
+                        max_tokens: 8192,
+                        temperature: 0.3,
+                        top_p: 0.9,
+                        frequency_penalty: 0.3,
+                        presence_penalty: 0.2
                     })
                 });
 
@@ -2889,8 +2891,39 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
             }
         };
 
+        // 5b. Call OpenRouter API (Fallback Provider)
+        const callOpenRouter = async (targetModel, customMessages = null) => {
+            if (!openRouterApiKey) return { ok: false, data: { error: { message: "OpenRouter API Key missing" } } };
+
+            try {
+                console.log(`[AI Doctor] 🔄 Switching to OpenRouter (Model: ${targetModel})...`);
+                const payloadMessages = customMessages || enhancedMessages;
+                const resp = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${openRouterApiKey}`,
+                        "HTTP-Referer": "https://vanamap.online", // Required by OpenRouter
+                        "X-Title": "VanaMap AI Doctor"
+                    },
+                    body: JSON.stringify({
+                        model: targetModel,
+                        messages: payloadMessages,
+                        max_tokens: 4000,
+                        temperature: 0.3
+                    })
+                });
+
+                const json = await resp.json();
+                return { ok: resp.ok, data: json, status: resp.status };
+            } catch (err) {
+                console.error("[OpenRouter] Error:", err.message);
+                return { ok: false, data: { error: { message: err.message } } };
+            }
+        };
+
         // --- ENSEMBLE LOGIC (The "Council of Experts") ---
-        let result;
+        let result = { ok: false };
 
         // If this is a vision request, use PARALLEL ENSEMBLE
         if (image && model === "llama-3.2-90b-vision-preview") {
@@ -2900,8 +2933,7 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
                 { id: "llama-3.2-90b-vision-preview", role: "Senior Botanist" },
                 { id: "llama-3.2-11b-vision-preview", role: "Field Scout" },
                 { id: "llava-v1.5-7b-4096-preview", role: "Research Analyst" },
-                { id: "qwen2-vl-7b-instruct", role: "Vision-Language Expert" },
-                { id: "meta-llama/llama-4-scout-17b-16e-instruct", role: "Advanced Multimodal Specialist" }
+                { id: "qwen2-vl-7b-instruct", role: "Vision-Language Expert" }
             ];
 
             const visionResults = await Promise.all(experts.map(async (expert) => {
@@ -2917,7 +2949,7 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
             console.log(`[AI Doctor] 🧠 Ensemble: ${validOpinions.length}/${experts.length} experts reported.`);
 
             if (validOpinions.length > 0) {
-                console.log('[AI Doctor] 🖋️ Synthesizing Final Diagnosis...');
+                console.log('[AI Doctor] 🖋️ Synthesizing Final Diagnosis with Groq...');
 
                 const synthesisPrompt = `You are Dr. Flora. Synthesize these plant analyses into ONE PERFECT answer:
 
@@ -2943,16 +2975,17 @@ REMEMBER: Your response must include BOTH the identification analysis AND the [G
 
                 result = await callGroq("llama-3.3-70b-versatile", synthesisMessages);
             } else {
-                console.warn('[AI Doctor] All ensemble experts failed.');
+                console.warn('[AI Doctor] All ensemble experts failed. Preparing for External Fallback.');
                 result = { ok: false };
             }
         } else {
+            console.log(`[AI Doctor] Attempting Primary Groq Model: ${model}`);
             result = await callGroq(model);
         }
 
-        // --- TRIPLE-STAGE FALLBACK LOGIC ---
+        // --- TRIPLE-STAGE FALLBACK LOGIC (GROQ INTERNAL) ---
         if (!result.ok || result.data.error) {
-            console.warn(`[AI Doctor] Primary model ${model} failed (Status: ${result.status}). Trying fallback sequence...`);
+            console.warn(`[AI Doctor] Primary model ${model} failed (Status: ${result.status}). Trying Groq fallback sequence...`);
 
             // FALLBACK STAGE 1: Standard Vision (11B)
             if (image && model === "llama-3.2-90b-vision-preview") {
@@ -2960,7 +2993,7 @@ REMEMBER: Your response must include BOTH the identification analysis AND the [G
                 console.log(`[AI Doctor] ⚠️ Vision Fallback 1: Engaging Field Botanist (${expert2})`);
                 result = await callGroq(expert2);
 
-                // FALLBACK STAGE 2: Open Source Vision (LLaVA - The "Analyst")
+                // FALLBACK STAGE 2: Open Source Vision (LLaVA)
                 if (!result.ok || result.data.error) {
                     const expert3 = "llava-v1.5-7b-4096-preview";
                     console.log(`[AI Doctor] ⚠️⚠️ Vision Fallback 2: Engaging Research Analyst (${expert3})`);
@@ -2968,39 +3001,55 @@ REMEMBER: Your response must include BOTH the identification analysis AND the [G
                 }
             }
 
-            // FALLBACK STAGE 2: High-Speed Text-Only (Final Stand)
+            // FALLBACK STAGE 3: High-Speed Text-Only (Groq)
             if (!result.ok || result.data.error) {
-                console.warn('[AI Doctor] Vision falling back to High-Speed Text Engine.');
-
+                console.warn('[AI Doctor] Vision falling back to High-Speed Text Engine (Groq).');
                 const bulletproofModel = "llama-3.1-8b-instant";
 
-                // Strip image if it still exists in the message structure
-                const lastIdx = enhancedMessages.length - 1;
-                const lastMsg = enhancedMessages[lastIdx];
-                if (Array.isArray(lastMsg.content)) {
-                    const textPart = lastMsg.content.find(c => c.type === 'text');
-                    if (textPart) {
-                        lastMsg.content = textPart.text + " (Note: I am currently analyzing your description only as my vision module is temporarily offline.)";
+                // Helper to strip images
+                const stripValidation = (msgs) => msgs.map(m => {
+                    if (Array.isArray(m.content)) {
+                        const textPart = m.content.find(c => c.type === 'text');
+                        return { role: m.role, content: textPart ? textPart.text + " (Image analysis unavailable, falling back to text description.)" : m.content };
                     }
-                }
+                    return m;
+                });
 
-                result = await callGroq(bulletproofModel);
+                result = await callGroq(bulletproofModel, stripValidation(enhancedMessages));
+            }
+        }
+
+        // --- ULTIMATE SAFETY NET: OPENROUTER (EXTERNAL) ---
+        // If Groq is completely down or rate limited (429), switch to OpenRouter
+        if (!result.ok || (result.data && result.data.error)) {
+            console.error("[AI Doctor] 🚨 ALL GROQ MODELS FAILED. INITIATING OPENROUTER EMERGENCY PROTOCOL.");
+
+            // Determine model based on capability needed
+            // Use "google/gemini-2.0-flash-exp:free" as it's multimodal (vision+text) and free
+            const openRouterModel = "google/gemini-2.0-flash-exp:free";
+
+            result = await callOpenRouter(openRouterModel);
+
+            // If that fails too, try a simple Llama 3 via OpenRouter
+            if (!result.ok) {
+                console.log("[AI Doctor] OpenRouter Vision failed, trying OpenRouter Text mode...");
+                result = await callOpenRouter("meta-llama/llama-3-8b-instruct:free");
             }
         }
 
         // 6. Handle Final Result
         if (!result.ok) {
-            console.error("Groq API Fatal Error:", result.data);
+            console.error("AI API Fatal Error:", result.data);
 
             // Rate Limit specific message
-            if (result.data.error?.message?.includes('rate_limit')) {
+            if (result.data.error?.message?.includes('rate_limit') || result.status === 429) {
                 return res.status(429).json({
-                    error: 'Dr. Flora is a bit overwhelmed right now! 🌿 (Rate Limit reached)',
-                    retryAfter: result.data.error?.message?.match(/try again in ([\d.]+s)/)?.[1] || '60s'
+                    error: 'Dr. Flora is currently overwhelmed by many patients! 🌿 Please try again in 1 minute.',
+                    retryAfter: '60s'
                 });
             }
 
-            return res.status(result.status || 500).json(result.data);
+            return res.status(result.status || 500).json(result.data || { error: "AI Service Unavailable" });
         }
 
         // --- FLUX.1 DEV IMAGE GENERATION INTERVENTION ---
