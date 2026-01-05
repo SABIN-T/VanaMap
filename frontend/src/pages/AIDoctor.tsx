@@ -174,6 +174,7 @@ export const AIDoctor = () => {
     // Web Search for Scientific Plant Data
 
     const handleSend = async (contentOverride?: string) => {
+        stopSpeaking(); // Stop speaking when sending a message
         const textToSend = typeof contentOverride === 'string' ? contentOverride : input;
 
         if (!textToSend.trim() && !selectedImage) return;
@@ -498,15 +499,20 @@ export const AIDoctor = () => {
         if (savedVoice) setSelectedVoiceId(savedVoice);
     }, []);
 
+    const stopSpeaking = useCallback(() => {
+        if (audioRef.current) {
+            audioRef.current.pause();
+            audioRef.current.currentTime = 0;
+            audioRef.current = null;
+        }
+        window.speechSynthesis.cancel();
+        setIsSpeaking(false);
+    }, []);
+
     const speak = useCallback(async (text: string) => {
         if (!voiceEnabled) return;
 
-        // Stop current audio if playing
-        if (audioRef.current) {
-            audioRef.current.pause();
-            audioRef.current = null;
-        }
-
+        stopSpeaking();
         setIsSpeaking(true);
 
         try {
@@ -544,7 +550,7 @@ export const AIDoctor = () => {
             const utterance = new SpeechSynthesisUtterance(text);
             window.speechSynthesis.speak(utterance);
         }
-    }, [voiceEnabled, selectedVoiceId]);
+    }, [voiceEnabled, selectedVoiceId, stopSpeaking]);
 
     const handleVoiceSelect = (voiceId: string) => {
         setSelectedVoiceId(voiceId);
@@ -558,11 +564,11 @@ export const AIDoctor = () => {
 
     const toggleVoice = () => {
         if (voiceEnabled) {
-            if (audioRef.current) audioRef.current.pause();
+            stopSpeaking();
             setVoiceEnabled(false);
-            setIsSpeaking(false);
             toast("Voice Assistant Disabled", { icon: '🔇' });
         } else {
+            stopSpeaking(); // Stop any pending or lingering audio
             setVoiceEnabled(true);
             toast("Dr. Flora's Voice Enabled! 🎧", { icon: '🗣️' });
         }
@@ -570,13 +576,22 @@ export const AIDoctor = () => {
 
     // Auto-speak new AI messages
     useEffect(() => {
+        if (!messages.length) return;
         const lastMsg = messages[messages.length - 1];
+
+        // Ensure we only speak if:
+        // 1. Voice is enabled
+        // 2. It's an assistant message
+        // 3. It's NOT the initial welcome message (id '1')
+        // 4. We haven't spoken it yet
         if (voiceEnabled && lastMsg.role === 'assistant' && lastMsg.id !== '1') {
             if (lastSpokenMessageIdRef.current !== lastMsg.id) {
                 lastSpokenMessageIdRef.current = lastMsg.id;
                 // Only speak the text part, remove markdown images/links for cleaner audio
                 const cleanText = lastMsg.content.replace(/\[.*?\]/g, '').replace(/https?:\/\/\S+/g, '');
-                speak(cleanText);
+                if (cleanText.trim()) {
+                    speak(cleanText);
+                }
             }
         }
     }, [messages, voiceEnabled, speak]);
@@ -615,11 +630,7 @@ export const AIDoctor = () => {
 
         recognition.onstart = () => {
             setIsListening(true);
-            // Stop AI from speaking when user starts talking
-            if (audioRef.current) {
-                audioRef.current.pause();
-                setIsSpeaking(false);
-            }
+            stopSpeaking(); // Ensure AI stops speaking when user starts
             toast(`🎤 Listening in ${userLang}...`, {
                 icon: '👂',
                 duration: 3000,
@@ -756,11 +767,7 @@ export const AIDoctor = () => {
                         {isSpeaking && (
                             <button
                                 className={styles.actionBtn}
-                                onClick={() => {
-                                    if (audioRef.current) audioRef.current.pause();
-                                    setIsSpeaking(false);
-                                    toast.success("Stopped speaking");
-                                }}
+                                onClick={stopSpeaking}
                                 style={{
                                     color: '#ef4444',
                                     borderColor: '#fecaca',
@@ -1077,7 +1084,10 @@ export const AIDoctor = () => {
                             className={styles.textInput}
                             placeholder="Type a message..."
                             value={input}
-                            onChange={(e) => setInput(e.target.value)}
+                            onChange={(e) => {
+                                setInput(e.target.value);
+                                if (isSpeaking) stopSpeaking(); // Stop speaking when user types
+                            }}
                             onKeyDown={(e) => {
                                 if (e.key === 'Enter' && !e.shiftKey) {
                                     e.preventDefault();
