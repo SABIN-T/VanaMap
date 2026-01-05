@@ -394,15 +394,6 @@ export const AIDoctor = () => {
         handleSend(prompt);
     };
 
-    const handleClear = () => {
-        setMessages([{
-            id: '1',
-            role: 'assistant',
-            content: "Welcome back! 🌿 I hope your garden is thriving today. How can I help your green friends?",
-            timestamp: new Date()
-        }]);
-    };
-
     const downloadImage = async (base64OrUrl: string, messageId: string) => {
         try {
             setDownloadingIds(prev => new Set(prev).add(messageId));
@@ -625,8 +616,8 @@ export const AIDoctor = () => {
         recognition.onstart = () => {
             setIsListening(true);
             // Stop AI from speaking when user starts talking
-            if (synth && synth.speaking) {
-                synth.cancel();
+            if (audioRef.current) {
+                audioRef.current.pause();
                 setIsSpeaking(false);
             }
             toast(`🎤 Listening in ${userLang}...`, {
@@ -878,8 +869,7 @@ export const AIDoctor = () => {
                 <Download size={18} />
             </button>
         </div>
-                </div >
-            </header >
+    </header >
 
     {/* Chat Area */ }
     < div className = { styles.chatContainer } >
@@ -1043,7 +1033,7 @@ export const AIDoctor = () => {
             )}
             <div ref={messagesEndRef} />
         </div>
-            </div >
+    </div >
 
     {/* Input Dock */ }
     < div className = { styles.inputContainer } >
@@ -1109,7 +1099,7 @@ export const AIDoctor = () => {
                 {loading ? <Sparkles size={18} /> : <Send size={18} />}
             </button>
         </div>
-            </div >
+    </div >
 
     {/* Neural Energy & Settings Overlay (Tooltip/Modal) */ }
 {
