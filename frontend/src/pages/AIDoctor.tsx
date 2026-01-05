@@ -1110,8 +1110,8 @@ export const AIDoctor = () => {
             </button>
         </div>
             </div >
+
     {/* Neural Energy & Settings Overlay (Tooltip/Modal) */ }
-{/* Neural Energy & Settings Overlay (Tooltip/Modal) */ }
 {
     showLimitInfo && (
         <div className={styles.overlay} onClick={() => setShowLimitInfo(false)}>
