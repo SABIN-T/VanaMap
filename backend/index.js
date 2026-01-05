@@ -3169,21 +3169,34 @@ app.post('/api/chat/feedback', async (req, res) => {
 });
 
 // --- VOICE SYNTHESIS (ELEVENLABS) ---
+
+// Curated list of high-quality Female voices for Dr. Flora
+const AVAILABLE_VOICES = [
+    { id: "XB0fDUnXU5powFXDhCwa", name: "Charlotte", style: "Mystical & Soothing", description: "The classic voice of Dr. Flora." },
+    { id: "21m00Tcm4TlvDq8ikWAM", name: "Rachel", style: "Narrative & Clear", description: "Professional and well-articulated." },
+    { id: "AZnzlk1XvdvUeBnXmlld", name: "Domi", style: "Strong & Emotive", description: "Engaging and confident presence." },
+    { id: "MF3mGyEYCl7XYWbV9V6O", name: "Elli", style: "Warm & Friendly", description: "Younger, cheerful energy." },
+    { id: "piTKgcLEGmPE4e6mEKli", name: "Nicole", style: "Whisper & Calm", description: "Perfect for relaxing plant care advice." }
+];
+
+app.get('/api/chat/voices', (req, res) => {
+    res.json(AVAILABLE_VOICES);
+});
+
 app.post('/api/chat/speak', auth, async (req, res) => {
     try {
-        const { text } = req.body;
+        const { text, voiceId } = req.body; // Use voiceId if provided
         const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY;
 
         if (!text) return res.status(400).json({ error: "Text required" });
         if (!ELEVENLABS_API_KEY) return res.status(503).json({ error: "Voice service not configured" });
 
-        // Voice ID for "Charlotte" - A calm, professional, and slightly mystical female voice
-        // Perfect for Dr. Flora's persona
-        const VOICE_ID = "XB0fDUnXU5powFXDhCwa";
+        // Use requested voice or fallback to Charlotte
+        const targetVoiceId = voiceId || "XB0fDUnXU5powFXDhCwa";
 
-        console.log(`[Dr. Flora Voice] Synthesizing: "${text.substring(0, 30)}..."`);
+        console.log(`[Dr. Flora Voice] Synthesizing: "${text.substring(0, 30)}..." using Voice ID: ${targetVoiceId}`);
 
-        const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${VOICE_ID}/stream`, {
+        const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${targetVoiceId}/stream`, {
             method: 'POST',
             headers: {
                 'Accept': 'audio/mpeg',
