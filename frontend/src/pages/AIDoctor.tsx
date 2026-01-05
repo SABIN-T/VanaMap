@@ -135,7 +135,7 @@ export const AIDoctor = () => {
 
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const lastSpokenMessageIdRef = useRef<string | null>(null);
-    const timeoutIdsRef = useRef<number[]>([]);
+
 
     const [neuralMeta, setNeuralMeta] = useState<{ current: number; max: number } | null>(() => {
         const saved = localStorage.getItem('drflora_neural_meta');
@@ -868,321 +868,320 @@ export const AIDoctor = () => {
             <button className={styles.actionBtn} onClick={handleExport} title="Export Chat">
                 <Download size={18} />
             </button>
-        </div>
-    </header>
 
-    {/* Chat Area */}
-    <div className={styles.chatContainer}>
-        <div className={styles.messagesWrapper}>
-            {messages.map((message) => (
-                <div key={message.id} className={`${styles.message} ${message.role === 'user' ? styles.userMessage : styles.assistantMessage}`}>
-                    <div className={styles.messageIcon}>
-                        {message.role === 'user' ? <User size={16} /> : <Leaf size={16} />}
-                    </div>
-                    <div className={styles.messageContent}>
-                        <div className={styles.messageSender}>
-                            {message.role === 'user' ? 'You' : 'Dr. Flora'} • {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                        </div>
-                        {/* Display uploaded image if present */}
-                        {((message.images && message.images.length > 0) || message.image) && (
-                            <div style={{
-                                display: 'grid',
-                                gridTemplateColumns: (message.images && message.images.length > 1) ? 'repeat(auto-fit, minmax(280px, 1fr))' : '1fr',
-                                gap: '12px',
-                                marginBottom: '0.75rem',
-                                width: '100%'
-                            }}>
-                                {(message.images && message.images.length > 0 ? message.images : [message.image]).map((imgUrl, idx) => {
-                                    const imageKey = `${message.id}-${idx}`;
-                                    return (
-                                        <div key={imageKey} style={{
-                                            position: 'relative',
-                                            background: message.role === 'assistant' ? '#f8fafc' : 'rgba(0,0,0,0.1)',
-                                            borderRadius: '16px',
-                                            padding: '4px',
-                                            border: '1px solid rgba(0,0,0,0.05)',
-                                            overflow: 'hidden',
-                                            minHeight: '200px'
-                                        }}>
-                                            <img
-                                                src={(() => {
-                                                    if (!imgUrl) return '';
-                                                    if (imgUrl.startsWith('data:')) return imgUrl; // Handle Base64 User Uploads
-                                                    if (imgUrl.startsWith('http')) return imgUrl;
-                                                    // Robust URL cleaning
-                                                    const cleanBase = API_URL.replace(/\/+$/, '').replace(/\/api$/, '');
-                                                    const cleanPath = imgUrl.startsWith('/') ? imgUrl : `/${imgUrl}`;
-                                                    return `${cleanBase}${cleanPath}`;
-                                                })()}
-                                                alt={`Plant view ${idx + 1}`}
-                                                onLoad={() => setLoadedImageIds(prev => new Set(prev).add(imageKey))}
-                                                onError={(e) => {
-                                                    console.warn("Primary image load failed. Attempting fallback...");
-                                                    setLoadedImageIds(prev => new Set(prev).add(imageKey));
-                                                    e.currentTarget.style.opacity = '1';
 
-                                                    // Auto-fallback to direct Pollinations URL if backend proxy fails
-                                                    const src = e.currentTarget.src;
-                                                    if (src.includes('/api/generate-image')) {
-                                                        try {
-                                                            const url = new URL(src);
-                                                            const params = new URLSearchParams(url.search);
-                                                            const prompt = params.get('prompt');
-                                                            const model = params.get('model') || 'flux';
-                                                            const seed = params.get('seed') || '42';
+            {/* Chat Area */}
+            <div className={styles.chatContainer}>
+                <div className={styles.messagesWrapper}>
+                    {messages.map((message) => (
+                        <div key={message.id} className={`${styles.message} ${message.role === 'user' ? styles.userMessage : styles.assistantMessage}`}>
+                            <div className={styles.messageIcon}>
+                                {message.role === 'user' ? <User size={16} /> : <Leaf size={16} />}
+                            </div>
+                            <div className={styles.messageContent}>
+                                <div className={styles.messageSender}>
+                                    {message.role === 'user' ? 'You' : 'Dr. Flora'} • {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                </div>
+                                {/* Display uploaded image if present */}
+                                {((message.images && message.images.length > 0) || message.image) && (
+                                    <div style={{
+                                        display: 'grid',
+                                        gridTemplateColumns: (message.images && message.images.length > 1) ? 'repeat(auto-fit, minmax(280px, 1fr))' : '1fr',
+                                        gap: '12px',
+                                        marginBottom: '0.75rem',
+                                        width: '100%'
+                                    }}>
+                                        {(message.images && message.images.length > 0 ? message.images : (message.image ? [message.image] : [])).map((imgUrl, idx) => {
+                                            const imageKey = `${message.id}-${idx}`;
+                                            return (
+                                                <div key={imageKey} style={{
+                                                    position: 'relative',
+                                                    background: message.role === 'assistant' ? '#f8fafc' : 'rgba(0,0,0,0.1)',
+                                                    borderRadius: '16px',
+                                                    padding: '4px',
+                                                    border: '1px solid rgba(0,0,0,0.05)',
+                                                    overflow: 'hidden',
+                                                    minHeight: '200px'
+                                                }}>
+                                                    <img
+                                                        src={(() => {
+                                                            if (!imgUrl) return '';
+                                                            if (imgUrl.startsWith('data:')) return imgUrl; // Handle Base64 User Uploads
+                                                            if (imgUrl.startsWith('http')) return imgUrl;
+                                                            // Robust URL cleaning
+                                                            const cleanBase = API_URL.replace(/\/+$/, '').replace(/\/api$/, '');
+                                                            const cleanPath = imgUrl.startsWith('/') ? imgUrl : `/${imgUrl}`;
+                                                            return `${cleanBase}${cleanPath}`;
+                                                        })()}
+                                                        alt={`Plant view ${idx + 1}`}
+                                                        onLoad={() => setLoadedImageIds(prev => new Set(prev).add(imageKey))}
+                                                        onError={(e) => {
+                                                            console.warn("Primary image load failed. Attempting fallback...");
+                                                            setLoadedImageIds(prev => new Set(prev).add(imageKey));
+                                                            e.currentTarget.style.opacity = '1';
 
-                                                            if (prompt) {
-                                                                const directUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?model=${model}&seed=${seed}&width=896&height=896&nologo=true`;
-                                                                e.currentTarget.src = directUrl;
+                                                            // Auto-fallback to direct Pollinations URL if backend proxy fails
+                                                            const src = e.currentTarget.src;
+                                                            if (src.includes('/api/generate-image')) {
+                                                                try {
+                                                                    const url = new URL(src);
+                                                                    const params = new URLSearchParams(url.search);
+                                                                    const prompt = params.get('prompt');
+                                                                    const model = params.get('model') || 'flux';
+                                                                    const seed = params.get('seed') || '42';
+
+                                                                    if (prompt) {
+                                                                        const directUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?model=${model}&seed=${seed}&width=896&height=896&nologo=true`;
+                                                                        e.currentTarget.src = directUrl;
+                                                                    }
+                                                                } catch (err) {
+                                                                    console.error("Fallback failed", err);
+                                                                }
                                                             }
-                                                        } catch (err) {
-                                                            console.error("Fallback failed", err);
-                                                        }
-                                                    }
-                                                }}
-                                                style={{
-                                                    width: '100%',
-                                                    maxHeight: '400px',
-                                                    borderRadius: '12px',
-                                                    objectFit: 'contain',
-                                                    display: 'block',
-                                                    opacity: 1,
-                                                    transition: 'none',
-                                                    boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
-                                                }}
-                                            />
+                                                        }}
+                                                        style={{
+                                                            width: '100%',
+                                                            maxHeight: '400px',
+                                                            borderRadius: '12px',
+                                                            objectFit: 'contain',
+                                                            display: 'block',
+                                                            opacity: 1,
+                                                            transition: 'none',
+                                                            boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
+                                                        }}
+                                                    />
 
-                                            <div style={{
-                                                position: 'absolute',
-                                                top: '12px',
-                                                left: '12px',
-                                                background: 'rgba(5, 150, 105, 0.9)',
-                                                color: 'white',
-                                                padding: '4px 10px',
-                                                borderRadius: '20px',
-                                                fontSize: '0.7rem',
-                                                fontWeight: 800,
-                                                backdropFilter: 'blur(8px)',
-                                                boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
-                                                zIndex: 8,
-                                                textTransform: 'uppercase',
-                                                letterSpacing: '0.5px'
-                                            }}>
-                                                {idx === 0 ? '🎨 Botanical Art (Flux)' : '📸 Ultra-Realism (Pro)'}
-                                            </div>
-
-                                            <button
-                                                onClick={() => downloadImage(imgUrl!, imageKey)}
-                                                disabled={downloadingIds.has(imageKey)}
-                                                style={{
-                                                    position: 'absolute',
-                                                    bottom: '12px',
-                                                    right: '12px',
-                                                    background: '#059669',
-                                                    color: 'white',
-                                                    border: 'none',
-                                                    borderRadius: '30px',
-                                                    padding: '8px 14px',
-                                                    display: 'flex',
-                                                    alignItems: 'center',
-                                                    gap: '8px',
-                                                    cursor: downloadingIds.has(imageKey) ? 'wait' : 'pointer',
-                                                    boxShadow: '0 6px 15px rgba(5, 150, 105, 0.4)',
-                                                    zIndex: 10,
-                                                    fontSize: '0.8rem',
-                                                    fontWeight: 700,
-                                                    transition: 'all 0.2s'
-                                                }}
-                                            >
-                                                {downloadingIds.has(imageKey) ? (
-                                                    <div style={{ animation: 'spin 1s linear infinite', display: 'flex' }}>
-                                                        <Loader2 size={16} />
+                                                    <div style={{
+                                                        position: 'absolute',
+                                                        top: '12px',
+                                                        left: '12px',
+                                                        background: 'rgba(5, 150, 105, 0.9)',
+                                                        color: 'white',
+                                                        padding: '4px 10px',
+                                                        borderRadius: '20px',
+                                                        fontSize: '0.7rem',
+                                                        fontWeight: 800,
+                                                        backdropFilter: 'blur(8px)',
+                                                        boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
+                                                        zIndex: 8,
+                                                        textTransform: 'uppercase',
+                                                        letterSpacing: '0.5px'
+                                                    }}>
+                                                        {idx === 0 ? '🎨 Botanical Art (Flux)' : '📸 Ultra-Realism (Pro)'}
                                                     </div>
-                                                ) : (
-                                                    <Download size={16} />
-                                                )}
-                                                <span>Save PNG</span>
-                                            </button>
 
-                                            {(!loadedImageIds.has(imageKey)) && (
-                                                <ImageLoader idx={idx} />
-                                            )}
-                                        </div>
-                                    );
-                                })}
+                                                    <button
+                                                        onClick={() => downloadImage(imgUrl!, imageKey)}
+                                                        disabled={downloadingIds.has(imageKey)}
+                                                        style={{
+                                                            position: 'absolute',
+                                                            bottom: '12px',
+                                                            right: '12px',
+                                                            background: '#059669',
+                                                            color: 'white',
+                                                            border: 'none',
+                                                            borderRadius: '30px',
+                                                            padding: '8px 14px',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            gap: '8px',
+                                                            cursor: downloadingIds.has(imageKey) ? 'wait' : 'pointer',
+                                                            boxShadow: '0 6px 15px rgba(5, 150, 105, 0.4)',
+                                                            zIndex: 10,
+                                                            fontSize: '0.8rem',
+                                                            fontWeight: 700,
+                                                            transition: 'all 0.2s'
+                                                        }}
+                                                    >
+                                                        {downloadingIds.has(imageKey) ? (
+                                                            <div style={{ animation: 'spin 1s linear infinite', display: 'flex' }}>
+                                                                <Loader2 size={16} />
+                                                            </div>
+                                                        ) : (
+                                                            <Download size={16} />
+                                                        )}
+                                                        <span>Save PNG</span>
+                                                    </button>
+
+                                                    {(!loadedImageIds.has(imageKey)) && (
+                                                        <ImageLoader idx={idx} />
+                                                    )}
+                                                </div>
+                                            );
+                                        })}
+                                    </div>
+                                )}
+                                <div className={styles.messageText}>
+                                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                        {message.content}
+                                    </ReactMarkdown>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+
+                    {loading && (
+                        <div className={`${styles.message} ${styles.assistantMessage}`}>
+                            <div className={styles.messageIcon}><Leaf size={16} /></div>
+                            <div className={styles.messageContent}>
+                                <div className={`${styles.messageText} ${styles.typing}`}>
+                                    <span></span><span></span><span></span>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                    <div ref={messagesEndRef} />
+                </div>
+            </div>
+
+            {/* Input Dock */}
+            <div className={styles.inputContainer}>
+                <div className={styles.inputDock}>
+                    <button
+                        className={styles.toolBtn}
+                        onClick={handleScanClick}
+                        title="Identify Plant (Scan)"
+                    >
+                        <Camera size={20} />
+                    </button>
+                    <input
+                        type="file"
+                        ref={fileInputRef}
+                        onChange={handleFileChange}
+                        accept="image/*"
+                        style={{ display: 'none' }}
+                    />
+
+                    <button
+                        className={styles.toolBtn}
+                        onClick={toggleListening}
+                        style={isListening ? { color: '#ef4444', background: '#fef2f2' } : {}}
+                        title="Voice Input"
+                    >
+                        <Mic size={20} />
+                    </button>
+
+                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                        {previewUrl && (
+                            <div className={styles.previewArea}>
+                                <div className={styles.previewBadge}>
+                                    <img src={previewUrl} className={styles.previewThumb} alt="Scan" />
+                                    <span>Image attached</span>
+                                    <button onClick={clearImage} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#0284c7', marginLeft: 'auto' }}>
+                                        <Trash2 size={14} />
+                                    </button>
+                                </div>
                             </div>
                         )}
-                        <div className={styles.messageText}>
-                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                                {message.content}
-                            </ReactMarkdown>
-                        </div>
+                        <textarea
+                            className={styles.textInput}
+                            placeholder="Type a message..."
+                            value={input}
+                            onChange={(e) => setInput(e.target.value)}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter' && !e.shiftKey) {
+                                    e.preventDefault();
+                                    if (!loading) handleSend();
+                                }
+                            }}
+                            disabled={loading}
+                            rows={1}
+                            style={{ height: 'auto', minHeight: '44px' }}
+                        />
                     </div>
+
+                    <button
+                        className={styles.sendBtn}
+                        onClick={() => handleSend()}
+                        disabled={loading || (!input.trim() && !selectedImage)}
+                    >
+                        {loading ? <Sparkles size={18} /> : <Send size={18} />}
+                    </button>
                 </div>
-            ))}
-
-            {loading && (
-                <div className={`${styles.message} ${styles.assistantMessage}`}>
-                    <div className={styles.messageIcon}><Leaf size={16} /></div>
-                    <div className={styles.messageContent}>
-                        <div className={`${styles.messageText} ${styles.typing}`}>
-                            <span></span><span></span><span></span>
-                        </div>
-                    </div>
-                </div>
-            )}
-            <div ref={messagesEndRef} />
-        </div>
-    </div>
-
-    {/* Input Dock */}
-    <div className={styles.inputContainer}>
-        <div className={styles.inputDock}>
-            <button
-                className={styles.toolBtn}
-                onClick={handleScanClick}
-                title="Identify Plant (Scan)"
-            >
-                <Camera size={20} />
-            </button>
-            <input
-                type="file"
-                ref={fileInputRef}
-                onChange={handleFileChange}
-                accept="image/*"
-                style={{ display: 'none' }}
-            />
-
-            <button
-                className={styles.toolBtn}
-                onClick={toggleListening}
-                style={isListening ? { color: '#ef4444', background: '#fef2f2' } : {}}
-                title="Voice Input"
-            >
-                <Mic size={20} />
-            </button>
-
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-                {previewUrl && (
-                    <div className={styles.previewArea}>
-                        <div className={styles.previewBadge}>
-                            <img src={previewUrl} className={styles.previewThumb} alt="Scan" />
-                            <span>Image attached</span>
-                            <button onClick={clearImage} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#0284c7', marginLeft: 'auto' }}>
-                                <Trash2 size={14} />
-                            </button>
-                        </div>
-                    </div>
-                )}
-                <textarea
-                    className={styles.textInput}
-                    placeholder="Type a message..."
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    onKeyDown={(e) => {
-                        if (e.key === 'Enter' && !e.shiftKey) {
-                            e.preventDefault();
-                            if (!loading) handleSend();
-                        }
-                    }}
-                    disabled={loading}
-                    rows={1}
-                    style={{ height: 'auto', minHeight: '44px' }}
-                />
             </div>
 
-            <button
-                className={styles.sendBtn}
-                onClick={() => handleSend()}
-                disabled={loading || (!input.trim() && !selectedImage)}
-            >
-                {loading ? <Sparkles size={18} /> : <Send size={18} />}
-            </button>
-        </div>
-    </div>
+            {/* Neural Energy & Settings Overlay (Tooltip/Modal) */}
+            {
+                showLimitInfo && (
+                    <div className={styles.overlay} onClick={() => setShowLimitInfo(false)}>
+                        <div className={styles.modal} onClick={e => e.stopPropagation()}>
+                            <div className={styles.modalHeader}>
+                                <h2 style={{ display: 'flex', alignItems: 'center', gap: '10px', margin: 0, fontSize: '1.15rem' }}>
+                                    <Zap size={20} color="#10b981" fill="#10b981" />
+                                    Neural Energy Insights
+                                </h2>
+                                <button className={styles.closeBtn} onClick={() => setShowLimitInfo(false)}>&times;</button>
+                            </div>
+                            <div className={styles.modalContent}>
+                                <p style={{ color: '#64748b', fontSize: '0.875rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>
+                                    Dr. Flora's advanced botanical reasoning and image analysis require significant "Neural Energy". Daily limits help us maintain service for all gardeners.
+                                </p>
 
-    {/* Neural Energy & Settings Overlay (Tooltip/Modal) */}
-{
-    showLimitInfo && (
-        <div className={styles.overlay} onClick={() => setShowLimitInfo(false)}>
-            <div className={styles.modal} onClick={e => e.stopPropagation()}>
-                <div className={styles.modalHeader}>
-                    <h2 style={{ display: 'flex', alignItems: 'center', gap: '10px', margin: 0, fontSize: '1.15rem' }}>
-                        <Zap size={20} color="#10b981" fill="#10b981" />
-                        Neural Energy Insights
-                    </h2>
-                    <button className={styles.closeBtn} onClick={() => setShowLimitInfo(false)}>&times;</button>
-                </div>
-                <div className={styles.modalContent}>
-                    <p style={{ color: '#64748b', fontSize: '0.875rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>
-                        Dr. Flora's advanced botanical reasoning and image analysis require significant "Neural Energy". Daily limits help us maintain service for all gardeners.
-                    </p>
+                                <div style={{
+                                    background: '#f8fafc',
+                                    padding: '1.25rem',
+                                    borderRadius: '1rem',
+                                    border: '1px solid #e2e8f0',
+                                    marginBottom: '1.5rem'
+                                }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '0.85rem' }}>
+                                        <span style={{ fontWeight: 700 }}>Daily Capacity:</span>
+                                        <span style={{ color: isAnalysisLimited ? '#ef4444' : '#10b981', fontWeight: 800 }}>
+                                            {isAnalysisLimited ? "Neural Exhausted" : `${((neuralMeta?.current || 0) / (neuralMeta?.max || 1) * 100).toFixed(1)}%`}
+                                        </span>
+                                    </div>
+                                    <div style={{ width: '100%', height: '8px', background: '#e2e8f0', borderRadius: '4px', overflow: 'hidden' }}>
+                                        <div style={{
+                                            width: `${((neuralMeta?.current || 0) / (neuralMeta?.max || 1) * 100)}%`,
+                                            height: '100%',
+                                            background: isAnalysisLimited ? '#ef4444' : '#10b981',
+                                            transition: 'width 0.8s cubic-bezier(0.16, 1, 0.3, 1)'
+                                        }} />
+                                    </div>
+                                    <p style={{ fontSize: '0.7rem', color: '#94a3b8', marginTop: '10px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                                        <Sparkles size={12} />
+                                        Resets every 24 hours at midnight UTC.
+                                    </p>
+                                </div>
 
-                    <div style={{
-                        background: '#f8fafc',
-                        padding: '1.25rem',
-                        borderRadius: '1rem',
-                        border: '1px solid #e2e8f0',
-                        marginBottom: '1.5rem'
-                    }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '0.85rem' }}>
-                            <span style={{ fontWeight: 700 }}>Daily Capacity:</span>
-                            <span style={{ color: isAnalysisLimited ? '#ef4444' : '#10b981', fontWeight: 800 }}>
-                                {isAnalysisLimited ? "Neural Exhausted" : `${((neuralMeta?.current || 0) / (neuralMeta?.max || 1) * 100).toFixed(1)}%`}
-                            </span>
+                                <h3 style={{ fontSize: '0.9rem', fontWeight: 800, color: '#1e293b', marginBottom: '0.75rem' }}>How to increase your limit?</h3>
+                                <ul style={{ paddingLeft: '1.2rem', color: '#475569', fontSize: '0.825rem', lineHeight: 1.8, marginBottom: '1.5rem' }}>
+                                    <li><strong>✨ Upgrade to Premium</strong>: Instant 10x capacity boost and priority analysis.</li>
+                                    <li><strong>🛍️ Shopping Activity</strong>: Active buyers earn "Energy Credits" over time.</li>
+                                    <li><strong>🌿 Patience</strong>: Limits reset daily. Small gardens grow best with time!</li>
+                                </ul>
+
+                                {!user?.isPremium && (
+                                    <button
+                                        className={styles.premiumBtn}
+                                        onClick={() => {
+                                            window.location.href = '/premium';
+                                        }}
+                                        style={{
+                                            width: '100%',
+                                            background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                                            color: 'white',
+                                            border: 'none',
+                                            padding: '1rem',
+                                            borderRadius: '0.75rem',
+                                            fontWeight: 800,
+                                            fontSize: '0.9rem',
+                                            cursor: 'pointer',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            justifyContent: 'center',
+                                            gap: '10px'
+                                        }}
+                                    >
+                                        <Sparkles size={18} />
+                                        Experience Infinite Wisdom
+                                    </button>
+                                )}
+                            </div>
                         </div>
-                        <div style={{ width: '100%', height: '8px', background: '#e2e8f0', borderRadius: '4px', overflow: 'hidden' }}>
-                            <div style={{
-                                width: `${((neuralMeta?.current || 0) / (neuralMeta?.max || 1) * 100)}%`,
-                                height: '100%',
-                                background: isAnalysisLimited ? '#ef4444' : '#10b981',
-                                transition: 'width 0.8s cubic-bezier(0.16, 1, 0.3, 1)'
-                            }} />
-                        </div>
-                        <p style={{ fontSize: '0.7rem', color: '#94a3b8', marginTop: '10px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                            <Sparkles size={12} />
-                            Resets every 24 hours at midnight UTC.
-                        </p>
                     </div>
-
-                    <h3 style={{ fontSize: '0.9rem', fontWeight: 800, color: '#1e293b', marginBottom: '0.75rem' }}>How to increase your limit?</h3>
-                    <ul style={{ paddingLeft: '1.2rem', color: '#475569', fontSize: '0.825rem', lineHeight: 1.8, marginBottom: '1.5rem' }}>
-                        <li><strong>✨ Upgrade to Premium</strong>: Instant 10x capacity boost and priority analysis.</li>
-                        <li><strong>🛍️ Shopping Activity</strong>: Active buyers earn "Energy Credits" over time.</li>
-                        <li><strong>🌿 Patience</strong>: Limits reset daily. Small gardens grow best with time!</li>
-                    </ul>
-
-                    {!user?.isPremium && (
-                        <button
-                            className={styles.premiumBtn}
-                            onClick={() => {
-                                window.location.href = '/premium';
-                            }}
-                            style={{
-                                width: '100%',
-                                background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-                                color: 'white',
-                                border: 'none',
-                                padding: '1rem',
-                                borderRadius: '0.75rem',
-                                fontWeight: 800,
-                                fontSize: '0.9rem',
-                                cursor: 'pointer',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                gap: '10px'
-                            }}
-                        >
-                            <Sparkles size={18} />
-                            Experience Infinite Wisdom
-                        </button>
-                    )}
-                </div>
-            </div>
-        </div>
-    )
-}
+                )
+            }
         </div>
     );
 };
