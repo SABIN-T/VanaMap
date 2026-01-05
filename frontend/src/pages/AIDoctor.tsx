@@ -7,6 +7,7 @@ import styles from './AIDoctor.module.css';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { mlCache } from '../utils/mlCache'; // ML-powered response cache
+import { Helmet } from 'react-helmet-async';
 
 interface Message {
     id: string;
@@ -832,6 +833,11 @@ export const AIDoctor = () => {
 
     return (
         <div className={styles.container}>
+            <Helmet>
+                <title>Dr. Flora AI - Plant Disease Diagnosis & Care | VanaMap</title>
+                <meta name="description" content="Chat with Dr. Flora, your personal AI plant doctor. Diagnose plant diseases from photos, get care schedules, and voice-guided gardening advice." />
+                <link rel="canonical" href="https://www.vanamap.online/ai-doctor" />
+            </Helmet>
             {/* Header */}
             <header className={styles.header}>
                 <div className={styles.headerContent}>

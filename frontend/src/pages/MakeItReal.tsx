@@ -4,6 +4,7 @@ import { fetchPlants, analyzeScene } from '../services/api';
 import type { Plant } from '../types';
 import toast from 'react-hot-toast';
 import { Search, ArrowLeft, ScanLine, Sparkles, BrainCircuit, Activity, Sun } from 'lucide-react';
+import { Helmet } from 'react-helmet-async';
 
 /* 
  * 🧠 MakeItReal v3.0 - Neural Studio
@@ -604,6 +605,11 @@ export const MakeItReal = () => {
 
     return (
         <div className={styles.container}>
+            <Helmet>
+                <title>Neural Studio (AR) - VanaMap | Visualize Plants in Your Room</title>
+                <meta name="description" content="See how plants look in your home before you buy using our advanced AR Neural Studio. Real-time background removal and lighting adaptation." />
+                <link rel="canonical" href="https://www.vanamap.online/make-it-real" />
+            </Helmet>
             <div className={styles.ambientGlow} />
             <div className={styles.scanline} />
 

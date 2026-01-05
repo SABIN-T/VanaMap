@@ -8,6 +8,7 @@ import { calculateAptness, normalizeBatch } from '../utils/logic';
 import type { Plant, Vendor } from '../types';
 import { Sprout, MapPin, Thermometer, Wind, ArrowDown, Sparkles, Search, AlertCircle, Heart, Sun, Activity, GraduationCap, ShoppingBag, PlusCircle, MoveRight, MessageCircle, Droplets, Settings2, Download, X, Share, CheckCircle2, Leaf } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 // Lazy load modal for performance
 const PlantDetailsModal = lazy(() => import('../components/features/plants/PlantDetailsModal').then(module => ({ default: module.PlantDetailsModal })));
 import { PlantSkeleton } from '../components/features/plants/PlantSkeleton';
@@ -447,6 +448,11 @@ export const Home = () => {
 
     return (
         <div className={styles.homeContainer}>
+            <Helmet>
+                <title>{weather ? `Plants for ${weather.locationName || 'You'} | VanaMap` : 'VanaMap - Smart Plant Finder & AI Doctor'}</title>
+                <meta name="description" content={weather ? `Discover optimal plants for ${weather.locationName} based on live weather data (${weather.avgTemp30Days}°C). Breathe better with VanaMap.` : "Find the perfect plants for your home using AI. Detect your climate, diagnose diseases, and chat with Dr. Flora."} />
+                <link rel="canonical" href="https://www.vanamap.online/" />
+            </Helmet>
             {/* Desktop Background Animations */}
             <div className={styles.desktopAnimationOverlay}>
                 <div className={`${styles.floatingElement} ${styles.leaf1}`}><Sprout size={48} /></div>
