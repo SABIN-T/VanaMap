@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { Send, Sparkles, Leaf, Bot, User, Trash2, Download, Calendar, Globe, Camera, Mic, Volume2, VolumeX, Zap, Loader2 } from 'lucide-react';
+import { Send, Sparkles, Leaf, Bot, User, Trash2, Download, Calendar, Globe, Camera, Mic, Volume2, VolumeX, Zap, Loader2, Settings, X, Play } from 'lucide-react';
 import { chatWithDrFlora, API_URL } from '../services/api';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
@@ -479,222 +479,95 @@ export const AIDoctor = () => {
         toast.success('Conversation exported!');
     };
 
-    // --- VOICE ASSISTANT (Dr. Flora's Voice) ---
+    // --- ELEVENLABS VOICE ASSISTANT ---
     const [voiceEnabled, setVoiceEnabled] = useState(true);
+    const [selectedVoiceId, setSelectedVoiceId] = useState<string>('XB0fDUnXU5powFXDhCwa'); // Default: Charlotte
+    const [availableVoices, setAvailableVoices] = useState<any[]>([]);
+    const [isVoiceSelectorOpen, setIsVoiceSelectorOpen] = useState(false);
     const [isSpeaking, setIsSpeaking] = useState(false);
-    const synth = typeof window !== 'undefined' ? window.speechSynthesis : undefined;
+    const audioRef = useRef<HTMLAudioElement | null>(null);
 
-    // --- LANGUAGE SELECTION ---
-    const [selectedLanguage, setSelectedLanguage] = useState('English');
-    const [showLanguageMenu, setShowLanguageMenu] = useState(false);
-
-    const languages = [
-        'English', 'हिंदी (Hindi)', 'മലയാളം (Malayalam)', 'தமிழ் (Tamil)',
-        'తెలుగు (Telugu)', 'ಕನ್ನಡ (Kannada)', 'বাংলা (Bengali)', 'মराठी (Marathi)',
-        'ગુજરાતી (Gujarati)', 'ਪੰਜਾਬੀ (Punjabi)', 'Español', 'Français', 'Deutsch',
-        '中文', '日本語', 'العربية'
-    ];
-
+    // Fetch available voices on mount
     useEffect(() => {
-        // Preload voices
-        const loadVoices = () => {
-            if (!synth) return;
-            const voices = synth.getVoices();
-            console.log("Available voices:", voices.map(v => v.name));
+        const fetchVoices = async () => {
+            try {
+                const res = await fetch(`${API_URL}/chat/voices`);
+                if (res.ok) {
+                    const data = await res.json();
+                    setAvailableVoices(data);
+                }
+            } catch (err) {
+                console.error("Failed to load voices:", err);
+            }
         };
-        loadVoices();
-        if (synth && (synth as any).onvoiceschanged !== undefined) {
-            (synth as any).onvoiceschanged = loadVoices;
-        }
-        return () => {
-            // Cleanup on unmount
-            if (synth) synth.cancel(); // Stop speaking on unmount
-            timeoutIdsRef.current.forEach(id => clearTimeout(id)); // Clear all pending timeouts
-            timeoutIdsRef.current = [];
-        }
+        fetchVoices();
+
+        // Load saved voice preference
+        const savedVoice = localStorage.getItem('drflora_voice_id');
+        if (savedVoice) setSelectedVoiceId(savedVoice);
     }, []);
 
-    const speak = useCallback((text: string, globalMood: string = 'natural') => {
+    const speak = useCallback(async (text: string) => {
         if (!voiceEnabled) return;
 
-        // Clear any pending timeouts
-        timeoutIdsRef.current.forEach(id => clearTimeout(id));
-        timeoutIdsRef.current = [];
+        // Stop current audio if playing
+        if (audioRef.current) {
+            audioRef.current.pause();
+            audioRef.current = null;
+        }
 
-        // Cancel any current speech
-        if (synth) synth.cancel();
+        setIsSpeaking(true);
 
-        // 1. Advanced Text Cleanup & Convert Emotions to Speakable Sounds
-        const cleanText = text
-            .replace(/\*/g, '') // Remove bold/italic markers
-            .replace(/[#-]/g, '') // Remove headers/lists
-            .replace(/\[.*?\]/g, '') // Remove [Citation] or [Image] tags
-            // Convert emotional expressions to speakable sounds
-            .replace(/\*giggles\*/gi, 'hehe') // *giggles* → "hehe"
-            .replace(/\*laughs\*/gi, 'haha') // *laughs* → "haha"
-            .replace(/\*happy dance\*/gi, 'yay!') // *happy dance* → "yay!"
-            .replace(/\*sighs\*/gi, 'hmm') // *sighs* → "hmm"
-            .replace(/\*gasps\*/gi, 'oh!') // *gasps* → "oh!"
-            .replace(/\*chuckles\*/gi, 'hehe') // *chuckles* → "hehe"
-            // Keep natural interjections
-            .replace(/haha+/gi, (match) => match.toLowerCase()) // Normalize "haha"
-            .replace(/hehe+/gi, (match) => match.toLowerCase()) // Normalize "hehe"
-            .replace(/aww+/gi, (match) => match.toLowerCase()) // Normalize "aww"
-            .replace(/omg/gi, 'oh my gosh') // OMG → speakable
-            .replace(/lol/gi, 'haha') // LOL → "haha"
-            // Remove remaining emojis AFTER converting text emotions
-            .replace(/[\u{1F300}-\u{1F9FF}]/gu, '')
-            // Fix common pronunciation issues
-            .replace(/\bDr\.\s*/gi, 'Doctor ') // "Dr." → "Doctor"
-            .replace(/\bMr\.\s*/gi, 'Mister ')
-            .replace(/\bMs\.\s*/gi, 'Miss ')
-            .replace(/\bMrs\.\s*/gi, 'Missus ')
-            .replace(/\bSt\.\s*/gi, 'Saint ')
-            .replace(/\bAve\.\s*/gi, 'Avenue ')
-            .replace(/\betc\.\s*/gi, 'et cetera ')
-            .replace(/\be\.g\.\s*/gi, 'for example ')
-            .replace(/\bi\.e\.\s*/gi, 'that is ')
-            // Add natural pauses and breathing patterns for human-like speech
-            .replace(/([.!?])\s+/g, '$1 ')
-            .replace(/,\s+/g, ', ')
-            .replace(/:\s+/g, ': ')
-            .replace(/;\s+/g, '; ')
-            .replace(/\b(and|but|so|because|however|therefore)\b/gi, ' $1 ')
-            .replace(/\b(well|um|uh|like|you know)\b/gi, '$1, ')
-            .trim();
+        try {
+            const response = await fetch(`${API_URL}/chat/speak`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}` // Ensure auth if needed
+                },
+                body: JSON.stringify({
+                    text,
+                    voiceId: selectedVoiceId
+                })
+            });
 
-        // Split into natural speech units (sentences/phrases) without creating duplicates
-        // Split on sentence boundaries but keep the punctuation with the sentence
-        const speechUnits: string[] = cleanText
-            .split(/(?<=[.!?])\s+/)  // Split after punctuation followed by space
-            .filter(unit => unit.trim().length > 0)  // Remove empty units
-            .map(unit => unit.trim());  // Clean up whitespace
+            if (!response.ok) throw new Error("Voice synthesis failed");
 
-        // 2. Multi-Language Accent & Voice Selection
-        if (!synth) return;
-        const voices = synth.getVoices();
+            // Play the audio blob
+            const blob = await response.blob();
+            const url = URL.createObjectURL(blob);
+            const audio = new Audio(url);
+            audioRef.current = audio;
 
-        // Detect language of the text
-        const detectLanguage = (text: string) => {
-            if (/[\u0900-\u097F]/.test(text)) return 'hi-IN'; // Hindi
-            if (/[\u4E00-\u9FFF]/.test(text)) return 'zh-CN'; // Chinese
-            if (/[\u3040-\u30FF]/.test(text)) return 'ja-JP'; // Japanese
-            if (/[\u0600-\u06FF]/.test(text)) return 'ar-SA'; // Arabic
-            if (/[\u0400-\u04FF]/.test(text)) return 'ru-RU'; // Russian
-            // Fallback to browser language if Latin-based, or default English
-            return navigator.language || 'en-US';
-        };
+            audio.onended = () => {
+                setIsSpeaking(false);
+                URL.revokeObjectURL(url);
+            };
 
-        const targetLang = detectLanguage(cleanText);
-        const langCode = targetLang.split('-')[0];
+            await audio.play();
 
-        // Find the absolute best voice for this specific language/accent
-        const preferredVoice =
-            // 1. Natural/Neural for the specific language
-            voices.find(v => v.lang.startsWith(langCode) && (v.name.includes("Natural") || v.name.includes("Neural")) && v.name.includes("Female")) ||
-            voices.find(v => v.lang.startsWith(langCode) && (v.name.includes("Natural") || v.name.includes("Neural"))) ||
-            // 2. High-quality platform specific triggers
-            voices.find(v => v.lang.startsWith(langCode) && (v.name.includes("Google") || v.name.includes("Microsoft"))) ||
-            // 3. Generic language match
-            voices.find(v => v.lang.startsWith(langCode) && v.name.toLowerCase().includes("female")) ||
-            voices.find(v => v.lang.startsWith(langCode)) ||
-            // 4. Ultimate English fallback (if target lang not found)
-            voices.find(v => v.name.includes("Natural") && v.name.includes("Female") && v.lang.startsWith("en")) ||
-            voices.find(v => v.lang.startsWith("en-US")) ||
-            voices.find(v => v.lang.startsWith("en"));
+        } catch (error) {
+            console.error("Voice Error:", error);
+            setIsSpeaking(false);
+            // Fallback to browser synthesis if server fails
+            const utterance = new SpeechSynthesisUtterance(text);
+            window.speechSynthesis.speak(utterance);
+        }
+    }, [voiceEnabled, selectedVoiceId]);
 
-        if (preferredVoice) console.log(`[Voice System] Speaking in ${targetLang} accent using: ${preferredVoice.name}`);
+    const handleVoiceSelect = (voiceId: string) => {
+        setSelectedVoiceId(voiceId);
+        localStorage.setItem('drflora_voice_id', voiceId);
+        setIsVoiceSelectorOpen(false);
+        toast.success("Voice updated! 🎙️");
 
-        // 3. Detect Global Emotional Mood passed as argument
-        // const userMessages = messages.filter(m => m.role === 'user');
-        // const lastUserMsg = userMessages[userMessages.length - 1]?.content.toLowerCase() || '';
-        // Moved to call site to avoid dependency loop
-
-        // Remove any duplicate units (safety check)
-        const uniqueUnits = [...new Set(speechUnits)];
-        console.log('[Voice] Speech units:', uniqueUnits);
-
-        // 4. Speak Phrase-by-Phrase with EXTREME Expression
-        uniqueUnits.forEach((unit: string, index: number) => {
-            if (!unit.trim()) return;
-
-            const utterance = new SpeechSynthesisUtterance(unit.trim());
-            utterance.lang = targetLang; // Match browser engine to text language
-            if (preferredVoice) utterance.voice = preferredVoice;
-
-            // --- Human Imperfection & Texture Modulation ---
-            const microPitch = (Math.random() - 0.5) * 0.12;
-            const microRate = (Math.random() - 0.5) * 0.1;
-
-            let basePitch = 1.2;
-            let baseRate = 1.0;
-            let baseVolume = 1.0;
-
-            if (globalMood === 'joyful') {
-                basePitch = 1.4; // Happier base
-                baseRate = 1.1;
-            } else if (globalMood === 'concerned') {
-                basePitch = 1.0; // Sober base
-                baseRate = 0.9;
-            }
-
-            const lowerUnit = unit.toLowerCase();
-
-            // 💭 THINKING FILLER MODULATION
-            if (lowerUnit.match(/\b(um|uh|well|hmm)\b/)) {
-                basePitch *= 0.85; baseRate *= 0.8; baseVolume *= 0.8;
-            }
-
-            // 🤫 WHISPER / SOFT MODE
-            if (lowerUnit.includes('(softly)') || lowerUnit.includes('shh')) {
-                basePitch *= 0.82; baseRate *= 0.88; baseVolume *= 0.55;
-            }
-
-            // EXTREME EMOTIONAL TRIGGERS
-            if (lowerUnit.includes('haha') || lowerUnit.includes('hehe') || lowerUnit.includes('lol')) {
-                basePitch = 1.6; baseRate = 1.35; baseVolume = 1.15;
-            }
-            else if (lowerUnit.includes('wow') || lowerUnit.includes('yay') || lowerUnit.includes('!') || lowerUnit.includes('amazing')) {
-                basePitch = 1.5; baseRate = 1.25; baseVolume = 1.2;
-            }
-            else if (lowerUnit.includes('sad') || lowerUnit.includes('died') || lowerUnit.includes('sorry') || lowerUnit.includes('poor')) {
-                basePitch = 0.65; baseRate = 0.75; baseVolume = 0.85;
-            }
-            else if (lowerUnit.includes('worry') || lowerUnit.includes('fix') || lowerUnit.includes('together') || lowerUnit.includes('okay')) {
-                basePitch = 1.1; baseRate = 0.85; baseVolume = 0.95;
-            }
-
-            // Questions - Rising excitement/curiosity
-            if (unit.includes('?')) {
-                basePitch += 0.25; baseRate -= 0.05;
-            }
-
-            utterance.pitch = basePitch + microPitch;
-            utterance.rate = baseRate + microRate;
-            utterance.volume = baseVolume;
-
-            // Tracking speaking state
-            if (index === 0) utterance.onstart = () => setIsSpeaking(true);
-            if (index === uniqueUnits.length - 1) {
-                utterance.onend = () => setIsSpeaking(false);
-                utterance.onerror = () => setIsSpeaking(false);
-            }
-
-            // Breath/Thought Pacing with proper cleanup
-            if (unit.length > 50 || unit.includes('.') || unit.includes('!')) {
-                const timeoutId = window.setTimeout(() => {
-                    if (synth) synth.speak(utterance);
-                }, 20);
-                timeoutIdsRef.current.push(timeoutId);
-            } else {
-                if (synth) synth.speak(utterance);
-            }
-        });
-    }, [voiceEnabled, synth]);
+        // Preview
+        speak("Hello, do you like my new voice?");
+    };
 
     const toggleVoice = () => {
         if (voiceEnabled) {
-            if (synth) synth.cancel();
+            if (audioRef.current) audioRef.current.pause();
             setVoiceEnabled(false);
             setIsSpeaking(false);
             toast("Voice Assistant Disabled", { icon: '🔇' });
@@ -708,18 +581,11 @@ export const AIDoctor = () => {
     useEffect(() => {
         const lastMsg = messages[messages.length - 1];
         if (voiceEnabled && lastMsg.role === 'assistant' && lastMsg.id !== '1') {
-            // Prevent repeating the same message ID
             if (lastSpokenMessageIdRef.current !== lastMsg.id) {
                 lastSpokenMessageIdRef.current = lastMsg.id;
-
-                // Calculate mood here
-                const userMessages = messages.filter(m => m.role === 'user');
-                const lastUserMsg = userMessages[userMessages.length - 1]?.content.toLowerCase() || '';
-                let globalMood = 'natural';
-                if (lastUserMsg.includes('sad') || lastUserMsg.includes('died') || lastUserMsg.includes('poor') || lastUserMsg.includes('help')) globalMood = 'concerned';
-                if (lastUserMsg.includes('happy') || lastUserMsg.includes('yay') || lastUserMsg.includes('great')) globalMood = 'joyful';
-
-                speak(lastMsg.content, globalMood);
+                // Only speak the text part, remove markdown images/links for cleaner audio
+                const cleanText = lastMsg.content.replace(/\[.*?\]/g, '').replace(/https?:\/\/\S+/g, '');
+                speak(cleanText);
             }
         }
     }, [messages, voiceEnabled, speak]);
@@ -881,9 +747,18 @@ export const AIDoctor = () => {
                             className={styles.actionBtn}
                             onClick={toggleVoice}
                             style={voiceEnabled ? { color: '#10b981', borderColor: '#bbf7d0', background: '#f0fdf4', boxShadow: isSpeaking ? '0 0 10px rgba(16, 185, 129, 0.3)' : 'none' } : {}}
-                            title="Voice Output"
+                            title={voiceEnabled ? "Disable Voice" : "Enable Voice"}
                         >
                             {voiceEnabled ? <Volume2 size={18} /> : <VolumeX size={18} />}
+                        </button>
+
+                        {/* Voice Settings Button */}
+                        <button
+                            className={styles.actionBtn}
+                            onClick={() => setIsVoiceSelectorOpen(true)}
+                            title="Change Voice Pack"
+                        >
+                            <Settings size={18} />
                         </button>
 
                         {/* Stop Speaking Button (only shows when AI is speaking) */}
@@ -891,7 +766,7 @@ export const AIDoctor = () => {
                             <button
                                 className={styles.actionBtn}
                                 onClick={() => {
-                                    if (synth) synth.cancel();
+                                    if (audioRef.current) audioRef.current.pause();
                                     setIsSpeaking(false);
                                     toast.success("Stopped speaking");
                                 }}
@@ -906,362 +781,423 @@ export const AIDoctor = () => {
                                 <VolumeX size={18} />
                             </button>
                         )}
-
-                        {/* Language Toggle */}
-                        <div style={{ position: 'relative' }}>
-                            <button
-                                className={styles.actionBtn}
-                                onClick={() => setShowLanguageMenu(!showLanguageMenu)}
-                                title={`Language: ${selectedLanguage}`}
-                            >
-                                <Globe size={18} />
-                            </button>
-                            {showLanguageMenu && (
-                                <div style={{
-                                    position: 'absolute', top: '100%', right: 0, marginTop: '8px',
-                                    background: 'white', border: '1px solid #e2e8f0', borderRadius: '12px',
-                                    padding: '4px', display: 'flex', flexDirection: 'column', gap: '2px',
-                                    width: '160px', maxHeight: '300px', overflowY: 'auto', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)', zIndex: 100
-                                }}>
-                                    {languages.map(lang => (
-                                        <button key={lang} onClick={() => { setSelectedLanguage(lang); setShowLanguageMenu(false); }}
-                                            style={{ textAlign: 'left', padding: '8px 12px', background: 'transparent', border: 'none', fontSize: '0.85rem', cursor: 'pointer', borderRadius: '8px', color: '#334155' }}
-                                            onMouseEnter={(e) => e.currentTarget.style.background = '#f1f5f9'}
-                                            onMouseLeave={(e) => e.currentTarget.style.background = 'transparent'}
-                                        >
-                                            {lang}
-                                        </button>
-                                    ))}
-                                </div>
-                            )}
-                        </div>
-
-                        <button className={styles.actionBtn} onClick={handleCareCalendar} title="Care Calendar">
-                            <Calendar size={18} />
-                        </button>
-
-                        <button className={styles.actionBtn} onClick={handleExport} title="Export Chat">
-                            <Download size={18} />
-                        </button>
-                        <button className={styles.actionBtn} onClick={handleClear} title="Clear">
-                            <Trash2 size={18} />
-                        </button>
                     </div>
                 </div>
             </header>
 
-            {/* Chat Area */}
-            <div className={styles.chatContainer}>
-                <div className={styles.messagesWrapper}>
-                    {messages.map((message) => (
-                        <div key={message.id} className={`${styles.message} ${message.role === 'user' ? styles.userMessage : styles.assistantMessage}`}>
-                            <div className={styles.messageIcon}>
-                                {message.role === 'user' ? <User size={16} /> : <Leaf size={16} />}
+            {/* Voice Selector Modal */}
+            {isVoiceSelectorOpen && (
+                <div style={{
+                    position: 'fixed',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    background: 'rgba(0,0,0,0.7)',
+                    zIndex: 2000,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                }}>
+                    <div style={{
+                        background: '#ffffff', // Clean white background for gardening app
+                        padding: '24px',
+                        borderRadius: '24px',
+                        width: '90%',
+                        maxWidth: '420px',
+                        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+                        border: '4px solid #dcfce7' // Soft green border
+                    }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                            <div>
+                                <h3 style={{ margin: 0, color: '#064e3b', fontSize: '1.4rem', fontWeight: 800 }}>Voice of Nature</h3>
+                                <p style={{ margin: '4px 0 0', color: '#64748b', fontSize: '0.9rem' }}>Choose Dr. Flora's personality</p>
                             </div>
-                            <div className={styles.messageContent}>
-                                <div className={styles.messageSender}>
-                                    {message.role === 'user' ? 'You' : 'Dr. Flora'} • {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                                </div>
-                                {/* Display uploaded image if present */}
-                                {((message.images && message.images.length > 0) || message.image) && (
-                                    <div style={{
-                                        display: 'grid',
-                                        gridTemplateColumns: (message.images && message.images.length > 1) ? 'repeat(auto-fit, minmax(280px, 1fr))' : '1fr',
-                                        gap: '12px',
-                                        marginBottom: '0.75rem',
-                                        width: '100%'
-                                    }}>
-                                        {(message.images && message.images.length > 0 ? message.images : [message.image]).map((imgUrl, idx) => {
-                                            const imageKey = `${message.id}-${idx}`;
-                                            return (
-                                                <div key={imageKey} style={{
-                                                    position: 'relative',
-                                                    background: message.role === 'assistant' ? '#f8fafc' : 'rgba(0,0,0,0.1)',
-                                                    borderRadius: '16px',
-                                                    padding: '4px',
-                                                    border: '1px solid rgba(0,0,0,0.05)',
-                                                    overflow: 'hidden',
-                                                    minHeight: '200px'
-                                                }}>
-                                                    <img
-                                                        src={(() => {
-                                                            if (!imgUrl) return '';
-                                                            if (imgUrl.startsWith('data:')) return imgUrl; // Handle Base64 User Uploads
-                                                            if (imgUrl.startsWith('http')) return imgUrl;
-                                                            // Robust URL cleaning: remove trailing slashes from base, remove /api suffix if present
-                                                            const cleanBase = API_URL.replace(/\/+$/, '').replace(/\/api$/, '');
-                                                            const cleanPath = imgUrl.startsWith('/') ? imgUrl : `/${imgUrl}`;
-                                                            return `${cleanBase}${cleanPath}`;
-                                                        })()}
-                                                        alt={`Plant view ${idx + 1}`}
-                                                        onLoad={() => {
-                                                            setLoadedImageIds(prev => new Set(prev).add(imageKey));
-
-                                                        }}
-                                                        onError={(e) => {
-                                                            console.warn("Primary image load failed. Attempting fallback...");
-                                                            setLoadedImageIds(prev => new Set(prev).add(imageKey));
-                                                            e.currentTarget.style.opacity = '1';
-
-                                                            // Auto-fallback to direct Pollinations URL if backend proxy fails
-                                                            const src = e.currentTarget.src;
-                                                            if (src.includes('/api/generate-image')) {
-                                                                try {
-                                                                    const url = new URL(src);
-                                                                    const params = new URLSearchParams(url.search);
-                                                                    const prompt = params.get('prompt');
-                                                                    const model = params.get('model') || 'flux';
-                                                                    const seed = params.get('seed') || '42';
-
-                                                                    if (prompt) {
-                                                                        const directUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?model=${model}&seed=${seed}&width=896&height=896&nologo=true`;
-                                                                        e.currentTarget.src = directUrl;
-                                                                    }
-                                                                } catch (err) {
-                                                                    console.error("Fallback failed", err);
-                                                                }
-                                                            }
-                                                        }}
-                                                        style={{
-                                                            width: '100%',
-                                                            maxHeight: '400px',
-                                                            borderRadius: '12px',
-                                                            objectFit: 'contain',
-                                                            display: 'block',
-                                                            opacity: 1,
-                                                            transition: 'none',
-                                                            boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
-                                                        }}
-                                                    />
-
-                                                    <div style={{
-                                                        position: 'absolute',
-                                                        top: '12px',
-                                                        left: '12px',
-                                                        background: 'rgba(5, 150, 105, 0.9)',
-                                                        color: 'white',
-                                                        padding: '4px 10px',
-                                                        borderRadius: '20px',
-                                                        fontSize: '0.7rem',
-                                                        fontWeight: 800,
-                                                        backdropFilter: 'blur(8px)',
-                                                        boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
-                                                        zIndex: 8,
-                                                        textTransform: 'uppercase',
-                                                        letterSpacing: '0.5px'
-                                                    }}>
-                                                        {idx === 0 ? '🎨 Botanical Art (Flux)' : '📸 Ultra-Realism (Pro)'}
-                                                    </div>
-
-                                                    <button
-                                                        onClick={() => downloadImage(imgUrl!, imageKey)}
-                                                        disabled={downloadingIds.has(imageKey)}
-                                                        style={{
-                                                            position: 'absolute',
-                                                            bottom: '12px',
-                                                            right: '12px',
-                                                            background: '#059669',
-                                                            color: 'white',
-                                                            border: 'none',
-                                                            borderRadius: '30px',
-                                                            padding: '8px 14px',
-                                                            display: 'flex',
-                                                            alignItems: 'center',
-                                                            gap: '8px',
-                                                            cursor: downloadingIds.has(imageKey) ? 'wait' : 'pointer',
-                                                            boxShadow: '0 6px 15px rgba(5, 150, 105, 0.4)',
-                                                            zIndex: 10,
-                                                            fontSize: '0.8rem',
-                                                            fontWeight: 700,
-                                                            transition: 'all 0.2s'
-                                                        }}
-                                                    >
-                                                        {downloadingIds.has(imageKey) ? (
-                                                            <div style={{ animation: 'spin 1s linear infinite', display: 'flex' }}>
-                                                                <Loader2 size={16} />
-                                                            </div>
-                                                        ) : (
-                                                            <Download size={16} />
-                                                        )}
-                                                        <span>Save PNG</span>
-                                                    </button>
-
-                                                    {(!loadedImageIds.has(imageKey)) && (
-                                                        <ImageLoader idx={idx} />
-                                                    )}
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
-                                )}
-                                <div className={styles.messageText}>
-                                    <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                                        {message.content}
-                                    </ReactMarkdown>
-                                </div>
-                            </div>
+                            <button onClick={() => setIsVoiceSelectorOpen(false)} style={{ background: '#f1f5f9', border: 'none', color: '#64748b', cursor: 'pointer', padding: '8px', borderRadius: '50%' }}>
+                                <X size={20} />
+                            </button>
                         </div>
-                    ))}
 
-                    {loading && (
-                        <div className={`${styles.message} ${styles.assistantMessage}`}>
-                            <div className={styles.messageIcon}><Leaf size={16} /></div>
-                            <div className={styles.messageContent}>
-                                <div className={`${styles.messageText} ${styles.typing}`}>
-                                    <span></span><span></span><span></span>
-                                </div>
-                            </div>
-                        </div>
-                    )}
-                    <div ref={messagesEndRef} />
-                </div>
-            </div>
-
-            {/* Input Dock */}
-            <div className={styles.inputContainer}>
-                <div className={styles.inputDock}>
-                    <button
-                        className={styles.toolBtn}
-                        onClick={handleScanClick}
-                        title="Identify Plant (Scan)"
-                    >
-                        <Camera size={20} />
-                    </button>
-                    <input
-                        type="file"
-                        ref={fileInputRef}
-                        onChange={handleFileChange}
-                        accept="image/*"
-                        style={{ display: 'none' }}
-                    />
-
-                    <button
-                        className={styles.toolBtn}
-                        onClick={toggleListening}
-                        style={isListening ? { color: '#ef4444', background: '#fef2f2' } : {}}
-                        title="Voice Input"
-                    >
-                        <Mic size={20} />
-                    </button>
-
-                    <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-                        {previewUrl && (
-                            <div className={styles.previewArea}>
-                                <div className={styles.previewBadge}>
-                                    <img src={previewUrl} className={styles.previewThumb} alt="Scan" />
-                                    <span>Image attached</span>
-                                    <button onClick={clearImage} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#0284c7', marginLeft: 'auto' }}>
-                                        <Trash2 size={14} />
-                                    </button>
-                                </div>
-                            </div>
-                        )}
-                        <textarea
-                            className={styles.textInput}
-                            placeholder="Type a message..."
-                            value={input}
-                            onChange={(e) => setInput(e.target.value)}
-                            onKeyDown={(e) => {
-                                if (e.key === 'Enter' && !e.shiftKey) {
-                                    e.preventDefault();
-                                    if (!loading) handleSend();
-                                }
-                            }}
-                            disabled={loading}
-                            rows={1}
-                            style={{ height: 'auto', minHeight: '44px' }}
-                        />
-                    </div>
-
-                    <button
-                        className={styles.sendBtn}
-                        onClick={() => handleSend()}
-                        disabled={loading || (!input.trim() && !selectedImage)}
-                    >
-                        {loading ? <Sparkles size={18} /> : <Send size={18} />}
-                    </button>
-                </div>
-            </div>
-            {/* Neural Energy & Settings Overlay (Tooltip/Modal) */}
-            {showLimitInfo && (
-                <div className={styles.overlay} onClick={() => setShowLimitInfo(false)}>
-                    <div className={styles.modal} onClick={e => e.stopPropagation()}>
-                        <div className={styles.modalHeader}>
-                            <h2 style={{ display: 'flex', alignItems: 'center', gap: '10px', margin: 0, fontSize: '1.15rem' }}>
-                                <Zap size={20} color="#10b981" fill="#10b981" />
-                                Neural Energy Insights
-                            </h2>
-                            <button className={styles.closeBtn} onClick={() => setShowLimitInfo(false)}>&times;</button>
-                        </div>
-                        <div className={styles.modalContent}>
-                            <p style={{ color: '#64748b', fontSize: '0.875rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>
-                                Dr. Flora's advanced botanical reasoning and image analysis require significant "Neural Energy". Daily limits help us maintain service for all gardeners.
-                            </p>
-
-                            <div style={{
-                                background: '#f8fafc',
-                                padding: '1.25rem',
-                                borderRadius: '1rem',
-                                border: '1px solid #e2e8f0',
-                                marginBottom: '1.5rem'
-                            }}>
-                                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '0.85rem' }}>
-                                    <span style={{ fontWeight: 700 }}>Daily Capacity:</span>
-                                    <span style={{ color: isAnalysisLimited ? '#ef4444' : '#10b981', fontWeight: 800 }}>
-                                        {isAnalysisLimited ? "Neural Exhausted" : `${((neuralMeta?.current || 0) / (neuralMeta?.max || 1) * 100).toFixed(1)}%`}
-                                    </span>
-                                </div>
-                                <div style={{ width: '100%', height: '8px', background: '#e2e8f0', borderRadius: '4px', overflow: 'hidden' }}>
-                                    <div style={{
-                                        width: `${((neuralMeta?.current || 0) / (neuralMeta?.max || 1) * 100)}%`,
-                                        height: '100%',
-                                        background: isAnalysisLimited ? '#ef4444' : '#10b981',
-                                        transition: 'width 0.8s cubic-bezier(0.16, 1, 0.3, 1)'
-                                    }} />
-                                </div>
-                                <p style={{ fontSize: '0.7rem', color: '#94a3b8', marginTop: '10px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                    <Sparkles size={12} />
-                                    Resets every 24 hours at midnight UTC.
-                                </p>
-                            </div>
-
-                            <h3 style={{ fontSize: '0.9rem', fontWeight: 800, color: '#1e293b', marginBottom: '0.75rem' }}>How to increase your limit?</h3>
-                            <ul style={{ paddingLeft: '1.2rem', color: '#475569', fontSize: '0.825rem', lineHeight: 1.8, marginBottom: '1.5rem' }}>
-                                <li><strong>✨ Upgrade to Premium</strong>: Instant 10x capacity boost and priority analysis.</li>
-                                <li><strong>🛍️ Shopping Activity</strong>: Active buyers earn "Energy Credits" over time.</li>
-                                <li><strong>🌿 Patience</strong>: Limits reset daily. Small gardens grow best with time!</li>
-                            </ul>
-
-                            {!user?.isPremium && (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxHeight: '400px', overflowY: 'auto' }}>
+                            {availableVoices.map((voice) => (
                                 <button
-                                    className={styles.premiumBtn}
-                                    onClick={() => {
-                                        window.location.href = '/premium';
-                                    }}
+                                    key={voice.id}
+                                    onClick={() => handleVoiceSelect(voice.id)}
                                     style={{
-                                        width: '100%',
-                                        background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-                                        color: 'white',
-                                        border: 'none',
-                                        padding: '1rem',
-                                        borderRadius: '0.75rem',
-                                        fontWeight: 800,
-                                        fontSize: '0.9rem',
-                                        cursor: 'pointer',
                                         display: 'flex',
                                         alignItems: 'center',
-                                        justifyContent: 'center',
-                                        gap: '10px'
+                                        gap: '16px',
+                                        padding: '16px',
+                                        background: selectedVoiceId === voice.id ? '#ecfdf5' : '#ffffff',
+                                        border: selectedVoiceId === voice.id ? '2px solid #10b981' : '1px solid #e2e8f0',
+                                        borderRadius: '16px',
+                                        cursor: 'pointer',
+                                        transition: 'all 0.2s',
+                                        width: '100%',
+                                        textAlign: 'left',
+                                        position: 'relative'
                                     }}
                                 >
-                                    <Sparkles size={18} />
-                                    Experience Infinite Wisdom
+                                    <div style={{
+                                        width: '44px', height: '44px', borderRadius: '50%',
+                                        background: selectedVoiceId === voice.id ? '#10b981' : '#f1f5f9',
+                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                        flexShrink: 0
+                                    }}>
+                                        {selectedVoiceId === voice.id ? <Sparkles size={20} color="white" /> : <Mic size={20} color="#94a3b8" />}
+                                    </div>
+                                    <div style={{ flex: 1 }}>
+                                        <div style={{ color: '#1e293b', fontWeight: 700, fontSize: '1rem', marginBottom: '2px' }}>{voice.name}</div>
+                                        <div style={{ color: '#64748b', fontSize: '0.8rem', fontStyle: 'italic' }}>{voice.style}</div>
+                                        <div style={{ color: '#94a3b8', fontSize: '0.75rem', marginTop: '2px' }}>{voice.description}</div>
+                                    </div>
+                                    {selectedVoiceId === voice.id && (
+                                        <div style={{ position: 'absolute', top: '12px', right: '12px' }}>
+                                            <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981' }}></div>
+                                        </div>
+                                    )}
                                 </button>
+                            ))}
+
+                            {availableVoices.length === 0 && (
+                                <div style={{ textAlign: 'center', padding: '30px', color: '#94a3b8' }}>
+                                    <Loader2 className="animate-spin" style={{ margin: '0 auto 10px', display: 'block' }} />
+                                    Loading voice packs...
+                                </div>
                             )}
                         </div>
                     </div>
                 </div>
             )}
+
+            <button className={styles.actionBtn} onClick={handleCareCalendar} title="Care Calendar">
+                <Calendar size={18} />
+            </button>
+
+            <button className={styles.actionBtn} onClick={handleExport} title="Export Chat">
+                <Download size={18} />
+            </button>
+            <button className={styles.actionBtn} onClick={handleClear} title="Clear">
+                <Trash2 size={18} />
+            </button>
         </div>
+                </div >
+            </header >
+
+    {/* Chat Area */ }
+    < div className = { styles.chatContainer } >
+        <div className={styles.messagesWrapper}>
+            {messages.map((message) => (
+                <div key={message.id} className={`${styles.message} ${message.role === 'user' ? styles.userMessage : styles.assistantMessage}`}>
+                    <div className={styles.messageIcon}>
+                        {message.role === 'user' ? <User size={16} /> : <Leaf size={16} />}
+                    </div>
+                    <div className={styles.messageContent}>
+                        <div className={styles.messageSender}>
+                            {message.role === 'user' ? 'You' : 'Dr. Flora'} • {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                        </div>
+                        {/* Display uploaded image if present */}
+                        {((message.images && message.images.length > 0) || message.image) && (
+                            <div style={{
+                                display: 'grid',
+                                gridTemplateColumns: (message.images && message.images.length > 1) ? 'repeat(auto-fit, minmax(280px, 1fr))' : '1fr',
+                                gap: '12px',
+                                marginBottom: '0.75rem',
+                                width: '100%'
+                            }}>
+                                {(message.images && message.images.length > 0 ? message.images : [message.image]).map((imgUrl, idx) => {
+                                    const imageKey = `${message.id}-${idx}`;
+                                    return (
+                                        <div key={imageKey} style={{
+                                            position: 'relative',
+                                            background: message.role === 'assistant' ? '#f8fafc' : 'rgba(0,0,0,0.1)',
+                                            borderRadius: '16px',
+                                            padding: '4px',
+                                            border: '1px solid rgba(0,0,0,0.05)',
+                                            overflow: 'hidden',
+                                            minHeight: '200px'
+                                        }}>
+                                            <img
+                                                src={(() => {
+                                                    if (!imgUrl) return '';
+                                                    if (imgUrl.startsWith('data:')) return imgUrl; // Handle Base64 User Uploads
+                                                    if (imgUrl.startsWith('http')) return imgUrl;
+                                                    // Robust URL cleaning: remove trailing slashes from base, remove /api suffix if present
+                                                    const cleanBase = API_URL.replace(/\/+$/, '').replace(/\/api$/, '');
+                                                    const cleanPath = imgUrl.startsWith('/') ? imgUrl : `/${imgUrl}`;
+                                                    return `${cleanBase}${cleanPath}`;
+                                                })()}
+                                                alt={`Plant view ${idx + 1}`}
+                                                onLoad={() => {
+                                                    setLoadedImageIds(prev => new Set(prev).add(imageKey));
+
+                                                }}
+                                                onError={(e) => {
+                                                    console.warn("Primary image load failed. Attempting fallback...");
+                                                    setLoadedImageIds(prev => new Set(prev).add(imageKey));
+                                                    e.currentTarget.style.opacity = '1';
+
+                                                    // Auto-fallback to direct Pollinations URL if backend proxy fails
+                                                    const src = e.currentTarget.src;
+                                                    if (src.includes('/api/generate-image')) {
+                                                        try {
+                                                            const url = new URL(src);
+                                                            const params = new URLSearchParams(url.search);
+                                                            const prompt = params.get('prompt');
+                                                            const model = params.get('model') || 'flux';
+                                                            const seed = params.get('seed') || '42';
+
+                                                            if (prompt) {
+                                                                const directUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?model=${model}&seed=${seed}&width=896&height=896&nologo=true`;
+                                                                e.currentTarget.src = directUrl;
+                                                            }
+                                                        } catch (err) {
+                                                            console.error("Fallback failed", err);
+                                                        }
+                                                    }
+                                                }}
+                                                style={{
+                                                    width: '100%',
+                                                    maxHeight: '400px',
+                                                    borderRadius: '12px',
+                                                    objectFit: 'contain',
+                                                    display: 'block',
+                                                    opacity: 1,
+                                                    transition: 'none',
+                                                    boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
+                                                }}
+                                            />
+
+                                            <div style={{
+                                                position: 'absolute',
+                                                top: '12px',
+                                                left: '12px',
+                                                background: 'rgba(5, 150, 105, 0.9)',
+                                                color: 'white',
+                                                padding: '4px 10px',
+                                                borderRadius: '20px',
+                                                fontSize: '0.7rem',
+                                                fontWeight: 800,
+                                                backdropFilter: 'blur(8px)',
+                                                boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
+                                                zIndex: 8,
+                                                textTransform: 'uppercase',
+                                                letterSpacing: '0.5px'
+                                            }}>
+                                                {idx === 0 ? '🎨 Botanical Art (Flux)' : '📸 Ultra-Realism (Pro)'}
+                                            </div>
+
+                                            <button
+                                                onClick={() => downloadImage(imgUrl!, imageKey)}
+                                                disabled={downloadingIds.has(imageKey)}
+                                                style={{
+                                                    position: 'absolute',
+                                                    bottom: '12px',
+                                                    right: '12px',
+                                                    background: '#059669',
+                                                    color: 'white',
+                                                    border: 'none',
+                                                    borderRadius: '30px',
+                                                    padding: '8px 14px',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    gap: '8px',
+                                                    cursor: downloadingIds.has(imageKey) ? 'wait' : 'pointer',
+                                                    boxShadow: '0 6px 15px rgba(5, 150, 105, 0.4)',
+                                                    zIndex: 10,
+                                                    fontSize: '0.8rem',
+                                                    fontWeight: 700,
+                                                    transition: 'all 0.2s'
+                                                }}
+                                            >
+                                                {downloadingIds.has(imageKey) ? (
+                                                    <div style={{ animation: 'spin 1s linear infinite', display: 'flex' }}>
+                                                        <Loader2 size={16} />
+                                                    </div>
+                                                ) : (
+                                                    <Download size={16} />
+                                                )}
+                                                <span>Save PNG</span>
+                                            </button>
+
+                                            {(!loadedImageIds.has(imageKey)) && (
+                                                <ImageLoader idx={idx} />
+                                            )}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        )}
+                        <div className={styles.messageText}>
+                            <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                                {message.content}
+                            </ReactMarkdown>
+                        </div>
+                    </div>
+                </div>
+            ))}
+
+            {loading && (
+                <div className={`${styles.message} ${styles.assistantMessage}`}>
+                    <div className={styles.messageIcon}><Leaf size={16} /></div>
+                    <div className={styles.messageContent}>
+                        <div className={`${styles.messageText} ${styles.typing}`}>
+                            <span></span><span></span><span></span>
+                        </div>
+                    </div>
+                </div>
+            )}
+            <div ref={messagesEndRef} />
+        </div>
+            </div >
+
+    {/* Input Dock */ }
+    < div className = { styles.inputContainer } >
+        <div className={styles.inputDock}>
+            <button
+                className={styles.toolBtn}
+                onClick={handleScanClick}
+                title="Identify Plant (Scan)"
+            >
+                <Camera size={20} />
+            </button>
+            <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleFileChange}
+                accept="image/*"
+                style={{ display: 'none' }}
+            />
+
+            <button
+                className={styles.toolBtn}
+                onClick={toggleListening}
+                style={isListening ? { color: '#ef4444', background: '#fef2f2' } : {}}
+                title="Voice Input"
+            >
+                <Mic size={20} />
+            </button>
+
+            <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
+                {previewUrl && (
+                    <div className={styles.previewArea}>
+                        <div className={styles.previewBadge}>
+                            <img src={previewUrl} className={styles.previewThumb} alt="Scan" />
+                            <span>Image attached</span>
+                            <button onClick={clearImage} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#0284c7', marginLeft: 'auto' }}>
+                                <Trash2 size={14} />
+                            </button>
+                        </div>
+                    </div>
+                )}
+                <textarea
+                    className={styles.textInput}
+                    placeholder="Type a message..."
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={(e) => {
+                        if (e.key === 'Enter' && !e.shiftKey) {
+                            e.preventDefault();
+                            if (!loading) handleSend();
+                        }
+                    }}
+                    disabled={loading}
+                    rows={1}
+                    style={{ height: 'auto', minHeight: '44px' }}
+                />
+            </div>
+
+            <button
+                className={styles.sendBtn}
+                onClick={() => handleSend()}
+                disabled={loading || (!input.trim() && !selectedImage)}
+            >
+                {loading ? <Sparkles size={18} /> : <Send size={18} />}
+            </button>
+        </div>
+            </div >
+    {/* Neural Energy & Settings Overlay (Tooltip/Modal) */ }
+{
+    showLimitInfo && (
+        <div className={styles.overlay} onClick={() => setShowLimitInfo(false)}>
+            <div className={styles.modal} onClick={e => e.stopPropagation()}>
+                <div className={styles.modalHeader}>
+                    <h2 style={{ display: 'flex', alignItems: 'center', gap: '10px', margin: 0, fontSize: '1.15rem' }}>
+                        <Zap size={20} color="#10b981" fill="#10b981" />
+                        Neural Energy Insights
+                    </h2>
+                    <button className={styles.closeBtn} onClick={() => setShowLimitInfo(false)}>&times;</button>
+                </div>
+                <div className={styles.modalContent}>
+                    <p style={{ color: '#64748b', fontSize: '0.875rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>
+                        Dr. Flora's advanced botanical reasoning and image analysis require significant "Neural Energy". Daily limits help us maintain service for all gardeners.
+                    </p>
+
+                    <div style={{
+                        background: '#f8fafc',
+                        padding: '1.25rem',
+                        borderRadius: '1rem',
+                        border: '1px solid #e2e8f0',
+                        marginBottom: '1.5rem'
+                    }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '0.85rem' }}>
+                            <span style={{ fontWeight: 700 }}>Daily Capacity:</span>
+                            <span style={{ color: isAnalysisLimited ? '#ef4444' : '#10b981', fontWeight: 800 }}>
+                                {isAnalysisLimited ? "Neural Exhausted" : `${((neuralMeta?.current || 0) / (neuralMeta?.max || 1) * 100).toFixed(1)}%`}
+                            </span>
+                        </div>
+                        <div style={{ width: '100%', height: '8px', background: '#e2e8f0', borderRadius: '4px', overflow: 'hidden' }}>
+                            <div style={{
+                                width: `${((neuralMeta?.current || 0) / (neuralMeta?.max || 1) * 100)}%`,
+                                height: '100%',
+                                background: isAnalysisLimited ? '#ef4444' : '#10b981',
+                                transition: 'width 0.8s cubic-bezier(0.16, 1, 0.3, 1)'
+                            }} />
+                        </div>
+                        <p style={{ fontSize: '0.7rem', color: '#94a3b8', marginTop: '10px', display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            <Sparkles size={12} />
+                            Resets every 24 hours at midnight UTC.
+                        </p>
+                    </div>
+
+                    <h3 style={{ fontSize: '0.9rem', fontWeight: 800, color: '#1e293b', marginBottom: '0.75rem' }}>How to increase your limit?</h3>
+                    <ul style={{ paddingLeft: '1.2rem', color: '#475569', fontSize: '0.825rem', lineHeight: 1.8, marginBottom: '1.5rem' }}>
+                        <li><strong>✨ Upgrade to Premium</strong>: Instant 10x capacity boost and priority analysis.</li>
+                        <li><strong>🛍️ Shopping Activity</strong>: Active buyers earn "Energy Credits" over time.</li>
+                        <li><strong>🌿 Patience</strong>: Limits reset daily. Small gardens grow best with time!</li>
+                    </ul>
+
+                    {!user?.isPremium && (
+                        <button
+                            className={styles.premiumBtn}
+                            onClick={() => {
+                                window.location.href = '/premium';
+                            }}
+                            style={{
+                                width: '100%',
+                                background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                                color: 'white',
+                                border: 'none',
+                                padding: '1rem',
+                                borderRadius: '0.75rem',
+                                fontWeight: 800,
+                                fontSize: '0.9rem',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                gap: '10px'
+                            }}
+                        >
+                            <Sparkles size={18} />
+                            Experience Infinite Wisdom
+                        </button>
+                    )}
+                </div>
+            </div>
+        </div>
+    )
+}
+        </div >
     );
 };
