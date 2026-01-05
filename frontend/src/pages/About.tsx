@@ -13,12 +13,18 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/common/Button';
 import styles from './About.module.css';
+import { Helmet } from 'react-helmet-async';
 
 export const About = () => {
     const navigate = useNavigate();
 
     return (
         <div className={styles.container}>
+            <Helmet>
+                <title>About VanaMap | Precision Urban Ecosystems & AI Botany</title>
+                <meta name="description" content="Learn about VanaMap's mission to merge technology and nature. Using AI, Monte Carlo simulations, and biophilic design to create healthier urban spaces." />
+                <link rel="canonical" href="https://www.vanamap.online/about" />
+            </Helmet>
             <button onClick={() => navigate('/')} className={styles.backBtn}>
                 <ArrowLeft size={18} /> BACK TO DISCOVERY
             </button>

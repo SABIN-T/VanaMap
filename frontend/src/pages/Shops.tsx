@@ -6,6 +6,7 @@ import { PlantVendorsModal } from '../components/features/market/PlantVendorsMod
 import { useNavigate, useLocation } from 'react-router-dom';
 import styles from './Shops.module.css';
 import { plantCache, apiCache } from '../utils/universalCache'; // 🚀 Performance boost!
+import { Helmet } from 'react-helmet-async';
 
 export const Shops = () => {
     const navigate = useNavigate();
@@ -186,6 +187,11 @@ export const Shops = () => {
 
     return (
         <div className={styles.shopContainer}>
+            <Helmet>
+                <title>VanaMap Plant Market - Buy Verified Plants Online</title>
+                <meta name="description" content="Shop verified, healthy plants from local nurseries delivered to your door. Filter by indoor, outdoor, air-purifying, and pet-friendly options." />
+                <link rel="canonical" href="https://www.vanamap.online/shops" />
+            </Helmet>
             {/* Header Section */}
             <div className={styles.header}>
                 <div className={styles.badgeMain}>

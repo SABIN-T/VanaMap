@@ -12,6 +12,7 @@ import { useCart } from '../context/CartContext';
 import toast from 'react-hot-toast';
 import styles from './Nearby.module.css';
 import { locationCache, cachedFetch } from '../utils/universalCache'; // 🚀 Boost map speed!
+import { Helmet } from 'react-helmet-async';
 
 // Geocoding helper removed or handled inline
 
@@ -321,6 +322,11 @@ out center;
 
     return (
         <div className={styles.nearbyContainer}>
+            <Helmet>
+                <title>Find Plant Shops Near Me | VanaMap - Local Nurseries Explorer</title>
+                <meta name="description" content="Locate top-rated plant nurseries, garden centers, and florists in your neighborhood using VanaMap's satellite GPS tool. Verified stock and reviews." />
+                <link rel="canonical" href="https://www.vanamap.online/nearby" />
+            </Helmet>
             <div className={styles.noticeBanner} style={{ background: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.2)' }}>
                 <MapPin className={styles.noticeIcon} size={20} color="#10b981" />
                 <div className={styles.noticeText} style={{ color: '#ecfdf5' }}>

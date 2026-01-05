@@ -1,6 +1,7 @@
 import { ArrowLeft, MessageCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/common/Button';
+import { Helmet } from 'react-helmet-async';
 
 export const Sponsor = () => {
     const navigate = useNavigate();
@@ -13,6 +14,11 @@ export const Sponsor = () => {
             justifyContent: 'center',
             background: 'radial-gradient(circle at top right, rgba(250, 204, 21, 0.1), transparent 40%), #0f172a'
         }}>
+            <Helmet>
+                <title>Sponsor VanaMap Ecosystem | Support Green Tech</title>
+                <meta name="description" content="Partner with VanaMap to drive the future of urban botany. Sponsorships fund ecological research and platform development." />
+                <link rel="canonical" href="https://www.vanamap.online/sponsor" />
+            </Helmet>
             <div className="glass-panel" style={{
                 maxWidth: '600px',
                 width: '90%',

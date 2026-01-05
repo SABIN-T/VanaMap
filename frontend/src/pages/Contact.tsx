@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-hot-toast';
 import styles from './Contact.module.css';
 import { useState, useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 
 export const Contact = () => {
     const navigate = useNavigate();
@@ -99,6 +100,11 @@ export const Contact = () => {
 
     return (
         <div className={styles.contactContainer}>
+            <Helmet>
+                <title>Contact VanaMap - Support & Inquiries | Botanical Concierge</title>
+                <meta name="description" content="Reach out to VanaMap for support, botanical advice, or partnership inquiries. Our AI specialist and human experts are ready to assist." />
+                <link rel="canonical" href="https://www.vanamap.online/contact" />
+            </Helmet>
             {/* Header */}
             <header className={styles.header}>
                 <div className={styles.badge}>

@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-hot-toast';
 import { submitSuggestion } from '../services/api';
 import styles from './Support.module.css';
+import { Helmet } from 'react-helmet-async';
 
 export const Support = () => {
     const navigate = useNavigate();
@@ -42,6 +43,11 @@ export const Support = () => {
 
     return (
         <div className={styles.supportContainer}>
+            <Helmet>
+                <title>VanaMap Support & Community | Suggest Plants & Report Issues</title>
+                <meta name="description" content="Get help with VanaMap, suggest new plant species for our database, or report data issues. Join our community of botanical enthusiasts." />
+                <link rel="canonical" href="https://www.vanamap.online/support" />
+            </Helmet>
             <button onClick={() => navigate(-1)} className={styles.backBtn}>
                 <ArrowLeft size={18} /> Back to Ecosystem
             </button>
