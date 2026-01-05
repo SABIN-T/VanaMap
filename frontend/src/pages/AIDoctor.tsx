@@ -499,6 +499,48 @@ export const AIDoctor = () => {
         if (savedVoice) setSelectedVoiceId(savedVoice);
     }, []);
 
+    // Helper: Clean text for natural speech (Remove markdown, emojis, system jargon)
+    const cleanTextForSpeech = (text: string) => {
+        if (!text) return "";
+        let clean = text;
+
+        // 1. Remove Markdown headers, bold, italics
+        clean = clean.replace(/#{1,6}\s?/g, '') // Remove headlines
+            .replace(/\*\*(.*?)\*\*/g, '$1') // Remove bold
+            .replace(/\*(.*?)\*/g, '$1') // Remove italics
+            .replace(/\[.*?\]/g, '') // Remove links/tags [text]
+            .replace(/\(.*?\)/g, '') // Remove link URLs (url) if inside [] but regex above covers strict MD links usually. Let's be careful not to remove (tips).
+            .replace(/!\[.*?\]/g, ''); // Remove images
+
+        // 2. Remove URLs
+        clean = clean.replace(/https?:\/\/\S+/g, 'link');
+
+        // 3. Remove Emojis (Ranges for many common emoji sets)
+        // clean = clean.replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}]/gu, ''); 
+        // More robust standard emoji regex or just general symbol cleanup if prefered.
+        clean = clean.replace(/[\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF]/g, '');
+
+        // 4. Remove Specific System Phrases
+        const systemPhrases = [
+            "Response from learned knowledge",
+            "Expert 1:", "Expert 2:", "Expert 3:",
+            "DeepSeek says:",
+            "Response from memory",
+            "Here is the generated image:",
+            "GENERATE:",
+            "Image description:"
+        ];
+        systemPhrases.forEach(phrase => {
+            const re = new RegExp(phrase, "gi");
+            clean = clean.replace(re, "");
+        });
+
+        // 5. Cleanup whitespace
+        clean = clean.replace(/\s+/g, ' ').trim();
+
+        return clean;
+    };
+
     const stopSpeaking = useCallback(() => {
         if (audioRef.current) {
             audioRef.current.pause();
@@ -516,6 +558,8 @@ export const AIDoctor = () => {
         setIsSpeaking(true);
 
         const targetVoiceId = overrideVoiceId || selectedVoiceId;
+        const cleanText = cleanTextForSpeech(text);
+        if (!cleanText) return;
 
         try {
             const response = await fetch(`${API_URL}/chat/speak`, {
@@ -525,7 +569,7 @@ export const AIDoctor = () => {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 },
                 body: JSON.stringify({
-                    text,
+                    text: cleanText,
                     voiceId: targetVoiceId
                 })
             });
@@ -587,10 +631,18 @@ export const AIDoctor = () => {
         if (voiceEnabled && lastMsg.role === 'assistant' && lastMsg.id !== '1') {
             if (lastSpokenMessageIdRef.current !== lastMsg.id) {
                 lastSpokenMessageIdRef.current = lastMsg.id;
-                // Only speak the text part, remove markdown images/links for cleaner audio
-                const cleanText = lastMsg.content.replace(/\[.*?\]/g, '').replace(/https?:\/\/\S+/g, '');
+                lastSpokenMessageIdRef.current = lastMsg.id;
+                // Use the robust cleaner
+                const cleanText = cleanTextForSpeech(lastMsg.content);
                 if (cleanText.trim()) {
-                    speak(cleanText);
+                    speak(lastMsg.content); // speak function now cleans it internally!, but wait, passing raw content to speak allows speak() to clean it. 
+                    // Actually, if I clean it here, speak() cleans it again. Efficient?
+                    // Let's pass the raw content and let speak() handle it to avoid duplication or pass cleaned.
+                    // speak() calls cleanTextForSpeech. So passing raw is fine.
+                    // BUT: The original logic passed 'cleanText' to speak.
+                    // My replacement for speak() adds cleaning. 
+                    // To be safe, let's just pass raw content to speak() and let IT do the work.
+                    speak(lastMsg.content);
                 }
             }
         }
