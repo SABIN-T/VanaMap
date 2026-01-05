@@ -387,6 +387,7 @@ const connectDB = async () => {
         if (plantCount === 0) {
             console.log('🌱 Database is empty. Auto-seeding from plant-data.js...');
             try {
+                // Lazy load heavy data files only when needed for seeding
                 const { indoorPlants, outdoorPlants } = require('./plant-data');
                 const allPlants = [...indoorPlants, ...outdoorPlants];
 

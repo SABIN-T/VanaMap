@@ -1,15 +1,13 @@
-const worldFlora = require('./worldFlora');
 const { User, Plant } = require('./models');
 
 /**
  * Advanced AI Intelligence Layer for Dr. Flora
  */
 const FloraIntelligence = {
-    /**
-     * Searches 5,839 World Flora records for plants mentioned in the user's query.
-     * Uses fuzzy-ish matching against scientific and common names.
-     */
     async getRelevantFloraContext(userMessages) {
+        // Lazy load worldFlora only when needed
+        const worldFlora = require('./worldFlora');
+
         const fullText = userMessages
             .map(m => {
                 if (typeof m.content === 'string') return m.content;

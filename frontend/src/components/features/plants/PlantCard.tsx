@@ -45,7 +45,13 @@ export const PlantCard = ({ plant, score, isTopMatch, priority = false, onAdd, s
         }}>
             <div className={styles.imageContainer}>
                 <img
-                    src={plant.imageUrl}
+                    src={(() => {
+                        if (!plant.imageUrl) return '';
+                        if (plant.imageUrl.includes('cloudinary.com') && !plant.imageUrl.includes('f_auto')) {
+                            return plant.imageUrl.replace('/upload/', '/upload/f_auto,q_auto,w_600/');
+                        }
+                        return plant.imageUrl;
+                    })()}
                     alt={`${plant.name} - ${plant.scientificName} plant`}
                     className={styles.image}
                     loading={priority ? "eager" : "lazy"}

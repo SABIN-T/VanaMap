@@ -124,8 +124,8 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // Static assets (JS, CSS) - Network First (CHANGED from Stale While Revalidate)
-    // This ensures users always get the latest version after deployment
+    // Static assets (JS, CSS) - Stale While Revalidate
+    // Serve from cache immediately for speed, then update in background
     if (request.destination === 'script' ||
         request.destination === 'style' ||
         request.destination === 'font' ||
@@ -137,7 +137,7 @@ self.addEventListener('fetch', (event) => {
             return;
         }
 
-        event.respondWith(networkFirstStrategy(request, STATIC_CACHE));
+        event.respondWith(staleWhileRevalidateStrategy(request, STATIC_CACHE));
         return;
     }
 
