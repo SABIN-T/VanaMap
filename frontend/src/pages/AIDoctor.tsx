@@ -877,9 +877,6 @@ export const AIDoctor = () => {
             <button className={styles.actionBtn} onClick={handleExport} title="Export Chat">
                 <Download size={18} />
             </button>
-            <button className={styles.actionBtn} onClick={handleClear} title="Clear">
-                <Trash2 size={18} />
-            </button>
         </div>
                 </div >
             </header >
@@ -922,16 +919,13 @@ export const AIDoctor = () => {
                                                     if (!imgUrl) return '';
                                                     if (imgUrl.startsWith('data:')) return imgUrl; // Handle Base64 User Uploads
                                                     if (imgUrl.startsWith('http')) return imgUrl;
-                                                    // Robust URL cleaning: remove trailing slashes from base, remove /api suffix if present
+                                                    // Robust URL cleaning
                                                     const cleanBase = API_URL.replace(/\/+$/, '').replace(/\/api$/, '');
                                                     const cleanPath = imgUrl.startsWith('/') ? imgUrl : `/${imgUrl}`;
                                                     return `${cleanBase}${cleanPath}`;
                                                 })()}
                                                 alt={`Plant view ${idx + 1}`}
-                                                onLoad={() => {
-                                                    setLoadedImageIds(prev => new Set(prev).add(imageKey));
-
-                                                }}
+                                                onLoad={() => setLoadedImageIds(prev => new Set(prev).add(imageKey))}
                                                 onError={(e) => {
                                                     console.warn("Primary image load failed. Attempting fallback...");
                                                     setLoadedImageIds(prev => new Set(prev).add(imageKey));
@@ -1117,6 +1111,7 @@ export const AIDoctor = () => {
         </div>
             </div >
     {/* Neural Energy & Settings Overlay (Tooltip/Modal) */ }
+{/* Neural Energy & Settings Overlay (Tooltip/Modal) */ }
 {
     showLimitInfo && (
         <div className={styles.overlay} onClick={() => setShowLimitInfo(false)}>
