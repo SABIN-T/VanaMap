@@ -869,10 +869,10 @@ export const AIDoctor = () => {
                 <Download size={18} />
             </button>
         </div>
-    </header >
+    </header>
 
-    {/* Chat Area */ }
-    < div className = { styles.chatContainer } >
+    {/* Chat Area */}
+    <div className={styles.chatContainer}>
         <div className={styles.messagesWrapper}>
             {messages.map((message) => (
                 <div key={message.id} className={`${styles.message} ${message.role === 'user' ? styles.userMessage : styles.assistantMessage}`}>
@@ -1033,10 +1033,10 @@ export const AIDoctor = () => {
             )}
             <div ref={messagesEndRef} />
         </div>
-    </div >
+    </div>
 
-    {/* Input Dock */ }
-    < div className = { styles.inputContainer } >
+    {/* Input Dock */}
+    <div className={styles.inputContainer}>
         <div className={styles.inputDock}>
             <button
                 className={styles.toolBtn}
@@ -1099,9 +1099,9 @@ export const AIDoctor = () => {
                 {loading ? <Sparkles size={18} /> : <Send size={18} />}
             </button>
         </div>
-    </div >
+    </div>
 
-    {/* Neural Energy & Settings Overlay (Tooltip/Modal) */ }
+    {/* Neural Energy & Settings Overlay (Tooltip/Modal) */}
 {
     showLimitInfo && (
         <div className={styles.overlay} onClick={() => setShowLimitInfo(false)}>
@@ -1183,6 +1183,6 @@ export const AIDoctor = () => {
         </div>
     )
 }
-        </div >
+        </div>
     );
 };
