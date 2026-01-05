@@ -2828,15 +2828,14 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
             }))
         ];
 
-        // --- MODEL SELECTION ---
-        // Text Primary: Llama 3.3 70B (State of the art intelligence)
-        // Vision Primary: Llama 3.2 90B (Best for plant identification)
-        let model = "llama-3.3-70b-versatile";
+        // --- UPGRADED MODEL SELECTION (2026) ---
+        // Text Primary: Llama 3.3 70B Versatile (Latest, most capable)
+        // Vision Primary: Llama 3.2 90B Vision (SOTA for plant identification)
+        let model = "llama-3.3-70b-versatile"; // Upgraded from 3.1
 
         if (image) {
-            console.log('[AI Doctor] Vision request detected. engaging Llama 3.2 90B Vision (Advanced).');
-            // Reverting to the absolute BEST model for accuracy as requested:
-            // "Llama 3.2 90B Vision" is currently SOTA (State of the Art) for visual reasoning.
+            console.log('[AI Doctor] 🔬 Vision request detected. Engaging Llama 3.2 90B Vision (SOTA).');
+            // Llama 3.2 90B Vision - State of the Art for visual botanical analysis
             model = "llama-3.2-90b-vision-preview";
 
             // Attach image to the last user message
@@ -2931,11 +2930,12 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
         if (image && model === "llama-3.2-90b-vision-preview") {
             console.log('[AI Doctor] 🧠 Starting Neural Ensemble Analysis (Parallel Execution)...');
 
+            // UPGRADED EXPERT ENSEMBLE (2026)
             const experts = [
-                { id: "llama-3.2-90b-vision-preview", role: "Senior Botanist (Groq Vision)", provider: 'groq' },
-                { id: "llama-3.2-11b-vision-preview", role: "Field Scout (Groq Vision)", provider: 'groq' },
-                { id: "deepseek/deepseek-r1:free", role: "Strategic Botanist (DeepSeek R1)", provider: 'openrouter' }, // DeepSeek R1 for Reasoning
-                { id: "llava-v1.5-7b-4096-preview", role: "Research Analyst (Groq)", provider: 'groq' }
+                { id: "llama-3.2-90b-vision-preview", role: "Senior Botanist (Llama 3.2 90B Vision)", provider: 'groq' },
+                { id: "llama-3.2-11b-vision-preview", role: "Field Botanist (Llama 3.2 11B Vision)", provider: 'groq' },
+                { id: "deepseek/deepseek-r1", role: "Strategic Reasoner (DeepSeek R1)", provider: 'openrouter' }, // Latest DeepSeek
+                { id: "google/gemini-2.0-flash-thinking-exp:free", role: "Vision Analyst (Gemini 2.0 Flash)", provider: 'openrouter' } // Upgraded from LLaVA
             ];
 
             const visionResults = await Promise.all(experts.map(async (expert) => {
@@ -2996,7 +2996,14 @@ REMEMBER: Your response must include BOTH the identification analysis AND the [G
                     { role: "user", content: synthesisPrompt }
                 ];
 
+                // Use latest Llama 3.3 for synthesis
                 result = await callGroq("llama-3.3-70b-versatile", synthesisMessages);
+
+                // If synthesis fails, try DeepSeek R1 for reasoning-based synthesis
+                if (!result.ok) {
+                    console.log('[AI Doctor] Synthesis fallback: Trying DeepSeek R1...');
+                    result = await callOpenRouter("deepseek/deepseek-r1", synthesisMessages);
+                }
             } else {
                 console.warn('[AI Doctor] All ensemble experts failed. Preparing for External Fallback.');
                 result = { ok: false };
@@ -3007,10 +3014,24 @@ REMEMBER: Your response must include BOTH the identification analysis AND the [G
             console.log(`[AI Doctor] Attempting Primary Groq Model: ${model}`);
             result = await callGroq(model);
 
-            // If Groq text fails, use DeepSeek immediately
+            // UPGRADED TEXT FALLBACK CASCADE
             if (!result.ok) {
-                console.log("[AI Doctor] Primary text failed. Calling DeepSeek R1 via OpenRouter...");
-                result = await callOpenRouter("deepseek/deepseek-r1:free");
+                console.log("[AI Doctor] ⚠️ Primary failed. Cascading through upgraded models...");
+
+                // Fallback 1: DeepSeek R1 (Latest reasoning model)
+                result = await callOpenRouter("deepseek/deepseek-r1");
+
+                // Fallback 2: Gemini 2.0 Flash Thinking
+                if (!result.ok) {
+                    console.log("[AI Doctor] ⚠️⚠️ Trying Gemini 2.0 Flash Thinking...");
+                    result = await callOpenRouter("google/gemini-2.0-flash-thinking-exp:free");
+                }
+
+                // Fallback 3: Claude 3.5 Haiku (Fast & Efficient)
+                if (!result.ok) {
+                    console.log("[AI Doctor] ⚠️⚠️⚠️ Trying Claude 3.5 Haiku...");
+                    result = await callOpenRouter("anthropic/claude-3.5-haiku:free");
+                }
             }
         }
 
@@ -3032,10 +3053,10 @@ REMEMBER: Your response must include BOTH the identification analysis AND the [G
                 }
             }
 
-            // FALLBACK STAGE 3: High-Speed Text-Only (Groq)
+            // FALLBACK STAGE 3: High-Speed Text-Only (Upgraded)
             if (!result.ok || result.data.error) {
-                console.warn('[AI Doctor] Vision falling back to High-Speed Text Engine (Groq).');
-                const bulletproofModel = "llama-3.1-8b-instant";
+                console.warn('[AI Doctor] Vision falling back to High-Speed Text Engine.');
+                const bulletproofModel = "llama-3.3-70b-versatile"; // Upgraded from 3.1-8b
 
                 // Helper to strip images
                 const stripValidation = (msgs) => msgs.map(m => {
@@ -3055,16 +3076,23 @@ REMEMBER: Your response must include BOTH the identification analysis AND the [G
         if (!result.ok || (result.data && result.data.error)) {
             console.error("[AI Doctor] 🚨 ALL GROQ MODELS FAILED. INITIATING OPENROUTER EMERGENCY PROTOCOL.");
 
-            // Determine model based on capability needed
-            // Use "google/gemini-2.0-flash-exp:free" as it's multimodal (vision+text) and free
-            const openRouterModel = "google/gemini-2.0-flash-exp:free";
+            // ULTIMATE FALLBACK CASCADE (Multiple Providers)
+            const ultimateFallbacks = [
+                { model: "google/gemini-2.0-flash-thinking-exp:free", name: "Gemini 2.0 Flash Thinking" },
+                { model: "deepseek/deepseek-r1", name: "DeepSeek R1" },
+                { model: "anthropic/claude-3.5-haiku:free", name: "Claude 3.5 Haiku" },
+                { model: "meta-llama/llama-3.3-70b-instruct:free", name: "Llama 3.3 70B" },
+                { model: "google/gemini-2.0-flash-exp:free", name: "Gemini 2.0 Flash" },
+                { model: "qwen/qwen-2.5-72b-instruct:free", name: "Qwen 2.5 72B" }
+            ];
 
-            result = await callOpenRouter(openRouterModel);
-
-            // If that fails too, try a simple Llama 3 via OpenRouter
-            if (!result.ok) {
-                console.log("[AI Doctor] OpenRouter Vision failed, trying OpenRouter Text mode...");
-                result = await callOpenRouter("meta-llama/llama-3-8b-instruct:free");
+            for (const fallback of ultimateFallbacks) {
+                console.log(`[AI Doctor] 🆘 Trying ${fallback.name}...`);
+                result = await callOpenRouter(fallback.model);
+                if (result.ok) {
+                    console.log(`[AI Doctor] ✅ Success with ${fallback.name}!`);
+                    break;
+                }
             }
         }
 
