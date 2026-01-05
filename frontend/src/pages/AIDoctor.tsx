@@ -1,13 +1,15 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback, lazy } from 'react';
 import { Send, Sparkles, Leaf, Bot, User, Trash2, Download, Calendar, Camera, Mic, Volume2, VolumeX, Zap, Loader2, Settings, X } from 'lucide-react';
 import { chatWithDrFlora, API_URL } from '../services/api';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
 import styles from './AIDoctor.module.css';
-import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { mlCache } from '../utils/mlCache'; // ML-powered response cache
+import { mlCache } from '../utils/mlCache';
 import { Helmet } from 'react-helmet-async';
+
+// Lazy load ReactMarkdown for faster mobile load
+const ReactMarkdown = lazy(() => import('react-markdown'));
 
 interface Message {
     id: string;
@@ -163,13 +165,17 @@ export const AIDoctor = () => {
 
     const [showLimitInfo, setShowLimitInfo] = useState(false);
 
-    const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    };
+    // Optimized scroll for mobile
+    const scrollToBottom = useCallback(() => {
+        requestAnimationFrame(() => {
+            messagesEndRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        });
+    }, []);
 
     useEffect(() => {
-        scrollToBottom();
-    }, [messages]);
+        const timer = setTimeout(scrollToBottom, 100);
+        return () => clearTimeout(timer);
+    }, [messages, scrollToBottom]);
 
     // Web Search for Scientific Plant Data
 
