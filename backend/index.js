@@ -3168,6 +3168,58 @@ app.post('/api/chat/feedback', async (req, res) => {
     }
 });
 
+// --- VOICE SYNTHESIS (ELEVENLABS) ---
+app.post('/api/chat/speak', auth, async (req, res) => {
+    try {
+        const { text } = req.body;
+        const ELEVENLABS_API_KEY = process.env.ELEVENLABS_API_KEY;
+
+        if (!text) return res.status(400).json({ error: "Text required" });
+        if (!ELEVENLABS_API_KEY) return res.status(503).json({ error: "Voice service not configured" });
+
+        // Voice ID for "Charlotte" - A calm, professional, and slightly mystical female voice
+        // Perfect for Dr. Flora's persona
+        const VOICE_ID = "XB0fDUnXU5powFXDhCwa";
+
+        console.log(`[Dr. Flora Voice] Synthesizing: "${text.substring(0, 30)}..."`);
+
+        const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${VOICE_ID}/stream`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'audio/mpeg',
+                'xi-api-key': ELEVENLABS_API_KEY,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                text: text,
+                model_id: "eleven_monolingual_v1", // High quality, low latency
+                voice_settings: {
+                    stability: 0.5,       // Balance emotion/stability
+                    similarity_boost: 0.75 // Strong character adherence
+                },
+                optimize_streaming_latency: 4 // Max performance for real-time feel
+            })
+        });
+
+        if (!response.ok) {
+            const err = await response.json();
+            throw new Error(err.detail?.message || "Voice API failed");
+        }
+
+        // Pipe the audio directly to the client
+        res.setHeader('Content-Type', 'audio/mpeg');
+        const { pipeline } = require('stream');
+        const { promisify } = require('util');
+        const streamPipeline = promisify(pipeline);
+
+        await streamPipeline(response.body, res);
+
+    } catch (e) {
+        console.error("Voice Error:", e.message);
+        res.status(500).json({ error: "Dr. Flora lost her voice temporarily!" });
+    }
+});
+
 // --- AI-POWERED TRANSLATION ENDPOINTS ---
 // Context-aware translation for botanical terms and plant descriptions
 
