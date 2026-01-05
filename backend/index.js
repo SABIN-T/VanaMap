@@ -2930,15 +2930,36 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
             console.log('[AI Doctor] 🧠 Starting Neural Ensemble Analysis (Parallel Execution)...');
 
             const experts = [
-                { id: "llama-3.2-90b-vision-preview", role: "Senior Botanist" },
-                { id: "llama-3.2-11b-vision-preview", role: "Field Scout" },
-                { id: "llava-v1.5-7b-4096-preview", role: "Research Analyst" },
-                { id: "qwen2-vl-7b-instruct", role: "Vision-Language Expert" }
+                { id: "llama-3.2-90b-vision-preview", role: "Senior Botanist (Groq Vision)", provider: 'groq' },
+                { id: "llama-3.2-11b-vision-preview", role: "Field Scout (Groq Vision)", provider: 'groq' },
+                { id: "deepseek/deepseek-r1:free", role: "Strategic Botanist (DeepSeek R1)", provider: 'openrouter' }, // DeepSeek R1 for Reasoning
+                { id: "llava-v1.5-7b-4096-preview", role: "Research Analyst (Groq)", provider: 'groq' }
             ];
 
             const visionResults = await Promise.all(experts.map(async (expert) => {
                 console.log(`[AI Doctor] ⚡ Triggering ${expert.role}...`);
-                const expertResponse = await callGroq(expert.id);
+                let expertResponse;
+
+                // Input Sanitization: DeepSeek R1 is a REASONING model, not necessarily vision. 
+                // We give it the pure text context (User description + Flora DB) to check for logic/scientific consistency.
+                const isTextOnly = expert.id.includes('deepseek');
+                const payloadMessages = isTextOnly
+                    ? enhancedMessages.map(m => {
+                        if (Array.isArray(m.content)) {
+                            // Strip image, keep text
+                            const textPart = m.content.find(c => c.type === 'text');
+                            return { role: m.role, content: textPart ? textPart.text : "Analyze the botanical context provided." };
+                        }
+                        return m;
+                    })
+                    : enhancedMessages; // Vision models get the image
+
+                if (expert.provider === 'openrouter') {
+                    expertResponse = await callOpenRouter(expert.id, payloadMessages);
+                } else {
+                    expertResponse = await callGroq(expert.id, payloadMessages);
+                }
+
                 return {
                     model: expert.role,
                     content: expertResponse.ok ? expertResponse.data.choices[0]?.message?.content : null
@@ -2951,20 +2972,20 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
             if (validOpinions.length > 0) {
                 console.log('[AI Doctor] 🖋️ Synthesizing Final Diagnosis with Groq...');
 
-                const synthesisPrompt = `You are Dr. Flora. Synthesize these plant analyses into ONE PERFECT answer:
+                const synthesisPrompt = `You are Dr. Flora. Synthesize these plant analyses into ONE PERFECT answer.
+                
+                WE HAVE A SPECIAL GUEST EXPERT: DEEPSEEK R1 (Strategic Botanist). 
+                Pay special attention to its logical reasoning and scientific data cross-referencing.
 
 ${validOpinions.map((op, i) => `EXPERT ${i + 1} (${op.model}): ${op.content}`).join('\n\n')}
 
 CRITICAL INSTRUCTIONS:
-1. Compare all expert findings and create a unified identification
-2. If experts agree, output with HIGH confidence (95%+)
-3. If experts disagree, use your advanced knowledge to determine the correct species
-4. EXPLAIN the scientific name (Etymology) - connect Latin/Greek roots to visual traits
-5. Provide COMPLETE nomenclature (Scientific name + Hindi + Regional + Trade names)
-6. **MANDATORY**: Include a [GENERATE: ...] tag with ultra-detailed botanical illustration prompt
-   - The [GENERATE] tag MUST describe the identified plant with maximum botanical detail
-   - Include leaf venation, flower anatomy, growth habit, accurate colors
-   - Example: [GENERATE: ultra high resolution botanical illustration of Monstera deliciosa showing fenestrated leaves with pinnate venation, aerial roots, and climbing growth habit]
+1. Compare all expert findings and create a unified identification.
+2. If DeepSeek contradicts the Vision models, analyze WHY (did the text description match the science better?).
+3. Output with HIGH confidence.
+4. EXPLAIN the scientific name (Etymology).
+5. Provide COMPLETE nomenclature (Scientific + Hindi + Regional).
+6. **MANDATORY**: Include a [GENERATE: ...] tag with ultra-detailed botanical illustration prompt.
 
 REMEMBER: Your response must include BOTH the identification analysis AND the [GENERATE] tag for visualization!`;
 
@@ -2979,8 +3000,16 @@ REMEMBER: Your response must include BOTH the identification analysis AND the [G
                 result = { ok: false };
             }
         } else {
+            // Text-Only Flow: Use DeepSeek as a backup or alternate? 
+            // Let's stick to Primary Groq for speed, but add DeepSeek as the FIRST fallback for text.
             console.log(`[AI Doctor] Attempting Primary Groq Model: ${model}`);
             result = await callGroq(model);
+
+            // If Groq text fails, use DeepSeek immediately
+            if (!result.ok) {
+                console.log("[AI Doctor] Primary text failed. Calling DeepSeek R1 via OpenRouter...");
+                result = await callOpenRouter("deepseek/deepseek-r1:free");
+            }
         }
 
         // --- TRIPLE-STAGE FALLBACK LOGIC (GROQ INTERNAL) ---
