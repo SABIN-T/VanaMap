@@ -22,6 +22,15 @@ import('./utils/pwa').then(({ pwaManager }) => {
   console.warn('[App] PWA Manager failed to load:', error);
 });
 
+// Initialize offline support for fast loading on any network
+import('./utils/offlineSupport').then(({ registerServiceWorker, requestPersistentStorage }) => {
+  registerServiceWorker();
+  requestPersistentStorage();
+  console.log('[App] Offline support initialized');
+}).catch((error) => {
+  console.warn('[App] Offline support failed:', error);
+});
+
 // Global handler for Vite dynamic import errors (Mismatch after new deployment)
 window.addEventListener('unhandledrejection', (event) => {
   if (event.reason?.name === 'ChunkLoadError' ||
