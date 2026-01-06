@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
+import 'leaflet/dist/leaflet.css'; // CRITICAL: Import Leaflet CSS for map tiles
 import { fetchVendors, logVendorContact } from '../services/api';
 import { getDistanceFromLatLonInKm, formatDistance } from '../utils/logic';
 import type { Vendor } from '../types';
