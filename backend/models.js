@@ -77,6 +77,10 @@ const UserSchema = new mongoose.Schema({
     verified: { type: Boolean, default: false },
     verificationOTP: String,
     otpExpires: Date,
+    googleAuth: { type: Boolean, default: false },
+    profilePicture: String,
+    latitude: Number,
+    longitude: Number,
     gameLevel: { type: Number, default: 1 },
     gamePoints: { type: Number, default: 0 },
     designs: [{

@@ -1953,6 +1953,85 @@ app.post('/api/auth/check-email', async (req, res) => {
     }
 });
 
+// Google OAuth Authentication
+app.post('/api/auth/google', async (req, res) => {
+    try {
+        const { email, name, picture, role, location, phone } = req.body;
+        console.log(`[Google Auth] Request for: ${email}, role: ${role}`);
+
+        // Check if user exists
+        let user = await User.findOne({ email });
+
+        if (!user) {
+            // Create new user (skip CAPTCHA for Google users)
+            const crypto = require('crypto');
+            user = new User({
+                email,
+                name,
+                role: role || 'user',
+                password: crypto.randomBytes(16).toString('hex'), // Random password
+                verified: true, // Auto-verified via Google
+                googleAuth: true,
+                profilePicture: picture,
+                city: location?.city,
+                state: location?.state,
+                country: location?.country,
+                latitude: location?.lat,
+                longitude: location?.lng,
+                phone
+            });
+            await user.save();
+
+            // Send welcome email
+            sendWelcomeEmail(user.email, user.name, user.role);
+
+            console.log(`[Google Auth] New user created: ${email}`);
+        } else {
+            // Update existing user's Google info
+            user.googleAuth = true;
+            user.profilePicture = picture;
+            if (location) {
+                user.latitude = location.lat;
+                user.longitude = location.lng;
+                if (!user.city) user.city = location.city;
+                if (!user.state) user.state = location.state;
+                if (!user.country) user.country = location.country;
+            }
+            await user.save();
+
+            console.log(`[Google Auth] Existing user logged in: ${email}`);
+        }
+
+        // Auto-Expire Check (On Login)
+        if (user.isPremium && user.premiumExpiry && new Date() > user.premiumExpiry) {
+            console.log(`[Auth] Auto-expiring premium for ${user.email}`);
+            user.isPremium = false;
+            user.premiumType = 'none';
+            await user.save();
+        }
+
+        // Generate JWT
+        const token = jwt.sign(
+            { id: user._id, email: user.email, role: user.role },
+            JWT_SECRET,
+            { expiresIn: '7d' }
+        );
+
+        // Set cookie
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        });
+
+        res.json({ user: normalizeUser(user), token });
+    } catch (error) {
+        console.error('[Google Auth] Error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
 app.post('/api/auth/login', async (req, res) => {
     try {
         const { email, password } = req.body;
