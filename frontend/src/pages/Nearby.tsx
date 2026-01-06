@@ -429,17 +429,24 @@ out center;
 
                     <div className={styles.mapContainer}>
                         {position ? (
-                            <MapContainer center={position} zoom={11} style={{ height: '100%', width: '100%', borderRadius: '16px' }}>
+                            <MapContainer
+                                center={position}
+                                zoom={11}
+                                style={{ height: '100%', width: '100%', borderRadius: '16px', zIndex: 1 }}
+                                scrollWheelZoom={true}
+                            >
+                                {/* Primary tile server with fallbacks */}
                                 <TileLayer
                                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
                                     maxZoom={19}
-                                    crossOrigin={true}
+                                    minZoom={1}
+                                    errorTileUrl="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=="
                                 />
                                 <ChangeView center={position} />
                                 <Marker position={position} icon={L.divIcon({
                                     className: 'u-marker',
-                                    html: `<div style="background:transparent;width:30px;height:30px;display:flex;align-items:center;justify-content:center;"><div style="background:var(--color-primary);width:14px;height:14px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 15px var(--color-primary)"></div></div>`
+                                    html: `<div style="background:transparent;width:30px;height:30px;display:flex;align-items:center;justify-content:center;"><div style="background:#10b981;width:14px;height:14px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 15px #10b981"></div></div>`
                                 })}><Popup>Origin point (You)</Popup></Marker>
                                 {displayVendors.map(v => (
                                     <Marker key={v.id} position={[v.latitude, v.longitude]}>
