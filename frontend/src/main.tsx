@@ -9,7 +9,7 @@ import { HelmetProvider } from 'react-helmet-async';
 
 import { ThemeProvider } from './context/ThemeContext';
 
-const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "480996649148-rkab0dbajc5n6q2lhvjjjkog2in6oh5u.apps.googleusercontent.com";
+const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || "1962862596-913q2agm2ut7dot7dm6ml58rsvtp3adp.apps.googleusercontent.com";
 
 // Initialize PWA with advanced features
 import('./utils/pwa').then(({ pwaManager }) => {

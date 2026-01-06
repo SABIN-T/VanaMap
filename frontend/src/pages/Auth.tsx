@@ -6,12 +6,16 @@ import { useAuth } from '../context/AuthContext';
 import { Country, State, type ICountry, type IState } from 'country-state-city';
 import { toast } from 'react-hot-toast';
 import styles from './Auth.module.css';
+import { GoogleAuthButton } from '../components/auth/GoogleAuthButton';
+import { useLocationCapture } from '../hooks/useLocationCapture';
+import { googleAuth } from '../services/googleAuth';
 
 export const Auth = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [searchParams] = useSearchParams();
     const { login, signup, user, verify } = useAuth();
+    const { location: userLocation, detectLocation, isDetecting } = useLocationCapture();
 
     type AuthView = 'login' | 'signup' | 'forgot' | 'reset' | 'verify';
 
@@ -244,6 +248,56 @@ export const Auth = () => {
             toast.error(err.message || "Failed to refresh captcha", { id: tid });
         }
     };
+
+    const handleGoogleAuth = async (googleData: {
+        email: string;
+        name: string;
+        picture: string;
+        email_verified: boolean;
+    }) => {
+        const tid = toast.loading('Signing in with Google...');
+
+        try {
+            // Get current location (if available)
+            const loc = userLocation || await detectLocation();
+
+            const result = await googleAuth({
+                email: googleData.email,
+                name: googleData.name,
+                picture: googleData.picture,
+                role,
+                location: loc ? {
+                    lat: loc.lat,
+                    lng: loc.lng,
+                    city: loc.city,
+                    state: loc.state,
+                    country: loc.country
+                } : undefined,
+                phone: phone || undefined
+            });
+
+            if (result.user && result.token) {
+                // Save to localStorage
+                localStorage.setItem('user', JSON.stringify(result));
+
+                toast.success(`Welcome, ${result.user.name}!`, { id: tid });
+
+                // Navigate based on role
+                if (result.user.role === 'admin') {
+                    localStorage.setItem('adminAuthenticated', 'true');
+                    navigate('/admin', { replace: true });
+                } else if (result.user.role === 'vendor') {
+                    navigate('/vendor', { replace: true });
+                } else {
+                    navigate('/dashboard', { replace: true });
+                }
+            }
+        } catch (error: any) {
+            console.error('[Google Auth] Error:', error);
+            toast.error(error.message || 'Google sign-in failed', { id: tid });
+        }
+    };
+
 
     return (
         <div className={styles.authContainer}>
@@ -570,6 +624,15 @@ export const Auth = () => {
                             {view === 'reset' && 'Update Password'}
                         </Button>
                     )}
+
+                    {/* Google Sign-In - Only show for login and signup, not during email check */}
+                    {(view === 'login' || view === 'signup') && !isEmailChecked && view !== 'verify' && (
+                        <GoogleAuthButton
+                            role={role}
+                            onSuccess={handleGoogleAuth}
+                        />
+                    )}
+
 
                     {view === 'login' && !isEmailChecked && (
                         <div style={{ textAlign: 'center', marginTop: '1rem' }}>
