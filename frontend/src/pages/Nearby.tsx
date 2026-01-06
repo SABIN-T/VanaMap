@@ -434,19 +434,6 @@ out center;
                                 zoom={11}
                                 style={{ height: '100%', width: '100%', borderRadius: '16px', zIndex: 1 }}
                                 scrollWheelZoom={true}
-                                whenCreated={(map) => {
-                                    // Handle tile load errors
-                                    map.on('tileerror', () => {
-                                        import('../utils/autoRefresh').then(({ handleMapTileError }) => {
-                                            handleMapTileError();
-                                        });
-                                    });
-
-                                    // Reset counter on successful tile load
-                                    map.on('tileload', () => {
-                                        sessionStorage.setItem('map_tiles_loaded', 'true');
-                                    });
-                                }}
                             >
                                 {/* Multiple tile servers for reliability */}
                                 <TileLayer
@@ -464,6 +451,9 @@ out center;
                                             import('../utils/autoRefresh').then(({ handleMapTileError }) => {
                                                 handleMapTileError();
                                             });
+                                        },
+                                        tileload: () => {
+                                            sessionStorage.setItem('map_tiles_loaded', 'true');
                                         }
                                     }}
                                 />
