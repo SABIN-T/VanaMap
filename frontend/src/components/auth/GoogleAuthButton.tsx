@@ -11,7 +11,6 @@ interface GoogleAuthButtonProps {
         email_verified: boolean;
     }) => void;
     role: 'user' | 'vendor';
-    disabled?: boolean;
 }
 
 interface GoogleJWT {
@@ -22,7 +21,7 @@ interface GoogleJWT {
     sub: string;
 }
 
-export const GoogleAuthButton = ({ onSuccess, role, disabled }: GoogleAuthButtonProps) => {
+export const GoogleAuthButton = ({ onSuccess, role }: GoogleAuthButtonProps) => {
     const handleGoogleSuccess = (credentialResponse: CredentialResponse) => {
         try {
             if (!credentialResponse.credential) {

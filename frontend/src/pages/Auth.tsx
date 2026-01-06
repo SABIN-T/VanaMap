@@ -15,7 +15,7 @@ export const Auth = () => {
     const location = useLocation();
     const [searchParams] = useSearchParams();
     const { login, signup, user, verify } = useAuth();
-    const { location: userLocation, detectLocation, isDetecting } = useLocationCapture();
+    const { location: userLocation, detectLocation } = useLocationCapture();
 
     type AuthView = 'login' | 'signup' | 'forgot' | 'reset' | 'verify';
 
@@ -626,7 +626,7 @@ export const Auth = () => {
                     )}
 
                     {/* Google Sign-In - Only show for login and signup, not during email check */}
-                    {(view === 'login' || view === 'signup') && !isEmailChecked && view !== 'verify' && (
+                    {(view === 'login' || view === 'signup') && !isEmailChecked && (
                         <GoogleAuthButton
                             role={role}
                             onSuccess={handleGoogleAuth}
