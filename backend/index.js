@@ -1980,6 +1980,7 @@ app.post('/api/auth/google', async (req, res) => {
                 role: role || 'user',
                 password: crypto.randomBytes(16).toString('hex'), // Random password
                 verified: true, // Auto-verified via Google
+                emailVerified: true, // Google emails are verified
                 googleAuth: true,
                 profilePicture: picture,
                 city: location?.city,
@@ -2040,6 +2041,134 @@ app.post('/api/auth/google', async (req, res) => {
     }
 });
 
+
+// --- OTP CONTACT VERIFICATION ROUTES ---
+
+// 1. Send Contact OTP
+app.post('/api/user/send-contact-otp', auth, async (req, res) => {
+    try {
+        const { method } = req.body; // 'email' or 'phone'
+        const user = await User.findById(req.user.id);
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Check if already verified
+        if (method === 'email' && user.emailVerified) {
+            return res.status(400).json({ error: 'Email already verified' });
+        }
+        if (method === 'phone' && user.phoneVerified) {
+            return res.status(400).json({ error: 'Phone already verified' });
+        }
+
+        // Generate 6-digit OTP
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+        // Save OTP (expires in 10 minutes)
+        user.contactVerificationOTP = otp;
+        user.contactOTPExpires = new Date(Date.now() + 10 * 60 * 1000);
+        await user.save();
+
+        // Send OTP
+        if (method === 'email') {
+            const mailOptions = {
+                from: `"Vana Map" <${process.env.EMAIL_USER}>`,
+                to: user.email,
+                subject: 'VanaMap - Verify Your Contact',
+                html: `
+                    <div style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
+                        <h2>Verify Your ${method === 'email' ? 'Email' : 'Phone'}</h2>
+                        <p>Use the following code to verify your account contact details:</p>
+                        <h1 style="color: #10b981; font-size: 32px; letter-spacing: 2px;">${otp}</h1>
+                        <p>This code expires in 10 minutes.</p>
+                        <hr/>
+                        <p style="font-size: 12px; color: #666;">If you didn't request this, please ignore this email.</p>
+                    </div>
+                `
+            };
+            await transporter.sendMail(mailOptions);
+            console.log(`[OTP] Email verification code sent to ${user.email}`);
+        } else if (method === 'phone') {
+            // Placeholder for SMS integration
+            console.log(`[OTP] Phone verification code for ${user.phone}: ${otp}`);
+            // TODO: Integrate SMS provider here
+        }
+
+        res.json({
+            success: true,
+            message: `OTP sent to your ${method}`,
+            expiresIn: 600
+        });
+    } catch (error) {
+        console.error('[Contact OTP] Error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// 2. Verify Contact OTP
+app.post('/api/user/verify-contact-otp', auth, async (req, res) => {
+    try {
+        const { otp, method } = req.body; // method: 'email' or 'phone'
+        const user = await User.findById(req.user.id);
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Check OTP expiry
+        if (!user.contactOTPExpires || new Date() > user.contactOTPExpires) {
+            return res.status(400).json({ error: 'OTP expired. Please request a new one.' });
+        }
+
+        // Verify OTP
+        if (user.contactVerificationOTP !== otp) {
+            return res.status(400).json({ error: 'Invalid OTP' });
+        }
+
+        // Mark as verified
+        if (method === 'email') {
+            user.emailVerified = true;
+        } else if (method === 'phone') {
+            user.phoneVerified = true;
+            if (req.body.phone) user.phone = req.body.phone;
+        }
+
+        // Clear OTP
+        user.contactVerificationOTP = undefined;
+        user.contactOTPExpires = undefined;
+        await user.save();
+
+        res.json({
+            success: true,
+            message: `${method === 'email' ? 'Email' : 'Phone'} verified successfully`,
+            user: {
+                emailVerified: user.emailVerified,
+                phoneVerified: user.phoneVerified
+            }
+        });
+    } catch (error) {
+        console.error('[Contact Verify] Error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// 3. Check Verification Status
+app.get('/api/user/verification-status', auth, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+        if (!user) return res.status(404).json({ error: "User not found" });
+
+        res.json({
+            emailVerified: user.emailVerified || false,
+            phoneVerified: user.phoneVerified || false,
+            canAccessCart: user.emailVerified || user.phoneVerified || user.googleAuth,
+            canAccessPremium: user.emailVerified || user.phoneVerified || user.googleAuth
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
 
 app.post('/api/auth/login', async (req, res) => {
     try {
@@ -3859,6 +3988,75 @@ app.get('/api/proxy-image', async (req, res) => {
         res.status(500).json({ error: 'Failed to proxy image' });
     }
 });
+
+// --- LOCATION-BASED ANALYTICS FOR VENDORS ---
+app.get('/api/analytics/nearby-users', auth, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+        if (!user || user.role !== 'vendor') {
+            return res.status(403).json({ error: 'Vendor access only' });
+        }
+
+        // Get vendor's location
+        const vendor = await Vendor.findOne({ id: user.email });
+        if (!vendor || !vendor.latitude || !vendor.longitude) {
+            return res.status(400).json({ error: 'Vendor location not set' });
+        }
+
+        // Get all users with location data
+        const users = await User.find({
+            latitude: { $exists: true, $ne: null },
+            longitude: { $exists: true, $ne: null }
+        }).select('latitude longitude city state country createdAt');
+
+        // Calculate distance for each user
+        const calculateDistance = (lat1, lon1, lat2, lon2) => {
+            const R = 6371; // Earth's radius in km
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            return R * c;
+        };
+
+        const usersWithDistance = users.map(u => ({
+            city: u.city,
+            state: u.state,
+            country: u.country,
+            distance: calculateDistance(vendor.latitude, vendor.longitude, u.latitude, u.longitude),
+            joinedDate: u.createdAt
+        }));
+
+        // Group by distance ranges
+        const analytics = {
+            total: users.length,
+            within5km: usersWithDistance.filter(u => u.distance <= 5).length,
+            within10km: usersWithDistance.filter(u => u.distance <= 10).length,
+            within25km: usersWithDistance.filter(u => u.distance <= 25).length,
+            within50km: usersWithDistance.filter(u => u.distance <= 50).length,
+            byCity: {},
+            byState: {}
+        };
+
+        // Group by city and state
+        usersWithDistance.forEach(u => {
+            if (u.city) {
+                analytics.byCity[u.city] = (analytics.byCity[u.city] || 0) + 1;
+            }
+            if (u.state) {
+                analytics.byState[u.state] = (analytics.byState[u.state] || 0) + 1;
+            }
+        });
+
+        res.json(analytics);
+    } catch (error) {
+        console.error('[Analytics] Error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
 
 app.get('/debug-env', (req, res) => {
     // SECURITY: Do not expose full values in prod, just presence
