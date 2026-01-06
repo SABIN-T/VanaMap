@@ -100,19 +100,18 @@ cron.schedule('0 0 * * *', async () => {
 
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
-    port: 465,
-    secure: true, // Use SSL
+    port: 587,
+    secure: false, // true for 465, false for other ports
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
     },
     tls: {
-        servername: 'smtp.gmail.com',
-        rejectUnauthorized: false
+        rejectionUnauthorized: false
     },
-    connectionTimeout: 60000, // 1 minute
+    family: 4, // Force IPv4 to avoid IPv6 timeouts
+    connectionTimeout: 30000,
     greetingTimeout: 30000,
-    socketTimeout: 60000,
     pool: false, // Disable pooling for more consistent per-request connections
     logger: true,
     debug: true
