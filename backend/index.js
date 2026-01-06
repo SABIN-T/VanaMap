@@ -99,14 +99,14 @@ cron.schedule('0 0 * * *', async () => {
 });
 
 const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true,
+    host: process.env.SMTP_HOST || 'smtp.gmail.com',
+    port: parseInt(process.env.SMTP_PORT || '587'),
+    secure: process.env.SMTP_SECURE === 'true' || process.env.SMTP_PORT === '465',
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
     },
-    family: 4, // Strict IPv4 is critical
+    family: 4,
     connectionTimeout: 30000,
     greetingTimeout: 30000,
     pool: false,
@@ -114,7 +114,8 @@ const transporter = nodemailer.createTransport({
     debug: true
 });
 
-// Verify connection configuration
+// Log SMTP Config
+console.log(`[SMTP] Provider: ${process.env.SMTP_HOST || 'smtp.gmail.com (Default)'}`);
 // Verify connection configuration - DISABLED to prevent startup hang/crash on timeout
 // transporter.verify((error, success) => {
 //     if (error) {
