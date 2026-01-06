@@ -42,7 +42,7 @@ export const VerificationModal = ({ onSuccess, onClose, initialMethod = 'email',
 
             if (response.ok) {
                 setOtpSent(true);
-                toast.success(`OTP Sent! Check your ${method}.`, { id: tid });
+                toast.success(data.message || `OTP Sent! Check your ${method}.`, { id: tid });
             } else {
                 toast.error(data.error || "Failed to send OTP", { id: tid });
             }
