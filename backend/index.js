@@ -19,6 +19,7 @@ const parser = new Parser();
 const FloraIntelligence = require('./flora-intelligence');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
 
 // 🚀 PERFORMANCE: In-memory cache for frequently accessed data
 const NodeCache = require('node-cache');
@@ -319,6 +320,12 @@ app.use(session({
     secret: process.env.SESSION_SECRET || 'vanamap_secure_session_secret',
     resave: false,
     saveUninitialized: false,
+    store: MongoStore.create({
+        mongoUrl: process.env.MONGO_URI,
+        collectionName: 'sessions', // Store sessions in a separate collection
+        ttl: 24 * 60 * 60, // 1 day
+        autoRemove: 'native' // Auto-remove expired sessions
+    }),
     cookie: {
         secure: process.env.NODE_ENV === 'production',
         httpOnly: true,
