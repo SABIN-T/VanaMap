@@ -125,6 +125,34 @@ console.log(`[SMTP] Provider: ${process.env.SMTP_HOST || 'smtp.gmail.com (Defaul
 //     }
 // });
 
+// --- EMAIL SENDING WRAPPER (SMTP vs SendGrid API) ---
+const sgMail = require('@sendgrid/mail');
+if (process.env.SENDGRID_API_KEY) {
+    sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+    console.log("✅ [Email] Using SendGrid HTTP API (Bypasses SMTP Ports)");
+}
+
+const sendEmail = async (mailOptions) => {
+    if (process.env.SENDGRID_API_KEY) {
+        const msg = {
+            to: mailOptions.to,
+            from: mailOptions.from, // Ensure verified sender in SendGrid
+            subject: mailOptions.subject,
+            html: mailOptions.html,
+        };
+        try {
+            await sgMail.send(msg);
+            console.log(`[SendGrid] Sent to ${mailOptions.to}`);
+            return { messageId: 'sendgrid-api' };
+        } catch (error) {
+            console.error('[SendGrid] Error:', error.response ? error.response.body : error);
+            throw error; // Re-throw to trigger fallback logs if needed
+        }
+    } else {
+        return transporter.sendMail(mailOptions);
+    }
+};
+
 const sendResetEmail = async (email, tempPass) => {
     console.log(`ATTEMPTING TO SEND EMAIL TO: ${email} via ${process.env.EMAIL_USER}`);
     const mailOptions = {
@@ -164,9 +192,9 @@ const sendResetEmail = async (email, tempPass) => {
     };
 
     try {
-        const info = await transporter.sendMail(mailOptions);
+        await sendEmail(mailOptions);
         console.log(`Email successfully sent to: ${email}`);
-        console.log(`Response: ${info.response}`);
+        // console.log(`Response: ${info.response}`); // Wrapper might not return info for all providers
     } catch (e) {
         console.error("CRITICAL MAIL ERROR:", e.message);
         console.error("Transporter Auth:", { user: process.env.EMAIL_USER, pass: '****' });
@@ -221,7 +249,7 @@ const sendWelcomeEmail = async (email, name, role = 'user') => {
     };
 
     try {
-        await transporter.sendMail(mailOptions);
+        await sendEmail(mailOptions);
         console.log(`Welcome email sent to: ${email} (${role})`);
     } catch (e) {
         console.warn("⚠️ Welcome email skipped (SMTP blocked/timeout). This is expected on free tier.");
@@ -2085,7 +2113,7 @@ app.post('/api/user/send-contact-otp', auth, async (req, res) => {
                     </div>
                 `
             };
-            await transporter.sendMail(mailOptions);
+            await sendEmail(mailOptions);
             console.log(`[OTP] Email verification code sent to ${user.email}`);
         } else if (method === 'phone') {
             const phoneNumber = req.body.phone || user.phone;
@@ -2112,7 +2140,7 @@ app.post('/api/user/send-contact-otp', auth, async (req, res) => {
                         </div>
                     `
                 };
-                await transporter.sendMail(mailOptions);
+                await sendEmail(mailOptions);
             } catch (smsError) {
                 console.error("🚨 EMAIL FAILED TO SEND (SMTP BLOCK) 🚨");
                 console.error(`[EMERGENCY OTP] >>>> ${otp} <<<<`);
