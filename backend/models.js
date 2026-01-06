@@ -153,7 +153,7 @@ const PaymentSchema = new mongoose.Schema({
 PlantSchema.index({ name: 'text', description: 'text', type: 1 });
 PlantSchema.index({ oxygenLevel: 1 });
 PlantSchema.index({ type: 1, name: 1 }); // For filtered searches by type
-PlantSchema.index({ id: 1 }); // Fast ID lookups (compound queries)
+// Note: id field already has index from unique: true in schema definition
 
 // Speed up vendor lookups by location and inventory
 VendorSchema.index({ city: 1, state: 1 });
