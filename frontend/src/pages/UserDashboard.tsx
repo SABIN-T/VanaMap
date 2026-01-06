@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import { Button } from '../components/common/Button';
 import { ShoppingBag, MapPin, Heart, ArrowRight, Loader2, Store, Shield, Lock, Trophy, Zap, TrendingUp, Wind, Award, HelpCircle } from 'lucide-react';
+import { VerificationModal } from '../components/auth/VerificationModal';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { fetchPlants, fetchVendors, updateVendor, changePassword, fetchLeaderboard } from '../services/api';
@@ -31,6 +32,31 @@ export const UserDashboard = () => {
     });
     const [detectingLoc, setDetectingLoc] = useState(false);
     const [showCollectionModal, setShowCollectionModal] = useState(false);
+
+    // Verification State
+    const [isContactVerified, setIsContactVerified] = useState(false);
+    const [showVerifyModal, setShowVerifyModal] = useState(false);
+
+    // Check verification status
+    useEffect(() => {
+        const checkVerification = async () => {
+            if (!user) return;
+            try {
+                const savedUser = localStorage.getItem('user');
+                const token = savedUser ? JSON.parse(savedUser).token : null;
+                if (!token) return;
+
+                const res = await fetch(`${import.meta.env.VITE_API_URL || 'https://plantoxy.onrender.com/api'}/user/verification-status`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const data = await res.json();
+                setIsContactVerified(data.emailVerified || data.phoneVerified || (user as any).googleAuth);
+            } catch (e) {
+                console.error("Failed to check verification", e);
+            }
+        };
+        checkVerification();
+    }, [user]);
 
     // Redirect if not logged in - Handle purely with useEffect to avoid conditional returns before hooks
     useEffect(() => {
@@ -516,6 +542,23 @@ export const UserDashboard = () => {
                         <Lock size={18} />
                     </button>
 
+                    {!isContactVerified && (
+                        <Button
+                            onClick={() => setShowVerifyModal(true)}
+                            variant="primary"
+                            size="sm"
+                            style={{
+                                background: 'rgba(239, 68, 68, 0.1)',
+                                color: '#ef4444',
+                                border: '1px solid #ef4444',
+                                padding: '0.6rem 1.2rem',
+                                fontSize: '0.85rem'
+                            }}
+                        >
+                            Verify Account ⚠️
+                        </Button>
+                    )}
+
                     {user.role === 'vendor' && (
                         <Button onClick={() => navigate('/vendor')} variant="primary" size="sm" style={{ padding: '0.6rem 1.2rem', borderRadius: '0.75rem' }}>
                             <Store size={18} /> Shop Portal
@@ -722,6 +765,18 @@ export const UserDashboard = () => {
                         )}
                     </div>
                 </div>
+            )}
+
+            {/* VERIFICATION MODAL */}
+            {showVerifyModal && (
+                <VerificationModal
+                    onSuccess={() => {
+                        setIsContactVerified(true);
+                        setShowVerifyModal(false);
+                        toast.success("Account Verified Successfully!");
+                    }}
+                    onClose={() => setShowVerifyModal(false)}
+                />
             )}
 
         </div>
