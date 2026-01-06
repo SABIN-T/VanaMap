@@ -539,7 +539,7 @@ export const UserDashboard = () => {
                 <div className={styles.titleSection}>
                     <div className={styles.welcomeTag}>VANAMAP ECOSYSTEM</div>
                     <h1 className={styles.dashboardTitle}>
-                        Hello, {user.name.split(' ')[0]}!
+                        Hello, {(user.name || 'Friend').split(' ')[0]}!
                     </h1>
                 </div>
 
