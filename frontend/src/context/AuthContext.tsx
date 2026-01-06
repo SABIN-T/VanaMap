@@ -29,6 +29,7 @@ interface AuthContextType {
     toggleFavorite: (plantId: string) => void;
     updateUser: (updates: Partial<User>) => void;
     refreshUser: () => Promise<void>;
+    setAuthSession: (data: User) => void;
     loading: boolean;
 }
 
@@ -254,8 +255,13 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         });
     };
 
+    const setAuthSession = (data: User) => {
+        setUser(data);
+        localStorage.setItem('user', JSON.stringify(data));
+    };
+
     return (
-        <AuthContext.Provider value={{ user, login, signup, googleLogin, logout, verify, toggleFavorite, updateUser, refreshUser, loading }}>
+        <AuthContext.Provider value={{ user, login, signup, googleLogin, logout, verify, toggleFavorite, updateUser, refreshUser, setAuthSession, loading }}>
             {children}
         </AuthContext.Provider>
     );

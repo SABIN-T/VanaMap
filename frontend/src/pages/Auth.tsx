@@ -14,7 +14,7 @@ export const Auth = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [searchParams] = useSearchParams();
-    const { login, signup, user, verify } = useAuth();
+    const { login, signup, user, verify, setAuthSession } = useAuth();
     const { location: userLocation, detectLocation } = useLocationCapture();
 
     type AuthView = 'login' | 'signup' | 'forgot' | 'reset' | 'verify';
@@ -277,20 +277,12 @@ export const Auth = () => {
             });
 
             if (result.user && result.token) {
-                // Save to localStorage
-                localStorage.setItem('user', JSON.stringify(result));
+                // Update Context (Local Storage handled by context)
+                // This triggers the main useEffect to redirect based on role
+                setAuthSession(result);
 
                 toast.success(`Welcome, ${result.user.name}!`, { id: tid });
-
-                // Navigate based on role
-                if (result.user.role === 'admin') {
-                    localStorage.setItem('adminAuthenticated', 'true');
-                    navigate('/admin', { replace: true });
-                } else if (result.user.role === 'vendor') {
-                    navigate('/vendor', { replace: true });
-                } else {
-                    navigate('/dashboard', { replace: true });
-                }
+                // No manual navigate needed - useEffect [user] handles it
             }
         } catch (error: any) {
             console.error('[Google Auth] Error:', error);
