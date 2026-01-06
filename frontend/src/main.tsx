@@ -31,6 +31,14 @@ import('./utils/offlineSupport').then(({ registerServiceWorker, requestPersisten
   console.warn('[App] Offline support failed:', error);
 });
 
+// Initialize auto-refresh for failed images/maps
+import('./utils/autoRefresh').then(({ setupGlobalImageErrorHandler }) => {
+  setupGlobalImageErrorHandler();
+  console.log('[App] Auto-refresh handler initialized');
+}).catch((error) => {
+  console.warn('[App] Auto-refresh setup failed:', error);
+});
+
 // Global handler for Vite dynamic import errors (Mismatch after new deployment)
 window.addEventListener('unhandledrejection', (event) => {
   if (event.reason?.name === 'ChunkLoadError' ||
