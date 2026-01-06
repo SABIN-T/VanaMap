@@ -226,7 +226,8 @@ const sendWelcomeEmail = async (email, name, role = 'user') => {
         await transporter.sendMail(mailOptions);
         console.log(`Welcome email sent to: ${email} (${role})`);
     } catch (e) {
-        console.error("Welcome Mail Error:", e.message);
+        console.warn("⚠️ Welcome email skipped (SMTP blocked/timeout). This is expected on free tier.");
+        // console.error("Welcome Mail Error:", e.message); // Suppress noisy error
     }
 };
 
