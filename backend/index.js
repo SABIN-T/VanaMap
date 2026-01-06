@@ -17,6 +17,8 @@ const cron = require('node-cron');
 const Parser = require('rss-parser');
 const parser = new Parser();
 const FloraIntelligence = require('./flora-intelligence');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
 
 // 🚀 PERFORMANCE: In-memory cache for frequently accessed data
 const NodeCache = require('node-cache');
@@ -312,11 +314,28 @@ app.use(express.json({ limit: '100mb' })); // Body parser
 app.use(mongoSanitize()); // Data sanitization against NoSQL query injection
 app.use(xss()); // Data sanitization against XSS
 app.use(express.urlencoded({ limit: '100mb', extended: true }));
+app.use(cookieParser());
+app.use(session({
+    secret: process.env.SESSION_SECRET || 'vanamap_secure_session_secret',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        secure: process.env.NODE_ENV === 'production',
+        httpOnly: true,
+        maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    }
+}));
 
 // --- MIDDLEWARES ---
 
 const auth = (req, res, next) => {
-    const token = req.header('Authorization')?.replace('Bearer ', '');
+    let token = req.header('Authorization')?.replace('Bearer ', '');
+
+    // Fallback to cookie if header is missing
+    if (!token && req.cookies && req.cookies.token) {
+        token = req.cookies.token;
+    }
+
     if (!token) return res.status(401).json({ error: 'Access denied. No token provided.' });
 
     try {
@@ -356,6 +375,16 @@ const generalLimiter = rateLimit({
     windowMs: 60 * 60 * 1000, // 1 hour
     max: 500, // Limit each IP to 500 requests per window
     message: { error: "System under heavy load. Please try again later." }
+});
+
+app.get('/api/test-session', (req, res) => {
+    if (req.session.views) {
+        req.session.views++;
+        res.send(`Views: ${req.session.views}. Cookie expires in: ${req.session.cookie.maxAge / 1000}s`);
+    } else {
+        req.session.views = 1;
+        res.send('Welcome to the session demo. Refresh page!');
+    }
 });
 
 app.use('/api/', generalLimiter);
@@ -1869,6 +1898,13 @@ app.post('/api/auth/verify-otp', async (req, res) => {
         sendWelcomeEmail(user.email, user.name, user.role);
 
         const token = jwt.sign({ id: user._id, email: user.email, role: user.role }, JWT_SECRET, { expiresIn: '7d' });
+
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+        });
+
         res.json({ user: normalizeUser(user), token, message: "Verification Successful!" });
     } catch (err) {
         res.status(401).json({ error: "Session expired or invalid. Please sign up again." });
@@ -1917,9 +1953,17 @@ app.post('/api/auth/login', async (req, res) => {
         // Admin login fallback with environment credentials
         if (identifier === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASS) {
             console.log(`[AUTH] Login success: ${identifier} (admin)`);
+            const token = jwt.sign({ email: identifier, role: 'admin' }, JWT_SECRET, { expiresIn: '7d' });
+
+            res.cookie('token', token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+            });
+
             return res.json({
                 user: { name: 'Master Admin', email: identifier, role: 'admin', favorites: [], cart: [] },
-                token: jwt.sign({ email: identifier, role: 'admin' }, JWT_SECRET, { expiresIn: '7d' })
+                token
             });
         }
 
@@ -1957,6 +2001,13 @@ app.post('/api/auth/login', async (req, res) => {
 
         console.log(`[AUTH] Login success: ${identifier} (${user.role})`);
         const token = jwt.sign({ id: user._id, email: user.email, role: user.role }, JWT_SECRET, { expiresIn: '7d' });
+
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+        });
+
         res.json({ user: normalizeUser(user), token });
     } catch (err) {
         res.status(500).json({ error: err.message });
