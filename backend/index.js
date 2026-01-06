@@ -100,17 +100,14 @@ cron.schedule('0 0 * * *', async () => {
 
 const transporter = nodemailer.createTransport({
     host: 'smtp.gmail.com',
-    port: 587,
-    secure: false,
+    port: 465,
+    secure: true,
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
     },
-    tls: {
-        rejectUnauthorized: false
-    },
-    family: 4, // Strict IPv4 for Render
-    connectionTimeout: 60000,
+    family: 4, // Strict IPv4 is critical
+    connectionTimeout: 30000,
     greetingTimeout: 30000,
     pool: false,
     logger: true,
