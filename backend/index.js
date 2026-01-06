@@ -309,7 +309,16 @@ const JWT_SECRET = process.env.JWT_SECRET || 'vanamap_super_secret_key_2025';
 // Security & Performance
 app.set('trust proxy', 1); // Required for Render/Heroku to get real client IP and satisfy express-rate-limit validation
 app.use(compression()); // Compress all responses
-app.use(cors());
+app.use(cors({
+    origin: [
+        'https://www.vanamap.online',
+        'https://vanamap.online',
+        'https://vanamap.vercel.app',
+        'http://localhost:5173',
+        'http://localhost:3000'
+    ],
+    credentials: true
+}));
 app.use(helmet({
     contentSecurityPolicy: false,
     crossOriginEmbedderPolicy: false
