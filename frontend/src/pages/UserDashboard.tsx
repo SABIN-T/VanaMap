@@ -50,6 +50,7 @@ export const UserDashboard = () => {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 const data = await res.json();
+                console.log("[VERIFY DEBUG] Status:", data);
                 setIsContactVerified(data.emailVerified || data.phoneVerified || (user as any).googleAuth);
             } catch (e) {
                 console.error("Failed to check verification", e);
@@ -542,7 +543,8 @@ export const UserDashboard = () => {
                         <Lock size={18} />
                     </button>
 
-                    {!isContactVerified && (
+                    {/* DEBUG: Force show button (removed !isContactVerified check) */}
+                    {(true || !isContactVerified) && (
                         <Button
                             onClick={() => setShowVerifyModal(true)}
                             variant="primary"
