@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import { Button } from '../components/common/Button';
-import { ShoppingBag, MapPin, Heart, ArrowRight, Loader2, Store, Shield, Lock, Trophy, Zap, TrendingUp, Wind, Award, HelpCircle } from 'lucide-react';
+import { ShoppingBag, MapPin, Heart, ArrowRight, Loader2, Store, Shield, Lock, Trophy, Zap, TrendingUp, Wind, Award, HelpCircle, CheckCircle } from 'lucide-react';
 import { VerificationModal } from '../components/auth/VerificationModal';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -34,8 +34,10 @@ export const UserDashboard = () => {
     const [showCollectionModal, setShowCollectionModal] = useState(false);
 
     // Verification State
-    const [isContactVerified, setIsContactVerified] = useState(false);
+    // Verification State
+    const [verStatus, setVerStatus] = useState({ email: false, phone: false });
     const [showVerifyModal, setShowVerifyModal] = useState(false);
+    const isFullyVerified = verStatus.email && verStatus.phone;
 
     // Check verification status
     useEffect(() => {
@@ -51,7 +53,10 @@ export const UserDashboard = () => {
                 });
                 const data = await res.json();
                 console.log("[VERIFY DEBUG] Status:", data);
-                setIsContactVerified(data.emailVerified || data.phoneVerified || (user as any).googleAuth);
+
+                // If Google Auth, assume email is verified
+                const emailVerified = data.emailVerified || (user as any).googleAuth;
+                setVerStatus({ email: !!emailVerified, phone: !!data.phoneVerified });
             } catch (e) {
                 console.error("Failed to check verification", e);
             }
@@ -543,8 +548,16 @@ export const UserDashboard = () => {
                         <Lock size={18} />
                     </button>
 
-                    {/* DEBUG: Force show button (removed !isContactVerified check) */}
-                    {(true || !isContactVerified) && (
+                    {isFullyVerified ? (
+                        <div style={{
+                            display: 'flex', alignItems: 'center', gap: '6px',
+                            background: 'rgba(16, 185, 129, 0.1)', color: '#10b981',
+                            padding: '0.6rem 1rem', borderRadius: '0.75rem', fontSize: '0.85rem', fontWeight: 600,
+                            border: '1px solid rgba(16, 185, 129, 0.2)'
+                        }}>
+                            <CheckCircle size={16} /> Verified
+                        </div>
+                    ) : (
                         <Button
                             onClick={() => setShowVerifyModal(true)}
                             variant="primary"
@@ -553,11 +566,11 @@ export const UserDashboard = () => {
                                 background: 'rgba(239, 68, 68, 0.1)',
                                 color: '#ef4444',
                                 border: '1px solid #ef4444',
-                                padding: '0.6rem 1.2rem',
+                                padding: '0.6rem 1rem',
                                 fontSize: '0.85rem'
                             }}
                         >
-                            Verify Account ⚠️
+                            Verify {verStatus.email ? 'Phone' : 'Account'} ⚠️
                         </Button>
                     )}
 
@@ -773,8 +786,7 @@ export const UserDashboard = () => {
             {showVerifyModal && (
                 <VerificationModal
                     onSuccess={() => {
-                        setIsContactVerified(true);
-                        setShowVerifyModal(false);
+                        window.location.reload();
                         toast.success("Account Verified Successfully!");
                     }}
                     onClose={() => setShowVerifyModal(false)}
