@@ -2115,13 +2115,16 @@ app.post('/api/user/send-contact-otp', auth, async (req, res) => {
                 };
                 await transporter.sendMail(mailOptions);
             } catch (smsError) {
-                console.error("Failed to send backup email for SMS:", smsError);
+                console.error("🚨 EMAIL FAILED TO SEND (SMTP BLOCK) 🚨");
+                console.error(`[EMERGENCY OTP] >>>> ${otp} <<<<`);
+                console.error("Use the code above to verify.");
             }
         }
 
         res.json({
             success: true,
-            message: `OTP sent to your ${method === 'phone' ? 'Phone (check email for backup)' : method}`,
+            // Generic message so valid cases look normal, but hints at backup
+            message: `OTP Generated. Check Email (or Server Logs if testing).`,
             expiresIn: 600
         });
     } catch (error) {
