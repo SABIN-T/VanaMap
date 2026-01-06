@@ -35,7 +35,10 @@ export const VerificationModal = ({ onSuccess, onClose, initialMethod = 'email',
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify({ method })
+                body: JSON.stringify({
+                    method,
+                    phone: method === 'phone' ? phone : undefined
+                })
             });
 
             const data = await response.json();
