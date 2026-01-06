@@ -1436,35 +1436,39 @@ app.get('/api/news', async (req, res) => {
 // 🚀 NEW: Fast light endpoint for initial page load (minimal data)
 app.get('/api/plants/light', async (req, res) => {
     try {
-        // Check cache first
-        const cacheKey = 'light_plants';
+        // Check cache first - separate cache for mobile vs desktop
+        const isMobile = req.headers['user-agent']?.toLowerCase().includes('mobile');
+        const cacheKey = isMobile ? 'light_plants_mobile' : 'light_plants';
         const cachedLightPlants = cache.get(cacheKey);
 
         if (cachedLightPlants) {
-            console.log(`GET /api/plants/light - Served from cache (${cachedLightPlants.length} plants)`);
+            console.log(`GET /api/plants/light - Served from cache (${cachedLightPlants.length} plants, mobile: ${isMobile})`);
             return res.json(cachedLightPlants);
         }
 
-        console.log("GET /api/plants/light - Fetching minimal data...");
+        console.log(`GET /api/plants/light - Fetching minimal data (mobile: ${isMobile})...`);
 
-        // Get first 6 plants with only essential fields for INSTANT display
+        // Mobile: 4 plants with tiny images (200px), Desktop: 6 plants (300px)
+        const limit = isMobile ? 4 : 6;
+        const imageSize = isMobile ? 200 : 300;
+
         const plants = await Plant.find()
             .select('id name scientificName type imageUrl price')
-            .limit(6)
+            .limit(limit)
             .lean();
 
         // Optimize image URLs for fast loading
         const optimizedPlants = plants.map(p => ({
             ...p,
             imageUrl: p.imageUrl && p.imageUrl.includes('cloudinary.com') && !p.imageUrl.includes('f_auto')
-                ? p.imageUrl.replace('/upload/', '/upload/f_auto,q_auto,w_300,c_limit/')
+                ? p.imageUrl.replace('/upload/', `/upload/f_auto,q_auto,w_${imageSize},c_limit/`)
                 : p.imageUrl
         }));
 
         // Cache for 30 minutes (aggressive caching for speed)
         cache.set(cacheKey, optimizedPlants, 1800);
 
-        console.log(`GET /api/plants/light - Returning ${optimizedPlants.length} optimized plants`);
+        console.log(`GET /api/plants/light - Returning ${optimizedPlants.length} optimized plants (${imageSize}px)`);
         res.json(optimizedPlants);
     } catch (err) {
         console.error("GET /api/plants/light ERROR:", err);

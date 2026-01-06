@@ -39,7 +39,7 @@ export const Home = () => {
     const [citySearch, setCitySearch] = useState('');
     const [suggestions, setSuggestions] = useState<any[]>([]);
     const [showSuggestions, setShowSuggestions] = useState(false);
-    const [visibleLimit, setVisibleLimit] = useState(() => window.innerWidth < 768 ? 4 : 10);
+    const [visibleLimit, setVisibleLimit] = useState(() => window.innerWidth < 768 ? 4 : 8); // Reduced for mobile
     const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
     const [showInstallModal, setShowInstallModal] = useState(false);
 
