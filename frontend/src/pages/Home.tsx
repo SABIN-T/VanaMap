@@ -117,9 +117,22 @@ export const Home = () => {
                     return;
                 }
 
-                // Cache MISS - Fetch from API
-                console.log('[Cache] ❌ Cache miss - fetching from API');
+                // Cache MISS - Use PROGRESSIVE LOADING for new users
+                console.log('[Cache] ❌ Cache miss - using progressive loading...');
 
+                // 🚀 STEP 1: Fast initial load (12 plants, optimized)
+                const { fetchPlantsLight } = await import('../services/api');
+                const lightPlants = await fetchPlantsLight();
+
+                if (lightPlants.length > 0) {
+                    console.log('[Progressive] ⚡ Showing first 12 plants instantly!');
+                    setPlants(lightPlants);
+                    setPlantsLoading(false); // Show UI immediately!
+                    setIsSlowLoading(false);
+                    clearTimeout(timer);
+                }
+
+                // 🚀 STEP 2: Load full data in background
                 const [data, vendorData] = await Promise.all([
                     fetchPlants(),
                     fetchVendors()
@@ -128,7 +141,7 @@ export const Home = () => {
                 // Store in cache for next time
                 plantCache.set('/api/plants', data, {});
                 apiCache.set('/api/vendors', vendorData, {});
-                console.log('[Cache] 💾 Data cached for future use');
+                console.log('[Cache] 💾 Full data cached for future use');
 
                 setVendors(vendorData);
                 if (data.length === 0) {

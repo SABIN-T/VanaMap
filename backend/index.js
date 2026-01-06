@@ -1433,25 +1433,104 @@ app.get('/api/news', async (req, res) => {
 
 // --- PLANT ROUTES ---
 
+// 🚀 NEW: Fast light endpoint for initial page load (minimal data)
+app.get('/api/plants/light', async (req, res) => {
+    try {
+        // Check cache first
+        const cacheKey = 'light_plants';
+        const cachedLightPlants = cache.get(cacheKey);
+
+        if (cachedLightPlants) {
+            console.log(`GET /api/plants/light - Served from cache (${cachedLightPlants.length} plants)`);
+            return res.json(cachedLightPlants);
+        }
+
+        console.log("GET /api/plants/light - Fetching minimal data...");
+
+        // Get first 12 plants with only essential fields for instant display
+        const plants = await Plant.find()
+            .select('id name scientificName type imageUrl price')
+            .limit(12)
+            .lean();
+
+        // Optimize image URLs for fast loading
+        const optimizedPlants = plants.map(p => ({
+            ...p,
+            imageUrl: p.imageUrl && p.imageUrl.includes('cloudinary.com') && !p.imageUrl.includes('f_auto')
+                ? p.imageUrl.replace('/upload/', '/upload/f_auto,q_auto,w_400,c_limit/')
+                : p.imageUrl
+        }));
+
+        // Cache for 10 minutes
+        cache.set(cacheKey, optimizedPlants, 600);
+
+        console.log(`GET /api/plants/light - Returning ${optimizedPlants.length} optimized plants`);
+        res.json(optimizedPlants);
+    } catch (err) {
+        console.error("GET /api/plants/light ERROR:", err);
+        res.status(500).json({ error: "DB Error: " + err.message });
+    }
+});
+
+
 app.get('/api/plants', async (req, res) => {
     try {
-        // 🚀 PERFORMANCE: Check cache first
-        const cacheKey = 'all_plants';
+        // 🚀 PERFORMANCE: Support pagination
+        const page = parseInt(req.query.page) || 0;
+        const limit = parseInt(req.query.limit) || 0; // 0 means no limit (get all)
+        const skip = page > 0 ? (page - 1) * limit : 0;
+
+        // 🚀 PERFORMANCE: Check cache first (only for full requests without pagination)
+        const cacheKey = page === 0 ? 'all_plants' : `plants_page_${page}_limit_${limit}`;
         const cachedPlants = cache.get(cacheKey);
 
         if (cachedPlants) {
-            console.log(`GET /api/plants - Served from cache (${cachedPlants.length} plants)`);
+            console.log(`GET /api/plants - Served from cache (${cachedPlants.length || cachedPlants.plants?.length} plants)`);
             return res.json(cachedPlants);
         }
 
-        console.log("GET /api/plants - Fetching from database...");
-        const plants = await Plant.find().lean(); // .lean() for better performance
-        console.log(`GET /api/plants - Found ${plants.length} plants`);
+        console.log(`GET /api/plants - Fetching from database (page: ${page}, limit: ${limit})...`);
+
+        let query = Plant.find().lean(); // .lean() for better performance
+
+        if (limit > 0) {
+            query = query.limit(limit).skip(skip);
+        }
+
+        const plants = await query;
+
+        // Optimize all image URLs
+        const optimizedPlants = plants.map(p => ({
+            ...p,
+            imageUrl: p.imageUrl && p.imageUrl.includes('cloudinary.com') && !p.imageUrl.includes('f_auto')
+                ? p.imageUrl.replace('/upload/', '/upload/f_auto,q_auto,w_600,c_limit/')
+                : p.imageUrl
+        }));
+
+        console.log(`GET /api/plants - Found ${optimizedPlants.length} plants`);
+
+        // If paginated, return with metadata
+        if (page > 0 && limit > 0) {
+            const total = await Plant.countDocuments();
+            const response = {
+                plants: optimizedPlants,
+                pagination: {
+                    page,
+                    limit,
+                    total,
+                    pages: Math.ceil(total / limit),
+                    hasMore: skip + optimizedPlants.length < total
+                }
+            };
+            // Cache for 5 minutes
+            cache.set(cacheKey, response, 300);
+            return res.json(response);
+        }
 
         // Cache for 5 minutes
-        cache.set(cacheKey, plants, 300);
+        cache.set(cacheKey, optimizedPlants, 300);
 
-        res.json(plants);
+        res.json(optimizedPlants);
     } catch (err) {
         console.error("GET /api/plants ERROR:", err);
         res.status(500).json({ error: "DB Error: " + err.message, stack: process.env.NODE_ENV === 'development' ? err.stack : undefined });

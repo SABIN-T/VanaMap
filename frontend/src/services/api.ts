@@ -33,6 +33,22 @@ export const fetchPlants = async (): Promise<Plant[]> => {
     }
 };
 
+// 🚀 Fast light endpoint for initial load (12 plants, minimal data, optimized images)
+export const fetchPlantsLight = async (): Promise<Plant[]> => {
+    try {
+        const data = await cachedFetch(
+            `${API_URL}/plants/light`,
+            { method: 'GET' },
+            {},
+            plantCache
+        );
+        return data;
+    } catch (error) {
+        console.error("Error fetching light plants, falling back:", error);
+        return fetchPlants();
+    }
+};
+
 export const fetchUsers = async (): Promise<unknown[]> => {
     try {
         const response = await fetch(`${API_URL}/users`, { headers: getHeaders() });

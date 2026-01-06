@@ -152,10 +152,13 @@ const PaymentSchema = new mongoose.Schema({
 // Speed up plant searches by name, type, and medical values
 PlantSchema.index({ name: 'text', description: 'text', type: 1 });
 PlantSchema.index({ oxygenLevel: 1 });
+PlantSchema.index({ type: 1, name: 1 }); // For filtered searches by type
+PlantSchema.index({ id: 1 }); // Fast ID lookups (compound queries)
 
-// Speed up vendor lookups by location
+// Speed up vendor lookups by location and inventory
 VendorSchema.index({ city: 1, state: 1 });
 VendorSchema.index({ verified: 1 });
+VendorSchema.index({ verified: 1, 'inventory.plantId': 1 }); // Shop queries with stock checks
 
 // Speed up login and auth checks
 // UserSchema.index({ email: 1 }); // Already defined in schema with unique: true
