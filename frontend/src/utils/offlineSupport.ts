@@ -22,7 +22,7 @@ export const registerServiceWorker = () => {
 // Preload critical images for instant display
 export const preloadCriticalImages = async (imageUrls: string[]) => {
     const promises = imageUrls.slice(0, 6).map((url) => {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             const img = new Image();
             img.onload = () => resolve(url);
             img.onerror = () => resolve(url); // Don't fail, just continue
@@ -36,7 +36,6 @@ export const preloadCriticalImages = async (imageUrls: string[]) => {
 
 // Preload map tiles for current location
 export const preloadMapTiles = (lat: number, lng: number, zoom: number = 13) => {
-    const tileSize = 256;
     const numTiles = Math.pow(2, zoom);
 
     // Calculate tile coordinates
