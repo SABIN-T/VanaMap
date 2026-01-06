@@ -550,12 +550,13 @@ export const UserDashboard = () => {
 
                     {isFullyVerified ? (
                         <div style={{
-                            display: 'flex', alignItems: 'center', gap: '6px',
-                            background: 'rgba(16, 185, 129, 0.1)', color: '#10b981',
-                            padding: '0.6rem 1rem', borderRadius: '0.75rem', fontSize: '0.85rem', fontWeight: 600,
-                            border: '1px solid rgba(16, 185, 129, 0.2)'
+                            display: 'flex', alignItems: 'center', gap: '8px',
+                            background: 'rgba(16, 185, 129, 0.15)', color: '#10b981',
+                            padding: '0.6rem 1rem', borderRadius: '0.75rem', fontSize: '0.8rem', fontWeight: 500,
+                            border: '1px solid rgba(16, 185, 129, 0.3)', maxWidth: '300px', lineHeight: '1.2'
                         }}>
-                            <CheckCircle size={16} /> Verified
+                            <CheckCircle size={24} style={{ flexShrink: 0 }} />
+                            <span>Complete! You can buy now and access Heaven by paying accordingly.</span>
                         </div>
                     ) : (
                         <Button
@@ -785,6 +786,8 @@ export const UserDashboard = () => {
             {/* VERIFICATION MODAL */}
             {showVerifyModal && (
                 <VerificationModal
+                    initialMethod={verStatus.email ? 'phone' : 'email'}
+                    disableEmail={verStatus.email}
                     onSuccess={() => {
                         window.location.reload();
                         toast.success("Account Verified Successfully!");

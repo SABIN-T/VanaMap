@@ -6,10 +6,12 @@ import { Button } from '../common/Button';
 interface VerificationModalProps {
     onSuccess: () => void;
     onClose: () => void;
+    initialMethod?: 'email' | 'phone';
+    disableEmail?: boolean;
 }
 
-export const VerificationModal = ({ onSuccess, onClose }: VerificationModalProps) => {
-    const [method, setMethod] = useState<'email' | 'phone'>('email');
+export const VerificationModal = ({ onSuccess, onClose, initialMethod = 'email', disableEmail = false }: VerificationModalProps) => {
+    const [method, setMethod] = useState<'email' | 'phone'>(disableEmail ? 'phone' : initialMethod);
     const [otp, setOtp] = useState('');
     const [otpSent, setOtpSent] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -117,39 +119,41 @@ export const VerificationModal = ({ onSuccess, onClose }: VerificationModalProps
 
                 {!otpSent ? (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                        <p style={{ color: 'white', fontSize: '0.95rem', fontWeight: 500 }}>Select Verification Method:</p>
+                        {!disableEmail && <p style={{ color: 'white', fontSize: '0.95rem', fontWeight: 500 }}>Select Verification Method:</p>}
 
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                            <button
-                                onClick={() => setMethod('email')}
-                                style={{
-                                    padding: '1rem', borderRadius: '12px', border: '1px solid',
-                                    borderColor: method === 'email' ? '#10b981' : 'rgba(255,255,255,0.1)',
-                                    background: method === 'email' ? 'rgba(16, 185, 129, 0.1)' : 'transparent',
-                                    color: method === 'email' ? '#10b981' : '#94a3b8',
-                                    display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem',
-                                    cursor: 'pointer', transition: 'all 0.2s'
-                                }}
-                            >
-                                <Mail size={24} />
-                                <span style={{ fontSize: '0.9rem', fontWeight: 600 }}>Email</span>
-                            </button>
+                        {!disableEmail && (
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                                <button
+                                    onClick={() => setMethod('email')}
+                                    style={{
+                                        padding: '1rem', borderRadius: '12px', border: '1px solid',
+                                        borderColor: method === 'email' ? '#10b981' : 'rgba(255,255,255,0.1)',
+                                        background: method === 'email' ? 'rgba(16, 185, 129, 0.1)' : 'transparent',
+                                        color: method === 'email' ? '#10b981' : '#94a3b8',
+                                        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem',
+                                        cursor: 'pointer', transition: 'all 0.2s'
+                                    }}
+                                >
+                                    <Mail size={24} />
+                                    <span style={{ fontSize: '0.9rem', fontWeight: 600 }}>Email</span>
+                                </button>
 
-                            <button
-                                onClick={() => setMethod('phone')}
-                                style={{
-                                    padding: '1rem', borderRadius: '12px', border: '1px solid',
-                                    borderColor: method === 'phone' ? '#10b981' : 'rgba(255,255,255,0.1)',
-                                    background: method === 'phone' ? 'rgba(16, 185, 129, 0.1)' : 'transparent',
-                                    color: method === 'phone' ? '#10b981' : '#94a3b8',
-                                    display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem',
-                                    cursor: 'pointer', transition: 'all 0.2s'
-                                }}
-                            >
-                                <Phone size={24} />
-                                <span style={{ fontSize: '0.9rem', fontWeight: 600 }}>Phone</span>
-                            </button>
-                        </div>
+                                <button
+                                    onClick={() => setMethod('phone')}
+                                    style={{
+                                        padding: '1rem', borderRadius: '12px', border: '1px solid',
+                                        borderColor: method === 'phone' ? '#10b981' : 'rgba(255,255,255,0.1)',
+                                        background: method === 'phone' ? 'rgba(16, 185, 129, 0.1)' : 'transparent',
+                                        color: method === 'phone' ? '#10b981' : '#94a3b8',
+                                        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem',
+                                        cursor: 'pointer', transition: 'all 0.2s'
+                                    }}
+                                >
+                                    <Phone size={24} />
+                                    <span style={{ fontSize: '0.9rem', fontWeight: 600 }}>Phone</span>
+                                </button>
+                            </div>
+                        )}
 
                         {method === 'phone' && (
                             <input
