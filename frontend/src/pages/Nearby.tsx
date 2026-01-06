@@ -435,13 +435,17 @@ out center;
                                 style={{ height: '100%', width: '100%', borderRadius: '16px', zIndex: 1 }}
                                 scrollWheelZoom={true}
                             >
-                                {/* Primary tile server with fallbacks */}
+                                {/* Multiple tile servers for reliability */}
                                 <TileLayer
-                                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                    url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
                                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
                                     maxZoom={19}
                                     minZoom={1}
-                                    errorTileUrl="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg=="
+                                    crossOrigin="anonymous"
+                                    tileSize={256}
+                                    updateWhenIdle={false}
+                                    updateWhenZooming={false}
+                                    keepBuffer={2}
                                 />
                                 <ChangeView center={position} />
                                 <Marker position={position} icon={L.divIcon({
