@@ -1447,22 +1447,22 @@ app.get('/api/plants/light', async (req, res) => {
 
         console.log("GET /api/plants/light - Fetching minimal data...");
 
-        // Get first 12 plants with only essential fields for instant display
+        // Get first 6 plants with only essential fields for INSTANT display
         const plants = await Plant.find()
             .select('id name scientificName type imageUrl price')
-            .limit(12)
+            .limit(6)
             .lean();
 
         // Optimize image URLs for fast loading
         const optimizedPlants = plants.map(p => ({
             ...p,
             imageUrl: p.imageUrl && p.imageUrl.includes('cloudinary.com') && !p.imageUrl.includes('f_auto')
-                ? p.imageUrl.replace('/upload/', '/upload/f_auto,q_auto,w_400,c_limit/')
+                ? p.imageUrl.replace('/upload/', '/upload/f_auto,q_auto,w_300,c_limit/')
                 : p.imageUrl
         }));
 
-        // Cache for 10 minutes
-        cache.set(cacheKey, optimizedPlants, 600);
+        // Cache for 30 minutes (aggressive caching for speed)
+        cache.set(cacheKey, optimizedPlants, 1800);
 
         console.log(`GET /api/plants/light - Returning ${optimizedPlants.length} optimized plants`);
         res.json(optimizedPlants);
@@ -1503,7 +1503,7 @@ app.get('/api/plants', async (req, res) => {
         const optimizedPlants = plants.map(p => ({
             ...p,
             imageUrl: p.imageUrl && p.imageUrl.includes('cloudinary.com') && !p.imageUrl.includes('f_auto')
-                ? p.imageUrl.replace('/upload/', '/upload/f_auto,q_auto,w_600,c_limit/')
+                ? p.imageUrl.replace('/upload/', '/upload/f_auto,q_auto,w_500,c_limit/')
                 : p.imageUrl
         }));
 
@@ -1522,13 +1522,13 @@ app.get('/api/plants', async (req, res) => {
                     hasMore: skip + optimizedPlants.length < total
                 }
             };
-            // Cache for 5 minutes
-            cache.set(cacheKey, response, 300);
+            // Cache for 15 minutes
+            cache.set(cacheKey, response, 900);
             return res.json(response);
         }
 
-        // Cache for 5 minutes
-        cache.set(cacheKey, optimizedPlants, 300);
+        // Cache for 15 minutes
+        cache.set(cacheKey, optimizedPlants, 900);
 
         res.json(optimizedPlants);
     } catch (err) {
