@@ -18,6 +18,14 @@ const Parser = require('rss-parser');
 const parser = new Parser();
 const FloraIntelligence = require('./flora-intelligence');
 
+// 🚀 PERFORMANCE: In-memory cache for frequently accessed data
+const NodeCache = require('node-cache');
+const cache = new NodeCache({
+    stdTTL: 300, // 5 minutes default
+    checkperiod: 60, // Check for expired keys every 60 seconds
+    useClones: false // Better performance, don't clone objects
+});
+
 // --- CLOUDINARY CONFIGURATION ---
 const cloudinary = require('cloudinary').v2;
 const multer = require('multer');
@@ -1427,9 +1435,22 @@ app.get('/api/news', async (req, res) => {
 
 app.get('/api/plants', async (req, res) => {
     try {
-        console.log("GET /api/plants - Fetching all plants...");
-        const plants = await Plant.find().lean();
+        // 🚀 PERFORMANCE: Check cache first
+        const cacheKey = 'all_plants';
+        const cachedPlants = cache.get(cacheKey);
+
+        if (cachedPlants) {
+            console.log(`GET /api/plants - Served from cache (${cachedPlants.length} plants)`);
+            return res.json(cachedPlants);
+        }
+
+        console.log("GET /api/plants - Fetching from database...");
+        const plants = await Plant.find().lean(); // .lean() for better performance
         console.log(`GET /api/plants - Found ${plants.length} plants`);
+
+        // Cache for 5 minutes
+        cache.set(cacheKey, plants, 300);
+
         res.json(plants);
     } catch (err) {
         console.error("GET /api/plants ERROR:", err);
@@ -1450,6 +1471,9 @@ app.post('/api/plants', auth, admin, upload.single('image'), async (req, res) =>
 
         const plant = new Plant(plantData);
         await plant.save();
+
+        // 🚀 PERFORMANCE: Invalidate cache
+        cache.del('all_plants');
 
         await broadcastAlert('plant', `New plant added: ${plant.name}`, { plantId: plant.id }, `/#plant-${plant.id}`);
         res.status(201).json(plant);
@@ -1518,7 +1542,20 @@ app.delete('/api/plants/:id', auth, admin, async (req, res) => {
 
 app.get('/api/vendors', async (req, res) => {
     try {
+        // 🚀 PERFORMANCE: Check cache first
+        const cacheKey = 'all_vendors';
+        const cachedVendors = cache.get(cacheKey);
+
+        if (cachedVendors) {
+            console.log(`GET /api/vendors - Served from cache (${cachedVendors.length} vendors)`);
+            return res.json(cachedVendors);
+        }
+
         const vendors = await Vendor.find().lean();
+
+        // Cache for 5 minutes
+        cache.set(cacheKey, vendors, 300);
+
         res.json(vendors);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -1531,6 +1568,9 @@ app.post('/api/vendors', auth, async (req, res) => {
         const itemData = { id: "v" + Date.now(), ...req.body };
         const newVendor = new Vendor(itemData);
         await newVendor.save();
+
+        // 🚀 PERFORMANCE: Invalidate cache
+        cache.del('all_vendors');
 
         await broadcastAlert('vendor', `New vendor joined: ${newVendor.name}`, { vendorId: newVendor.id, title: 'New Store Opening! 🏪' }, '/nearby');
         res.status(201).json(newVendor);
