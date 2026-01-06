@@ -19,7 +19,10 @@ const parser = new Parser();
 const FloraIntelligence = require('./flora-intelligence');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
-const MongoStore = require('connect-mongo');
+let MongoStore = require('connect-mongo');
+if (MongoStore.default) {
+    MongoStore = MongoStore.default;
+}
 
 // 🚀 PERFORMANCE: In-memory cache for frequently accessed data
 const NodeCache = require('node-cache');
