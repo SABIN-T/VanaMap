@@ -428,8 +428,13 @@ out center;
 
                     <div className={styles.mapContainer}>
                         {position ? (
-                            <MapContainer center={position} zoom={11} style={{ height: '100%', width: '100%' }}>
-                                <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                            <MapContainer center={position} zoom={11} style={{ height: '100%', width: '100%', borderRadius: '16px' }}>
+                                <TileLayer
+                                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                    maxZoom={19}
+                                    crossOrigin={true}
+                                />
                                 <ChangeView center={position} />
                                 <Marker position={position} icon={L.divIcon({
                                     className: 'u-marker',
