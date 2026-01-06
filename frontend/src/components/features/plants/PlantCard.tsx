@@ -47,8 +47,13 @@ export const PlantCard = ({ plant, score, isTopMatch, priority = false, onAdd, s
                 <img
                     src={(() => {
                         if (!plant.imageUrl) return '';
-                        if (plant.imageUrl.includes('cloudinary.com') && !plant.imageUrl.includes('f_auto')) {
-                            return plant.imageUrl.replace('/upload/', '/upload/f_auto,q_auto,w_600/');
+                        // Mobile optimization: reduce quality and size for faster loading
+                        const isMobile = window.innerWidth < 768;
+                        if (plant.imageUrl.includes('cloudinary.com')) {
+                            const transforms = isMobile
+                                ? '/upload/f_auto,q_auto:low,w_400,c_limit/' // Mobile: lower quality, smaller size
+                                : '/upload/f_auto,q_auto,w_600,c_limit/';    // Desktop: higher quality
+                            return plant.imageUrl.replace('/upload/', transforms);
                         }
                         return plant.imageUrl;
                     })()}
@@ -58,7 +63,7 @@ export const PlantCard = ({ plant, score, isTopMatch, priority = false, onAdd, s
                     decoding="async"
                     width="300"
                     height="300"
-                    {...(priority ? { fetchPriority: "high" } : {})}
+                    {...(priority ? { fetchPriority: "high" as const } : {})}
                 />
 
                 <div className={styles.overlayTop}>
