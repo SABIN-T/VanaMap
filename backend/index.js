@@ -99,17 +99,22 @@ cron.schedule('0 0 * * *', async () => {
 });
 
 const transporter = nodemailer.createTransport({
-    service: 'Gmail',
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false,
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
     },
-    // Reliability settings
+    tls: {
+        rejectUnauthorized: false
+    },
+    family: 4, // Strict IPv4 for Render
+    connectionTimeout: 60000,
+    greetingTimeout: 30000,
     pool: false,
     logger: true,
-    debug: true,
-    connectionTimeout: 60000,
-    greetingTimeout: 30000
+    debug: true
 });
 
 // Verify connection configuration
