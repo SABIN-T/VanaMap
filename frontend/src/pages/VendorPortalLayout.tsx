@@ -113,13 +113,14 @@ export const VendorPortalLayout = ({ title, children }: VendorPortalLayoutProps)
                     .mobile-tab-bar { display: flex !important; }
                     aside { display: none !important; }
                     main { padding-bottom: 70px !important; }
+                    #desktop-sidebar-toggle { display: none !important; }
                 }
             `}</style>
 
             <main className={styles.main}>
                 <header className={styles.topBar}>
                     <div className={styles.topBarLeft}>
-                        <button onClick={() => setSidebarOpen(!isSidebarOpen)} className={styles.toggleBtn}>
+                        <button id="desktop-sidebar-toggle" onClick={() => setSidebarOpen(!isSidebarOpen)} className={styles.toggleBtn}>
                             {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
                         </button>
                         <div className={styles.breadcrumbs}>
