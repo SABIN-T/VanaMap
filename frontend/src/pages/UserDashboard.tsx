@@ -3,7 +3,7 @@ import { useCart } from '../context/CartContext';
 import { Button } from '../components/common/Button';
 import {
     ShoppingBag, MapPin, Heart, ArrowRight, Loader2,
-    Shield, Lock, Trophy, Zap, Wind, CheckCircle
+    Shield, Lock, Trophy, Zap, Wind, CheckCircle, Store
 } from 'lucide-react';
 import { VerificationModal } from '../components/auth/VerificationModal';
 import { useNavigate } from 'react-router-dom';
@@ -364,6 +364,25 @@ export const UserDashboard = () => {
             {/* 4. QUICK ACCESS GRID */}
             <h2 style={{ fontSize: '1.2rem', fontWeight: 700, margin: '0 0 1rem', color: 'var(--color-text-main)' }}>Quick Access</h2>
             <div className={styles.actionGrid}>
+                {user.role === 'vendor' && (
+                    <div onClick={() => navigate('/vendor')} className={styles.quickCard} style={{ background: 'rgba(250, 204, 21, 0.1)', borderColor: 'rgba(250, 204, 21, 0.3)' }}>
+                        <Store style={{ color: '#facc15' }} size={32} />
+                        <div>
+                            <strong>Vendor Portal</strong>
+                            <p>Manage Your Shop</p>
+                        </div>
+                    </div>
+                )}
+
+                {user.role === 'admin' && (
+                    <div onClick={() => navigate('/admin')} className={styles.quickCard} style={{ background: 'rgba(239, 68, 68, 0.1)', borderColor: 'rgba(239, 68, 68, 0.3)' }}>
+                        <Shield style={{ color: '#ef4444' }} size={32} />
+                        <div>
+                            <strong>Admin Panel</strong>
+                            <p>System Control</p>
+                        </div>
+                    </div>
+                )}
 
                 <div onClick={() => setShowCollectionModal(true)} className={styles.quickCard}>
                     <Heart style={{ color: '#f43f5e' }} size={32} />
