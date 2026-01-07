@@ -89,26 +89,37 @@ export const VendorPortal = () => {
     }, [location.pathname]);
 
     const loadVendorData = useCallback(async () => {
-        const vendors = await fetchVendors();
-        if (!user) return;
-        const myVendor = vendors.find(v => v.id === user.id || v.id === (user as any)._id);
-        if (myVendor) {
-            setCurrentVendor(myVendor);
-            setIsEditing(true);
-            setExistingVendorId(myVendor.id);
-            setFormData({
-                shopName: myVendor.name,
-                phone: myVendor.phone || '',
-                whatsapp: myVendor.whatsapp || '',
-                address: myVendor.address || ''
-            });
-            if (myVendor.latitude && myVendor.longitude) setMarkerPos(new L.LatLng(myVendor.latitude, myVendor.longitude));
+        try {
+            const vendors = await fetchVendors();
+            if (!user) return;
 
-            // Fetch real-time analytics
-            try {
-                const stats = await fetchVendorAnalytics(myVendor.id);
-                setAnalytics(stats);
-            } catch (e) { console.error(e); }
+            // Match vendor by ownerEmail (primary) or fallback to ID matching
+            const myVendor = vendors.find(v =>
+                v.ownerEmail === user.email ||
+                v.id === user.id ||
+                v.id === (user as any)._id
+            );
+
+            if (myVendor) {
+                setCurrentVendor(myVendor);
+                setIsEditing(true);
+                setExistingVendorId(myVendor.id);
+                setFormData({
+                    shopName: myVendor.name,
+                    phone: myVendor.phone || '',
+                    whatsapp: myVendor.whatsapp || '',
+                    address: myVendor.address || ''
+                });
+                if (myVendor.latitude && myVendor.longitude) setMarkerPos(new L.LatLng(myVendor.latitude, myVendor.longitude));
+
+                // Fetch real-time analytics
+                try {
+                    const stats = await fetchVendorAnalytics(myVendor.id);
+                    setAnalytics(stats);
+                } catch (e) { console.error(e); }
+            }
+        } catch (error) {
+            console.error("Failed to load vendor data:", error);
         }
     }, [user]);
 
