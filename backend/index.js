@@ -337,6 +337,27 @@ const normalizeUser = (user) => {
     };
 };
 
+// --- DEVELOPER API MIDDLEWARE ---
+const requireApiKey = async (req, res, next) => {
+    const key = req.header('x-api-key');
+    if (!key) return res.status(401).json({ error: "Missing x-api-key header" });
+
+    try {
+        const apiKeyDoc = await ApiKey.findOne({ key, isActive: true });
+        if (!apiKeyDoc) return res.status(403).json({ error: "Invalid or revoked API Key" });
+
+        // Update usage stats (async, don't block)
+        apiKeyDoc.lastUsed = new Date();
+        apiKeyDoc.save();
+
+        req.apiKey = apiKeyDoc; // Attach to request
+        next();
+    } catch (e) {
+        res.status(500).json({ error: "API Validation Error" });
+    }
+};
+
+
 
 // --- API NOTIFICATION CONTROLLERS ---
 
@@ -1939,27 +1960,9 @@ app.delete('/api/keys/:id', auth, async (req, res) => {
     }
 });
 
-// --- DEVELOPER API MIDDLEWARE ---
-const requireApiKey = async (req, res, next) => {
-    const key = req.header('x-api-key');
-    if (!key) return res.status(401).json({ error: "Missing x-api-key header" });
-
-    try {
-        const apiKeyDoc = await ApiKey.findOne({ key, isActive: true });
-        if (!apiKeyDoc) return res.status(403).json({ error: "Invalid or revoked API Key" });
-
-        // Update usage stats (async, don't block)
-        apiKeyDoc.lastUsed = new Date();
-        apiKeyDoc.save();
-
-        req.apiKey = apiKeyDoc; // Attach to request
-        next();
-    } catch (e) {
-        res.status(500).json({ error: "API Validation Error" });
-    }
-};
 
 // --- PUBLIC DEVELOPER API ENDPOINTS (v1) ---
+
 
 // 1. Search Plants (Protected by Key)
 app.get('/api/v1/plants/search', requireApiKey, async (req, res) => {
