@@ -253,12 +253,12 @@
     .topBar {
         padding: 0 1rem;
     }
-}
 
-.backdrop {
-    position: fixed;
-    inset: 0;
-    background: rgba(2, 6, 23, 0.8);
-    backdrop-filter: blur(4px);
-    z-index: 1500;
+    .backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(2, 6, 23, 0.8);
+        backdrop-filter: blur(4px);
+        z-index: 1500;
+    }
 }
