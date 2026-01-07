@@ -3,7 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
-const { Plant, Vendor, User, Payment, Notification, Chat, PlantSuggestion, SearchLog, PushSubscription, SystemSettings, CustomPot, SupportTicket, AIFeedback, ApiKey, NewsletterSubscriber } = require('./models');
+const { Plant, Vendor, User, Payment, Notification, Chat, PlantSuggestion, SearchLog, PushSubscription, SystemSettings, CustomPot, SupportTicket, AIFeedback, ApiKey, NewsletterSubscriber, Sale, Review } = require('./models');
 const Razorpay = require('razorpay');
 const webpush = require('web-push');
 const helmet = require('helmet');
@@ -2047,6 +2047,70 @@ app.get('/api/users', auth, admin, async (req, res) => {
 });
 
 
+
+// --- VENDOR TOOLS ---
+app.get('/api/vendors/:id/qr', auth, async (req, res) => {
+    try {
+        const vendor = await Vendor.findOne({ id: req.params.id });
+        if (!vendor) return res.status(404).json({ error: "Vendor not found" });
+
+        // Deep link to open the specific shop on the map/profile
+        const deepLink = `https://vanamap.online/shop/${vendor.id}`;
+
+        // We return the payload that the frontend can turn into a QR code
+        res.json({
+            shopUrl: deepLink,
+            name: vendor.name,
+            message: `Scan to visit ${vendor.name} on VanaMap`
+        });
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
+app.get('/api/analytics/vendor/:vendorId/demand', auth, async (req, res) => {
+    try {
+        const vendor = await Vendor.findOne({ id: req.params.vendorId });
+        if (!vendor) return res.status(404).json({ error: "Vendor not found" });
+
+        // Find searches in the vendor's city/area in the last 30 days
+        const recentSearches = await SearchLog.aggregate([
+            {
+                $match: {
+                    'location.city': { $regex: new RegExp(vendor.city || '', 'i') },
+                    timestamp: { $gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) }
+                }
+            },
+            { $group: { _id: "$query", count: { $sum: 1 } } },
+            { $sort: { count: -1 } },
+            { $limit: 10 }
+        ]);
+
+        const inventoryIds = vendor.inventory.map(i => i.plantId);
+        const recommendations = [];
+
+        // Match queries to plants they DON'T have
+        for (const search of recentSearches) {
+            const plant = await Plant.findOne({
+                name: { $regex: new RegExp(search._id, 'i') },
+                id: { $nin: inventoryIds }
+            }).select('id name imageUrl price idealTempMin idealTempMax');
+
+            if (plant) {
+                recommendations.push({
+                    plant,
+                    searchVolume: search.count,
+                    potentialRevenue: (plant.price || 0) * search.count // Rough estimate
+                });
+            }
+        }
+
+        res.json({ recommendations });
+    } catch (e) {
+        console.error(e);
+        res.status(500).json({ error: e.message });
+    }
+});
 
 // --- SUPPORT ---
 app.post('/api/support/inquiry', async (req, res) => {

@@ -45,14 +45,29 @@ const VendorSchema = new mongoose.Schema({
         quantity: { type: Number, default: 0 },
         status: { type: String, default: 'approved' },
         inStock: { type: Boolean, default: true },
-        sellingMode: { type: String, enum: ['online', 'offline', 'both'], default: 'offline' }
+        sellingMode: { type: String, enum: ['online', 'offline', 'both'], default: 'offline' },
+        isBoosted: { type: Boolean, default: false },
+        boostExpiry: Date,
+        lowStockThreshold: { type: Number, default: 5 }
     }],
     verified: { type: Boolean, default: false },
     highlyRecommended: { type: Boolean, default: false },
     category: { type: String, default: 'Plant Shop' },
     ownerEmail: String,
+    isVacationMode: { type: Boolean, default: false },
     lastActive: { type: Date, default: Date.now }
 }, { timestamps: true });
+
+const ReviewSchema = new mongoose.Schema({
+    vendorId: { type: String, required: true },
+    userId: { type: String, required: true },
+    userName: String,
+    rating: { type: Number, min: 1, max: 5, required: true },
+    comment: String,
+    reply: String,
+    repliedAt: Date,
+    timestamp: { type: Date, default: Date.now }
+});
 
 const UserSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
@@ -197,6 +212,7 @@ module.exports = {
     PlantSuggestion: mongoose.model('PlantSuggestion', PlantSuggestionSchema),
     SearchLog: mongoose.model('SearchLog', SearchLogSchema),
     Sale: mongoose.model('Sale', SaleSchema),
+    Review: mongoose.model('Review', ReviewSchema),
     PushSubscription: mongoose.model('PushSubscription', new mongoose.Schema({
         endpoint: { type: String, unique: true, required: true },
         keys: {

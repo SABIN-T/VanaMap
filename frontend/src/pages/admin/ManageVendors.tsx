@@ -183,6 +183,18 @@ export const ManageVendors = () => {
                                             <MapPin size={14} className="mt-0.5 shrink-0" />
                                             <p className={styles.address}>{vendor.address || "No physical address listed"}</p>
                                         </div>
+                                        {/* Credentials Helper */}
+                                        <div style={{ marginTop: '0.5rem', padding: '0.5rem', background: 'rgba(0,0,0,0.2)', borderRadius: '6px', fontSize: '0.75rem', color: '#94a3b8' }}>
+                                            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+                                                <span style={{ fontWeight: 600, color: '#e2e8f0' }}>Email:</span>
+                                                <span>{(vendor as any).ownerEmail || 'Not Linked'}</span>
+                                            </div>
+                                            <div style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', marginTop: '2px' }}>
+                                                <span style={{ fontWeight: 600, color: '#e2e8f0' }}>Pass:</span>
+                                                <span style={{ fontFamily: 'monospace' }}>••••••••</span>
+                                                <span style={{ fontSize: '0.65rem', opacity: 0.7 }}>(Use Reset to change)</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 

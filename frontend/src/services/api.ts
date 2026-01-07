@@ -597,6 +597,26 @@ export const fetchMyCustomPots = async () => {
     return await res.json();
 };
 
+export const fetchAllCustomPots = async () => {
+    const res = await fetch(`${API_URL}/custom-pots/all`, { headers: getHeaders() });
+    if (!res.ok) throw new Error("Failed to load designs");
+    return await res.json();
+};
+
+export const generateVendorQR = async (vendorId: string) => {
+    const res = await fetch(`${API_URL}/vendors/${vendorId}/qr`, { headers: getHeaders() });
+    if (!res.ok) throw new Error("Failed to generate QR Code");
+    return await res.json(); // { qrCodeUrl: '...' }
+};
+
+export const fetchVendorStockDemand = async (vendorId: string) => {
+    const res = await fetch(`${API_URL}/analytics/vendor/${vendorId}/demand`, {
+        headers: getHeaders()
+    });
+    if (!res.ok) throw new Error("Failed to fetch market demand");
+    return await res.json(); // { recommendedPlants: [...] }
+};
+
 export const fetchAdminCustomPots = async () => {
     const res = await fetch(`${API_URL}/admin/custom-pots`, {
         headers: getHeaders()

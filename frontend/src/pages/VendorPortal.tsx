@@ -16,6 +16,7 @@ import type { LatLng } from 'leaflet';
 import type { Vendor } from '../types';
 import { VendorInventory } from '../components/features/vendor/VendorInventory';
 import { MarketInsights } from '../components/features/vendor/MarketInsights';
+import { GrowthTools } from '../components/features/vendor/GrowthTools';
 import { VendorPortalLayout } from './VendorPortalLayout';
 import styles from './VendorPortal.module.css';
 
@@ -82,6 +83,7 @@ export const VendorPortal = () => {
         const path = location.pathname;
         if (path.endsWith('/inventory')) return 'inventory';
         if (path.endsWith('/insights')) return 'insights';
+        if (path.endsWith('/growth')) return 'growth';
         if (path.endsWith('/profile')) return 'profile';
         return 'overview';
     }, [location.pathname]);
@@ -113,6 +115,16 @@ export const VendorPortal = () => {
     useEffect(() => {
         if (user?.role === 'vendor' || user?.role === 'admin') loadVendorData();
     }, [user, loadVendorData]);
+
+    const fetchAnalytics = async () => {
+        if (!existingVendorId) return;
+        try {
+            const data = await fetchVendorAnalytics(existingVendorId);
+            setAnalytics(data);
+        } catch (e) {
+            console.error("Failed to load analytics", e);
+        }
+    };
 
     const handleAutoLocate = useCallback(() => {
         if (isLocating) return;
@@ -177,6 +189,7 @@ export const VendorPortal = () => {
         switch (activeSection) {
             case 'inventory': return 'Catalog Manager';
             case 'insights': return 'Performance Data';
+            case 'growth': return 'Growth Engine';
             case 'profile': return 'Shop Settings';
             default: return 'Partner Overview';
         }
@@ -185,6 +198,22 @@ export const VendorPortal = () => {
     return (
         <VendorPortalLayout title={getTitle()}>
             <div className={styles.portalContainer}>
+                {/* SECTION: INVENTORY */}
+                {activeSection === 'inventory' && currentVendor && (
+                    <VendorInventory
+                        vendor={currentVendor}
+                        onUpdate={() => { loadVendorData(); fetchAnalytics(); }}
+                    />
+                )}
+
+                {/* SECTION: INSIGHTS */}
+                {activeSection === 'insights' && (
+                    <MarketInsights analytics={analytics} />
+                )}
+
+                {/* SECTION: GROWTH TOOLS */}
+                {activeSection === 'growth' && <GrowthTools vendorId={currentVendor?.id || ''} />}
+
                 {/* SECTION: OVERVIEW */}
                 {activeSection === 'overview' && (
                     <>
@@ -283,22 +312,10 @@ export const VendorPortal = () => {
                                     </div>
                                 </div>
 
-                                <MarketInsights vendorId={currentVendor?.id || ''} />
+                                <MarketInsights analytics={analytics} />
                             </>
                         )}
                     </>
-                )}
-
-                {/* SECTION: INVENTORY */}
-                {activeSection === 'inventory' && currentVendor && (
-                    <VendorInventory vendor={currentVendor} onUpdate={loadVendorData} />
-                )}
-
-                {/* SECTION: INSIGHTS */}
-                {activeSection === 'insights' && (
-                    <div className={styles.insightsWrapper}>
-                        <MarketInsights vendorId={currentVendor?.id || ''} />
-                    </div>
                 )}
 
                 {/* SECTION: PROFILE / SETTINGS */}

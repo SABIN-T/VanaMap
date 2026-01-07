@@ -1,31 +1,19 @@
 import { useState, useEffect } from 'react';
 import { TrendingUp, Map, Award, Lightbulb, ArrowUpRight, DollarSign, Package, ShoppingCart, User } from 'lucide-react';
-import { fetchVendorAnalytics } from '../../../services/api';
 import styles from './MarketInsights.module.css';
 
 interface MarketInsightsProps {
-    vendorId: string;
+    analytics: any;
 }
 
-export const MarketInsights = ({ vendorId }: MarketInsightsProps) => {
-    const [stats, setStats] = useState<any>(null);
-    const [loading, setLoading] = useState(true);
+export const MarketInsights = ({ analytics: initialAnalytics }: MarketInsightsProps) => {
+    const [stats, setStats] = useState<any>(initialAnalytics);
 
     useEffect(() => {
-        const load = async () => {
-            try {
-                const res = await fetchVendorAnalytics(vendorId);
-                setStats(res);
-            } catch (e) {
-                console.error("Analytics failure", e);
-            } finally {
-                setLoading(false);
-            }
-        };
-        if (vendorId) load();
-    }, [vendorId]);
+        setStats(initialAnalytics);
+    }, [initialAnalytics]);
 
-    if (loading) return <div style={{ color: '#64748b', padding: '2rem', textAlign: 'center' }}>Synchronizing local market data...</div>;
+    if (!stats) return <div style={{ color: '#64748b', padding: '2rem', textAlign: 'center' }}>Synchronizing local market data...</div>;
 
     return (
         <div className={styles.container}>

@@ -3,7 +3,7 @@ import { useLocation, Link } from 'react-router-dom';
 import {
     LayoutDashboard, Store,
     LogOut, Menu, X, ChevronRight, Leaf,
-    Package, BarChart2, ShieldCheck
+    Package, BarChart2, ShieldCheck, TrendingUp, QrCode
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import styles from './UserDashboardLayout.module.css'; // Reuse the updated premium styles
@@ -28,6 +28,7 @@ export const VendorPortalLayout = ({ title, children }: VendorPortalLayoutProps)
         { path: '/vendor', icon: LayoutDashboard, label: 'Portal Overview' },
         { path: '/vendor/inventory', icon: Package, label: 'My Inventory' },
         { path: '/vendor/insights', icon: BarChart2, label: 'Market Insights' },
+        { path: '/vendor/growth', icon: TrendingUp, label: 'Growth Tools' },
         { path: '/vendor/profile', icon: Store, label: 'Shop Settings' },
     ];
 
@@ -81,6 +82,39 @@ export const VendorPortalLayout = ({ title, children }: VendorPortalLayoutProps)
                     </button>
                 </div>
             </aside>
+
+            {/* Mobile Bottom Tab Bar */}
+            <nav style={{
+                position: 'fixed', bottom: 0, left: 0, right: 0,
+                background: '#1e293b', borderTop: '1px solid rgba(255,255,255,0.1)',
+                display: 'none', justifyContent: 'space-around', alignItems: 'center',
+                padding: '0.5rem', zIndex: 1000,
+                boxShadow: '0 -4px 20px rgba(0,0,0,0.3)',
+                backdropFilter: 'blur(10px)'
+            }} className="mobile-tab-bar">
+                {navItems.map((item) => (
+                    <Link
+                        key={item.path}
+                        to={item.path}
+                        style={{
+                            display: 'flex', flexDirection: 'column', alignItems: 'center',
+                            textDecoration: 'none', color: isActive(item.path) ? '#facc15' : '#94a3b8',
+                            fontSize: '0.7rem', gap: '4px', padding: '4px'
+                        }}
+                    >
+                        <item.icon size={22} strokeWidth={isActive(item.path) ? 2.5 : 2} />
+                        <span>{item.label.split(' ')[0]}</span>
+                    </Link>
+                ))}
+            </nav>
+
+            <style>{`
+                @media (max-width: 768px) {
+                    .mobile-tab-bar { display: flex !important; }
+                    aside { display: none !important; }
+                    main { padding-bottom: 70px !important; }
+                }
+            `}</style>
 
             <main className={styles.main}>
                 <header className={styles.topBar}>
