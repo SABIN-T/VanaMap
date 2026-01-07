@@ -4553,13 +4553,8 @@ app.get('/api/analytics/nearby-users', auth, async (req, res) => {
 });
 
 
-// --- KEEP ALIVE for Render Free Tier ---
-// Use a service like cron-job.org to ping this every 14 minutes
-app.get('/api/keep-alive', (req, res) => {
-    res.status(200).send('I am awake!');
-});
-
-app.get('/debug-env', (req, res) => {
+// --- DEBUG ENVIRONMENT ---
+app.get('/api/debug-env', (req, res) => {
     // SECURITY: Do not expose full values in prod, just presence
     res.json({
         MONGO_URI_SET: !!process.env.MONGO_URI,

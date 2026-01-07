@@ -258,7 +258,7 @@ export const UserDashboard = () => {
                             <div style={{ background: '#facc15', padding: '0.5rem', borderRadius: '50%', color: 'black' }}>
                                 <Trophy size={20} />
                             </div>
-                            <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 800 }}>Welcome back, {user.name?.split(' ')[0]}!</h3>
+                            <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 800 }}>Welcome back, {user.name}!</h3>
                         </div>
                         <p style={{ margin: 0, color: '#94a3b8', maxWidth: '500px' }}>
                             You are currently a <span style={{ color: '#10b981', fontWeight: 700 }}>Seed Level</span> explorer.

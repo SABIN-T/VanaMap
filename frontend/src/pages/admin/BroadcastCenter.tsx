@@ -169,7 +169,7 @@ export const BroadcastCenter: React.FC = () => {
                                         />
                                         {searching && (
                                             <div style={{ position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)' }}>
-                                                <Loader2 size={18} className="animate-spin text-emerald-500" />
+                                                <Loader2 size={18} className={`${styles.animateSpin} text-emerald-500`} />
                                             </div>
                                         )}
                                     </div>

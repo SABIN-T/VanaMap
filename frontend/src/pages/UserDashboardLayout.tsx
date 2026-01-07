@@ -122,7 +122,7 @@ export const UserDashboardLayout = ({ title, children }: UserDashboardLayoutProp
                                 {user?.name?.charAt(0) || 'U'}
                             </div>
                             <div className={styles.userInfo}>
-                                <div className={styles.userName}>{user?.name?.split(' ')[0] || 'User'}</div>
+                                <div className={styles.userName}>{user?.name || 'User'}</div>
                                 <div className={styles.userRole}>{user?.role || 'Member'}</div>
                             </div>
                         </div>
