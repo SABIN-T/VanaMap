@@ -16,7 +16,16 @@ interface VendorPortalLayoutProps {
 export const VendorPortalLayout = ({ title, children }: VendorPortalLayoutProps) => {
     const location = useLocation();
     const { logout, user } = useAuth();
-    const [isSidebarOpen, setSidebarOpen] = useState(true);
+    const [isSidebarOpen, setSidebarOpen] = useState(() => window.innerWidth > 1024);
+
+    React.useEffect(() => {
+        const handleResize = () => {
+            if (window.innerWidth > 1024) setSidebarOpen(true);
+            else setSidebarOpen(false);
+        };
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     const handleNavClick = () => {
         if (window.innerWidth < 1024) {

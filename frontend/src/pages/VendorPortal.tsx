@@ -6,7 +6,7 @@ import { Button } from '../components/common/Button';
 import {
     Store, Locate, Info, ArrowRight, Package,
     ShoppingBag, ShoppingCart, DollarSign, ShieldCheck, ExternalLink,
-    MessageCircle, CheckCircle, Clock
+    MessageCircle, CheckCircle, Clock, QrCode
 } from 'lucide-react';
 import { registerVendor, fetchVendors, updateVendor, fetchVendorAnalytics } from '../services/api';
 import { useAuth } from '../context/AuthContext';
@@ -280,6 +280,26 @@ export const VendorPortal = () => {
                                     </Button>
                                     <Button size="sm" onClick={() => window.open('https://wa.me/9188773534', '_blank')} style={{ background: '#25D366', border: 'none' }}>
                                         <MessageCircle size={16} /> WhatsApp Support
+                                    </Button>
+                                </div>
+
+                                {/* QR Code Quick Access */}
+                                <div className={styles.verifiedBanner} style={{ marginTop: '1rem', background: 'linear-gradient(135deg, #6366f1, #3b82f6)' }}>
+                                    <div className={styles.verifiedInfo}>
+                                        <div className={styles.verifiedIcon} style={{ background: 'rgba(255,255,255,0.2)' }}>
+                                            <QrCode size={20} color="white" />
+                                        </div>
+                                        <div>
+                                            <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 800 }}>Physical Shop QR Code</h3>
+                                            <p style={{ margin: 0, fontSize: '0.8rem', opacity: 0.9 }}>Download your official VanaMap signage for walk-in customers.</p>
+                                        </div>
+                                    </div>
+                                    <Button
+                                        size="sm"
+                                        onClick={() => navigate('/vendor/growth')}
+                                        style={{ background: 'white', color: '#4f46e5', fontWeight: 700 }}
+                                    >
+                                        Get QR Code
                                     </Button>
                                 </div>
 
