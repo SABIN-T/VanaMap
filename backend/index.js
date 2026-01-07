@@ -1516,8 +1516,6 @@ app.get('/api/system/is-restricted', async (req, res) => {
 });
 
 // --- DYNAMIC SEED BANK MANAGEMENT (EDIT/DELETE) ---
-const fs = require('fs');
-const path = require('path');
 
 const updatePlantDataFile = (indoor, outdoor) => {
     const content = `// MASTER PLANT DATA (Generated & Updated via Admin)
