@@ -245,14 +245,14 @@ const CommunicationOS = {
     // 1. Core: Send Email
     email: async (to, subject, html) => {
         try {
-            const mailOptions = { from: `"VanaMap" <${process.env.EMAIL_USER}>`, to, subject, html };
-            if (process.env.SENDGRID_API_KEY) {
-                await sgMail.send(mailOptions);
-                return { success: true, provider: 'SendGrid' };
-            } else {
-                await transporter.sendMail(mailOptions);
-                return { success: true, provider: 'GmailSMTP' };
-            }
+            const mailOptions = {
+                from: 'VanaMap <noreply@vanamap.online>',
+                to,
+                subject,
+                html
+            };
+            await sendEmail(mailOptions); // Use the unified sendEmail wrapper (Resend > SendGrid > SMTP)
+            return { success: true, provider: 'Resend' };
         } catch (e) {
             console.error('[CommOS] Email Failed:', e.message);
             return { success: false, error: e.message };
