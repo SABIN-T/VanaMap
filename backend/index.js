@@ -126,6 +126,7 @@ console.log(`[SMTP] Provider: ${process.env.SMTP_HOST || 'smtp.gmail.com (Defaul
 // });
 
 // --- EMAIL SENDING WRAPPER (SMTP vs SendGrid API) ---
+const app = express(); // Initialize Express App EARLY to avoid ReferenceError
 const sgMail = require('@sendgrid/mail');
 if (process.env.SENDGRID_API_KEY) {
     sgMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -297,6 +298,8 @@ const CommunicationOS = {
     }
 };
 
+const JWT_SECRET = process.env.JWT_SECRET || 'vanamap_super_secret_key_2025';
+
 // --- API NOTIFICATION CONTROLLERS ---
 
 // 1. Subscribe to Newsletter
@@ -357,87 +360,6 @@ app.post('/api/v1/send/otp', requireApiKey, async (req, res) => {
         res.status(500).json({ error: e.message });
     }
 });
-
-// Wrappers for existing code compatibility
-const sendOtpEmail = (email, otp) => CommunicationOS.sendOTP(email, otp, 'email');
-const sendSmsOtp = (phone, otp) => CommunicationOS.sendOTP(phone, otp, 'sms');
-const sendWelcomeEmail = (email, name, role) => CommunicationOS.sendWelcome({ email, name, role, phone: null }); // Phone null to skip sms for now unless we look it up
-
-
-// --- WEB PUSH SETUP ---
-let publicVapidKey = process.env.PUBLIC_VAPID_KEY;
-let privateVapidKey = process.env.PRIVATE_VAPID_KEY;
-
-let pushEnabled = false;
-
-const initializePush = () => {
-    if (!publicVapidKey || !privateVapidKey) {
-        console.warn("VAPID Keys not found. Generating temporary keys...");
-        const keys = webpush.generateVAPIDKeys();
-        publicVapidKey = keys.publicKey;
-        privateVapidKey = keys.privateKey;
-        console.log("-----------------------------------------");
-        console.log("NEW VAPID KEYS GENERATED (Save to .env):");
-        console.log("PUBLIC_VAPID_KEY=" + publicVapidKey);
-        console.log("PRIVATE_VAPID_KEY=" + privateVapidKey);
-        console.log("-----------------------------------------");
-    }
-
-    try {
-        webpush.setVapidDetails('mailto:support@vanamap.online', publicVapidKey, privateVapidKey);
-        pushEnabled = true;
-        console.log("Web Push initialized successfully.");
-    } catch (err) {
-        console.error("Web Push init failed:", err.message);
-    }
-};
-
-initializePush();
-
-const sendPushNotification = async (payload) => {
-    if (!pushEnabled) {
-        console.log("Skipping push notification (Push Disabled/No Keys)");
-        return;
-    }
-
-    try {
-        const subscriptions = await PushSubscription.find().lean();
-        if (subscriptions.length === 0) return;
-
-        console.log(`[PUSH] Dispatched to ${subscriptions.length} devices...`);
-        const notificationPayload = JSON.stringify(payload);
-
-        // Process in batches of 50 to avoid memory/rate limit issues
-        const batchSize = 50;
-        let sentCount = 0;
-        let deadCount = 0;
-
-        for (let i = 0; i < subscriptions.length; i += batchSize) {
-            const batch = subscriptions.slice(i, i + batchSize);
-            await Promise.all(batch.map(async (sub) => {
-                try {
-                    await webpush.sendNotification(sub, notificationPayload);
-                    sentCount++;
-                } catch (err) {
-                    if (err.statusCode === 410 || err.statusCode === 404) {
-                        deadCount++;
-                        await PushSubscription.deleteOne({ _id: sub._id }).catch(() => { });
-                    } else {
-                        console.error(`[PUSH] Delivery error (${err.statusCode}): ${err.message}`);
-                    }
-                }
-            }));
-        }
-
-        if (deadCount > 0) console.log(`[PUSH] Cleaned up ${deadCount} expired subscriptions.`);
-        console.log(`[PUSH] Successfully reached ${sentCount} devices.`);
-    } catch (e) {
-        console.error("[PUSH] Critical processing error:", e.message);
-    }
-};
-
-const app = express();
-const JWT_SECRET = process.env.JWT_SECRET || 'vanamap_super_secret_key_2025';
 
 // Security & Performance
 app.set('trust proxy', 1); // Required for Render/Heroku to get real client IP and satisfy express-rate-limit validation
