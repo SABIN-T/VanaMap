@@ -125,19 +125,47 @@ console.log(`[SMTP] Provider: ${process.env.SMTP_HOST || 'smtp.gmail.com (Defaul
 //     }
 // });
 
-// --- EMAIL SENDING WRAPPER (SMTP vs SendGrid API) ---
+// --- EMAIL SENDING WRAPPER (Resend > SendGrid > SMTP) ---
 const app = express(); // Initialize Express App EARLY to avoid ReferenceError
+
+// Resend Setup
+let resend;
+if (process.env.RESEND_API_KEY) {
+    const { Resend } = require('resend');
+    resend = new Resend(process.env.RESEND_API_KEY);
+    console.log("✅ [Email] Using Resend HTTP API (Primary)");
+}
+
+// SendGrid Setup (Fallback)
 const sgMail = require('@sendgrid/mail');
 if (process.env.SENDGRID_API_KEY) {
     sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-    console.log("✅ [Email] Using SendGrid HTTP API (Bypasses SMTP Ports)");
+    console.log("✅ [Email] SendGrid configured (Fallback)");
 }
 
 const sendEmail = async (mailOptions) => {
+    // Priority 1: Resend
+    if (resend) {
+        try {
+            const result = await resend.emails.send({
+                from: mailOptions.from || 'VanaMap <onboarding@resend.dev>', // Use verified domain
+                to: mailOptions.to,
+                subject: mailOptions.subject,
+                html: mailOptions.html
+            });
+            console.log(`[Resend] Sent to ${mailOptions.to} (ID: ${result.data?.id})`);
+            return { messageId: result.data?.id || 'resend-api' };
+        } catch (error) {
+            console.error('[Resend] Error:', error.message);
+            // Fall through to SendGrid
+        }
+    }
+
+    // Priority 2: SendGrid
     if (process.env.SENDGRID_API_KEY) {
         const msg = {
             to: mailOptions.to,
-            from: mailOptions.from, // Ensure verified sender in SendGrid
+            from: mailOptions.from,
             subject: mailOptions.subject,
             html: mailOptions.html,
         };
@@ -147,11 +175,12 @@ const sendEmail = async (mailOptions) => {
             return { messageId: 'sendgrid-api' };
         } catch (error) {
             console.error('[SendGrid] Error:', error.response ? error.response.body : error);
-            throw error; // Re-throw to trigger fallback logs if needed
+            // Fall through to SMTP
         }
-    } else {
-        return transporter.sendMail(mailOptions);
     }
+
+    // Priority 3: Gmail SMTP (Last Resort)
+    return transporter.sendMail(mailOptions);
 };
 
 const sendResetEmail = async (email, tempPass) => {
