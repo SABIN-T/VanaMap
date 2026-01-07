@@ -1328,6 +1328,47 @@
     .statInfo {
         align-items: flex-start;
     }
+
+    /* PERFORMANCE OPTIMIZATIONS FOR MOBILE */
+    .actionContainer {
+        backdrop-filter: none !important;
+        -webkit-backdrop-filter: none !important;
+        background: rgba(30, 41, 59, 0.95) !important;
+        /* Solid fallback */
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3) !important;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .heroTitle {
+        background: none !important;
+        -webkit-text-fill-color: var(--color-text-main) !important;
+        color: var(--color-text-main) !important;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        /* Cheaper alternative to gradient text */
+    }
+
+    .heroBadge {
+        backdrop-filter: none !important;
+        background: rgba(16, 185, 129, 0.15) !important;
+    }
+
+    .instagramIcon,
+    .whatsappIcon,
+    .emailIcon,
+    .twitterIcon {
+        backdrop-filter: none !important;
+        background: rgba(255, 255, 255, 0.05) !important;
+        /* Simplified bg */
+        box-shadow: none !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+
+    .searchBox {
+        backdrop-filter: none !important;
+        background: rgba(255, 255, 255, 0.1) !important;
+        transform: translateZ(0);
+        /* Force hardware acceleration */
+    }
 }
 
 /* --- Premium Layouts & Modules --- */

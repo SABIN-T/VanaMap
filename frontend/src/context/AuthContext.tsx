@@ -89,7 +89,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             if (!res.ok) throw new Error(data.error || 'Login failed');
 
             // data.user is already normalized by backend
-            const userData = { ...data.user, token: data.token };
+            const userData = {
+                ...data.user,
+                token: data.token,
+                favorites: Array.isArray(data.user.favorites) ? data.user.favorites : [],
+                cart: Array.isArray(data.user.cart) ? data.user.cart : []
+            };
 
             setUser(userData);
             localStorage.setItem('user', JSON.stringify(userData));
@@ -161,7 +166,12 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
             if (!res.ok) throw new Error("Google sync failed");
             const data = await res.json();
-            const fullUser = { ...data.user, token: data.token };
+            const fullUser = {
+                ...data.user,
+                token: data.token,
+                favorites: Array.isArray(data.user.favorites) ? data.user.favorites : [],
+                cart: Array.isArray(data.user.cart) ? data.user.cart : []
+            };
 
             setUser(fullUser);
             localStorage.setItem('user', JSON.stringify(fullUser));

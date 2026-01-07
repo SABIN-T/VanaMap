@@ -21,7 +21,7 @@ interface PlantCardProps {
 
 export const PlantCard = ({ plant, score, isTopMatch, priority = false, onAdd, stockStatus, hideBuyBtn = false, hideStockBadge = false }: PlantCardProps) => {
     const { user, toggleFavorite } = useAuth();
-    const isFavorite = user?.favorites.includes(plant.id);
+    const isFavorite = user?.favorites?.includes(plant.id) ?? false;
     const isPetFriendly = plant.petFriendly;
 
     // Determine Price & Stock

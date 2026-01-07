@@ -899,7 +899,7 @@ export const Home = () => {
                                     onAdd={handleAddToCart}
                                     score={weather ? plant.score : undefined}
                                     isTopMatch={weather ? (plant.score || 0) >= 100 : false}
-                                    priority={index < (window.innerWidth < 768 ? 4 : 6)}
+                                    priority={window.innerWidth >= 768 && index < 6}
                                     stockStatus={getVendorStats(plant.id)}
                                     hideBuyBtn={true}
                                     hideStockBadge={true}

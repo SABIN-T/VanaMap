@@ -33,6 +33,12 @@ body::before {
     transition: opacity 0.5s ease;
 }
 
+@media (max-width: 640px) {
+    body::before {
+        display: none !important;
+    }
+}
+
 a {
     color: inherit;
     text-decoration: none;
