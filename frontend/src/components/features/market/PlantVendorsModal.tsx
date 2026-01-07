@@ -151,6 +151,11 @@ export const PlantVendorsModal = ({ plant, onClose }: PlantVendorsModalProps) =>
                                             <span>
                                                 <Phone size={12} /> Contact Info
                                             </span>
+                                            {vendor.website && (
+                                                <span onClick={() => window.open(vendor.website!.startsWith('http') ? vendor.website! : `https://${vendor.website}`, '_blank')} style={{ cursor: 'pointer', color: '#10b981' }}>
+                                                    <Star size={12} /> Website
+                                                </span>
+                                            )}
                                         </div>
                                         <div className={styles.sellingDetails}>
                                             <span className={styles.modeBadge}>

@@ -82,13 +82,16 @@ export const registerVendor = async (vendorData: Partial<Vendor>): Promise<Vendo
             headers: getHeaders(),
             body: JSON.stringify(vendorData)
         });
-        if (!response.ok) throw new Error('Failed to register vendor');
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.error || 'Failed to register vendor');
+        }
         const data = await response.json();
         apiCache.clear(); // 🚀 Force refresh!
         return data;
-    } catch (error) {
+    } catch (error: any) {
         console.error("Error registering vendor:", error);
-        return null;
+        throw error;
     }
 };
 
@@ -99,15 +102,18 @@ export const updateVendor = async (id: string, updates: Partial<Vendor>): Promis
             headers: getHeaders(),
             body: JSON.stringify(updates)
         });
-        if (!response.ok) throw new Error('Failed to update vendor');
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.error || 'Failed to update vendor');
+        }
         const data = await response.json();
         apiCache.clear(); // 🚀 Force refresh!
         return data;
-    } catch (error) {
+    } catch (error: any) {
         console.error("Error updating vendor:", error);
-        return null;
+        throw error;
     }
-}
+};
 
 export const deleteVendor = async (id: string): Promise<boolean> => {
     try {

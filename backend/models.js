@@ -50,6 +50,7 @@ const VendorSchema = new mongoose.Schema({
     verified: { type: Boolean, default: false },
     highlyRecommended: { type: Boolean, default: false },
     category: { type: String, default: 'Plant Shop' },
+    ownerEmail: String,
     lastActive: { type: Date, default: Date.now }
 }, { timestamps: true });
 

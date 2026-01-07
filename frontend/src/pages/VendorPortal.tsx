@@ -3,7 +3,11 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { Button } from '../components/common/Button';
-import { Store, MessageCircle, Info, Locate, BadgeCheck, ShoppingBag, ShoppingCart, DollarSign, ArrowRight } from 'lucide-react';
+import {
+    Store, Locate, Info, ArrowRight, Package,
+    ShoppingBag, ShoppingCart, DollarSign, ShieldCheck, ExternalLink,
+    MessageCircle, CheckCircle, Clock
+} from 'lucide-react';
 import { registerVendor, fetchVendors, updateVendor, fetchVendorAnalytics } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
@@ -131,6 +135,8 @@ export const VendorPortal = () => {
         );
     }, [isLocating]);
 
+    const [showSuccessStep, setShowSuccessStep] = useState(false);
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
@@ -142,19 +148,30 @@ export const VendorPortal = () => {
             address: formData.address,
             latitude: markerPos.lat,
             longitude: markerPos.lng,
-            verified: isEditing
+            verified: isEditing,
+            ownerEmail: user?.email
         };
         try {
             if (isEditing && existingVendorId) {
                 await updateVendor(existingVendorId, vendorData);
                 toast.success("Profile Updated!");
+                setShowSuccessStep(true);
             } else {
                 const result = await registerVendor(vendorData);
-                if (result) { toast.success("Shop Registered!"); setIsEditing(true); }
+                if (result) {
+                    toast.success("Shop Registered!");
+                    setIsEditing(true);
+                    setShowSuccessStep(true);
+                }
             }
-        } catch (err) { toast.error("Process failed."); }
+        } catch (err: any) { toast.error(err.message || "Process failed."); }
         finally { setLoading(false); }
     };
+
+    // Reset success step on navigation
+    useEffect(() => {
+        setShowSuccessStep(false);
+    }, [activeSection]);
 
     const getTitle = () => {
         switch (activeSection) {
@@ -178,7 +195,7 @@ export const VendorPortal = () => {
                                 <p style={{ color: '#94a3b8', maxWidth: '500px', margin: '0 auto 2rem' }}>
                                     Register your nursery to start showcasing your plant collection to thousands of local enthusiasts.
                                 </p>
-                                <Button onClick={() => window.location.href = '/vendor/profile'} style={{ background: '#facc15', color: '#000', fontWeight: 800 }}>
+                                <Button onClick={() => navigate('/vendor/profile')} style={{ background: '#facc15', color: '#000', fontWeight: 800 }}>
                                     Start Registration
                                 </Button>
                             </div>
@@ -204,7 +221,7 @@ export const VendorPortal = () => {
                                         </div>
                                     </div>
                                     <div className={styles.statCard}>
-                                        <div className={styles.statIcon} style={{ background: 'rgba(56, 189, 248, 0.1)', color: '#38bdf8' }}>
+                                        <div className={styles.statIcon} style={{ background: 'rgba(59, 130, 246, 0.1)', color: '#3b82f6' }}>
                                             <DollarSign size={24} />
                                         </div>
                                         <div className={styles.statInfo}>
@@ -216,12 +233,22 @@ export const VendorPortal = () => {
 
                                 <div className={styles.verifiedBanner}>
                                     <div className={styles.verifiedInfo}>
-                                        <div className={styles.verifiedIconBox}><BadgeCheck size={20} /></div>
+                                        <div className={styles.verifiedIcon}>
+                                            <ShieldCheck size={20} />
+                                        </div>
                                         <div>
-                                            <div className={styles.verifiedTitle}>Legacy Status: {currentVendor?.verified ? 'Verified Partner' : 'Verification Under Review'}</div>
-                                            <p className={styles.verifiedText}>Complete your inventory to boost your visibility score.</p>
+                                            <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 800 }}>Verified Partner</h3>
+                                            <p style={{ margin: 0, fontSize: '0.8rem', opacity: 0.8 }}>Your nursery is live and visible to local plant enthusiasts.</p>
                                         </div>
                                     </div>
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        onClick={() => navigate('/nearby')}
+                                        style={{ borderColor: 'rgba(255,255,255,0.3)', color: 'white', gap: '0.5rem' }}
+                                    >
+                                        <ExternalLink size={14} /> View Public Shop
+                                    </Button>
                                     <Button size="sm" onClick={() => window.open('https://wa.me/9188773534', '_blank')} style={{ background: '#25D366', border: 'none' }}>
                                         <MessageCircle size={16} /> WhatsApp Support
                                     </Button>
@@ -276,57 +303,105 @@ export const VendorPortal = () => {
 
                 {/* SECTION: PROFILE / SETTINGS */}
                 {activeSection === 'profile' && (
-                    <div className={styles.formGrid}>
-                        <form onSubmit={handleSubmit} className={styles.formCard}>
-                            <div className={styles.formHeader}>
-                                <Store size={20} />
-                                <h2>Shop Profile</h2>
-                            </div>
-                            <div className={styles.formGroup}>
-                                <label className={styles.label}>Nursery Name</label>
-                                <input type="text" required className={styles.input} value={formData.shopName} onChange={e => setFormData({ ...formData, shopName: e.target.value })} />
-                            </div>
-                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
-                                <div className={styles.formGroup}>
-                                    <label className={styles.label}>Phone</label>
-                                    <input type="tel" className={styles.input} value={formData.phone} onChange={e => setFormData({ ...formData, phone: e.target.value })} />
+                    <>
+                        {showSuccessStep ? (
+                            <div className={styles.successScreen}>
+                                <div className={styles.successPulse}>
+                                    <CheckCircle size={80} color="#10b981" />
                                 </div>
-                                <div className={styles.formGroup}>
-                                    <label className={styles.label}>WhatsApp</label>
-                                    <input type="tel" className={styles.input} value={formData.whatsapp} onChange={e => setFormData({ ...formData, whatsapp: e.target.value })} />
-                                </div>
-                            </div>
-                            <div className={styles.formGroup}>
-                                <label className={styles.label}>Full Address</label>
-                                <textarea rows={2} className={styles.textarea} value={formData.address} onChange={e => setFormData({ ...formData, address: e.target.value })} />
-                            </div>
-                            <div className={styles.coordsBox}>
-                                <div className={styles.coordValue}>{markerPos.lat.toFixed(5)}, {markerPos.lng.toFixed(5)}</div>
-                                <button type="button" onClick={handleAutoLocate} disabled={isLocating} className={styles.gpsBtn}>
-                                    <Locate size={14} /> {isLocating ? '...' : 'Use GPS'}
-                                </button>
-                            </div>
-                            <Button type="submit" disabled={loading} style={{ width: '100%', borderRadius: '0.85rem' }}>
-                                {loading ? 'Syncing...' : 'Save Profile Changes'}
-                            </Button>
-                        </form>
+                                <h2 className={styles.successTitle}>Profile Synchronized!</h2>
+                                <p className={styles.successSubtitle}>
+                                    Your shop data has been secured and broadcasted to our botanical network.
+                                </p>
 
-                        <div className={styles.mapWrapper}>
-                            <div className={styles.mapContainer}>
-                                <MapContainer center={markerPos} zoom={13} style={{ height: '100%', width: '100%' }}>
-                                    <TileLayer attribution='&copy; OSM' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                                    <DraggableMarker pos={markerPos} setPos={setMarkerPos} />
-                                    <RecenterMap center={markerPos} />
-                                </MapContainer>
+                                <div className={styles.roadmapCard}>
+                                    <h3 className={styles.roadmapHeading}>🚀 Next Recommended Steps</h3>
+                                    <div className={styles.roadmapList}>
+                                        <div className={styles.roadmapItem}>
+                                            <div className={styles.roadmapIcon}><Package size={18} /></div>
+                                            <div className={styles.roadmapContent}>
+                                                <strong>Add Your Catalog</strong>
+                                                <p>Populate your inventory with at least 5 plant species to increase shop visibility.</p>
+                                            </div>
+                                        </div>
+                                        <div className={styles.roadmapItem}>
+                                            <div className={styles.roadmapIcon}><Locate size={18} /></div>
+                                            <div className={styles.roadmapContent}>
+                                                <strong>Geofence Verification</strong>
+                                                <p>Ensure your GPS pin is accurate for "Nearby" search results in your city.</p>
+                                            </div>
+                                        </div>
+                                        <div className={styles.roadmapItem}>
+                                            <div className={styles.roadmapIcon}><Clock size={18} /></div>
+                                            <div className={styles.roadmapContent}>
+                                                <strong>Registration: Review Pending</strong>
+                                                <p>Your shop details have been saved. You will receive an automated approval email at <strong>{user?.email}</strong> once verified by the VanaMap team.</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <Button
+                                    onClick={() => navigate('/vendor/inventory')}
+                                    style={{ padding: '1rem 2rem', fontSize: '1rem', fontWeight: 800, borderRadius: '1rem' }}
+                                >
+                                    Manage Inventory <ArrowRight size={20} style={{ marginLeft: '10px' }} />
+                                </Button>
                             </div>
-                            <div className={styles.formCard} style={{ padding: '1rem' }}>
-                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#64748b', fontSize: '0.8rem' }}>
-                                    <Info size={14} />
-                                    <span>Drag marker to your shop's main entrance for precision navigation.</span>
+                        ) : (
+                            <div className={styles.formGrid}>
+                                <form onSubmit={handleSubmit} className={styles.formCard}>
+                                    <div className={styles.formHeader}>
+                                        <Store size={20} />
+                                        <h2>Shop Profile</h2>
+                                    </div>
+                                    <div className={styles.formGroup}>
+                                        <label className={styles.label}>Nursery Name</label>
+                                        <input type="text" required className={styles.input} value={formData.shopName} onChange={e => setFormData({ ...formData, shopName: e.target.value })} />
+                                    </div>
+                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                                        <div className={styles.formGroup}>
+                                            <label className={styles.label}>Phone</label>
+                                            <input type="tel" className={styles.input} value={formData.phone} onChange={e => setFormData({ ...formData, phone: e.target.value })} />
+                                        </div>
+                                        <div className={styles.formGroup}>
+                                            <label className={styles.label}>WhatsApp</label>
+                                            <input type="tel" className={styles.input} value={formData.whatsapp} onChange={e => setFormData({ ...formData, whatsapp: e.target.value })} />
+                                        </div>
+                                    </div>
+                                    <div className={styles.formGroup}>
+                                        <label className={styles.label}>Full Address</label>
+                                        <textarea rows={2} className={styles.textarea} value={formData.address} onChange={e => setFormData({ ...formData, address: e.target.value })} />
+                                    </div>
+                                    <div className={styles.coordsBox}>
+                                        <div className={styles.coordValue}>{markerPos.lat.toFixed(5)}, {markerPos.lng.toFixed(5)}</div>
+                                        <button type="button" onClick={handleAutoLocate} disabled={isLocating} className={styles.gpsBtn}>
+                                            <Locate size={14} /> {isLocating ? '...' : 'Use GPS'}
+                                        </button>
+                                    </div>
+                                    <Button type="submit" disabled={loading} style={{ width: '100%', borderRadius: '0.85rem' }}>
+                                        {loading ? 'Syncing...' : 'Save Profile Changes'}
+                                    </Button>
+                                </form>
+
+                                <div className={styles.mapWrapper}>
+                                    <div className={styles.mapContainer}>
+                                        <MapContainer center={markerPos} zoom={13} style={{ height: '100%', width: '100%' }}>
+                                            <TileLayer attribution='&copy; OSM' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                                            <DraggableMarker pos={markerPos} setPos={setMarkerPos} />
+                                            <RecenterMap center={markerPos} />
+                                        </MapContainer>
+                                    </div>
+                                    <div className={styles.formCard} style={{ padding: '1rem' }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#64748b', fontSize: '0.8rem' }}>
+                                            <Info size={14} />
+                                            <span>Drag marker to your shop's main entrance for precision navigation.</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </div>
+                        )}
+                    </>
                 )}
             </div>
         </VendorPortalLayout>

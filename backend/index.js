@@ -1979,7 +1979,13 @@ app.patch('/api/vendors/:id', auth, async (req, res) => {
         const oldVendor = await Vendor.findOne({ id: req.params.id });
         const vendor = await Vendor.findOneAndUpdate({ id: req.params.id }, req.body, { new: true });
 
-        if (req.body.verified === true && !oldVendor.verified) {
+        if (req.body.verified === true && (!oldVendor || !oldVendor.verified)) {
+            const recipientEmail = vendor.ownerEmail || (oldVendor && oldVendor.ownerEmail);
+            if (recipientEmail) {
+                const html = EmailTemplates.vendorVerified(vendor.name, vendor.name); // Using vendor name for both for now, or find user name
+                CommunicationOS.email(recipientEmail, "Your Shop is Now Verified! 🌿 | VanaMap Partner", html).catch(e => console.error('[Approval Email] Failed:', e.message));
+            }
+
             sendPushNotification({
                 title: 'New Verified Nursery! 🏠',
                 body: `${vendor.name} is now a Verified VanaMap Partner in ${vendor.city || 'your area'}. Visit them today!`,
@@ -2226,7 +2232,11 @@ app.post('/api/auth/signup', async (req, res) => {
             captchaSvg: null // No captcha image for OTP flow
         });
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        console.error('[Signup] Error:', err);
+        if (err.code === 11000) {
+            return res.status(400).json({ error: "Email or Phone already registered in our ecosystem." });
+        }
+        res.status(500).json({ error: "Registration failed. Please try again later." });
     }
 });
 
@@ -2606,7 +2616,11 @@ app.post('/api/user/verify-contact-otp', auth, async (req, res) => {
         });
     } catch (error) {
         console.error('[Contact Verify] Error:', error);
-        res.status(500).json({ error: error.message });
+        if (error.code === 11000) {
+            const field = Object.keys(error.keyValue)[0];
+            return res.status(400).json({ error: `This ${field} is already linked to another account.` });
+        }
+        res.status(500).json({ error: 'Verification failed. Please try again later.' });
     }
 });
 
@@ -2694,7 +2708,8 @@ app.post('/api/auth/login', async (req, res) => {
 
         res.json({ user: normalizeUser(user), token });
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        console.error('[Login] Error:', err);
+        res.status(500).json({ error: "Something went wrong during login. Please try again." });
     }
 });
 
@@ -3022,7 +3037,8 @@ app.post('/api/auth/reset-password-verify', async (req, res) => {
 
         res.json({ success: true, message: "Password updated successfully." });
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        console.error('[Reset Verify] Error:', err);
+        res.status(500).json({ error: "Failed to reset password. Please contact support." });
     }
 });
 
@@ -3052,7 +3068,8 @@ app.post('/api/auth/reset-password-request', async (req, res) => {
         await user.save();
         res.json({ success: true, message: "Request submitted for admin review." });
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        console.error('[Reset Request] Error:', err);
+        res.status(500).json({ error: "Failed to process request. Please try again later." });
     }
 });
 

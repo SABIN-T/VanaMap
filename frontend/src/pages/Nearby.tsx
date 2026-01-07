@@ -604,6 +604,16 @@ out center;
                                             <Button variant="outline" size="sm" className={styles.actionBtn} onClick={() => window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(vendor.name)}&query_place_id=${vendor.latitude},${vendor.longitude}`)}>
                                                 <MapPin size={14} /> <span className="hidden sm:inline">Map</span>
                                             </Button>
+                                            {vendor.website && (
+                                                <Button variant="outline" size="sm" className={styles.actionBtn} onClick={() => {
+                                                    if (vendor.website) {
+                                                        const url = vendor.website.startsWith('http') ? vendor.website : `https://${vendor.website}`;
+                                                        window.open(url, '_blank');
+                                                    }
+                                                }}>
+                                                    <ExternalLink size={14} /> <span className="hidden sm:inline">Website</span>
+                                                </Button>
+                                            )}
                                             {(vendor.whatsapp || vendor.phone !== 'N/A') && (
                                                 <Button size="sm" className={styles.actionBtn} style={{ background: '#25D366', color: '#fff', border: 'none' }} onClick={() => {
                                                     logVendorContact({ vendorId: vendor.id, vendorName: vendor.name, userEmail: user?.email || 'guest', contactType: 'whatsapp' });

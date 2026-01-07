@@ -272,6 +272,55 @@ const EmailTemplates = {
             </tr>
         `;
         return createEmailTemplate(content);
+    },
+
+    // 5. Vendor Verified Confirmation
+    vendorVerified: (name, shopName) => {
+        const content = `
+            <tr>
+                <td style="padding: 40px 30px;">
+                    <div style="text-align: center; margin-bottom: 30px;">
+                        <div style="font-size: 60px; margin-bottom: 20px;">🛡️</div>
+                        <h2 style="color: #1f2937; margin: 0 0 10px 0; font-size: 28px; font-weight: 600;">
+                            Your Shop is Verified!
+                        </h2>
+                        <p style="color: #6b7280; font-size: 16px; margin: 0;">
+                            Congratulations ${name}, your nursery is now a Verified Partner.
+                        </p>
+                    </div>
+                    
+                    <div style="background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%); border-left: 4px solid #10b981; padding: 25px; border-radius: 12px; margin: 30px 0;">
+                        <p style="color: #065f46; font-size: 16px; line-height: 1.8; margin: 0;">
+                            <strong>Shop: ${shopName}</strong><br/><br/>
+                            We have reviewed your shop details and granted you the <strong>Verified Partner</strong> badge. This status increases your visibility in search results and builds trust with thousands of local plant enthusiasts on VanaMap.
+                        </p>
+                    </div>
+                    
+                    <div style="margin: 30px 0;">
+                        <h3 style="color: #1f2937; font-size: 18px; margin: 0 0 15px 0;">
+                            🚀 Next Professional Steps:
+                        </h3>
+                        <ul style="color: #4b5563; font-size: 15px; line-height: 2; margin: 0; padding-left: 20px;">
+                            <li><strong>List Your Inventory</strong> - Add high-quality photos and professional descriptions for your plants.</li>
+                            <li><strong>Manage Prices</strong> - Keep your pricing up-to-date to attract more local buyers.</li>
+                            <li><strong>Check Insights</strong> - Use your dashboard to see which plants are in high demand in your area.</li>
+                            <li><strong>Promote Your Shop</strong> - Share your VanaMap profile link on social media.</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="text-align: center; margin: 30px 0;">
+                        <a href="https://vanamap.online/vendor/inventory" style="display: inline-block; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 50px; font-weight: 600; font-size: 16px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);">
+                            Start Adding Plants
+                        </a>
+                    </div>
+                    
+                    <p style="color: #9ca3af; font-size: 13px; text-align: center; margin: 30px 0 0 0; padding-top: 20px; border-top: 1px solid #e5e7eb;">
+                        Welcome to the Elite Circle of VanaMap Partners! 🌿
+                    </p>
+                </td>
+            </tr>
+        `;
+        return createEmailTemplate(content);
     }
 };
 
