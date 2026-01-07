@@ -36,7 +36,7 @@ const SimulationData = lazy(() => import('../../pages/admin/SimulationData').the
 const PotDesigns = lazy(() => import('../../pages/admin/PotDesigns').then(m => ({ default: m.default })));
 const Premium = lazy(() => import('../../pages/admin/Premium').then(m => ({ default: m.Premium })));
 const PublicPremium = lazy(() => import('../../pages/Premium').then(m => ({ default: m.Premium })));
-const MakeItReal = lazy(() => import('../../pages/MakeItReal').then(m => ({ default: m.MakeItReal })));
+
 const ForestGame = lazy(() => import('../../pages/ForestGame').then(m => ({ default: m.ForestGame })));
 const PotDesigner = lazy(() => import('../../pages/PotDesigner').then(m => ({ default: m.PotDesigner })));
 const DailyNews = lazy(() => import('../../pages/DailyNews').then(m => ({ default: m.DailyNews })));
@@ -157,11 +157,7 @@ export const AnimatedRoutes = () => {
                                 <Heaven />
                             </RestrictedRoute>
                         } />
-                        <Route path="/make-it-real" element={
-                            <RestrictedRoute path="/make-it-real">
-                                <MakeItReal />
-                            </RestrictedRoute>
-                        } />
+
                         <Route path="/forest-game" element={
                             <RestrictedRoute path="/forest-game">
                                 <ForestGame />

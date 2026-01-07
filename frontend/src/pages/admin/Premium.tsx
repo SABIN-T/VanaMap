@@ -243,7 +243,7 @@ export const Premium = () => {
                                 {[
                                     { name: 'Heaven', path: '/heaven' },
                                     { name: 'Shops Global', path: '/shops' },
-                                    { name: 'AI Diagnostics', path: '/make-it-real' },
+
                                     { name: 'Leaderboard', path: '/leaderboard' },
                                     { name: 'Nearby GPS', path: '/nearby' }
                                 ].map(page => {

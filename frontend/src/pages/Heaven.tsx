@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Crown, Zap, ArrowRight, Star, Palette, Gamepad as GamepadIcon, Newspaper, Bot } from 'lucide-react';
+import { Crown, ArrowRight, Star, Palette, Gamepad as GamepadIcon, Newspaper, Bot } from 'lucide-react';
 import { useEffect } from 'react';
 import styles from './Heaven.module.css';
 
@@ -54,21 +54,7 @@ export const Heaven = () => {
 
                 {/* Exclusive Features Grid */}
                 <div className={styles.grid}>
-                    {/* Make It Real */}
-                    <div className={styles.card} onClick={() => navigate('/make-it-real')}>
-                        <div className={styles.exclusiveBadge}>VanaMap+</div>
-                        <div className={styles.cardIconBox}>
-                            <Zap size={32} />
-                        </div>
-                        <h3 className={styles.cardTitle}>Make It Real</h3>
-                        <p className={styles.cardText}>
-                            Visualize plants in your space with advanced AR reality.
-                            Recolor pots and see magic happen.
-                        </p>
-                        <button className={styles.cardAction}>
-                            Launch AR <ArrowRight size={16} />
-                        </button>
-                    </div>
+
 
                     {/* Pot Designer */}
                     <div className={styles.card} onClick={() => navigate('/pot-designer')}>
