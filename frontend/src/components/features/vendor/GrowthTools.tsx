@@ -14,12 +14,24 @@ export const GrowthTools = ({ vendorId }: GrowthToolsProps) => {
     const [qrData, setQrData] = useState<{ shopUrl: string; name: string } | null>(null);
     const [demandData, setDemandData] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    const [lastUpdated, setLastUpdated] = useState<Date>(new Date());
+    const [isLive, setIsLive] = useState(true);
 
     useEffect(() => {
         loadTools();
+
+        // Auto-refresh every 30 seconds for real-time data
+        const interval = setInterval(() => {
+            if (vendorId) {
+                console.log('[Growth Tools] 🔄 Auto-refreshing demand data...');
+                loadTools(true); // Silent refresh
+            }
+        }, 30000); // 30 seconds
+
+        return () => clearInterval(interval);
     }, [vendorId]);
 
-    const loadTools = async () => {
+    const loadTools = async (silent = false) => {
         if (!vendorId) {
             // If no vendor ID yet, we might still be loading parent data, 
             // OR the user has no vendor profile.
@@ -30,7 +42,7 @@ export const GrowthTools = ({ vendorId }: GrowthToolsProps) => {
             setLoading(false);
             return;
         }
-        setLoading(true); // Ensure loading state if ID changes
+        if (!silent) setLoading(true); // Only show loading on initial load
         try {
             const [qr, demand] = await Promise.all([
                 generateVendorQR(vendorId),
@@ -38,8 +50,14 @@ export const GrowthTools = ({ vendorId }: GrowthToolsProps) => {
             ]);
             setQrData(qr);
             setDemandData(demand.recommendations || []);
+            setLastUpdated(new Date());
+            setIsLive(true);
+            if (!silent) {
+                console.log('[Growth Tools] ✅ Data loaded successfully');
+            }
         } catch (e) {
             console.error("Failed to load growth tools", e);
+            setIsLive(false);
         } finally {
             setLoading(false);
         }
@@ -127,9 +145,34 @@ export const GrowthTools = ({ vendorId }: GrowthToolsProps) => {
                 <div className={`${styles.card} ${styles.wideCard}`}>
                     <div className={styles.cardHeader}>
                         <TrendingUp size={24} className={styles.iconBlue} />
-                        <div>
-                            <h3>Demanded in Your City</h3>
-                            <p>Top plants users are searching for near you</p>
+                        <div style={{ flex: 1 }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                <h3>Demanded in Your City</h3>
+                                {isLive && (
+                                    <span style={{
+                                        background: '#10b981',
+                                        color: 'white',
+                                        fontSize: '0.65rem',
+                                        fontWeight: 700,
+                                        padding: '2px 8px',
+                                        borderRadius: '4px',
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        gap: '4px',
+                                        animation: 'pulse 2s ease-in-out infinite'
+                                    }}>
+                                        <span style={{
+                                            width: '6px',
+                                            height: '6px',
+                                            borderRadius: '50%',
+                                            background: 'white',
+                                            animation: 'blink 1.5s ease-in-out infinite'
+                                        }}></span>
+                                        LIVE
+                                    </span>
+                                )}
+                            </div>
+                            <p>Top plants users are searching for near you • Updated {new Date(lastUpdated).toLocaleTimeString()}</p>
                         </div>
                     </div>
                     <div className={styles.demandList}>
