@@ -321,6 +321,54 @@ const EmailTemplates = {
             </tr>
         `;
         return createEmailTemplate(content);
+    },
+
+    vendorRejected: (name, shopName, reason = 'incomplete information') => {
+        const content = `
+            <tr>
+                <td style="padding: 40px 30px;">
+                    <div style="text-align: center; margin-bottom: 30px;">
+                        <div style="font-size: 60px; margin-bottom: 20px;">📋</div>
+                        <h2 style="color: #1f2937; margin: 0 0 10px 0; font-size: 28px; font-weight: 600;">
+                            Shop Verification Update
+                        </h2>
+                        <p style="color: #6b7280; font-size: 16px; margin: 0;">
+                            Hello ${name}, regarding your shop verification request
+                        </p>
+                    </div>
+                    
+                    <div style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-left: 4px solid #f59e0b; padding: 25px; border-radius: 12px; margin: 30px 0;">
+                        <p style="color: #92400e; font-size: 16px; line-height: 1.8; margin: 0;">
+                            <strong>Shop: ${shopName}</strong><br/><br/>
+                            We've reviewed your shop registration and found that we need some additional information before we can verify your account. This is typically due to ${reason}.
+                        </p>
+                    </div>
+                    
+                    <div style="margin: 30px 0;">
+                        <h3 style="color: #1f2937; font-size: 18px; margin: 0 0 15px 0;">
+                            📝 Next Steps:
+                        </h3>
+                        <ul style="color: #4b5563; font-size: 15px; line-height: 2; margin: 0; padding-left: 20px;">
+                            <li><strong>Review Your Profile</strong> - Make sure all required fields are filled out completely.</li>
+                            <li><strong>Add Contact Information</strong> - Verify your phone number and address are correct.</li>
+                            <li><strong>Upload Shop Photos</strong> - Add clear photos of your nursery to build trust.</li>
+                            <li><strong>Resubmit</strong> - Once updated, your profile will be automatically reviewed again.</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="text-align: center; margin: 30px 0;">
+                        <a href="https://vanamap.online/vendor/profile" style="display: inline-block; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 50px; font-weight: 600; font-size: 16px; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);">
+                            Update Profile
+                        </a>
+                    </div>
+                    
+                    <p style="color: #9ca3af; font-size: 13px; text-align: center; margin: 30px 0 0 0; padding-top: 20px; border-top: 1px solid #e5e7eb;">
+                        Need help? Reply to this email or contact us at <a href="mailto:support@vanamap.online" style="color: #10b981; text-decoration: none;">support@vanamap.online</a>
+                    </p>
+                </td>
+            </tr>
+        `;
+        return createEmailTemplate(content);
     }
 };
 

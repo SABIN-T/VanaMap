@@ -1979,11 +1979,28 @@ app.patch('/api/vendors/:id', auth, async (req, res) => {
         const oldVendor = await Vendor.findOne({ id: req.params.id });
         const vendor = await Vendor.findOneAndUpdate({ id: req.params.id }, req.body, { new: true });
 
+        if (!vendor) {
+            return res.status(404).json({ error: 'Vendor not found' });
+        }
+
+        const recipientEmail = vendor.ownerEmail || (oldVendor && oldVendor.ownerEmail);
+
+        // APPROVAL: Vendor just got verified
         if (req.body.verified === true && (!oldVendor || !oldVendor.verified)) {
-            const recipientEmail = vendor.ownerEmail || (oldVendor && oldVendor.ownerEmail);
             if (recipientEmail) {
-                const html = EmailTemplates.vendorVerified(vendor.name, vendor.name); // Using vendor name for both for now, or find user name
-                CommunicationOS.email(recipientEmail, "Your Shop is Now Verified! 🌿 | VanaMap Partner", html).catch(e => console.error('[Approval Email] Failed:', e.message));
+                console.log(`[Vendor Approval] Sending verification email to: ${recipientEmail} for shop: ${vendor.name}`);
+                const html = EmailTemplates.vendorVerified(vendor.name, vendor.name);
+                CommunicationOS.email(recipientEmail, "Your Shop is Now Verified! 🌿 | VanaMap Partner", html)
+                    .then(result => {
+                        if (result.success) {
+                            console.log(`[Vendor Approval] ✅ Email sent successfully to ${recipientEmail}`);
+                        } else {
+                            console.error(`[Vendor Approval] ❌ Email failed to ${recipientEmail}:`, result.error);
+                        }
+                    })
+                    .catch(e => console.error('[Vendor Approval] ❌ Email exception:', e.message));
+            } else {
+                console.warn(`[Vendor Approval] ⚠️ No email found for vendor ${vendor.name} (ID: ${vendor.id})`);
             }
 
             sendPushNotification({
@@ -1992,6 +2009,26 @@ app.patch('/api/vendors/:id', auth, async (req, res) => {
                 url: '/nearby',
                 icon: '/logo.png'
             });
+        }
+
+        // REJECTION: Vendor got unverified/rejected
+        if (req.body.verified === false && oldVendor && oldVendor.verified === true) {
+            if (recipientEmail) {
+                console.log(`[Vendor Rejection] Sending rejection email to: ${recipientEmail} for shop: ${vendor.name}`);
+                const reason = req.body.rejectionReason || 'incomplete or inaccurate information';
+                const html = EmailTemplates.vendorRejected(vendor.name, vendor.name, reason);
+                CommunicationOS.email(recipientEmail, "Shop Verification Update | VanaMap", html)
+                    .then(result => {
+                        if (result.success) {
+                            console.log(`[Vendor Rejection] ✅ Email sent successfully to ${recipientEmail}`);
+                        } else {
+                            console.error(`[Vendor Rejection] ❌ Email failed to ${recipientEmail}:`, result.error);
+                        }
+                    })
+                    .catch(e => console.error('[Vendor Rejection] ❌ Email exception:', e.message));
+            } else {
+                console.warn(`[Vendor Rejection] ⚠️ No email found for vendor ${vendor.name} (ID: ${vendor.id})`);
+            }
         }
 
         // Detect Inventory/Price Updates
@@ -2016,6 +2053,7 @@ app.patch('/api/vendors/:id', auth, async (req, res) => {
 
         res.json(vendor);
     } catch (err) {
+        console.error('[Vendor Update] Error:', err);
         res.status(500).json({ error: err.message });
     }
 });
