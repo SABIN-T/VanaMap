@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { useLocation, Link, useNavigate } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import {
-    LayoutDashboard, MapPin, Heart, ShoppingBag,
+    LayoutDashboard, MapPin, ShoppingBag,
     LogOut, Menu, X, ChevronRight, Store, Trophy,
-    Shield, User, Settings, HelpCircle, Leaf
+    Shield, Leaf
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import styles from './UserDashboardLayout.module.css';
@@ -15,7 +15,6 @@ interface UserDashboardLayoutProps {
 
 export const UserDashboardLayout = ({ title, children }: UserDashboardLayoutProps) => {
     const location = useLocation();
-    const navigate = useNavigate();
     const { logout, user } = useAuth();
     const [isSidebarOpen, setSidebarOpen] = useState(true);
 

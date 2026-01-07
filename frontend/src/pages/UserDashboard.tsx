@@ -1,13 +1,12 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 import { Button } from '../components/common/Button';
 import {
-    ShoppingBag, MapPin, Heart, ArrowRight, Loader2, Store,
-    Shield, Lock, Trophy, Zap, TrendingUp, Wind, Award,
-    HelpCircle, CheckCircle
+    ShoppingBag, MapPin, Heart, ArrowRight, Loader2,
+    Shield, Lock, Trophy, Zap, Wind, CheckCircle
 } from 'lucide-react';
 import { VerificationModal } from '../components/auth/VerificationModal';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { fetchPlants, fetchVendors, updateVendor, changePassword, fetchLeaderboard } from '../services/api';
 import type { Plant, Vendor } from '../types';
@@ -165,7 +164,7 @@ export const UserDashboard = () => {
                 setDetectingLoc(false);
                 toast.success("GPS Location detected!");
             },
-            (err) => {
+            () => {
                 performIPFallback("GPS access denied.");
             }
         );
@@ -399,29 +398,21 @@ export const UserDashboard = () => {
                 </div>
             </div>
 
+            {/* --- MODALS --- */}
 
-            {/* --- MODALS (Preserved) --- */}
-
-            {/* VENDOR MODAL */}
             {showVendorModal && (
                 <div style={{
                     position: 'fixed', inset: 0, zIndex: 1000,
                     background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(8px)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem'
                 }}>
-                    {/* ... Vendor Modal Content ... */}
-                    {/* Simplified for brevity as logic remains same, just re-rendering */}
                     <div style={{
                         width: '100%', maxWidth: '500px',
                         background: 'var(--color-bg-card)', border: '1px solid var(--glass-border)',
                         borderRadius: '1.5rem', padding: '2rem',
                         boxShadow: '0 20px 50px rgba(0,0,0,0.3)',
                     }}>
-                        {/* Copy-pasting internal content would be ideal or extract to component. 
-                            For this refactor, I'm keeping the logic here but minimal representation for the file write tool.
-                        */}
                         <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem' }}>Shop Profile</h2>
-                        {/* Inputs */}
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                             <input value={vendorForm.name} onChange={e => setVendorForm({ ...vendorForm, name: e.target.value })} placeholder="Shop Name" style={{ padding: '0.8rem', borderRadius: '0.5rem' }} />
                             <input value={vendorForm.phone} onChange={e => setVendorForm({ ...vendorForm, phone: e.target.value })} placeholder="Phone" style={{ padding: '0.8rem', borderRadius: '0.5rem' }} />
@@ -435,7 +426,6 @@ export const UserDashboard = () => {
                 </div>
             )}
 
-            {/* PASSWORD RESET MODAL */}
             {showPasswordModal && (
                 <div style={{
                     position: 'fixed', inset: 0, zIndex: 1001,
@@ -457,7 +447,6 @@ export const UserDashboard = () => {
                 </div>
             )}
 
-            {/* GUIDE MODAL */}
             {showGuide && (
                 <div style={{
                     position: 'fixed', inset: 0, zIndex: 1001,
@@ -470,7 +459,6 @@ export const UserDashboard = () => {
                     }} onClick={e => e.stopPropagation()}>
                         <h2 style={{ fontSize: '1.5rem', fontWeight: 800, margin: '0 0 1.5rem' }}>Level Up Guide</h2>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                            {/* Content same as before */}
                             <p style={{ color: '#ccc' }}>Earn points by adding favorites, visiting daily, and completing profile.</p>
                             <Button onClick={() => setShowGuide(false)}>Got it!</Button>
                         </div>
@@ -478,7 +466,6 @@ export const UserDashboard = () => {
                 </div>
             )}
 
-            {/* COLLECTION MODAL (Full Screen Overlay/Sidebar) */}
             {showCollectionModal && (
                 <div style={{
                     position: 'fixed', inset: 0, zIndex: 1005,
@@ -525,7 +512,6 @@ export const UserDashboard = () => {
                 </div>
             )}
 
-            {/* VERIFICATION MODAL */}
             {showVerifyModal && (
                 <VerificationModal
                     initialMethod={verStatus.email ? 'phone' : 'email'}

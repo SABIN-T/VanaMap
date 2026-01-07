@@ -17,6 +17,9 @@ const svgCaptcha = require('svg-captcha');
 const cron = require('node-cron');
 const Parser = require('rss-parser');
 const parser = new Parser();
+const multer = require('multer');
+const path = require('path');
+const fs = require('fs');
 const FloraIntelligence = require('./flora-intelligence');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
@@ -3137,6 +3140,11 @@ app.get('/api/news', async (req, res) => {
 
 app.get('/', (req, res) => res.send('VanaMap API v3.0 - Full Power Simulation Active'));
 
+app.get('/api/keep-alive', (req, res) => {
+    console.log("Ping received from cron-job.org");
+    res.status(200).send("I am awake!");
+});
+
 // 1. User Submit Ticket
 app.post('/api/support', auth, async (req, res) => {
     try {
@@ -3193,34 +3201,141 @@ app.post('/api/admin/support/:id/reply', auth, admin, async (req, res) => {
     }
 });
 
-// 4. Admin Broadcast Message (Manual)
-app.post('/api/admin/broadcast', auth, admin, async (req, res) => {
-    try {
-        const { type, targetId, title, message } = req.body; // type: 'all', 'vendor', 'user', 'specific'
+// ==========================================
+// ADMIN BROADCAST SYSTEM (NEW)
+// ==========================================
 
-        // Use existing broadcastAlert function logic but generalized
-        // If specific targetId is provided, notify just them
-        // If type is all/vendor/user, we iterate and notify
+// Configure multer for broadcast images
+const broadcastStorage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        const dir = path.join(__dirname, 'uploads', 'broadcasts');
+        if (!fs.existsSync(dir)) {
+            fs.mkdirSync(dir, { recursive: true });
+        }
+        cb(null, dir);
+    },
+    filename: (req, file, cb) => {
+        cb(null, `broadcast-${Date.now()}${path.extname(file.originalname)}`);
+    }
+});
 
-        if (type === 'specific' && targetId) {
-            await broadcastAlert('admin_msg', 'Admin Message', {
-                userId: targetId,
-                title: title || 'System Update',
-                body: message
-            });
+const broadcastUpload = multer({
+    storage: broadcastStorage,
+    limits: { fileSize: 5 * 1024 * 1024 },
+    fileFilter: (req, file, cb) => {
+        const allowedTypes = /jpeg|jpg|png|gif|webp/;
+        const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
+        const mimetype = allowedTypes.test(file.mimetype);
+        if (extname && mimetype) {
+            cb(null, true);
         } else {
-            // For mass broadcast, efficient logic would be needed. 
-            // For now, we assume this is low volume usage or handled by socket broadcast in future.
-            // We'll create a generic notification type that the frontend polls for? 
-            // Actually, existing broadcastAlert saves to DB for specific users. 
-            // MassDB insertion for thousands of users is heavy. 
-            // Instead, we might create a 'SystemAnnouncement' model later.
-            // But for now, let's just support 'specific' user messaging via UI as requested "sepratly".
-            return res.status(400).json({ error: "Mass broadcast not fully implemented in this version. Use specific user targeting." });
+            cb(new Error('Only image files are allowed!'));
+        }
+    }
+});
+
+// Serve uploads
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
+// 1. Search Users
+app.get('/api/admin/search-users', auth, admin, async (req, res) => {
+    try {
+        const { q } = req.query;
+        if (!q || q.trim().length < 2) return res.status(400).json({ error: "Search query too short" });
+
+        const users = await User.find({
+            $or: [
+                { name: { $regex: q, $options: 'i' } },
+                { email: { $regex: q, $options: 'i' } },
+                { phone: { $regex: q, $options: 'i' } }
+            ]
+        }).select('name email phone role').limit(20);
+
+        res.json({ success: true, users: users.map(u => ({ id: u._id, name: u.name, email: u.email, phone: u.phone, role: u.role })) });
+    } catch (error) {
+        res.status(500).json({ error: "Search failed" });
+    }
+});
+
+// 2. Send Broadcast (Replaces old endpoint)
+app.post('/api/admin/broadcast', auth, admin, broadcastUpload.single('image'), async (req, res) => {
+    try {
+        const { recipientType, messageType, subject, messageText, recipientId } = req.body;
+        const imageFile = req.file;
+
+        if (!subject) return res.status(400).json({ error: "Subject required" });
+
+        let recipients = [];
+        if (recipientType === 'all') {
+            recipients = await User.find({}).select('name email');
+        } else if (recipientType === 'single') {
+            if (!recipientId) return res.status(400).json({ error: "Recipient required" });
+            const user = await User.findById(recipientId).select('name email');
+            if (!user) return res.status(404).json({ error: "User not found" });
+            recipients = [user];
         }
 
-        res.json({ success: true });
+        // --- Construct Email HTML ---
+        let contentHTML = '';
+        if (messageType === 'text' || messageType === 'both') {
+            contentHTML += `<div style="padding: 20px; color: #333; line-height: 1.6; font-size: 16px;">${messageText ? messageText.replace(/\n/g, '<br>') : ''}</div>`;
+        }
+        if ((messageType === 'image' || messageType === 'both') && imageFile) {
+            const imageUrl = `${process.env.BACKEND_URL || 'https://plantoxy.onrender.com'}/uploads/broadcasts/${imageFile.filename}`;
+            contentHTML += `<div style="text-align: center; padding: 20px;"><img src="${imageUrl}" alt="Broadcast" style="max-width: 100%; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);" /></div>`;
+        }
+
+        const fullHTML = `
+            <!DOCTYPE html>
+            <html>
+            <body style="margin: 0; padding: 0; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: #f3f4f6;">
+                <table width="100%" cellpadding="0" cellspacing="0" style="padding: 40px 0;">
+                    <tr>
+                        <td align="center">
+                            <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+                                <tr>
+                                    <td style="background: linear-gradient(135deg, #059669 0%, #10b981 100%); padding: 30px; text-align: center;">
+                                        <h1 style="color: white; margin: 0; font-size: 24px;">${subject}</h1>
+                                    </td>
+                                </tr>
+                                <tr><td>${contentHTML}</td></tr>
+                                <tr>
+                                    <td style="background-color: #f9fafb; padding: 20px; text-align: center; font-size: 12px; color: #9ca3af;">
+                                        &copy; 2026 VanaMap. All rights reserved.
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+            </body>
+            </html>
+        `;
+
+        // --- Send in Batches ---
+        let successCount = 0;
+        let failedCount = 0;
+
+        // Simple loop for now (for production, use a queue)
+        for (const recipient of recipients) {
+            try {
+                await sendEmail({
+                    from: 'VanaMap Broadcast <noreply@vanamap.online>',
+                    to: recipient.email,
+                    subject: subject,
+                    html: fullHTML
+                });
+                successCount++;
+            } catch (err) {
+                console.error("Broadcast Send Error:", err.message);
+                failedCount++;
+            }
+        }
+
+        res.json({ success: true, sent: successCount, failed: failedCount, message: `Sent to ${successCount} users.` });
+
     } catch (e) {
+        console.error("Broadcast Error:", e);
         res.status(500).json({ error: e.message });
     }
 });
