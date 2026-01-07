@@ -298,7 +298,6 @@ const CommunicationOS = {
     }
 };
 
-const app = express();
 const JWT_SECRET = process.env.JWT_SECRET || 'vanamap_super_secret_key_2025';
 
 // --- MIDDLEWARES (Moved Up) ---
