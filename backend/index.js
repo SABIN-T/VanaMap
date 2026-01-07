@@ -3,7 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
-const { Plant, Vendor, User, Payment, Notification, Chat, PlantSuggestion, SearchLog, PushSubscription, SystemSettings, CustomPot, SupportTicket, AIFeedback, ApiKey } = require('./models');
+const { Plant, Vendor, User, Payment, Notification, Chat, PlantSuggestion, SearchLog, PushSubscription, SystemSettings, CustomPot, SupportTicket, AIFeedback, ApiKey, NewsletterSubscriber } = require('./models');
 const Razorpay = require('razorpay');
 const webpush = require('web-push');
 const helmet = require('helmet');
@@ -201,118 +201,168 @@ const sendResetEmail = async (email, tempPass) => {
     }
 };
 
-// Email OTP Sender
-const sendOtpEmail = async (email, otp) => {
-    const mailOptions = {
-        from: `"VanaMap Security" <${process.env.EMAIL_USER}>`,
-        to: email,
-        subject: '🔐 Your Verification Code',
-        html: `
-            <div style="font-family: sans-serif; max-width: 400px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 10px; background-color: #ffffff;">
-                <h2 style="color: #10b981; text-align: center;">Verify Identity</h2>
-                <p style="color: #64748b; text-align: center;">Use the following code to complete your registration:</p>
-                <div style="background: #f1f5f9; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center;">
-                    <span style="font-size: 32px; font-weight: bold; letter-spacing: 5px; color: #0f172a;">${otp}</span>
-                </div>
-                <p style="color: #94a3b8; font-size: 12px; text-align: center;">Valid for 15 minutes. Do not share this code.</p>
-            </div>
-        `
-    };
-    try {
-        await sendEmail(mailOptions);
-        console.log(`[AUTH] OTP Email sent to ${email}`);
-    } catch (e) {
-        console.error("[AUTH] Email OTP Failed:", e.message);
-    }
-};
+// --- CommunicationOS 2.0 (The Neural Network of VanaMap) ---
+// Unified messaging system for Email (Gmail), SMS (Fast2SMS), and Push
 
-// SMS OTP Sender (Research Implementation)
-const sendSmsOtp = async (phone, otp) => {
-    // 1. FREE/RESEARCH IMPLEMENTATION: Fast2SMS (India)
-    // If user has API Key in .env, use it.
-    if (process.env.FAST2SMS_API_KEY && phone && phone.startsWith('+91')) {
+const CommunicationOS = {
+    // 1. Core: Send Email
+    email: async (to, subject, html) => {
         try {
-            const unirest = require('unirest'); // Note: 'unirest' need to be installed or use 'axios' / 'fetch'
-            const req = unirest('POST', 'https://www.fast2sms.com/dev/bulkV2');
-            req.headers({
-                'authorization': process.env.FAST2SMS_API_KEY
-            });
-            req.form({
-                'variables_values': otp,
-                'route': 'otp',
-                'numbers': phone.replace('+91', '') // Remove country code for Fast2SMS if 10-digit required
-            });
-            req.end((res) => {
-                if (res.error) console.error('[SMS] Fast2SMS Error:', res.error);
-                else console.log('[SMS] Fast2SMS Sent:', res.body);
-            });
-            return;
+            const mailOptions = { from: `"VanaMap" <${process.env.EMAIL_USER}>`, to, subject, html };
+            if (process.env.SENDGRID_API_KEY) {
+                await sgMail.send(mailOptions);
+                return { success: true, provider: 'SendGrid' };
+            } else {
+                await transporter.sendMail(mailOptions);
+                return { success: true, provider: 'GmailSMTP' };
+            }
         } catch (e) {
-            console.error('[SMS] Fast2SMS Exception:', e.message);
+            console.error('[CommOS] Email Failed:', e.message);
+            return { success: false, error: e.message };
+        }
+    },
+
+    // 2. Core: Send SMS (Fast2SMS Integrated)
+    sms: async (phone, message) => {
+        // Normalize phone: Ensure +91 or other codes are handled for Fast2SMS (requires numbers without + for some routes, or international format)
+        // Fast2SMS "Bulk V2" usually expects "9999999999" for India.
+        const cleanPhone = phone.replace(/\D/g, '').slice(-10); // Extract last 10 digits for India
+
+        if (process.env.FAST2SMS_API_KEY) {
+            return new Promise((resolve) => {
+                const unirest = require('unirest');
+                const req = unirest('POST', 'https://www.fast2sms.com/dev/bulkV2');
+                req.headers({ 'authorization': process.env.FAST2SMS_API_KEY });
+                req.form({
+                    'message': message,
+                    'language': 'english',
+                    'route': 'q', // 'q' = Quick, 'p' = Promotional, 't' = Transactional
+                    'numbers': cleanPhone
+                });
+                req.end((res) => {
+                    if (res.error) {
+                        console.error('[CommOS] Fast2SMS Error:', res.error);
+                        resolve({ success: false, error: res.error });
+                    } else {
+                        console.log('[CommOS] Fast2SMS Sent:', res.body);
+                        resolve({ success: true, provider: 'Fast2SMS', data: res.body });
+                    }
+                });
+            });
+        } else {
+            console.log(`[CommOS] 📱 SMS Simulation to ${phone}: "${message}"`);
+            return { success: true, provider: 'Simulation' };
+        }
+    },
+
+    // 3. High-Level: Send OTP
+    sendOTP: async (target, otp, type = 'email') => {
+        if (type === 'email') {
+            const html = `
+                <div style="font-family: sans-serif; background: #f0fdf4; padding: 40px; text-align: center;">
+                    <div style="background: white; padding: 30px; border-radius: 16px; max-width: 400px; margin: 0 auto; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);">
+                        <h2 style="color: #10b981; margin:0;">Identity Check</h2>
+                        <p style="color: #64748b; margin-top: 5px;">VanaMap Security Protocol</p>
+                        <div style="margin: 25px 0; background: #ecfdf5; padding: 20px; border-radius: 8px; font-family: monospace; font-size: 32px; letter-spacing: 5px; color: #065f46; font-weight: bold;">
+                            ${otp}
+                        </div>
+                        <p style="font-size: 12px; color: #94a3b8;">Valid for 15 minutes.</p>
+                    </div>
+                </div>`;
+            return await CommunicationOS.email(target, '🔐 Your VanaMap Code', html);
+        } else if (type === 'sms') {
+            return await CommunicationOS.sms(target, `Your VanaMap verification code is: ${otp}. Do not share this.`);
+        }
+    },
+
+    // 4. High-Level: Welcome Message
+    sendWelcome: async (user) => {
+        // Email
+        const isVendor = user.role === 'vendor';
+        const subject = isVendor ? 'Welcome, Partner! 🏪' : 'Welcome to the Jungle! 🌿';
+        const html = `
+            <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; color: #334155;">
+                <h1 style="color: #10b981;">Hi ${user.name}!</h1>
+                <p>Welcome to <strong>VanaMap</strong>. We are thrilled to have you.</p>
+                <p>Your journey to a greener planet starts now.</p>
+                <a href="https://vanamap.online" style="display: inline-block; background: #10b981; color: white; text-decoration: none; padding: 10px 20px; border-radius: 50px; margin-top: 20px;">Get Started</a>
+            </div>
+        `;
+        await CommunicationOS.email(user.email, subject, html);
+
+        // SMS (Optional nice touch)
+        if (user.phone) {
+            await CommunicationOS.sms(user.phone, `Welcome to VanaMap, ${user.name.split(' ')[0]}! 🌿 We're glad you're here.`);
         }
     }
-
-    // 2. DEFAULT/MOCK LOGGER (Free)
-    console.log(`[SMS-MOCK] 📱 SMS to ${phone}: "Your VanaMap Code is: ${otp}"`);
-    // In production, integrate standard providers here (Twilio, Firebase, Msg91)
-    // For now, we trust the email or the console log for development.
 };
 
-const sendWelcomeEmail = async (email, name, role = 'user') => {
-    const isVendor = role === 'vendor';
-    const welcomeTitle = isVendor ? `Welcome Partner, ${name}! 🏪` : `Welcome, ${name}! 🌿`;
-    const specificMessage = isVendor
-        ? `You are now a registered <strong>Vendor</strong> on VanaMap. Get ready to showcase your nursery to thousands of plant lovers!`
-        : `You are now part of VanaMap with user name <strong style="color: #10b981;">Explore the nature</strong>.`;
+// --- API NOTIFICATION CONTROLLERS ---
 
-    const mailOptions = {
-        from: `"Vana Map" <${process.env.EMAIL_USER}>`,
-        to: email,
-        subject: isVendor ? 'Welcome to VanaMap Content Partner! 🚀' : 'Welcome to VanaMap - Explore the nature',
-        html: `
-            <div style="font-family: 'Outfit', sans-serif; max-width: 600px; margin: 0 auto; padding: 40px 20px; color: #1e293b; background-color: #f0fdf4; border-radius: 24px;">
-                <div style="text-align: center; margin-bottom: 40px;">
-                    <h1 style="color: #10b981; margin: 0; font-size: 32px; letter-spacing: -1px;">VanaMap</h1>
-                    <p style="color: #059669; font-size: 16px; margin-top: 8px; font-weight: 600;">The Forest Land for Future</p>
-                </div>
-                
-                <div style="background: white; padding: 40px; border-radius: 20px; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1);">
-                    <h2 style="color: #0f172a; margin-top: 0; font-size: 24px;">${welcomeTitle}</h2>
-                    <p style="font-size: 16px; line-height: 1.6; color: #475569;">
-                        ${specificMessage}
-                    </p>
-                    <p style="font-size: 16px; line-height: 1.6; color: #475569;">
-                        We are thrilled to have you join our mission to build a greener future. With VanaMap, you can:
-                    </p>
-                    <ul style="color: #475569; font-size: 15px; line-height: 1.8; padding-left: 20px;">
-                        ${isVendor ? '<li>🏪 Manage your digital shop inventory</li><li>📈 Reach local customers instantly</li>' : '<li>🌱 Discover plants perfect for your home</li><li>🏡 Find nearby nurseries and vendors</li>'}
-                        <li>🤖 Diagnose plant diseases with AI</li>
-                        <li>💨 Simulate air quality improvements</li>
-                    </ul>
-                    
-                    <div style="margin-top: 35px; text-align: center;">
-                        <a href="https://www.vanamap.online/dashboard" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; text-decoration: none; padding: 14px 32px; border-radius: 99px; font-weight: bold; font-size: 16px; display: inline-block; box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3);">
-                            ${isVendor ? 'Go to Vendor Portal' : 'Start Exploring'}
-                        </a>
-                    </div>
-                </div>
-
-                <div style="margin-top: 40px; text-align: center; color: #64748b; font-size: 13px;">
-                    <p>&copy; 2025 VanaMap. All rights reserved.</p>
-                    <p>let's breath fresh air together</p>
-                </div>
-            </div>
-        `
-    };
-
+// 1. Subscribe to Newsletter
+app.post('/api/newsletter/subscribe', async (req, res) => {
     try {
-        await sendEmail(mailOptions);
-        console.log(`Welcome email sent to: ${email} (${role})`);
+        const { email } = req.body;
+        if (!email) return res.status(400).json({ error: "Email required" });
+
+        await NewsletterSubscriber.updateOne(
+            { email },
+            { email, isActive: true, source: 'api' },
+            { upsert: true }
+        );
+
+        // Auto-reply
+        await CommunicationOS.email(email, "Subscribed! 📰", "You are now subscribed to VanaMap Weekly.");
+
+        res.json({ success: true, message: "Subscribed successfully" });
     } catch (e) {
-        console.warn("⚠️ Welcome email skipped (SMTP blocked/timeout). This is expected on free tier.");
-        // console.error("Welcome Mail Error:", e.message); // Suppress noisy error
+        res.status(500).json({ error: e.message });
     }
-};
+});
+
+// 2. Broadcast Newsletter (Admin)
+app.post('/api/newsletter/broadcast', auth, admin, async (req, res) => {
+    try {
+        const { subject, body } = req.body;
+        const subscribers = await NewsletterSubscriber.find({ isActive: true });
+
+        console.log(`[Newsletter] Broadcasting to ${subscribers.length} people...`);
+
+        // Async sending (fire and forget to avoid timeout)
+        subscribers.forEach(sub => {
+            CommunicationOS.email(sub.email, subject, body).catch(e => console.error(`Failed to send to ${sub.email}`));
+        });
+
+        res.json({ success: true, message: `Broadcasting to ${subscribers.length} subscribers` });
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
+// 3. Developer API: Trigger OTP (External Apps)
+app.post('/api/v1/send/otp', requireApiKey, async (req, res) => {
+    try {
+        const { target, channel } = req.body; // channel: 'email' or 'sms'
+        // Generate OTP
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+        const result = await CommunicationOS.sendOTP(target, otp, channel || 'email');
+
+        res.json({
+            success: result.success,
+            otp: otp, // Return OTP to developer so *they* can verify it in their app
+            provider: result.provider
+        });
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
+// Wrappers for existing code compatibility
+const sendOtpEmail = (email, otp) => CommunicationOS.sendOTP(email, otp, 'email');
+const sendSmsOtp = (phone, otp) => CommunicationOS.sendOTP(phone, otp, 'sms');
+const sendWelcomeEmail = (email, name, role) => CommunicationOS.sendWelcome({ email, name, role, phone: null }); // Phone null to skip sms for now unless we look it up
+
 
 // --- WEB PUSH SETUP ---
 let publicVapidKey = process.env.PUBLIC_VAPID_KEY;

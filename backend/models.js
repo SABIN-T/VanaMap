@@ -229,9 +229,15 @@ module.exports = {
         key: { type: String, required: true, unique: true }, // Store hashed if possible, but strict unique
         userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
         name: { type: String, default: 'My API Key' }, // Friendly name e.g. "Mobile App"
-        scopes: [{ type: String, enum: ['read', 'write', 'admin'], default: 'read' }],
+        scopes: [{ type: String, enum: ['read', 'write', 'admin', 'notify'], default: 'read' }],
         isActive: { type: Boolean, default: true },
         lastUsed: Date,
         createdAt: { type: Date, default: Date.now }
+    })),
+    NewsletterSubscriber: mongoose.model('NewsletterSubscriber', new mongoose.Schema({
+        email: { type: String, required: true, unique: true },
+        isActive: { type: Boolean, default: true },
+        source: { type: String, default: 'website' },
+        joinedAt: { type: Date, default: Date.now }
     }))
 };
