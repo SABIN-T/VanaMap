@@ -298,7 +298,46 @@ const CommunicationOS = {
     }
 };
 
+const app = express();
 const JWT_SECRET = process.env.JWT_SECRET || 'vanamap_super_secret_key_2025';
+
+// --- MIDDLEWARES (Moved Up) ---
+
+const auth = (req, res, next) => {
+    let token = req.header('Authorization')?.replace('Bearer ', '');
+
+    // Fallback to cookie if header is missing
+    if (!token && req.cookies && req.cookies.token) {
+        token = req.cookies.token;
+    }
+
+    if (!token) return res.status(401).json({ error: 'Access denied. No token provided.' });
+
+    try {
+        const decoded = jwt.verify(token, JWT_SECRET);
+        req.user = decoded;
+        next();
+    } catch (ex) {
+        res.status(400).json({ error: 'Invalid token.' });
+    }
+};
+
+const admin = (req, res, next) => {
+    if (req.user?.role !== 'admin') return res.status(403).json({ error: 'Access denied. Admin only.' });
+    next();
+};
+
+// Helper to normalize user for frontend (stripping sensitive data)
+const normalizeUser = (user) => {
+    if (!user) return null;
+    const obj = user.toObject ? user.toObject() : user;
+    const { password, __v, _id, ...rest } = obj;
+    return {
+        id: _id ? _id.toString() : (obj.id || ''),
+        ...rest
+    };
+};
+
 
 // --- API NOTIFICATION CONTROLLERS ---
 
@@ -400,42 +439,7 @@ app.use(session({
     }
 }));
 
-// --- MIDDLEWARES ---
 
-const auth = (req, res, next) => {
-    let token = req.header('Authorization')?.replace('Bearer ', '');
-
-    // Fallback to cookie if header is missing
-    if (!token && req.cookies && req.cookies.token) {
-        token = req.cookies.token;
-    }
-
-    if (!token) return res.status(401).json({ error: 'Access denied. No token provided.' });
-
-    try {
-        const decoded = jwt.verify(token, JWT_SECRET);
-        req.user = decoded;
-        next();
-    } catch (ex) {
-        res.status(400).json({ error: 'Invalid token.' });
-    }
-};
-
-const admin = (req, res, next) => {
-    if (req.user?.role !== 'admin') return res.status(403).json({ error: 'Access denied. Admin only.' });
-    next();
-};
-
-// Helper to normalize user for frontend (stripping sensitive data)
-const normalizeUser = (user) => {
-    if (!user) return null;
-    const obj = user.toObject ? user.toObject() : user;
-    const { password, __v, _id, ...rest } = obj;
-    return {
-        id: _id ? _id.toString() : (obj.id || ''),
-        ...rest
-    };
-};
 
 
 // --- RATE LIMITING ---
