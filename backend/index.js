@@ -201,6 +201,63 @@ const sendResetEmail = async (email, tempPass) => {
     }
 };
 
+// Email OTP Sender
+const sendOtpEmail = async (email, otp) => {
+    const mailOptions = {
+        from: `"VanaMap Security" <${process.env.EMAIL_USER}>`,
+        to: email,
+        subject: '🔐 Your Verification Code',
+        html: `
+            <div style="font-family: sans-serif; max-width: 400px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 10px; background-color: #ffffff;">
+                <h2 style="color: #10b981; text-align: center;">Verify Identity</h2>
+                <p style="color: #64748b; text-align: center;">Use the following code to complete your registration:</p>
+                <div style="background: #f1f5f9; padding: 20px; border-radius: 8px; margin: 20px 0; text-align: center;">
+                    <span style="font-size: 32px; font-weight: bold; letter-spacing: 5px; color: #0f172a;">${otp}</span>
+                </div>
+                <p style="color: #94a3b8; font-size: 12px; text-align: center;">Valid for 15 minutes. Do not share this code.</p>
+            </div>
+        `
+    };
+    try {
+        await sendEmail(mailOptions);
+        console.log(`[AUTH] OTP Email sent to ${email}`);
+    } catch (e) {
+        console.error("[AUTH] Email OTP Failed:", e.message);
+    }
+};
+
+// SMS OTP Sender (Research Implementation)
+const sendSmsOtp = async (phone, otp) => {
+    // 1. FREE/RESEARCH IMPLEMENTATION: Fast2SMS (India)
+    // If user has API Key in .env, use it.
+    if (process.env.FAST2SMS_API_KEY && phone && phone.startsWith('+91')) {
+        try {
+            const unirest = require('unirest'); // Note: 'unirest' need to be installed or use 'axios' / 'fetch'
+            const req = unirest('POST', 'https://www.fast2sms.com/dev/bulkV2');
+            req.headers({
+                'authorization': process.env.FAST2SMS_API_KEY
+            });
+            req.form({
+                'variables_values': otp,
+                'route': 'otp',
+                'numbers': phone.replace('+91', '') // Remove country code for Fast2SMS if 10-digit required
+            });
+            req.end((res) => {
+                if (res.error) console.error('[SMS] Fast2SMS Error:', res.error);
+                else console.log('[SMS] Fast2SMS Sent:', res.body);
+            });
+            return;
+        } catch (e) {
+            console.error('[SMS] Fast2SMS Exception:', e.message);
+        }
+    }
+
+    // 2. DEFAULT/MOCK LOGGER (Free)
+    console.log(`[SMS-MOCK] 📱 SMS to ${phone}: "Your VanaMap Code is: ${otp}"`);
+    // In production, integrate standard providers here (Twilio, Firebase, Msg91)
+    // For now, we trust the email or the console log for development.
+};
+
 const sendWelcomeEmail = async (email, name, role = 'user') => {
     const isVendor = role === 'vendor';
     const welcomeTitle = isVendor ? `Welcome Partner, ${name}! 🏪` : `Welcome, ${name}! 🌿`;
@@ -242,7 +299,7 @@ const sendWelcomeEmail = async (email, name, role = 'user') => {
 
                 <div style="margin-top: 40px; text-align: center; color: #64748b; font-size: 13px;">
                     <p>&copy; 2025 VanaMap. All rights reserved.</p>
-                    <p>Let's breathe fresh air together.</p>
+                    <p>let's breath fresh air together</p>
                 </div>
             </div>
         `
@@ -1849,15 +1906,20 @@ app.post('/api/auth/signup', async (req, res) => {
         });
         if (existing) return res.status(400).json({ error: "Email or Phone already registered" });
 
-        const captcha = svgCaptcha.create({
-            size: 4,
-            noise: 4,
-            color: true,
-            background: '#ffffff',
-            charPreset: '0123456789'
-        });
+        // Generate 6-digit OTP
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
-        // Store registration data in a temporary token (valid for 15m)
+        // Send OTP via Email
+        if (email) {
+            await sendOtpEmail(email, otp);
+        }
+
+        // Send OTP via SMS (if configured)
+        if (phone) {
+            await sendSmsOtp(phone, otp);
+        }
+
+        // Store registration data
         const registrationData = {
             email: email ? email.trim().toLowerCase() : undefined,
             phone: phone ? phone.trim() : undefined,
@@ -1867,17 +1929,17 @@ app.post('/api/auth/signup', async (req, res) => {
             country,
             city,
             state,
-            captchaText: captcha.text
+            captchaText: otp // We reuse the 'captchaText' field to store the OTP for verification logic compatibility
         };
 
         const registrationToken = jwt.sign(registrationData, process.env.JWT_SECRET || 'secret', { expiresIn: '15m' });
 
-        console.log(`[AUTH] Numeric Captcha (4-digit) generated: ${captcha.text}`);
+        console.log(`[AUTH] Generated OTP for ${email || phone}: ${otp}`);
 
         res.status(200).json({
-            message: "Verify captcha to complete registration.",
+            message: "Verify code sent to your Email/SMS.",
             registrationToken,
-            captchaSvg: captcha.data
+            captchaSvg: null // No captcha image for OTP flow
         });
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -1891,21 +1953,22 @@ app.post('/api/auth/resend-otp', async (req, res) => {
 
         const decoded = jwt.verify(registrationToken, process.env.JWT_SECRET || 'secret');
 
-        const captcha = svgCaptcha.create({
-            size: 4,
-            noise: 4,
-            color: true,
-            background: '#ffffff',
-            charPreset: '0123456789'
-        });
+        // Generate new 6-digit OTP
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
-        const newRegistrationData = { ...decoded, captchaText: captcha.text };
+        // Resend
+        if (decoded.email) await sendOtpEmail(decoded.email, otp);
+        if (decoded.phone) await sendSmsOtp(decoded.phone, otp);
+
+        const newRegistrationData = { ...decoded, captchaText: otp };
         const newToken = jwt.sign(newRegistrationData, process.env.JWT_SECRET || 'secret', { expiresIn: '15m' });
+
+        console.log(`[AUTH] Resent OTP for ${decoded.email || decoded.phone}: ${otp}`);
 
         res.json({
             success: true,
-            message: "New code generated!",
-            captchaSvg: captcha.data,
+            message: "New code sent to email!",
+            captchaSvg: null,
             registrationToken: newToken
         });
     } catch (err) {

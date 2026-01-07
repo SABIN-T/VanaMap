@@ -508,7 +508,23 @@ export const Auth = () => {
 
                     {view === 'verify' && (
                         <div className={`${styles.formGroup} ${styles.revealAnimation}`}>
-                            <label className={styles.label}>Enter Captcha</label>
+                            <label className={styles.label}>Enter OTP Code</label>
+
+                            {!captchaSvg && (
+                                <div style={{
+                                    background: '#f0fdf4',
+                                    padding: '1rem',
+                                    borderRadius: '12px',
+                                    marginBottom: '1rem',
+                                    color: '#065f46',
+                                    fontSize: '0.9rem',
+                                    textAlign: 'center',
+                                    border: '1px solid #bbf7d0'
+                                }}>
+                                    ✅ Code sent to your Email/SMS.<br />
+                                    <span style={{ fontSize: '0.8rem', opacity: 0.8 }}>Check Spam folder if not found.</span>
+                                </div>
+                            )}
 
                             {captchaSvg && (
                                 <div
@@ -529,13 +545,13 @@ export const Auth = () => {
                             <input
                                 className={styles.input}
                                 type="text"
-                                maxLength={4}
+                                maxLength={6}
                                 value={otp}
-                                onChange={(e) => setOtp(e.target.value)}
+                                onChange={(e) => setOtp(e.target.value.replace(/\D/g, ''))}
                                 required
-                                placeholder="Type 4 characters"
+                                placeholder="------"
                                 autoFocus
-                                style={{ textAlign: 'center', fontSize: '1.5rem', letterSpacing: '4px', textTransform: 'lowercase' }}
+                                style={{ textAlign: 'center', fontSize: '1.5rem', letterSpacing: '8px', fontWeight: 'bold' }}
                             />
                         </div>
                     )}
@@ -669,7 +685,7 @@ export const Auth = () => {
                     {view === 'verify' && (
                         <div style={{ marginTop: '1rem', textAlign: 'center' }}>
                             <div className={styles.hintText}>
-                                Can't read the code? <button type="button" onClick={handleResendOTP} style={{ color: '#10b981', fontWeight: 600 }}>Refresh Captcha</button>
+                                Didn't receive code? <button type="button" onClick={handleResendOTP} style={{ color: '#10b981', fontWeight: 600 }}>Resend OTP</button>
                             </div>
                         </div>
                     )}
