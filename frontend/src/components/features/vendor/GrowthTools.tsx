@@ -19,7 +19,17 @@ export const GrowthTools = ({ vendorId }: GrowthToolsProps) => {
     }, [vendorId]);
 
     const loadTools = async () => {
-        if (!vendorId) return;
+        if (!vendorId) {
+            // If no vendor ID yet, we might still be loading parent data, 
+            // OR the user has no vendor profile.
+            // We'll keep loading true for a bit, or handle it?
+            // Better to rely on useEffect re-trigger. 
+            // But if it stays null for long, we should show empty state.
+            // For now, let's allow it to 'finish' loading so we see the UI.
+            setLoading(false);
+            return;
+        }
+        setLoading(true); // Ensure loading state if ID changes
         try {
             const [qr, demand] = await Promise.all([
                 generateVendorQR(vendorId),
@@ -54,7 +64,9 @@ export const GrowthTools = ({ vendorId }: GrowthToolsProps) => {
         img.src = "data:image/svg+xml;base64," + btoa(svgData);
     };
 
-    if (loading) return <div className={styles.loader}>Loading Growth Engine...</div>;
+    if (loading) return <div className={styles.loader} style={{ color: 'white', padding: '2rem', textAlign: 'center' }}>Loading Growth Engine...</div>;
+
+    if (!vendorId) return <div className={styles.container} style={{ color: 'white', padding: '2rem', textAlign: 'center' }}>Please complete your shop profile to access growth tools.</div>;
 
     return (
         <div className={styles.container}>
