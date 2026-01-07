@@ -2089,18 +2089,31 @@ app.get('/api/analytics/vendor/:vendorId/demand', auth, async (req, res) => {
         const inventoryIds = vendor.inventory.map(i => i.plantId);
         const recommendations = [];
 
-        // Match queries to plants they DON'T have
+        // Match queries to plants
         for (const search of recentSearches) {
+            const query = search._id;
+            // Try to find if this query matches a known plant
             const plant = await Plant.findOne({
-                name: { $regex: new RegExp(search._id, 'i') },
-                id: { $nin: inventoryIds }
+                name: { $regex: new RegExp(query, 'i') }
             }).select('id name imageUrl price idealTempMin idealTempMax');
 
             if (plant) {
+                // Known plant. Check if vendor has it.
+                if (!inventoryIds.includes(plant.id)) {
+                    recommendations.push({
+                        type: 'stock_gap',
+                        plant: plant,
+                        searchVolume: search.count,
+                        potentialRevenue: (plant.price || 0) * search.count
+                    });
+                }
+            } else {
+                // Unknown plant / raw query not in DB
                 recommendations.push({
-                    plant,
+                    type: 'missing_db',
+                    query: query,
                     searchVolume: search.count,
-                    potentialRevenue: (plant.price || 0) * search.count // Rough estimate
+                    potentialRevenue: 0
                 });
             }
         }
@@ -2108,6 +2121,24 @@ app.get('/api/analytics/vendor/:vendorId/demand', auth, async (req, res) => {
         res.json({ recommendations });
     } catch (e) {
         console.error(e);
+        res.status(500).json({ error: e.message });
+    }
+});
+
+// Submit a suggestion (e.g. for missing plants)
+app.post('/api/suggestions', auth, async (req, res) => {
+    try {
+        const { plantName, description } = req.body;
+        const suggestion = new PlantSuggestion({
+            userId: req.user.id,
+            userName: req.user.name,
+            plantName,
+            description,
+            status: 'pending'
+        });
+        await suggestion.save();
+        res.json({ success: true, message: "Suggestion submitted to Admin." });
+    } catch (e) {
         res.status(500).json({ error: e.message });
     }
 });

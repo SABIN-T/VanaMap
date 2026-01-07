@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
-import { QrCode, TrendingUp, Download, Share2, Zap, ArrowRight, Star } from 'lucide-react';
+import { QrCode, TrendingUp, Download, Share2, Zap, ArrowRight, Star, HelpCircle, UploadCloud } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 import { Button } from '../../common/Button';
-import { generateVendorQR, fetchVendorStockDemand } from '../../../services/api';
+import { generateVendorQR, fetchVendorStockDemand, submitSuggestion } from '../../../services/api';
 import styles from './GrowthTools.module.css';
 
 interface GrowthToolsProps {
@@ -41,6 +42,19 @@ export const GrowthTools = ({ vendorId }: GrowthToolsProps) => {
             console.error("Failed to load growth tools", e);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleSuggest = async (query: string) => {
+        const tid = toast.loading("Submitting request...");
+        try {
+            await submitSuggestion({
+                plantName: query,
+                description: `Requested by vendor as high-demand missing plant.`
+            });
+            toast.success("Sent to Admin!", { id: tid });
+        } catch (e: any) {
+            toast.error("Failed to submit", { id: tid });
         }
     };
 
@@ -127,17 +141,32 @@ export const GrowthTools = ({ vendorId }: GrowthToolsProps) => {
                         ) : (
                             demandData.map((item, i) => (
                                 <div key={i} className={styles.demandItem}>
-                                    <img src={item.plant.imageUrl} alt={item.plant.name} />
+                                    {item.type === 'missing_db' ? (
+                                        <div style={{ width: 48, height: 48, background: 'rgba(255,255,255,0.1)', borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                                            <HelpCircle size={24} color="#94a3b8" />
+                                        </div>
+                                    ) : (
+                                        <img src={item.plant.imageUrl} alt={item.plant.name} />
+                                    )}
+
                                     <div className={styles.demandInfo}>
-                                        <h4>{item.plant.name}</h4>
+                                        <h4>{item.type === 'missing_db' ? `"${item.query}"` : item.plant.name}</h4>
                                         <div className={styles.demandStats}>
-                                            <span>🔥 {item.searchVolume} recent searches</span>
-                                            <span>💰 Potential: ₹{item.potentialRevenue}</span>
+                                            <span>🔥 {item.searchVolume} searches</span>
+                                            {item.type !== 'missing_db' && <span>💰 Potential: ₹{item.potentialRevenue}</span>}
+                                            {item.type === 'missing_db' && <span style={{ color: '#facc15' }}>Unknown Plant</span>}
                                         </div>
                                     </div>
-                                    <Button size="sm" className={styles.addBtn}>
-                                        <ArrowRight size={14} /> Add to Stock
-                                    </Button>
+
+                                    {item.type === 'missing_db' ? (
+                                        <Button size="sm" onClick={() => handleSuggest(item.query)} className={styles.addBtn} style={{ background: 'rgba(250, 204, 21, 0.1)', color: '#facc15', border: '1px solid rgba(250, 204, 21, 0.2)' }}>
+                                            <UploadCloud size={14} /> Vote to Add
+                                        </Button>
+                                    ) : (
+                                        <Button size="sm" className={styles.addBtn}>
+                                            <ArrowRight size={14} /> Add to Stock
+                                        </Button>
+                                    )}
                                 </div>
                             ))
                         )}

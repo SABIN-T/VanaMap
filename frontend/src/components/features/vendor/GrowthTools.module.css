@@ -87,6 +87,23 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    max-height: 480px;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+
+.demandList::-webkit-scrollbar {
+    width: 4px;
+}
+
+.demandList::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 4px;
+}
+
+.demandList::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
 }
 
 .demandItem {

@@ -617,6 +617,8 @@ export const fetchVendorStockDemand = async (vendorId: string) => {
     return await res.json(); // { recommendedPlants: [...] }
 };
 
+
+
 export const fetchAdminCustomPots = async () => {
     const res = await fetch(`${API_URL}/admin/custom-pots`, {
         headers: getHeaders()
