@@ -2399,17 +2399,73 @@ app.post('/api/user/send-contact-otp', auth, async (req, res) => {
 
                 // For now, fallback to email so user DEFINITELY gets the code
                 const mailOptions = {
-                    from: 'VanaMap Security <noreply@vanamap.online>',
-                    to: user.email, // Send to email
-                    subject: '📱 Your Mobile Verification Code',
+                    from: 'VanaMap <noreply@vanamap.online>',
+                    to: user.email,
+                    subject: '🔐 Your VanaMap Verification Code',
                     html: `
-                        <div style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
-                            <h2>Verify Your Phone Number</h2>
-                            <p>You requested a verification code for mobile: <strong>${phoneNumber || 'your number'}</strong></p>
-                            <h1 style="color: #3b82f6; font-size: 32px; letter-spacing: 2px;">${otp}</h1>
-                            <p>This code expires in 10 minutes.</p>
-                            <p style="font-size: 11px; color: #888;">(Sent via email backup because SMS gateway is inactive)</p>
-                        </div>
+                        <!DOCTYPE html>
+                        <html>
+                        <head>
+                            <meta charset="UTF-8">
+                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        </head>
+                        <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f0fdf4;">
+                            <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f0fdf4; padding: 40px 20px;">
+                                <tr>
+                                    <td align="center">
+                                        <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); overflow: hidden;">
+                                            <!-- Header with Logo -->
+                                            <tr>
+                                                <td style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); padding: 30px; text-align: center;">
+                                                    <img src="https://vanamap.online/logo.png" alt="VanaMap" style="height: 50px; margin-bottom: 10px;" />
+                                                    <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: 600;">VanaMap</h1>
+                                                </td>
+                                            </tr>
+                                            
+                                            <!-- Content -->
+                                            <tr>
+                                                <td style="padding: 40px 30px;">
+                                                    <h2 style="color: #1f2937; margin: 0 0 20px 0; font-size: 22px; font-weight: 600;">Verify Your Account</h2>
+                                                    
+                                                    <p style="color: #4b5563; font-size: 16px; line-height: 1.6; margin: 0 0 10px 0;">
+                                                        Hello! You requested a verification code for:
+                                                    </p>
+                                                    
+                                                    <p style="color: #1f2937; font-size: 16px; font-weight: 600; margin: 0 0 30px 0;">
+                                                        📱 ${phoneNumber || 'your mobile number'}
+                                                    </p>
+                                                    
+                                                    <!-- OTP Code Box -->
+                                                    <div style="background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%); border: 2px solid #10b981; border-radius: 12px; padding: 30px; text-align: center; margin: 30px 0;">
+                                                        <p style="color: #065f46; font-size: 14px; margin: 0 0 10px 0; font-weight: 500; text-transform: uppercase; letter-spacing: 1px;">Your Verification Code</p>
+                                                        <h1 style="color: #065f46; font-size: 42px; font-weight: 700; margin: 0; letter-spacing: 8px; font-family: 'Courier New', monospace;">${otp}</h1>
+                                                    </div>
+                                                    
+                                                    <p style="color: #6b7280; font-size: 14px; line-height: 1.6; margin: 20px 0 0 0;">
+                                                        ⏱️ This code expires in <strong>10 minutes</strong>
+                                                    </p>
+                                                    
+                                                    <p style="color: #9ca3af; font-size: 13px; line-height: 1.6; margin: 30px 0 0 0; padding-top: 20px; border-top: 1px solid #e5e7eb;">
+                                                        🔒 For your security, never share this code with anyone.
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                            
+                                            <!-- Footer -->
+                                            <tr>
+                                                <td style="background-color: #f9fafb; padding: 20px 30px; text-align: center; border-top: 1px solid #e5e7eb;">
+                                                    <p style="color: #9ca3af; font-size: 12px; margin: 0; line-height: 1.5;">
+                                                        © 2026 VanaMap. All rights reserved.<br/>
+                                                        <a href="https://vanamap.online" style="color: #10b981; text-decoration: none;">vanamap.online</a>
+                                                    </p>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </table>
+                        </body>
+                        </html>
                     `
                 };
                 await sendEmail(mailOptions);
