@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './BroadcastCenter.module.css';
+import { Loader2, Search } from 'lucide-react'; // Added icons for better UX
 
 interface User {
     id: string;
@@ -20,23 +21,45 @@ export const BroadcastCenter: React.FC = () => {
     const [selectedUser, setSelectedUser] = useState<User | null>(null);
     const [searchResults, setSearchResults] = useState<User[]>([]);
     const [sending, setSending] = useState(false);
+    const [searching, setSearching] = useState(false);
 
-    // Search users by email, phone, or name
-    const handleSearch = async () => {
-        if (!searchQuery.trim()) return;
+    // Live Search Effect (Debounced)
+    useEffect(() => {
+        const fetchUsers = async () => {
+            if (!searchQuery.trim() || searchQuery.length < 2) {
+                setSearchResults([]);
+                return;
+            }
 
-        try {
-            const response = await fetch(`/api/admin/search-users?q=${encodeURIComponent(searchQuery)}`, {
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                }
-            });
+            // If we already selected someone, don't search behind the scenes
+            if (selectedUser) return;
 
-            const data = await response.json();
-            setSearchResults(data.users || []);
-        } catch (error) {
-            console.error('Search failed:', error);
-        }
+            setSearching(true);
+            try {
+                const response = await fetch(`/api/admin/search-users?q=${encodeURIComponent(searchQuery)}`, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+
+                const data = await response.json();
+                setSearchResults(data.users || []);
+            } catch (error) {
+                console.error('Search failed:', error);
+            } finally {
+                setSearching(false);
+            }
+        };
+
+        const timeoutId = setTimeout(fetchUsers, 300); // 300ms delay
+
+        return () => clearTimeout(timeoutId);
+    }, [searchQuery, selectedUser]);
+
+    const handleSelectUser = (user: User) => {
+        setSelectedUser(user);
+        setSearchQuery('');
+        setSearchResults([]);
     };
 
     // Handle image upload
@@ -132,41 +155,61 @@ export const BroadcastCenter: React.FC = () => {
 
                     {recipientType === 'single' && (
                         <div className={styles.searchBox}>
-                            <input
-                                type="text"
-                                placeholder="Search by name, email, or phone..."
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-                                className={styles.searchInput}
-                            />
-                            <button onClick={handleSearch} className={styles.searchBtn}>
-                                🔍 Search
-                            </button>
-
-                            {searchResults.length > 0 && (
-                                <div className={styles.searchResults}>
-                                    {searchResults.map(user => (
-                                        <div
-                                            key={user.id}
-                                            className={`${styles.userCard} ${selectedUser?.id === user.id ? styles.selected : ''}`}
-                                            onClick={() => setSelectedUser(user)}
-                                        >
-                                            <div className={styles.userInfo}>
-                                                <strong>{user.name}</strong>
-                                                <span>{user.email}</span>
-                                                <span>{user.phone}</span>
+                            {!selectedUser ? (
+                                <div style={{ position: 'relative' }}>
+                                    <div style={{ position: 'relative' }}>
+                                        <Search size={18} style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#9ca3af' }} />
+                                        <input
+                                            type="text"
+                                            placeholder="Type name, email, or phone..."
+                                            value={searchQuery}
+                                            onChange={(e) => setSearchQuery(e.target.value)}
+                                            className={styles.searchInput}
+                                            style={{ paddingLeft: '48px' }}
+                                        />
+                                        {searching && (
+                                            <div style={{ position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)' }}>
+                                                <Loader2 size={18} className="animate-spin text-emerald-500" />
                                             </div>
-                                            <span className={styles.userRole}>{user.role}</span>
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
+                                        )}
+                                    </div>
 
-                            {selectedUser && (
+                                    {/* Auto-Suggestions Dropdown */}
+                                    {searchResults.length > 0 && searchQuery.length >= 2 && (
+                                        <div className={styles.searchResults}>
+                                            <div style={{ padding: '8px 12px', fontSize: '12px', color: '#9ca3af', borderBottom: '1px solid #eee' }}>
+                                                Found {searchResults.length} matches
+                                            </div>
+                                            {searchResults.map(user => (
+                                                <div
+                                                    key={user.id}
+                                                    className={styles.userCard}
+                                                    onClick={() => handleSelectUser(user)}
+                                                >
+                                                    <div className={styles.userInfo}>
+                                                        <strong>{user.name}</strong>
+                                                        <div style={{ display: 'flex', gap: '8px', fontSize: '0.8rem', color: '#666' }}>
+                                                            <span>📧 {user.email}</span>
+                                                            {user.phone && <span>📱 {user.phone}</span>}
+                                                        </div>
+                                                    </div>
+                                                    <span className={styles.userRole}>{user.role}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            ) : (
                                 <div className={styles.selectedUser}>
-                                    <span>✅ Selected: <strong>{selectedUser.name}</strong> ({selectedUser.email})</span>
-                                    <button onClick={() => setSelectedUser(null)}>✕</button>
+                                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                        <span style={{ fontSize: '0.85rem', color: '#065f46', fontWeight: 'bold', textTransform: 'uppercase', marginBottom: '4px' }}>Recipient Selected</span>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                            <span style={{ fontSize: '1.1rem', fontWeight: 'bold' }}>{selectedUser.name}</span>
+                                            <span style={{ background: '#065f46', color: 'white', padding: '2px 8px', borderRadius: '12px', fontSize: '0.75rem' }}>{selectedUser.role}</span>
+                                        </div>
+                                        <span style={{ fontSize: '0.9rem', color: '#4b5563' }}>{selectedUser.email} &bull; {selectedUser.phone}</span>
+                                    </div>
+                                    <button onClick={() => setSelectedUser(null)} style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444' }}>✕</button>
                                 </div>
                             )}
                         </div>
