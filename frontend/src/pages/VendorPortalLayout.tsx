@@ -3,7 +3,7 @@ import { useLocation, Link } from 'react-router-dom';
 import {
     LayoutDashboard, Store,
     LogOut, Menu, X, ChevronRight, Leaf,
-    Package, BarChart2, ShieldCheck, TrendingUp, QrCode
+    Package, BarChart2, ShieldCheck, TrendingUp
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import styles from './UserDashboardLayout.module.css'; // Reuse the updated premium styles
