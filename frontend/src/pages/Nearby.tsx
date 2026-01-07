@@ -326,6 +326,7 @@ out center;
             <Helmet>
                 <title>Find Plant Shops Near Me | VanaMap - Local Nurseries Explorer</title>
                 <meta name="description" content="Locate top-rated plant nurseries, garden centers, and florists in your neighborhood using VanaMap's satellite GPS tool. Verified stock and reviews." />
+                <meta property="og:image" content="https://www.vanamap.online/vanamap_social_card.png" />
                 <link rel="canonical" href="https://www.vanamap.online/nearby" />
             </Helmet>
             <div className={styles.noticeBanner} style={{ background: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.2)' }}>
