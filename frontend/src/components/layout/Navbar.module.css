@@ -214,19 +214,33 @@
     align-items: center;
 }
 
-.loginBtn {
+.loginBtn,
+.userBadgeBtn {
     background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
-    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
     border-radius: 999px !important;
     font-weight: 700 !important;
     color: white !important;
-    transition: all 0.3s ease !important;
+    transition: all 0.2s ease !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
-.loginBtn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
-    filter: brightness(1.1);
+.loginBtn:hover,
+.userBadgeBtn:hover {
+    transform: translateY(-1px);
+    box-shadow: none !important;
+    filter: brightness(1.05);
+    background: linear-gradient(135deg, #059669 0%, #047857 100%) !important;
+}
+
+[data-theme='light'] .loginBtn,
+[data-theme='light'] .userBadgeBtn {
+    box-shadow: none !important;
+    filter: none !important;
 }
 
 /* Mobile Menu Button */
