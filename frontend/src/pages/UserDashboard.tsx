@@ -314,7 +314,7 @@ export const UserDashboard = () => {
             </div>
 
             {/* 3. ALERTS & ACTIONS */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
 
                 {/* Verification Status */}
                 <div className={styles.actionCard} style={{ background: isFullyVerified ? 'rgba(16, 185, 129, 0.05)' : 'rgba(239, 68, 68, 0.05)', borderColor: isFullyVerified ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)' }}>
@@ -323,9 +323,9 @@ export const UserDashboard = () => {
                             {isFullyVerified ? <CheckCircle size={20} /> : <Shield size={20} />}
                         </div>
                         <div>
-                            <h4 style={{ margin: 0, fontSize: '1rem', fontWeight: 700 }}>Account Status</h4>
-                            <p style={{ margin: 0, fontSize: '0.8rem', color: '#94a3b8' }}>
-                                {isFullyVerified ? 'Your account is fully verified.' : 'Verification required for full access.'}
+                            <h4 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 800 }}>Account Status</h4>
+                            <p style={{ margin: 0, fontSize: '0.85rem', color: '#94a3b8' }}>
+                                {isFullyVerified ? 'Your identity is verified.' : 'Verify to unlock trading.'}
                             </p>
                         </div>
                     </div>
@@ -333,30 +333,46 @@ export const UserDashboard = () => {
                         <Button
                             onClick={() => setShowVerifyModal(true)}
                             size="sm"
-                            style={{ width: '100%', background: '#ef4444', color: 'white', border: 'none' }}
+                            style={{ width: '100%', background: '#ef4444', color: 'white', border: 'none', fontWeight: 700 }}
                         >
-                            Verify Now
+                            Verify Identity
                         </Button>
                     )}
                 </div>
 
                 {/* Account Security */}
-                <div className={styles.actionCard}>
+                <div className={styles.actionCard} style={{ background: 'rgba(99, 102, 241, 0.05)', borderColor: 'rgba(99, 102, 241, 0.2)' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
                         <div style={{ background: '#6366f1', padding: '0.5rem', borderRadius: '50%', color: 'white' }}>
                             <Lock size={20} />
                         </div>
                         <div>
-                            <h4 style={{ margin: 0, fontSize: '1rem', fontWeight: 700 }}>Security</h4>
-                            <p style={{ margin: 0, fontSize: '0.8rem', color: '#94a3b8' }}>Manage password & privacy</p>
+                            <h4 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 800 }}>Security</h4>
+                            <p style={{ margin: 0, fontSize: '0.85rem', color: '#94a3b8' }}>Manage account privacy</p>
+                        </div>
+                    </div>
+                    <Button onClick={() => setShowPasswordModal(true)} size="sm" variant="outline" style={{ width: '100%', fontWeight: 700 }}>
+                        Update Password
+                    </Button>
+                </div>
+
+                {/* Vendor Portal Quick Access */}
+                <div className={styles.actionCard} style={{ background: 'rgba(250, 204, 21, 0.05)', borderColor: 'rgba(250, 204, 21, 0.2)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
+                        <div style={{ background: '#facc15', padding: '0.5rem', borderRadius: '50%', color: 'black' }}>
+                            <Store size={20} />
+                        </div>
+                        <div>
+                            <h4 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 800 }}>Partner Center</h4>
+                            <p style={{ margin: 0, fontSize: '0.85rem', color: '#94a3b8' }}>Manage your nursery shop</p>
                         </div>
                     </div>
                     <Button
-                        onClick={() => setShowPasswordModal(true)}
-                        size="sm" variant="outline"
-                        style={{ width: '100%' }}
+                        onClick={() => navigate('/vendor')}
+                        size="sm"
+                        style={{ width: '100%', background: '#facc15', color: '#000', border: 'none', fontWeight: 800 }}
                     >
-                        Update Password
+                        Login as Vendor
                     </Button>
                 </div>
             </div>
