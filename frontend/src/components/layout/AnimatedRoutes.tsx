@@ -42,6 +42,7 @@ const PotDesigner = lazy(() => import('../../pages/PotDesigner').then(m => ({ de
 const DailyNews = lazy(() => import('../../pages/DailyNews').then(m => ({ default: m.DailyNews })));
 const CustomerSupport = lazy(() => import('../../pages/admin/CustomerSupport').then(m => ({ default: m.CustomerSupport })));
 const AIDoctor = lazy(() => import('../../pages/AIDoctor').then(m => ({ default: m.AIDoctor })));
+const BroadcastCenter = lazy(() => import('../../pages/admin/BroadcastCenter').then(m => ({ default: m.BroadcastCenter })));
 
 
 // Enhanced Loading Screen with timeout feedback
@@ -144,6 +145,7 @@ export const AnimatedRoutes = () => {
                         <Route path="/admin/customer-support" element={<CustomerSupport />} />
                         <Route path="/admin/pot-designs" element={<PotDesigns />} />
                         <Route path="/admin/premium" element={<Premium />} />
+                        <Route path="/admin/broadcast" element={<BroadcastCenter />} />
 
                         <Route path="/admin/edit-plant/:id" element={<EditPlant />} />
 

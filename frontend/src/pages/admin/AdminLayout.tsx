@@ -3,7 +3,7 @@ import { useLocation, Link } from 'react-router-dom';
 import {
     LayoutDashboard, Sprout, Store,
     Users, Activity, Bell, Settings, Layers, Sparkles,
-    Menu, X, LogOut, ChevronRight, MessageSquare, DollarSign, Trophy, Database, ScanLine, Bot
+    Menu, X, LogOut, ChevronRight, MessageSquare, DollarSign, Trophy, Database, ScanLine, Bot, Mail
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
@@ -54,6 +54,7 @@ export const AdminLayout = ({ title, children }: AdminLayoutProps) => {
         { path: '/admin/suggestions', icon: MessageSquare, label: 'User Suggestions' },
         { path: '/admin/ai-doctor', icon: Bot, label: 'AI Plant Doctor' },
         { path: '/admin/customer-support', icon: MessageSquare, label: 'Customer Support' },
+        { path: '/admin/broadcast', icon: Mail, label: 'Broadcast Center' },
         { path: '/admin/notifications', icon: Bell, label: 'Notifications', badge: stats.unread?.total },
         { path: '/admin/diag', icon: Activity, label: 'System Health' },
         { path: '/admin/settings', icon: Settings, label: 'Settings' },
