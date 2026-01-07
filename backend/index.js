@@ -148,7 +148,7 @@ const sendEmail = async (mailOptions) => {
     if (resend) {
         try {
             const result = await resend.emails.send({
-                from: mailOptions.from || 'VanaMap <onboarding@resend.dev>', // Use verified domain
+                from: mailOptions.from || 'VanaMap <noreply@vanamap.online>', // Use verified domain
                 to: mailOptions.to,
                 subject: mailOptions.subject,
                 html: mailOptions.html
