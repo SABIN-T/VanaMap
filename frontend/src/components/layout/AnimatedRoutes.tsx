@@ -121,6 +121,9 @@ export const AnimatedRoutes = () => {
                             </RestrictedRoute>
                         } />
                         <Route path="/vendor" element={<VendorPortal />} />
+                        <Route path="/vendor/profile" element={<VendorPortal />} />
+                        <Route path="/vendor/inventory" element={<VendorPortal />} />
+                        <Route path="/vendor/insights" element={<VendorPortal />} />
                         <Route path="/auth" element={<Auth />} />
                         <Route path="/cart" element={<Cart />} />
                         <Route path="/admin" element={<Admin />} />

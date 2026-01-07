@@ -444,6 +444,16 @@ export const updateUserPoints = async (userId: string, points: number) => {
     return res.json();
 };
 
+export const updateLocation = async (locationData: { city?: string, state?: string, country?: string, latitude?: number, longitude?: number }) => {
+    const res = await fetch(`${API_URL}/user/location`, {
+        method: 'PATCH',
+        headers: getHeaders(),
+        body: JSON.stringify(locationData)
+    });
+    if (!res.ok) throw new Error("Failed to update location");
+    return res.json();
+};
+
 export const updateGameProgress = async (level: number, points: number) => {
     const res = await fetch(`${API_URL}/user/game-progress`, {
         method: 'PATCH',

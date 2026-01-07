@@ -1,8 +1,9 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useLocation } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { Button } from '../components/common/Button';
-import { Store, Phone, MessageCircle, Info, Locate, AlertTriangle, BadgeCheck } from 'lucide-react';
+import { Store, MessageCircle, Info, Locate, BadgeCheck, Zap, Trophy, ShoppingBag } from 'lucide-react';
 import { registerVendor, fetchVendors, updateVendor } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
@@ -11,6 +12,7 @@ import type { LatLng } from 'leaflet';
 import type { Vendor } from '../types';
 import { VendorInventory } from '../components/features/vendor/VendorInventory';
 import { MarketInsights } from '../components/features/vendor/MarketInsights';
+import { VendorPortalLayout } from './VendorPortalLayout';
 import styles from './VendorPortal.module.css';
 
 // Fix Leaflet's default icon path issues
@@ -21,7 +23,6 @@ L.Icon.Default.mergeOptions({
     shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
 });
 
-// Component to recenter map when marker moves
 const RecenterMap = ({ center }: { center: LatLng }) => {
     const map = useMap();
     useEffect(() => {
@@ -44,13 +45,11 @@ function DraggableMarker({ pos, setPos }: { pos: L.LatLng, setPos: (pos: L.LatLn
             eventHandlers={{
                 dragend: (e) => {
                     const marker = e.target;
-                    if (marker != null) {
-                        setPos(marker.getLatLng());
-                        toast.success("Location updated!");
-                    }
+                    if (marker != null) { setPos(marker.getLatLng()); toast.success("Location updated!"); }
                 },
             }}
-            position={pos}>
+            position={pos}
+        >
             <Popup>
                 <div style={{ textAlign: 'center', padding: '0.5rem' }}>
                     <strong style={{ display: 'block', marginBottom: '4px' }}>Shop Marker</strong>
@@ -63,6 +62,7 @@ function DraggableMarker({ pos, setPos }: { pos: L.LatLng, setPos: (pos: L.LatLn
 
 export const VendorPortal = () => {
     const { user } = useAuth();
+    const location = useLocation();
     const [markerPos, setMarkerPos] = useState<L.LatLng>(new L.LatLng(20.5937, 78.9629));
     const [isEditing, setIsEditing] = useState(false);
     const [existingVendorId, setExistingVendorId] = useState<string | null>(null);
@@ -70,19 +70,20 @@ export const VendorPortal = () => {
     const [isLocating, setIsLocating] = useState(false);
     const [currentVendor, setCurrentVendor] = useState<Vendor | null>(null);
 
-    const [formData, setFormData] = useState({
-        shopName: '',
-        phone: '',
-        whatsapp: '',
-        address: ''
-    });
+    const [formData, setFormData] = useState({ shopName: '', phone: '', whatsapp: '', address: '' });
+
+    const activeSection = useMemo(() => {
+        const path = location.pathname;
+        if (path.endsWith('/inventory')) return 'inventory';
+        if (path.endsWith('/insights')) return 'insights';
+        if (path.endsWith('/profile')) return 'profile';
+        return 'overview';
+    }, [location.pathname]);
 
     const loadVendorData = useCallback(async () => {
         const vendors = await fetchVendors();
         if (!user) return;
-
         const myVendor = vendors.find(v => v.id === user.id || v.id === (user as any)._id);
-
         if (myVendor) {
             setCurrentVendor(myVendor);
             setIsEditing(true);
@@ -93,42 +94,31 @@ export const VendorPortal = () => {
                 whatsapp: myVendor.whatsapp || '',
                 address: myVendor.address || ''
             });
-            if (myVendor.latitude && myVendor.longitude) {
-                setMarkerPos(new L.LatLng(myVendor.latitude, myVendor.longitude));
-            }
+            if (myVendor.latitude && myVendor.longitude) setMarkerPos(new L.LatLng(myVendor.latitude, myVendor.longitude));
         }
     }, [user]);
 
     useEffect(() => {
-        if (user?.role === 'vendor' || user?.role === 'admin') {
-            loadVendorData();
-        }
+        if (user?.role === 'vendor' || user?.role === 'admin') loadVendorData();
     }, [user, loadVendorData]);
-
-
 
     const handleAutoLocate = useCallback(() => {
         if (isLocating) return;
         setIsLocating(true);
         const tid = toast.loading("Accessing GPS...");
-
         if (!navigator.geolocation) {
-            toast.error("Geolocation is not supported by your browser", { id: tid });
+            toast.error("Geolocation not supported", { id: tid });
             setIsLocating(false);
             return;
         }
-
         navigator.geolocation.getCurrentPosition(
             (pos) => {
                 const newPos = new L.LatLng(pos.coords.latitude, pos.coords.longitude);
                 setMarkerPos(newPos);
-                toast.success("Current location captured!", { id: tid });
+                toast.success("Location captured!", { id: tid });
                 setIsLocating(false);
             },
-            () => {
-                toast.error("Failed to get location. Please pin manually.", { id: tid });
-                setIsLocating(false);
-            },
+            () => { toast.error("GPS failed. Pin manually.", { id: tid }); setIsLocating(false); },
             { enableHighAccuracy: true, timeout: 10000 }
         );
     }, [isLocating]);
@@ -144,177 +134,164 @@ export const VendorPortal = () => {
             address: formData.address,
             latitude: markerPos.lat,
             longitude: markerPos.lng,
-            verified: isEditing // Keep verification status if editing
+            verified: isEditing
         };
-
         try {
             if (isEditing && existingVendorId) {
-                const result = await updateVendor(existingVendorId, vendorData);
-                if (result) toast.success("Shop details updated!");
-                else throw new Error("Update failed");
+                await updateVendor(existingVendorId, vendorData);
+                toast.success("Profile Updated!");
             } else {
                 const result = await registerVendor(vendorData);
-                if (result) {
-                    toast.success(`Shop "${formData.shopName}" registered!`);
-                    setIsEditing(true);
-                } else {
-                    throw new Error("Registration failed");
-                }
+                if (result) { toast.success("Shop Registered!"); setIsEditing(true); }
             }
-        } catch (err) {
-            toast.error("Process failed. Please try again.");
-            console.error(err);
-        } finally {
-            setLoading(false);
+        } catch (err) { toast.error("Process failed."); }
+        finally { setLoading(false); }
+    };
+
+    const getTitle = () => {
+        switch (activeSection) {
+            case 'inventory': return 'Catalog Manager';
+            case 'insights': return 'Performance Data';
+            case 'profile': return 'Shop Settings';
+            default: return 'Partner Overview';
         }
     };
 
     return (
-        <div className={styles.portalContainer}>
-            <div className={styles.header}>
-                <h1 className={styles.portalTitle}>
-                    {isEditing ? 'Shop Manager' : 'Register Shop'}
-                </h1>
-                <p className={styles.portalSubtitle}>
-                    {isEditing ? `Managing: ${formData.shopName}` : 'Join our network of verified plant suppliers.'}
-                </p>
-            </div>
+        <VendorPortalLayout title={getTitle()}>
+            <div className={styles.portalContainer}>
+                {/* SECTION: OVERVIEW */}
+                {activeSection === 'overview' && (
+                    <>
+                        {!isEditing ? (
+                            <div className={styles.formCard} style={{ textAlign: 'center', padding: '3rem' }}>
+                                <Store size={48} style={{ color: '#facc15', margin: '0 auto 1.5rem' }} />
+                                <h2 style={{ fontSize: '1.5rem', fontWeight: 800, marginBottom: '1rem' }}>Welcome to Partner Network</h2>
+                                <p style={{ color: '#94a3b8', maxWidth: '500px', margin: '0 auto 2rem' }}>
+                                    Register your nursery to start showcasing your plant collection to thousands of local enthusiasts.
+                                </p>
+                                <Button onClick={() => window.location.href = '/vendor/profile'} style={{ background: '#facc15', color: '#000', fontWeight: 800 }}>
+                                    Start Registration
+                                </Button>
+                            </div>
+                        ) : (
+                            <>
+                                <div className={styles.statsGrid}>
+                                    <div className={styles.statCard}>
+                                        <div className={styles.statIcon} style={{ background: 'rgba(16, 185, 129, 0.1)', color: '#10b981' }}>
+                                            <ShoppingBag size={24} />
+                                        </div>
+                                        <div className={styles.statInfo}>
+                                            <div className={styles.statValue}>{currentVendor?.inventory?.length || 0}</div>
+                                            <div className={styles.statLabel}>Active Products</div>
+                                        </div>
+                                    </div>
+                                    <div className={styles.statCard}>
+                                        <div className={styles.statIcon} style={{ background: 'rgba(250, 204, 21, 0.1)', color: '#facc15' }}>
+                                            <Trophy size={24} />
+                                        </div>
+                                        <div className={styles.statInfo}>
+                                            <div className={styles.statValue}>Lv. 1</div>
+                                            <div className={styles.statLabel}>Partner Tier</div>
+                                        </div>
+                                    </div>
+                                    <div className={styles.statCard}>
+                                        <div className={styles.statIcon} style={{ background: 'rgba(56, 189, 248, 0.1)', color: '#38bdf8' }}>
+                                            <Zap size={24} />
+                                        </div>
+                                        <div className={styles.statInfo}>
+                                            <div className={styles.statValue}>88%</div>
+                                            <div className={styles.statLabel}>Search Visibility</div>
+                                        </div>
+                                    </div>
+                                </div>
 
-            {/* Verified Partner Banner */}
-            {isEditing && (
-                <div className={styles.verifiedBanner}>
-                    <div className={styles.verifiedIconBox}>
-                        <AlertTriangle size={24} />
-                    </div>
-                    <div className={styles.verifiedContent}>
-                        <div className={styles.verifiedTitle}>
-                            <BadgeCheck size={18} />
-                            Verified Partner Status
-                        </div>
-                        <p className={styles.verifiedText}>
-                            Get Verified to rank higher in search results and gain customer trust. Your shop will be marked as "Verified Partner" across the platform.
-                        </p>
-                    </div>
-                    <button
-                        onClick={() => window.open('https://wa.me/9188773534', '_blank')}
-                        className={styles.whatsappBtn}
-                    >
-                        <MessageCircle size={18} />
-                        WhatsApp Support
-                        <span>Contact Admin</span>
-                    </button>
-                </div>
-            )}
+                                <div className={styles.verifiedBanner}>
+                                    <div className={styles.verifiedInfo}>
+                                        <div className={styles.verifiedIconBox}><BadgeCheck size={20} /></div>
+                                        <div>
+                                            <div className={styles.verifiedTitle}>Legacy Status: {currentVendor?.verified ? 'Verified Partner' : 'Verification Under Review'}</div>
+                                            <p className={styles.verifiedText}>Complete your inventory to boost your visibility score.</p>
+                                        </div>
+                                    </div>
+                                    <Button size="sm" onClick={() => window.open('https://wa.me/9188773534', '_blank')} style={{ background: '#25D366', border: 'none' }}>
+                                        <MessageCircle size={16} /> WhatsApp Support
+                                    </Button>
+                                </div>
 
-            <div className={styles.portalGrid}>
-                {/* Form Section */}
-                <form onSubmit={handleSubmit} className={styles.formCard}>
-                    <div className={styles.formSectionHeader}>
-                        <Store size={20} />
-                        <h2>Profile Settings</h2>
-                    </div>
+                                <MarketInsights vendorId={currentVendor?.id || ''} />
+                            </>
+                        )}
+                    </>
+                )}
 
-                    <div className={styles.formGroup}>
-                        <label className={styles.label}>Official Shop Name</label>
-                        <input
-                            type="text"
-                            required
-                            placeholder="e.g. Green Valley Nursery"
-                            className={styles.input}
-                            value={formData.shopName}
-                            onChange={e => setFormData({ ...formData, shopName: e.target.value })}
-                        />
-                    </div>
+                {/* SECTION: INVENTORY */}
+                {activeSection === 'inventory' && currentVendor && (
+                    <VendorInventory vendor={currentVendor} onUpdate={loadVendorData} />
+                )}
 
-                    <div className={styles.inputGrid}>
-                        <div className={styles.formGroup}>
-                            <label className={styles.label}><Phone size={12} /> Phone Number</label>
-                            <input
-                                type="tel"
-                                required
-                                className={styles.input}
-                                value={formData.phone}
-                                onChange={e => setFormData({ ...formData, phone: e.target.value })}
-                            />
-                        </div>
-                        <div className={styles.formGroup}>
-                            <label className={styles.label}><MessageCircle size={12} /> WhatsApp</label>
-                            <input
-                                type="tel"
-                                required
-                                className={styles.input}
-                                value={formData.whatsapp}
-                                onChange={e => setFormData({ ...formData, whatsapp: e.target.value })}
-                            />
-                        </div>
+                {/* SECTION: INSIGHTS */}
+                {activeSection === 'insights' && (
+                    <div className={styles.insightsWrapper}>
+                        <MarketInsights vendorId={currentVendor?.id || ''} />
                     </div>
+                )}
 
-                    <div className={styles.formGroup}>
-                        <label className={styles.label}>Physical Address</label>
-                        <textarea
-                            rows={3}
-                            required
-                            placeholder="Unit #, Street Name, City, Pincode"
-                            className={styles.textarea}
-                            value={formData.address}
-                            onChange={e => setFormData({ ...formData, address: e.target.value })}
-                        />
-                    </div>
+                {/* SECTION: PROFILE / SETTINGS */}
+                {activeSection === 'profile' && (
+                    <div className={styles.formGrid}>
+                        <form onSubmit={handleSubmit} className={styles.formCard}>
+                            <div className={styles.formHeader}>
+                                <Store size={20} />
+                                <h2>Shop Profile</h2>
+                            </div>
+                            <div className={styles.formGroup}>
+                                <label className={styles.label}>Nursery Name</label>
+                                <input type="text" required className={styles.input} value={formData.shopName} onChange={e => setFormData({ ...formData, shopName: e.target.value })} />
+                            </div>
+                            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                                <div className={styles.formGroup}>
+                                    <label className={styles.label}>Phone</label>
+                                    <input type="tel" className={styles.input} value={formData.phone} onChange={e => setFormData({ ...formData, phone: e.target.value })} />
+                                </div>
+                                <div className={styles.formGroup}>
+                                    <label className={styles.label}>WhatsApp</label>
+                                    <input type="tel" className={styles.input} value={formData.whatsapp} onChange={e => setFormData({ ...formData, whatsapp: e.target.value })} />
+                                </div>
+                            </div>
+                            <div className={styles.formGroup}>
+                                <label className={styles.label}>Full Address</label>
+                                <textarea rows={2} className={styles.textarea} value={formData.address} onChange={e => setFormData({ ...formData, address: e.target.value })} />
+                            </div>
+                            <div className={styles.coordsBox}>
+                                <div className={styles.coordValue}>{markerPos.lat.toFixed(5)}, {markerPos.lng.toFixed(5)}</div>
+                                <button type="button" onClick={handleAutoLocate} disabled={isLocating} className={styles.gpsBtn}>
+                                    <Locate size={14} /> {isLocating ? '...' : 'Use GPS'}
+                                </button>
+                            </div>
+                            <Button type="submit" disabled={loading} style={{ width: '100%', borderRadius: '0.85rem' }}>
+                                {loading ? 'Syncing...' : 'Save Profile Changes'}
+                            </Button>
+                        </form>
 
-                    <div className={styles.coordsBox}>
-                        <div className={styles.coordsInfo}>
-                            <h4>Global Pin</h4>
-                            <div className={styles.coordsValue}>
-                                {markerPos.lat.toFixed(6)}, {markerPos.lng.toFixed(6)}
+                        <div className={styles.mapWrapper}>
+                            <div className={styles.mapContainer}>
+                                <MapContainer center={markerPos} zoom={13} style={{ height: '100%', width: '100%' }}>
+                                    <TileLayer attribution='&copy; OSM' url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+                                    <DraggableMarker pos={markerPos} setPos={setMarkerPos} />
+                                    <RecenterMap center={markerPos} />
+                                </MapContainer>
+                            </div>
+                            <div className={styles.formCard} style={{ padding: '1rem' }}>
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#64748b', fontSize: '0.8rem' }}>
+                                    <Info size={14} />
+                                    <span>Drag marker to your shop's main entrance for precision navigation.</span>
+                                </div>
                             </div>
                         </div>
-                        <button
-                            type="button"
-                            onClick={handleAutoLocate}
-                            disabled={isLocating}
-                            className={styles.gpsBtn}
-                        >
-                            <Locate size={14} /> {isLocating ? 'Capturing...' : 'Use GPS'}
-                        </button>
                     </div>
-
-                    <Button type="submit" disabled={loading} style={{ width: '100%', borderRadius: '0.75rem', padding: '1rem', fontWeight: 800 }}>
-                        {loading ? 'Propagating Changes...' : (isEditing ? 'Save Profile' : 'Register Now')}
-                    </Button>
-                </form>
-
-                {/* Map & Notifications Section */}
-                <div className={styles.mapWrapper}>
-                    <div className={styles.mapHint}>
-                        <h3><Info size={14} /> Precise Location Required</h3>
-                        <p>
-                            Nearby search results use your shop's coordinate. Move the marker to your entrance.
-                        </p>
-                    </div>
-
-                    <div className={styles.mapContainer}>
-                        <MapContainer center={markerPos} zoom={13} style={{ height: '100%', width: '100%' }}>
-                            <TileLayer
-                                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                            />
-                            <DraggableMarker pos={markerPos} setPos={setMarkerPos} />
-                            <RecenterMap center={markerPos} />
-                        </MapContainer>
-                    </div>
-                </div>
+                )}
             </div>
-
-            {/* Inventory Section */}
-            {isEditing && currentVendor && (
-                <div style={{ marginTop: '4rem' }}>
-                    <MarketInsights vendorId={currentVendor.id} />
-                    <VendorInventory
-                        vendor={currentVendor}
-                        onUpdate={loadVendorData}
-                    />
-                </div>
-            )}
-        </div>
+        </VendorPortalLayout>
     );
 };

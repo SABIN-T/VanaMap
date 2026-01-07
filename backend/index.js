@@ -2697,9 +2697,43 @@ app.post('/api/user/add-points', auth, async (req, res) => {
         const user = await User.findById(req.user.id);
         if (!user) return res.status(404).json({ error: "User not found" });
 
-        user.points = (user.points || 0) + (amount || 0);
+        // PREMIUM BOOST: Premium users get 2x Chlorophyll Points (CP)
+        const multiplier = user.isPremium ? 2 : 1;
+        const finalAmount = (amount || 0) * multiplier;
+
+        user.points = (user.points || 0) + finalAmount;
+
+        // Also update gamePoints if they are linked
+        if (user.gamePoints !== undefined) {
+            user.gamePoints = (user.gamePoints || 0) + finalAmount;
+        }
+
         await user.save();
-        res.json({ success: true, points: user.points });
+        res.json({
+            success: true,
+            points: user.points,
+            bonus: user.isPremium ? '2x Premium Boost Applied!' : null
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Update User Location for Rankings
+app.patch('/api/user/location', auth, async (req, res) => {
+    try {
+        const { city, state, country, latitude, longitude } = req.body;
+        const user = await User.findById(req.user.id);
+        if (!user) return res.status(404).json({ error: "User not found" });
+
+        if (city) user.city = city;
+        if (state) user.state = state;
+        if (country) user.country = country;
+        if (latitude) user.latitude = latitude;
+        if (longitude) user.longitude = longitude;
+
+        await user.save();
+        res.json({ success: true, user: { city: user.city, state: user.state } });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }

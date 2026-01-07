@@ -90,4 +90,10 @@ export interface User {
     premiumStartDate?: string;
     gameLevel?: number;
     gamePoints?: number;
+    city?: string;
+    state?: string;
+    country?: string;
+    latitude?: number;
+    longitude?: number;
+    googleAuth?: boolean;
 }

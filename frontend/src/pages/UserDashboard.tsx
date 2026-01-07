@@ -8,7 +8,7 @@ import {
 import { VerificationModal } from '../components/auth/VerificationModal';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { fetchPlants, fetchVendors, updateVendor, changePassword, fetchLeaderboard } from '../services/api';
+import { fetchPlants, fetchVendors, updateVendor, changePassword, fetchLeaderboard, updateLocation } from '../services/api';
 import type { Plant, Vendor } from '../types';
 import toast from 'react-hot-toast';
 import styles from './UserDashboard.module.css';
@@ -36,6 +36,8 @@ export const UserDashboard = () => {
     });
     const [detectingLoc, setDetectingLoc] = useState(false);
     const [showCollectionModal, setShowCollectionModal] = useState(false);
+    const [showLocationModal, setShowLocationModal] = useState(false);
+    const [locForm, setLocForm] = useState({ city: '', state: '' });
 
     // Verification State
     const [verStatus, setVerStatus] = useState({ email: false, phone: false });
@@ -238,6 +240,27 @@ export const UserDashboard = () => {
         }
     };
 
+    const submitLocation = async () => {
+        if (!locForm.city) {
+            toast.error("Please enter a city name");
+            return;
+        }
+        const tid = toast.loading("Joining local leaderboard...");
+        try {
+            const res = await updateLocation({ ...locForm });
+            if (res.success) {
+                toast.success("Welcome to " + locForm.city + " team!", { id: tid });
+                setShowLocationModal(false);
+                // Refresh user data (if needed, but usually redirect/reload helps)
+                window.location.reload();
+            } else {
+                toast.error("Failed to update location", { id: tid });
+            }
+        } catch (e) {
+            toast.error("Error connecting to ranking server", { id: tid });
+        }
+    };
+
     if (loading) {
         return (
             <div style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -252,175 +275,200 @@ export const UserDashboard = () => {
         <UserDashboardLayout title="Overview">
             {/* 1. GAMIFICATION BANNER */}
             <div className={styles.gamificationBanner}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', position: 'relative', zIndex: 2 }}>
-                    <div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
-                            <div style={{ background: '#facc15', padding: '0.5rem', borderRadius: '50%', color: 'black' }}>
-                                <Trophy size={20} />
-                            </div>
-                            <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 800 }}>Welcome back, {user.name}!</h3>
-                        </div>
-                        <p style={{ margin: 0, color: '#94a3b8', maxWidth: '500px' }}>
-                            You are currently a <span style={{ color: '#10b981', fontWeight: 700 }}>Seed Level</span> explorer.
-                            Collect more points to grow your status!
+                <div className={styles.bannerContent}>
+                    <div className={styles.trophyCircle}>
+                        <Trophy size={22} />
+                    </div>
+                    <div className={styles.bannerText}>
+                        <h3>Welcome back, {user.name}!</h3>
+                        <p>
+                            You are a <span style={{ color: '#10b981', fontWeight: 700 }}>Seed Level</span> explorer.
+                            {user.isPremium && <span style={{ marginLeft: '8px', color: '#fbbf24', fontWeight: 800 }}>✨ PREMIUM (2x CP BOOST)</span>}
                         </p>
                     </div>
-
-                    <Button
-                        size="sm"
-                        variant="outline"
-                        onClick={() => setShowGuide(true)}
-                        style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.1)' }}
-                    >
-                        How to Level Up <ArrowRight size={14} style={{ marginLeft: '4px' }} />
-                    </Button>
                 </div>
+
+                <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => navigate('/leaderboard')}
+                    className={styles.actionBtn}
+                    style={{ width: 'auto' }}
+                >
+                    View Rankings <ArrowRight size={14} style={{ marginLeft: '4px' }} />
+                </Button>
             </div>
 
-            {/* 2. STATS OVERVIEW */}
+            {/* LOCATION PROMPT - CLEANER ALERT */}
+            {!user.city && (
+                <div className={styles.actionCard} style={{
+                    background: 'linear-gradient(135deg, rgba(56, 189, 248, 0.1) 0%, rgba(14, 165, 233, 0.05) 100%)',
+                    borderColor: 'rgba(56, 189, 248, 0.3)',
+                    marginBottom: '1.5rem',
+                    animation: 'pulse-glow 3s infinite',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between'
+                }}>
+                    <div className={styles.actionHeader}>
+                        <div className={styles.actionIconBox} style={{ background: '#0ea5e9' }}>
+                            <MapPin size={22} />
+                        </div>
+                        <div className={styles.actionContent}>
+                            <h4 className={styles.actionTitle}>Missing Local Ranking</h4>
+                            <p className={styles.actionDesc}>Set city to represent your zone in Hall of Fame</p>
+                        </div>
+                    </div>
+                    <Button
+                        size="sm"
+                        onClick={() => setShowLocationModal(true)}
+                        style={{ background: '#0ea5e9', border: 'none', fontWeight: 800, width: 'auto' }}
+                    >
+                        Set Location
+                    </Button>
+                </div>
+            )}
+
+            {/* 2. STATS OVERVIEW - HIGH DENSITY */}
             <div className={styles.statsBoard}>
-                {/* Points Card */}
                 <div className={styles.statCard}>
                     <div className={styles.statIcon} style={{ background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)', color: 'white' }}>
                         <Zap size={20} />
                     </div>
-                    <div className={styles.statInfo}>
+                    <div>
                         <div className={styles.statValue}>{user.points || 0}</div>
                         <div className={styles.statLabel}>Total Points</div>
                     </div>
                 </div>
 
-                {/* Rank Card */}
                 <div className={styles.statCard}>
                     <div className={styles.statIcon} style={{ background: 'linear-gradient(135deg, #facc15 0%, #ca8a04 100%)', color: 'black' }}>
                         <Trophy size={20} />
                     </div>
-                    <div className={styles.statInfo}>
+                    <div>
                         <div className={styles.statValue}>{rank ? `#${rank}` : '-'}</div>
                         <div className={styles.statLabel}>Global Rank</div>
                     </div>
                 </div>
 
-                {/* Impact Card */}
                 <div className={styles.statCard}>
                     <div className={styles.statIcon} style={{ background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)', color: 'white' }}>
                         <Wind size={20} />
                     </div>
-                    <div className={styles.statInfo}>
+                    <div>
                         <div className={styles.statValue}>{((favoritePlants.length || items.length) * 1.2).toFixed(1)}L</div>
                         <div className={styles.statLabel}>Oxygen Impact</div>
                     </div>
                 </div>
             </div>
 
-            {/* 3. ALERTS & ACTIONS */}
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
-
-                {/* Verification Status */}
-                <div className={styles.actionCard} style={{ background: isFullyVerified ? 'rgba(16, 185, 129, 0.05)' : 'rgba(239, 68, 68, 0.05)', borderColor: isFullyVerified ? 'rgba(16, 185, 129, 0.2)' : 'rgba(239, 68, 68, 0.2)' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-                        <div style={{ background: isFullyVerified ? '#10b981' : '#ef4444', padding: '0.5rem', borderRadius: '50%', color: 'white' }}>
-                            {isFullyVerified ? <CheckCircle size={20} /> : <Shield size={20} />}
+            {/* 3. ALERTS & ACTIONS - GRID 3-COL */}
+            <div className={styles.actionSection}>
+                {/* Account Status Card */}
+                <div className={styles.actionCard}>
+                    <div className={styles.actionHeader}>
+                        <div className={styles.actionIconBox} style={{ background: isFullyVerified ? '#10b981' : '#ef4444' }}>
+                            {isFullyVerified ? <CheckCircle size={18} /> : <Shield size={18} />}
                         </div>
-                        <div>
-                            <h4 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 800 }}>Account Status</h4>
-                            <p style={{ margin: 0, fontSize: '0.85rem', color: '#94a3b8' }}>
-                                {isFullyVerified ? 'Your identity is verified.' : 'Verify to unlock trading.'}
-                            </p>
+                        <div className={styles.actionContent}>
+                            <h4 className={styles.actionTitle}>Identity</h4>
+                            <p className={styles.actionDesc}>{isFullyVerified ? 'Verified Account' : 'Action Required'}</p>
                         </div>
                     </div>
                     {!isFullyVerified && (
                         <Button
                             onClick={() => setShowVerifyModal(true)}
                             size="sm"
-                            style={{ width: '100%', background: '#ef4444', color: 'white', border: 'none', fontWeight: 700 }}
+                            className={styles.actionBtn}
+                            style={{ background: '#ef4444', color: 'white', border: 'none' }}
                         >
                             Verify Identity
                         </Button>
                     )}
                 </div>
 
-                {/* Account Security */}
-                <div className={styles.actionCard} style={{ background: 'rgba(99, 102, 241, 0.05)', borderColor: 'rgba(99, 102, 241, 0.2)' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-                        <div style={{ background: '#6366f1', padding: '0.5rem', borderRadius: '50%', color: 'white' }}>
-                            <Lock size={20} />
+                {/* Privacy/Security Card */}
+                <div className={styles.actionCard}>
+                    <div className={styles.actionHeader}>
+                        <div className={styles.actionIconBox} style={{ background: '#6366f1' }}>
+                            <Lock size={18} />
                         </div>
-                        <div>
-                            <h4 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 800 }}>Security</h4>
-                            <p style={{ margin: 0, fontSize: '0.85rem', color: '#94a3b8' }}>Manage account privacy</p>
+                        <div className={styles.actionContent}>
+                            <h4 className={styles.actionTitle}>Security</h4>
+                            <p className={styles.actionDesc}>Manage Privacy</p>
                         </div>
                     </div>
-                    <Button onClick={() => setShowPasswordModal(true)} size="sm" variant="outline" style={{ width: '100%', fontWeight: 700 }}>
-                        Update Password
+                    <Button onClick={() => setShowPasswordModal(true)} size="sm" variant="outline" className={styles.actionBtn}>
+                        Change Key
                     </Button>
                 </div>
 
-                {/* Vendor Portal Quick Access */}
-                <div className={styles.actionCard} style={{ background: 'rgba(250, 204, 21, 0.05)', borderColor: 'rgba(250, 204, 21, 0.2)' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '1rem' }}>
-                        <div style={{ background: '#facc15', padding: '0.5rem', borderRadius: '50%', color: 'black' }}>
-                            <Store size={20} />
+                {/* Shop Center Card */}
+                <div className={styles.actionCard}>
+                    <div className={styles.actionHeader}>
+                        <div className={styles.actionIconBox} style={{ background: '#facc15', color: '#000' }}>
+                            <Store size={18} />
                         </div>
-                        <div>
-                            <h4 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 800 }}>Partner Center</h4>
-                            <p style={{ margin: 0, fontSize: '0.85rem', color: '#94a3b8' }}>Manage your nursery shop</p>
+                        <div className={styles.actionContent}>
+                            <h4 className={styles.actionTitle}>Partners</h4>
+                            <p className={styles.actionDesc}>Shop Portal</p>
                         </div>
                     </div>
                     <Button
                         onClick={() => navigate('/vendor')}
                         size="sm"
-                        style={{ width: '100%', background: '#facc15', color: '#000', border: 'none', fontWeight: 800 }}
+                        className={styles.actionBtn}
+                        style={{ background: '#facc15', color: '#000', border: 'none' }}
                     >
-                        Login as Vendor
+                        Visit Center
                     </Button>
                 </div>
             </div>
 
             {/* 4. QUICK ACCESS GRID */}
-            <h2 style={{ fontSize: '1.2rem', fontWeight: 700, margin: '0 0 1rem', color: 'var(--color-text-main)' }}>Quick Access</h2>
-            <div className={styles.actionGrid}>
+            <h2 className={styles.sectionTitle} style={{ marginBottom: '1rem' }}>Quick Navigation</h2>
+            <div className={styles.quickGrid}>
                 {user.role === 'vendor' && (
-                    <div onClick={() => navigate('/vendor')} className={styles.quickCard} style={{ background: 'rgba(250, 204, 21, 0.1)', borderColor: 'rgba(250, 204, 21, 0.3)' }}>
-                        <Store style={{ color: '#facc15' }} size={32} />
+                    <div onClick={() => navigate('/vendor')} className={styles.quickCard} style={{ background: 'rgba(250, 204, 21, 0.05)', borderColor: 'rgba(250, 204, 21, 0.2)' }}>
+                        <Store style={{ color: '#facc15' }} size={24} />
                         <div>
                             <strong>Vendor Portal</strong>
-                            <p>Manage Your Shop</p>
+                            <p>Manage Shop</p>
                         </div>
                     </div>
                 )}
 
                 {user.role === 'admin' && (
-                    <div onClick={() => navigate('/admin')} className={styles.quickCard} style={{ background: 'rgba(239, 68, 68, 0.1)', borderColor: 'rgba(239, 68, 68, 0.3)' }}>
-                        <Shield style={{ color: '#ef4444' }} size={32} />
+                    <div onClick={() => navigate('/admin')} className={styles.quickCard} style={{ background: 'rgba(239, 68, 68, 0.05)', borderColor: 'rgba(239, 68, 68, 0.2)' }}>
+                        <Shield style={{ color: '#ef4444' }} size={24} />
                         <div>
                             <strong>Admin Panel</strong>
-                            <p>System Control</p>
+                            <p>System Hub</p>
                         </div>
                     </div>
                 )}
 
                 <div onClick={() => setShowCollectionModal(true)} className={styles.quickCard}>
-                    <Heart style={{ color: '#f43f5e' }} size={32} />
+                    <Heart style={{ color: '#f43f5e' }} size={24} />
                     <div>
-                        <strong>My Collection</strong>
-                        <p>{user.favorites?.length || 0} Plants</p>
+                        <strong>My Garden</strong>
+                        <p>{user.favorites?.length || 0} Collected</p>
                     </div>
                 </div>
 
                 <div onClick={() => navigate('/nearby')} className={styles.quickCard}>
-                    <MapPin style={{ color: '#10b981' }} size={32} />
+                    <MapPin style={{ color: '#10b981' }} size={24} />
                     <div>
-                        <strong>Nearby Map</strong>
-                        <p>Find Local Nurseries</p>
+                        <strong>Nearby</strong>
+                        <p>Locate Shops</p>
                     </div>
                 </div>
 
                 <div onClick={() => navigate('/cart')} className={styles.quickCard}>
-                    <ShoppingBag style={{ color: '#0ea5e9' }} size={32} />
+                    <ShoppingBag style={{ color: '#0ea5e9' }} size={24} />
                     <div>
-                        <strong>Saved Cart</strong>
-                        <p>{items.length} Pending Items</p>
+                        <strong>Cart</strong>
+                        <p>{items.length} Pending</p>
                     </div>
                 </div>
             </div>
@@ -453,6 +501,7 @@ export const UserDashboard = () => {
                 </div>
             )}
 
+            {/* 6. PASSWORD MODAL - (existing) */}
             {showPasswordModal && (
                 <div style={{
                     position: 'fixed', inset: 0, zIndex: 1001,
@@ -470,6 +519,53 @@ export const UserDashboard = () => {
                                 <Button type="submit" style={{ flex: 1 }}>Update</Button>
                             </div>
                         </form>
+                    </div>
+                </div>
+            )}
+
+            {/* 7. LOCATION MODAL */}
+            {showLocationModal && (
+                <div className={styles.modalOverlay}>
+                    <div className={styles.modalCard} style={{ maxWidth: '400px' }}>
+                        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.5rem' }}>
+                            <div style={{ background: 'rgba(14, 165, 233, 0.1)', padding: '1rem', borderRadius: '50%', color: '#0ea5e9' }}>
+                                <MapPin size={32} />
+                            </div>
+                        </div>
+                        <h2 style={{ fontSize: '1.5rem', fontWeight: 800, margin: '0 0 0.5rem', color: '#f1f5f9' }}>Hall of Fame</h2>
+                        <p style={{ margin: '0 0 2rem', color: '#94a3b8', fontSize: '0.9rem' }}>
+                            Join your local city ranking and earn badges.
+                        </p>
+
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', textAlign: 'left', marginBottom: '2rem' }}>
+                            <div>
+                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#64748b', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Current City</label>
+                                <input
+                                    type="text"
+                                    placeholder="e.g. New Delhi"
+                                    className={styles.modalInput}
+                                    style={{ width: '100%', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '0.75rem', padding: '0.75rem', color: 'white' }}
+                                    value={locForm.city}
+                                    onChange={e => setLocForm({ ...locForm, city: e.target.value })}
+                                />
+                            </div>
+                            <div>
+                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#64748b', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>State / Region</label>
+                                <input
+                                    type="text"
+                                    placeholder="e.g. Delhi"
+                                    className={styles.modalInput}
+                                    style={{ width: '100%', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '0.75rem', padding: '0.75rem', color: 'white' }}
+                                    value={locForm.state}
+                                    onChange={e => setLocForm({ ...locForm, state: e.target.value })}
+                                />
+                            </div>
+                        </div>
+
+                        <div style={{ display: 'flex', gap: '1rem' }}>
+                            <Button variant="outline" onClick={() => setShowLocationModal(false)} style={{ flex: 1 }}>Maybe Later</Button>
+                            <Button onClick={submitLocation} style={{ flex: 1, background: '#0ea5e9', border: 'none' }}>Join Now</Button>
+                        </div>
                     </div>
                 </div>
             )}

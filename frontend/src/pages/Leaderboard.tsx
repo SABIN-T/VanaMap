@@ -213,20 +213,22 @@ export const Leaderboard = () => {
                     </h2>
 
                     <div className={styles.tableContainer}>
-                        {rest.map((user, idx) => (
-                            <div key={idx} className={styles.row}>
-                                <span className={styles.rankNumber}>#{idx + 4}</span>
-                                <div className={styles.smallAvatar}>{user.name.charAt(0)}</div>
-                                <div className={styles.userInfo}>
-                                    <span className={styles.name}>{user.name}</span>
-                                    <span className={styles.levelText}>{user.city || 'Global'} • Lvl {user.gameLevel || 1}</span>
+                        <div className={styles.scrollContainer}>
+                            {rest.map((user, idx) => (
+                                <div key={idx} className={styles.row}>
+                                    <span className={styles.rankNumber}>#{idx + 4}</span>
+                                    <div className={styles.smallAvatar}>{user.name.charAt(0)}</div>
+                                    <div className={styles.userInfo}>
+                                        <span className={styles.name}>{user.name}</span>
+                                        <span className={styles.levelText}>{user.city || 'Global'} • Lvl {user.gameLevel || 1}</span>
+                                    </div>
+                                    <div className={styles.rowPoints}>{user.points.toLocaleString()}</div>
                                 </div>
-                                <div className={styles.rowPoints}>{user.points.toLocaleString()}</div>
-                            </div>
-                        ))}
-                        {rest.length === 0 && (
-                            <div style={{ textAlign: 'center', padding: '2rem', color: '#64748b', fontSize: '0.85rem' }}>No other rankings yet.</div>
-                        )}
+                            ))}
+                            {rest.length === 0 && (
+                                <div style={{ textAlign: 'center', padding: '2rem', color: '#64748b', fontSize: '0.85rem' }}>No other rankings yet.</div>
+                            )}
+                        </div>
                     </div>
                 </div>
 
@@ -265,7 +267,7 @@ export const Leaderboard = () => {
                             <Building size={16} className="text-emerald-400" /> Top Zones
                         </h2>
 
-                        <div>
+                        <div className={styles.scrollContainer} style={{ maxHeight: '420px' }}>
                             {data.cities.length > 0 ? data.cities.map((cityData, idx) => (
                                 <div key={idx} className={styles.cityCard}>
                                     <div className={styles.cityIcon}>
