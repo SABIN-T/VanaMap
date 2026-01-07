@@ -443,3 +443,83 @@
 .actionCard:active {
     transform: scale(0.98);
 }
+
+/* GAMIFICATION BANNER */
+.gamificationBanner {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(56, 189, 248, 0.1) 100%);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.gamificationBanner:hover {
+    transform: translateY(-2px);
+    border-color: rgba(16, 185, 129, 0.4);
+}
+
+/* QUICK ACCESS CARDS */
+.quickCard {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    /* Subtle border */
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+}
+
+.quickCard::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.05));
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.quickCard:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.4);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.quickCard:hover::before {
+    opacity: 1;
+}
+
+.quickCard strong {
+    display: block;
+    color: #fff;
+    font-size: 1.15rem;
+    margin-bottom: 0.3rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+.quickCard p {
+    margin: 0;
+    color: #94a3b8;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.quickCard svg {
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.2));
+    transition: transform 0.3s ease;
+}
+
+.quickCard:hover svg {
+    transform: scale(1.1) rotate(5deg);
+}

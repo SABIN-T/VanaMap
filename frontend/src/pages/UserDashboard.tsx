@@ -251,15 +251,7 @@ export const UserDashboard = () => {
     return (
         <UserDashboardLayout title="Overview">
             {/* 1. GAMIFICATION BANNER */}
-            <div className={styles.gamificationBanner} style={{
-                background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(56, 189, 248, 0.1) 100%)',
-                border: '1px solid rgba(16, 185, 129, 0.2)',
-                borderRadius: '1.5rem',
-                padding: '1.5rem',
-                marginBottom: '2rem',
-                position: 'relative',
-                overflow: 'hidden'
-            }}>
+            <div className={styles.gamificationBanner}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', position: 'relative', zIndex: 2 }}>
                     <div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
@@ -371,10 +363,10 @@ export const UserDashboard = () => {
 
             {/* 4. QUICK ACCESS GRID */}
             <h2 style={{ fontSize: '1.2rem', fontWeight: 700, margin: '0 0 1rem', color: 'var(--color-text-main)' }}>Quick Access</h2>
-            <div className={styles.actionGrid} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
+            <div className={styles.actionGrid}>
 
                 <div onClick={() => setShowCollectionModal(true)} className={styles.quickCard}>
-                    <Heart className="text-rose-500" size={24} />
+                    <Heart style={{ color: '#f43f5e' }} size={32} />
                     <div>
                         <strong>My Collection</strong>
                         <p>{user.favorites?.length || 0} Plants</p>
@@ -382,7 +374,7 @@ export const UserDashboard = () => {
                 </div>
 
                 <div onClick={() => navigate('/nearby')} className={styles.quickCard}>
-                    <MapPin className="text-emerald-500" size={24} />
+                    <MapPin style={{ color: '#10b981' }} size={32} />
                     <div>
                         <strong>Nearby Map</strong>
                         <p>Find Local Nurseries</p>
@@ -390,7 +382,7 @@ export const UserDashboard = () => {
                 </div>
 
                 <div onClick={() => navigate('/cart')} className={styles.quickCard}>
-                    <ShoppingBag className="text-sky-500" size={24} />
+                    <ShoppingBag style={{ color: '#0ea5e9' }} size={32} />
                     <div>
                         <strong>Saved Cart</strong>
                         <p>{items.length} Pending Items</p>
