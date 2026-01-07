@@ -8,6 +8,7 @@ const Razorpay = require('razorpay');
 const webpush = require('web-push');
 const helmet = require('helmet');
 const compression = require('compression'); // Performance: Gzip/Brotli
+const EmailTemplates = require('./email-templates'); // Professional email templates
 const rateLimit = require('express-rate-limit');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
