@@ -6,7 +6,7 @@ import { Button } from '../components/common/Button';
 import {
     Store, Locate, Info, ArrowRight, Package,
     ShoppingBag, ShoppingCart, DollarSign, ShieldCheck, ExternalLink,
-    MessageCircle, CheckCircle, Clock, QrCode
+    MessageCircle, CheckCircle, Clock, QrCode, BarChart2, TrendingUp
 } from 'lucide-react';
 import { registerVendor, fetchVendors, updateVendor, fetchVendorAnalytics } from '../services/api';
 import { useAuth } from '../context/AuthContext';
@@ -258,6 +258,37 @@ export const VendorPortal = () => {
                                             <div className={styles.statLabel}>Total Earnings</div>
                                         </div>
                                     </div>
+                                </div>
+
+                                {/* Quick Navigation Grid */}
+                                <div style={{
+                                    display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
+                                    gap: '0.75rem', marginTop: '1.5rem', marginBottom: '1.5rem'
+                                }}>
+                                    {[
+                                        { label: 'Inventory', icon: Package, path: '/vendor/inventory', color: '#3b82f6' },
+                                        { label: 'Insights', icon: BarChart2, path: '/vendor/insights', color: '#a855f7' },
+                                        { label: 'Growth', icon: TrendingUp, path: '/vendor/growth', color: '#facc15' },
+                                        { label: 'Settings', icon: Store, path: '/vendor/profile', color: '#10b981' },
+                                    ].map((action, i) => (
+                                        <div
+                                            key={i}
+                                            onClick={() => navigate(action.path)}
+                                            style={{
+                                                background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)',
+                                                borderRadius: '0.75rem', padding: '1rem', cursor: 'pointer',
+                                                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem',
+                                                transition: 'all 0.2s ease'
+                                            }}
+                                            onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; }}
+                                            onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.03)'; }}
+                                        >
+                                            <div style={{ padding: '0.5rem', borderRadius: '50%', background: `${action.color}20`, color: action.color }}>
+                                                <action.icon size={20} />
+                                            </div>
+                                            <span style={{ fontSize: '0.8rem', fontWeight: 600, color: '#e2e8f0' }}>{action.label}</span>
+                                        </div>
+                                    ))}
                                 </div>
 
                                 <div className={styles.verifiedBanner}>
