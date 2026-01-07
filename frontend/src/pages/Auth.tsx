@@ -512,17 +512,27 @@ export const Auth = () => {
 
                             {!captchaSvg && (
                                 <div style={{
-                                    background: '#f0fdf4',
-                                    padding: '1rem',
-                                    borderRadius: '12px',
-                                    marginBottom: '1rem',
+                                    background: 'linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%)',
+                                    padding: '1.25rem',
+                                    borderRadius: '16px',
+                                    marginBottom: '1.5rem',
                                     color: '#065f46',
-                                    fontSize: '0.9rem',
+                                    fontSize: '0.95rem',
                                     textAlign: 'center',
-                                    border: '1px solid #bbf7d0'
+                                    border: '2px solid #86efac',
+                                    boxShadow: '0 4px 12px rgba(16, 185, 129, 0.1)'
                                 }}>
-                                    ✅ Code sent to your Email/SMS.<br />
-                                    <span style={{ fontSize: '0.8rem', opacity: 0.8 }}>Check Spam folder if not found.</span>
+                                    <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>📧</div>
+                                    <div style={{ fontWeight: '600', marginBottom: '0.5rem' }}>
+                                        Verification Code Sent!
+                                    </div>
+                                    <div style={{ fontSize: '0.85rem', opacity: 0.9, lineHeight: '1.5' }}>
+                                        We've sent a 6-digit code to your email.
+                                        <br />
+                                        <span style={{ fontSize: '0.8rem', opacity: 0.7 }}>
+                                            💡 Check your spam folder if you don't see it.
+                                        </span>
+                                    </div>
                                 </div>
                             )}
 
