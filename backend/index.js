@@ -38,7 +38,6 @@ const cache = new NodeCache({
 
 // --- CLOUDINARY CONFIGURATION ---
 const cloudinary = require('cloudinary').v2;
-const multer = require('multer');
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
 // Auto-configure from CLOUDINARY_URL env var
