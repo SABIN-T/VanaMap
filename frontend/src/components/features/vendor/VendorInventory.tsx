@@ -15,7 +15,7 @@ export const VendorInventory = ({ vendor, onUpdate }: VendorInventoryProps) => {
     const [plants, setPlants] = useState<Plant[]>([]);
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
-    const [editValues, setEditValues] = useState<Record<string, { price: string, quantity: string, inStock: boolean }>>({});
+    const [editValues, setEditValues] = useState<Record<string, { price: string, quantity: string, inStock: boolean, sellingMode: 'online' | 'offline' | 'both' }>>({});
 
     useEffect(() => {
         const loadPlants = async () => {
@@ -24,13 +24,14 @@ export const VendorInventory = ({ vendor, onUpdate }: VendorInventoryProps) => {
                 setPlants(data);
 
                 // Initialize edit values from existing inventory
-                const initialEdits: Record<string, { price: string, quantity: string, inStock: boolean }> = {};
+                const initialEdits: Record<string, { price: string, quantity: string, inStock: boolean, sellingMode: 'online' | 'offline' | 'both' }> = {};
                 if (vendor.inventory) {
                     vendor.inventory.forEach(item => {
                         initialEdits[item.plantId] = {
                             price: item.price.toString(),
-                            quantity: ((item as any).quantity || 0).toString(),
-                            inStock: item.inStock
+                            quantity: (item.quantity || 0).toString(),
+                            inStock: item.inStock,
+                            sellingMode: item.sellingMode || 'offline'
                         };
                     });
                 }
@@ -60,12 +61,13 @@ export const VendorInventory = ({ vendor, onUpdate }: VendorInventoryProps) => {
     // Auto-refresh: Sync local state when vendor data updates (e.g. after save)
     useEffect(() => {
         if (vendor.inventory && plants.length > 0) {
-            const serverState: Record<string, { price: string, quantity: string, inStock: boolean }> = {};
+            const serverState: Record<string, { price: string, quantity: string, inStock: boolean, sellingMode: 'online' | 'offline' | 'both' }> = {};
             vendor.inventory.forEach(item => {
                 serverState[item.plantId] = {
                     price: item.price.toString(),
-                    quantity: ((item as any).quantity || 0).toString(),
-                    inStock: item.inStock
+                    quantity: (item.quantity || 0).toString(),
+                    inStock: item.inStock,
+                    sellingMode: item.sellingMode || 'offline'
                 };
             });
             // Merge with existing to keep unsaved input, but overwrite saved ones
@@ -73,13 +75,14 @@ export const VendorInventory = ({ vendor, onUpdate }: VendorInventoryProps) => {
         }
     }, [vendor, plants]);
 
-    const handleFieldChange = (plantId: string, field: 'price' | 'quantity', val: string) => {
+    const handleFieldChange = (plantId: string, field: 'price' | 'quantity' | 'sellingMode', val: any) => {
         setEditValues(prev => ({
             ...prev,
             [plantId]: {
                 ...prev[plantId],
                 [field]: val,
-                inStock: prev[plantId]?.inStock ?? true
+                inStock: prev[plantId]?.inStock ?? true,
+                sellingMode: prev[plantId]?.sellingMode ?? 'offline'
             }
         }));
     };
@@ -100,6 +103,7 @@ export const VendorInventory = ({ vendor, onUpdate }: VendorInventoryProps) => {
 
         const newPrice = parseFloat(edits.price);
         const newQty = parseInt(edits.quantity || '0');
+        const newMode = edits.sellingMode || 'offline';
 
         if (isNaN(newPrice) || newPrice <= 0) {
             toast.error("Invalid price entered");
@@ -116,7 +120,8 @@ export const VendorInventory = ({ vendor, onUpdate }: VendorInventoryProps) => {
             price: newPrice,
             quantity: newQty,
             status: 'approved' as const,
-            inStock: edits.inStock
+            inStock: edits.inStock,
+            sellingMode: newMode
         };
 
         if (existingIndex >= 0) {
@@ -223,7 +228,7 @@ export const VendorInventory = ({ vendor, onUpdate }: VendorInventoryProps) => {
                 <div className={styles.grid}>
                     {filteredPlants.map(plant => {
                         const invItem = getInventoryItem(plant.id);
-                        const editState = editValues[plant.id] || { price: '', inStock: true };
+                        const editState = editValues[plant.id] || { price: '', quantity: '0', inStock: true, sellingMode: 'offline' };
                         const isPending = invItem?.status === 'pending';
 
                         return (
@@ -273,7 +278,7 @@ export const VendorInventory = ({ vendor, onUpdate }: VendorInventoryProps) => {
                                             <button
                                                 onClick={() => handleSaveItem(plant)}
                                                 className={styles.saveBtn}
-                                                title="Save Price"
+                                                title="Save Row"
                                             >
                                                 <Save size={18} />
                                             </button>
@@ -287,6 +292,19 @@ export const VendorInventory = ({ vendor, onUpdate }: VendorInventoryProps) => {
                                                     <Trash2 size={18} />
                                                 </button>
                                             )}
+                                        </div>
+
+                                        <div className={styles.modeRow}>
+                                            <span className={styles.modeLabel}>Selling Via:</span>
+                                            <select
+                                                className={styles.modeSelect}
+                                                value={editState.sellingMode}
+                                                onChange={e => handleFieldChange(plant.id, 'sellingMode', e.target.value)}
+                                            >
+                                                <option value="offline">Storefront (Offline)</option>
+                                                <option value="online">Home Delivery (Online)</option>
+                                                <option value="both">Both (Online + Offline)</option>
+                                            </select>
                                         </div>
 
                                         {invItem && (

@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import { Button } from '../components/common/Button';
-import { Store, MessageCircle, Info, Locate, BadgeCheck, Zap, Trophy, ShoppingBag } from 'lucide-react';
-import { registerVendor, fetchVendors, updateVendor } from '../services/api';
+import { Store, MessageCircle, Info, Locate, BadgeCheck, ShoppingBag, ShoppingCart, DollarSign, ArrowRight } from 'lucide-react';
+import { registerVendor, fetchVendors, updateVendor, fetchVendorAnalytics } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 
@@ -61,14 +61,16 @@ function DraggableMarker({ pos, setPos }: { pos: L.LatLng, setPos: (pos: L.LatLn
 }
 
 export const VendorPortal = () => {
-    const { user } = useAuth();
+    const navigate = useNavigate();
     const location = useLocation();
+    const { user } = useAuth();
     const [markerPos, setMarkerPos] = useState<L.LatLng>(new L.LatLng(20.5937, 78.9629));
     const [isEditing, setIsEditing] = useState(false);
     const [existingVendorId, setExistingVendorId] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [isLocating, setIsLocating] = useState(false);
     const [currentVendor, setCurrentVendor] = useState<Vendor | null>(null);
+    const [analytics, setAnalytics] = useState<any>(null);
 
     const [formData, setFormData] = useState({ shopName: '', phone: '', whatsapp: '', address: '' });
 
@@ -95,6 +97,12 @@ export const VendorPortal = () => {
                 address: myVendor.address || ''
             });
             if (myVendor.latitude && myVendor.longitude) setMarkerPos(new L.LatLng(myVendor.latitude, myVendor.longitude));
+
+            // Fetch real-time analytics
+            try {
+                const stats = await fetchVendorAnalytics(myVendor.id);
+                setAnalytics(stats);
+            } catch (e) { console.error(e); }
         }
     }, [user]);
 
@@ -183,25 +191,25 @@ export const VendorPortal = () => {
                                         </div>
                                         <div className={styles.statInfo}>
                                             <div className={styles.statValue}>{currentVendor?.inventory?.length || 0}</div>
-                                            <div className={styles.statLabel}>Active Products</div>
+                                            <div className={styles.statLabel}>Added Plants</div>
                                         </div>
                                     </div>
                                     <div className={styles.statCard}>
                                         <div className={styles.statIcon} style={{ background: 'rgba(250, 204, 21, 0.1)', color: '#facc15' }}>
-                                            <Trophy size={24} />
+                                            <ShoppingCart size={24} />
                                         </div>
                                         <div className={styles.statInfo}>
-                                            <div className={styles.statValue}>Lv. 1</div>
-                                            <div className={styles.statLabel}>Partner Tier</div>
+                                            <div className={styles.statValue}>{analytics?.itemsSold || 0}</div>
+                                            <div className={styles.statLabel}>Purchased Units</div>
                                         </div>
                                     </div>
                                     <div className={styles.statCard}>
                                         <div className={styles.statIcon} style={{ background: 'rgba(56, 189, 248, 0.1)', color: '#38bdf8' }}>
-                                            <Zap size={24} />
+                                            <DollarSign size={24} />
                                         </div>
                                         <div className={styles.statInfo}>
-                                            <div className={styles.statValue}>88%</div>
-                                            <div className={styles.statLabel}>Search Visibility</div>
+                                            <div className={styles.statValue}>₹{analytics?.revenue?.toLocaleString() || 0}</div>
+                                            <div className={styles.statLabel}>Total Earnings</div>
                                         </div>
                                     </div>
                                 </div>
@@ -217,6 +225,35 @@ export const VendorPortal = () => {
                                     <Button size="sm" onClick={() => window.open('https://wa.me/9188773534', '_blank')} style={{ background: '#25D366', border: 'none' }}>
                                         <MessageCircle size={16} /> WhatsApp Support
                                     </Button>
+                                </div>
+
+                                <div className={styles.earningsChartCard}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+                                        <h3 style={{ fontSize: '1rem', fontWeight: 800, color: 'white' }}>Your Catalog Highlights</h3>
+                                        <button onClick={() => navigate('/vendor/inventory')} className={styles.viewAllBtn}>
+                                            Manage All <ArrowRight size={14} />
+                                        </button>
+                                    </div>
+                                    <div className={styles.catalogGrid}>
+                                        {currentVendor?.inventory?.slice(0, 4).map((item: any, idx: number) => (
+                                            <div key={idx} className={styles.miniPlantCard}>
+                                                <div className={styles.miniThumbBox}>
+                                                    <div className={styles.miniPlantId}>#{item.plantId.slice(-4)}</div>
+                                                </div>
+                                                <div className={styles.miniPlantInfo}>
+                                                    <div className={styles.miniPlantPrice}>₹{item.price}</div>
+                                                    <div className={item.inStock ? styles.miniStockIn : styles.miniStockOut}>
+                                                        {item.inStock ? 'In Stock' : 'Sold Out'}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                        {(!currentVendor?.inventory || currentVendor.inventory.length === 0) && (
+                                            <div className={styles.emptyCatalog}>
+                                                No plants added yet. <span onClick={() => navigate('/vendor/inventory')}>Start listing →</span>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
 
                                 <MarketInsights vendorId={currentVendor?.id || ''} />

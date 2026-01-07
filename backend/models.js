@@ -44,11 +44,13 @@ const VendorSchema = new mongoose.Schema({
         price: Number,
         quantity: { type: Number, default: 0 },
         status: { type: String, default: 'approved' },
-        inStock: { type: Boolean, default: true }
+        inStock: { type: Boolean, default: true },
+        sellingMode: { type: String, enum: ['online', 'offline', 'both'], default: 'offline' }
     }],
     verified: { type: Boolean, default: false },
     highlyRecommended: { type: Boolean, default: false },
-    category: { type: String, default: 'Plant Shop' }
+    category: { type: String, default: 'Plant Shop' },
+    lastActive: { type: Date, default: Date.now }
 }, { timestamps: true });
 
 const UserSchema = new mongoose.Schema({
@@ -156,6 +158,18 @@ const PaymentSchema = new mongoose.Schema({
     date: { type: Date, default: Date.now }
 });
 
+const SaleSchema = new mongoose.Schema({
+    vendorId: { type: String, required: true },
+    userId: String,
+    userName: String,
+    plantId: { type: String, required: true },
+    plantName: String,
+    price: { type: Number, required: true },
+    quantity: { type: Number, default: 1 },
+    status: { type: String, enum: ['pending', 'completed', 'cancelled'], default: 'completed' },
+    timestamp: { type: Date, default: Date.now }
+});
+
 // --- INDEXES FOR PERFORMANCE ---
 // Speed up plant searches by name, type, and medical values
 PlantSchema.index({ name: 'text', description: 'text', type: 1 });
@@ -181,6 +195,7 @@ module.exports = {
     Chat: mongoose.model('Chat', ChatSchema),
     PlantSuggestion: mongoose.model('PlantSuggestion', PlantSuggestionSchema),
     SearchLog: mongoose.model('SearchLog', SearchLogSchema),
+    Sale: mongoose.model('Sale', SaleSchema),
     PushSubscription: mongoose.model('PushSubscription', new mongoose.Schema({
         endpoint: { type: String, unique: true, required: true },
         keys: {

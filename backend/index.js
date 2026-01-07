@@ -450,7 +450,8 @@ const sendPushNotification = async (payload) => {
                     await webpush.sendNotification(sub, notificationPayload);
                     sentCount++;
                 } catch (err) {
-                    if (err.statusCode === 410 || err.statusCode === 404) {
+                    // 410 (Gone), 404 (Not Found), 403 (Forbidden/Invalid VAPID), 401 (Unauthorized)
+                    if ([410, 404, 403, 401].includes(err.statusCode)) {
                         deadCount++;
                         await PushSubscription.deleteOne({ _id: sub._id }).catch(() => { });
                     } else {
@@ -1126,7 +1127,7 @@ app.post('/api/user/complete-purchase', auth, async (req, res) => {
 app.post('/api/tracking/search', async (req, res) => {
     try {
         const { query, plantId, location } = req.body;
-        const log = new SearchLog({ query, plantId, location });
+        const log = new SearchLog({ query, plantId, location: location || {} });
         await log.save();
         res.json({ success: true });
     } catch (err) {
@@ -1134,24 +1135,93 @@ app.post('/api/tracking/search', async (req, res) => {
     }
 });
 
+// New Endpoint: Complete Purchase (Real Sales Tracking)
+app.post('/api/user/complete-purchase', auth, async (req, res) => {
+    try {
+        const { items } = req.body; // Array of { plantId, vendorId, quantity, price, plantName }
+        if (!items || !items.length) return res.status(400).json({ error: "No items in cart" });
+
+        const sales = [];
+        for (const item of items) {
+            const sale = new Sale({
+                vendorId: item.vendorId,
+                userId: req.user.id,
+                userName: req.user.name,
+                plantId: item.plantId,
+                plantName: item.plantName,
+                price: item.price,
+                quantity: item.quantity || 1,
+                status: 'completed'
+            });
+            await sale.save();
+            sales.push(sale);
+
+            // Notify vendor
+            await broadcastAlert('sale', `New order: ${item.quantity || 1}x ${item.plantName}`, {
+                vendorId: item.vendorId,
+                title: 'New Sale! 💰'
+            });
+        }
+
+        // Clear user cart if needed (optional based on front-end flow)
+        await User.findByIdAndUpdate(req.user.id, { $set: { cart: [] } });
+
+        res.json({ success: true, sales });
+    } catch (err) {
+        console.error("Purchase Error:", err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
 app.get('/api/analytics/vendor/:vendorId', auth, async (req, res) => {
     try {
-        // Simple search analytics for vendors
-        // In a real app we'd filter by vendor's service area
-        const topSearches = await SearchLog.aggregate([
+        const { vendorId } = req.params;
+
+        // 1. Search Trends (What users are searching for)
+        const searchTrends = await SearchLog.aggregate([
             { $group: { _id: '$query', count: { $sum: 1 } } },
             { $sort: { count: -1 } },
-            { $limit: 5 }
+            { $limit: 10 }
         ]);
 
-        const demandByLocation = await SearchLog.aggregate([
+        // 2. Sales Analytics (What users are actually buying)
+        const recentSales = await Sale.find({ vendorId }).sort({ timestamp: -1 }).limit(20);
+
+        const salesStats = await Sale.aggregate([
+            { $match: { vendorId } },
+            {
+                $group: {
+                    _id: null,
+                    totalRevenue: { $sum: { $multiply: ['$price', '$quantity'] } },
+                    totalItems: { $sum: '$quantity' }
+                }
+            }
+        ]);
+
+        // 3. Demand by Species
+        const speciesDemand = await Sale.aggregate([
+            { $match: { vendorId } },
+            { $group: { _id: '$plantName', count: { $sum: '$quantity' } } },
+            { $sort: { count: -1 } }
+        ]);
+
+        // 4. Nearby Demand (Searches by city)
+        const nearbyDemand = await SearchLog.aggregate([
             { $group: { _id: '$location.city', count: { $sum: 1 } } },
             { $sort: { count: -1 } },
             { $limit: 5 }
         ]);
 
-        res.json({ topSearches, demandByLocation });
+        res.json({
+            searchTrends: searchTrends.map(t => ({ label: t._id || 'Generic Search', value: t.count })),
+            sales: recentSales,
+            revenue: salesStats[0]?.totalRevenue || 0,
+            itemsSold: salesStats[0]?.totalItems || 0,
+            demand: speciesDemand.map(d => ({ name: d._id, count: d.count })),
+            nearbyDemand: nearbyDemand.map(d => ({ city: d._id, count: d.count }))
+        });
     } catch (err) {
+        console.error("Analytics Error:", err);
         res.status(500).json({ error: err.message });
     }
 });
@@ -1934,6 +2004,10 @@ app.patch('/api/vendors/:id', auth, async (req, res) => {
 
             await broadcastAlert('price', `Price/Inventory updated for ${vendor.name}`, { vendorId: vendor.id, location: vendor.address, title: 'Price Hack! 📉' });
         }
+
+        // 🚀 PERFORMANCE: Invalidate cache
+        cache.del('all_vendors');
+
         res.json(vendor);
     } catch (err) {
         res.status(500).json({ error: err.message });

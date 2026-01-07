@@ -122,8 +122,15 @@ export const Cart = () => {
         const cleanNumber = waNumber.replace(/[^0-9]/g, '');
         const url = `https://wa.me/${cleanNumber.length < 10 ? '91' + cleanNumber : cleanNumber}?text=${encodeURIComponent(msg)}`;
 
-        // Background award points (no need to await if we want it fast)
-        completePurchase(vItems).catch(console.error);
+        // Background award points and track sale
+        const purchaseData = vItems.map(i => ({
+            plantId: i.plant.id,
+            vendorId: vendor.id,
+            quantity: i.quantity,
+            price: i.vendorPrice || i.plant.price || 0,
+            plantName: i.plant.name
+        }));
+        completePurchase(purchaseData).catch(console.error);
 
         window.open(url, '_blank');
 

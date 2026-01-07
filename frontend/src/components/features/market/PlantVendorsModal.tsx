@@ -77,9 +77,16 @@ export const PlantVendorsModal = ({ plant, onClose }: PlantVendorsModalProps) =>
             if (userLocation) distance = getDistance(userLocation.lat, userLocation.lng, v.latitude, v.longitude);
             else distance = v.distance || 9999;
 
-            return { ...v, currentPrice: price, realDistance: distance };
+            const info = {
+                ...v,
+                currentPrice: price,
+                realDistance: distance,
+                sellingMode: (invItem?.sellingMode || 'offline') as 'online' | 'offline' | 'both',
+                quantity: invItem?.quantity || 0
+            };
+            return info;
         })
-        .filter((v): v is (Vendor & { currentPrice: number, realDistance: number }) => v !== null)
+        .filter((v): v is (Vendor & { currentPrice: number, realDistance: number, sellingMode: 'online' | 'offline' | 'both', quantity: number }) => v !== null)
         .sort((a, b) => {
             if (a.highlyRecommended && !b.highlyRecommended) return -1;
             if (!a.highlyRecommended && b.highlyRecommended) return 1;
@@ -144,6 +151,14 @@ export const PlantVendorsModal = ({ plant, onClose }: PlantVendorsModalProps) =>
                                             <span>
                                                 <Phone size={12} /> Contact Info
                                             </span>
+                                        </div>
+                                        <div className={styles.sellingDetails}>
+                                            <span className={styles.modeBadge}>
+                                                {vendor.sellingMode === 'online' ? '🚚 Delivery Only' :
+                                                    vendor.sellingMode === 'offline' ? '🏪 Store Pickup' :
+                                                        '🔄 Delivery & Pickup'}
+                                            </span>
+                                            {vendor.quantity > 0 && <span className={styles.qtyBadge}>In Stock: {vendor.quantity}</span>}
                                         </div>
                                     </div>
 

@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 import type { Plant, Vendor } from '../types';
 import { fetchPlants, fetchVendors, logSearch } from '../services/api';
+import { useAuth } from '../context/AuthContext';
 import { Search, ShoppingBag, AlertCircle } from 'lucide-react';
 import { PlantVendorsModal } from '../components/features/market/PlantVendorsModal';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -11,6 +12,7 @@ import { Helmet } from 'react-helmet-async';
 export const Shops = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const { user } = useAuth();
     const [plants, setPlants] = useState<Plant[]>([]);
     const [vendors, setVendors] = useState<Vendor[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
@@ -137,10 +139,15 @@ export const Shops = () => {
     useEffect(() => {
         if (!searchQuery.trim()) return;
         const timer = setTimeout(() => {
-            logSearch(searchQuery);
+            const locationData = user ? {
+                city: user.city,
+                state: user.state,
+                country: user.country
+            } : undefined;
+            logSearch(searchQuery, undefined, locationData);
         }, 1500);
         return () => clearTimeout(timer);
-    }, [searchQuery]);
+    }, [searchQuery, user]);
 
     const getStockStatus = useCallback((plant: Plant) => {
         const selling = vendors.filter(v => v.inventory?.some(i => i.plantId === plant.id && i.inStock));
@@ -368,9 +375,19 @@ export const Shops = () => {
                                     <p className={styles.scientific}>{plant.scientificName}</p>
 
                                     <div className={styles.tags}>
-                                        <span style={{ fontSize: '0.75rem', padding: '0.2rem 0.5rem', background: 'rgba(16, 185, 129, 0.1)', color: '#10b981', borderRadius: '4px', whiteSpace: 'nowrap' }}>
-                                            Air Purifying
-                                        </span>
+                                        <span className={styles.tag}>Air Purifying</span>
+                                        {(() => {
+                                            const selling = vendors.filter(v => v.inventory?.some(i => i.plantId === plant.id && i.inStock));
+                                            const hasOnline = selling.some(v => v.inventory?.find(i => i.plantId === plant.id)?.sellingMode !== 'offline');
+                                            const hasOffline = selling.some(v => v.inventory?.find(i => i.plantId === plant.id)?.sellingMode !== 'online');
+
+                                            return (
+                                                <>
+                                                    {hasOnline && <span className={styles.deliveryTag} title="Available for Home Delivery">🚚 Delivery</span>}
+                                                    {hasOffline && <span className={styles.storefrontTag} title="Available for Store Pickup">🏪 In-Store</span>}
+                                                </>
+                                            );
+                                        })()}
                                     </div>
                                 </div>
 

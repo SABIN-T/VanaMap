@@ -44,8 +44,10 @@ export interface Vendor {
     inventory?: {
         plantId: string;
         price: number;
+        quantity: number;
         status: 'pending' | 'approved';
         inStock: boolean;
+        sellingMode: 'online' | 'offline' | 'both';
     }[];
     verified?: boolean;
     highlyRecommended?: boolean;

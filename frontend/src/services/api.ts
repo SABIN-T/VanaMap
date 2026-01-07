@@ -83,7 +83,9 @@ export const registerVendor = async (vendorData: Partial<Vendor>): Promise<Vendo
             body: JSON.stringify(vendorData)
         });
         if (!response.ok) throw new Error('Failed to register vendor');
-        return await response.json();
+        const data = await response.json();
+        apiCache.clear(); // 🚀 Force refresh!
+        return data;
     } catch (error) {
         console.error("Error registering vendor:", error);
         return null;
@@ -98,7 +100,9 @@ export const updateVendor = async (id: string, updates: Partial<Vendor>): Promis
             body: JSON.stringify(updates)
         });
         if (!response.ok) throw new Error('Failed to update vendor');
-        return await response.json();
+        const data = await response.json();
+        apiCache.clear(); // 🚀 Force refresh!
+        return data;
     } catch (error) {
         console.error("Error updating vendor:", error);
         return null;
@@ -111,6 +115,7 @@ export const deleteVendor = async (id: string): Promise<boolean> => {
             method: 'DELETE',
             headers: getHeaders()
         });
+        if (response.ok) apiCache.clear();
         return response.ok;
     } catch (error) {
         console.error("Error deleting vendor:", error);

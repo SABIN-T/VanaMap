@@ -297,6 +297,33 @@
     margin-bottom: 1.5rem;
 }
 
+.tag {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.5rem;
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+    border-radius: 4px;
+    white-space: nowrap;
+}
+
+.deliveryTag {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.5rem;
+    background: rgba(59, 130, 246, 0.1);
+    color: #3b82f6;
+    border-radius: 4px;
+    white-space: nowrap;
+}
+
+.storefrontTag {
+    font-size: 0.75rem;
+    padding: 0.2rem 0.5rem;
+    background: rgba(250, 204, 21, 0.1);
+    color: #facc15;
+    border-radius: 4px;
+    white-space: nowrap;
+}
+
 .footer {
     display: flex;
     align-items: center;
