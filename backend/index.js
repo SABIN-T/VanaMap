@@ -3,7 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
-const { Plant, Vendor, User, Payment, Notification, Chat, PlantSuggestion, SearchLog, PushSubscription, SystemSettings, CustomPot, SupportTicket, AIFeedback } = require('./models');
+const { Plant, Vendor, User, Payment, Notification, Chat, PlantSuggestion, SearchLog, PushSubscription, SystemSettings, CustomPot, SupportTicket, AIFeedback, ApiKey } = require('./models');
 const Razorpay = require('razorpay');
 const webpush = require('web-push');
 const helmet = require('helmet');
@@ -1894,7 +1894,125 @@ app.post('/api/support/inquiry', async (req, res) => {
         res.status(500).json({ error: 'Failed to send inquiry' });
     }
 });
-// --- AUTH ---
+// --- API KEY SYSTEM (Developer Platform) ---
+
+const crypto = require('crypto');
+
+// Helper: Generate Secure Key
+const generateApiKey = () => {
+    return 'vm_' + crypto.randomBytes(24).toString('hex'); // e.g. vm_a1b2c3...
+};
+
+// 1. Generate New API Key
+app.post('/api/keys', auth, async (req, res) => {
+    try {
+        const { name, scopes } = req.body;
+
+        // Limit: 5 keys per user
+        const count = await ApiKey.countDocuments({ userId: req.user.id });
+        if (count >= 5) return res.status(400).json({ error: "Limit reached: Maximum 5 API keys allowed." });
+
+        const keyString = generateApiKey();
+
+        const newKey = new ApiKey({
+            key: keyString, // Ideally hash this in production, but storing plain for simplicity if permitted
+            userId: req.user.id,
+            name: name || 'My App',
+            scopes: scopes || ['read']
+        });
+
+        await newKey.save();
+
+        res.status(201).json({
+            success: true,
+            message: "API Key Generated",
+            apiKey: keyString, // ONLY TIME WE SHOW THIS
+            details: { name: newKey.name, scopes: newKey.scopes, id: newKey._id }
+        });
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
+// 2. List My Keys
+app.get('/api/keys', auth, async (req, res) => {
+    try {
+        const keys = await ApiKey.find({ userId: req.user.id }).select('name scopes lastUsed createdAt isActive key');
+        // Mask the keys for security in the list
+        const maskedKeys = keys.map(k => ({
+            id: k._id,
+            name: k.name,
+            prefix: k.key.substring(0, 7) + '...',
+            scopes: k.scopes,
+            isActive: k.isActive,
+            created: k.createdAt,
+            lastUsed: k.lastUsed
+        }));
+        res.json(maskedKeys);
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
+// 3. Revoke/Delete Key
+app.delete('/api/keys/:id', auth, async (req, res) => {
+    try {
+        await ApiKey.findOneAndDelete({ _id: req.params.id, userId: req.user.id });
+        res.json({ success: true, message: "Key revoked" });
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
+// --- DEVELOPER API MIDDLEWARE ---
+const requireApiKey = async (req, res, next) => {
+    const key = req.header('x-api-key');
+    if (!key) return res.status(401).json({ error: "Missing x-api-key header" });
+
+    try {
+        const apiKeyDoc = await ApiKey.findOne({ key, isActive: true });
+        if (!apiKeyDoc) return res.status(403).json({ error: "Invalid or revoked API Key" });
+
+        // Update usage stats (async, don't block)
+        apiKeyDoc.lastUsed = new Date();
+        apiKeyDoc.save();
+
+        req.apiKey = apiKeyDoc; // Attach to request
+        next();
+    } catch (e) {
+        res.status(500).json({ error: "API Validation Error" });
+    }
+};
+
+// --- PUBLIC DEVELOPER API ENDPOINTS (v1) ---
+
+// 1. Search Plants (Protected by Key)
+app.get('/api/v1/plants/search', requireApiKey, async (req, res) => {
+    try {
+        const { query } = req.query;
+        if (!query) return res.status(400).json({ error: "Query parameter required" });
+
+        const results = await Plant.find(
+            { $text: { $search: query } },
+            { score: { $meta: "textScore" } }
+        )
+            .sort({ score: { $meta: "textScore" } })
+            .limit(10)
+            .select('name scientificName imageUrl type price -_id');
+
+        res.json({
+            meta: {
+                total: results.length,
+                source: "VanaMap Developer API",
+                quota_remaining: "Unlimited (Beta)"
+            },
+            data: results
+        });
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
 
 app.post('/api/auth/signup', async (req, res) => {
     try {

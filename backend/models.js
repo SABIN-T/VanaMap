@@ -224,5 +224,14 @@ module.exports = {
         correction: String, // If user provides a better answer
         userId: String,
         timestamp: { type: Date, default: Date.now }
+    })),
+    ApiKey: mongoose.model('ApiKey', new mongoose.Schema({
+        key: { type: String, required: true, unique: true }, // Store hashed if possible, but strict unique
+        userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+        name: { type: String, default: 'My API Key' }, // Friendly name e.g. "Mobile App"
+        scopes: [{ type: String, enum: ['read', 'write', 'admin'], default: 'read' }],
+        isActive: { type: Boolean, default: true },
+        lastUsed: Date,
+        createdAt: { type: Date, default: Date.now }
     }))
 };
