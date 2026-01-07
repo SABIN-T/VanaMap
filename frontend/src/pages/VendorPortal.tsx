@@ -17,6 +17,7 @@ import type { Vendor } from '../types';
 import { VendorInventory } from '../components/features/vendor/VendorInventory';
 import { MarketInsights } from '../components/features/vendor/MarketInsights';
 import { GrowthTools } from '../components/features/vendor/GrowthTools';
+import { PaymentSettings } from '../components/features/vendor/PaymentSettings';
 import { VendorPortalLayout } from './VendorPortalLayout';
 import styles from './VendorPortal.module.css';
 
@@ -84,6 +85,7 @@ export const VendorPortal = () => {
         if (path.endsWith('/inventory')) return 'inventory';
         if (path.endsWith('/insights')) return 'insights';
         if (path.endsWith('/growth')) return 'growth';
+        if (path.endsWith('/payments')) return 'payments';
         if (path.endsWith('/profile')) return 'profile';
         return 'overview';
     }, [location.pathname]);
@@ -225,6 +227,9 @@ export const VendorPortal = () => {
                 {/* SECTION: GROWTH TOOLS */}
                 {activeSection === 'growth' && <GrowthTools vendorId={currentVendor?.id || ''} />}
 
+                {/* SECTION: PAYMENTS */}
+                {activeSection === 'payments' && <PaymentSettings vendorId={currentVendor?.id || ''} />}
+
                 {/* SECTION: OVERVIEW */}
                 {activeSection === 'overview' && (
                     <>
@@ -280,7 +285,8 @@ export const VendorPortal = () => {
                                         { label: 'Inventory', icon: Package, path: '/vendor/inventory', color: '#3b82f6' },
                                         { label: 'Insights', icon: BarChart2, path: '/vendor/insights', color: '#a855f7' },
                                         { label: 'Growth', icon: TrendingUp, path: '/vendor/growth', color: '#facc15' },
-                                        { label: 'Settings', icon: Store, path: '/vendor/profile', color: '#10b981' },
+                                        { label: 'Payments', icon: DollarSign, path: '/vendor/payments', color: '#10b981' },
+                                        { label: 'Settings', icon: Store, path: '/vendor/profile', color: '#64748b' },
                                     ].map((action, i) => (
                                         <div
                                             key={i}

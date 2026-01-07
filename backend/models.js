@@ -55,7 +55,48 @@ const VendorSchema = new mongoose.Schema({
     category: { type: String, default: 'Plant Shop' },
     ownerEmail: String,
     isVacationMode: { type: Boolean, default: false },
-    lastActive: { type: Date, default: Date.now }
+    lastActive: { type: Date, default: Date.now },
+
+    // Payment & Banking Details
+    paymentDetails: {
+        // Bank Account
+        accountHolderName: String,
+        accountNumber: String, // Encrypted
+        ifscCode: String,
+        accountType: { type: String, enum: ['savings', 'current'] },
+        bankName: String,
+        branchName: String,
+
+        // UPI (Alternative)
+        upiId: String,
+
+        // Tax & Compliance
+        panCard: String, // Required for tax compliance
+        gstNumber: String, // Optional, required if registered
+
+        // Razorpay Route
+        razorpayContactId: String, // Razorpay contact ID for payouts
+        razorpayFundAccountId: String, // Fund account ID
+
+        // Payout Settings
+        autoPayoutEnabled: { type: Boolean, default: false },
+        minimumPayoutAmount: { type: Number, default: 500 }, // Minimum ₹500 for payout
+        payoutFrequency: { type: String, enum: ['instant', 'daily', 'weekly', 'monthly'], default: 'weekly' },
+
+        // Status
+        isVerified: { type: Boolean, default: false }, // Bank details verified
+        verifiedAt: Date,
+        lastPayoutDate: Date
+    },
+
+    // Commission & Earnings
+    earnings: {
+        totalSales: { type: Number, default: 0 },
+        vanaMapCommission: { type: Number, default: 0 },
+        netEarnings: { type: Number, default: 0 },
+        pendingPayout: { type: Number, default: 0 },
+        totalPaidOut: { type: Number, default: 0 }
+    }
 }, { timestamps: true });
 
 const ReviewSchema = new mongoose.Schema({
