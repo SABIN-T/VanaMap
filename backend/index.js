@@ -193,7 +193,7 @@ const sendEmail = async (mailOptions) => {
 const sendResetEmail = async (email, tempPass) => {
     console.log(`ATTEMPTING TO SEND EMAIL TO: ${email} via ${process.env.EMAIL_USER}`);
     const mailOptions = {
-        from: `"Vana Map" <${process.env.EMAIL_USER}>`,
+        from: 'VanaMap <noreply@vanamap.online>',
         to: email,
         subject: '🛡️ Account Recovered by The Defender',
         html: `
@@ -1974,7 +1974,7 @@ app.post('/api/support/inquiry', async (req, res) => {
         const targetEmail = process.env.ADMIN_EMAIL || process.env.EMAIL_USER; // Send to admin
 
         const mailOptions = {
-            from: `"VanaMap Contact" <${process.env.EMAIL_USER}>`,
+            from: 'VanaMap Contact <noreply@vanamap.online>',
             to: targetEmail,
             replyTo: email,
             subject: `New Inquiry from ${name}: VanaMap`,
@@ -2371,7 +2371,7 @@ app.post('/api/user/send-contact-otp', auth, async (req, res) => {
         // Send OTP
         if (method === 'email') {
             const mailOptions = {
-                from: `"Vana Map" <${process.env.EMAIL_USER}>`,
+                from: 'VanaMap <noreply@vanamap.online>',
                 to: user.email,
                 subject: 'VanaMap - Verify Your Contact',
                 html: `
@@ -2399,7 +2399,7 @@ app.post('/api/user/send-contact-otp', auth, async (req, res) => {
 
                 // For now, fallback to email so user DEFINITELY gets the code
                 const mailOptions = {
-                    from: `"Vana Map Security" <${process.env.EMAIL_USER}>`,
+                    from: 'VanaMap Security <noreply@vanamap.online>',
                     to: user.email, // Send to email
                     subject: '📱 Your Mobile Verification Code',
                     html: `
