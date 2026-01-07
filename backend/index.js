@@ -153,10 +153,17 @@ const sendEmail = async (mailOptions) => {
                 subject: mailOptions.subject,
                 html: mailOptions.html
             });
-            console.log(`[Resend] Sent to ${mailOptions.to} (ID: ${result.data?.id})`);
+            console.log(`[Resend] Sent to ${mailOptions.to} (ID: ${result.data?.id})`)
+                ;
             return { messageId: result.data?.id || 'resend-api' };
         } catch (error) {
             console.error('[Resend] Error:', error.message);
+            console.error('[Resend] Full Error:', JSON.stringify(error, null, 2));
+            console.error('[Resend] Attempted to send:', {
+                from: mailOptions.from || 'VanaMap <noreply@vanamap.online>',
+                to: mailOptions.to,
+                subject: mailOptions.subject
+            });
             // Fall through to SendGrid
         }
     }
