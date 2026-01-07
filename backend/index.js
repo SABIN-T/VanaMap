@@ -515,7 +515,9 @@ app.get('/api/auth/me', auth, async (req, res) => {
 const connectDB = async () => {
     try {
         await mongoose.connect(process.env.MONGO_URI, {
-            serverSelectionTimeoutMS: 5000 // Fail fast if no connection
+            serverSelectionTimeoutMS: 30000, // Increased to 30s for Free Tier Cold Starts
+            socketTimeoutMS: 45000, // Close sockets after 45s of inactivity
+            family: 4 // Force IPv4 to avoid pending connection issues on some networks
         });
         console.log('MongoDB Connected');
 
@@ -4174,6 +4176,12 @@ app.get('/api/analytics/nearby-users', auth, async (req, res) => {
     }
 });
 
+
+// --- KEEP ALIVE for Render Free Tier ---
+// Use a service like cron-job.org to ping this every 14 minutes
+app.get('/api/keep-alive', (req, res) => {
+    res.status(200).send('I am awake!');
+});
 
 app.get('/debug-env', (req, res) => {
     // SECURITY: Do not expose full values in prod, just presence
