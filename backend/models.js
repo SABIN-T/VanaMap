@@ -312,5 +312,28 @@ module.exports = {
         isActive: { type: Boolean, default: true },
         source: { type: String, default: 'website' },
         joinedAt: { type: Date, default: Date.now }
-    }))
+    })),
+    SupportEmail: mongoose.model('SupportEmail', new mongoose.Schema({
+        messageId: String,
+        from: String,
+        to: String,
+        subject: String,
+        text: String,
+        html: String,
+        receivedAt: { type: Date, default: Date.now },
+        status: { type: String, enum: ['unread', 'read', 'replied', 'archived'], default: 'unread' },
+        priority: { type: String, enum: ['low', 'medium', 'high', 'urgent'], default: 'medium' },
+        assignedTo: String,
+        tags: [String],
+        reply: {
+            message: String,
+            sentAt: Date,
+            sentBy: String
+        },
+        attachments: [{
+            filename: String,
+            url: String,
+            size: Number
+        }]
+    }, { timestamps: true }))
 };

@@ -3,7 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
-const { Plant, Vendor, User, Payment, Notification, Chat, PlantSuggestion, SearchLog, PushSubscription, SystemSettings, CustomPot, SupportTicket, AIFeedback, ApiKey, NewsletterSubscriber, Sale, Review } = require('./models');
+const { Plant, Vendor, User, Payment, Notification, Chat, PlantSuggestion, SearchLog, PushSubscription, SystemSettings, CustomPot, SupportTicket, AIFeedback, ApiKey, NewsletterSubscriber, Sale, Review, SupportEmail } = require('./models');
 const Razorpay = require('razorpay');
 const webpush = require('web-push');
 const helmet = require('helmet');
@@ -4806,6 +4806,239 @@ app.get('/api/analytics/nearby-users', auth, async (req, res) => {
         res.json(analytics);
     } catch (error) {
         console.error('[Analytics] Error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
+// --- EMAIL SUPPORT SYSTEM ---
+
+// Webhook to receive emails from Resend
+app.post('/api/webhooks/resend-email', express.raw({ type: 'application/json' }), async (req, res) => {
+    try {
+        // Verify webhook signature (if Resend provides one)
+        // const signature = req.headers['resend-signature'];
+        // TODO: Implement signature verification when Resend supports it
+
+        const event = JSON.parse(req.body.toString());
+
+        if (event.type === 'email.received') {
+            const emailData = event.data;
+
+            // Save email to database
+            const supportEmail = new SupportEmail({
+                messageId: emailData.message_id || emailData.id,
+                from: emailData.from,
+                to: emailData.to,
+                subject: emailData.subject || '(No Subject)',
+                text: emailData.text || '',
+                html: emailData.html || '',
+                receivedAt: new Date(emailData.created_at || Date.now()),
+                status: 'unread',
+                priority: 'medium',
+                attachments: emailData.attachments || []
+            });
+
+            await supportEmail.save();
+            console.log(`[Support Email] New email received from ${emailData.from}: ${emailData.subject}`);
+
+            // Send auto-reply
+            if (resend) {
+                try {
+                    await resend.emails.send({
+                        from: 'VanaMap Support <support@vanamap.online>',
+                        to: emailData.from,
+                        subject: `Re: ${emailData.subject || 'Your message'}`,
+                        html: `
+                            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                                <h2 style="color: #10b981;">Thank you for contacting VanaMap Support!</h2>
+                                <p>We've received your message and will get back to you within 24 hours.</p>
+                                <p><strong>Your message:</strong></p>
+                                <div style="background: #f3f4f6; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                                    ${emailData.text || emailData.html || ''}
+                                </div>
+                                <p>If your issue is urgent, you can also reach us on WhatsApp: <a href="https://wa.me/919188773534">+91 91887 73534</a></p>
+                                <p style="color: #6b7280; font-size: 14px;">Best regards,<br>VanaMap Support Team</p>
+                            </div>
+                        `
+                    });
+                    console.log(`[Support Email] Auto-reply sent to ${emailData.from}`);
+                } catch (e) {
+                    console.error('[Support Email] Auto-reply failed:', e.message);
+                }
+            }
+        }
+
+        res.status(200).json({ received: true });
+    } catch (error) {
+        console.error('[Support Email Webhook] Error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Get all support emails (Admin only)
+app.get('/api/admin/support-emails', auth, admin, async (req, res) => {
+    try {
+        const { status, priority, search, limit = 50, skip = 0 } = req.query;
+
+        const filter = {};
+        if (status) filter.status = status;
+        if (priority) filter.priority = priority;
+        if (search) {
+            filter.$or = [
+                { from: { $regex: search, $options: 'i' } },
+                { subject: { $regex: search, $options: 'i' } },
+                { text: { $regex: search, $options: 'i' } }
+            ];
+        }
+
+        const emails = await SupportEmail.find(filter)
+            .sort({ receivedAt: -1 })
+            .limit(parseInt(limit))
+            .skip(parseInt(skip));
+
+        const total = await SupportEmail.countDocuments(filter);
+        const unreadCount = await SupportEmail.countDocuments({ status: 'unread' });
+
+        res.json({
+            emails,
+            total,
+            unreadCount,
+            hasMore: total > (parseInt(skip) + parseInt(limit))
+        });
+    } catch (error) {
+        console.error('[Support Emails] Error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Get single support email (Admin only)
+app.get('/api/admin/support-emails/:id', auth, admin, async (req, res) => {
+    try {
+        const email = await SupportEmail.findById(req.params.id);
+        if (!email) return res.status(404).json({ error: 'Email not found' });
+
+        // Mark as read
+        if (email.status === 'unread') {
+            email.status = 'read';
+            await email.save();
+        }
+
+        res.json(email);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Update email status (Admin only)
+app.put('/api/admin/support-emails/:id/status', auth, admin, async (req, res) => {
+    try {
+        const { status, priority, assignedTo, tags } = req.body;
+
+        const email = await SupportEmail.findById(req.params.id);
+        if (!email) return res.status(404).json({ error: 'Email not found' });
+
+        if (status) email.status = status;
+        if (priority) email.priority = priority;
+        if (assignedTo !== undefined) email.assignedTo = assignedTo;
+        if (tags) email.tags = tags;
+
+        await email.save();
+        res.json(email);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Reply to support email (Admin only)
+app.post('/api/admin/support-emails/:id/reply', auth, admin, async (req, res) => {
+    try {
+        const { message } = req.body;
+        if (!message) return res.status(400).json({ error: 'Message is required' });
+
+        const email = await SupportEmail.findById(req.params.id);
+        if (!email) return res.status(404).json({ error: 'Email not found' });
+
+        // Send reply via Resend
+        if (resend) {
+            await resend.emails.send({
+                from: 'VanaMap Support <support@vanamap.online>',
+                to: email.from,
+                subject: `Re: ${email.subject}`,
+                html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+                        <h2 style="color: #10b981;">VanaMap Support Response</h2>
+                        <div style="background: #f9fafb; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                            ${message}
+                        </div>
+                        <hr style="border: none; border-top: 1px solid #e5e7eb; margin: 20px 0;">
+                        <p style="color: #6b7280; font-size: 14px;"><strong>Original message:</strong></p>
+                        <div style="background: #f3f4f6; padding: 15px; border-radius: 8px;">
+                            ${email.html || email.text}
+                        </div>
+                        <p style="color: #6b7280; font-size: 12px; margin-top: 20px;">
+                            Best regards,<br>
+                            VanaMap Support Team<br>
+                            <a href="https://vanamap.online">vanamap.online</a>
+                        </p>
+                    </div>
+                `
+            });
+        }
+
+        // Update email record
+        email.reply = {
+            message,
+            sentAt: new Date(),
+            sentBy: req.user.email
+        };
+        email.status = 'replied';
+        await email.save();
+
+        res.json({ success: true, email });
+    } catch (error) {
+        console.error('[Support Reply] Error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Delete support email (Admin only)
+app.delete('/api/admin/support-emails/:id', auth, admin, async (req, res) => {
+    try {
+        await SupportEmail.findByIdAndDelete(req.params.id);
+        res.json({ success: true });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Get support email statistics (Admin only)
+app.get('/api/admin/support-stats', auth, admin, async (req, res) => {
+    try {
+        const total = await SupportEmail.countDocuments();
+        const unread = await SupportEmail.countDocuments({ status: 'unread' });
+        const replied = await SupportEmail.countDocuments({ status: 'replied' });
+        const archived = await SupportEmail.countDocuments({ status: 'archived' });
+
+        // Average response time (for replied emails)
+        const repliedEmails = await SupportEmail.find({ status: 'replied', 'reply.sentAt': { $exists: true } });
+        let avgResponseTime = 0;
+        if (repliedEmails.length > 0) {
+            const totalResponseTime = repliedEmails.reduce((sum, email) => {
+                const responseTime = new Date(email.reply.sentAt) - new Date(email.receivedAt);
+                return sum + responseTime;
+            }, 0);
+            avgResponseTime = totalResponseTime / repliedEmails.length / (1000 * 60 * 60); // Convert to hours
+        }
+
+        res.json({
+            total,
+            unread,
+            replied,
+            archived,
+            avgResponseTimeHours: avgResponseTime.toFixed(2)
+        });
+    } catch (error) {
         res.status(500).json({ error: error.message });
     }
 });
