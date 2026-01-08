@@ -4860,6 +4860,79 @@ app.get('/api/analytics/nearby-users', auth, async (req, res) => {
 
 // --- EMAIL SUPPORT SYSTEM ---
 
+// Endpoint for Contact Form Submissions
+app.post('/api/support/contact', async (req, res) => {
+    try {
+        const { name, email, subject, message, userId } = req.body;
+
+        if (!email || !message) {
+            return res.status(400).json({ error: 'Email and message are required' });
+        }
+
+        // Save to database as a SupportEmail (so it shows in Admin UI)
+        const supportEmail = new SupportEmail({
+            messageId: `web-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+            from: `${name || 'User'} <${email}>`,
+            to: 'support@vanamap.online',
+            subject: subject || 'New Contact Form Submission',
+            text: message,
+            html: `<p>${message.replace(/\n/g, '<br>')}</p>`,
+            receivedAt: new Date(),
+            status: 'unread',
+            priority: 'medium',
+            assignedTo: userId // Optional: link to logged-in user
+        });
+
+        await supportEmail.save();
+        console.log(`[Support Form] New message from ${email}`);
+
+        // Send Auto-Reply via Resend
+        if (resend) {
+            try {
+                await resend.emails.send({
+                    from: 'VanaMap Support <support@vanamap.online>',
+                    to: email,
+                    subject: `Received: ${subject || 'Contact Request'}`,
+                    html: `
+                        <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; color: #333;">
+                            <div style="text-align: center; padding: 20px 0;">
+                                <img src="https://vanamap.online/support-avatar.jpg" alt="VanaMap Support" style="width: 64px; height: 64px; border-radius: 50%;">
+                            </div>
+                            <div style="background: #ffffff; border-radius: 12px; padding: 30px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid #e5e7eb;">
+                                <h2 style="color: #10b981; margin-top: 0; text-align: center;">Message Received!</h2>
+                                <p style="font-size: 16px; line-height: 1.6; color: #4b5563;">
+                                    Hi ${name || 'there'},
+                                </p>
+                                <p style="font-size: 16px; line-height: 1.6; color: #4b5563;">
+                                    Thanks for reaching out to VanaMap Support! This is an automated message to confirm that we've received your request.
+                                </p>
+                                <p style="font-size: 16px; line-height: 1.6; color: #4b5563;">
+                                    Our team will review your message and get back to you within 24 hours.
+                                </p>
+                                <div style="background: #f3f4f6; padding: 20px; border-radius: 8px; margin: 24px 0;">
+                                    <strong style="display: block; margin-bottom: 8px; color: #1f2937;">Your Message:</strong>
+                                    <p style="margin: 0; color: #4b5563; font-style: italic;">"${message}"</p>
+                                </div>
+                                <p style="font-size: 14px; color: #6b7280; text-align: center; margin-top: 30px;">
+                                    © 2026 VanaMap. All rights reserved.
+                                </p>
+                            </div>
+                        </div>
+                    `
+                });
+            } catch (emailError) {
+                console.error('[Support Form] Auto-reply failed:', emailError);
+                // Don't fail the request if auto-reply fails
+            }
+        }
+
+        res.status(200).json({ success: true, message: 'Message sent successfully' });
+    } catch (error) {
+        console.error('[Support Form] Error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // Webhook to receive emails from Resend
 app.post('/api/webhooks/resend-email', express.raw({ type: 'application/json' }), async (req, res) => {
     try {

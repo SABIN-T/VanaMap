@@ -15,6 +15,7 @@ import { SystemGuard } from './components/common/SystemGuard';
 import { LocationNag } from './components/common/LocationNag';
 import { PermissionCenter } from './components/common/PermissionCenter';
 import { InAppBrowserGuard } from './components/common/InAppBrowserGuard';
+import { ContactSupport } from './components/features/support/ContactSupport';
 
 function App() {
   return (
@@ -56,6 +57,7 @@ function App() {
                 <InstallPrompt />
 
                 <AnimatedRoutes />
+                <ContactSupport />
               </Router>
             </InAppBrowserGuard>
           </CartProvider>
