@@ -4997,6 +4997,75 @@ app.post('/api/webhooks/resend-email', express.raw({ type: 'application/json' })
 });
 
 // Get all support emails (Admin only)
+// --- PUBLIC SUPPORT ENDPOINTS ---
+
+// Handle Contact Form Submissions
+app.post('/api/support/contact', async (req, res) => {
+    try {
+        const { name, email, subject, message, userId } = req.body;
+
+        // 1. Save to Database
+        const newTicket = new SupportEmail({
+            from: email,
+            fromName: name,
+            subject: subject || 'No Subject',
+            text: message,
+            userId: userId || null, // Optional: Link to user if logged in
+            status: 'unread',
+            priority: 'normal',
+            source: 'web_form',
+            receivedAt: new Date()
+        });
+        await newTicket.save();
+
+        // 2. Send Auto-Reply
+        if (resend) {
+            try {
+                await resend.emails.send({
+                    from: 'VanaMap Support <support@vanamap.online>',
+                    to: email,
+                    subject: `Re: ${subject || 'Support Request'} - [Received]`,
+                    html: `
+                        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #1e293b;">
+                            <div style="text-align: center; margin-bottom: 24px;">
+                                <img src="https://vanamap.online/support-avatar.jpg" alt="VanaMap Support" style="width: 64px; height: 64px; border-radius: 50%; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);">
+                                <h2 style="color: #059669; margin: 16px 0 8px;">Message Received</h2>
+                            </div>
+                            
+                            <div style="background: #f8fafc; border-radius: 12px; padding: 24px; border: 1px solid #e2e8f0; box-shadow: 0 2px 4px rgba(0,0,0,0.05);">
+                                <p style="margin-top: 0;">Hi <strong>${name || 'there'}</strong>,</p>
+                                <p>Thanks for reaching out! We've received your message and created a support ticket.</p>
+                                <p>Our team will review it and get back to you as soon as possible.</p>
+                                
+                                <div style="margin: 24px 0; padding: 16px; background: #ffffff; border-left: 4px solid #10b981; border-radius: 0 4px 4px 0;">
+                                    <p style="margin: 0; color: #64748b; font-size: 0.9em; font-weight: 500; margin-bottom: 4px;">You wrote:</p>
+                                    <p style="margin: 0; color: #334155; font-style: italic;">"${message}"</p>
+                                </div>
+
+                                <p style="margin-bottom: 0;">Best regards,<br><strong>VanaMap Support Team</strong></p>
+                                <p style="font-size: 0.8em; color: #94a3b8; margin-top: 8px;"><a href="https://vanamap.online" style="color: #10b981; text-decoration: none;">vanamap.online</a></p>
+                            </div>
+                        </div>
+                    `
+                });
+            } catch (emailErr) {
+                console.error("Auto-reply failed:", emailErr);
+                // Don't fail the request if auto-reply fails
+            }
+        }
+
+        // 3. Clear Cache (so admin panel sees new count immediately)
+        cache.del('support_stats');
+
+        res.status(201).json({ success: true, message: 'Ticket created', id: newTicket._id });
+    } catch (error) {
+        console.error('Contact Form Error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// --- ADMIN SUPPORT DASHBOARD ENDPOINTS ---
+
 app.get('/api/admin/support-emails', auth, admin, async (req, res) => {
     try {
         const { status, priority, search, limit = 50, skip = 0 } = req.query;
