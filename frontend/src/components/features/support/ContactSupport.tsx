@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Mail, MessageSquare, Send, X, Loader2 } from 'lucide-react';
 import { useAuth } from '../../../context/AuthContext';
 import { Button } from '../../common/Button';
@@ -11,6 +12,9 @@ export const ContactSupport = () => {
     const { user } = useAuth();
     const [isOpen, setIsOpen] = useState(false);
     const [loading, setLoading] = useState(false);
+
+    // Router hooks
+    const location = useLocation();
 
     // Form state
     const [name, setName] = useState('');
@@ -25,6 +29,12 @@ export const ContactSupport = () => {
             setEmail(user.email || '');
         }
     }, [isOpen, user]);
+
+    // Only show on Home page (unless modal is open)
+    // Matches behavior of AI Doctor and Permission buttons
+    if (location.pathname !== '/' && !isOpen) {
+        return null;
+    }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
