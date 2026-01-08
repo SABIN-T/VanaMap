@@ -218,16 +218,19 @@
 /* Mobile Responsive */
 @media (max-width: 640px) {
     .fab {
-        bottom: 160px;
-        /* Positioned above AI Doctor/Permission buttons */
+        bottom: 230px;
+        /* Increased to 230px to clear AI Doctor button */
         right: 16px;
         padding: 0;
         width: 48px;
         height: 48px;
+        z-index: 99999;
+        /* Maximum z-index */
         border-radius: 50%;
         justify-content: center;
-        background: rgba(30, 41, 59, 0.9);
+        background: rgba(30, 41, 59, 0.95);
         backdrop-filter: blur(12px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
 
     .fabIcon {
