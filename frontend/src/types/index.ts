@@ -99,4 +99,6 @@ export interface User {
     latitude?: number;
     longitude?: number;
     googleAuth?: boolean;
+    emailVerified?: boolean;
+    phoneVerified?: boolean;
 }

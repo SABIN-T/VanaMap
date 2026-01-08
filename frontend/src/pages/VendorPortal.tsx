@@ -6,7 +6,7 @@ import { Button } from '../components/common/Button';
 import {
     Store, Locate, Info, ArrowRight, Package,
     ShoppingBag, ShoppingCart, DollarSign, ShieldCheck, ExternalLink,
-    MessageCircle, CheckCircle, Clock, QrCode, BarChart2, TrendingUp
+    MessageCircle, CheckCircle, Clock, QrCode, BarChart2, TrendingUp, Shield
 } from 'lucide-react';
 import { registerVendor, fetchVendors, updateVendor, fetchVendorAnalytics } from '../services/api';
 import { useAuth } from '../context/AuthContext';
@@ -252,6 +252,41 @@ export const VendorPortal = () => {
                                 <p style={{ color: '#94a3b8', maxWidth: '500px', margin: '0 auto 2rem' }}>
                                     Register your nursery to start showcasing your plant collection to thousands of local enthusiasts.
                                 </p>
+
+                                {/* Verification Warning */}
+                                <div style={{
+                                    background: 'rgba(59, 130, 246, 0.1)',
+                                    border: '1px solid rgba(59, 130, 246, 0.3)',
+                                    borderRadius: '12px',
+                                    padding: '1rem 1.5rem',
+                                    margin: '0 auto 1.5rem',
+                                    maxWidth: '500px',
+                                    textAlign: 'left'
+                                }}>
+                                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
+                                        <Shield size={20} style={{ color: '#3b82f6', flexShrink: 0, marginTop: '2px' }} />
+                                        <div>
+                                            <h4 style={{ margin: '0 0 0.5rem 0', color: '#3b82f6', fontSize: '0.9rem', fontWeight: 700 }}>
+                                                ⚠️ Verification Required
+                                            </h4>
+                                            <p style={{ margin: 0, fontSize: '0.85rem', color: '#cbd5e1', lineHeight: 1.5 }}>
+                                                To register as a vendor, you must verify your <strong>email</strong> or <strong>phone number</strong> first.
+                                                Email verification is recommended for receiving important notifications.
+                                            </p>
+                                            {user && !user.emailVerified && !user.phoneVerified && (
+                                                <Button
+                                                    onClick={() => navigate('/user?tab=verification')}
+                                                    size="sm"
+                                                    variant="outline"
+                                                    style={{ marginTop: '0.75rem', fontSize: '0.8rem' }}
+                                                >
+                                                    Verify Now →
+                                                </Button>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <Button onClick={() => navigate('/vendor/profile')} style={{ background: '#facc15', color: '#000', fontWeight: 800 }}>
                                     Start Registration
                                 </Button>
