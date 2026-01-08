@@ -5119,6 +5119,89 @@ app.get('/api/admin/support-emails/:id', auth, admin, async (req, res) => {
     }
 });
 
+// --- ADMIN BROADCAST ENDPOINTS ---
+
+// Search users for broadcast
+app.get('/api/admin/search-users', auth, admin, async (req, res) => {
+    try {
+        const query = req.query.q;
+        if (!query) return res.json({ users: [] });
+
+        const users = await User.find({
+            $or: [
+                { name: { $regex: query, $options: 'i' } },
+                { email: { $regex: query, $options: 'i' } }
+            ]
+        }).select('id name email phone role');
+
+        const mappedUsers = users.map(u => ({
+            id: u._id,
+            name: u.name,
+            email: u.email,
+            phone: u.phone,
+            role: u.role
+        }));
+
+        res.json({ users: mappedUsers });
+    } catch (error) {
+        console.error('Search Users Error:', error);
+        res.status(500).json({ error: 'Search failed' });
+    }
+});
+
+// Send broadcast
+app.post('/api/admin/broadcast', auth, admin, upload.single('image'), async (req, res) => {
+    try {
+        const { recipientType, subject, messageText, recipientId } = req.body;
+        const imageUrl = req.file ? req.file.path : null;
+
+        let recipients = [];
+        if (recipientType === 'single') {
+            if (!recipientId) return res.status(400).json({ error: 'Recipient ID required' });
+            const user = await User.findById(recipientId);
+            if (user) recipients.push(user);
+        } else {
+            // All users (active)
+            recipients = await User.find({}).select('email name');
+        }
+
+        if (recipients.length === 0) {
+            return res.status(404).json({ error: 'No recipients found' });
+        }
+
+        // Send via Resend
+        if (resend) {
+            // Process in chunks of 50
+            const chunkSize = 50;
+            for (let i = 0; i < recipients.length; i += chunkSize) {
+                const chunk = recipients.slice(i, i + chunkSize);
+                await Promise.all(chunk.map(user =>
+                    resend.emails.send({
+                        from: 'VanaMap Updates <updates@vanamap.online>',
+                        to: user.email,
+                        subject: subject,
+                        html: `
+                            <div style="font-family: sans-serif; color: #1e293b; max-width: 600px; margin: 0 auto;">
+                                ${imageUrl ? `<img src="${imageUrl}" style="width: 100%; border-radius: 8px; margin-bottom: 24px;" />` : ''}
+                                <div style="font-size: 16px; line-height: 1.6;">${messageText.replace(/\n/g, '<br>')}</div>
+                                <hr style="margin: 32px 0; border: 0; border-top: 1px solid #e2e8f0;">
+                                <p style="font-size: 12px; color: #94a3b8; text-align: center;">
+                                    Sent via VanaMap Broadcast Center • <a href="https://vanamap.online" style="color: #94a3b8;">Unsubscribe</a>
+                                </p>
+                            </div>
+                        `
+                    }).catch(e => console.error(`Failed to send to ${user.email}`, e))
+                ));
+            }
+        }
+
+        res.json({ success: true, recipientCount: recipients.length });
+    } catch (error) {
+        console.error('Broadcast Error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // Update email status (Admin only)
 app.put('/api/admin/support-emails/:id/status', auth, admin, async (req, res) => {
     try {
