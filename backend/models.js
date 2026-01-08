@@ -316,13 +316,16 @@ module.exports = {
     SupportEmail: mongoose.model('SupportEmail', new mongoose.Schema({
         messageId: String,
         from: String,
+        fromName: String, // Added name field
         to: String,
         subject: String,
         text: String,
         html: String,
+        userId: String, // Link to registered user
+        source: { type: String, default: 'email' }, // web_form, email_inbound
         receivedAt: { type: Date, default: Date.now },
         status: { type: String, enum: ['unread', 'read', 'replied', 'archived'], default: 'unread' },
-        priority: { type: String, enum: ['low', 'medium', 'high', 'urgent'], default: 'medium' },
+        priority: { type: String, enum: ['low', 'medium', 'high', 'urgent', 'normal'], default: 'medium' }, // Added normal
         assignedTo: String,
         tags: [String],
         reply: {
