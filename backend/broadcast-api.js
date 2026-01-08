@@ -200,7 +200,7 @@ app.post('/api/admin/broadcast', admin, upload.single('image'), async (req, res)
         for (const recipient of recipients) {
             try {
                 await sendEmail({
-                    from: 'VanaMap <noreply@vanamap.online>',
+                    from: 'VanaMap <support@vanamap.online>',
                     to: recipient.email,
                     subject: subject,
                     html: fullHTML

@@ -151,7 +151,7 @@ const sendEmail = async (mailOptions) => {
     if (resend) {
         try {
             const result = await resend.emails.send({
-                from: mailOptions.from || 'VanaMap <noreply@vanamap.online>', // Use verified domain
+                from: mailOptions.from || 'VanaMap <support@vanamap.online>', // Use verified domain
                 to: mailOptions.to,
                 subject: mailOptions.subject,
                 html: mailOptions.html
@@ -163,7 +163,7 @@ const sendEmail = async (mailOptions) => {
             console.error('[Resend] Error:', error.message);
             console.error('[Resend] Full Error:', JSON.stringify(error, null, 2));
             console.error('[Resend] Attempted to send:', {
-                from: mailOptions.from || 'VanaMap <noreply@vanamap.online>',
+                from: mailOptions.from || 'VanaMap <support@vanamap.online>',
                 to: mailOptions.to,
                 subject: mailOptions.subject
             });
@@ -196,7 +196,7 @@ const sendEmail = async (mailOptions) => {
 const sendResetEmail = async (email, tempPass) => {
     console.log(`ATTEMPTING TO SEND EMAIL TO: ${email} via ${process.env.EMAIL_USER}`);
     const mailOptions = {
-        from: 'VanaMap <noreply@vanamap.online>',
+        from: 'VanaMap <support@vanamap.online>',
         to: email,
         subject: '🛡️ Account Recovered by The Defender',
         html: `
@@ -249,7 +249,7 @@ const CommunicationOS = {
     email: async (to, subject, html) => {
         try {
             const mailOptions = {
-                from: 'VanaMap <noreply@vanamap.online>',
+                from: 'VanaMap <support@vanamap.online>',
                 to,
                 subject,
                 html
@@ -2188,7 +2188,7 @@ app.post('/api/support/inquiry', async (req, res) => {
         const targetEmail = process.env.ADMIN_EMAIL || process.env.EMAIL_USER; // Send to admin
 
         const mailOptions = {
-            from: 'VanaMap Contact <noreply@vanamap.online>',
+            from: 'VanaMap Contact <support@vanamap.online>',
             to: targetEmail,
             replyTo: email,
             subject: `New Inquiry from ${name}: VanaMap`,
@@ -2589,7 +2589,7 @@ app.post('/api/user/send-contact-otp', auth, async (req, res) => {
         // Send OTP
         if (method === 'email') {
             const mailOptions = {
-                from: 'VanaMap <noreply@vanamap.online>',
+                from: 'VanaMap <support@vanamap.online>',
                 to: user.email,
                 subject: 'VanaMap - Verify Your Contact',
                 html: `
@@ -2617,7 +2617,7 @@ app.post('/api/user/send-contact-otp', auth, async (req, res) => {
 
                 // For now, fallback to email so user DEFINITELY gets the code
                 const mailOptions = {
-                    from: 'VanaMap <noreply@vanamap.online>',
+                    from: 'VanaMap <support@vanamap.online>',
                     to: user.email,
                     subject: '🔐 Your VanaMap Verification Code',
                     html: `
@@ -3575,7 +3575,7 @@ app.post('/api/admin/broadcast', auth, admin, broadcastUpload.single('image'), a
         for (const recipient of recipients) {
             try {
                 await sendEmail({
-                    from: 'VanaMap Broadcast <noreply@vanamap.online>',
+                    from: 'VanaMap Broadcast <support@vanamap.online>',
                     to: recipient.email,
                     subject: subject,
                     html: fullHTML
