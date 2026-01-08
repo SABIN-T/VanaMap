@@ -125,7 +125,7 @@ export const Contact = () => {
                         </div>
                         <div>
                             <h3 className={styles.cardTitle}>Email Support</h3>
-                            <p className={styles.cardValue}>jiibruh86@gmail.com</p>
+                            <p className={styles.cardValue}>support@vanamap.online</p>
                             <p style={{ fontSize: '0.75rem', color: '#64748b', marginTop: '0.25rem' }}>Average response: 2h</p>
                         </div>
                     </div>

@@ -556,7 +556,7 @@ export const Home = () => {
                             </a>
                             {/* Premium Email Icon */}
                             <a
-                                href="mailto:jiibruh86@gmail.com"
+                                href="mailto:support@vanamap.online"
                                 className={styles.emailLink}
                                 aria-label="Email VanaMap Support"
                             >

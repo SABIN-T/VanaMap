@@ -40,7 +40,7 @@ const PublicPremium = lazy(() => import('../../pages/Premium').then(m => ({ defa
 const ForestGame = lazy(() => import('../../pages/ForestGame').then(m => ({ default: m.ForestGame })));
 const PotDesigner = lazy(() => import('../../pages/PotDesigner').then(m => ({ default: m.PotDesigner })));
 const DailyNews = lazy(() => import('../../pages/DailyNews').then(m => ({ default: m.DailyNews })));
-const CustomerSupport = lazy(() => import('../../pages/admin/CustomerSupport').then(m => ({ default: m.CustomerSupport })));
+const SupportEmails = lazy(() => import('../../pages/admin/SupportEmails').then(m => ({ default: m.SupportEmails })));
 const AIDoctor = lazy(() => import('../../pages/AIDoctor').then(m => ({ default: m.AIDoctor })));
 const BroadcastCenter = lazy(() => import('../../pages/admin/BroadcastCenter').then(m => ({ default: m.BroadcastCenter })));
 
@@ -147,7 +147,7 @@ export const AnimatedRoutes = () => {
                         <Route path="/admin/simulation-data" element={<SimulationData />} />
                         <Route path="/admin/suggestions" element={<ManageSuggestions />} />
                         <Route path="/admin/ai-doctor" element={<AIDoctor />} />
-                        <Route path="/admin/customer-support" element={<CustomerSupport />} />
+                        <Route path="/admin/customer-support" element={<SupportEmails />} />
                         <Route path="/admin/pot-designs" element={<PotDesigns />} />
                         <Route path="/admin/premium" element={<Premium />} />
                         <Route path="/admin/broadcast" element={<BroadcastCenter />} />

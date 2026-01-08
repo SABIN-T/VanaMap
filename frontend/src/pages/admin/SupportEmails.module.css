@@ -1,0 +1,356 @@
+.container {
+    padding: 1.5rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.loader {
+    padding: 4rem;
+    text-align: center;
+    color: #94a3b8;
+}
+
+/* Statistics */
+.statsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.statCard {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.statIcon {
+    flex-shrink: 0;
+}
+
+.statValue {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #e2e8f0;
+}
+
+.statLabel {
+    font-size: 0.875rem;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Toolbar */
+.toolbar {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.filterGroup {
+    display: flex;
+    gap: 0.5rem;
+    flex: 1;
+}
+
+.filterBtn {
+    padding: 0.5rem 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    color: #cbd5e1;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.filterBtn:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.filterBtnActive {
+    background: #10b981;
+    border-color: #10b981;
+    color: white;
+}
+
+.searchBox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    flex: 1;
+    max-width: 300px;
+}
+
+.searchBox input {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #e2e8f0;
+    width: 100%;
+    font-size: 0.875rem;
+}
+
+.searchBox input::placeholder {
+    color: #64748b;
+}
+
+/* Email Layout */
+.emailLayout {
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    gap: 1.5rem;
+    height: calc(100vh - 400px);
+    min-height: 600px;
+}
+
+.emailList {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    overflow-y: auto;
+    padding: 0.5rem;
+}
+
+.emptyState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #64748b;
+    gap: 1rem;
+}
+
+.emailItem {
+    padding: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 0.5rem;
+    border: 1px solid transparent;
+}
+
+.emailItem:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.emailItemActive {
+    background: rgba(16, 185, 129, 0.1);
+    border-color: rgba(16, 185, 129, 0.3);
+}
+
+.emailItemUnread {
+    background: rgba(59, 130, 246, 0.05);
+    border-left: 3px solid #3b82f6;
+}
+
+.emailItemHeader {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.emailFrom {
+    font-weight: 600;
+    color: #e2e8f0;
+    flex: 1;
+    font-size: 0.875rem;
+}
+
+.emailTime {
+    font-size: 0.75rem;
+    color: #94a3b8;
+}
+
+.emailSubject {
+    font-weight: 600;
+    color: #cbd5e1;
+    margin-bottom: 0.25rem;
+    font-size: 0.875rem;
+}
+
+.emailPreview {
+    font-size: 0.8rem;
+    color: #64748b;
+    line-height: 1.4;
+}
+
+.statusIconUnread {
+    color: #3b82f6;
+}
+
+.statusIconRead {
+    color: #94a3b8;
+}
+
+.statusIconReplied {
+    color: #10b981;
+}
+
+.statusIconArchived {
+    color: #64748b;
+}
+
+/* Email Detail */
+.emailDetail {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 1.5rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.emailDetailHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 1.5rem;
+}
+
+.emailDetailHeader h3 {
+    margin: 0 0 0.5rem 0;
+    color: #e2e8f0;
+    font-size: 1.25rem;
+}
+
+.emailMeta {
+    font-size: 0.875rem;
+    color: #94a3b8;
+    margin: 0;
+}
+
+.emailActions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.emailContent {
+    flex: 1;
+    color: #cbd5e1;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.emailContent pre {
+    white-space: pre-wrap;
+    font-family: inherit;
+}
+
+/* Reply Section */
+.replySection {
+    background: rgba(16, 185, 129, 0.05);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-top: 1.5rem;
+}
+
+.replySection h4 {
+    margin: 0 0 0.75rem 0;
+    color: #10b981;
+    font-size: 1rem;
+}
+
+.replyContent {
+    color: #cbd5e1;
+    font-size: 0.875rem;
+}
+
+.replyMeta {
+    margin-top: 0.75rem;
+    font-size: 0.75rem;
+    color: #94a3b8;
+    font-style: italic;
+}
+
+.replyForm {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.replyForm h4 {
+    margin: 0 0 1rem 0;
+    color: #e2e8f0;
+    font-size: 1rem;
+}
+
+.replyForm textarea {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 0.75rem;
+    color: #e2e8f0;
+    font-size: 0.875rem;
+    resize: vertical;
+    margin-bottom: 1rem;
+    font-family: inherit;
+}
+
+.replyForm textarea:focus {
+    outline: none;
+    border-color: #10b981;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+/* Mobile Responsive */
+@media (max-width: 1024px) {
+    .emailLayout {
+        grid-template-columns: 1fr;
+        height: auto;
+    }
+
+    .emailList {
+        max-height: 400px;
+    }
+
+    .emailDetail {
+        min-height: 500px;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+
+    .statsGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filterGroup {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+    }
+
+    .searchBox {
+        max-width: 100%;
+    }
+
+    .emailActions {
+        flex-direction: column;
+    }
+}
