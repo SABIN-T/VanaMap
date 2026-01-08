@@ -47,13 +47,10 @@
     display: none;
 }
 
-/* Modal Styling */
+/* Modal Styling - Matching PermissionCenter */
 .modalOverlay {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    inset: 0;
     background: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(4px);
     z-index: 10000;
@@ -64,11 +61,11 @@
     animation: fadeIn 0.2s ease;
 }
 
-/* ... existing modal styles ... */
-
 .modal {
     width: 100%;
     max-width: 500px;
+    /* Limit height to ensure it fits above tab bar with margin */
+    max-height: calc(100vh - 120px);
     background: #1e293b;
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 20px;
@@ -76,36 +73,8 @@
     position: relative;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
     animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* ... keep other styles ... */
-
-/* Mobile Specific Adjustments (mainly for modal) */
-@media (max-width: 640px) {
-    .fab {
-        right: 16px;
-        /* Slightly tighter margin on mobile */
-        /* Bottom position stays same or adjusts if needed */
-    }
-
-    .modalOverlay {
-        padding: 0;
-        align-items: flex-end;
-    }
-
-    .modal {
-        border-radius: 20px 20px 0 0;
-        max-height: 85vh;
-        margin-bottom: 0;
-        /* Add large padding to clear the 80px mobile tab bar + safe area */
-        padding-bottom: 100px;
-    }
-
-    .modalBody {
-        padding: 1.25rem;
-        overflow-y: auto;
-        max-height: calc(85vh - 70px);
-    }
+    display: flex;
+    flex-direction: column;
 }
 
 .modalHeader {
@@ -115,6 +84,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-shrink: 0;
 }
 
 .headerTitle {
@@ -161,6 +131,10 @@
 
 .modalBody {
     padding: 1.5rem;
+    overflow-y: auto;
+    /* Ensure content scrolls if needed */
+    flex: 1;
+    -webkit-overflow-scrolling: touch;
 }
 
 .modalDesc {
@@ -219,6 +193,8 @@
     background: linear-gradient(135deg, #10b981, #059669);
     border: none;
     font-weight: 600;
+    border-radius: 10px;
+    /* Match inputs */
 }
 
 .submitButton:hover {
@@ -253,65 +229,33 @@
     }
 }
 
-/* Mobile Responsive */
+/* Mobile Responsive - Matching PermissionCenter Style */
 @media (max-width: 640px) {
     .fab {
-        bottom: 230px;
-        /* Increased to 230px to clear AI Doctor button */
         right: 16px;
-        padding: 0;
-        width: 48px;
-        height: 48px;
-        z-index: 99999;
-        /* Maximum z-index */
-        border-radius: 50%;
-        justify-content: center;
-        background: rgba(30, 41, 59, 0.95);
-        backdrop-filter: blur(12px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    }
-
-    .fabIcon {
-        width: 100%;
-        height: 100%;
-        background: transparent;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #10b981;
-    }
-
-    .fabLabel {
-        display: none;
-        /* Hide text on mobile */
     }
 
     .modalOverlay {
-        padding: 0;
-        align-items: flex-end;
-        /* Sheet style on mobile */
-        z-index: 9999;
-        /* Ensure it's above everything including tab bar */
+        padding: 0.5rem;
+        align-items: center;
+        /* CENTER it, don't adhere to bottom */
     }
 
     .modal {
-        border-radius: 20px 20px 0 0;
-        max-height: 85vh;
-        /* Limit height so it doesn't cover top bar */
-        height: auto;
-        overflow-y: auto;
+        /* Reduce max-height to clear tab bar comfortably */
+        max-height: calc(100vh - 120px);
+        border-radius: 1.25rem;
         margin-bottom: 0;
-        border-bottom: none;
-        padding-bottom: env(safe-area-inset-bottom, 20px);
-        /* Handle notch/home bar */
+        padding-bottom: 0;
+        /* Reset any previous padding hacks */
     }
 
     .modalBody {
-        padding: 1.25rem;
-        /* Ensure content is scrollable if needed */
-        overflow-y: auto;
-        max-height: calc(85vh - 70px);
-        /* Subtract header height */
+        padding: 1rem;
+    }
+
+    /* Slightly compact form on mobile */
+    .form {
+        gap: 1rem;
     }
 }
