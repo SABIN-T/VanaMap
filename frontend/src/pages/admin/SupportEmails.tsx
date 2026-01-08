@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Mail, Inbox, Send, Archive, Search, Filter, Clock, CheckCircle2, AlertCircle, Trash2, RefreshCw, BarChart3 } from 'lucide-react';
+import { Mail, Inbox, Send, Archive, Search, Clock, CheckCircle2, AlertCircle, Trash2, RefreshCw } from 'lucide-react';
 import { Button } from '../../components/common/Button';
 import toast from 'react-hot-toast';
 import styles from './SupportEmails.module.css';
