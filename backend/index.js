@@ -1958,13 +1958,60 @@ app.get('/api/vendors', async (req, res) => {
 
 app.post('/api/vendors', auth, async (req, res) => {
     try {
+        // Check if user has verified email or phone
+        const user = await User.findById(req.user.userId);
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Require email OR phone verification before vendor registration
+        if (!user.emailVerified && !user.phoneVerified && !user.googleAuth) {
+            return res.status(403).json({
+                error: 'Verification required',
+                message: 'Please verify your email or phone number before registering as a vendor',
+                requiresVerification: true,
+                emailVerified: user.emailVerified,
+                phoneVerified: user.phoneVerified
+            });
+        }
+
+        // Check if user already has a vendor profile
+        const existingVendor = await Vendor.findOne({ userId: req.user.userId });
+        if (existingVendor) {
+            return res.status(400).json({
+                error: 'Vendor profile already exists',
+                vendorId: existingVendor.id
+            });
+        }
+
         // Allow frontend to specify ID (linking to User ID), fallback to timestamp if missing
-        const itemData = { id: "v" + Date.now(), ...req.body };
+        const itemData = {
+            id: "v" + Date.now(),
+            userId: req.user.userId,
+            ownerEmail: user.email,
+            ...req.body
+        };
         const newVendor = new Vendor(itemData);
         await newVendor.save();
 
         // 🚀 PERFORMANCE: Invalidate cache
         cache.del('all_vendors');
+
+        // Send welcome email to vendor
+        if (resend && user.email) {
+            try {
+                const html = EmailTemplates.welcome(user.name, 'vendor');
+                await resend.emails.send({
+                    from: 'VanaMap <support@vanamap.online>',
+                    to: user.email,
+                    subject: 'Welcome to VanaMap Vendor Portal! 🏪',
+                    html
+                });
+                console.log(`[Vendor Registration] Welcome email sent to ${user.email}`);
+            } catch (e) {
+                console.error('[Vendor Registration] Welcome email failed:', e.message);
+            }
+        }
 
         await broadcastAlert('vendor', `New vendor joined: ${newVendor.name}`, { vendorId: newVendor.id, title: 'New Store Opening! 🏪' }, '/nearby');
         res.status(201).json(newVendor);

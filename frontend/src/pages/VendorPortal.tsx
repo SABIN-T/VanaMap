@@ -189,7 +189,19 @@ export const VendorPortal = () => {
                     setShowSuccessStep(true);
                 }
             }
-        } catch (err: any) { toast.error(err.message || "Process failed."); }
+        } catch (err: any) {
+            // Check if error is due to verification requirement
+            if (err.response?.data?.requiresVerification) {
+                toast.error(
+                    err.response.data.message || "Please verify your email or phone before registering as a vendor",
+                    { duration: 5000 }
+                );
+                // Optionally redirect to verification page
+                navigate('/user?tab=verification');
+            } else {
+                toast.error(err.message || "Process failed.");
+            }
+        }
         finally { setLoading(false); }
     };
 
