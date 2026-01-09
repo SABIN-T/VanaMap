@@ -4337,8 +4337,8 @@ REMEMBER: Your response must include BOTH the identification analysis AND the [G
             const seed = Math.floor(Math.random() * 1000000);
 
             // RELIABILITY UPGRADE: Return two images (Flux + SDXL) for a better comparison
-            const fluxUrl = `/api/generate-image?prompt=${encodeURIComponent(enhancedPrompt)}&seed=${seed}&width=896&height=896&model=flux`;
-            const sdxlUrl = `/api/generate-image?prompt=${encodeURIComponent(enhancedPrompt)}&seed=${seed + 1}&width=896&height=896&model=flux-realism&enhance=true`;
+            const fluxUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(enhancedPrompt)}?width=896&height=896&model=flux&seed=${seed}&nologo=true`;
+            const sdxlUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(enhancedPrompt)}?width=896&height=896&model=flux-realism&seed=${seed + 1}&enhance=true&nologo=true`;
 
             // Inject multi-image support
             result.data.choices[0].message.images = [fluxUrl, sdxlUrl];
