@@ -4380,6 +4380,32 @@ REMEMBER: Your response must include BOTH the identification analysis AND the [G
     }
 });
 
+// --- IMAGE GENERATION PROXY ---
+app.get('/api/generate-image', (req, res) => {
+    try {
+        const { prompt, width = 1024, height = 1024, seed, model = 'flux', enhance = 'false' } = req.query;
+
+        if (!prompt) {
+            return res.status(400).send('Prompt required');
+        }
+
+        // Construct Pollinations URL
+        const safePrompt = encodeURIComponent(prompt);
+        const seedParam = seed ? `&seed=${seed}` : `&seed=${Math.floor(Math.random() * 1000000)}`;
+        const enhanceParam = enhance === 'true' ? '&enhance=true' : '';
+        const nologoParam = '&nologo=true';
+
+        const imageUrl = `https://image.pollinations.ai/prompt/${safePrompt}?width=${width}&height=${height}&model=${model}${seedParam}${enhanceParam}${nologoParam}`;
+
+        // Redirect client to fetch image directly (faster, low bandwidth)
+        res.redirect(imageUrl);
+
+    } catch (e) {
+        console.error("Image Gen Error:", e);
+        res.status(500).send("Generation failed");
+    }
+});
+
 app.post('/api/chat/feedback', async (req, res) => {
     try {
         const { query, response, rating, userId } = req.body;
