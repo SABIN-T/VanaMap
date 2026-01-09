@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import styles from './BroadcastCenter.module.css';
 import { Loader2, Search } from 'lucide-react'; // Added icons for better UX
 
+const API_URL = import.meta.env.VITE_API_URL || 'https://plantoxy.onrender.com/api';
+
 interface User {
     id: string;
     name: string;
@@ -36,7 +38,7 @@ export const BroadcastCenter: React.FC = () => {
 
             setSearching(true);
             try {
-                const response = await fetch(`/api/admin/search-users?q=${encodeURIComponent(searchQuery)}`, {
+                const response = await fetch(`${API_URL}/admin/search-users?q=${encodeURIComponent(searchQuery)}`, {
                     headers: {
                         'Authorization': `Bearer ${localStorage.getItem('token')}`
                     }
@@ -99,7 +101,7 @@ export const BroadcastCenter: React.FC = () => {
                 formData.append('recipientId', selectedUser.id);
             }
 
-            const response = await fetch('/api/admin/broadcast', {
+            const response = await fetch(`${API_URL}/admin/broadcast`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
