@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
 import { Edit, Trash2, X, Search, Leaf } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { AdminLayout } from './AdminLayout';
 import { fetchPlants, deletePlant } from '../../services/api';
 import type { Plant } from '../../types';
@@ -12,6 +12,7 @@ export const ManagePlants = () => {
     const [filteredPlants, setFilteredPlants] = useState<Plant[]>([]);
     const [searchQuery, setSearchQuery] = useState("");
     const navigate = useNavigate();
+    const location = useLocation();
 
     const loadPlants = async () => {
         const data = await fetchPlants();
@@ -19,8 +20,29 @@ export const ManagePlants = () => {
         setFilteredPlants(data);
     };
 
+    // Reload plants on mount AND when navigating back to this page
     useEffect(() => {
         loadPlants();
+
+        // Reload when page becomes visible (user switches back to tab or navigates back)
+        const handleVisibilityChange = () => {
+            if (!document.hidden) {
+                loadPlants();
+            }
+        };
+
+        // Reload when user navigates back to this page
+        const handleFocus = () => {
+            loadPlants();
+        };
+
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+        window.addEventListener('focus', handleFocus);
+
+        return () => {
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+            window.removeEventListener('focus', handleFocus);
+        };
     }, []);
 
     useEffect(() => {
@@ -35,6 +57,11 @@ export const ManagePlants = () => {
             ));
         }
     }, [searchQuery, allPlants]);
+
+    // Reload plants when navigating back to this page (e.g., after editing)
+    useEffect(() => {
+        loadPlants();
+    }, [location.pathname]);
 
     const handleEdit = (plant: Plant) => {
         navigate(`/admin/edit-plant/${plant.id}`);
