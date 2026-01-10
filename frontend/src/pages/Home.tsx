@@ -488,27 +488,6 @@ export const Home = () => {
                 </Suspense>
             )}
 
-            {/* Hanging Plant Decoration */}
-            <div style={{
-                width: '100%',
-                display: 'flex',
-                justifyContent: 'center',
-                marginTop: '-20px',
-                position: 'relative',
-                zIndex: 10,
-                pointerEvents: 'none'
-            }}>
-                <img
-                    src="/hanging-plant.png"
-                    alt="Decorative hanging plant"
-                    style={{
-                        maxWidth: '100%',
-                        height: 'auto',
-                        display: 'block'
-                    }}
-                />
-            </div>
-
             <section className={styles.hero}>
                 <div className={styles.heroContent}>
                     <div className={styles.heroMainStack}>
