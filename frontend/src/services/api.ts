@@ -223,6 +223,11 @@ export const addPlant = async (plantData: Partial<Plant> | FormData) => {
         body: isFormData ? plantData : JSON.stringify(plantData)
     });
     if (!res.ok) throw new Error("Failed to add plant");
+
+    // 🚀 Clear cache to ensure fresh data on Home and Shops pages
+    plantCache.clear();
+    console.log('[Cache] 🗑️ Plant cache cleared after adding new plant');
+
     return res.json();
 };
 
@@ -237,6 +242,11 @@ export const updatePlant = async (id: string, updates: Partial<Plant> | FormData
         body: isFormData ? updates : JSON.stringify(updates)
     });
     if (!res.ok) throw new Error("Failed to update plant");
+
+    // 🚀 Clear cache to ensure fresh data on Home and Shops pages
+    plantCache.clear();
+    console.log('[Cache] 🗑️ Plant cache cleared after updating plant');
+
     return res.json();
 };
 
@@ -247,6 +257,11 @@ export const deletePlant = async (id: string) => {
         headers: getHeaders()
     });
     if (!res.ok) throw new Error("Failed to delete plant");
+
+    // 🚀 Clear cache to ensure fresh data on Home and Shops pages
+    plantCache.clear();
+    console.log('[Cache] 🗑️ Plant cache cleared after deleting plant');
+
     return res.json();
 };
 
