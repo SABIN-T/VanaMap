@@ -95,6 +95,15 @@ class MLResponseCache {
             const similarity = this.cosineSimilarity(queryEmbedding, cached.embedding);
 
             if (similarity > bestSimilarity && similarity >= this.SIMILARITY_THRESHOLD) {
+                // Safety: If the cached response is an error message, don't use it, delete it
+                if (cached.response.includes("trouble connecting to my knowledge base") ||
+                    cached.response.includes("AI Service Unavailable")) {
+                    console.warn('[ML Cache] 🛠️ Self-Healing: Removing poisoned error cache');
+                    const key = this.hashString(cached.query).toString();
+                    this.cache.delete(key);
+                    this.saveCache();
+                    continue;
+                }
                 bestSimilarity = similarity;
                 bestMatch = cached;
             }

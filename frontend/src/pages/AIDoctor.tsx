@@ -433,7 +433,10 @@ export const AIDoctor = () => {
 
             // 🤖 ML CACHE STORAGE - Save response for future reuse
             // Only cache text-only responses (not image-based)
-            if (!base64Image && aiText && messageContent) {
+            const isErrorMessage = aiText.includes("trouble connecting to my knowledge base") ||
+                aiText.includes("AI Service Unavailable");
+
+            if (!base64Image && aiText && messageContent && !isErrorMessage) {
                 mlCache.add(messageContent, aiText);
                 console.log('[ML Cache] 💾 Response cached for future use');
             }
