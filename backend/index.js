@@ -1867,7 +1867,10 @@ app.post('/api/plants', auth, admin, upload.single('image'), async (req, res) =>
         await plant.save();
 
         // 🚀 PERFORMANCE: Invalidate cache
-        cache.del('all_plants');
+        cache.keys().forEach(k => {
+            if (k.includes('plant') || k === 'all_plants') cache.del(k);
+        });
+        console.log('[Cache] 🗑️  Plant cache invalidated (Add)');
 
         await broadcastAlert('plant', `New plant added: ${plant.name}`, { plantId: plant.id }, `/#plant-${plant.id}`);
         res.status(201).json(plant);
@@ -1906,6 +1909,13 @@ app.patch('/api/plants/:id', auth, admin, (req, res, next) => {
         delete updates.updatedAt;
 
         const plant = await Plant.findOneAndUpdate({ id: req.params.id }, updates, { new: true });
+
+        // 🚀 PERFORMANCE: Invalidate cache
+        cache.keys().forEach(k => {
+            if (k.includes('plant') || k === 'all_plants') cache.del(k);
+        });
+        console.log('[Cache] 🗑️  Plant cache invalidated (Update)');
+
         res.json(plant);
     } catch (err) {
         console.error("Edit Plant Error:", err);
@@ -1926,6 +1936,13 @@ app.post('/api/plants/upload', auth, admin, upload.single('image'), async (req, 
 app.delete('/api/plants/:id', auth, admin, async (req, res) => {
     try {
         await Plant.findOneAndDelete({ id: req.params.id });
+
+        // 🚀 PERFORMANCE: Invalidate cache
+        cache.keys().forEach(k => {
+            if (k.includes('plant') || k === 'all_plants') cache.del(k);
+        });
+        console.log('[Cache] 🗑️  Plant cache invalidated (Delete)');
+
         res.json({ message: 'Deleted' });
     } catch (err) {
         res.status(500).json({ error: err.message });

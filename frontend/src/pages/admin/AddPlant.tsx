@@ -350,6 +350,9 @@ Please be specific and accurate.`;
             toast.success("Image Set", { id: tid });
         } catch (err) {
             toast.error("Image Error", { id: tid });
+        } finally {
+            // Reset input value so same file can be selected again
+            e.target.value = '';
         }
     };
 

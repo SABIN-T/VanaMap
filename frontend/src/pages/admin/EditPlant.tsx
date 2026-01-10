@@ -96,6 +96,9 @@ export const EditPlant = () => {
             toast.success("Image selected", { id: tid });
         } catch (err) {
             toast.error("Preview failed", { id: tid });
+        } finally {
+            // Reset input value
+            e.target.value = '';
         }
     };
 
