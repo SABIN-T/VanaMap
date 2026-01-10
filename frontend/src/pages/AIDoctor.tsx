@@ -262,8 +262,8 @@ export const AIDoctor = () => {
             const conversationHistory = [...messages, userMessage].map(m => ({
                 role: m.role,
                 content: m.content,
-                // If the message has an image, the backend can now potentially use it
-                metadata: m.image ? { hasImage: true } : undefined
+                // VISION CONTINUITY: Pass the image back in history so the AI remembers it
+                image: m.image
             }));
 
             const response = await chatWithDrFlora(

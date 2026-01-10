@@ -4045,33 +4045,52 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
 
         const enhancedMessages = [
             { role: "system", content: systemPrompt },
-            ...messages.filter(m => m.role !== 'system').map(m => ({
-                role: m.role,
-                content: m.content
-            }))
+            ...messages.filter(m => m.role !== 'system').map(m => {
+                // VISION CONTINUITY: If a message has an image, preserve it in history
+                if (m.image || m.metadata?.image) {
+                    const imgUrl = m.image || m.metadata?.image;
+                    return {
+                        role: m.role,
+                        content: [
+                            { type: "text", text: m.content || "Analyze this plant." },
+                            { type: "image_url", image_url: { url: imgUrl } }
+                        ]
+                    };
+                }
+                return {
+                    role: m.role,
+                    content: m.content
+                };
+            })
         ];
 
         // --- UPGRADED MODEL SELECTION (2026) ---
         // Text Primary: Llama 3.3 70B Versatile (Latest, most capable)
         // Vision Primary: Llama 3.2 90B Vision (SOTA for plant identification)
-        let model = "llama-3.3-70b-versatile"; // Upgraded from 3.1
+        let model = "llama-3.3-70b-versatile";
 
+        // If turn-level image is provided, append it to the LAST message if not already there
         if (image) {
-            console.log('[AI Doctor] 🔬 Vision request detected. Engaging Llama 3.2 90B Vision (SOTA).');
-            // Llama 3.2 90B Vision - State of the Art for visual botanical analysis
+            console.log('[AI Doctor] 🔬 New Vision request detected.');
             model = "llama-3.2-90b-vision-preview";
 
-            // Attach image to the last user message
             const lastMsgIndex = enhancedMessages.length - 1;
-            if (enhancedMessages[lastMsgIndex].role === 'user') {
-                const textContent = typeof enhancedMessages[lastMsgIndex].content === 'string'
-                    ? enhancedMessages[lastMsgIndex].content
-                    : "Analyze this plant image.";
+            const lastMsg = enhancedMessages[lastMsgIndex];
 
-                enhancedMessages[lastMsgIndex].content = [
-                    { type: "text", text: textContent },
-                    { type: "image_url", image_url: { url: image } }
-                ];
+            if (lastMsg && lastMsg.role === 'user') {
+                // If it's already an array (from previous Turn Vision logic), just check if image matches
+                if (Array.isArray(lastMsg.content)) {
+                    const hasImg = lastMsg.content.some(c => c.type === 'image_url');
+                    if (!hasImg) {
+                        lastMsg.content.push({ type: "image_url", image_url: { url: image } });
+                    }
+                } else {
+                    // Convert string to vision array
+                    lastMsg.content = [
+                        { type: "text", text: lastMsg.content || "Analyze this plant." },
+                        { type: "image_url", image_url: { url: image } }
+                    ];
+                }
             }
         }
 
@@ -4155,10 +4174,10 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
 
             // UPGRADED EXPERT ENSEMBLE (2026)
             const experts = [
-                { id: "llama-3.2-90b-vision-preview", role: "Senior Botanist (Llama 3.2 90B Vision)", provider: 'groq' },
-                { id: "llama-3.2-11b-vision-preview", role: "Field Botanist (Llama 3.2 11B Vision)", provider: 'groq' },
-                { id: "deepseek/deepseek-r1", role: "Strategic Reasoner (DeepSeek R1)", provider: 'openrouter' }, // Latest DeepSeek
-                { id: "google/gemini-2.0-flash-thinking-exp:free", role: "Vision Analyst (Gemini 2.0 Flash)", provider: 'openrouter' } // Upgraded from LLaVA
+                { id: "google/gemini-2.0-flash:free", role: "Botanical Vision Analyst (Gemini 2.0 Flash)", provider: 'openrouter' },
+                { id: "llama-3.2-90b-vision-preview", role: "Morphological Specialist (Llama 3.2 90B)", provider: 'groq' },
+                { id: "deepseek/deepseek-r1", role: "Strategic Reasoner (DeepSeek R1)", provider: 'openrouter' },
+                { id: "anthropic/claude-3.5-sonnet", role: "Senior Taxonomic Expert (Claude 3.5)", provider: 'openrouter' }
             ];
 
             const visionResults = await Promise.all(experts.map(async (expert) => {
