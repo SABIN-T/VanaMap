@@ -66,19 +66,6 @@ export const Home = () => {
         { id: 'role-lover', title: 'For Plant Lovers', icon: <Heart size={32} />, color: '#10b981', bg: 'rgba(16, 185, 129, 0.1)', desc: 'Find the perfect match for your home, track your collection, and learn how to care for your green companions.', meta: 'Social Collector' }
     ];
 
-    // Mouse Parallax Logic for Desktop
-    const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
-    useEffect(() => {
-        const handleMouseMove = (e: MouseEvent) => {
-            if (window.innerWidth < 1024) return;
-            const x = (e.clientX / window.innerWidth - 0.5) * 20; // -10 to 10
-            const y = (e.clientY / window.innerHeight - 0.5) * 20; // -10 to 10
-            setMousePos({ x, y });
-        };
-        window.addEventListener('mousemove', handleMouseMove);
-        return () => window.removeEventListener('mousemove', handleMouseMove);
-    }, []);
-
     useEffect(() => {
         const handlePopState = () => {
             setSelectedPlant(null);
@@ -481,41 +468,12 @@ export const Home = () => {
             </Helmet>
             {/* Desktop Background Animations */}
             <div className={styles.desktopAnimationOverlay}>
-                <div
-                    className={`${styles.floatingElement} ${styles.leaf1}`}
-                    style={{ transform: `translate(${mousePos.x * 1.5}px, ${mousePos.y * 1.5}px) rotate(${mousePos.x * 2}deg)` }}
-                ><Sprout size={48} /></div>
-                <div
-                    className={`${styles.floatingElement} ${styles.leaf2}`}
-                    style={{ transform: `translate(${mousePos.x * -1}px, ${mousePos.y * -1}px) rotate(${mousePos.y * -2}deg)` }}
-                ><Leaf size={40} /></div>
-                <div
-                    className={`${styles.floatingElement} ${styles.leaf3}`}
-                    style={{ transform: `translate(${mousePos.x * 2}px, ${mousePos.y * 2}px)` }}
-                ><Activity size={56} /></div>
-                <div
-                    className={`${styles.floatingElement} ${styles.leaf4}`}
-                    style={{ transform: `translate(${mousePos.x * -0.5}px, ${mousePos.y * -0.5}px)` }}
-                ><Wind size={44} /></div>
-
-                {/* Advanced Neural Botanical Particles */}
-                <div className={styles.particleField}>
-                    {[...Array(12)].map((_, i) => (
-                        <div
-                            key={i}
-                            className={styles.particle}
-                            style={{
-                                left: `${(Math.sin(i) * 50) + 50}%`,
-                                top: `${(Math.cos(i) * 50) + 50}%`,
-                                animationDelay: `${i * 0.5}s`,
-                                transform: `translate(${mousePos.x * (i % 3 === 0 ? 0.8 : -0.8)}px, ${mousePos.y * (i % 2 === 0 ? 0.8 : -0.8)}px)`
-                            }}
-                        />
-                    ))}
-                </div>
-
-                <div className={styles.glowingOrb1} style={{ transform: `translate(${mousePos.x * 0.3}px, ${mousePos.y * 0.3}px)` }} />
-                <div className={styles.glowingOrb2} style={{ transform: `translate(${mousePos.x * -0.3}px, ${mousePos.y * -0.3}px)` }} />
+                <div className={`${styles.floatingElement} ${styles.leaf1}`}><Sprout size={48} /></div>
+                <div className={`${styles.floatingElement} ${styles.leaf2}`}><Leaf size={40} /></div>
+                <div className={`${styles.floatingElement} ${styles.leaf3}`}><Activity size={56} /></div>
+                <div className={`${styles.floatingElement} ${styles.leaf4}`}><Wind size={44} /></div>
+                <div className={styles.glowingOrb1} />
+                <div className={styles.glowingOrb2} />
             </div>
 
             {selectedPlant && (

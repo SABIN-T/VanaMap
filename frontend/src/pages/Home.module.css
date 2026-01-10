@@ -517,26 +517,23 @@
     }
 }
 
+.heroTitle {
+    font-size: clamp(2.5rem, 8vw, 5rem);
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 1rem;
+    color: var(--color-text-main);
+    letter-spacing: -1.5px;
+    background: linear-gradient(135deg, var(--color-text-main) 0%, var(--color-text-muted) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
 @media (min-width: 1024px) {
     .heroTitle {
         margin-bottom: 1.5rem;
         line-height: 0.95;
-        animation: heroReveal 1s cubic-bezier(0.16, 1, 0.3, 1) both;
-        perspective: 1000px;
-    }
-}
-
-@keyframes heroReveal {
-    from {
-        opacity: 0;
-        transform: translateY(40px) rotateX(-20deg) scale(0.95);
-        filter: blur(10px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0) rotateX(0) scale(1);
-        filter: blur(0);
     }
 }
 
@@ -555,7 +552,6 @@
         text-align: left;
         max-width: 600px;
         font-size: 1.35rem;
-        animation: heroReveal 1s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
     }
 }
 
@@ -2113,120 +2109,33 @@
     opacity: 0.15;
     color: var(--color-primary);
     filter: blur(1px);
-    transition: transform 0.2s cubic-bezier(0.1, 0, 0.2, 1);
+    animation: drift 20s linear infinite;
 }
 
 .leaf1 {
     top: 15%;
     left: 5%;
+    animation-duration: 25s;
 }
 
 .leaf2 {
     top: 65%;
     left: 85%;
+    animation-duration: 30s;
 }
 
 .leaf3 {
     top: 35%;
     left: 75%;
+    animation-duration: 28s;
     opacity: 0.1;
 }
 
 .leaf4 {
     top: 85%;
     left: 15%;
+    animation-duration: 35s;
 }
-
-/* Advanced Biological Particles */
-.particleField {
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-}
-
-.particle {
-    position: absolute;
-    width: 6px;
-    height: 6px;
-    background: var(--color-primary);
-    border-radius: 50%;
-    opacity: 0.1;
-    filter: blur(2px);
-    animation: particleDrift 15s linear infinite;
-    transition: transform 0.5s ease-out;
-}
-
-@keyframes particleDrift {
-    0% {
-        transform: translateY(0) translateX(0);
-        opacity: 0;
-    }
-
-    20% {
-        opacity: 0.2;
-    }
-
-    80% {
-        opacity: 0.2;
-    }
-
-    100% {
-        transform: translateY(-200px) translateX(50px);
-        opacity: 0;
-    }
-}
-
-.glowingOrb1 {
-    position: absolute;
-    width: 600px;
-    height: 600px;
-    background: radial-gradient(circle, rgba(16, 185, 129, 0.08) 0%, transparent 70%);
-    top: -100px;
-    right: -100px;
-    filter: blur(60px);
-    animation: pulseOrb 10s ease-in-out infinite;
-    transition: transform 0.4s ease-out;
-}
-
-.glowingOrb2 {
-    position: absolute;
-    width: 500px;
-    height: 500px;
-    background: radial-gradient(circle, rgba(56, 189, 248, 0.05) 0%, transparent 70%);
-    bottom: -50px;
-    left: -50px;
-    filter: blur(50px);
-    animation: pulseOrb 12s ease-in-out infinite reverse;
-    transition: transform 0.4s ease-out;
-}
-
-@keyframes pulseOrb {
-
-    0%,
-    100% {
-        transform: scale(1) translate(0, 0);
-        opacity: 0.5;
-    }
-
-    50% {
-        transform: scale(1.15) translate(30px, -30px);
-        opacity: 0.8;
-    }
-}
-
-/* Staggered Actions Reveal */
-@media (min-width: 1024px) {
-    .actionContainer {
-        animation: heroReveal 1s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
-    }
-
-    .weatherDashboard {
-        animation: heroReveal 1s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
-    }
-}
-
-/* Cleaned */
-
 
 .glowingOrb1 {
     position: absolute;
