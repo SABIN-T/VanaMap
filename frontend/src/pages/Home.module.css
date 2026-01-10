@@ -2064,27 +2064,8 @@
     background: rgba(16, 185, 129, 0.1);
 }
 
-[data-theme='light'] .legendItem span {
-    color: #059669;
-    /* Changed from #064e3b to lighter green */
-    font-weight: 600;
-}
-
 [data-theme='light'] .legendText {
-    color: #059669;
-    /* Changed from #064e3b to lighter green */
-}
-
-[data-theme='light'] .explainerText {
-    color: #10b981;
-    /* Changed from #065f46 to lighter green */
-    font-weight: 500;
-}
-
-[data-theme='light'] .explainerText strong {
-    color: #047857;
-    /* Changed from #022c22 to lighter green */
-    font-weight: 700;
+    color: #064e3b;
 }
 
 /* Section Titles */

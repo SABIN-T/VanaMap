@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback, lazy } from 'react';
-import { Send, Sparkles, Leaf, Bot, User, Trash2, Download, Calendar, Camera, Mic, Volume2, VolumeX, Zap, Loader2, Settings, X } from 'lucide-react';
+import { Send, Sparkles, Leaf, Bot, User, Trash2, Download, Calendar, Camera, Mic, Volume2, VolumeX, Zap, Loader2, Settings, X, Stethoscope, CloudSun, ScrollText, CheckCircle2, AlertCircle } from 'lucide-react';
 import { chatWithDrFlora, API_URL } from '../services/api';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
@@ -165,6 +165,91 @@ export const AIDoctor = () => {
 
     const [showLimitInfo, setShowLimitInfo] = useState(false);
 
+    // --- SPECIALTY PERSONA SYSTEM ---
+    const [persona, setPersona] = useState<'flora' | 'geneticist' | 'ayurvedic'>(() => {
+        return (localStorage.getItem('drflora_persona') as any) || 'flora';
+    });
+
+    // --- GARDEN CLINIC (MEDICAL RECORDS) ---
+    const [medicalRecords, setMedicalRecords] = useState<any[]>([]);
+    const [showClinic, setShowClinic] = useState(false);
+    const [clinicLoading, setClinicLoading] = useState(false);
+
+    // --- CLIMATE AWARENESS ---
+    const [weather, setWeather] = useState<any>(null);
+
+    const fetchWeather = async () => {
+        try {
+            // Simplified: User geolocation or default city? 
+            // In a real app, we'd use navigator.geolocation
+            const res = await fetch('https://ipapi.co/json/');
+            const data = await res.json();
+            if (data.city) {
+                // Mocking weather for demo context - in production we'd call OpenWeather
+                setWeather({ city: data.city, avgTemp30Days: 28, humidity: 65 });
+            }
+        } catch (e) {
+            console.warn('Weather fetch failed');
+        }
+    };
+
+    const fetchMedicalRecords = async () => {
+        if (!user) return;
+        setClinicLoading(true);
+        try {
+            const res = await fetch(`${API_URL}/user/medical-records`, {
+                headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+            });
+            const data = await res.json();
+            if (Array.isArray(data)) setMedicalRecords(data);
+        } catch (e) {
+            console.error('Failed to fetch records');
+        } finally {
+            setClinicLoading(false);
+        }
+    };
+
+    const handlePersonaChange = async (p: 'flora' | 'geneticist' | 'ayurvedic') => {
+        setPersona(p);
+        localStorage.setItem('drflora_persona', p);
+        if (user) {
+            try {
+                await fetch(`${API_URL}/user/persona`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    body: JSON.stringify({ persona: p })
+                });
+            } catch (e) { /* silent fail */ }
+        }
+        toast.success(`Specialist changed to: ${p.toUpperCase()}`, { icon: '🎓' });
+    };
+
+    useEffect(() => {
+        fetchWeather();
+        if (user) fetchMedicalRecords();
+    }, [user]);
+
+    const handleUpdateRecordStatus = async (id: string, newStatus: string) => {
+        try {
+            await fetch(`${API_URL}/user/medical-records/${id}`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({ status: newStatus })
+            });
+            setMedicalRecords(prev => prev.map(r => r._id === id ? { ...r, status: newStatus } : r));
+            toast.success(`Plant marked as ${newStatus}! 🎉`, { icon: '🌿' });
+        } catch (e) {
+            toast.error("Failed to update status");
+        }
+    };
+
+
     // Optimized scroll for mobile
     const scrollToBottom = useCallback(() => {
         requestAnimationFrame(() => {
@@ -268,8 +353,13 @@ export const AIDoctor = () => {
 
             const response = await chatWithDrFlora(
                 conversationHistory,
-                { timezone: Intl.DateTimeFormat().resolvedOptions().timeZone },
-                base64Image // Current turn image
+                {
+                    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                    city: weather?.city,
+                    weather: weather
+                },
+                base64Image, // Current turn image
+                persona
             );
 
             console.log('[AI Doctor] Raw API Response:', response); // Debugging
@@ -336,6 +426,10 @@ export const AIDoctor = () => {
 
 
             setMessages(prev => [...prev, assistantMessage]);
+            if (user && (aiText.includes('DIAGNOSIS:') || aiText.includes('TREATMENT:'))) {
+                // Refresh medical records if a new diagnosis was made
+                setTimeout(fetchMedicalRecords, 3000);
+            }
 
             // 🤖 ML CACHE STORAGE - Save response for future reuse
             // Only cache text-only responses (not image-based)
@@ -775,8 +869,16 @@ export const AIDoctor = () => {
                     </div>
                     <div className={styles.titleBlock}>
                         <h1 className={styles.title}>Dr. Flora</h1>
-                        <span className={styles.subtitle}>AI Plant Specialist • VanaMap</span>
+                        <span className={styles.subtitle}>{persona === 'flora' ? 'Botanical Soul' : persona === 'geneticist' ? 'Molecular Specialist' : 'Herbal Wisdom'} • VanaMap</span>
                     </div>
+
+                    {/* Climate Awareness Badge */}
+                    {weather && (
+                        <div className={styles.climateBadge}>
+                            <CloudSun size={14} />
+                            <span>{weather.city}: {weather.avgTemp30Days}°C</span>
+                        </div>
+                    )}
 
                     <div className={styles.actions}>
                         {/* Neural Energy Display */}
@@ -803,6 +905,16 @@ export const AIDoctor = () => {
                                 <span>{isAnalysisLimited ? "LIMIT REACHED" : `${(neuralMeta.current / 1000).toFixed(1)}k Ops`}</span>
                             </div>
                         )}
+                        {/* Garden Clinic Button */}
+                        <button
+                            className={`${styles.actionBtn} ${showClinic ? styles.active : ''}`}
+                            onClick={() => setShowClinic(!showClinic)}
+                            title="Garden Clinic (Medical Records)"
+                        >
+                            <Stethoscope size={18} />
+                            {medicalRecords.length > 0 && <span className={styles.recordBadge}>{medicalRecords.length}</span>}
+                        </button>
+
                         <button
                             className={styles.actionBtn}
                             onClick={toggleVoice}
@@ -819,6 +931,14 @@ export const AIDoctor = () => {
                             title="Change Voice Pack"
                         >
                             <Settings size={18} />
+                        </button>
+
+                        <button className={styles.actionBtn} onClick={handleCareCalendar} title="Care Calendar">
+                            <Calendar size={18} />
+                        </button>
+
+                        <button className={styles.actionBtn} onClick={handleExport} title="Export Chat">
+                            <Download size={18} />
                         </button>
 
                         {/* Stop Speaking Button (only shows when AI is speaking) */}
@@ -841,6 +961,94 @@ export const AIDoctor = () => {
                 </div>
             </header>
 
+            {/* Council of Experts Selector (Personas) */}
+            <div className={styles.councilBar}>
+                <button
+                    className={`${styles.expertBtn} ${persona === 'flora' ? styles.expertActive : ''}`}
+                    onClick={() => handlePersonaChange('flora')}
+                >
+                    <Bot size={16} />
+                    <span>Flora</span>
+                </button>
+                <button
+                    className={`${styles.expertBtn} ${persona === 'geneticist' ? styles.expertActive : ''}`}
+                    onClick={() => handlePersonaChange('geneticist')}
+                >
+                    <Zap size={16} />
+                    <span>Geneticist</span>
+                </button>
+                <button
+                    className={`${styles.expertBtn} ${persona === 'ayurvedic' ? styles.expertActive : ''}`}
+                    onClick={() => handlePersonaChange('ayurvedic')}
+                >
+                    <Leaf size={16} />
+                    <span>Ayurvedic</span>
+                </button>
+            </div>
+
+            {/* Garden Clinic Side Panel (Medical Records) */}
+            {showClinic && (
+                <div className={styles.clinicOverlay} onClick={() => setShowClinic(false)}>
+                    <div className={styles.clinicPanel} onClick={e => e.stopPropagation()}>
+                        <div className={styles.clinicHeader}>
+                            <h3 className={styles.clinicTitle}>
+                                <Stethoscope size={20} />
+                                Garden Clinic
+                            </h3>
+                            <button onClick={() => setShowClinic(false)} className={styles.closeClinic}>
+                                <X size={20} />
+                            </button>
+                        </div>
+                        <div className={styles.clinicContent}>
+                            {clinicLoading ? (
+                                <div className={styles.clinicLoading}>
+                                    <Loader2 className="animate-spin" />
+                                    <span>Reviewing plant health records...</span>
+                                </div>
+                            ) : medicalRecords.length === 0 ? (
+                                <div className={styles.emptyClinic}>
+                                    <ScrollText size={48} />
+                                    <p>No medical records yet. Ask for a diagnosis!</p>
+                                </div>
+                            ) : (
+                                <div className={styles.recordsList}>
+                                    {medicalRecords.map((record) => (
+                                        <div key={record._id} className={styles.recordItem}>
+                                            <div className={styles.recordMain}>
+                                                <div className={styles.recordInfo}>
+                                                    <h4 className={styles.recordPlantName}>{record.plantName}</h4>
+                                                    <p className={styles.recordScientific}>{record.scientificName}</p>
+                                                </div>
+                                                <div className={`${styles.recordSeverity} ${styles[record.severity]}`}>
+                                                    {record.severity.toUpperCase()}
+                                                </div>
+                                            </div>
+                                            <div className={styles.recordDiagnosInfo}>
+                                                <strong>Diagnosis:</strong> {record.diagnosis}
+                                            </div>
+                                            <div className={styles.recordTreatment}>
+                                                <strong>Dr. Flora's Treatment:</strong> {record.treatment}
+                                            </div>
+                                            <div className={styles.recordMeta}>
+                                                <Calendar size={12} />
+                                                <span>{new Date(record.timestamp).toLocaleDateString()}</span>
+                                                <div className={`${styles.statusBadge} ${styles[record.status]}`}
+                                                    style={{ cursor: record.status === 'active' ? 'pointer' : 'default' }}
+                                                    onClick={() => record.status === 'active' && handleUpdateRecordStatus(record._id, 'resolved')}>
+                                                    {record.status === 'active' ? <AlertCircle size={12} /> : <CheckCircle2 size={12} />}
+                                                    {record.status.toUpperCase()}
+                                                    {record.status === 'active' && <span style={{ fontSize: '0.6rem', marginLeft: '4px', opacity: 0.7 }}>(Click to Resolve)</span>}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
+
             {/* Voice Selector Modal */}
             {isVoiceSelectorOpen && (
                 <div style={{
@@ -856,13 +1064,13 @@ export const AIDoctor = () => {
                     justifyContent: 'center'
                 }}>
                     <div style={{
-                        background: '#ffffff', // Clean white background for gardening app
+                        background: '#ffffff',
                         padding: '24px',
                         borderRadius: '24px',
                         width: '90%',
                         maxWidth: '420px',
                         boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-                        border: '4px solid #dcfce7' // Soft green border
+                        border: '4px solid #dcfce7'
                     }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
                             <div>
@@ -907,32 +1115,12 @@ export const AIDoctor = () => {
                                         <div style={{ color: '#64748b', fontSize: '0.8rem', fontStyle: 'italic' }}>{voice.style}</div>
                                         <div style={{ color: '#94a3b8', fontSize: '0.75rem', marginTop: '2px' }}>{voice.description}</div>
                                     </div>
-                                    {selectedVoiceId === voice.id && (
-                                        <div style={{ position: 'absolute', top: '12px', right: '12px' }}>
-                                            <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10b981' }}></div>
-                                        </div>
-                                    )}
                                 </button>
                             ))}
-
-                            {availableVoices.length === 0 && (
-                                <div style={{ textAlign: 'center', padding: '30px', color: '#94a3b8' }}>
-                                    <Loader2 className="animate-spin" style={{ margin: '0 auto 10px', display: 'block' }} />
-                                    Loading voice packs...
-                                </div>
-                            )}
                         </div>
                     </div>
                 </div>
             )}
-
-            <button className={styles.actionBtn} onClick={handleCareCalendar} title="Care Calendar">
-                <Calendar size={18} />
-            </button>
-
-            <button className={styles.actionBtn} onClick={handleExport} title="Export Chat">
-                <Download size={18} />
-            </button>
 
 
             {/* Chat Area */}

@@ -725,11 +725,11 @@ export const analyzeScene = async (image: string, plantName: string) => {
     return res.json();
 };
 
-export const chatWithDrFlora = async (messages: any[], userContext: any, image?: string | null) => {
+export const chatWithDrFlora = async (messages: any[], userContext: any, image?: string | null, persona: string = 'flora') => {
     const res = await fetch(`${API_URL}/chat`, {
         method: 'POST',
         headers: getHeaders(),
-        body: JSON.stringify({ messages, userContext, image })
+        body: JSON.stringify({ messages, userContext, image, persona })
     });
 
     if (!res.ok) {

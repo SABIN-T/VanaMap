@@ -150,7 +150,8 @@ const UserSchema = new mongoose.Schema({
         id: String,
         imageUrl: String,
         createdAt: { type: Date, default: Date.now }
-    }]
+    }],
+    currentPersona: { type: String, enum: ['flora', 'geneticist', 'ayurvedic'], default: 'flora' }
 }, { timestamps: true });
 
 const SearchLogSchema = new mongoose.Schema({
@@ -338,5 +339,16 @@ module.exports = {
             url: String,
             size: Number
         }]
-    }, { timestamps: true }))
+    }, { timestamps: true })),
+    DiagnosisRecord: mongoose.model('DiagnosisRecord', new mongoose.Schema({
+        userId: { type: String, required: true },
+        plantName: String,
+        scientificName: String,
+        diagnosis: String,
+        treatment: String,
+        imageUrl: String,
+        status: { type: String, enum: ['active', 'resolved', 'monitoring'], default: 'active' },
+        severity: { type: String, enum: ['low', 'medium', 'high', 'critical'], default: 'low' },
+        timestamp: { type: Date, default: Date.now }
+    }))
 };
