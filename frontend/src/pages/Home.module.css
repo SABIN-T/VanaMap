@@ -2064,8 +2064,23 @@
     background: rgba(16, 185, 129, 0.1);
 }
 
+[data-theme='light'] .legendItem span {
+    color: #064e3b;
+    font-weight: 600;
+}
+
 [data-theme='light'] .legendText {
     color: #064e3b;
+}
+
+[data-theme='light'] .explainerText {
+    color: #065f46;
+    font-weight: 500;
+}
+
+[data-theme='light'] .explainerText strong {
+    color: #022c22;
+    font-weight: 700;
 }
 
 /* Section Titles */
