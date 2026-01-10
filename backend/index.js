@@ -40,9 +40,14 @@ const cache = new NodeCache({
 const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
-// Auto-configure from CLOUDINARY_URL env var
-if (process.env.CLOUDINARY_URL) {
-    console.log('✅ Cloudinary configured');
+// Auto-configure from CLOUDINARY_URL env var or individual keys
+const isCloudinaryConfigured = process.env.CLOUDINARY_URL ||
+    (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_SECRET);
+
+if (isCloudinaryConfigured) {
+    console.log('✅ Cloudinary Storage Connected');
+} else {
+    console.log('❌ Cloudinary Configuration Missing (Check CLOUDINARY_URL or keys)');
 }
 
 const storage = new CloudinaryStorage({
