@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '../../components/common/Button';
 import { addPlant, fetchPlants, chatWithDrFlora } from '../../services/api';
 import { AdminLayout } from './AdminLayout';
@@ -198,6 +199,7 @@ const compressImage = (file: File): Promise<string> => {
 };
 
 export const AddPlant = () => {
+    const navigate = useNavigate();
     const [scientificNameSearch, setScientificNameSearch] = useState('');
 
     const [newPlant, setNewPlant] = useState<Partial<Plant>>({
@@ -392,7 +394,7 @@ Please be specific and accurate.`;
             await addPlant(plantData);
             toast.success("Specimen Registered", { id: tid });
 
-            // Reset
+            // Reset form
             setNewPlant({
                 name: '', scientificName: '', imageUrl: '', price: 0,
                 type: 'indoor', sunlight: 'medium', description: '',
@@ -401,6 +403,9 @@ Please be specific and accurate.`;
                 foliageTexture: '', leafShape: '', stemStructure: '', overallHabit: '', biometricFeatures: [], lifespan: ''
             });
             setScientificNameSearch('');
+
+            // Navigate to ManagePlants to show the newly added plant
+            setTimeout(() => navigate('/admin/manage-plants'), 1000);
         } catch (err) {
             toast.error("Save Failed", { id: tid });
         }
