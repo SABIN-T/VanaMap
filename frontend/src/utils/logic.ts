@@ -113,9 +113,6 @@ export const normalizeBatch = (scores: number[]): number[] => {
 
 // Calculates the "Stress" (Efficiency Loss) based on sliders
 const calculateStressFactor = (plant: Plant, temp: number, light: number): number => {
-    let thermalStress = 0.0;
-    let lightStress = 0.0;
-
     // 1. Light Stress (Every 10% deviation adds significant stress)
     const sun = (plant.sunlight || 'medium').toLowerCase();
     let idealLight = 50;
@@ -130,7 +127,7 @@ const calculateStressFactor = (plant: Plant, temp: number, light: number): numbe
     }
 
     const lightDiff = Math.abs(light - idealLight);
-    lightStress = (lightDiff / 100) * 1.5; // Up to 150% stress for total darkness/over-exposure
+    const lightStress = (lightDiff / 100) * 1.5; // Up to 150% stress for total darkness/over-exposure
 
     // 2. Temperature Stress (Biological Peak Model)
     // Instead of a flat range, plants have a peak performance temperature
@@ -143,9 +140,6 @@ const calculateStressFactor = (plant: Plant, temp: number, light: number): numbe
     const sigma = 4.5;
     const tempDiff = temp - optimal;
     const thermalEfficiency = Math.exp(-(tempDiff * tempDiff) / (2 * sigma * sigma));
-
-    // Efficiency to Stress (e.g. 0.8 efficiency => 0.2 stress)
-    thermalStress = 1.0 - thermalEfficiency;
 
     // Combine stresses (Total efficiency is product of independent efficiencies)
     const totalEfficiency = (1.0 - Math.min(0.8, lightStress)) * thermalEfficiency;
