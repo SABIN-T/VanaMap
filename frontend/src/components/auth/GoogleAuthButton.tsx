@@ -59,12 +59,12 @@ export const GoogleAuthButton = ({ onSuccess, role }: GoogleAuthButtonProps) => 
                 <GoogleLogin
                     onSuccess={handleGoogleSuccess}
                     onError={handleGoogleError}
-                    theme="filled_black"
+                    theme="filled_blue"
                     size="large"
-                    text={role === 'vendor' ? 'continue_with' : 'signin_with'}
-                    shape="rectangular"
-                    width="100%"
-                    logo_alignment="left"
+                    text={role === 'vendor' ? 'signup_with' : 'signin_with'}
+                    shape="pill"
+                    auto_select={false}
+                    useOneTap={false}
                 />
             </div>
 
