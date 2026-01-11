@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback, lazy } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Send, Sparkles, Leaf, Bot, User, Trash2, Download, Calendar, Camera, Mic, Volume2, VolumeX, Zap, Loader2, Settings, X, Stethoscope, CloudSun, ScrollText, CheckCircle2, AlertCircle } from 'lucide-react';
 import { chatWithDrFlora, API_URL } from '../services/api';
 import toast from 'react-hot-toast';
@@ -85,6 +86,7 @@ const ImageLoader = ({ idx }: { idx: number }) => {
 
 export const AIDoctor = () => {
     const { user } = useAuth();
+    const navigate = useNavigate();
     const [messages, setMessages] = useState<Message[]>([
         {
             id: '1',
@@ -726,25 +728,13 @@ export const AIDoctor = () => {
         if (!messages.length) return;
         const lastMsg = messages[messages.length - 1];
 
-        // Ensure we only speak if:
-        // 1. Voice is enabled
-        // 2. It's an assistant message
-        // 3. It's NOT the initial welcome message (id '1')
-        // 4. We haven't spoken it yet
         if (voiceEnabled && lastMsg.role === 'assistant' && lastMsg.id !== '1') {
             if (lastSpokenMessageIdRef.current !== lastMsg.id) {
                 lastSpokenMessageIdRef.current = lastMsg.id;
-                lastSpokenMessageIdRef.current = lastMsg.id;
-                // Use the robust cleaner
+
+                // Only speak if there's actual content after cleaning
                 const cleanText = cleanTextForSpeech(lastMsg.content);
                 if (cleanText.trim()) {
-                    speak(lastMsg.content); // speak function now cleans it internally!, but wait, passing raw content to speak allows speak() to clean it. 
-                    // Actually, if I clean it here, speak() cleans it again. Efficient?
-                    // Let's pass the raw content and let speak() handle it to avoid duplication or pass cleaned.
-                    // speak() calls cleanTextForSpeech. So passing raw is fine.
-                    // BUT: The original logic passed 'cleanText' to speak.
-                    // My replacement for speak() adds cleaning. 
-                    // To be safe, let's just pass raw content to speak() and let IT do the work.
                     speak(lastMsg.content);
                 }
             }
@@ -867,17 +857,26 @@ export const AIDoctor = () => {
             {/* Header */}
             <header className={styles.header}>
                 <div className={styles.headerContent}>
+                    <button
+                        onClick={() => navigate('/')}
+                        className={styles.actionBtn}
+                        style={{ marginRight: '0.5rem' }}
+                        title="Go Home"
+                    >
+                        <X size={20} />
+                    </button>
+
                     <div className={styles.logoIcon}>
-                        <Bot size={20} />
+                        <Bot size={24} />
                     </div>
                     <div className={styles.titleBlock}>
-                        <h1 className={styles.title}>Dr. Flora</h1>
-                        <span className={styles.subtitle}>{persona === 'flora' ? 'Botanical Soul' : persona === 'geneticist' ? 'Molecular Specialist' : 'Herbal Wisdom'} • VanaMap</span>
+                        <h1 className={styles.title}>Dr. Flora AI</h1>
+                        <span className={styles.subtitle}>{persona === 'flora' ? 'Botanical Soul' : persona === 'geneticist' ? 'Molecular Specialist' : 'Herbal Wisdom'}</span>
                     </div>
 
-                    {/* Climate Awareness Badge */}
+                    {/* Climate Awareness Badge - Hide on tiny screens */}
                     {weather && (
-                        <div className={styles.climateBadge}>
+                        <div className={`${styles.climateBadge} hide-on-mobile`}>
                             <CloudSun size={14} />
                             <span>{weather.city}: {weather.avgTemp30Days}°C</span>
                         </div>
@@ -888,160 +887,133 @@ export const AIDoctor = () => {
                         {neuralMeta && (
                             <div
                                 onClick={() => setShowLimitInfo(true)}
+                                className={styles.climateBadge}
                                 style={{
-                                    fontSize: 'clamp(10px, 2vw, 12px)',
-                                    padding: '4px 10px',
-                                    background: (neuralMeta.current < 20000 || isAnalysisLimited) ? '#fef2f2' : 'rgba(255,255,255,0.6)',
+                                    background: (neuralMeta.current < 20000 || isAnalysisLimited) ? 'rgba(239, 68, 68, 0.1)' : 'rgba(16, 185, 129, 0.1)',
                                     color: (neuralMeta.current < 20000 || isAnalysisLimited) ? '#ef4444' : '#10b981',
-                                    borderRadius: '99px',
-                                    border: `1px solid ${(neuralMeta.current < 20000 || isAnalysisLimited) ? '#fecaca' : '#bbf7d0'}`,
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    gap: '4px',
-                                    fontWeight: 600,
-                                    marginRight: '8px',
-                                    backdropFilter: 'blur(4px)',
-                                    boxShadow: '0 2px 5px rgba(0,0,0,0.05)',
+                                    border: `1px solid ${(neuralMeta.current < 20000 || isAnalysisLimited) ? 'rgba(239, 68, 68, 0.2)' : 'rgba(16, 185, 129, 0.2)'}`,
                                     cursor: 'pointer'
-                                }} title={`Click to see how to increase limits`}>
+                                }}
+                            >
                                 <Zap size={14} fill={(neuralMeta.current < 20000 || isAnalysisLimited) ? "#ef4444" : "#10b981"} />
-                                <span>{isAnalysisLimited ? "LIMIT REACHED" : `${(neuralMeta.current / 1000).toFixed(1)}k Ops`}</span>
+                                <span className="hide-on-mobile">{isAnalysisLimited ? "RECHARGE" : `${(neuralMeta.current / 1000).toFixed(1)}k Ops`}</span>
                             </div>
                         )}
-                        {/* Garden Clinic Button */}
+
                         <button
                             className={`${styles.actionBtn} ${showClinic ? styles.active : ''}`}
                             onClick={() => setShowClinic(!showClinic)}
-                            title="Garden Clinic (Medical Records)"
+                            title="Garden Clinic"
                         >
-                            <Stethoscope size={18} />
-                            {medicalRecords.length > 0 && <span className={styles.recordBadge}>{medicalRecords.length}</span>}
+                            <div style={{ position: 'relative' }}>
+                                <Stethoscope size={20} />
+                                {medicalRecords.length > 0 && <span className={styles.recordBadge}>{medicalRecords.length}</span>}
+                            </div>
                         </button>
 
                         <button
                             className={styles.actionBtn}
                             onClick={toggleVoice}
-                            style={voiceEnabled ? { color: '#10b981', borderColor: '#bbf7d0', background: '#f0fdf4', boxShadow: isSpeaking ? '0 0 10px rgba(16, 185, 129, 0.3)' : 'none' } : {}}
-                            title={voiceEnabled ? "Disable Voice" : "Enable Voice"}
+                            style={voiceEnabled ? { color: '#10b981', borderColor: '#10b981', background: 'rgba(16, 185, 129, 0.1)' } : {}}
+                            title="Voice Mode"
                         >
-                            {voiceEnabled ? <Volume2 size={18} /> : <VolumeX size={18} />}
+                            {voiceEnabled ? <Volume2 size={20} /> : <VolumeX size={20} />}
                         </button>
 
-                        {/* Voice Settings Button */}
+                        {/* Extra Actions Menu - Unified */}
                         <button
                             className={styles.actionBtn}
                             onClick={() => setIsVoiceSelectorOpen(true)}
-                            title="Change Voice Pack"
+                            title="Settings"
                         >
-                            <Settings size={18} />
+                            <Settings size={20} />
                         </button>
-
-                        <button className={styles.actionBtn} onClick={handleCareCalendar} title="Care Calendar">
-                            <Calendar size={18} />
-                        </button>
-
-                        <button className={styles.actionBtn} onClick={handleExport} title="Export Chat">
-                            <Download size={18} />
-                        </button>
-
-                        {/* Stop Speaking Button (only shows when AI is speaking) */}
-                        {isSpeaking && (
-                            <button
-                                className={styles.actionBtn}
-                                onClick={stopSpeaking}
-                                style={{
-                                    color: '#ef4444',
-                                    borderColor: '#fecaca',
-                                    background: '#fef2f2',
-                                    animation: 'pulse 2s infinite'
-                                }}
-                                title="Stop Speaking"
-                            >
-                                <VolumeX size={18} />
-                            </button>
-                        )}
                     </div>
                 </div>
             </header>
 
-            {/* Council of Experts Selector (Personas) */}
+            {/* Council of Experts (Horizontal Persona Bar) */}
             <div className={styles.councilBar}>
                 <button
                     className={`${styles.expertBtn} ${persona === 'flora' ? styles.expertActive : ''}`}
                     onClick={() => handlePersonaChange('flora')}
                 >
-                    <Bot size={16} />
+                    <Bot size={18} />
                     <span>Flora</span>
                 </button>
                 <button
                     className={`${styles.expertBtn} ${persona === 'geneticist' ? styles.expertActive : ''}`}
                     onClick={() => handlePersonaChange('geneticist')}
                 >
-                    <Zap size={16} />
+                    <Zap size={18} />
                     <span>Geneticist</span>
                 </button>
                 <button
                     className={`${styles.expertBtn} ${persona === 'ayurvedic' ? styles.expertActive : ''}`}
                     onClick={() => handlePersonaChange('ayurvedic')}
                 >
-                    <Leaf size={16} />
+                    <Leaf size={18} />
                     <span>Ayurvedic</span>
                 </button>
             </div>
 
-            {/* Garden Clinic Side Panel (Medical Records) */}
+            {/* Garden Clinic Side Panel */}
             {showClinic && (
                 <div className={styles.clinicOverlay} onClick={() => setShowClinic(false)}>
                     <div className={styles.clinicPanel} onClick={e => e.stopPropagation()}>
                         <div className={styles.clinicHeader}>
                             <h3 className={styles.clinicTitle}>
-                                <Stethoscope size={20} />
-                                Garden Clinic
+                                <Stethoscope size={22} className="text-primary" />
+                                Patient Records
                             </h3>
                             <button onClick={() => setShowClinic(false)} className={styles.closeClinic}>
-                                <X size={20} />
+                                <X size={24} />
                             </button>
                         </div>
                         <div className={styles.clinicContent}>
                             {clinicLoading ? (
                                 <div className={styles.clinicLoading}>
-                                    <Loader2 className="animate-spin" />
-                                    <span>Reviewing plant health records...</span>
+                                    <Loader2 className="animate-spin" size={32} />
+                                    <span>Accessing secure medical database...</span>
                                 </div>
                             ) : medicalRecords.length === 0 ? (
                                 <div className={styles.emptyClinic}>
-                                    <ScrollText size={48} />
-                                    <p>No medical records yet. Ask for a diagnosis!</p>
+                                    <ScrollText size={56} opacity={0.3} />
+                                    <p style={{ marginTop: '1rem', fontWeight: 600 }}>No plants currently under observation.</p>
+                                    <p style={{ fontSize: '0.85rem', color: '#64748b' }}>Start a diagnosis with a photo to create records.</p>
                                 </div>
                             ) : (
                                 <div className={styles.recordsList}>
                                     {medicalRecords.map((record) => (
                                         <div key={record._id} className={styles.recordItem}>
                                             <div className={styles.recordMain}>
-                                                <div className={styles.recordInfo}>
+                                                <div>
                                                     <h4 className={styles.recordPlantName}>{record.plantName}</h4>
                                                     <p className={styles.recordScientific}>{record.scientificName}</p>
                                                 </div>
                                                 <div className={`${styles.recordSeverity} ${styles[record.severity]}`}>
-                                                    {record.severity.toUpperCase()}
+                                                    {record.severity}
                                                 </div>
                                             </div>
                                             <div className={styles.recordDiagnosInfo}>
-                                                <strong>Diagnosis:</strong> {record.diagnosis}
+                                                <strong>Condition:</strong> {record.diagnosis}
                                             </div>
                                             <div className={styles.recordTreatment}>
-                                                <strong>Dr. Flora's Treatment:</strong> {record.treatment}
+                                                <strong>Prescription:</strong> {record.treatment}
                                             </div>
                                             <div className={styles.recordMeta}>
-                                                <Calendar size={12} />
-                                                <span>{new Date(record.timestamp).toLocaleDateString()}</span>
-                                                <div className={`${styles.statusBadge} ${styles[record.status]}`}
+                                                <div
+                                                    className={`${styles.statusBadge} ${styles[record.status]}`}
                                                     style={{ cursor: record.status === 'active' ? 'pointer' : 'default' }}
-                                                    onClick={() => record.status === 'active' && handleUpdateRecordStatus(record._id, 'resolved')}>
-                                                    {record.status === 'active' ? <AlertCircle size={12} /> : <CheckCircle2 size={12} />}
-                                                    {record.status.toUpperCase()}
+                                                    onClick={() => record.status === 'active' && handleUpdateRecordStatus(record._id, 'resolved')}
+                                                >
+                                                    {record.status === 'active' ? <AlertCircle size={14} /> : <CheckCircle2 size={14} />}
+                                                    {record.status}
                                                     {record.status === 'active' && <span style={{ fontSize: '0.6rem', marginLeft: '4px', opacity: 0.7 }}>(Click to Resolve)</span>}
                                                 </div>
+                                                <span style={{ marginLeft: 'auto' }}>
+                                                    {new Date(record.timestamp).toLocaleDateString()}
+                                                </span>
                                             </div>
                                         </div>
                                     ))}
@@ -1052,221 +1024,148 @@ export const AIDoctor = () => {
                 </div>
             )}
 
-            {/* Voice Selector Modal */}
+            {/* Voice Pack Modal */}
             {isVoiceSelectorOpen && (
-                <div style={{
-                    position: 'fixed',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    background: 'rgba(0,0,0,0.7)',
-                    zIndex: 2000,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                }}>
-                    <div style={{
-                        background: '#ffffff',
-                        padding: '24px',
-                        borderRadius: '24px',
-                        width: '90%',
-                        maxWidth: '420px',
-                        boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-                        border: '4px solid #dcfce7'
-                    }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                            <div>
-                                <h3 style={{ margin: 0, color: '#064e3b', fontSize: '1.4rem', fontWeight: 800 }}>Voice of Nature</h3>
-                                <p style={{ margin: '4px 0 0', color: '#64748b', fontSize: '0.9rem' }}>Choose Dr. Flora's personality</p>
+                <div className={styles.overlay} onClick={() => setIsVoiceSelectorOpen(false)}>
+                    <div className={styles.modal} onClick={e => e.stopPropagation()}>
+                        <div className={styles.modalHeader}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                <Mic size={24} className="text-primary" />
+                                <div>
+                                    <h3 style={{ margin: 0, fontSize: '1.25rem' }}>Voice Personalities</h3>
+                                    <p style={{ margin: 0, fontSize: '0.8rem', color: '#64748b' }}>Choose how Dr. Flora sounds</p>
+                                </div>
                             </div>
-                            <button onClick={() => setIsVoiceSelectorOpen(false)} style={{ background: '#f1f5f9', border: 'none', color: '#64748b', cursor: 'pointer', padding: '8px', borderRadius: '50%' }}>
+                            <button onClick={() => setIsVoiceSelectorOpen(false)} className={styles.closeBtn}>
                                 <X size={20} />
                             </button>
                         </div>
+                        <div className={styles.modalContent}>
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', maxHeight: '60vh', overflowY: 'auto', paddingRight: '8px' }}>
+                                {availableVoices.map((voice) => (
+                                    <button
+                                        key={voice.id}
+                                        onClick={() => handleVoiceSelect(voice.id)}
+                                        style={{
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '16px',
+                                            padding: '1.25rem',
+                                            background: selectedVoiceId === voice.id ? 'var(--flora-primary)' : 'var(--flora-card)',
+                                            border: '1px solid var(--flora-border)',
+                                            borderRadius: '20px',
+                                            cursor: 'pointer',
+                                            transition: 'all 0.3s',
+                                            width: '100%',
+                                            textAlign: 'left',
+                                            color: selectedVoiceId === voice.id ? 'white' : 'var(--flora-text)'
+                                        }}
+                                    >
+                                        <div style={{
+                                            width: '48px', height: '48px', borderRadius: '15px',
+                                            background: selectedVoiceId === voice.id ? 'rgba(255,255,255,0.2)' : 'rgba(16, 185, 129, 0.1)',
+                                            display: 'flex', alignItems: 'center', justifyContent: 'center'
+                                        }}>
+                                            <Mic size={24} />
+                                        </div>
+                                        <div>
+                                            <div style={{ fontWeight: 800, fontSize: '1.1rem' }}>{voice.name}</div>
+                                            <div style={{ fontSize: '0.85rem', opacity: 0.8 }}>{voice.style} • {voice.description}</div>
+                                        </div>
+                                    </button>
+                                ))}
+                            </div>
 
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', maxHeight: '400px', overflowY: 'auto' }}>
-                            {availableVoices.map((voice) => (
-                                <button
-                                    key={voice.id}
-                                    onClick={() => handleVoiceSelect(voice.id)}
-                                    style={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '16px',
-                                        padding: '16px',
-                                        background: selectedVoiceId === voice.id ? '#ecfdf5' : '#ffffff',
-                                        border: selectedVoiceId === voice.id ? '2px solid #10b981' : '1px solid #e2e8f0',
-                                        borderRadius: '16px',
-                                        cursor: 'pointer',
-                                        transition: 'all 0.2s',
-                                        width: '100%',
-                                        textAlign: 'left',
-                                        position: 'relative'
-                                    }}
-                                >
-                                    <div style={{
-                                        width: '44px', height: '44px', borderRadius: '50%',
-                                        background: selectedVoiceId === voice.id ? '#10b981' : '#f1f5f9',
-                                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                        flexShrink: 0
-                                    }}>
-                                        {selectedVoiceId === voice.id ? <Sparkles size={20} color="white" /> : <Mic size={20} color="#94a3b8" />}
-                                    </div>
-                                    <div style={{ flex: 1 }}>
-                                        <div style={{ color: '#1e293b', fontWeight: 700, fontSize: '1rem', marginBottom: '2px' }}>{voice.name}</div>
-                                        <div style={{ color: '#64748b', fontSize: '0.8rem', fontStyle: 'italic' }}>{voice.style}</div>
-                                        <div style={{ color: '#94a3b8', fontSize: '0.75rem', marginTop: '2px' }}>{voice.description}</div>
-                                    </div>
+                            <div style={{ marginTop: '1.5rem', display: 'flex', gap: '10px' }}>
+                                <button className={styles.expertBtn} onClick={handleCareCalendar} style={{ flex: 1 }}>
+                                    <Calendar size={18} /> Generate Schedule
                                 </button>
-                            ))}
+                                <button className={styles.expertBtn} onClick={handleExport} style={{ flex: 1 }}>
+                                    <Download size={18} /> Save Transcript
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
             )}
 
-
-            {/* Chat Area */}
+            {/* Chat Theatre */}
             <div className={styles.chatContainer}>
                 <div className={styles.messagesWrapper}>
                     {messages.map((message) => (
                         <div key={message.id} className={`${styles.message} ${message.role === 'user' ? styles.userMessage : styles.assistantMessage}`}>
                             <div className={styles.messageIcon}>
-                                {message.role === 'user' ? <User size={16} /> : <Leaf size={16} />}
+                                {message.role === 'user' ? <User size={20} /> : <Bot size={20} />}
                             </div>
                             <div className={styles.messageContent}>
                                 <div className={styles.messageSender}>
-                                    {message.role === 'user' ? 'You' : 'Dr. Flora'} • {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                    {message.role === 'user' ? 'You' : 'Dr. Flora AI'} • {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                 </div>
-                                {/* Display uploaded image if present */}
+
                                 {((message.images && message.images.length > 0) || message.image) && (
                                     <div style={{
                                         display: 'grid',
                                         gridTemplateColumns: (message.images && message.images.length > 1) ? 'repeat(auto-fit, minmax(280px, 1fr))' : '1fr',
                                         gap: '12px',
-                                        marginBottom: '0.75rem',
+                                        marginBottom: '1rem',
                                         width: '100%'
                                     }}>
                                         {(message.images && message.images.length > 0 ? message.images : (message.image ? [message.image] : [])).map((imgUrl, idx) => {
                                             const imageKey = `${message.id}-${idx}`;
                                             return (
-                                                <div key={imageKey} style={{
-                                                    position: 'relative',
-                                                    background: message.role === 'assistant' ? '#f8fafc' : 'rgba(0,0,0,0.1)',
-                                                    borderRadius: '16px',
-                                                    padding: '4px',
-                                                    border: '1px solid rgba(0,0,0,0.05)',
-                                                    overflow: 'hidden',
-                                                    minHeight: '200px'
-                                                }}>
+                                                <div key={imageKey} className={styles.recordItem} style={{ position: 'relative', padding: '6px', overflow: 'hidden', minHeight: '300px' }}>
                                                     <img
                                                         src={(() => {
                                                             if (!imgUrl) return '';
-                                                            if (imgUrl.startsWith('data:')) return imgUrl; // Handle Base64 User Uploads
+                                                            if (imgUrl.startsWith('data:')) return imgUrl;
                                                             if (imgUrl.startsWith('http')) return imgUrl;
-                                                            // Robust URL cleaning
-                                                            const cleanBase = API_URL.replace(/\/+$/, '').replace(/\/api$/, '');
-                                                            const cleanPath = imgUrl.startsWith('/') ? imgUrl : `/${imgUrl}`;
-                                                            return `${cleanBase}${cleanPath}`;
+                                                            return `${API_URL.replace(/\/api$/, '')}/${imgUrl.startsWith('/') ? imgUrl.slice(1) : imgUrl}`;
                                                         })()}
-                                                        alt={`Plant view ${idx + 1}`}
+                                                        alt="Patient Scan"
+                                                        className={styles.revealAnimation}
                                                         onLoad={() => setLoadedImageIds(prev => new Set(prev).add(imageKey))}
-                                                        onError={(e) => {
-                                                            console.warn("Primary image load failed. Attempting fallback...");
-                                                            setLoadedImageIds(prev => new Set(prev).add(imageKey));
-                                                            e.currentTarget.style.opacity = '1';
-
-                                                            // Auto-fallback to direct Pollinations URL if backend proxy fails
-                                                            const src = e.currentTarget.src;
-                                                            if (src.includes('/api/generate-image')) {
-                                                                try {
-                                                                    const url = new URL(src);
-                                                                    const params = new URLSearchParams(url.search);
-                                                                    const prompt = params.get('prompt');
-                                                                    const model = params.get('model') || 'flux';
-                                                                    const seed = params.get('seed') || '42';
-
-                                                                    if (prompt) {
-                                                                        const directUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?model=${model}&seed=${seed}&width=896&height=896&nologo=true`;
-                                                                        e.currentTarget.src = directUrl;
-                                                                    }
-                                                                } catch (err) {
-                                                                    console.error("Fallback failed", err);
-                                                                }
-                                                            }
-                                                        }}
-                                                        style={{
-                                                            width: '100%',
-                                                            maxHeight: '400px',
-                                                            borderRadius: '12px',
-                                                            objectFit: 'contain',
-                                                            display: 'block',
-                                                            opacity: 1,
-                                                            transition: 'none',
-                                                            boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
-                                                        }}
+                                                        style={{ width: '100%', maxHeight: '500px', borderRadius: '16px', objectFit: 'cover' }}
                                                     />
 
                                                     <div style={{
-                                                        position: 'absolute',
-                                                        top: '12px',
-                                                        left: '12px',
-                                                        background: 'rgba(5, 150, 105, 0.9)',
-                                                        color: 'white',
-                                                        padding: '4px 10px',
-                                                        borderRadius: '20px',
-                                                        fontSize: '0.7rem',
-                                                        fontWeight: 800,
-                                                        backdropFilter: 'blur(8px)',
-                                                        boxShadow: '0 4px 10px rgba(0,0,0,0.1)',
-                                                        zIndex: 8,
-                                                        textTransform: 'uppercase',
-                                                        letterSpacing: '0.5px'
+                                                        position: 'absolute', top: '15px', left: '15px',
+                                                        background: 'var(--flora-primary)', color: 'white',
+                                                        padding: '4px 12px', borderRadius: '30px',
+                                                        fontSize: '0.7rem', fontWeight: 800, boxShadow: '0 4px 15px rgba(0,0,0,0.2)'
                                                     }}>
-                                                        {idx === 0 ? '🎨 Botanical Art (Flux)' : '📸 Ultra-Realism (Pro)'}
+                                                        {idx === 0 ? 'NEURAL ART' : 'HD DIAGNOSIS'}
                                                     </div>
 
                                                     <button
                                                         onClick={() => downloadImage(imgUrl!, imageKey)}
                                                         disabled={downloadingIds.has(imageKey)}
+                                                        className={styles.sendBtn}
                                                         style={{
                                                             position: 'absolute',
-                                                            bottom: '12px',
-                                                            right: '12px',
-                                                            background: '#059669',
-                                                            color: 'white',
-                                                            border: 'none',
-                                                            borderRadius: '30px',
-                                                            padding: '8px 14px',
-                                                            display: 'flex',
-                                                            alignItems: 'center',
+                                                            bottom: '15px',
+                                                            right: '15px',
+                                                            width: 'auto',
+                                                            padding: '0 15px',
                                                             gap: '8px',
-                                                            cursor: downloadingIds.has(imageKey) ? 'wait' : 'pointer',
-                                                            boxShadow: '0 6px 15px rgba(5, 150, 105, 0.4)',
-                                                            zIndex: 10,
-                                                            fontSize: '0.8rem',
-                                                            fontWeight: 700,
-                                                            transition: 'all 0.2s'
+                                                            opacity: downloadingIds.has(imageKey) ? 0.7 : 1,
+                                                            cursor: downloadingIds.has(imageKey) ? 'wait' : 'pointer'
                                                         }}
                                                     >
                                                         {downloadingIds.has(imageKey) ? (
-                                                            <div style={{ animation: 'spin 1s linear infinite', display: 'flex' }}>
-                                                                <Loader2 size={16} />
-                                                            </div>
+                                                            <Loader2 size={16} className="animate-spin" />
                                                         ) : (
                                                             <Download size={16} />
                                                         )}
-                                                        <span>Save PNG</span>
+                                                        <span>{downloadingIds.has(imageKey) ? 'Saving...' : 'Save PNG'}</span>
                                                     </button>
 
-                                                    {(!loadedImageIds.has(imageKey)) && (
-                                                        <ImageLoader idx={idx} />
-                                                    )}
+                                                    {!loadedImageIds.has(imageKey) && <ImageLoader idx={idx} />}
                                                 </div>
                                             );
                                         })}
                                     </div>
                                 )}
+
                                 <div className={styles.messageText}>
                                     <ReactMarkdown remarkPlugins={[remarkGfm]}>
                                         {message.content}
@@ -1278,7 +1177,7 @@ export const AIDoctor = () => {
 
                     {loading && (
                         <div className={`${styles.message} ${styles.assistantMessage}`}>
-                            <div className={styles.messageIcon}><Leaf size={16} /></div>
+                            <div className={styles.messageIcon}><Bot size={20} /></div>
                             <div className={styles.messageContent}>
                                 <div className={`${styles.messageText} ${styles.typing}`}>
                                     <span></span><span></span><span></span>
@@ -1290,52 +1189,41 @@ export const AIDoctor = () => {
                 </div>
             </div>
 
-            {/* Input Dock */}
+            {/* Premium Command Prism (Input) */}
             <div className={styles.inputContainer}>
                 <div className={styles.inputDock}>
-                    <button
-                        className={styles.toolBtn}
-                        onClick={handleScanClick}
-                        title="Identify Plant (Scan)"
-                    >
-                        <Camera size={20} />
+                    <button className={styles.toolBtn} onClick={handleScanClick}>
+                        <Camera size={24} />
                     </button>
-                    <input
-                        type="file"
-                        ref={fileInputRef}
-                        onChange={handleFileChange}
-                        accept="image/*"
-                        style={{ display: 'none' }}
-                    />
+                    <input type="file" ref={fileInputRef} onChange={handleFileChange} accept="image/*" style={{ display: 'none' }} />
 
                     <button
                         className={styles.toolBtn}
                         onClick={toggleListening}
-                        style={isListening ? { color: '#ef4444', background: '#fef2f2' } : {}}
-                        title="Voice Input"
+                        style={isListening ? { color: 'white', background: '#ef4444' } : {}}
                     >
-                        <Mic size={20} />
+                        <Mic size={24} className={isListening ? 'animate-pulse' : ''} />
                     </button>
 
                     <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
                         {previewUrl && (
                             <div className={styles.previewArea}>
                                 <div className={styles.previewBadge}>
-                                    <img src={previewUrl} className={styles.previewThumb} alt="Scan" />
-                                    <span>Image attached</span>
-                                    <button onClick={clearImage} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#0284c7', marginLeft: 'auto' }}>
-                                        <Trash2 size={14} />
+                                    <img src={previewUrl} className={styles.previewThumb} alt="Scan Preview" />
+                                    <span>Bio-Analysis Ready</span>
+                                    <button onClick={clearImage} style={{ background: 'none', border: 'none', color: '#ef4444', marginLeft: 'auto' }}>
+                                        <Trash2 size={16} />
                                     </button>
                                 </div>
                             </div>
                         )}
                         <textarea
                             className={styles.textInput}
-                            placeholder="Type a message..."
+                            placeholder="Ask Dr. Flora anything..."
                             value={input}
                             onChange={(e) => {
                                 setInput(e.target.value);
-                                if (isSpeaking) stopSpeaking(); // Stop speaking when user types
+                                if (isSpeaking) stopSpeaking();
                             }}
                             onKeyDown={(e) => {
                                 if (e.key === 'Enter' && !e.shiftKey) {
@@ -1345,7 +1233,6 @@ export const AIDoctor = () => {
                             }}
                             disabled={loading}
                             rows={1}
-                            style={{ height: 'auto', minHeight: '44px' }}
                         />
                     </div>
 
@@ -1354,93 +1241,78 @@ export const AIDoctor = () => {
                         onClick={() => handleSend()}
                         disabled={loading || (!input.trim() && !selectedImage)}
                     >
-                        {loading ? <Sparkles size={18} /> : <Send size={18} />}
+                        {loading ? <Loader2 className="animate-spin" size={24} /> : <Send size={24} />}
                     </button>
                 </div>
             </div>
 
-            {/* Neural Energy & Settings Overlay (Tooltip/Modal) */}
-            {
-                showLimitInfo && (
-                    <div className={styles.overlay} onClick={() => setShowLimitInfo(false)}>
-                        <div className={styles.modal} onClick={e => e.stopPropagation()}>
-                            <div className={styles.modalHeader}>
-                                <h2 style={{ display: 'flex', alignItems: 'center', gap: '10px', margin: 0, fontSize: '1.15rem' }}>
-                                    <Zap size={20} color="#10b981" fill="#10b981" />
-                                    Neural Energy Insights
-                                </h2>
-                                <button className={styles.closeBtn} onClick={() => setShowLimitInfo(false)}>&times;</button>
-                            </div>
-                            <div className={styles.modalContent}>
-                                <p style={{ color: '#64748b', fontSize: '0.875rem', lineHeight: 1.6, marginBottom: '1.5rem' }}>
-                                    Dr. Flora's advanced botanical reasoning and image analysis require significant "Neural Energy". Daily limits help us maintain service for all gardeners.
-                                </p>
+            {/* Styled Modal CSS for extra effects */}
+            <style>{`
+                .hide-on-mobile {
+                    display: flex;
+                }
+                @media (max-width: 600px) {
+                    .hide-on-mobile { display: none; }
+                }
+                .animate-pulse {
+                    animation: pulse-ring 1.5s cubic-bezier(0.24, 0, 0.38, 1) infinite;
+                }
+                @keyframes pulse-ring {
+                    0% { transform: scale(1); opacity: 1; }
+                    50% { transform: scale(1.1); opacity: 0.8; }
+                    100% { transform: scale(1); opacity: 1; }
+                }
+            `}</style>
 
-                                <div style={{
-                                    background: '#f8fafc',
-                                    padding: '1.25rem',
-                                    borderRadius: '1rem',
-                                    border: '1px solid #e2e8f0',
-                                    marginBottom: '1.5rem'
-                                }}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', fontSize: '0.85rem' }}>
-                                        <span style={{ fontWeight: 700 }}>Daily Capacity:</span>
-                                        <span style={{ color: isAnalysisLimited ? '#ef4444' : '#10b981', fontWeight: 800 }}>
-                                            {isAnalysisLimited ? "Neural Exhausted" : `${((neuralMeta?.current || 0) / (neuralMeta?.max || 1) * 100).toFixed(1)}%`}
-                                        </span>
-                                    </div>
-                                    <div style={{ width: '100%', height: '8px', background: '#e2e8f0', borderRadius: '4px', overflow: 'hidden' }}>
-                                        <div style={{
-                                            width: `${((neuralMeta?.current || 0) / (neuralMeta?.max || 1) * 100)}%`,
-                                            height: '100%',
-                                            background: isAnalysisLimited ? '#ef4444' : '#10b981',
-                                            transition: 'width 0.8s cubic-bezier(0.16, 1, 0.3, 1)'
-                                        }} />
-                                    </div>
-                                    <p style={{ fontSize: '0.7rem', color: '#94a3b8', marginTop: '10px', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                        <Sparkles size={12} />
-                                        Resets every 24 hours at midnight UTC.
-                                    </p>
+            {/* Neural Insights Modal */}
+            {showLimitInfo && (
+                <div className={styles.overlay} onClick={() => setShowLimitInfo(false)}>
+                    <div className={styles.modal} onClick={e => e.stopPropagation()}>
+                        <div className={styles.modalHeader}>
+                            <h2 style={{ display: 'flex', alignItems: 'center', gap: '12px', margin: 0 }}>
+                                <Zap size={24} className="text-primary" fill="var(--flora-primary)" />
+                                Neural Core Status
+                            </h2>
+                            <button className={styles.closeBtn} onClick={() => setShowLimitInfo(false)}><X size={20} /></button>
+                        </div>
+                        <div className={styles.modalContent}>
+                            <div style={{ background: 'rgba(16, 185, 129, 0.05)', padding: '1.5rem', borderRadius: '24px', marginBottom: '1.5rem' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px', fontWeight: 800 }}>
+                                    <span>Remaining Processing Energy</span>
+                                    <span style={{ color: 'var(--flora-primary)' }}>{((neuralMeta?.current || 0) / (neuralMeta?.max || 1) * 100).toFixed(0)}%</span>
                                 </div>
-
-                                <h3 style={{ fontSize: '0.9rem', fontWeight: 800, color: '#1e293b', marginBottom: '0.75rem' }}>How to increase your limit?</h3>
-                                <ul style={{ paddingLeft: '1.2rem', color: '#475569', fontSize: '0.825rem', lineHeight: 1.8, marginBottom: '1.5rem' }}>
-                                    <li><strong>✨ Upgrade to Premium</strong>: Instant 10x capacity boost and priority analysis.</li>
-                                    <li><strong>🛍️ Shopping Activity</strong>: Active buyers earn "Energy Credits" over time.</li>
-                                    <li><strong>🌿 Patience</strong>: Limits reset daily. Small gardens grow best with time!</li>
-                                </ul>
-
-                                {!user?.isPremium && (
-                                    <button
-                                        className={styles.premiumBtn}
-                                        onClick={() => {
-                                            window.location.href = '/premium';
-                                        }}
-                                        style={{
-                                            width: '100%',
-                                            background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
-                                            color: 'white',
-                                            border: 'none',
-                                            padding: '1rem',
-                                            borderRadius: '0.75rem',
-                                            fontWeight: 800,
-                                            fontSize: '0.9rem',
-                                            cursor: 'pointer',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            justifyContent: 'center',
-                                            gap: '10px'
-                                        }}
-                                    >
-                                        <Sparkles size={18} />
-                                        Experience Infinite Wisdom
-                                    </button>
-                                )}
+                                <div style={{ width: '100%', height: '12px', background: 'rgba(0,0,0,0.1)', borderRadius: '10px', overflow: 'hidden' }}>
+                                    <div style={{
+                                        width: `${((neuralMeta?.current || 0) / (neuralMeta?.max || 1) * 100)}%`,
+                                        height: '100%',
+                                        background: 'linear-gradient(90deg, #10b981, #059669)',
+                                        transition: 'width 1s cubic-bezier(0.4, 0, 0.2, 1)'
+                                    }} />
+                                </div>
                             </div>
+
+                            <div style={{ display: 'grid', gap: '12px' }}>
+                                <div className={styles.climateBadge} style={{ justifyContent: 'flex-start', background: 'transparent' }}>
+                                    <Bot size={18} /> Daily Reset at Midnight UTC
+                                </div>
+                                <div className={styles.climateBadge} style={{ justifyContent: 'flex-start', background: 'transparent' }}>
+                                    <Leaf size={18} /> Premium users get 10x capacity
+                                </div>
+                            </div>
+
+                            {!user?.isPremium && (
+                                <button
+                                    onClick={() => window.location.href = '/premium'}
+                                    className={styles.sendBtn}
+                                    style={{ width: '100%', height: '54px', marginTop: '2rem', borderRadius: '18px', gap: '10px' }}
+                                >
+                                    <Sparkles size={20} /> Upgrade to Infinite Neural Credits
+                                </button>
+                            )}
                         </div>
                     </div>
-                )
-            }
+                </div>
+            )}
         </div>
     );
 };
