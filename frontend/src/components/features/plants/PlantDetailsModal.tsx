@@ -8,7 +8,6 @@ import { runRoomSimulationMC, generatePlantInsights } from '../../../utils/logic
 
 interface PlantDetailsModalProps {
     plant: Plant;
-    score?: number;
     weather: {
         avgTemp30Days?: number;
         avgHumidity30Days?: number;
@@ -18,7 +17,7 @@ interface PlantDetailsModalProps {
     onBuy?: () => void;
 }
 
-export const PlantDetailsModal = ({ plant, score = 0, weather, onClose, onBuy }: PlantDetailsModalProps) => {
+export const PlantDetailsModal = ({ plant, weather, onClose, onBuy }: PlantDetailsModalProps) => {
     const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
 
     useEffect(() => {
@@ -42,9 +41,6 @@ export const PlantDetailsModal = ({ plant, score = 0, weather, onClose, onBuy }:
     const currentHumidity = weather?.avgHumidity30Days || 50;
 
 
-    // ==========================================
-    // SCIENTIFIC LOGIC
-    // ==========================================
     // ==========================================
     // SCIENTIFIC LOGIC
     // ==========================================
@@ -81,22 +77,25 @@ export const PlantDetailsModal = ({ plant, score = 0, weather, onClose, onBuy }:
         const aqi = weather?.air_quality?.aqi || 50;
         const insights = generatePlantInsights(plant, currentTemp, currentHumidity, aqi);
 
+        // Use simulated aptness if simulation is active (even in overview, simulated conditions matter)
+        const displayScore = (simResults.aptness * 100);
+
         const getVerdict = () => {
-            if (score >= 90) return { label: 'Optimal Match', color: '#10b981', desc: 'Condition analysis complete. Vital signs are within optimal ranges for peak physiological productivity.' };
-            if (score >= 75) return { label: 'Resilient Fit', color: '#38bdf8', desc: 'Biological compatibility is high. The specimen is capable of adapting to current atmospheric variance.' };
-            if (score >= 50) return { label: 'Struggling Match', color: '#fb923c', desc: 'Ecosystem stress detected. Metabolic efficiency is compromised due to environmental mismatch.' };
+            if (displayScore >= 90) return { label: 'Optimal Match', color: '#10b981', desc: 'Condition analysis complete. Vital signs are within optimal ranges for peak physiological productivity.' };
+            if (displayScore >= 75) return { label: 'Resilient Fit', color: '#38bdf8', desc: 'Biological compatibility is high. The specimen is capable of adapting to current atmospheric variance.' };
+            if (displayScore >= 50) return { label: 'Struggling Match', color: '#fb923c', desc: 'Ecosystem stress detected. Metabolic efficiency is compromised due to environmental mismatch.' };
             return { label: 'Non-Viable', color: '#f87171', desc: 'Critical life-energy deficit. Continuous exposure to these conditions may lead to permanent cellular damage.' };
         };
 
         const verdict = getVerdict();
         const circumference = 2 * Math.PI * 45;
-        const offset = circumference - (score / 100) * circumference;
+        const offset = circumference - (displayScore / 100) * circumference;
 
         return (
             <div className={styles.verdictSection}>
                 <div className={styles.verdictHeader}>
                     <div className={styles.verdictTitle}><Activity size={18} /> Ecosystem Viability Analysis</div>
-                    <div className="text-[10px] font-mono opacity-50">SCAN_ENGINE_V4.2</div>
+                    <div className="text-[10px] font-mono opacity-50">{isACMode ? 'SIMULATOR_ACTIVE_V4.2' : 'SCAN_ENGINE_V4.2'}</div>
                 </div>
 
                 <div className={styles.analysisScanner}>
@@ -114,7 +113,7 @@ export const PlantDetailsModal = ({ plant, score = 0, weather, onClose, onBuy }:
                             />
                         </svg>
                         <div className={styles.scoreCounter}>
-                            <span className={styles.scoreLarge}>{score.toFixed(1)}</span>
+                            <span className={styles.scoreLarge}>{displayScore.toFixed(1)}</span>
                             <span className={styles.scorePct}>APTNESS</span>
                         </div>
                     </div>
@@ -193,7 +192,10 @@ export const PlantDetailsModal = ({ plant, score = 0, weather, onClose, onBuy }:
             {/* AC/Temp */}
             <div className={styles.controlItem}>
                 <div className={styles.controlHeader}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}><Fan size={14} /> AC Control</div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                        <Fan size={14} className={isACMode ? 'spinning-ac' : ''} />
+                        AC Status: <span style={{ color: isACMode ? '#10b981' : '#64748b' }}>{isACMode ? 'WORKING' : 'OFF'}</span>
+                    </div>
                     <button
                         onClick={() => setIsACMode(!isACMode)}
                         className={`${styles.toggleSwitch} ${isACMode ? styles.active : ''}`}
@@ -203,18 +205,19 @@ export const PlantDetailsModal = ({ plant, score = 0, weather, onClose, onBuy }:
                 {isACMode ? (
                     <div className="animate-fade-in space-y-2 mt-2">
                         <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.8rem', color: '#64748b' }}>
-                            <span>Target Temp</span>
+                            <span>Target Room Temp</span>
                             <span className={styles.controlValue}>{targetTemp}°C</span>
                         </div>
                         <input
                             type="range" min="16" max="30" value={targetTemp}
                             onChange={(e) => setTargetTemp(Number(e.target.value))}
                             className={styles.rangeInput}
+                            style={{ '--thumb-color': '#10b981' } as any}
                         />
                     </div>
                 ) : (
                     <div style={{ fontSize: '0.8rem', color: '#64748b', fontStyle: 'italic', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                        <span>Using 30-Day Avg Temp: <strong style={{ color: '#94a3b8' }}>{weather?.avgTemp30Days || 25}°C</strong></span>
+                        <span>Using External Temp: <strong style={{ color: '#94a3b8' }}>{weather?.avgTemp30Days || 25}°C</strong></span>
                     </div>
                 )}
             </div>
@@ -377,8 +380,10 @@ export const PlantDetailsModal = ({ plant, score = 0, weather, onClose, onBuy }:
                 <style>{`
                     .pop-in { animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) backwards; }
                     .animate-fade-in { animation: fadeIn 0.3s ease-out; }
+                    .spinning-ac { animation: spin 2s linear infinite; color: #10b981; }
                     @keyframes popIn { from { transform: scale(0); } to { transform: scale(1); } }
                     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+                    @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
                 `}</style>
             </div>
         );
