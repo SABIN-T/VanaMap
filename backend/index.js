@@ -1195,15 +1195,18 @@ app.post('/api/tracking/search', async (req, res) => {
 // New Endpoint: Complete Purchase (Real Sales Tracking)
 app.post('/api/user/complete-purchase', auth, async (req, res) => {
     try {
-        const { items } = req.body; // Array of { plantId, vendorId, quantity, price, plantName }
+        const { items } = req.body; // Array of { plantId, vendorId, vendorName, quantity, price, plantName }
         if (!items || !items.length) return res.status(400).json({ error: "No items in cart" });
+
+        const user = await User.findById(req.user.id);
+        if (!user) return res.status(404).json({ error: "User not found" });
 
         const sales = [];
         for (const item of items) {
             const sale = new Sale({
                 vendorId: item.vendorId,
-                userId: req.user.id,
-                userName: req.user.name,
+                userId: user._id,
+                userName: user.name,
                 plantId: item.plantId,
                 plantName: item.plantName,
                 price: item.price,
@@ -1218,6 +1221,17 @@ app.post('/api/user/complete-purchase', auth, async (req, res) => {
                 vendorId: item.vendorId,
                 title: 'New Sale! 💰'
             });
+
+            // 🚀 Send Purchase Confirmation Email to User
+            try {
+                await sendEmail({
+                    to: user.email,
+                    subject: `Confirmed: Your purchase of ${item.plantName}! 🌿`,
+                    html: EmailTemplates.plantPurchased(user.name, item.plantName, item.vendorName || 'VanaMap Partner', item.price)
+                });
+            } catch (mailErr) {
+                console.error('[Purchase Confirm] Email failed:', mailErr.message);
+            }
         }
 
         // Clear user cart if needed (optional based on front-end flow)
@@ -3233,6 +3247,17 @@ app.post('/api/admin/users/:id/gift-premium', auth, admin, async (req, res) => {
 
         await user.save();
 
+        // 🚀 Send Premium Activation Email
+        try {
+            await sendEmail({
+                to: user.email,
+                subject: "Welcome to VanaMap Premium! 👑",
+                html: EmailTemplates.premiumActivated(user.name, user.premiumType, user.premiumExpiry)
+            });
+        } catch (mailErr) {
+            console.error('[Premium Activate] Email failed:', mailErr.message);
+        }
+
         // Log the action (optional but good for tracking)
         console.log(`Admin gifted premium to user ${user.email}`);
 
@@ -3253,6 +3278,18 @@ app.post('/api/user/change-password', auth, async (req, res) => {
 
         user.password = newPassword;
         await user.save();
+
+        // 🚀 Send Password Changed Security Alert
+        try {
+            await sendEmail({
+                to: user.email,
+                subject: "Security Alert: Password Changed 🔒",
+                html: EmailTemplates.passwordChanged(user.name)
+            });
+        } catch (mailErr) {
+            console.error('[Password Change] Email alert failed:', mailErr.message);
+        }
+
         res.json({ success: true, message: "Password updated successfully" });
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -3365,6 +3402,17 @@ app.post('/api/auth/reset-password-verify', async (req, res) => {
         user.password = newPassword;
         user.resetRequest = { requested: false, approved: true, requestDate: new Date() };
         await user.save();
+
+        // 🚀 Send Password Changed Security Alert
+        try {
+            await sendEmail({
+                to: user.email,
+                subject: "Security Alert: Password Updated 🔒",
+                html: EmailTemplates.passwordChanged(user.name)
+            });
+        } catch (mailErr) {
+            console.error('[Reset Verify] Email alert failed:', mailErr.message);
+        }
 
         // Notify Admin via Unified system
         await broadcastAlert('security', `User ${user.name} (${user.email}) changed password via verified reset.`, { userId: user._id, email: user.email, title: 'Security Update 🛡️' });

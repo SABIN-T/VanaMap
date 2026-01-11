@@ -126,6 +126,7 @@ export const Cart = () => {
         const purchaseData = vItems.map(i => ({
             plantId: i.plant.id,
             vendorId: vendor.id,
+            vendorName: vendor.name,
             quantity: i.quantity,
             price: i.vendorPrice || i.plant.price || 0,
             plantName: i.plant.name
