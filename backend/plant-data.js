@@ -6025,6 +6025,1124 @@ const indoorPlants = [
         ],
         "verifiedSource": "Royal Horticultural Society (RHS) Plant Finder"
     }
+,,
+    "value":  [
+                  {
+                      "id":  "mock_389",
+                      "name":  "Calathea Ornata",
+                      "scientificName":  "Calathea ornata",
+                      "description":  "The Calathea Ornata is a stunning indoor plant with pink striped leaves that fold up at night.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  18,
+                      "idealTempMax":  27,
+                      "minHumidity":  60,
+                      "sunlight":  "Low to medium (500-1500 Lux)",
+                      "oxygenLevel":  "22 L/day",
+                      "medicinalValues":  [
+                                              "Air purification"
+                                          ],
+                      "advantages":  [
+                                         "Prayer plant movement",
+                                         "Decorative foliage"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "2-5 Years",
+                      "petFriendly":  true
+                  },
+                  {
+                      "id":  "mock_390",
+                      "name":  "Aglaonema",
+                      "scientificName":  "Aglaonema commutatum",
+                      "description":  "The Aglaonema is a hardy indoor plant known for its colorful variegated leaves and air-purifying qualities.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  16,
+                      "idealTempMax":  27,
+                      "minHumidity":  40,
+                      "sunlight":  "Low to medium (300-1500 Lux)",
+                      "oxygenLevel":  "20 L/day",
+                      "medicinalValues":  [
+                                              "Formaldehyde removal",
+                                              "Benzene removal"
+                                          ],
+                      "advantages":  [
+                                         "Low light tolerant",
+                                         "Colorful foliage"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "5-10 Years"
+                  },
+                  {
+                      "id":  "mock_391",
+                      "name":  "Peperomia",
+                      "scientificName":  "Peperomia obtusifolia",
+                      "description":  "The Peperomia is a compact indoor plant with thick, glossy leaves perfect for small spaces.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  18,
+                      "idealTempMax":  24,
+                      "minHumidity":  40,
+                      "sunlight":  "Bright indirect (1000-2000 Lux)",
+                      "oxygenLevel":  "15 L/day",
+                      "medicinalValues":  [
+                                              "Air cleaning"
+                                          ],
+                      "advantages":  [
+                                         "Compact size",
+                                         "Low maintenance"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "5-10 Years",
+                      "petFriendly":  true
+                  },
+                  {
+                      "id":  "mock_392",
+                      "name":  "Hoya Carnosa",
+                      "scientificName":  "Hoya carnosa",
+                      "description":  "The Hoya Carnosa is a wax plant with fragrant star-shaped flowers and trailing vines.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  15,
+                      "idealTempMax":  27,
+                      "minHumidity":  40,
+                      "sunlight":  "Bright indirect (1500-2500 Lux)",
+                      "oxygenLevel":  "18 L/day",
+                      "medicinalValues":  [
+                                              "Air purification"
+                                          ],
+                      "advantages":  [
+                                         "Fragrant flowers",
+                                         "Trailing vine"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "10-30 Years"
+                  },
+                  {
+                      "id":  "mock_393",
+                      "name":  "Schefflera",
+                      "scientificName":  "Schefflera arboricola",
+                      "description":  "The Schefflera is an umbrella plant with glossy compound leaves that adapts well to indoor conditions.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  15,
+                      "idealTempMax":  24,
+                      "minHumidity":  40,
+                      "sunlight":  "Bright indirect (1500-2500 Lux)",
+                      "oxygenLevel":  "35 L/day",
+                      "medicinalValues":  [
+                                              "Air toxin removal"
+                                          ],
+                      "advantages":  [
+                                         "Fast growing",
+                                         "Bushy appearance"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "10-25 Years"
+                  },
+                  {
+                      "id":  "mock_394",
+                      "name":  "Croton",
+                      "scientificName":  "Codiaeum variegatum",
+                      "description":  "The Croton is a vibrant indoor plant with multicolored leaves in red, orange, yellow, and green.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  18,
+                      "idealTempMax":  27,
+                      "minHumidity":  50,
+                      "sunlight":  "Bright direct (2000-3000 Lux)",
+                      "oxygenLevel":  "25 L/day",
+                      "medicinalValues":  [
+                                              "Air purification"
+                                          ],
+                      "advantages":  [
+                                         "Colorful foliage",
+                                         "Tropical look"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "3-8 Years"
+                  },
+                  {
+                      "id":  "mock_395",
+                      "name":  "Syngonium",
+                      "scientificName":  "Syngonium podophyllum",
+                      "description":  "The Syngonium is an arrowhead vine with arrow-shaped leaves that change form as they mature.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  16,
+                      "idealTempMax":  27,
+                      "minHumidity":  50,
+                      "sunlight":  "Low to bright (500-2000 Lux)",
+                      "oxygenLevel":  "20 L/day",
+                      "medicinalValues":  [
+                                              "Formaldehyde removal"
+                                          ],
+                      "advantages":  [
+                                         "Versatile growth",
+                                         "Easy propagation"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "5-15 Years"
+                  },
+                  {
+                      "id":  "mock_396",
+                      "name":  "Nerve Plant",
+                      "scientificName":  "Fittonia albivenis",
+                      "description":  "The Nerve Plant is a small indoor plant with intricate vein patterns on its colorful leaves.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  18,
+                      "idealTempMax":  24,
+                      "minHumidity":  60,
+                      "sunlight":  "Low to medium (500-1500 Lux)",
+                      "oxygenLevel":  "12 L/day",
+                      "medicinalValues":  [
+                                              "Air cleaning"
+                                          ],
+                      "advantages":  [
+                                         "Compact size",
+                                         "Unique patterns"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "2-5 Years",
+                      "petFriendly":  true
+                  },
+                  {
+                      "id":  "mock_397",
+                      "name":  "Parlor Palm",
+                      "scientificName":  "Chamaedorea elegans",
+                      "description":  "The Parlor Palm is an elegant indoor palm that thrives in low light conditions.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  16,
+                      "idealTempMax":  27,
+                      "minHumidity":  50,
+                      "sunlight":  "Low to medium (500-1500 Lux)",
+                      "oxygenLevel":  "40 L/day",
+                      "medicinalValues":  [
+                                              "Air purification",
+                                              "Formaldehyde removal"
+                                          ],
+                      "advantages":  [
+                                         "Low light tolerant",
+                                         "Pet safe"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "10-20 Years",
+                      "petFriendly":  true
+                  },
+                  {
+                      "id":  "mock_398",
+                      "name":  "Cast Iron Plant",
+                      "scientificName":  "Aspidistra elatior",
+                      "description":  "The Cast Iron Plant is nearly indestructible, tolerating neglect and low light.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  10,
+                      "idealTempMax":  27,
+                      "minHumidity":  30,
+                      "sunlight":  "Low (200-1000 Lux)",
+                      "oxygenLevel":  "18 L/day",
+                      "medicinalValues":  [
+                                              "Air cleaning"
+                                          ],
+                      "advantages":  [
+                                         "Extremely hardy",
+                                         "Low light champion"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "20-50 Years"
+                  },
+                  {
+                      "id":  "mock_399",
+                      "name":  "Dracaena Marginata",
+                      "scientificName":  "Dracaena marginata",
+                      "description":  "The Dracaena Marginata is a dragon tree with thin red-edged leaves on woody stems.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  16,
+                      "idealTempMax":  24,
+                      "minHumidity":  40,
+                      "sunlight":  "Bright indirect (1500-2500 Lux)",
+                      "oxygenLevel":  "30 L/day",
+                      "medicinalValues":  [
+                                              "Benzene removal",
+                                              "Trichloroethylene removal"
+                                          ],
+                      "advantages":  [
+                                         "Architectural form",
+                                         "Air purifier"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "10-15 Years"
+                  },
+                  {
+                      "id":  "mock_400",
+                      "name":  "Kentia Palm",
+                      "scientificName":  "Howea forsteriana",
+                      "description":  "The Kentia Palm is a graceful indoor palm with arching fronds perfect for large spaces.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  16,
+                      "idealTempMax":  27,
+                      "minHumidity":  50,
+                      "sunlight":  "Low to bright (500-2000 Lux)",
+                      "oxygenLevel":  "55 L/day",
+                      "medicinalValues":  [
+                                              "Air purification"
+                                          ],
+                      "advantages":  [
+                                         "Elegant appearance",
+                                         "Low maintenance"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "40-100 Years",
+                      "petFriendly":  true
+                  },
+                  {
+                      "id":  "mock_401",
+                      "name":  "Yucca",
+                      "scientificName":  "Yucca elephantipes",
+                      "description":  "The Yucca is a drought-tolerant indoor plant with sword-like leaves on a woody trunk.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  13,
+                      "idealTempMax":  30,
+                      "minHumidity":  30,
+                      "sunlight":  "Bright direct (2000-4000 Lux)",
+                      "oxygenLevel":  "35 L/day",
+                      "medicinalValues":  [
+                                              "Air cleaning"
+                                          ],
+                      "advantages":  [
+                                         "Drought tolerant",
+                                         "Architectural"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "20-50 Years"
+                  },
+                  {
+                      "id":  "mock_402",
+                      "name":  "Ponytail Palm",
+                      "scientificName":  "Beaucarnea recurvata",
+                      "description":  "The Ponytail Palm is a unique succulent with a bulbous trunk and cascading leaves.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  13,
+                      "idealTempMax":  27,
+                      "minHumidity":  30,
+                      "sunlight":  "Bright direct (2000-3000 Lux)",
+                      "oxygenLevel":  "20 L/day",
+                      "medicinalValues":  [
+                                              "Air purification"
+                                          ],
+                      "advantages":  [
+                                         "Drought tolerant",
+                                         "Unique appearance"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "20-100 Years",
+                      "petFriendly":  true
+                  },
+                  {
+                      "id":  "mock_403",
+                      "name":  "Tradescantia",
+                      "scientificName":  "Tradescantia zebrina",
+                      "description":  "The Tradescantia is a wandering jew plant with purple and silver striped trailing leaves.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  16,
+                      "idealTempMax":  27,
+                      "minHumidity":  40,
+                      "sunlight":  "Bright indirect (1500-2500 Lux)",
+                      "oxygenLevel":  "15 L/day",
+                      "medicinalValues":  [
+                                              "Air cleaning"
+                                          ],
+                      "advantages":  [
+                                         "Fast growing",
+                                         "Colorful foliage"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "2-5 Years"
+                  },
+                  {
+                      "id":  "mock_404",
+                      "name":  "Oxalis",
+                      "scientificName":  "Oxalis triangularis",
+                      "description":  "The Oxalis is a shamrock plant with purple triangular leaves that fold at night.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  16,
+                      "idealTempMax":  24,
+                      "minHumidity":  40,
+                      "sunlight":  "Bright indirect (1500-2500 Lux)",
+                      "oxygenLevel":  "12 L/day",
+                      "medicinalValues":  [
+                                              "None"
+                                          ],
+                      "advantages":  [
+                                         "Unique purple color",
+                                         "Delicate flowers"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "Perennial"
+                  },
+                  {
+                      "id":  "mock_405",
+                      "name":  "Stromanthe",
+                      "scientificName":  "Stromanthe sanguinea",
+                      "description":  "The Stromanthe is a prayer plant with stunning pink and green variegated leaves.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  18,
+                      "idealTempMax":  27,
+                      "minHumidity":  60,
+                      "sunlight":  "Medium (1000-2000 Lux)",
+                      "oxygenLevel":  "20 L/day",
+                      "medicinalValues":  [
+                                              "Air purification"
+                                          ],
+                      "advantages":  [
+                                         "Colorful undersides",
+                                         "Prayer movement"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "3-10 Years",
+                      "petFriendly":  true
+                  },
+                  {
+                      "id":  "mock_406",
+                      "name":  "Alocasia",
+                      "scientificName":  "Alocasia amazonica",
+                      "description":  "The Alocasia is an elephant ear plant with dramatic arrow-shaped leaves and white veins.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  18,
+                      "idealTempMax":  27,
+                      "minHumidity":  60,
+                      "sunlight":  "Bright indirect (1500-2500 Lux)",
+                      "oxygenLevel":  "28 L/day",
+                      "medicinalValues":  [
+                                              "Air purification"
+                                          ],
+                      "advantages":  [
+                                         "Dramatic foliage",
+                                         "Tropical look"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "5-10 Years"
+                  },
+                  {
+                      "id":  "mock_407",
+                      "name":  "Begonia Rex",
+                      "scientificName":  "Begonia rex-cultorum",
+                      "description":  "The Begonia Rex is a painted-leaf begonia with spectacular multicolored foliage patterns.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  16,
+                      "idealTempMax":  24,
+                      "minHumidity":  50,
+                      "sunlight":  "Medium (1000-2000 Lux)",
+                      "oxygenLevel":  "15 L/day",
+                      "medicinalValues":  [
+                                              "Air cleaning"
+                                          ],
+                      "advantages":  [
+                                         "Stunning foliage",
+                                         "Compact size"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "2-5 Years"
+                  },
+                  {
+                      "id":  "mock_408",
+                      "name":  "Columnea",
+                      "scientificName":  "Columnea gloriosa",
+                      "description":  "The Columnea is a goldfish plant with tubular orange flowers resembling goldfish.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  18,
+                      "idealTempMax":  24,
+                      "minHumidity":  50,
+                      "sunlight":  "Bright indirect (1500-2500 Lux)",
+                      "oxygenLevel":  "18 L/day",
+                      "medicinalValues":  [
+                                              "Air purification"
+                                          ],
+                      "advantages":  [
+                                         "Unique flowers",
+                                         "Trailing habit"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "5-10 Years"
+                  },
+                  {
+                      "id":  "mock_409",
+                      "name":  "Ctenanthe",
+                      "scientificName":  "Ctenanthe burle-marxii",
+                      "description":  "The Ctenanthe is a fishbone prayer plant with herringbone patterned leaves.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  18,
+                      "idealTempMax":  27,
+                      "minHumidity":  60,
+                      "sunlight":  "Medium (1000-2000 Lux)",
+                      "oxygenLevel":  "20 L/day",
+                      "medicinalValues":  [
+                                              "Air purification"
+                                          ],
+                      "advantages":  [
+                                         "Unique patterns",
+                                         "Prayer movement"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "3-8 Years",
+                      "petFriendly":  true
+                  },
+                  {
+                      "id":  "mock_410",
+                      "name":  "Pilea Cadierei",
+                      "scientificName":  "Pilea cadierei",
+                      "description":  "The Pilea Cadierei is an aluminum plant with silver-marked leaves creating a metallic effect.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  16,
+                      "idealTempMax":  24,
+                      "minHumidity":  50,
+                      "sunlight":  "Bright indirect (1500-2500 Lux)",
+                      "oxygenLevel":  "15 L/day",
+                      "medicinalValues":  [
+                                              "Air cleaning"
+                                          ],
+                      "advantages":  [
+                                         "Metallic appearance",
+                                         "Easy care"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "3-5 Years"
+                  },
+                  {
+                      "id":  "mock_411",
+                      "name":  "Episcia",
+                      "scientificName":  "Episcia cupreata",
+                      "description":  "The Episcia is a flame violet with velvety leaves and bright tubular flowers.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  18,
+                      "idealTempMax":  27,
+                      "minHumidity":  60,
+                      "sunlight":  "Medium (1000-2000 Lux)",
+                      "oxygenLevel":  "15 L/day",
+                      "medicinalValues":  [
+                                              "Air purification"
+                                          ],
+                      "advantages":  [
+                                         "Colorful flowers",
+                                         "Trailing habit"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "2-5 Years"
+                  },
+                  {
+                      "id":  "mock_412",
+                      "name":  "Rhipsalis",
+                      "scientificName":  "Rhipsalis baccifera",
+                      "description":  "The Rhipsalis is a mistletoe cactus with trailing cylindrical stems and small berries.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  16,
+                      "idealTempMax":  27,
+                      "minHumidity":  40,
+                      "sunlight":  "Bright indirect (1500-2500 Lux)",
+                      "oxygenLevel":  "12 L/day",
+                      "medicinalValues":  [
+                                              "Air purification"
+                                          ],
+                      "advantages":  [
+                                         "Unique form",
+                                         "Low maintenance"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "10-20 Years"
+                  },
+                  {
+                      "id":  "mock_413",
+                      "name":  "Haworthia",
+                      "scientificName":  "Haworthia fasciata",
+                      "description":  "The Haworthia is a zebra plant succulent with white striped leaves in a rosette form.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  13,
+                      "idealTempMax":  27,
+                      "minHumidity":  30,
+                      "sunlight":  "Bright indirect (1500-2500 Lux)",
+                      "oxygenLevel":  "10 L/day",
+                      "medicinalValues":  [
+                                              "Air cleaning"
+                                          ],
+                      "advantages":  [
+                                         "Compact size",
+                                         "Drought tolerant"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "10-50 Years",
+                      "petFriendly":  true
+                  },
+                  {
+                      "id":  "mock_414",
+                      "name":  "Echeveria",
+                      "scientificName":  "Echeveria elegans",
+                      "description":  "The Echeveria is a hen and chicks succulent with rosette-shaped powdery blue-green leaves.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  13,
+                      "idealTempMax":  27,
+                      "minHumidity":  30,
+                      "sunlight":  "Bright direct (2000-3000 Lux)",
+                      "oxygenLevel":  "10 L/day",
+                      "medicinalValues":  [
+                                              "Air purification"
+                                          ],
+                      "advantages":  [
+                                         "Sculptural form",
+                                         "Drought tolerant"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "3-10 Years"
+                  },
+                  {
+                      "id":  "mock_415",
+                      "name":  "Sedum",
+                      "scientificName":  "Sedum morganianum",
+                      "description":  "The Sedum is a burro\u0027s tail succulent with trailing stems covered in plump leaves.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  13,
+                      "idealTempMax":  27,
+                      "minHumidity":  30,
+                      "sunlight":  "Bright direct (2000-3000 Lux)",
+                      "oxygenLevel":  "12 L/day",
+                      "medicinalValues":  [
+                                              "Air cleaning"
+                                          ],
+                      "advantages":  [
+                                         "Trailing habit",
+                                         "Drought tolerant"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "5-10 Years"
+                  },
+                  {
+                      "id":  "mock_416",
+                      "name":  "Crassula Ovata Gollum",
+                      "scientificName":  "Crassula ovata \u0027Gollum\u0027",
+                      "description":  "The Crassula Ovata Gollum is a jade plant with tubular finger-like leaves.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  13,
+                      "idealTempMax":  27,
+                      "minHumidity":  30,
+                      "sunlight":  "Bright direct (2000-3000 Lux)",
+                      "oxygenLevel":  "15 L/day",
+                      "medicinalValues":  [
+                                              "Air purification"
+                                          ],
+                      "advantages":  [
+                                         "Unique form",
+                                         "Easy care"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "20-70 Years"
+                  },
+                  {
+                      "id":  "mock_417",
+                      "name":  "Senecio Rowleyanus",
+                      "scientificName":  "Senecio rowleyanus",
+                      "description":  "The Senecio Rowleyanus is a string of pearls succulent with bead-like leaves on trailing stems.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  13,
+                      "idealTempMax":  24,
+                      "minHumidity":  30,
+                      "sunlight":  "Bright indirect (1500-2500 Lux)",
+                      "oxygenLevel":  "10 L/day",
+                      "medicinalValues":  [
+                                              "Air cleaning"
+                                          ],
+                      "advantages":  [
+                                         "Unique appearance",
+                                         "Trailing habit"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "3-5 Years"
+                  },
+                  {
+                      "id":  "mock_418",
+                      "name":  "Ceropegia Woodii",
+                      "scientificName":  "Ceropegia woodii",
+                      "description":  "The Ceropegia Woodii is a string of hearts with heart-shaped leaves on delicate trailing vines.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  16,
+                      "idealTempMax":  27,
+                      "minHumidity":  40,
+                      "sunlight":  "Bright indirect (1500-2500 Lux)",
+                      "oxygenLevel":  "10 L/day",
+                      "medicinalValues":  [
+                                              "Air purification"
+                                          ],
+                      "advantages":  [
+                                         "Romantic appearance",
+                                         "Easy propagation"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "5-10 Years"
+                  },
+                  {
+                      "id":  "mock_419",
+                      "name":  "Lithops",
+                      "scientificName":  "Lithops species",
+                      "description":  "The Lithops are living stones that mimic pebbles with their unique succulent form.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  16,
+                      "idealTempMax":  30,
+                      "minHumidity":  20,
+                      "sunlight":  "Bright direct (2500-4000 Lux)",
+                      "oxygenLevel":  "5 L/day",
+                      "medicinalValues":  [
+                                              "None"
+                                          ],
+                      "advantages":  [
+                                         "Unique camouflage",
+                                         "Minimal care"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "10-50 Years"
+                  },
+                  {
+                      "id":  "mock_420",
+                      "name":  "Kalanchoe Tomentosa",
+                      "scientificName":  "Kalanchoe tomentosa",
+                      "description":  "The Kalanchoe Tomentosa is a panda plant with fuzzy silver leaves edged in brown.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  16,
+                      "idealTempMax":  27,
+                      "minHumidity":  30,
+                      "sunlight":  "Bright direct (2000-3000 Lux)",
+                      "oxygenLevel":  "12 L/day",
+                      "medicinalValues":  [
+                                              "Air cleaning"
+                                          ],
+                      "advantages":  [
+                                         "Fuzzy texture",
+                                         "Compact size"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "5-10 Years"
+                  },
+                  {
+                      "id":  "mock_421",
+                      "name":  "Gasteria",
+                      "scientificName":  "Gasteria species",
+                      "description":  "The Gasteria is an ox tongue succulent with thick tongue-shaped leaves in a rosette.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  13,
+                      "idealTempMax":  27,
+                      "minHumidity":  30,
+                      "sunlight":  "Bright indirect (1500-2500 Lux)",
+                      "oxygenLevel":  "10 L/day",
+                      "medicinalValues":  [
+                                              "Air purification"
+                                          ],
+                      "advantages":  [
+                                         "Low light tolerant",
+                                         "Drought tolerant"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "10-30 Years"
+                  },
+                  {
+                      "id":  "mock_422",
+                      "name":  "Crassula Perforata",
+                      "scientificName":  "Crassula perforata",
+                      "description":  "The Crassula Perforata is a string of buttons succulent with stacked triangular leaves.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  13,
+                      "idealTempMax":  27,
+                      "minHumidity":  30,
+                      "sunlight":  "Bright direct (2000-3000 Lux)",
+                      "oxygenLevel":  "12 L/day",
+                      "medicinalValues":  [
+                                              "Air cleaning"
+                                          ],
+                      "advantages":  [
+                                         "Architectural form",
+                                         "Easy care"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "5-15 Years"
+                  },
+                  {
+                      "id":  "mock_423",
+                      "name":  "Sempervivum",
+                      "scientificName":  "Sempervivum tectorum",
+                      "description":  "The Sempervivum is a houseleek succulent with rosettes that produce offsets freely.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  10,
+                      "idealTempMax":  27,
+                      "minHumidity":  30,
+                      "sunlight":  "Bright direct (2000-3000 Lux)",
+                      "oxygenLevel":  "10 L/day",
+                      "medicinalValues":  [
+                                              "Traditional wound healing"
+                                          ],
+                      "advantages":  [
+                                         "Cold hardy",
+                                         "Self-propagating"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "3-5 Years"
+                  },
+                  {
+                      "id":  "mock_424",
+                      "name":  "Aeonium",
+                      "scientificName":  "Aeonium arboreum",
+                      "description":  "The Aeonium is a tree houseleek with rosettes of fleshy leaves on branching stems.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  13,
+                      "idealTempMax":  27,
+                      "minHumidity":  30,
+                      "sunlight":  "Bright direct (2000-3000 Lux)",
+                      "oxygenLevel":  "15 L/day",
+                      "medicinalValues":  [
+                                              "Air purification"
+                                          ],
+                      "advantages":  [
+                                         "Architectural form",
+                                         "Colorful varieties"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "5-10 Years"
+                  },
+                  {
+                      "id":  "mock_425",
+                      "name":  "Graptoveria",
+                      "scientificName":  "Graptoveria \u0027Fred Ives\u0027",
+                      "description":  "The Graptoveria is a hybrid succulent with colorful rosettes that change with sun exposure.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  13,
+                      "idealTempMax":  27,
+                      "minHumidity":  30,
+                      "sunlight":  "Bright direct (2000-3000 Lux)",
+                      "oxygenLevel":  "10 L/day",
+                      "medicinalValues":  [
+                                              "Air cleaning"
+                                          ],
+                      "advantages":  [
+                                         "Color changing",
+                                         "Easy care"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "5-10 Years"
+                  },
+                  {
+                      "id":  "mock_426",
+                      "name":  "Pachyphytum",
+                      "scientificName":  "Pachyphytum oviferum",
+                      "description":  "The Pachyphytum is a moonstones succulent with plump egg-shaped leaves covered in powder.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  13,
+                      "idealTempMax":  27,
+                      "minHumidity":  30,
+                      "sunlight":  "Bright direct (2000-3000 Lux)",
+                      "oxygenLevel":  "10 L/day",
+                      "medicinalValues":  [
+                                              "Air purification"
+                                          ],
+                      "advantages":  [
+                                         "Unique appearance",
+                                         "Compact size"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "5-10 Years"
+                  },
+                  {
+                      "id":  "mock_427",
+                      "name":  "Adromischus",
+                      "scientificName":  "Adromischus cristatus",
+                      "description":  "The Adromischus is a crinkle-leaf plant with wavy-edged succulent leaves.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  13,
+                      "idealTempMax":  27,
+                      "minHumidity":  30,
+                      "sunlight":  "Bright indirect (1500-2500 Lux)",
+                      "oxygenLevel":  "8 L/day",
+                      "medicinalValues":  [
+                                              "Air cleaning"
+                                          ],
+                      "advantages":  [
+                                         "Unique texture",
+                                         "Compact size"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "5-15 Years"
+                  },
+                  {
+                      "id":  "mock_428",
+                      "name":  "Cotyledon",
+                      "scientificName":  "Cotyledon tomentosa",
+                      "description":  "The Cotyledon is a bear\u0027s paw succulent with fuzzy paw-shaped leaves.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  13,
+                      "idealTempMax":  27,
+                      "minHumidity":  30,
+                      "sunlight":  "Bright direct (2000-3000 Lux)",
+                      "oxygenLevel":  "12 L/day",
+                      "medicinalValues":  [
+                                              "Air purification"
+                                          ],
+                      "advantages":  [
+                                         "Adorable appearance",
+                                         "Easy care"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "5-10 Years"
+                  },
+                  {
+                      "id":  "mock_429",
+                      "name":  "Senecio Serpens",
+                      "scientificName":  "Senecio serpens",
+                      "description":  "The Senecio Serpens is a blue chalksticks succulent with cylindrical blue-gray leaves.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  13,
+                      "idealTempMax":  27,
+                      "minHumidity":  30,
+                      "sunlight":  "Bright direct (2000-3000 Lux)",
+                      "oxygenLevel":  "15 L/day",
+                      "medicinalValues":  [
+                                              "Air cleaning"
+                                          ],
+                      "advantages":  [
+                                         "Unique color",
+                                         "Spreading habit"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "5-10 Years"
+                  },
+                  {
+                      "id":  "mock_430",
+                      "name":  "Portulacaria Afra",
+                      "scientificName":  "Portulacaria afra",
+                      "description":  "The Portulacaria Afra is an elephant bush with small round leaves on red stems.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  13,
+                      "idealTempMax":  27,
+                      "minHumidity":  30,
+                      "sunlight":  "Bright direct (2000-3000 Lux)",
+                      "oxygenLevel":  "18 L/day",
+                      "medicinalValues":  [
+                                              "Air purification",
+                                              "Carbon sequestration"
+                                          ],
+                      "advantages":  [
+                                         "Fast growing",
+                                         "Bonsai potential"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "10-30 Years"
+                  },
+                  {
+                      "id":  "mock_431",
+                      "name":  "Crassula Muscosa",
+                      "scientificName":  "Crassula muscosa",
+                      "description":  "The Crassula Muscosa is a watch chain succulent with tightly packed scale-like leaves.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  13,
+                      "idealTempMax":  27,
+                      "minHumidity":  30,
+                      "sunlight":  "Bright direct (2000-3000 Lux)",
+                      "oxygenLevel":  "10 L/day",
+                      "medicinalValues":  [
+                                              "Air cleaning"
+                                          ],
+                      "advantages":  [
+                                         "Unique texture",
+                                         "Compact growth"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "5-15 Years"
+                  },
+                  {
+                      "id":  "mock_432",
+                      "name":  "Aloe Aristata",
+                      "scientificName":  "Aloe aristata",
+                      "description":  "The Aloe Aristata is a lace aloe with white-spotted leaves forming tight rosettes.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  13,
+                      "idealTempMax":  27,
+                      "minHumidity":  30,
+                      "sunlight":  "Bright indirect (1500-2500 Lux)",
+                      "oxygenLevel":  "15 L/day",
+                      "medicinalValues":  [
+                                              "Air purification"
+                                          ],
+                      "advantages":  [
+                                         "Compact size",
+                                         "Easy flowering"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "10-20 Years"
+                  },
+                  {
+                      "id":  "mock_433",
+                      "name":  "Sansevieria Cylindrica",
+                      "scientificName":  "Sansevieria cylindrica",
+                      "description":  "The Sansevieria Cylindrica is a cylindrical snake plant with round spear-like leaves.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  15,
+                      "idealTempMax":  30,
+                      "minHumidity":  30,
+                      "sunlight":  "Low to bright (250-2000 Lux)",
+                      "oxygenLevel":  "28 L/day",
+                      "medicinalValues":  [
+                                              "Air purification",
+                                              "Oxygen at night"
+                                          ],
+                      "advantages":  [
+                                         "Architectural form",
+                                         "Extremely hardy"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "10-25 Years"
+                  },
+                  {
+                      "id":  "mock_434",
+                      "name":  "Euphorbia Trigona",
+                      "scientificName":  "Euphorbia trigona",
+                      "description":  "The Euphorbia Trigona is an African milk tree with triangular stems and small leaves.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  16,
+                      "idealTempMax":  27,
+                      "minHumidity":  30,
+                      "sunlight":  "Bright direct (2000-3000 Lux)",
+                      "oxygenLevel":  "25 L/day",
+                      "medicinalValues":  [
+                                              "Air purification"
+                                          ],
+                      "advantages":  [
+                                         "Fast growing",
+                                         "Architectural"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "10-30 Years"
+                  },
+                  {
+                      "id":  "mock_435",
+                      "name":  "Zamioculcas Raven",
+                      "scientificName":  "Zamioculcas zamiifolia \u0027Raven\u0027",
+                      "description":  "The Zamioculcas Raven is a black ZZ plant with dark purple-black glossy leaves.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  15,
+                      "idealTempMax":  30,
+                      "minHumidity":  30,
+                      "sunlight":  "Low to bright (100-2000 Lux)",
+                      "oxygenLevel":  "18 L/day",
+                      "medicinalValues":  [
+                                              "Air purification"
+                                          ],
+                      "advantages":  [
+                                         "Dramatic color",
+                                         "Extremely hardy"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "5-10 Years"
+                  },
+                  {
+                      "id":  "mock_436",
+                      "name":  "Scindapsus Pictus",
+                      "scientificName":  "Scindapsus pictus",
+                      "description":  "The Scindapsus Pictus is a satin pothos with heart-shaped leaves splashed with silver.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  16,
+                      "idealTempMax":  27,
+                      "minHumidity":  50,
+                      "sunlight":  "Low to medium (500-1500 Lux)",
+                      "oxygenLevel":  "20 L/day",
+                      "medicinalValues":  [
+                                              "Air purification"
+                                          ],
+                      "advantages":  [
+                                         "Silvery foliage",
+                                         "Easy care"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "5-10 Years"
+                  },
+                  {
+                      "id":  "mock_437",
+                      "name":  "Monstera Adansonii",
+                      "scientificName":  "Monstera adansonii",
+                      "description":  "The Monstera Adansonii is a Swiss cheese vine with perforated heart-shaped leaves.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  18,
+                      "idealTempMax":  27,
+                      "minHumidity":  60,
+                      "sunlight":  "Bright indirect (1500-2500 Lux)",
+                      "oxygenLevel":  "35 L/day",
+                      "medicinalValues":  [
+                                              "Air purification"
+                                          ],
+                      "advantages":  [
+                                         "Unique fenestrations",
+                                         "Vining habit"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "10-40 Years"
+                  },
+                  {
+                      "id":  "mock_438",
+                      "name":  "Philodendron Birkin",
+                      "scientificName":  "Philodendron \u0027Birkin\u0027",
+                      "description":  "The Philodendron Birkin is a variegated philodendron with white pinstripes on dark green leaves.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  16,
+                      "idealTempMax":  27,
+                      "minHumidity":  50,
+                      "sunlight":  "Bright indirect (1500-2500 Lux)",
+                      "oxygenLevel":  "25 L/day",
+                      "medicinalValues":  [
+                                              "Air purification"
+                                          ],
+                      "advantages":  [
+                                         "Unique variegation",
+                                         "Compact growth"
+                                     ],
+                      "price":  25,
+                      "type":  "indoor",
+                      "lifespan":  "10-20 Years"
+                  }
+              ],
+    "Count":  50
 ];
 const outdoorPlants = [
     {
@@ -12066,6 +13184,1116 @@ const outdoorPlants = [
         ],
         "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
     }
+,,
+    "value":  [
+                  {
+                      "id":  "mock_439",
+                      "name":  "Butterfly Bush",
+                      "scientificName":  "Buddleja davidii",
+                      "description":  "The Butterfly Bush is a flowering shrub that attracts butterflies with fragrant purple flower spikes.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  10,
+                      "idealTempMax":  30,
+                      "minHumidity":  40,
+                      "sunlight":  "Full Sun (6+ hours)",
+                      "oxygenLevel":  "45 L/day",
+                      "medicinalValues":  [
+                                              "Traditional wound healing"
+                                          ],
+                      "advantages":  [
+                                         "Butterfly magnet",
+                                         "Fragrant blooms"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "15-20 Years"
+                  },
+                  {
+                      "id":  "mock_440",
+                      "name":  "Forsythia",
+                      "scientificName":  "Forsythia × intermedia",
+                      "description":  "The Forsythia is an early spring bloomer with bright yellow flowers before leaves emerge.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  7,
+                      "idealTempMax":  27,
+                      "minHumidity":  40,
+                      "sunlight":  "Full Sun",
+                      "oxygenLevel":  "50 L/day",
+                      "medicinalValues":  [
+                                              "Anti-inflammatory (traditional)"
+                                          ],
+                      "advantages":  [
+                                         "Early spring color",
+                                         "Fast growing"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "20-30 Years"
+                  },
+                  {
+                      "id":  "mock_441",
+                      "name":  "Weigela",
+                      "scientificName":  "Weigela florida",
+                      "description":  "The Weigela is a flowering shrub with tubular pink flowers that attract hummingbirds.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  10,
+                      "idealTempMax":  30,
+                      "minHumidity":  40,
+                      "sunlight":  "Full Sun to Part Shade",
+                      "oxygenLevel":  "40 L/day",
+                      "medicinalValues":  [
+                                              "None"
+                                          ],
+                      "advantages":  [
+                                         "Hummingbird attractor",
+                                         "Repeat bloomer"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "20-30 Years"
+                  },
+                  {
+                      "id":  "mock_442",
+                      "name":  "Spirea",
+                      "scientificName":  "Spiraea japonica",
+                      "description":  "The Spirea is a compact shrub with clusters of pink or white flowers and colorful foliage.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  10,
+                      "idealTempMax":  30,
+                      "minHumidity":  40,
+                      "sunlight":  "Full Sun",
+                      "oxygenLevel":  "35 L/day",
+                      "medicinalValues":  [
+                                              "Traditional pain relief"
+                                          ],
+                      "advantages":  [
+                                         "Low maintenance",
+                                         "Colorful foliage"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "15-20 Years"
+                  },
+                  {
+                      "id":  "mock_443",
+                      "name":  "Viburnum",
+                      "scientificName":  "Viburnum opulus",
+                      "description":  "The Viburnum is a snowball bush with large white flower clusters and fall berries.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  10,
+                      "idealTempMax":  27,
+                      "minHumidity":  50,
+                      "sunlight":  "Full Sun to Part Shade",
+                      "oxygenLevel":  "55 L/day",
+                      "medicinalValues":  [
+                                              "Muscle relaxant (bark)"
+                                          ],
+                      "advantages":  [
+                                         "Fragrant flowers",
+                                         "Wildlife food"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "20-40 Years"
+                  },
+                  {
+                      "id":  "mock_444",
+                      "name":  "Potentilla",
+                      "scientificName":  "Potentilla fruticosa",
+                      "description":  "The Potentilla is a cinquefoil shrub with cheerful yellow flowers blooming all summer.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  7,
+                      "idealTempMax":  27,
+                      "minHumidity":  40,
+                      "sunlight":  "Full Sun",
+                      "oxygenLevel":  "30 L/day",
+                      "medicinalValues":  [
+                                              "Digestive aid (traditional)"
+                                          ],
+                      "advantages":  [
+                                         "Long blooming",
+                                         "Cold hardy"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "10-15 Years"
+                  },
+                  {
+                      "id":  "mock_445",
+                      "name":  "Deutzia",
+                      "scientificName":  "Deutzia gracilis",
+                      "description":  "The Deutzia is a slender shrub covered in white star-shaped flowers in spring.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  10,
+                      "idealTempMax":  27,
+                      "minHumidity":  40,
+                      "sunlight":  "Full Sun to Part Shade",
+                      "oxygenLevel":  "35 L/day",
+                      "medicinalValues":  [
+                                              "None"
+                                          ],
+                      "advantages":  [
+                                         "Profuse blooms",
+                                         "Compact size"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "15-20 Years"
+                  },
+                  {
+                      "id":  "mock_446",
+                      "name":  "Mock Orange",
+                      "scientificName":  "Philadelphus coronarius",
+                      "description":  "The Mock Orange is a fragrant shrub with white flowers that smell like orange blossoms.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  10,
+                      "idealTempMax":  30,
+                      "minHumidity":  40,
+                      "sunlight":  "Full Sun to Part Shade",
+                      "oxygenLevel":  "50 L/day",
+                      "medicinalValues":  [
+                                              "Aromatherapy"
+                                          ],
+                      "advantages":  [
+                                         "Intense fragrance",
+                                         "Easy care"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "20-30 Years"
+                  },
+                  {
+                      "id":  "mock_447",
+                      "name":  "Ninebark",
+                      "scientificName":  "Physocarpus opulifolius",
+                      "description":  "The Ninebark is a native shrub with peeling bark and clusters of white or pink flowers.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  7,
+                      "idealTempMax":  30,
+                      "minHumidity":  40,
+                      "sunlight":  "Full Sun to Part Shade",
+                      "oxygenLevel":  "45 L/day",
+                      "medicinalValues":  [
+                                              "None"
+                                          ],
+                      "advantages":  [
+                                         "Four-season interest",
+                                         "Native plant"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "20-30 Years"
+                  },
+                  {
+                      "id":  "mock_448",
+                      "name":  "Smokebush",
+                      "scientificName":  "Cotinus coggygria",
+                      "description":  "The Smokebush is a dramatic shrub with smoky pink plumes and purple foliage.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  10,
+                      "idealTempMax":  30,
+                      "minHumidity":  40,
+                      "sunlight":  "Full Sun",
+                      "oxygenLevel":  "40 L/day",
+                      "medicinalValues":  [
+                                              "Tannin source"
+                                          ],
+                      "advantages":  [
+                                         "Unique appearance",
+                                         "Fall color"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "30-50 Years"
+                  },
+                  {
+                      "id":  "mock_449",
+                      "name":  "Barberry",
+                      "scientificName":  "Berberis thunbergii",
+                      "description":  "The Barberry is a thorny shrub with colorful foliage and small red berries.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  7,
+                      "idealTempMax":  30,
+                      "minHumidity":  40,
+                      "sunlight":  "Full Sun to Part Shade",
+                      "oxygenLevel":  "30 L/day",
+                      "medicinalValues":  [
+                                              "Berberine compound"
+                                          ],
+                      "advantages":  [
+                                         "Deer resistant",
+                                         "Colorful foliage"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "15-20 Years"
+                  },
+                  {
+                      "id":  "mock_450",
+                      "name":  "Beautyberry",
+                      "scientificName":  "Callicarpa americana",
+                      "description":  "The Beautyberry is a native shrub with stunning purple berries in fall.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  10,
+                      "idealTempMax":  30,
+                      "minHumidity":  50,
+                      "sunlight":  "Full Sun to Part Shade",
+                      "oxygenLevel":  "35 L/day",
+                      "medicinalValues":  [
+                                              "Insect repellent (traditional)"
+                                          ],
+                      "advantages":  [
+                                         "Purple berries",
+                                         "Wildlife food"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "10-15 Years"
+                  },
+                  {
+                      "id":  "mock_451",
+                      "name":  "Elderberry",
+                      "scientificName":  "Sambucus nigra",
+                      "description":  "The Elderberry is a fast-growing shrub with white flowers and edible dark berries.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  10,
+                      "idealTempMax":  30,
+                      "minHumidity":  50,
+                      "sunlight":  "Full Sun to Part Shade",
+                      "oxygenLevel":  "60 L/day",
+                      "medicinalValues":  [
+                                              "Immune support",
+                                              "Cold remedy"
+                                          ],
+                      "advantages":  [
+                                         "Edible berries",
+                                         "Medicinal"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "10-15 Years"
+                  },
+                  {
+                      "id":  "mock_452",
+                      "name":  "Serviceberry",
+                      "scientificName":  "Amelanchier canadensis",
+                      "description":  "The Serviceberry is a native tree with white spring flowers and edible berries.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  7,
+                      "idealTempMax":  27,
+                      "minHumidity":  40,
+                      "sunlight":  "Full Sun to Part Shade",
+                      "oxygenLevel":  "70 L/day",
+                      "medicinalValues":  [
+                                              "Antioxidant berries"
+                                          ],
+                      "advantages":  [
+                                         "Four-season beauty",
+                                         "Edible fruit"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "20-40 Years"
+                  },
+                  {
+                      "id":  "mock_453",
+                      "name":  "Redbud",
+                      "scientificName":  "Cercis canadensis",
+                      "description":  "The Redbud is a native tree with pink flowers blooming on bare branches in spring.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  10,
+                      "idealTempMax":  30,
+                      "minHumidity":  40,
+                      "sunlight":  "Full Sun to Part Shade",
+                      "oxygenLevel":  "80 L/day",
+                      "medicinalValues":  [
+                                              "Edible flowers"
+                                          ],
+                      "advantages":  [
+                                         "Early spring color",
+                                         "Heart-shaped leaves"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "50-70 Years"
+                  },
+                  {
+                      "id":  "mock_454",
+                      "name":  "Dogwood",
+                      "scientificName":  "Cornus florida",
+                      "description":  "The Dogwood is a flowering tree with showy white or pink bracts and red fall berries.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  10,
+                      "idealTempMax":  27,
+                      "minHumidity":  50,
+                      "sunlight":  "Part Shade to Sun",
+                      "oxygenLevel":  "90 L/day",
+                      "medicinalValues":  [
+                                              "Bark tonic (traditional)"
+                                          ],
+                      "advantages":  [
+                                         "Spring blooms",
+                                         "Fall color"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "80+ Years"
+                  },
+                  {
+                      "id":  "mock_455",
+                      "name":  "Crabapple",
+                      "scientificName":  "Malus species",
+                      "description":  "The Crabapple is a flowering tree with spring blossoms and small decorative fruits.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  7,
+                      "idealTempMax":  27,
+                      "minHumidity":  40,
+                      "sunlight":  "Full Sun",
+                      "oxygenLevel":  "100 L/day",
+                      "medicinalValues":  [
+                                              "Pectin source"
+                                          ],
+                      "advantages":  [
+                                         "Spring flowers",
+                                         "Wildlife food"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "30-70 Years"
+                  },
+                  {
+                      "id":  "mock_456",
+                      "name":  "Hawthorn",
+                      "scientificName":  "Crataegus monogyna",
+                      "description":  "The Hawthorn is a thorny tree with white flowers and red berries used medicinally.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  7,
+                      "idealTempMax":  27,
+                      "minHumidity":  40,
+                      "sunlight":  "Full Sun",
+                      "oxygenLevel":  "85 L/day",
+                      "medicinalValues":  [
+                                              "Heart health",
+                                              "Blood pressure"
+                                          ],
+                      "advantages":  [
+                                         "Medicinal berries",
+                                         "Wildlife habitat"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "100+ Years"
+                  },
+                  {
+                      "id":  "mock_457",
+                      "name":  "Japanese Maple",
+                      "scientificName":  "Acer palmatum",
+                      "description":  "The Japanese Maple is an ornamental tree with delicate lacy leaves in vibrant colors.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  10,
+                      "idealTempMax":  27,
+                      "minHumidity":  50,
+                      "sunlight":  "Part Shade to Sun",
+                      "oxygenLevel":  "75 L/day",
+                      "medicinalValues":  [
+                                              "None"
+                                          ],
+                      "advantages":  [
+                                         "Stunning foliage",
+                                         "Compact varieties"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "60-100 Years"
+                  },
+                  {
+                      "id":  "mock_458",
+                      "name":  "Crepe Myrtle",
+                      "scientificName":  "Lagerstroemia indica",
+                      "description":  "The Crepe Myrtle is a summer-blooming tree with crinkled flowers and peeling bark.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  15,
+                      "idealTempMax":  35,
+                      "minHumidity":  40,
+                      "sunlight":  "Full Sun",
+                      "oxygenLevel":  "80 L/day",
+                      "medicinalValues":  [
+                                              "Diabetes management (research)"
+                                          ],
+                      "advantages":  [
+                                         "Long blooming",
+                                         "Drought tolerant"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "50+ Years"
+                  },
+                  {
+                      "id":  "mock_459",
+                      "name":  "Witch Hazel",
+                      "scientificName":  "Hamamelis virginiana",
+                      "description":  "The Witch Hazel is a native shrub with fragrant yellow flowers blooming in fall.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  7,
+                      "idealTempMax":  27,
+                      "minHumidity":  50,
+                      "sunlight":  "Part Shade to Sun",
+                      "oxygenLevel":  "45 L/day",
+                      "medicinalValues":  [
+                                              "Skin astringent",
+                                              "Anti-inflammatory"
+                                          ],
+                      "advantages":  [
+                                         "Medicinal extract",
+                                         "Fall bloomer"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "30-50 Years"
+                  },
+                  {
+                      "id":  "mock_460",
+                      "name":  "Sumac",
+                      "scientificName":  "Rhus typhina",
+                      "description":  "The Sumac is a staghorn shrub with fuzzy red fruit clusters and brilliant fall color.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  7,
+                      "idealTempMax":  30,
+                      "minHumidity":  40,
+                      "sunlight":  "Full Sun",
+                      "oxygenLevel":  "55 L/day",
+                      "medicinalValues":  [
+                                              "Antioxidant spice"
+                                          ],
+                      "advantages":  [
+                                         "Fall color",
+                                         "Drought tolerant"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "20-30 Years"
+                  },
+                  {
+                      "id":  "mock_461",
+                      "name":  "Honeysuckle Vine",
+                      "scientificName":  "Lonicera periclymenum",
+                      "description":  "The Honeysuckle Vine is a climbing plant with fragrant tubular flowers.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  10,
+                      "idealTempMax":  30,
+                      "minHumidity":  40,
+                      "sunlight":  "Full Sun to Part Shade",
+                      "oxygenLevel":  "40 L/day",
+                      "medicinalValues":  [
+                                              "Respiratory aid (traditional)"
+                                          ],
+                      "advantages":  [
+                                         "Fragrant flowers",
+                                         "Hummingbird attractor"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "20+ Years"
+                  },
+                  {
+                      "id":  "mock_462",
+                      "name":  "Clematis",
+                      "scientificName":  "Clematis hybrids",
+                      "description":  "The Clematis is a flowering vine with large showy blooms in various colors.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  10,
+                      "idealTempMax":  27,
+                      "minHumidity":  50,
+                      "sunlight":  "Full Sun (roots shaded)",
+                      "oxygenLevel":  "35 L/day",
+                      "medicinalValues":  [
+                                              "None (toxic)"
+                                          ],
+                      "advantages":  [
+                                         "Spectacular blooms",
+                                         "Vertical interest"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "20-50 Years"
+                  },
+                  {
+                      "id":  "mock_463",
+                      "name":  "Wisteria",
+                      "scientificName":  "Wisteria sinensis",
+                      "description":  "The Wisteria is a vigorous vine with cascading purple flower clusters.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  10,
+                      "idealTempMax":  30,
+                      "minHumidity":  40,
+                      "sunlight":  "Full Sun",
+                      "oxygenLevel":  "60 L/day",
+                      "medicinalValues":  [
+                                              "None (toxic)"
+                                          ],
+                      "advantages":  [
+                                         "Dramatic blooms",
+                                         "Fragrant"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "50-100 Years"
+                  },
+                  {
+                      "id":  "mock_464",
+                      "name":  "Trumpet Vine",
+                      "scientificName":  "Campsis radicans",
+                      "description":  "The Trumpet Vine is a vigorous climber with orange trumpet-shaped flowers.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  10,
+                      "idealTempMax":  35,
+                      "minHumidity":  40,
+                      "sunlight":  "Full Sun",
+                      "oxygenLevel":  "50 L/day",
+                      "medicinalValues":  [
+                                              "None"
+                                          ],
+                      "advantages":  [
+                                         "Hummingbird magnet",
+                                         "Fast growing"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "20+ Years"
+                  },
+                  {
+                      "id":  "mock_465",
+                      "name":  "Virginia Creeper",
+                      "scientificName":  "Parthenocissus quinquefolia",
+                      "description":  "The Virginia Creeper is a native vine with five-leaflet leaves turning red in fall.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  7,
+                      "idealTempMax":  30,
+                      "minHumidity":  40,
+                      "sunlight":  "Sun to Shade",
+                      "oxygenLevel":  "45 L/day",
+                      "medicinalValues":  [
+                                              "None"
+                                          ],
+                      "advantages":  [
+                                         "Fall color",
+                                         "Wildlife food"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "20+ Years"
+                  },
+                  {
+                      "id":  "mock_466",
+                      "name":  "Boston Ivy",
+                      "scientificName":  "Parthenocissus tricuspidata",
+                      "description":  "The Boston Ivy is a clinging vine with three-lobed leaves and brilliant fall color.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  10,
+                      "idealTempMax":  30,
+                      "minHumidity":  40,
+                      "sunlight":  "Sun to Part Shade",
+                      "oxygenLevel":  "50 L/day",
+                      "medicinalValues":  [
+                                              "None"
+                                          ],
+                      "advantages":  [
+                                         "Wall coverage",
+                                         "Fall color"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "20+ Years"
+                  },
+                  {
+                      "id":  "mock_467",
+                      "name":  "Passionflower",
+                      "scientificName":  "Passiflora incarnata",
+                      "description":  "The Passionflower is an exotic vine with intricate purple and white flowers.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  15,
+                      "idealTempMax":  30,
+                      "minHumidity":  50,
+                      "sunlight":  "Full Sun",
+                      "oxygenLevel":  "35 L/day",
+                      "medicinalValues":  [
+                                              "Anxiety relief",
+                                              "Sleep aid"
+                                          ],
+                      "advantages":  [
+                                         "Unique flowers",
+                                         "Edible fruit"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "5-10 Years"
+                  },
+                  {
+                      "id":  "mock_468",
+                      "name":  "Climbing Hydrangea",
+                      "scientificName":  "Hydrangea anomala petiolaris",
+                      "description":  "The Climbing Hydrangea is a woody vine with white lace-cap flowers and peeling bark.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  10,
+                      "idealTempMax":  27,
+                      "minHumidity":  50,
+                      "sunlight":  "Part Shade to Sun",
+                      "oxygenLevel":  "55 L/day",
+                      "medicinalValues":  [
+                                              "None"
+                                          ],
+                      "advantages":  [
+                                         "Shade tolerant",
+                                         "Fragrant flowers"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "50+ Years"
+                  },
+                  {
+                      "id":  "mock_469",
+                      "name":  "Coral Bells",
+                      "scientificName":  "Heuchera sanguinea",
+                      "description":  "The Coral Bells is a perennial with colorful foliage and delicate flower spikes.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  10,
+                      "idealTempMax":  27,
+                      "minHumidity":  40,
+                      "sunlight":  "Part Shade to Sun",
+                      "oxygenLevel":  "15 L/day",
+                      "medicinalValues":  [
+                                              "Astringent (traditional)"
+                                          ],
+                      "advantages":  [
+                                         "Colorful foliage",
+                                         "Shade tolerant"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "3-5 Years"
+                  },
+                  {
+                      "id":  "mock_470",
+                      "name":  "Hosta",
+                      "scientificName":  "Hosta species",
+                      "description":  "The Hosta is a shade-loving perennial with large decorative leaves and lavender flowers.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  10,
+                      "idealTempMax":  27,
+                      "minHumidity":  50,
+                      "sunlight":  "Shade to Part Shade",
+                      "oxygenLevel":  "20 L/day",
+                      "medicinalValues":  [
+                                              "Edible shoots"
+                                          ],
+                      "advantages":  [
+                                         "Shade champion",
+                                         "Low maintenance"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "Perennial"
+                  },
+                  {
+                      "id":  "mock_471",
+                      "name":  "Astilbe",
+                      "scientificName":  "Astilbe chinensis",
+                      "description":  "The Astilbe is a shade perennial with feathery plume-like flowers in pink or white.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  10,
+                      "idealTempMax":  24,
+                      "minHumidity":  60,
+                      "sunlight":  "Part Shade to Shade",
+                      "oxygenLevel":  "18 L/day",
+                      "medicinalValues":  [
+                                              "None"
+                                          ],
+                      "advantages":  [
+                                         "Shade bloomer",
+                                         "Moisture loving"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "Perennial"
+                  },
+                  {
+                      "id":  "mock_472",
+                      "name":  "Bleeding Heart",
+                      "scientificName":  "Lamprocapnos spectabilis",
+                      "description":  "The Bleeding Heart is a spring perennial with heart-shaped pink and white flowers.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  10,
+                      "idealTempMax":  24,
+                      "minHumidity":  50,
+                      "sunlight":  "Part Shade to Shade",
+                      "oxygenLevel":  "20 L/day",
+                      "medicinalValues":  [
+                                              "None (toxic)"
+                                          ],
+                      "advantages":  [
+                                         "Unique flowers",
+                                         "Shade loving"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "Perennial"
+                  },
+                  {
+                      "id":  "mock_473",
+                      "name":  "Columbine",
+                      "scientificName":  "Aquilegia species",
+                      "description":  "The Columbine is a woodland perennial with spurred flowers in various colors.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  10,
+                      "idealTempMax":  27,
+                      "minHumidity":  40,
+                      "sunlight":  "Part Shade to Sun",
+                      "oxygenLevel":  "15 L/day",
+                      "medicinalValues":  [
+                                              "None (toxic)"
+                                          ],
+                      "advantages":  [
+                                         "Hummingbird attractor",
+                                         "Self-seeding"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "3-5 Years"
+                  },
+                  {
+                      "id":  "mock_474",
+                      "name":  "Lungwort",
+                      "scientificName":  "Pulmonaria officinalis",
+                      "description":  "The Lungwort is a shade perennial with spotted leaves and pink-to-blue flowers.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  10,
+                      "idealTempMax":  24,
+                      "minHumidity":  50,
+                      "sunlight":  "Shade to Part Shade",
+                      "oxygenLevel":  "12 L/day",
+                      "medicinalValues":  [
+                                              "Respiratory aid (traditional)"
+                                          ],
+                      "advantages":  [
+                                         "Early bloomer",
+                                         "Spotted foliage"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "Perennial"
+                  },
+                  {
+                      "id":  "mock_475",
+                      "name":  "Hellebore",
+                      "scientificName":  "Helleborus orientalis",
+                      "description":  "The Hellebore is a winter-blooming perennial with nodding cup-shaped flowers.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  7,
+                      "idealTempMax":  24,
+                      "minHumidity":  50,
+                      "sunlight":  "Part Shade to Shade",
+                      "oxygenLevel":  "18 L/day",
+                      "medicinalValues":  [
+                                              "None (toxic)"
+                                          ],
+                      "advantages":  [
+                                         "Winter blooms",
+                                         "Evergreen"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "Perennial"
+                  },
+                  {
+                      "id":  "mock_476",
+                      "name":  "Brunnera",
+                      "scientificName":  "Brunnera macrophylla",
+                      "description":  "The Brunnera is a Siberian bugloss with heart-shaped silver leaves and blue flowers.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  10,
+                      "idealTempMax":  24,
+                      "minHumidity":  50,
+                      "sunlight":  "Part Shade to Shade",
+                      "oxygenLevel":  "15 L/day",
+                      "medicinalValues":  [
+                                              "None"
+                                          ],
+                      "advantages":  [
+                                         "Silver foliage",
+                                         "Shade tolerant"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "Perennial"
+                  },
+                  {
+                      "id":  "mock_477",
+                      "name":  "Ferns (Mixed)",
+                      "scientificName":  "Various species",
+                      "description":  "Ferns are ancient shade-loving plants with delicate fronds in various forms.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  10,
+                      "idealTempMax":  27,
+                      "minHumidity":  60,
+                      "sunlight":  "Shade to Part Shade",
+                      "oxygenLevel":  "25 L/day",
+                      "medicinalValues":  [
+                                              "Some edible fiddleheads"
+                                          ],
+                      "advantages":  [
+                                         "Shade champion",
+                                         "Low maintenance"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "Perennial"
+                  },
+                  {
+                      "id":  "mock_478",
+                      "name":  "Ligularia",
+                      "scientificName":  "Ligularia dentata",
+                      "description":  "The Ligularia is a bold perennial with large leaves and yellow daisy-like flowers.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  10,
+                      "idealTempMax":  24,
+                      "minHumidity":  60,
+                      "sunlight":  "Part Shade",
+                      "oxygenLevel":  "30 L/day",
+                      "medicinalValues":  [
+                                              "None"
+                                          ],
+                      "advantages":  [
+                                         "Bold foliage",
+                                         "Moisture loving"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "Perennial"
+                  },
+                  {
+                      "id":  "mock_479",
+                      "name":  "Rodgersia",
+                      "scientificName":  "Rodgersia pinnata",
+                      "description":  "The Rodgersia is a dramatic perennial with large compound leaves and pink flower plumes.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  10,
+                      "idealTempMax":  24,
+                      "minHumidity":  60,
+                      "sunlight":  "Part Shade to Shade",
+                      "oxygenLevel":  "35 L/day",
+                      "medicinalValues":  [
+                                              "None"
+                                          ],
+                      "advantages":  [
+                                         "Architectural foliage",
+                                         "Moisture loving"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "Perennial"
+                  },
+                  {
+                      "id":  "mock_480",
+                      "name":  "Tiarella",
+                      "scientificName":  "Tiarella cordifolia",
+                      "description":  "The Tiarella is a foam flower with maple-like leaves and white flower spikes.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  10,
+                      "idealTempMax":  24,
+                      "minHumidity":  50,
+                      "sunlight":  "Shade to Part Shade",
+                      "oxygenLevel":  "12 L/day",
+                      "medicinalValues":  [
+                                              "Diuretic (traditional)"
+                                          ],
+                      "advantages":  [
+                                         "Groundcover",
+                                         "Native plant"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "Perennial"
+                  },
+                  {
+                      "id":  "mock_481",
+                      "name":  "Epimedium",
+                      "scientificName":  "Epimedium grandiflorum",
+                      "description":  "The Epimedium is a barrenwort with heart-shaped leaves and delicate spurred flowers.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  10,
+                      "idealTempMax":  24,
+                      "minHumidity":  50,
+                      "sunlight":  "Shade to Part Shade",
+                      "oxygenLevel":  "10 L/day",
+                      "medicinalValues":  [
+                                              "Libido enhancer (traditional)"
+                                          ],
+                      "advantages":  [
+                                         "Dry shade tolerant",
+                                         "Groundcover"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "Perennial"
+                  },
+                  {
+                      "id":  "mock_482",
+                      "name":  "Solomon\u0027s Seal",
+                      "scientificName":  "Polygonatum biflorum",
+                      "description":  "The Solomon\u0027s Seal is a woodland perennial with arching stems and hanging white bells.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  10,
+                      "idealTempMax":  24,
+                      "minHumidity":  50,
+                      "sunlight":  "Shade to Part Shade",
+                      "oxygenLevel":  "15 L/day",
+                      "medicinalValues":  [
+                                              "Joint health (traditional)"
+                                          ],
+                      "advantages":  [
+                                         "Graceful form",
+                                         "Native plant"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "Perennial"
+                  },
+                  {
+                      "id":  "mock_483",
+                      "name":  "Trillium",
+                      "scientificName":  "Trillium grandiflorum",
+                      "description":  "The Trillium is a spring wildflower with three-petaled white flowers and three leaves.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  7,
+                      "idealTempMax":  21,
+                      "minHumidity":  50,
+                      "sunlight":  "Shade to Part Shade",
+                      "oxygenLevel":  "10 L/day",
+                      "medicinalValues":  [
+                                              "Childbirth aid (traditional)"
+                                          ],
+                      "advantages":  [
+                                         "Native wildflower",
+                                         "Spring ephemeral"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "Perennial"
+                  },
+                  {
+                      "id":  "mock_484",
+                      "name":  "Jack-in-the-Pulpit",
+                      "scientificName":  "Arisaema triphyllum",
+                      "description":  "The Jack-in-the-Pulpit is a unique woodland plant with a hooded flower and red berries.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  10,
+                      "idealTempMax":  24,
+                      "minHumidity":  60,
+                      "sunlight":  "Shade to Part Shade",
+                      "oxygenLevel":  "12 L/day",
+                      "medicinalValues":  [
+                                              "None (toxic raw)"
+                                          ],
+                      "advantages":  [
+                                         "Unique appearance",
+                                         "Native plant"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "Perennial"
+                  },
+                  {
+                      "id":  "mock_485",
+                      "name":  "Wild Ginger",
+                      "scientificName":  "Asarum canadense",
+                      "description":  "The Wild Ginger is a groundcover with heart-shaped leaves and hidden maroon flowers.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  10,
+                      "idealTempMax":  24,
+                      "minHumidity":  60,
+                      "sunlight":  "Shade",
+                      "oxygenLevel":  "10 L/day",
+                      "medicinalValues":  [
+                                              "Ginger substitute (root)"
+                                          ],
+                      "advantages":  [
+                                         "Dense groundcover",
+                                         "Native plant"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "Perennial"
+                  },
+                  {
+                      "id":  "mock_486",
+                      "name":  "Bloodroot",
+                      "scientificName":  "Sanguinaria canadensis",
+                      "description":  "The Bloodroot is a spring ephemeral with white flowers and red-orange sap.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  7,
+                      "idealTempMax":  21,
+                      "minHumidity":  50,
+                      "sunlight":  "Part Shade to Shade",
+                      "oxygenLevel":  "8 L/day",
+                      "medicinalValues":  [
+                                              "Dental health (traditional)"
+                                          ],
+                      "advantages":  [
+                                         "Early spring blooms",
+                                         "Native wildflower"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "Perennial"
+                  },
+                  {
+                      "id":  "mock_487",
+                      "name":  "Virginia Bluebells",
+                      "scientificName":  "Mertensia virginica",
+                      "description":  "The Virginia Bluebells are spring ephemerals with pink buds opening to blue bell flowers.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  10,
+                      "idealTempMax":  21,
+                      "minHumidity":  50,
+                      "sunlight":  "Part Shade to Shade",
+                      "oxygenLevel":  "15 L/day",
+                      "medicinalValues":  [
+                                              "None"
+                                          ],
+                      "advantages":  [
+                                         "Spring color",
+                                         "Native wildflower"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "Perennial"
+                  },
+                  {
+                      "id":  "mock_488",
+                      "name":  "Mayapple",
+                      "scientificName":  "Podophyllum peltatum",
+                      "description":  "The Mayapple is a woodland plant with umbrella-like leaves and hidden white flowers.",
+                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                      "idealTempMin":  10,
+                      "idealTempMax":  24,
+                      "minHumidity":  60,
+                      "sunlight":  "Shade to Part Shade",
+                      "oxygenLevel":  "18 L/day",
+                      "medicinalValues":  [
+                                              "Cancer research compound"
+                                          ],
+                      "advantages":  [
+                                         "Groundcover",
+                                         "Native plant"
+                                     ],
+                      "price":  25,
+                      "type":  "outdoor",
+                      "lifespan":  "Perennial"
+                  }
+              ],
+    "Count":  50
 ];
 
 module.exports = { indoorPlants, outdoorPlants };
+
+
