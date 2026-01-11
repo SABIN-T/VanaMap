@@ -723,7 +723,7 @@ export const Auth = () => {
                     ) : (
                         <Button type="submit" variant="primary" className={styles.submitBtn}>
                             {view === 'login' && 'Log In'}
-                            {view === 'signup' && 'Send Code'}
+                            {view === 'signup' && 'Next'}
                             {view === 'verify' && 'Verify & Enter'}
                             {view === 'forgot' && 'Reset Password'}
                             {view === 'reset' && 'Update Password'}
