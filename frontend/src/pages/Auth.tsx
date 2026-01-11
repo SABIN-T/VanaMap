@@ -228,6 +228,10 @@ export const Auth = () => {
                 toast.error(`Please provide a valid Gmail: ${gmailStatus.message}`);
                 return;
             }
+            if (phone.replace(/\D/g, '').length !== 10) {
+                toast.error("Mobile number must be exactly 10 digits");
+                return;
+            }
             const fullPhone = phone ? `+${phoneCode}${phone.replace(/\D/g, '')}` : undefined;
             const result = await signup({ email, phone: fullPhone, password, name, role, city, state, country });
             if (result.success) {
@@ -558,17 +562,32 @@ export const Auth = () => {
 
                     {view === 'signup' && (
                         <div className={styles.formGroup}>
-                            <label className={styles.label}>WhatsApp / Mobile Number</label>
+                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                                <label className={styles.label} style={{ marginBottom: 0 }}>WhatsApp / Mobile Number</label>
+                                {phone.length > 0 && (
+                                    <span style={{
+                                        fontSize: '0.75rem',
+                                        fontWeight: 600,
+                                        color: phone.replace(/\D/g, '').length === 10 ? '#10b981' : '#ef4444'
+                                    }}>
+                                        {phone.replace(/\D/g, '').length}/10 Digits
+                                    </span>
+                                )}
+                            </div>
                             <div className={styles.inputWrapper}>
                                 <div className={styles.phonePrefix}>+{phoneCode}</div>
                                 <input
                                     className={styles.input}
                                     type="tel"
                                     value={phone}
-                                    onChange={(e) => setPhone(e.target.value)}
+                                    maxLength={10}
+                                    onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
                                     required
                                     placeholder="XXXXX XXXXX"
-                                    style={{ paddingLeft: '4.5rem' }}
+                                    style={{
+                                        paddingLeft: '4.5rem',
+                                        borderColor: phone.length > 0 && phone.length !== 10 ? '#ef4444' : (phone.length === 10 ? '#10b981' : undefined)
+                                    }}
                                 />
                             </div>
                         </div>
