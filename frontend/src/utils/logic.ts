@@ -113,13 +113,13 @@ export const normalizeBatch = (scores: number[]): number[] => {
 
 // Calculates the "Stress" (Efficiency Loss) based on sliders
 const calculateStressFactor = (plant: Plant, temp: number, light: number): number => {
-    let stress = 0.0;
+    let thermalStress = 0.0;
+    let lightStress = 0.0;
 
-    // 1. Light Stress (Direct, Linear Penalty w/ Lux)
+    // 1. Light Stress (Every 10% deviation adds significant stress)
     const sun = (plant.sunlight || 'medium').toLowerCase();
     let idealLight = 50;
 
-    // Parse Lux if available "2000 lux"
     const luxMatch = sun.match(/(\d+)\s*lux/i);
     if (luxMatch) {
         const val = parseInt(luxMatch[1]);
@@ -130,26 +130,28 @@ const calculateStressFactor = (plant: Plant, temp: number, light: number): numbe
     }
 
     const lightDiff = Math.abs(light - idealLight);
-    // Every 10% deviation adds 15% stress (Plant needs 15% more help)
-    stress += (lightDiff / 10) * 0.15;
+    lightStress = (lightDiff / 100) * 1.5; // Up to 150% stress for total darkness/over-exposure
 
-    // 2. Temperature Stress (AC Sensitivity Verified)
+    // 2. Temperature Stress (Biological Peak Model)
+    // Instead of a flat range, plants have a peak performance temperature
     const min = plant.idealTempMin || 15;
     const max = plant.idealTempMax || 30;
+    const optimal = (min + max) / 2;
 
-    // Logical Tolerance: 
-    // Small deviations (1-2 degrees) are fine. Large ones scale quadratically.
-    let tempDiff = 0;
-    if (temp < min) tempDiff = min - temp;
-    else if (temp > max) tempDiff = temp - max;
+    // Sensitivity: how quickly performance drops away from optimal
+    // We use a tighter sigma (3.5) for simulation to make sliders more "playable"
+    const sigma = 4.5;
+    const tempDiff = temp - optimal;
+    const thermalEfficiency = Math.exp(-(tempDiff * tempDiff) / (2 * sigma * sigma));
 
-    // Curve: 2 degrees = 0.04 (4% stress). 5 degrees = 0.25 (25% stress).
-    if (tempDiff > 0) {
-        stress += (tempDiff * tempDiff) / 100;
-    }
+    // Efficiency to Stress (e.g. 0.8 efficiency => 0.2 stress)
+    thermalStress = 1.0 - thermalEfficiency;
 
-    // Cap stress at 0.9 (90% efficiency loss), never 100% dead for UI sake
-    return Math.min(0.9, stress);
+    // Combine stresses (Total efficiency is product of independent efficiencies)
+    const totalEfficiency = (1.0 - Math.min(0.8, lightStress)) * thermalEfficiency;
+
+    // Return inverted for Stress Factor
+    return Math.max(0.1, 1.0 - totalEfficiency);
 };
 
 export const runRoomSimulationMC = (
@@ -213,14 +215,17 @@ export const runRoomSimulationMC = (
 
     // D. APPLY SLIDER STRESS (The Physics Engine)
     const stress = calculateStressFactor(plant, avgTemp, lightLevel);
+    // Efficiency is what's left after environmental degradation
     const efficiency = 1.0 - stress;
 
     // Calculate final needed
-    const finalPlantsNeeded = Math.ceil(plantsBeforeStress / Math.max(0.1, efficiency));
+    // We add a scaling factors to make the number more "human" (avoiding vast jumps but keeping it responsive)
+    const rawPlantCount = plantsBeforeStress / Math.max(0.05, efficiency);
+    const finalPlantsNeeded = Math.ceil(rawPlantCount);
 
     // E. Total Output (Visual Stat)
-    // Just a scaling number for the UI graph
-    const totalO2 = finalPlantsNeeded * 15 * hoursPerDay * efficiency;
+    // Total O2 output in Liters for the duration
+    const totalO2 = finalPlantsNeeded * 12 * hoursPerDay * efficiency;
 
     return {
         aptness,
