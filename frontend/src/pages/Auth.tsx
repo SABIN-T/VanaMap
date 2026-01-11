@@ -111,6 +111,45 @@ export const Auth = () => {
     const [emailLoading, setEmailLoading] = useState(false);
     const [emailVerifiedResult, setEmailVerifiedResult] = useState<{ name: string, role: string } | null>(null);
 
+    // Gmail Validation State
+    const [gmailStatus, setGmailStatus] = useState<{
+        isValid: boolean | null;
+        message: string;
+        registered: boolean;
+        loading: boolean;
+    }>({ isValid: null, message: '', registered: false, loading: false });
+
+    // Debounced Gmail Check
+    useEffect(() => {
+        if (view !== 'signup' || !email.includes('@')) {
+            setGmailStatus({ isValid: null, message: '', registered: false, loading: false });
+            return;
+        }
+
+        const timer = setTimeout(async () => {
+            if (!email.toLowerCase().endsWith('@gmail.com')) {
+                setGmailStatus({ isValid: false, message: 'Must be @gmail.com', registered: false, loading: false });
+                return;
+            }
+
+            setGmailStatus(prev => ({ ...prev, loading: true }));
+            try {
+                const api = await import('../services/api');
+                const res = await api.validateGmail(email);
+                setGmailStatus({
+                    isValid: res.valid,
+                    message: res.message,
+                    registered: res.registered || false,
+                    loading: false
+                });
+            } catch {
+                setGmailStatus({ isValid: null, message: '', registered: false, loading: false });
+            }
+        }, 800);
+
+        return () => clearTimeout(timer);
+    }, [email, view]);
+
     // Password Validation
     const validatePassword = (pass: string) => {
         const minLen = 4;
@@ -185,6 +224,10 @@ export const Auth = () => {
                 );
             }
         } else if (view === 'signup') {
+            if (gmailStatus.isValid === false) {
+                toast.error(`Please provide a valid Gmail: ${gmailStatus.message}`);
+                return;
+            }
             const fullPhone = phone ? `+${phoneCode}${phone.replace(/\D/g, '')}` : undefined;
             const result = await signup({ email, phone: fullPhone, password, name, role, city, state, country });
             if (result.success) {
@@ -467,7 +510,28 @@ export const Auth = () => {
 
                     {/* email/Phone Field - Step 1 for Login */}
                     <div className={styles.formGroup} style={{ opacity: (isEmailChecked && view === 'login') ? 0.6 : 1, transition: '0.3s' }}>
-                        <label className={styles.label}>{view === 'login' ? 'Email or Phone Number' : 'Email Address'}</label>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                            <label className={styles.label} style={{ marginBottom: 0 }}>
+                                {view === 'login' ? 'Email or Phone Number' : 'Email Address'}
+                            </label>
+                            {view === 'signup' && email.includes('@') && (
+                                <span style={{
+                                    fontSize: '0.75rem',
+                                    fontWeight: 600,
+                                    color: gmailStatus.loading ? '#94a3b8' : (gmailStatus.isValid ? '#10b981' : '#ef4444'),
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '4px'
+                                }}>
+                                    {gmailStatus.loading ? 'Checking...' : (
+                                        <>
+                                            {gmailStatus.isValid ? '✓ ' : '✕ '}
+                                            {gmailStatus.message}
+                                        </>
+                                    )}
+                                </span>
+                            )}
+                        </div>
                         <input
                             className={styles.input}
                             type={view === 'login' ? "text" : "email"}
@@ -476,6 +540,10 @@ export const Auth = () => {
                             required
                             disabled={(isEmailChecked && view === 'login') || view === 'verify'}
                             placeholder={view === 'login' ? "Email or Mobile Number" : "name@example.com"}
+                            style={{
+                                borderColor: (view === 'signup' && gmailStatus.isValid === false) ? '#ef4444' : (gmailStatus.isValid ? '#10b981' : undefined),
+                                boxShadow: (view === 'signup' && gmailStatus.isValid) ? '0 0 0 2px rgba(16, 185, 129, 0.1)' : undefined
+                            }}
                         />
                         {isEmailChecked && view === 'login' && (
                             <button

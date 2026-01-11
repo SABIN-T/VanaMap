@@ -555,6 +555,16 @@ export const checkEmail = async (email: string) => {
     return res.json();
 };
 
+export const validateGmail = async (email: string) => {
+    const res = await fetch(`${API_URL}/auth/validate-gmail`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+    });
+    if (!res.ok) throw new Error("Validation service unavailable");
+    return res.json();
+};
+
 export const sendInquiry = async (data: { name: string, email: string, message: string }) => {
     const res = await fetch(`${API_URL}/support/inquiry`, {
         method: 'POST',

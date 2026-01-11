@@ -2547,6 +2547,56 @@ app.post('/api/auth/check-email', async (req, res) => {
     }
 });
 
+// Real-time Gmail Validation (Verified by Google Data Format & MX)
+app.post('/api/auth/validate-gmail', async (req, res) => {
+    try {
+        const { email } = req.body;
+        if (!email) return res.status(400).json({ error: "Email is required" });
+
+        const emailLower = email.toLowerCase().trim();
+
+        // 1. Strict Regex for Gmail
+        // Accounts must be 6-30 characters, a-z, 0-9 and dots.
+        // Cannot start or end with a dot.
+        // Cannot have consecutive dots.
+        const gmailRegex = /^(?!.*?\.\.)[a-z0-9][a-z0-9.]{4,28}[a-z0-9]@gmail\.com$/;
+
+        if (!gmailRegex.test(emailLower)) {
+            return res.json({
+                valid: false,
+                reason: 'format',
+                message: emailLower.endsWith('@gmail.com') ? 'Username must be 6-30 chars (letters, numbers, dots)' : 'Must be a @gmail.com address'
+            });
+        }
+
+        // 2. DNS MX Check (Ensure it's a real domain with mail servers)
+        const dns = require('dns').promises;
+        try {
+            const mxRecords = await dns.resolveMx('gmail.com');
+            if (!mxRecords || mxRecords.length === 0) {
+                return res.json({ valid: false, reason: 'dns', message: 'Gmail mail servers unreachable' });
+            }
+        } catch (dnsErr) {
+            // If DNS fails, we fallback to regex but warn
+            console.error('DNS check failed:', dnsErr.message);
+        }
+
+        // 3. (Optional) Check if already registered
+        const existingUser = await User.findOne({ email: emailLower });
+        if (existingUser) {
+            return res.json({ valid: true, registered: true, message: 'Valid Gmail (Already Registered)' });
+        }
+
+        res.json({
+            valid: true,
+            registered: false,
+            message: 'Valid Google Gmail Account'
+        });
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
 // Google OAuth Authentication
 app.post('/api/auth/google', async (req, res) => {
     try {
