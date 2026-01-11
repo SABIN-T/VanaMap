@@ -609,23 +609,22 @@ export const AIDoctor = () => {
         if (!text) return "";
         let clean = text;
 
-        // 1. Remove Markdown headers, bold, italics
-        clean = clean.replace(/#{1,6}\s?/g, '') // Remove headlines
-            .replace(/\*\*(.*?)\*\*/g, '$1') // Remove bold
-            .replace(/\*(.*?)\*/g, '$1') // Remove italics
-            .replace(/\[.*?\]/g, '') // Remove links/tags [text]
-            .replace(/\(.*?\)/g, '') // Remove link URLs (url) if inside [] but regex above covers strict MD links usually. Let's be careful not to remove (tips).
-            .replace(/!\[.*?\]/g, ''); // Remove images
+        // 1. Remove Markdown structure but keep the text
+        clean = clean.replace(/#{1,6}\s?/g, '')
+            .replace(/\*\*(.*?)\*\*/g, '$1')
+            .replace(/\*(.*?)\*/g, '$1')
+            .replace(/!\[.*?\]/g, ''); // Remove images completely
 
         // 2. Remove URLs
         clean = clean.replace(/https?:\/\/\S+/g, 'link');
 
-        // 3. Remove Emojis (Ranges for many common emoji sets)
-        // clean = clean.replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}]/gu, ''); 
-        // More robust standard emoji regex or just general symbol cleanup if prefered.
+        // 3. Remove Emojis
         clean = clean.replace(/[\u2700-\u27BF]|[\uE000-\uF8FF]|\uD83C[\uDC00-\uDFFF]|\uD83D[\uDC00-\uDFFF]|[\u2011-\u26FF]|\uD83E[\uDD10-\uDDFF]/g, '');
 
-        // 4. Remove Specific System Phrases
+        // 4. Remove Specific System Tags & Jargon
+        const systemRegex = /\[(?:GENERATE|Image description|ID|SCIENTIFIC DOSSIER|USER PROFILE):.*?\]/gi;
+        clean = clean.replace(systemRegex, "");
+
         const systemPhrases = [
             "Response from learned knowledge",
             "Expert 1:", "Expert 2:", "Expert 3:",
@@ -633,15 +632,30 @@ export const AIDoctor = () => {
             "Response from memory",
             "Here is the generated image:",
             "GENERATE:",
-            "Image description:"
+            "Image description:",
+            "DIAGNOSIS:",
+            "TREATMENT:",
+            "Plant:",
+            "Scientific Name:"
         ];
         systemPhrases.forEach(phrase => {
             const re = new RegExp(phrase, "gi");
             clean = clean.replace(re, "");
         });
 
-        // 5. Cleanup whitespace
+        // 5. Cleanup "Dr." Stuttering & Common TTS Jargon
+        clean = clean.replace(/\bDr\.\b/gi, 'Doctor');
+
+        // Remove repetitive words like "is is"
+        clean = clean.replace(/\b(\w+)\s+\1\b/gi, '$1');
+
+        // 6. Cleanup whitespace and punctuation for flow
         clean = clean.replace(/\s+/g, ' ').trim();
+
+        // Add a small pause after sentences if missing by ending with period
+        if (clean && !clean.endsWith('.') && !clean.endsWith('?') && !clean.endsWith('!')) {
+            clean += '.';
+        }
 
         return clean;
     };
@@ -694,9 +708,19 @@ export const AIDoctor = () => {
             await audio.play();
 
         } catch (error) {
-            console.error("Voice Error:", error);
+            console.warn("High-quality voice service failed, using browser fallback.", error);
             setIsSpeaking(false);
-            const utterance = new SpeechSynthesisUtterance(text);
+
+            // Inform user about fallback
+            toast("Synthesizer Offline: Using Basic Voice", { icon: '🤖', duration: 2000 });
+
+            const utterance = new SpeechSynthesisUtterance(cleanText);
+            // Try to find a better sounding browser voice if possible
+            const voices = window.speechSynthesis.getVoices();
+            const preferredVoice = voices.find(v => v.lang.startsWith('en') && v.name.includes('Female')) || voices[0];
+            if (preferredVoice) utterance.voice = preferredVoice;
+
+            utterance.onend = () => setIsSpeaking(false);
             window.speechSynthesis.speak(utterance);
         }
     }, [voiceEnabled, selectedVoiceId, stopSpeaking]);
