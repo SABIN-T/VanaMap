@@ -98,12 +98,12 @@ export const Auth = () => {
 
     const handleNudge = async () => {
         if (!email) { toast.error("Please enter your email address first"); return; }
-        const tid = toast.loading("Signaling Admin...");
+        const tid = toast.loading("Sending secure request...");
         try {
             const api = await import('../services/api');
             await api.nudgeAdmin(email);
-            toast.success("Admin will change the password to 123456 for this email shortly. Please try after 1hr.", { id: tid, duration: 6000 });
-        } catch { toast.error("Failed to signal admin", { id: tid }); }
+            toast.success("A secure reset request has been triggered. Please check your email inbox shortly.", { id: tid, duration: 6000 });
+        } catch { toast.error("Failed to send request", { id: tid }); }
     };
 
     const [showPassword, setShowPassword] = useState(false);
@@ -762,7 +762,7 @@ export const Auth = () => {
                                 className={styles.linkBtn}
                                 style={{ color: '#f59e0b', fontSize: '0.9rem', marginBottom: '1rem' }}
                             >
-                                Contact Admin (Manual Reset)
+                                Change via Email
                             </button>
                         </div>
                     )}

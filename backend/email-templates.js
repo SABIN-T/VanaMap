@@ -369,6 +369,57 @@ const EmailTemplates = {
             </tr>
         `;
         return createEmailTemplate(content);
+    },
+
+    resetInstruction: (email) => {
+        const content = `
+            <tr>
+                <td style="padding: 40px 30px;">
+                    <div style="text-align: center; margin-bottom: 30px;">
+                        <div style="font-size: 60px; margin-bottom: 20px;">🆘</div>
+                        <h2 style="color: #1f2937; margin: 0 0 10px 0; font-size: 28px; font-weight: 600;">
+                            Secure Access Request
+                        </h2>
+                        <p style="color: #6b7280; font-size: 16px; margin: 0;">
+                            We received a request to access your VanaMap account via ${email}
+                        </p>
+                    </div>
+                    
+                    <div style="background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%); border-left: 4px solid #10b981; padding: 25px; border-radius: 12px; margin: 30px 0;">
+                        <p style="color: #065f46; font-size: 15px; line-height: 1.8; margin: 0;">
+                            <strong>Security Protocol Triggered:</strong><br/><br/>
+                            Our administrative team has been notified. To protect your nursery and personal data, we have set a temporary secure password for your next login:<br/><br/>
+                            <span style="display: block; text-align: center; font-family: monospace; font-size: 24px; font-weight: bold; color: #047857; background: #ffffff; padding: 15px; border-radius: 8px; border: 2px dashed #10b981; letter-spacing: 2px;">
+                                123456
+                            </span>
+                        </p>
+                    </div>
+                    
+                    <div style="margin: 30px 0;">
+                        <h3 style="color: #1f2937; font-size: 18px; margin: 0 0 15px 0;">
+                            🛡️ Next Steps:
+                        </h3>
+                        <ul style="color: #4b5563; font-size: 14px; line-height: 1.8; margin: 0; padding-left: 20px;">
+                            <li>Login using this temporary password.</li>
+                            <li>Immediately go to your <strong>Profile Settings</strong>.</li>
+                            <li>Change your password to something unique and strong.</li>
+                            <li>This temporary key will expire soon.</li>
+                        </ul>
+                    </div>
+                    
+                    <div style="text-align: center; margin: 30px 0;">
+                        <a href="https://vanamap.online/auth" style="display: inline-block; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 50px; font-weight: 600; font-size: 16px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);">
+                            Login to VanaMap
+                        </a>
+                    </div>
+                    
+                    <p style="color: #9ca3af; font-size: 13px; text-align: center; margin: 30px 0 0 0; padding-top: 20px; border-top: 1px solid #e5e7eb;">
+                        If you did not request this, please ignore this email. Your account remains secure.
+                    </p>
+                </td>
+            </tr>
+        `;
+        return createEmailTemplate(content);
     }
 };
 
