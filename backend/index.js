@@ -23,6 +23,7 @@ const fs = require('fs');
 const FloraIntelligence = require('./flora-intelligence');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const { body, validationResult } = require('express-validator'); // SECURE: Strict input validation
 let MongoStore = require('connect-mongo');
 if (MongoStore.default) {
     MongoStore = MongoStore.default;
@@ -367,7 +368,11 @@ const CommunicationOS = {
     }
 };
 
-const JWT_SECRET = process.env.JWT_SECRET || 'vanamap_super_secret_key_2025';
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+    console.error("FATAL: JWT_SECRET not found in environment variables.");
+    process.exit(1);
+}
 
 // --- MIDDLEWARES (Moved Up) ---
 
@@ -588,7 +593,7 @@ app.use(xss()); // Data sanitization against XSS
 app.use(express.urlencoded({ limit: '100mb', extended: true }));
 app.use(cookieParser());
 app.use(session({
-    secret: process.env.SESSION_SECRET || 'vanamap_secure_session_secret',
+    secret: process.env.SESSION_SECRET || 'vanamap_default_secure_session_key_rotate_this', // Note: Rotation recommended
     resave: false,
     saveUninitialized: false,
     store: MongoStore.create({
@@ -617,8 +622,29 @@ const authLimiter = rateLimit({
 const generalLimiter = rateLimit({
     windowMs: 60 * 60 * 1000, // 1 hour
     max: 500, // Limit each IP to 500 requests per window
-    message: { error: "System under heavy load. Please try again later." }
+    message: { error: "System under heavy load. Please try again later." },
+    standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+    legacyHeaders: false, // Disable the `X-RateLimit-*` headers
 });
+
+// SECURE: Extra strict limiting for sensitive/brute-forceable routes
+const sensitiveLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000, // 1 hour
+    max: 5, // Only 5 attempts per hour (e.g. for password resets or nudges)
+    message: { error: "Security limit reached. Please wait an hour before trying again." }
+});
+
+// Generic Validation Handler
+const validateRequest = (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({
+            error: "Validation failed",
+            details: errors.array().map(e => ({ field: e.path, message: e.msg }))
+        });
+    }
+    next();
+};
 
 app.get('/api/test-session', (req, res) => {
     if (req.session.views) {
@@ -2413,61 +2439,74 @@ app.get('/api/v1/plants/search', requireApiKey, async (req, res) => {
 });
 
 
-app.post('/api/auth/signup', async (req, res) => {
-    try {
-        const { email, phone, password, name, role, country, city, state } = req.body;
+app.post('/api/auth/signup',
+    // SECURE: Strict validation schema
+    [
+        body('email').optional().isEmail().withMessage('Invalid email format').normalizeEmail(),
+        body('phone').optional().isLength({ min: 10, max: 15 }).withMessage('Phone must be 10-15 digits'),
+        body('password').isLength({ min: 8 }).withMessage('Password must be at least 8 characters')
+            .matches(/[A-Z]/).withMessage('Must contain an uppercase letter')
+            .matches(/[0-9]/).withMessage('Must contain a number')
+            .matches(/[@#$%^&+=]/).withMessage('Must contain a special character'),
+        body('name').trim().isLength({ min: 2, max: 100 }).withMessage('Name must be 2-100 characters'),
+        body('role').isIn(['user', 'vendor']).withMessage('Invalid role'),
+        validateRequest
+    ],
+    async (req, res) => {
+        try {
+            const { email, phone, password, name, role, country, city, state } = req.body;
 
-        const existing = await User.findOne({
-            $or: [
-                { email: email ? email.trim().toLowerCase() : undefined },
-                { phone: phone ? phone.trim() : undefined }
-            ]
-        });
-        if (existing) return res.status(400).json({ error: "Email or Phone already registered" });
+            const existing = await User.findOne({
+                $or: [
+                    { email: email ? email.trim().toLowerCase() : undefined },
+                    { phone: phone ? phone.trim() : undefined }
+                ]
+            });
+            if (existing) return res.status(400).json({ error: "Email or Phone already registered" });
 
-        // Generate 6-digit OTP
-        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+            // Generate 6-digit OTP
+            const otp = Math.floor(100000 + Math.random() * 900000).toString();
 
-        // Send OTP via Email
-        if (email) {
-            await sendOtpEmail(email, otp);
+            // Send OTP via Email
+            if (email) {
+                await sendOtpEmail(email, otp);
+            }
+
+            // Send OTP via SMS (if configured)
+            if (phone) {
+                await sendSmsOtp(phone, otp);
+            }
+
+            // Store registration data
+            const registrationData = {
+                email: email ? email.trim().toLowerCase() : undefined,
+                phone: phone ? phone.trim() : undefined,
+                password,
+                name,
+                role,
+                country,
+                city,
+                state,
+                captchaText: otp // We reuse the 'captchaText' field to store the OTP for verification logic compatibility
+            };
+
+            const registrationToken = jwt.sign(registrationData, process.env.JWT_SECRET || 'secret', { expiresIn: '15m' });
+
+            console.log(`[AUTH] Generated OTP for ${email || phone}: ${otp}`);
+
+            res.status(200).json({
+                message: "Verify code sent to your Email/SMS.",
+                registrationToken,
+                captchaSvg: null // No captcha image for OTP flow
+            });
+        } catch (err) {
+            console.error('[Signup] Error:', err);
+            if (err.code === 11000) {
+                return res.status(400).json({ error: "Email or Phone already registered in our ecosystem." });
+            }
+            res.status(500).json({ error: "Registration failed. Please try again later." });
         }
-
-        // Send OTP via SMS (if configured)
-        if (phone) {
-            await sendSmsOtp(phone, otp);
-        }
-
-        // Store registration data
-        const registrationData = {
-            email: email ? email.trim().toLowerCase() : undefined,
-            phone: phone ? phone.trim() : undefined,
-            password,
-            name,
-            role,
-            country,
-            city,
-            state,
-            captchaText: otp // We reuse the 'captchaText' field to store the OTP for verification logic compatibility
-        };
-
-        const registrationToken = jwt.sign(registrationData, process.env.JWT_SECRET || 'secret', { expiresIn: '15m' });
-
-        console.log(`[AUTH] Generated OTP for ${email || phone}: ${otp}`);
-
-        res.status(200).json({
-            message: "Verify code sent to your Email/SMS.",
-            registrationToken,
-            captchaSvg: null // No captcha image for OTP flow
-        });
-    } catch (err) {
-        console.error('[Signup] Error:', err);
-        if (err.code === 11000) {
-            return res.status(400).json({ error: "Email or Phone already registered in our ecosystem." });
-        }
-        res.status(500).json({ error: "Registration failed. Please try again later." });
-    }
-});
+    });
 
 app.post('/api/auth/resend-otp', async (req, res) => {
     try {
@@ -2542,87 +2581,97 @@ app.post('/api/auth/verify-otp', async (req, res) => {
     }
 });
 
-app.post('/api/auth/check-email', async (req, res) => {
-    try {
-        const { email } = req.body;
-        const iden = email.trim().toLowerCase();
+app.post('/api/auth/check-email',
+    [
+        body('email').trim().notEmpty().withMessage('Identifier is required'),
+        validateRequest
+    ],
+    async (req, res) => {
+        try {
+            const { email } = req.body;
+            const iden = email.trim().toLowerCase();
 
-        if (iden === 'admin@plantai.com') {
-            return res.json({ success: true, verified: true, role: 'admin', name: 'Master Admin' });
-        }
+            if (iden === 'admin@plantai.com') {
+                return res.json({ success: true, verified: true, role: 'admin', name: 'Master Admin' });
+            }
 
-        // Phone fuzzy match (e.g. 98765 matches +9198765)
-        const isNumeric = /^\d+$/.test(iden.replace('+', ''));
-        const searchCriteria = [
-            { email: iden },
-            { phone: iden }
-        ];
-        if (isNumeric) {
-            searchCriteria.push({ phone: { $regex: iden.replace(/\+/g, '') + '$' } });
-        }
+            // Phone fuzzy match (e.g. 98765 matches +9198765)
+            const isNumeric = /^\d+$/.test(iden.replace('+', ''));
+            const searchCriteria = [
+                { email: iden },
+                { phone: iden }
+            ];
+            if (isNumeric) {
+                searchCriteria.push({ phone: { $regex: iden.replace(/\+/g, '') + '$' } });
+            }
 
-        const user = await User.findOne({ $or: searchCriteria });
-        if (!user) {
-            return res.status(404).json({ error: "Access Denied: Account not found." });
+            const user = await User.findOne({ $or: searchCriteria });
+            if (!user) {
+                return res.status(404).json({ error: "Access Denied: Account not found." });
+            }
+            if (!user.verified) {
+                return res.status(403).json({ error: "Account found, but not yet verified via WhatsApp/Gmail." });
+            }
+            res.json({ success: true, verified: true, role: user.role, name: user.name });
+        } catch (err) {
+            res.status(500).json({ error: err.message });
         }
-        if (!user.verified) {
-            return res.status(403).json({ error: "Account found, but not yet verified via WhatsApp/Gmail." });
-        }
-        res.json({ success: true, verified: true, role: user.role, name: user.name });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});
+    });
 
 // Real-time Gmail Validation (Verified by Google Data Format & MX)
-app.post('/api/auth/validate-gmail', async (req, res) => {
-    try {
-        const { email } = req.body;
-        if (!email) return res.status(400).json({ error: "Email is required" });
-
-        const emailLower = email.toLowerCase().trim();
-
-        // 1. Strict Regex for Gmail
-        // Accounts must be 6-30 characters, a-z, 0-9 and dots.
-        // Cannot start or end with a dot.
-        // Cannot have consecutive dots.
-        const gmailRegex = /^(?!.*?\.\.)[a-z0-9][a-z0-9.]{4,28}[a-z0-9]@gmail\.com$/;
-
-        if (!gmailRegex.test(emailLower)) {
-            return res.json({
-                valid: false,
-                reason: 'format',
-                message: emailLower.endsWith('@gmail.com') ? 'Username must be 6-30 chars (letters, numbers, dots)' : 'Must be a @gmail.com address'
-            });
-        }
-
-        // 2. DNS MX Check (Ensure it's a real domain with mail servers)
-        const dns = require('dns').promises;
+app.post('/api/auth/validate-gmail',
+    [
+        body('email').trim().isEmail().withMessage('Invalid email format'),
+        validateRequest
+    ],
+    async (req, res) => {
         try {
-            const mxRecords = await dns.resolveMx('gmail.com');
-            if (!mxRecords || mxRecords.length === 0) {
-                return res.json({ valid: false, reason: 'dns', message: 'Gmail mail servers unreachable' });
+            const { email } = req.body;
+            if (!email) return res.status(400).json({ error: "Email is required" });
+
+            const emailLower = email.toLowerCase().trim();
+
+            // 1. Strict Regex for Gmail
+            // Accounts must be 6-30 characters, a-z, 0-9 and dots.
+            // Cannot start or end with a dot.
+            // Cannot have consecutive dots.
+            const gmailRegex = /^(?!.*?\.\.)[a-z0-9][a-z0-9.]{4,28}[a-z0-9]@gmail\.com$/;
+
+            if (!gmailRegex.test(emailLower)) {
+                return res.json({
+                    valid: false,
+                    reason: 'format',
+                    message: emailLower.endsWith('@gmail.com') ? 'Username must be 6-30 chars (letters, numbers, dots)' : 'Must be a @gmail.com address'
+                });
             }
-        } catch (dnsErr) {
-            // If DNS fails, we fallback to regex but warn
-            console.error('DNS check failed:', dnsErr.message);
-        }
 
-        // 3. (Optional) Check if already registered
-        const existingUser = await User.findOne({ email: emailLower });
-        if (existingUser) {
-            return res.json({ valid: true, registered: true, message: 'Valid Gmail (Already Registered)' });
-        }
+            // 2. DNS MX Check (Ensure it's a real domain with mail servers)
+            const dns = require('dns').promises;
+            try {
+                const mxRecords = await dns.resolveMx('gmail.com');
+                if (!mxRecords || mxRecords.length === 0) {
+                    return res.json({ valid: false, reason: 'dns', message: 'Gmail mail servers unreachable' });
+                }
+            } catch (dnsErr) {
+                // If DNS fails, we fallback to regex but warn
+                console.error('DNS check failed:', dnsErr.message);
+            }
 
-        res.json({
-            valid: true,
-            registered: false,
-            message: 'Valid Google Gmail Account'
-        });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});
+            // 3. (Optional) Check if already registered
+            const existingUser = await User.findOne({ email: emailLower });
+            if (existingUser) {
+                return res.json({ valid: true, registered: true, message: 'Valid Gmail (Already Registered)' });
+            }
+
+            res.json({
+                valid: true,
+                registered: false,
+                message: 'Valid Google Gmail Account'
+            });
+        } catch (err) {
+            res.status(500).json({ error: err.message });
+        }
+    });
 
 // Google OAuth Authentication
 app.post('/api/auth/google', async (req, res) => {
@@ -2920,17 +2969,70 @@ app.get('/api/user/verification-status', auth, async (req, res) => {
     }
 });
 
-app.post('/api/auth/login', async (req, res) => {
-    try {
-        const { email, password } = req.body;
-        const identifier = email.trim().toLowerCase();
+app.post('/api/auth/login',
+    [
+        body('email').trim().notEmpty().withMessage('Email/Phone is required'),
+        body('password').notEmpty().withMessage('Password is required'),
+        validateRequest
+    ],
+    async (req, res) => {
+        try {
+            const { email, password } = req.body;
+            const identifier = email.trim().toLowerCase();
 
-        console.log(`[AUTH] Login attempt for: ${identifier}`);
+            console.log(`[AUTH] Login attempt for: ${identifier}`);
 
-        // Admin login fallback with environment credentials
-        if (identifier === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASS) {
-            console.log(`[AUTH] Login success: ${identifier} (admin)`);
-            const token = jwt.sign({ email: identifier, role: 'admin' }, JWT_SECRET, { expiresIn: '7d' });
+            // Admin login fallback with environment credentials
+            if (identifier === process.env.ADMIN_EMAIL && password === process.env.ADMIN_PASS) {
+                console.log(`[AUTH] Login success: ${identifier} (admin)`);
+                const token = jwt.sign({ email: identifier, role: 'admin' }, JWT_SECRET, { expiresIn: '7d' });
+
+                res.cookie('token', token, {
+                    httpOnly: true,
+                    secure: process.env.NODE_ENV === 'production',
+                    maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+                });
+
+                return res.json({
+                    user: { name: 'Master Admin', email: identifier, role: 'admin', favorites: [], cart: [] },
+                    token
+                });
+            }
+
+            const isNumeric = /^\d+$/.test(identifier.replace('+', ''));
+            const searchCriteria = [
+                { email: identifier },
+                { phone: identifier }
+            ];
+            if (isNumeric) {
+                searchCriteria.push({ phone: { $regex: identifier.replace(/\+/g, '') + '$' } });
+            }
+
+            const user = await User.findOne({ $or: searchCriteria });
+
+            if (!user) return res.status(401).json({ error: "Account not found in ecosystem" });
+
+            // Master Admin always bypasses verification check
+            if (identifier === 'admin@plantai.com') {
+                user.verified = true;
+            }
+
+            if (!user.verified) return res.status(401).json({ error: "Please verify captcha first" });
+
+            // Secure password check using bcrypt
+            const isMatch = await user.comparePassword(password);
+            if (!isMatch) return res.status(401).json({ error: "Invalid Credentials" });
+
+            // Auto-Expire Check (On Login)
+            if (user.isPremium && user.premiumExpiry && new Date() > user.premiumExpiry) {
+                console.log(`[AUTH] Auto-expiring premium for ${user.email}`);
+                user.isPremium = false;
+                user.premiumType = 'none';
+                await user.save();
+            }
+
+            console.log(`[AUTH] Login success: ${identifier} (${user.role})`);
+            const token = jwt.sign({ id: user._id, email: user.email, role: user.role }, JWT_SECRET, { expiresIn: '7d' });
 
             res.cookie('token', token, {
                 httpOnly: true,
@@ -2938,59 +3040,12 @@ app.post('/api/auth/login', async (req, res) => {
                 maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
             });
 
-            return res.json({
-                user: { name: 'Master Admin', email: identifier, role: 'admin', favorites: [], cart: [] },
-                token
-            });
+            res.json({ user: normalizeUser(user), token });
+        } catch (err) {
+            console.error('[Login] Error:', err);
+            res.status(500).json({ error: "Something went wrong during login. Please try again." });
         }
-
-        const isNumeric = /^\d+$/.test(identifier.replace('+', ''));
-        const searchCriteria = [
-            { email: identifier },
-            { phone: identifier }
-        ];
-        if (isNumeric) {
-            searchCriteria.push({ phone: { $regex: identifier.replace(/\+/g, '') + '$' } });
-        }
-
-        const user = await User.findOne({ $or: searchCriteria });
-
-        if (!user) return res.status(401).json({ error: "Account not found in ecosystem" });
-
-        // Master Admin always bypasses verification check
-        if (identifier === 'admin@plantai.com') {
-            user.verified = true;
-        }
-
-        if (!user.verified) return res.status(401).json({ error: "Please verify captcha first" });
-
-        // Secure password check using bcrypt
-        const isMatch = await user.comparePassword(password);
-        if (!isMatch) return res.status(401).json({ error: "Invalid Credentials" });
-
-        // Auto-Expire Check (On Login)
-        if (user.isPremium && user.premiumExpiry && new Date() > user.premiumExpiry) {
-            console.log(`[AUTH] Auto-expiring premium for ${user.email}`);
-            user.isPremium = false;
-            user.premiumType = 'none';
-            await user.save();
-        }
-
-        console.log(`[AUTH] Login success: ${identifier} (${user.role})`);
-        const token = jwt.sign({ id: user._id, email: user.email, role: user.role }, JWT_SECRET, { expiresIn: '7d' });
-
-        res.cookie('token', token, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
-        });
-
-        res.json({ user: normalizeUser(user), token });
-    } catch (err) {
-        console.error('[Login] Error:', err);
-        res.status(500).json({ error: "Something went wrong during login. Please try again." });
-    }
-});
+    });
 
 app.get('/api/user/profile', auth, async (req, res) => {
     try {
@@ -3321,36 +3376,48 @@ app.post('/api/auth/reset-password-verify', async (req, res) => {
     }
 });
 
-app.post('/api/auth/nudge-admin', async (req, res) => {
-    try {
-        const { email } = req.body;
-        const user = await User.findOne({ email });
-        // No automatic reset here, admin will do it manually.
+app.post('/api/auth/nudge-admin',
+    sensitiveLimiter, // SECURE: Brute-force protection
+    [
+        body('email').isEmail().normalizeEmail(),
+        validateRequest
+    ],
+    async (req, res) => {
+        try {
+            const { email } = req.body;
+            const user = await User.findOne({ email });
+            // No automatic reset here, admin will do it manually.
 
-        await broadcastAlert('help', `User with email ${email || 'Anonymous'} is requesting help (Forgot Username or Access). Manual password reset requested.`, { email, userId: user ? user._id : null, title: 'Support Request 🆘' });
-        res.json({ success: true });
-    } catch (e) { res.status(500).json({ error: e.message }); }
-});
+            await broadcastAlert('help', `User with email ${email || 'Anonymous'} is requesting help (Forgot Username or Access). Manual password reset requested.`, { email, userId: user ? user._id : null, title: 'Support Request 🆘' });
+            res.json({ success: true });
+        } catch (e) { res.status(500).json({ error: e.message }); }
+    });
 
 
 
 // --- Password Reset Request ---
-app.post('/api/auth/reset-password-request', async (req, res) => {
-    try {
-        const { email } = req.body;
-        const user = await User.findOne({ email });
-        if (!user) {
-            await new Promise(r => setTimeout(r, 500));
-            return res.json({ success: true, message: "If account exists, request sent." });
+app.post('/api/auth/reset-password-request',
+    sensitiveLimiter, // SECURE: Protect against mass mail spam
+    [
+        body('email').isEmail().normalizeEmail(),
+        validateRequest
+    ],
+    async (req, res) => {
+        try {
+            const { email } = req.body;
+            const user = await User.findOne({ email });
+            if (!user) {
+                await new Promise(r => setTimeout(r, 500));
+                return res.json({ success: true, message: "If account exists, request sent." });
+            }
+            user.resetRequest = { requested: true, approved: false, requestDate: new Date() };
+            await user.save();
+            res.json({ success: true, message: "Request submitted for admin review." });
+        } catch (err) {
+            console.error('[Reset Request] Error:', err);
+            res.status(500).json({ error: "Failed to process request. Please try again later." });
         }
-        user.resetRequest = { requested: true, approved: false, requestDate: new Date() };
-        await user.save();
-        res.json({ success: true, message: "Request submitted for admin review." });
-    } catch (err) {
-        console.error('[Reset Request] Error:', err);
-        res.status(500).json({ error: "Failed to process request. Please try again later." });
-    }
-});
+    });
 
 // --- SYSTEM SETTINGS ---
 app.get('/api/settings/:key', async (req, res) => {

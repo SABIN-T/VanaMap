@@ -152,16 +152,16 @@ export const Auth = () => {
 
     // Password Validation
     const validatePassword = (pass: string) => {
-        const minLen = 4;
+        const minLen = 8;
         const maxLen = 18;
         const hasUpper = /[A-Z]/.test(pass);
         const hasNumber = /[0-9]/.test(pass);
-        const hasSpecial = /[@#$%]/.test(pass);
+        const hasSpecial = /[@#$%^&+=]/.test(pass);
 
-        if (pass.length < minLen || pass.length > maxLen) return "Password must be 4-18 characters.";
+        if (pass.length < minLen || pass.length > maxLen) return "Password must be 8-18 characters for security.";
         if (!hasUpper) return "At least one capital letter required.";
         if (!hasNumber) return "At least one number required.";
-        if (!hasSpecial) return "At least one special character (@,#,$,%) required.";
+        if (!hasSpecial) return "At least one special character (@,#,$,%,^,&,+,=) required.";
         return null; // OK
     };
 
