@@ -184,9 +184,8 @@ export const Cart = () => {
                             const isVanaMap = vendorId === 'vanamap';
                             const vendor = vendors[vendorId];
                             const totalPrice = cartItems.reduce((sum, i) => {
-                                const isCustomPot = i.plant.id.startsWith('cp_');
-                                if (isCustomPot) return sum;
-                                return sum + ((i.vendorPrice || i.plant.price || 0) * i.quantity);
+                                const price = i.vendorPrice || i.plant.price || 0;
+                                return sum + (price * i.quantity);
                             }, 0);
 
                             // If vendor data is missing (async load), show skeleton or placeholder
@@ -272,14 +271,14 @@ export const Cart = () => {
                                                         <div className={styles.controlsRow}>
                                                             <div className={styles.stepper}>
                                                                 <button
-                                                                    onClick={() => updateQuantity(item.plant.id, item.quantity - 1, vendorId === 'vanamap' ? undefined : vendorId)}
+                                                                    onClick={() => updateQuantity(item.plant.id, item.quantity - 1, item.vendorId)}
                                                                     className={styles.stepperBtn}
                                                                 >
                                                                     <Minus size={14} />
                                                                 </button>
                                                                 <span className={styles.quantityVal}>{item.quantity}</span>
                                                                 <button
-                                                                    onClick={() => updateQuantity(item.plant.id, item.quantity + 1, vendorId === 'vanamap' ? undefined : vendorId)}
+                                                                    onClick={() => updateQuantity(item.plant.id, item.quantity + 1, item.vendorId)}
                                                                     className={`${styles.stepperBtn} ${styles.add}`}
                                                                 >
                                                                     <Plus size={14} />
@@ -287,7 +286,7 @@ export const Cart = () => {
                                                             </div>
 
                                                             <button
-                                                                onClick={() => removeFromCart(item.plant.id, vendorId === 'vanamap' ? undefined : vendorId)}
+                                                                onClick={() => removeFromCart(item.plant.id, item.vendorId)}
                                                                 className={styles.removeBtn}
                                                                 title="Remove"
                                                             >
