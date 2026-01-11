@@ -1,6 +1,5 @@
 // MASTER PLANT DATA (Generated)
-const indoorPlants = [
-    {
+const indoorPlants =, {
         "id": "p_in_1000",
         "name": "Snake Plant",
         "scientificName": "Sansevieria trifasciata",
@@ -6025,9 +6024,7 @@ const indoorPlants = [
         ],
         "verifiedSource": "Royal Horticultural Society (RHS) Plant Finder"
     }
-,,
-    "value":  [
-                  {
+, {
                       "id":  "mock_389",
                       "name":  "Calathea Ornata",
                       "scientificName":  "Calathea ornata",
@@ -7140,12 +7137,10 @@ const indoorPlants = [
                       "price":  25,
                       "type":  "indoor",
                       "lifespan":  "10-20 Years"
-                  }
-              ],
+                  },
     "Count":  50
 ];
-const outdoorPlants = [
-    {
+const outdoorPlants =, {
         "id": "p_out_2000",
         "name": "Lavender",
         "scientificName": "Lavandula angustifolia",
@@ -13184,9 +13179,7 @@ const outdoorPlants = [
         ],
         "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
     }
-,,
-    "value":  [
-                  {
+, {
                       "id":  "mock_439",
                       "name":  "Butterfly Bush",
                       "scientificName":  "Buddleja davidii",
@@ -14289,11 +14282,13 @@ const outdoorPlants = [
                       "price":  25,
                       "type":  "outdoor",
                       "lifespan":  "Perennial"
-                  }
-              ],
+                  },
     "Count":  50
 ];
 
 module.exports = { indoorPlants, outdoorPlants };
+
+
+
 
 
