@@ -1,11 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
-    fetchVendors, fetchPlants, fetchUsers
+    fetchAdminStats
 } from '../services/api';
 import {
     Activity, Users, Sprout, MapPin,
-    ArrowUpRight, Zap
+    ArrowUpRight, Zap, Eye
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { AdminLayout } from './admin/AdminLayout';
@@ -13,15 +13,16 @@ import styles from './Admin.module.css';
 
 export const Admin = () => {
     const { user, loading: authLoading } = useAuth();
-    const [stats, setStats] = useState({ plants: 0, users: 0, vendors: 0 });
+    const [stats, setStats] = useState({ plants: 0, users: 0, vendors: 0, viewers: 1 });
 
     const loadData = useCallback(async () => {
         try {
-            const [vendors, plants, users] = await Promise.all([fetchVendors(), fetchPlants(), fetchUsers()]);
+            const data = await fetchAdminStats();
             setStats({
-                vendors: vendors.length,
-                plants: plants.length,
-                users: users.length
+                vendors: data.vendors,
+                plants: data.plants,
+                users: data.users,
+                viewers: data.viewers || 1 // Always at least 1 (the admin)
             });
         } catch (err) {
             console.error(err);
@@ -39,6 +40,9 @@ export const Admin = () => {
     useEffect(() => {
         if (!authLoading && user?.role === 'admin') {
             loadData();
+            // 🚀 Poll for real-time viewers every 10 seconds
+            const interval = setInterval(loadData, 10000);
+            return () => clearInterval(interval);
         }
     }, [user, loadData, authLoading]);
 
@@ -85,6 +89,20 @@ export const Admin = () => {
                         <div className={styles.cardValue}>{stats.vendors}</div>
                         <div className={styles.cardTrend}>
                             <span className={styles.trendNeutral}><ArrowUpRight size={14} /> Network</span> Reach
+                        </div>
+                    </div>
+
+                    <div className={`${styles.card} ${styles.cardStat}`}>
+                        <div className={styles.cardHeader}>
+                            <span className={styles.cardTitle}>Live Viewers</span>
+                            <Eye size={20} className="text-rose-400" />
+                        </div>
+                        <div className={styles.cardValue}>
+                            {stats.viewers}
+                            <span className={styles.pulseDot}></span>
+                        </div>
+                        <div className={styles.cardTrend}>
+                            <span className={styles.trendUp} style={{ color: '#fb7185' }}>● Real-time</span> Activity
                         </div>
                     </div>
 

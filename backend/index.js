@@ -40,7 +40,32 @@ const cache = new NodeCache({
 const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
-// Auto-configure from CLOUDINARY_URL env var or individual keys
+// 🛡️ REAL-TIME VIEWER TRACKER
+const activeViewers = new Map(); // Store IP -> LastSeen Timestamp
+const TRACKING_WINDOW = 5 * 60 * 1000; // 5 minute window for "Live" users
+
+const trackViewer = (req, res, next) => {
+    try {
+        const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
+        if (ip) {
+            activeViewers.set(ip, Date.now());
+        }
+
+        // Cleanup expired viewers occasionally (1% chance per request to save CPU)
+        if (Math.random() < 0.01) {
+            const now = Date.now();
+            for (const [ip, lastSeen] of activeViewers.entries()) {
+                if (now - lastSeen > TRACKING_WINDOW) {
+                    activeViewers.delete(ip);
+                }
+            }
+        }
+    } catch (e) {
+        console.error("Tracker Error:", e.message);
+    }
+    next();
+};
+
 const isCloudinaryConfigured = process.env.CLOUDINARY_URL ||
     (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_SECRET);
 
@@ -605,6 +630,7 @@ app.get('/api/test-session', (req, res) => {
     }
 });
 
+app.use(trackViewer); // Pulse tracking
 app.use('/api/', generalLimiter);
 app.use('/api/auth/login', authLimiter);
 app.use('/api/auth/signup', authLimiter);
@@ -1423,6 +1449,7 @@ app.get('/api/admin/stats', auth, admin, async (req, res) => {
             users: userCount,
             vendors: vendorCount,
             plants: plantCount,
+            viewers: activeViewers.size,
             unread: {
                 total: unreadNotifs,
                 users: unreadUsers,
