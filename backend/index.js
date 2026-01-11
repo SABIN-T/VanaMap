@@ -2083,6 +2083,11 @@ app.post('/api/vendors', auth, async (req, res) => {
         const newVendor = new Vendor(itemData);
         await newVendor.save();
 
+        // 🔄 AUTO-UPGRADE: Change user role to 'vendor'
+        user.role = 'vendor';
+        await user.save();
+        console.log(`[Vendor Registration] User ${user.email} role upgraded to 'vendor'`);
+
         // 🚀 PERFORMANCE: Invalidate cache
         cache.del('all_vendors');
 
@@ -2103,7 +2108,10 @@ app.post('/api/vendors', auth, async (req, res) => {
         }
 
         await broadcastAlert('vendor', `New vendor joined: ${newVendor.name}`, { vendorId: newVendor.id, title: 'New Store Opening! 🏪' }, '/nearby');
-        res.status(201).json(newVendor);
+        res.status(201).json({
+            vendor: newVendor,
+            user: normalizeUser(user) // Include updated user with new role
+        });
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
