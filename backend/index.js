@@ -368,10 +368,9 @@ const CommunicationOS = {
     }
 };
 
-const JWT_SECRET = process.env.JWT_SECRET;
-if (!JWT_SECRET) {
-    console.error("FATAL: JWT_SECRET not found in environment variables.");
-    process.exit(1);
+const JWT_SECRET = process.env.JWT_SECRET || 'vanamap_super_secret_key_2025';
+if (!process.env.JWT_SECRET) {
+    console.warn("⚠️ SECURITY WARNING: JWT_SECRET not found in environment. Using insecure fallback. Please set JWT_SECRET in your dashboard.");
 }
 
 // --- MIDDLEWARES (Moved Up) ---
