@@ -1,5 +1,6 @@
 // MASTER PLANT DATA (Generated)
-const indoorPlants =, {
+const indoorPlants = [
+    {
         "id": "p_in_1000",
         "name": "Snake Plant",
         "scientificName": "Sansevieria trifasciata",
@@ -6024,8266 +6025,8266 @@ const indoorPlants =, {
         ],
         "verifiedSource": "Royal Horticultural Society (RHS) Plant Finder"
     }
-, {
-                      "id":  "mock_389",
-                      "name":  "Calathea Ornata",
-                      "scientificName":  "Calathea ornata",
-                      "description":  "The Calathea Ornata is a stunning indoor plant with pink striped leaves that fold up at night.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  18,
-                      "idealTempMax":  27,
-                      "minHumidity":  60,
-                      "sunlight":  "Low to medium (500-1500 Lux)",
-                      "oxygenLevel":  "22 L/day",
-                      "medicinalValues":  [
-                                              "Air purification"
-                                          ],
-                      "advantages":  [
-                                         "Prayer plant movement",
-                                         "Decorative foliage"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "2-5 Years",
-                      "petFriendly":  true
-                  },
-                  {
-                      "id":  "mock_390",
-                      "name":  "Aglaonema",
-                      "scientificName":  "Aglaonema commutatum",
-                      "description":  "The Aglaonema is a hardy indoor plant known for its colorful variegated leaves and air-purifying qualities.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  16,
-                      "idealTempMax":  27,
-                      "minHumidity":  40,
-                      "sunlight":  "Low to medium (300-1500 Lux)",
-                      "oxygenLevel":  "20 L/day",
-                      "medicinalValues":  [
-                                              "Formaldehyde removal",
-                                              "Benzene removal"
-                                          ],
-                      "advantages":  [
-                                         "Low light tolerant",
-                                         "Colorful foliage"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "5-10 Years"
-                  },
-                  {
-                      "id":  "mock_391",
-                      "name":  "Peperomia",
-                      "scientificName":  "Peperomia obtusifolia",
-                      "description":  "The Peperomia is a compact indoor plant with thick, glossy leaves perfect for small spaces.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  18,
-                      "idealTempMax":  24,
-                      "minHumidity":  40,
-                      "sunlight":  "Bright indirect (1000-2000 Lux)",
-                      "oxygenLevel":  "15 L/day",
-                      "medicinalValues":  [
-                                              "Air cleaning"
-                                          ],
-                      "advantages":  [
-                                         "Compact size",
-                                         "Low maintenance"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "5-10 Years",
-                      "petFriendly":  true
-                  },
-                  {
-                      "id":  "mock_392",
-                      "name":  "Hoya Carnosa",
-                      "scientificName":  "Hoya carnosa",
-                      "description":  "The Hoya Carnosa is a wax plant with fragrant star-shaped flowers and trailing vines.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  15,
-                      "idealTempMax":  27,
-                      "minHumidity":  40,
-                      "sunlight":  "Bright indirect (1500-2500 Lux)",
-                      "oxygenLevel":  "18 L/day",
-                      "medicinalValues":  [
-                                              "Air purification"
-                                          ],
-                      "advantages":  [
-                                         "Fragrant flowers",
-                                         "Trailing vine"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "10-30 Years"
-                  },
-                  {
-                      "id":  "mock_393",
-                      "name":  "Schefflera",
-                      "scientificName":  "Schefflera arboricola",
-                      "description":  "The Schefflera is an umbrella plant with glossy compound leaves that adapts well to indoor conditions.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  15,
-                      "idealTempMax":  24,
-                      "minHumidity":  40,
-                      "sunlight":  "Bright indirect (1500-2500 Lux)",
-                      "oxygenLevel":  "35 L/day",
-                      "medicinalValues":  [
-                                              "Air toxin removal"
-                                          ],
-                      "advantages":  [
-                                         "Fast growing",
-                                         "Bushy appearance"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "10-25 Years"
-                  },
-                  {
-                      "id":  "mock_394",
-                      "name":  "Croton",
-                      "scientificName":  "Codiaeum variegatum",
-                      "description":  "The Croton is a vibrant indoor plant with multicolored leaves in red, orange, yellow, and green.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  18,
-                      "idealTempMax":  27,
-                      "minHumidity":  50,
-                      "sunlight":  "Bright direct (2000-3000 Lux)",
-                      "oxygenLevel":  "25 L/day",
-                      "medicinalValues":  [
-                                              "Air purification"
-                                          ],
-                      "advantages":  [
-                                         "Colorful foliage",
-                                         "Tropical look"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "3-8 Years"
-                  },
-                  {
-                      "id":  "mock_395",
-                      "name":  "Syngonium",
-                      "scientificName":  "Syngonium podophyllum",
-                      "description":  "The Syngonium is an arrowhead vine with arrow-shaped leaves that change form as they mature.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  16,
-                      "idealTempMax":  27,
-                      "minHumidity":  50,
-                      "sunlight":  "Low to bright (500-2000 Lux)",
-                      "oxygenLevel":  "20 L/day",
-                      "medicinalValues":  [
-                                              "Formaldehyde removal"
-                                          ],
-                      "advantages":  [
-                                         "Versatile growth",
-                                         "Easy propagation"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "5-15 Years"
-                  },
-                  {
-                      "id":  "mock_396",
-                      "name":  "Nerve Plant",
-                      "scientificName":  "Fittonia albivenis",
-                      "description":  "The Nerve Plant is a small indoor plant with intricate vein patterns on its colorful leaves.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  18,
-                      "idealTempMax":  24,
-                      "minHumidity":  60,
-                      "sunlight":  "Low to medium (500-1500 Lux)",
-                      "oxygenLevel":  "12 L/day",
-                      "medicinalValues":  [
-                                              "Air cleaning"
-                                          ],
-                      "advantages":  [
-                                         "Compact size",
-                                         "Unique patterns"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "2-5 Years",
-                      "petFriendly":  true
-                  },
-                  {
-                      "id":  "mock_397",
-                      "name":  "Parlor Palm",
-                      "scientificName":  "Chamaedorea elegans",
-                      "description":  "The Parlor Palm is an elegant indoor palm that thrives in low light conditions.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  16,
-                      "idealTempMax":  27,
-                      "minHumidity":  50,
-                      "sunlight":  "Low to medium (500-1500 Lux)",
-                      "oxygenLevel":  "40 L/day",
-                      "medicinalValues":  [
-                                              "Air purification",
-                                              "Formaldehyde removal"
-                                          ],
-                      "advantages":  [
-                                         "Low light tolerant",
-                                         "Pet safe"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "10-20 Years",
-                      "petFriendly":  true
-                  },
-                  {
-                      "id":  "mock_398",
-                      "name":  "Cast Iron Plant",
-                      "scientificName":  "Aspidistra elatior",
-                      "description":  "The Cast Iron Plant is nearly indestructible, tolerating neglect and low light.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  10,
-                      "idealTempMax":  27,
-                      "minHumidity":  30,
-                      "sunlight":  "Low (200-1000 Lux)",
-                      "oxygenLevel":  "18 L/day",
-                      "medicinalValues":  [
-                                              "Air cleaning"
-                                          ],
-                      "advantages":  [
-                                         "Extremely hardy",
-                                         "Low light champion"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "20-50 Years"
-                  },
-                  {
-                      "id":  "mock_399",
-                      "name":  "Dracaena Marginata",
-                      "scientificName":  "Dracaena marginata",
-                      "description":  "The Dracaena Marginata is a dragon tree with thin red-edged leaves on woody stems.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  16,
-                      "idealTempMax":  24,
-                      "minHumidity":  40,
-                      "sunlight":  "Bright indirect (1500-2500 Lux)",
-                      "oxygenLevel":  "30 L/day",
-                      "medicinalValues":  [
-                                              "Benzene removal",
-                                              "Trichloroethylene removal"
-                                          ],
-                      "advantages":  [
-                                         "Architectural form",
-                                         "Air purifier"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "10-15 Years"
-                  },
-                  {
-                      "id":  "mock_400",
-                      "name":  "Kentia Palm",
-                      "scientificName":  "Howea forsteriana",
-                      "description":  "The Kentia Palm is a graceful indoor palm with arching fronds perfect for large spaces.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  16,
-                      "idealTempMax":  27,
-                      "minHumidity":  50,
-                      "sunlight":  "Low to bright (500-2000 Lux)",
-                      "oxygenLevel":  "55 L/day",
-                      "medicinalValues":  [
-                                              "Air purification"
-                                          ],
-                      "advantages":  [
-                                         "Elegant appearance",
-                                         "Low maintenance"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "40-100 Years",
-                      "petFriendly":  true
-                  },
-                  {
-                      "id":  "mock_401",
-                      "name":  "Yucca",
-                      "scientificName":  "Yucca elephantipes",
-                      "description":  "The Yucca is a drought-tolerant indoor plant with sword-like leaves on a woody trunk.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  13,
-                      "idealTempMax":  30,
-                      "minHumidity":  30,
-                      "sunlight":  "Bright direct (2000-4000 Lux)",
-                      "oxygenLevel":  "35 L/day",
-                      "medicinalValues":  [
-                                              "Air cleaning"
-                                          ],
-                      "advantages":  [
-                                         "Drought tolerant",
-                                         "Architectural"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "20-50 Years"
-                  },
-                  {
-                      "id":  "mock_402",
-                      "name":  "Ponytail Palm",
-                      "scientificName":  "Beaucarnea recurvata",
-                      "description":  "The Ponytail Palm is a unique succulent with a bulbous trunk and cascading leaves.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  13,
-                      "idealTempMax":  27,
-                      "minHumidity":  30,
-                      "sunlight":  "Bright direct (2000-3000 Lux)",
-                      "oxygenLevel":  "20 L/day",
-                      "medicinalValues":  [
-                                              "Air purification"
-                                          ],
-                      "advantages":  [
-                                         "Drought tolerant",
-                                         "Unique appearance"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "20-100 Years",
-                      "petFriendly":  true
-                  },
-                  {
-                      "id":  "mock_403",
-                      "name":  "Tradescantia",
-                      "scientificName":  "Tradescantia zebrina",
-                      "description":  "The Tradescantia is a wandering jew plant with purple and silver striped trailing leaves.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  16,
-                      "idealTempMax":  27,
-                      "minHumidity":  40,
-                      "sunlight":  "Bright indirect (1500-2500 Lux)",
-                      "oxygenLevel":  "15 L/day",
-                      "medicinalValues":  [
-                                              "Air cleaning"
-                                          ],
-                      "advantages":  [
-                                         "Fast growing",
-                                         "Colorful foliage"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "2-5 Years"
-                  },
-                  {
-                      "id":  "mock_404",
-                      "name":  "Oxalis",
-                      "scientificName":  "Oxalis triangularis",
-                      "description":  "The Oxalis is a shamrock plant with purple triangular leaves that fold at night.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  16,
-                      "idealTempMax":  24,
-                      "minHumidity":  40,
-                      "sunlight":  "Bright indirect (1500-2500 Lux)",
-                      "oxygenLevel":  "12 L/day",
-                      "medicinalValues":  [
-                                              "None"
-                                          ],
-                      "advantages":  [
-                                         "Unique purple color",
-                                         "Delicate flowers"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "Perennial"
-                  },
-                  {
-                      "id":  "mock_405",
-                      "name":  "Stromanthe",
-                      "scientificName":  "Stromanthe sanguinea",
-                      "description":  "The Stromanthe is a prayer plant with stunning pink and green variegated leaves.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  18,
-                      "idealTempMax":  27,
-                      "minHumidity":  60,
-                      "sunlight":  "Medium (1000-2000 Lux)",
-                      "oxygenLevel":  "20 L/day",
-                      "medicinalValues":  [
-                                              "Air purification"
-                                          ],
-                      "advantages":  [
-                                         "Colorful undersides",
-                                         "Prayer movement"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "3-10 Years",
-                      "petFriendly":  true
-                  },
-                  {
-                      "id":  "mock_406",
-                      "name":  "Alocasia",
-                      "scientificName":  "Alocasia amazonica",
-                      "description":  "The Alocasia is an elephant ear plant with dramatic arrow-shaped leaves and white veins.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  18,
-                      "idealTempMax":  27,
-                      "minHumidity":  60,
-                      "sunlight":  "Bright indirect (1500-2500 Lux)",
-                      "oxygenLevel":  "28 L/day",
-                      "medicinalValues":  [
-                                              "Air purification"
-                                          ],
-                      "advantages":  [
-                                         "Dramatic foliage",
-                                         "Tropical look"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "5-10 Years"
-                  },
-                  {
-                      "id":  "mock_407",
-                      "name":  "Begonia Rex",
-                      "scientificName":  "Begonia rex-cultorum",
-                      "description":  "The Begonia Rex is a painted-leaf begonia with spectacular multicolored foliage patterns.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  16,
-                      "idealTempMax":  24,
-                      "minHumidity":  50,
-                      "sunlight":  "Medium (1000-2000 Lux)",
-                      "oxygenLevel":  "15 L/day",
-                      "medicinalValues":  [
-                                              "Air cleaning"
-                                          ],
-                      "advantages":  [
-                                         "Stunning foliage",
-                                         "Compact size"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "2-5 Years"
-                  },
-                  {
-                      "id":  "mock_408",
-                      "name":  "Columnea",
-                      "scientificName":  "Columnea gloriosa",
-                      "description":  "The Columnea is a goldfish plant with tubular orange flowers resembling goldfish.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  18,
-                      "idealTempMax":  24,
-                      "minHumidity":  50,
-                      "sunlight":  "Bright indirect (1500-2500 Lux)",
-                      "oxygenLevel":  "18 L/day",
-                      "medicinalValues":  [
-                                              "Air purification"
-                                          ],
-                      "advantages":  [
-                                         "Unique flowers",
-                                         "Trailing habit"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "5-10 Years"
-                  },
-                  {
-                      "id":  "mock_409",
-                      "name":  "Ctenanthe",
-                      "scientificName":  "Ctenanthe burle-marxii",
-                      "description":  "The Ctenanthe is a fishbone prayer plant with herringbone patterned leaves.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  18,
-                      "idealTempMax":  27,
-                      "minHumidity":  60,
-                      "sunlight":  "Medium (1000-2000 Lux)",
-                      "oxygenLevel":  "20 L/day",
-                      "medicinalValues":  [
-                                              "Air purification"
-                                          ],
-                      "advantages":  [
-                                         "Unique patterns",
-                                         "Prayer movement"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "3-8 Years",
-                      "petFriendly":  true
-                  },
-                  {
-                      "id":  "mock_410",
-                      "name":  "Pilea Cadierei",
-                      "scientificName":  "Pilea cadierei",
-                      "description":  "The Pilea Cadierei is an aluminum plant with silver-marked leaves creating a metallic effect.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  16,
-                      "idealTempMax":  24,
-                      "minHumidity":  50,
-                      "sunlight":  "Bright indirect (1500-2500 Lux)",
-                      "oxygenLevel":  "15 L/day",
-                      "medicinalValues":  [
-                                              "Air cleaning"
-                                          ],
-                      "advantages":  [
-                                         "Metallic appearance",
-                                         "Easy care"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "3-5 Years"
-                  },
-                  {
-                      "id":  "mock_411",
-                      "name":  "Episcia",
-                      "scientificName":  "Episcia cupreata",
-                      "description":  "The Episcia is a flame violet with velvety leaves and bright tubular flowers.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  18,
-                      "idealTempMax":  27,
-                      "minHumidity":  60,
-                      "sunlight":  "Medium (1000-2000 Lux)",
-                      "oxygenLevel":  "15 L/day",
-                      "medicinalValues":  [
-                                              "Air purification"
-                                          ],
-                      "advantages":  [
-                                         "Colorful flowers",
-                                         "Trailing habit"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "2-5 Years"
-                  },
-                  {
-                      "id":  "mock_412",
-                      "name":  "Rhipsalis",
-                      "scientificName":  "Rhipsalis baccifera",
-                      "description":  "The Rhipsalis is a mistletoe cactus with trailing cylindrical stems and small berries.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  16,
-                      "idealTempMax":  27,
-                      "minHumidity":  40,
-                      "sunlight":  "Bright indirect (1500-2500 Lux)",
-                      "oxygenLevel":  "12 L/day",
-                      "medicinalValues":  [
-                                              "Air purification"
-                                          ],
-                      "advantages":  [
-                                         "Unique form",
-                                         "Low maintenance"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "10-20 Years"
-                  },
-                  {
-                      "id":  "mock_413",
-                      "name":  "Haworthia",
-                      "scientificName":  "Haworthia fasciata",
-                      "description":  "The Haworthia is a zebra plant succulent with white striped leaves in a rosette form.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  13,
-                      "idealTempMax":  27,
-                      "minHumidity":  30,
-                      "sunlight":  "Bright indirect (1500-2500 Lux)",
-                      "oxygenLevel":  "10 L/day",
-                      "medicinalValues":  [
-                                              "Air cleaning"
-                                          ],
-                      "advantages":  [
-                                         "Compact size",
-                                         "Drought tolerant"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "10-50 Years",
-                      "petFriendly":  true
-                  },
-                  {
-                      "id":  "mock_414",
-                      "name":  "Echeveria",
-                      "scientificName":  "Echeveria elegans",
-                      "description":  "The Echeveria is a hen and chicks succulent with rosette-shaped powdery blue-green leaves.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  13,
-                      "idealTempMax":  27,
-                      "minHumidity":  30,
-                      "sunlight":  "Bright direct (2000-3000 Lux)",
-                      "oxygenLevel":  "10 L/day",
-                      "medicinalValues":  [
-                                              "Air purification"
-                                          ],
-                      "advantages":  [
-                                         "Sculptural form",
-                                         "Drought tolerant"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "3-10 Years"
-                  },
-                  {
-                      "id":  "mock_415",
-                      "name":  "Sedum",
-                      "scientificName":  "Sedum morganianum",
-                      "description":  "The Sedum is a burro\u0027s tail succulent with trailing stems covered in plump leaves.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  13,
-                      "idealTempMax":  27,
-                      "minHumidity":  30,
-                      "sunlight":  "Bright direct (2000-3000 Lux)",
-                      "oxygenLevel":  "12 L/day",
-                      "medicinalValues":  [
-                                              "Air cleaning"
-                                          ],
-                      "advantages":  [
-                                         "Trailing habit",
-                                         "Drought tolerant"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "5-10 Years"
-                  },
-                  {
-                      "id":  "mock_416",
-                      "name":  "Crassula Ovata Gollum",
-                      "scientificName":  "Crassula ovata \u0027Gollum\u0027",
-                      "description":  "The Crassula Ovata Gollum is a jade plant with tubular finger-like leaves.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  13,
-                      "idealTempMax":  27,
-                      "minHumidity":  30,
-                      "sunlight":  "Bright direct (2000-3000 Lux)",
-                      "oxygenLevel":  "15 L/day",
-                      "medicinalValues":  [
-                                              "Air purification"
-                                          ],
-                      "advantages":  [
-                                         "Unique form",
-                                         "Easy care"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "20-70 Years"
-                  },
-                  {
-                      "id":  "mock_417",
-                      "name":  "Senecio Rowleyanus",
-                      "scientificName":  "Senecio rowleyanus",
-                      "description":  "The Senecio Rowleyanus is a string of pearls succulent with bead-like leaves on trailing stems.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  13,
-                      "idealTempMax":  24,
-                      "minHumidity":  30,
-                      "sunlight":  "Bright indirect (1500-2500 Lux)",
-                      "oxygenLevel":  "10 L/day",
-                      "medicinalValues":  [
-                                              "Air cleaning"
-                                          ],
-                      "advantages":  [
-                                         "Unique appearance",
-                                         "Trailing habit"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "3-5 Years"
-                  },
-                  {
-                      "id":  "mock_418",
-                      "name":  "Ceropegia Woodii",
-                      "scientificName":  "Ceropegia woodii",
-                      "description":  "The Ceropegia Woodii is a string of hearts with heart-shaped leaves on delicate trailing vines.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  16,
-                      "idealTempMax":  27,
-                      "minHumidity":  40,
-                      "sunlight":  "Bright indirect (1500-2500 Lux)",
-                      "oxygenLevel":  "10 L/day",
-                      "medicinalValues":  [
-                                              "Air purification"
-                                          ],
-                      "advantages":  [
-                                         "Romantic appearance",
-                                         "Easy propagation"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "5-10 Years"
-                  },
-                  {
-                      "id":  "mock_419",
-                      "name":  "Lithops",
-                      "scientificName":  "Lithops species",
-                      "description":  "The Lithops are living stones that mimic pebbles with their unique succulent form.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  16,
-                      "idealTempMax":  30,
-                      "minHumidity":  20,
-                      "sunlight":  "Bright direct (2500-4000 Lux)",
-                      "oxygenLevel":  "5 L/day",
-                      "medicinalValues":  [
-                                              "None"
-                                          ],
-                      "advantages":  [
-                                         "Unique camouflage",
-                                         "Minimal care"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "10-50 Years"
-                  },
-                  {
-                      "id":  "mock_420",
-                      "name":  "Kalanchoe Tomentosa",
-                      "scientificName":  "Kalanchoe tomentosa",
-                      "description":  "The Kalanchoe Tomentosa is a panda plant with fuzzy silver leaves edged in brown.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  16,
-                      "idealTempMax":  27,
-                      "minHumidity":  30,
-                      "sunlight":  "Bright direct (2000-3000 Lux)",
-                      "oxygenLevel":  "12 L/day",
-                      "medicinalValues":  [
-                                              "Air cleaning"
-                                          ],
-                      "advantages":  [
-                                         "Fuzzy texture",
-                                         "Compact size"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "5-10 Years"
-                  },
-                  {
-                      "id":  "mock_421",
-                      "name":  "Gasteria",
-                      "scientificName":  "Gasteria species",
-                      "description":  "The Gasteria is an ox tongue succulent with thick tongue-shaped leaves in a rosette.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  13,
-                      "idealTempMax":  27,
-                      "minHumidity":  30,
-                      "sunlight":  "Bright indirect (1500-2500 Lux)",
-                      "oxygenLevel":  "10 L/day",
-                      "medicinalValues":  [
-                                              "Air purification"
-                                          ],
-                      "advantages":  [
-                                         "Low light tolerant",
-                                         "Drought tolerant"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "10-30 Years"
-                  },
-                  {
-                      "id":  "mock_422",
-                      "name":  "Crassula Perforata",
-                      "scientificName":  "Crassula perforata",
-                      "description":  "The Crassula Perforata is a string of buttons succulent with stacked triangular leaves.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  13,
-                      "idealTempMax":  27,
-                      "minHumidity":  30,
-                      "sunlight":  "Bright direct (2000-3000 Lux)",
-                      "oxygenLevel":  "12 L/day",
-                      "medicinalValues":  [
-                                              "Air cleaning"
-                                          ],
-                      "advantages":  [
-                                         "Architectural form",
-                                         "Easy care"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "5-15 Years"
-                  },
-                  {
-                      "id":  "mock_423",
-                      "name":  "Sempervivum",
-                      "scientificName":  "Sempervivum tectorum",
-                      "description":  "The Sempervivum is a houseleek succulent with rosettes that produce offsets freely.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  10,
-                      "idealTempMax":  27,
-                      "minHumidity":  30,
-                      "sunlight":  "Bright direct (2000-3000 Lux)",
-                      "oxygenLevel":  "10 L/day",
-                      "medicinalValues":  [
-                                              "Traditional wound healing"
-                                          ],
-                      "advantages":  [
-                                         "Cold hardy",
-                                         "Self-propagating"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "3-5 Years"
-                  },
-                  {
-                      "id":  "mock_424",
-                      "name":  "Aeonium",
-                      "scientificName":  "Aeonium arboreum",
-                      "description":  "The Aeonium is a tree houseleek with rosettes of fleshy leaves on branching stems.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  13,
-                      "idealTempMax":  27,
-                      "minHumidity":  30,
-                      "sunlight":  "Bright direct (2000-3000 Lux)",
-                      "oxygenLevel":  "15 L/day",
-                      "medicinalValues":  [
-                                              "Air purification"
-                                          ],
-                      "advantages":  [
-                                         "Architectural form",
-                                         "Colorful varieties"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "5-10 Years"
-                  },
-                  {
-                      "id":  "mock_425",
-                      "name":  "Graptoveria",
-                      "scientificName":  "Graptoveria \u0027Fred Ives\u0027",
-                      "description":  "The Graptoveria is a hybrid succulent with colorful rosettes that change with sun exposure.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  13,
-                      "idealTempMax":  27,
-                      "minHumidity":  30,
-                      "sunlight":  "Bright direct (2000-3000 Lux)",
-                      "oxygenLevel":  "10 L/day",
-                      "medicinalValues":  [
-                                              "Air cleaning"
-                                          ],
-                      "advantages":  [
-                                         "Color changing",
-                                         "Easy care"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "5-10 Years"
-                  },
-                  {
-                      "id":  "mock_426",
-                      "name":  "Pachyphytum",
-                      "scientificName":  "Pachyphytum oviferum",
-                      "description":  "The Pachyphytum is a moonstones succulent with plump egg-shaped leaves covered in powder.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  13,
-                      "idealTempMax":  27,
-                      "minHumidity":  30,
-                      "sunlight":  "Bright direct (2000-3000 Lux)",
-                      "oxygenLevel":  "10 L/day",
-                      "medicinalValues":  [
-                                              "Air purification"
-                                          ],
-                      "advantages":  [
-                                         "Unique appearance",
-                                         "Compact size"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "5-10 Years"
-                  },
-                  {
-                      "id":  "mock_427",
-                      "name":  "Adromischus",
-                      "scientificName":  "Adromischus cristatus",
-                      "description":  "The Adromischus is a crinkle-leaf plant with wavy-edged succulent leaves.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  13,
-                      "idealTempMax":  27,
-                      "minHumidity":  30,
-                      "sunlight":  "Bright indirect (1500-2500 Lux)",
-                      "oxygenLevel":  "8 L/day",
-                      "medicinalValues":  [
-                                              "Air cleaning"
-                                          ],
-                      "advantages":  [
-                                         "Unique texture",
-                                         "Compact size"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "5-15 Years"
-                  },
-                  {
-                      "id":  "mock_428",
-                      "name":  "Cotyledon",
-                      "scientificName":  "Cotyledon tomentosa",
-                      "description":  "The Cotyledon is a bear\u0027s paw succulent with fuzzy paw-shaped leaves.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  13,
-                      "idealTempMax":  27,
-                      "minHumidity":  30,
-                      "sunlight":  "Bright direct (2000-3000 Lux)",
-                      "oxygenLevel":  "12 L/day",
-                      "medicinalValues":  [
-                                              "Air purification"
-                                          ],
-                      "advantages":  [
-                                         "Adorable appearance",
-                                         "Easy care"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "5-10 Years"
-                  },
-                  {
-                      "id":  "mock_429",
-                      "name":  "Senecio Serpens",
-                      "scientificName":  "Senecio serpens",
-                      "description":  "The Senecio Serpens is a blue chalksticks succulent with cylindrical blue-gray leaves.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  13,
-                      "idealTempMax":  27,
-                      "minHumidity":  30,
-                      "sunlight":  "Bright direct (2000-3000 Lux)",
-                      "oxygenLevel":  "15 L/day",
-                      "medicinalValues":  [
-                                              "Air cleaning"
-                                          ],
-                      "advantages":  [
-                                         "Unique color",
-                                         "Spreading habit"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "5-10 Years"
-                  },
-                  {
-                      "id":  "mock_430",
-                      "name":  "Portulacaria Afra",
-                      "scientificName":  "Portulacaria afra",
-                      "description":  "The Portulacaria Afra is an elephant bush with small round leaves on red stems.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  13,
-                      "idealTempMax":  27,
-                      "minHumidity":  30,
-                      "sunlight":  "Bright direct (2000-3000 Lux)",
-                      "oxygenLevel":  "18 L/day",
-                      "medicinalValues":  [
-                                              "Air purification",
-                                              "Carbon sequestration"
-                                          ],
-                      "advantages":  [
-                                         "Fast growing",
-                                         "Bonsai potential"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "10-30 Years"
-                  },
-                  {
-                      "id":  "mock_431",
-                      "name":  "Crassula Muscosa",
-                      "scientificName":  "Crassula muscosa",
-                      "description":  "The Crassula Muscosa is a watch chain succulent with tightly packed scale-like leaves.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  13,
-                      "idealTempMax":  27,
-                      "minHumidity":  30,
-                      "sunlight":  "Bright direct (2000-3000 Lux)",
-                      "oxygenLevel":  "10 L/day",
-                      "medicinalValues":  [
-                                              "Air cleaning"
-                                          ],
-                      "advantages":  [
-                                         "Unique texture",
-                                         "Compact growth"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "5-15 Years"
-                  },
-                  {
-                      "id":  "mock_432",
-                      "name":  "Aloe Aristata",
-                      "scientificName":  "Aloe aristata",
-                      "description":  "The Aloe Aristata is a lace aloe with white-spotted leaves forming tight rosettes.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  13,
-                      "idealTempMax":  27,
-                      "minHumidity":  30,
-                      "sunlight":  "Bright indirect (1500-2500 Lux)",
-                      "oxygenLevel":  "15 L/day",
-                      "medicinalValues":  [
-                                              "Air purification"
-                                          ],
-                      "advantages":  [
-                                         "Compact size",
-                                         "Easy flowering"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "10-20 Years"
-                  },
-                  {
-                      "id":  "mock_433",
-                      "name":  "Sansevieria Cylindrica",
-                      "scientificName":  "Sansevieria cylindrica",
-                      "description":  "The Sansevieria Cylindrica is a cylindrical snake plant with round spear-like leaves.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  15,
-                      "idealTempMax":  30,
-                      "minHumidity":  30,
-                      "sunlight":  "Low to bright (250-2000 Lux)",
-                      "oxygenLevel":  "28 L/day",
-                      "medicinalValues":  [
-                                              "Air purification",
-                                              "Oxygen at night"
-                                          ],
-                      "advantages":  [
-                                         "Architectural form",
-                                         "Extremely hardy"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "10-25 Years"
-                  },
-                  {
-                      "id":  "mock_434",
-                      "name":  "Euphorbia Trigona",
-                      "scientificName":  "Euphorbia trigona",
-                      "description":  "The Euphorbia Trigona is an African milk tree with triangular stems and small leaves.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  16,
-                      "idealTempMax":  27,
-                      "minHumidity":  30,
-                      "sunlight":  "Bright direct (2000-3000 Lux)",
-                      "oxygenLevel":  "25 L/day",
-                      "medicinalValues":  [
-                                              "Air purification"
-                                          ],
-                      "advantages":  [
-                                         "Fast growing",
-                                         "Architectural"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "10-30 Years"
-                  },
-                  {
-                      "id":  "mock_435",
-                      "name":  "Zamioculcas Raven",
-                      "scientificName":  "Zamioculcas zamiifolia \u0027Raven\u0027",
-                      "description":  "The Zamioculcas Raven is a black ZZ plant with dark purple-black glossy leaves.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  15,
-                      "idealTempMax":  30,
-                      "minHumidity":  30,
-                      "sunlight":  "Low to bright (100-2000 Lux)",
-                      "oxygenLevel":  "18 L/day",
-                      "medicinalValues":  [
-                                              "Air purification"
-                                          ],
-                      "advantages":  [
-                                         "Dramatic color",
-                                         "Extremely hardy"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "5-10 Years"
-                  },
-                  {
-                      "id":  "mock_436",
-                      "name":  "Scindapsus Pictus",
-                      "scientificName":  "Scindapsus pictus",
-                      "description":  "The Scindapsus Pictus is a satin pothos with heart-shaped leaves splashed with silver.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  16,
-                      "idealTempMax":  27,
-                      "minHumidity":  50,
-                      "sunlight":  "Low to medium (500-1500 Lux)",
-                      "oxygenLevel":  "20 L/day",
-                      "medicinalValues":  [
-                                              "Air purification"
-                                          ],
-                      "advantages":  [
-                                         "Silvery foliage",
-                                         "Easy care"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "5-10 Years"
-                  },
-                  {
-                      "id":  "mock_437",
-                      "name":  "Monstera Adansonii",
-                      "scientificName":  "Monstera adansonii",
-                      "description":  "The Monstera Adansonii is a Swiss cheese vine with perforated heart-shaped leaves.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  18,
-                      "idealTempMax":  27,
-                      "minHumidity":  60,
-                      "sunlight":  "Bright indirect (1500-2500 Lux)",
-                      "oxygenLevel":  "35 L/day",
-                      "medicinalValues":  [
-                                              "Air purification"
-                                          ],
-                      "advantages":  [
-                                         "Unique fenestrations",
-                                         "Vining habit"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "10-40 Years"
-                  },
-                  {
-                      "id":  "mock_438",
-                      "name":  "Philodendron Birkin",
-                      "scientificName":  "Philodendron \u0027Birkin\u0027",
-                      "description":  "The Philodendron Birkin is a variegated philodendron with white pinstripes on dark green leaves.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  16,
-                      "idealTempMax":  27,
-                      "minHumidity":  50,
-                      "sunlight":  "Bright indirect (1500-2500 Lux)",
-                      "oxygenLevel":  "25 L/day",
-                      "medicinalValues":  [
-                                              "Air purification"
-                                          ],
-                      "advantages":  [
-                                         "Unique variegation",
-                                         "Compact growth"
-                                     ],
-                      "price":  25,
-                      "type":  "indoor",
-                      "lifespan":  "10-20 Years"
-                  },
-    "Count":  50
-];
-const outdoorPlants =, {
-        "id": "p_out_2000",
-        "name": "Lavender",
-        "scientificName": "Lavandula angustifolia",
-        "description": "The Lavender (Lavandula angustifolia) is a classic garden staple. With a lifespan of 10-15 Years, it offers fragrant and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-6359979411?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun (10,000+ Lux)",
-        "oxygenLevel": "40 L/day",
-        "medicinalValues": [
-            "Sleep aid",
-            "Anxiety relief"
-        ],
-        "advantages": [
-            "Fragrant",
-            "Attracts bees"
-        ],
-        "price": 75,
-        "type": "outdoor",
-        "lifespan": "10-15 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2001",
-        "name": "Sunflower",
-        "scientificName": "Helianthus annuus",
-        "description": "The Sunflower (Helianthus annuus) is a classic garden staple. With a lifespan of 1 Year, it offers fast growth and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-6239949466?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun (10,000+ Lux)",
-        "oxygenLevel": "60 L/day",
-        "medicinalValues": [
-            "seeds rich in Vitamin E"
-        ],
-        "advantages": [
-            "Fast growth",
-            "Edible seeds"
-        ],
-        "price": 40,
-        "type": "outdoor",
-        "lifespan": "1 Year",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2002",
-        "name": "Rose",
-        "scientificName": "Rosa",
-        "description": "The Rose (Rosa) is a classic garden staple. With a lifespan of 15-20 Years, it offers classic beauty and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-4392484250?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun (6+ hours)",
-        "oxygenLevel": "35 L/day",
-        "medicinalValues": [
-            "Rose hips (Vitamin C)",
-            "Skin toner"
-        ],
-        "advantages": [
-            "Classic beauty",
-            "Fragrance"
-        ],
-        "price": 64,
-        "type": "outdoor",
-        "lifespan": "15-20 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2003",
-        "name": "Marigold",
-        "scientificName": "Tagetes",
-        "description": "The Marigold (Tagetes) is a classic garden staple. With a lifespan of 1 Year, it offers pest repellent and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-5337118955?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "25 L/day",
-        "medicinalValues": [
-            "Antiseptic",
-            "Anti-inflammatory"
-        ],
-        "advantages": [
-            "Pest repellent",
-            "Vibrant color"
-        ],
-        "price": 76,
-        "type": "outdoor",
-        "lifespan": "1 Year",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2004",
-        "name": "Basil",
-        "scientificName": "Ocimum basilicum",
-        "description": "The Basil (Ocimum basilicum) is a classic garden staple. With a lifespan of 1 Year, it offers culinary herb and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-6684641778?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "20 L/day",
-        "medicinalValues": [
-            "Digestion aid",
-            "Anti-bacterial"
-        ],
-        "advantages": [
-            "Culinary herb",
-            "Aromatic"
-        ],
-        "price": 55,
-        "type": "outdoor",
-        "lifespan": "1 Year",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2005",
-        "name": "Mint",
-        "scientificName": "Mentha",
-        "description": "The Mint (Mentha) is a classic garden staple. With a lifespan of Perennial, it offers fast growing and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-7365087712?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Partial Shade to Sun",
+    , {
+        "id": "mock_389",
+        "name": "Calathea Ornata",
+        "scientificName": "Calathea ornata",
+        "description": "The Calathea Ornata is a stunning indoor plant with pink striped leaves that fold up at night.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 18,
+        "idealTempMax": 27,
+        "minHumidity": 60,
+        "sunlight": "Low to medium (500-1500 Lux)",
         "oxygenLevel": "22 L/day",
         "medicinalValues": [
-            "Stomach relief",
-            "Headache relief"
+            "Air purification"
+        ],
+        "advantages": [
+            "Prayer plant movement",
+            "Decorative foliage"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "2-5 Years",
+        "petFriendly": true
+    },
+    {
+        "id": "mock_390",
+        "name": "Aglaonema",
+        "scientificName": "Aglaonema commutatum",
+        "description": "The Aglaonema is a hardy indoor plant known for its colorful variegated leaves and air-purifying qualities.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 16,
+        "idealTempMax": 27,
+        "minHumidity": 40,
+        "sunlight": "Low to medium (300-1500 Lux)",
+        "oxygenLevel": "20 L/day",
+        "medicinalValues": [
+            "Formaldehyde removal",
+            "Benzene removal"
+        ],
+        "advantages": [
+            "Low light tolerant",
+            "Colorful foliage"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "5-10 Years"
+    },
+    {
+        "id": "mock_391",
+        "name": "Peperomia",
+        "scientificName": "Peperomia obtusifolia",
+        "description": "The Peperomia is a compact indoor plant with thick, glossy leaves perfect for small spaces.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 18,
+        "idealTempMax": 24,
+        "minHumidity": 40,
+        "sunlight": "Bright indirect (1000-2000 Lux)",
+        "oxygenLevel": "15 L/day",
+        "medicinalValues": [
+            "Air cleaning"
+        ],
+        "advantages": [
+            "Compact size",
+            "Low maintenance"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "5-10 Years",
+        "petFriendly": true
+    },
+    {
+        "id": "mock_392",
+        "name": "Hoya Carnosa",
+        "scientificName": "Hoya carnosa",
+        "description": "The Hoya Carnosa is a wax plant with fragrant star-shaped flowers and trailing vines.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 15,
+        "idealTempMax": 27,
+        "minHumidity": 40,
+        "sunlight": "Bright indirect (1500-2500 Lux)",
+        "oxygenLevel": "18 L/day",
+        "medicinalValues": [
+            "Air purification"
+        ],
+        "advantages": [
+            "Fragrant flowers",
+            "Trailing vine"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "10-30 Years"
+    },
+    {
+        "id": "mock_393",
+        "name": "Schefflera",
+        "scientificName": "Schefflera arboricola",
+        "description": "The Schefflera is an umbrella plant with glossy compound leaves that adapts well to indoor conditions.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 15,
+        "idealTempMax": 24,
+        "minHumidity": 40,
+        "sunlight": "Bright indirect (1500-2500 Lux)",
+        "oxygenLevel": "35 L/day",
+        "medicinalValues": [
+            "Air toxin removal"
         ],
         "advantages": [
             "Fast growing",
-            "Tea ingredient"
+            "Bushy appearance"
         ],
-        "price": 66,
-        "type": "outdoor",
-        "lifespan": "Perennial",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "10-25 Years"
     },
     {
-        "id": "p_out_2006",
-        "name": "Rosemary",
-        "scientificName": "Salvia rosmarinus",
-        "description": "The Rosemary (Salvia rosmarinus) is a classic garden staple. With a lifespan of 15-20 Years, it offers evergreen shrub and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-6356274725?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "30 L/day",
-        "medicinalValues": [
-            "Memory boost",
-            "Hair growth"
-        ],
-        "advantages": [
-            "Evergreen shrub",
-            "Culinary use"
-        ],
-        "price": 80,
-        "type": "outdoor",
-        "lifespan": "15-20 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2007",
-        "name": "Tulip",
-        "scientificName": "Tulipa",
-        "description": "The Tulip (Tulipa) is a classic garden staple. With a lifespan of Perennial, it offers spring blooms and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-7262759396?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "15 L/day",
-        "medicinalValues": [
-            "Skin poultice (traditional)"
-        ],
-        "advantages": [
-            "Spring blooms",
-            "Infinite colors"
-        ],
-        "price": 39,
-        "type": "outdoor",
-        "lifespan": "Perennial",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2008",
-        "name": "Daffodil",
-        "scientificName": "Narcissus",
-        "description": "The Daffodil (Narcissus) is a classic garden staple. With a lifespan of Perennial, it offers early spring color and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-8316950394?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "15 L/day",
-        "medicinalValues": [
-            "None (Toxic bulb)"
-        ],
-        "advantages": [
-            "Early spring color",
-            "Deer resistant"
-        ],
-        "price": 66,
-        "type": "outdoor",
-        "lifespan": "Perennial",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "USDA Poisonous Plant Research"
-    },
-    {
-        "id": "p_out_2009",
-        "name": "Hydrangea",
-        "scientificName": "Hydrangea macrophylla",
-        "description": "The Hydrangea (Hydrangea macrophylla) is a classic garden staple. With a lifespan of 50+ Years, it offers massive flower heads and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-7455751654?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Morning Sun / Shade",
-        "oxygenLevel": "40 L/day",
-        "medicinalValues": [
-            "Diuretic (root)"
-        ],
-        "advantages": [
-            "Massive flower heads",
-            "Color changes with pH"
-        ],
-        "price": 50,
-        "type": "outdoor",
-        "lifespan": "50+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2010",
-        "name": "Peony",
-        "scientificName": "Paeonia",
-        "description": "The Peony (Paeonia) is a classic garden staple. With a lifespan of 50-100 Years, it offers huge blooms and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-6670980096?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "38 L/day",
-        "medicinalValues": [
-            "Muscle relaxant (white peony)"
-        ],
-        "advantages": [
-            "Huge blooms",
-            "Long lifespan"
-        ],
-        "price": 68,
-        "type": "outdoor",
-        "lifespan": "50-100 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2011",
-        "name": "Chrysanthemum",
-        "scientificName": "Chrysanthemum",
-        "description": "The Chrysanthemum (Chrysanthemum) is a classic garden staple. With a lifespan of 3-5 Years, it offers fall blooms and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-5281181155?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
+        "id": "mock_394",
+        "name": "Croton",
+        "scientificName": "Codiaeum variegatum",
+        "description": "The Croton is a vibrant indoor plant with multicolored leaves in red, orange, yellow, and green.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 18,
+        "idealTempMax": 27,
+        "minHumidity": 50,
+        "sunlight": "Bright direct (2000-3000 Lux)",
         "oxygenLevel": "25 L/day",
         "medicinalValues": [
-            "Tea for cooling",
-            "Eye health"
+            "Air purification"
         ],
         "advantages": [
-            "Fall blooms",
-            "Pest repellent"
+            "Colorful foliage",
+            "Tropical look"
         ],
-        "price": 65,
-        "type": "outdoor",
-        "lifespan": "3-5 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "3-8 Years"
     },
     {
-        "id": "p_out_2012",
-        "name": "Geranium",
-        "scientificName": "Pelargonium",
-        "description": "The Geranium (Pelargonium) is a classic garden staple. With a lifespan of 1-3 Years, it offers mosquito repellent and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-5633562435?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
+        "id": "mock_395",
+        "name": "Syngonium",
+        "scientificName": "Syngonium podophyllum",
+        "description": "The Syngonium is an arrowhead vine with arrow-shaped leaves that change form as they mature.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 16,
+        "idealTempMax": 27,
+        "minHumidity": 50,
+        "sunlight": "Low to bright (500-2000 Lux)",
         "oxygenLevel": "20 L/day",
         "medicinalValues": [
-            "Skin healing oil"
+            "Formaldehyde removal"
         ],
         "advantages": [
-            "Mosquito repellent",
-            "Container friendly"
+            "Versatile growth",
+            "Easy propagation"
         ],
-        "price": 56,
-        "type": "outdoor",
-        "lifespan": "1-3 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "5-15 Years"
     },
     {
-        "id": "p_out_2013",
-        "name": "Hibiscus",
-        "scientificName": "Hibiscus rosa-sinensis",
-        "description": "The Hibiscus (Hibiscus rosa-sinensis) is a classic garden staple. With a lifespan of 5-10 Years, it offers tropical flair and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-8343732685?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "45 L/day",
+        "id": "mock_396",
+        "name": "Nerve Plant",
+        "scientificName": "Fittonia albivenis",
+        "description": "The Nerve Plant is a small indoor plant with intricate vein patterns on its colorful leaves.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 18,
+        "idealTempMax": 24,
+        "minHumidity": 60,
+        "sunlight": "Low to medium (500-1500 Lux)",
+        "oxygenLevel": "12 L/day",
         "medicinalValues": [
-            "Lower blood pressure (tea)"
+            "Air cleaning"
         ],
         "advantages": [
-            "Tropical flair",
-            "Edible flowers"
+            "Compact size",
+            "Unique patterns"
         ],
-        "price": 59,
-        "type": "outdoor",
-        "lifespan": "5-10 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "2-5 Years",
+        "petFriendly": true
     },
     {
-        "id": "p_out_2014",
-        "name": "Jasmine",
-        "scientificName": "Jasminum",
-        "description": "The Jasmine (Jasminum) is a classic garden staple. With a lifespan of 10-20 Years, it offers intense fragrance and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-3123231645?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun to Part Shade",
-        "oxygenLevel": "30 L/day",
+        "id": "mock_397",
+        "name": "Parlor Palm",
+        "scientificName": "Chamaedorea elegans",
+        "description": "The Parlor Palm is an elegant indoor palm that thrives in low light conditions.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 16,
+        "idealTempMax": 27,
+        "minHumidity": 50,
+        "sunlight": "Low to medium (500-1500 Lux)",
+        "oxygenLevel": "40 L/day",
         "medicinalValues": [
-            "Stress relief aroma"
+            "Air purification",
+            "Formaldehyde removal"
         ],
         "advantages": [
-            "Intense fragrance",
-            "Climbing vine"
+            "Low light tolerant",
+            "Pet safe"
         ],
-        "price": 15,
-        "type": "outdoor",
+        "price": 25,
+        "type": "indoor",
         "lifespan": "10-20 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+        "petFriendly": true
     },
     {
-        "id": "p_out_2015",
-        "name": "Azalea",
-        "scientificName": "Rhododendron",
-        "description": "The Azalea (Rhododendron) is a classic garden staple. With a lifespan of 20-50 Years, it offers shade tolerant and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-3864980435?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
+        "id": "mock_398",
+        "name": "Cast Iron Plant",
+        "scientificName": "Aspidistra elatior",
+        "description": "The Cast Iron Plant is nearly indestructible, tolerating neglect and low light.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 27,
         "minHumidity": 30,
-        "sunlight": "Shade / Dappled Light",
-        "oxygenLevel": "35 L/day",
-        "medicinalValues": [
-            "None (Toxic)"
-        ],
-        "advantages": [
-            "Shade tolerant",
-            "Spring spectacle"
-        ],
-        "price": 16,
-        "type": "outdoor",
-        "lifespan": "20-50 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "USDA Poisonous Plant Research"
-    },
-    {
-        "id": "p_out_2016",
-        "name": "Magnolia",
-        "scientificName": "Magnolia grandiflora",
-        "description": "The Magnolia (Magnolia grandiflora) is a classic garden staple. With a lifespan of 80+ Years, it offers grand southern tree and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-5679398954?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "200 L/day",
-        "medicinalValues": [
-            "Anxiety relief",
-            "Weight loss aid"
-        ],
-        "advantages": [
-            "Grand Southern tree",
-            "Glossy leaves"
-        ],
-        "price": 70,
-        "type": "outdoor",
-        "lifespan": "80+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2017",
-        "name": "Lilac",
-        "scientificName": "Syringa vulgaris",
-        "description": "The Lilac (Syringa vulgaris) is a classic garden staple. With a lifespan of 75+ Years, it offers nostalgic scent and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-1012150789?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "60 L/day",
-        "medicinalValues": [
-            "Aromatherapy"
-        ],
-        "advantages": [
-            "Nostalgic scent",
-            "Cold hardy"
-        ],
-        "price": 64,
-        "type": "outdoor",
-        "lifespan": "75+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2018",
-        "name": "Boxwood",
-        "scientificName": "Buxus",
-        "description": "The Boxwood (Buxus) is a classic garden staple. With a lifespan of 20-30 Years, it offers formal hedges and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-4831396820?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Sun or Shade",
-        "oxygenLevel": "40 L/day",
-        "medicinalValues": [
-            "Fever reducer (historic, risky)"
-        ],
-        "advantages": [
-            "Formal hedges",
-            "Evergreen"
-        ],
-        "price": 6,
-        "type": "outdoor",
-        "lifespan": "20-30 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2019",
-        "name": "Pansy",
-        "scientificName": "Viola tricolor",
-        "description": "The Pansy (Viola tricolor) is a classic garden staple. With a lifespan of 2 Years, it offers winter/spring color and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-7429399706?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Sun / Part Shade",
-        "oxygenLevel": "10 L/day",
-        "medicinalValues": [
-            "Expectorant"
-        ],
-        "advantages": [
-            "Winter/Spring color",
-            "Edible flowers"
-        ],
-        "price": 22,
-        "type": "outdoor",
-        "lifespan": "2 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2020",
-        "name": "Neem",
-        "scientificName": "Azadirachta indica",
-        "description": "The Neem (Azadirachta indica) is a classic garden staple. With a lifespan of 100+ Years, it offers miracle tree and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-4975058419?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "150 L/day",
-        "medicinalValues": [
-            "Antiseptic",
-            "Skin cure"
-        ],
-        "advantages": [
-            "Miracle tree",
-            "Air cooling"
-        ],
-        "price": 39,
-        "type": "outdoor",
-        "lifespan": "100+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "Ayurvedic Pharmacopoeia of India"
-    },
-    {
-        "id": "p_out_2021",
-        "name": "Ashoka Tree",
-        "scientificName": "Saraca asoca",
-        "description": "The Ashoka Tree (Saraca asoca) is a classic garden staple. With a lifespan of 50+ Years, it offers sacred tree and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-6352765029?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun / Part Shade",
-        "oxygenLevel": "100 L/day",
-        "medicinalValues": [
-            "Gynaecological health"
-        ],
-        "advantages": [
-            "Sacred tree",
-            "Beautiful flowers"
-        ],
-        "price": 64,
-        "type": "outdoor",
-        "lifespan": "50+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "Ayurvedic Pharmacopoeia of India"
-    },
-    {
-        "id": "p_out_2022",
-        "name": "Gulmohar (Flame of Forest)",
-        "scientificName": "Delonix regia",
-        "description": "The Gulmohar (Flame of Forest) (Delonix regia) is a classic garden staple. With a lifespan of 40-60 Years, it offers stunning red canopy and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-9130619580?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "180 L/day",
-        "medicinalValues": [
-            "Gum used for pain"
-        ],
-        "advantages": [
-            "Stunning red canopy",
-            "Shade"
-        ],
-        "price": 28,
-        "type": "outdoor",
-        "lifespan": "40-60 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2023",
-        "name": "Peepal (Bodhi Tree)",
-        "scientificName": "Ficus religiosa",
-        "description": "The Peepal (Bodhi Tree) (Ficus religiosa) is a classic garden staple. With a lifespan of 1000+ Years, it offers produces o2 24/7 (myth/high output) and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-6837794734?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "200 L/day",
-        "medicinalValues": [
-            "Asthma",
-            "Diabetes trade"
-        ],
-        "advantages": [
-            "Produces O2 24/7 (myth/high output)",
-            "Sacred"
-        ],
-        "price": 17,
-        "type": "outdoor",
-        "lifespan": "1000+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "The Gymnosperm Database"
-    },
-    {
-        "id": "p_out_2024",
-        "name": "Banyan",
-        "scientificName": "Ficus benghalensis",
-        "description": "The Banyan (Ficus benghalensis) is a classic garden staple. With a lifespan of 200+ Years, it offers national tree of india and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-5934198151?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "220 L/day",
-        "medicinalValues": [
-            "Hair tonic",
-            "Teeth care"
-        ],
-        "advantages": [
-            "National Tree of India",
-            "Huge shade"
-        ],
-        "price": 35,
-        "type": "outdoor",
-        "lifespan": "200+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2025",
-        "name": "Mango",
-        "scientificName": "Mangifera indica",
-        "description": "The Mango (Mangifera indica) is a classic garden staple. With a lifespan of 100+ Years, it offers king of fruits and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-5704340801?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "140 L/day",
-        "medicinalValues": [
-            "Leaves regulate insulin"
-        ],
-        "advantages": [
-            "King of Fruits",
-            "Dense shade"
-        ],
-        "price": 69,
-        "type": "outdoor",
-        "lifespan": "100+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "USDA FoodData Central"
-    },
-    {
-        "id": "p_out_2026",
-        "name": "Guava",
-        "scientificName": "Psidium guajava",
-        "description": "The Guava (Psidium guajava) is a classic garden staple. With a lifespan of 30-40 Years, it offers vitamin c rich fruit and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-6460075030?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "80 L/day",
-        "medicinalValues": [
-            "Stomach health"
-        ],
-        "advantages": [
-            "Vitamin C rich fruit",
-            "Hardy"
-        ],
-        "price": 58,
-        "type": "outdoor",
-        "lifespan": "30-40 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "USDA FoodData Central"
-    },
-    {
-        "id": "p_out_2027",
-        "name": "Pomegranate",
-        "scientificName": "Punica granatum",
-        "description": "The Pomegranate (Punica granatum) is a classic garden staple. With a lifespan of 20-30 Years, it offers beautiful flowers and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-1424530531?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "60 L/day",
-        "medicinalValues": [
-            "Heart health",
-            "Antioxidant"
-        ],
-        "advantages": [
-            "Beautiful flowers",
-            "Healthy fruit"
-        ],
-        "price": 14,
-        "type": "outdoor",
-        "lifespan": "20-30 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2028",
-        "name": "Lemon",
-        "scientificName": "Citrus limon",
-        "description": "The Lemon (Citrus limon) is a classic garden staple. With a lifespan of 50+ Years, it offers daily kitchen use and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-7589454404?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "50 L/day",
-        "medicinalValues": [
-            "Vitamin C",
-            "Digestion"
-        ],
-        "advantages": [
-            "Daily kitchen use",
-            "Fragrant leaves"
-        ],
-        "price": 72,
-        "type": "outdoor",
-        "lifespan": "50+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "USDA FoodData Central"
-    },
-    {
-        "id": "p_out_2029",
-        "name": "Papaya",
-        "scientificName": "Carica papaya",
-        "description": "The Papaya (Carica papaya) is a classic garden staple. With a lifespan of 3-4 Years, it offers fast fruit and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-6249743720?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "60 L/day",
-        "medicinalValues": [
-            "Leaf juice for Dengue"
-        ],
-        "advantages": [
-            "Fast fruit",
-            "Digestive enzyme"
-        ],
-        "price": 77,
-        "type": "outdoor",
-        "lifespan": "3-4 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "USDA FoodData Central"
-    },
-    {
-        "id": "p_out_2030",
-        "name": "Banana",
-        "scientificName": "Musa acominata",
-        "description": "The Banana (Musa acominata) is a classic garden staple. With a lifespan of 1-2 Years (Regrows), it offers fruit and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-1640432248?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "100 L/day",
-        "medicinalValues": [
-            "Stem juice for kidney stones"
-        ],
-        "advantages": [
-            "Fruit",
-            "Leaves as plates"
-        ],
-        "price": 79,
-        "type": "outdoor",
-        "lifespan": "1-2 Years (Regrows)",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "USDA FoodData Central"
-    },
-    {
-        "id": "p_out_2031",
-        "name": "Coconut",
-        "scientificName": "Cocos nucifera",
-        "description": "The Coconut (Cocos nucifera) is a classic garden staple. With a lifespan of 60-80 Years, it offers kalpavriksha (gives everything) and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-6069153457?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "120 L/day",
-        "medicinalValues": [
-            "Water is electrolyte rich"
-        ],
-        "advantages": [
-            "Kalpavriksha (Gives everything)",
-            "Coastal"
-        ],
-        "price": 18,
-        "type": "outdoor",
-        "lifespan": "60-80 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "USDA FoodData Central"
-    },
-    {
-        "id": "p_out_2032",
-        "name": "Champa (Plumeria)",
-        "scientificName": "Plumeria rubra",
-        "description": "The Champa (Plumeria) (Plumeria rubra) is a classic garden staple. With a lifespan of 40+ Years, it offers temple flower and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-7515782031?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "50 L/day",
-        "medicinalValues": [
-            "Rheumatism (Bark)"
-        ],
-        "advantages": [
-            "Temple flower",
-            "Divine scent"
-        ],
-        "price": 23,
-        "type": "outdoor",
-        "lifespan": "40+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2033",
-        "name": "Parijat (Night Jasmine)",
-        "scientificName": "Nyctanthes arbor-tristis",
-        "description": "The Parijat (Night Jasmine) (Nyctanthes arbor-tristis) is a classic garden staple. With a lifespan of 20 Years, it offers night fragrance and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-6566848741?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Sun/Part Shade",
-        "oxygenLevel": "40 L/day",
-        "medicinalValues": [
-            "Sciatica",
-            "Arthritis"
-        ],
-        "advantages": [
-            "Night fragrance",
-            "Carpet of flowers"
-        ],
-        "price": 7,
-        "type": "outdoor",
-        "lifespan": "20 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2034",
-        "name": "Raat Ki Rani",
-        "scientificName": "Cestrum nocturnum",
-        "description": "The Raat Ki Rani (Cestrum nocturnum) is a classic garden staple. With a lifespan of 10-15 Years, it offers extreme fragrance at night and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-7384147952?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Part Shade",
-        "oxygenLevel": "35 L/day",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Extreme fragrance at night",
-            "Fast growth"
-        ],
-        "price": 24,
-        "type": "outdoor",
-        "lifespan": "10-15 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2035",
-        "name": "Mogra (Arabian Jasmine)",
-        "scientificName": "Jasminum sambac",
-        "description": "The Mogra (Arabian Jasmine) (Jasminum sambac) is a classic garden staple. With a lifespan of 10 Years, it offers perfume and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-8344965624?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "30 L/day",
-        "medicinalValues": [
-            "Cooling effect",
-            "Eye wash"
-        ],
-        "advantages": [
-            "Perfume",
-            "Garlands"
-        ],
-        "price": 42,
-        "type": "outdoor",
-        "lifespan": "10 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2036",
-        "name": "Vinca (Sadabahar)",
-        "scientificName": "Catharanthus roseus",
-        "description": "The Vinca (Sadabahar) (Catharanthus roseus) is a classic garden staple. With a lifespan of Perennial, it offers blooms daily and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-2758854938?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "20 L/day",
-        "medicinalValues": [
-            "Cancer fighting alkaloids",
-            "Diabetes"
-        ],
-        "advantages": [
-            "Blooms daily",
-            "Drought resistant"
-        ],
-        "price": 54,
-        "type": "outdoor",
-        "lifespan": "Perennial",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2037",
-        "name": "Oleander (Kaner)",
-        "scientificName": "Nerium oleander",
-        "description": "The Oleander (Kaner) (Nerium oleander) is a classic garden staple. With a lifespan of 20+ Years, it offers roadside hardy and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-6993879105?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "35 L/day",
-        "medicinalValues": [
-            "Toxic (used carefully in cardiac meds)"
-        ],
-        "advantages": [
-            "Roadside hardy",
-            "Colorful"
-        ],
-        "price": 79,
-        "type": "outdoor",
-        "lifespan": "20+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "USDA Poisonous Plant Research"
-    },
-    {
-        "id": "p_out_2038",
-        "name": "Bougainvillea",
-        "scientificName": "Bougainvillea spectabilis",
-        "description": "The Bougainvillea (Bougainvillea spectabilis) is a classic garden staple. With a lifespan of 20+ Years, it offers paper flowers and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-7063119527?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "40 L/day",
-        "medicinalValues": [
-            "Cough syrup"
-        ],
-        "advantages": [
-            "Paper flowers",
-            "Security hedge"
-        ],
-        "price": 79,
-        "type": "outdoor",
-        "lifespan": "20+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2039",
-        "name": "Rangoon Creeper",
-        "scientificName": "Combretum indicum",
-        "description": "The Rangoon Creeper (Combretum indicum) is a classic garden staple. With a lifespan of 20+ Years, it offers fragrant color changing flowers and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-6777610126?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "50 L/day",
-        "medicinalValues": [
-            "Parasite worms"
-        ],
-        "advantages": [
-            "Fragrant color changing flowers",
-            "Vine"
-        ],
-        "price": 57,
-        "type": "outdoor",
-        "lifespan": "20+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2040",
-        "name": "Aparajita (Butterfly Pea)",
-        "scientificName": "Clitoria ternatea",
-        "description": "The Aparajita (Butterfly Pea) (Clitoria ternatea) is a classic garden staple. With a lifespan of Perennial, it offers nitrogen fixer and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-6822563677?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "25 L/day",
-        "medicinalValues": [
-            "Memory booster",
-            "Blue tea"
-        ],
-        "advantages": [
-            "Nitrogen fixer",
-            "Holy flower"
-        ],
-        "price": 50,
-        "type": "outdoor",
-        "lifespan": "Perennial",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2041",
-        "name": "Ixora (Rugmini)",
-        "scientificName": "Ixora coccinea",
-        "description": "The Ixora (Rugmini) (Ixora coccinea) is a classic garden staple. With a lifespan of 10+ Years, it offers hedge plant and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-7183853886?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "30 L/day",
-        "medicinalValues": [
-            "Root for fever"
-        ],
-        "advantages": [
-            "Hedge plant",
-            "Neon flowers"
-        ],
-        "price": 55,
-        "type": "outdoor",
-        "lifespan": "10+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2042",
-        "name": "Red Hibiscus",
-        "scientificName": "Hibiscus rosa-sinensis",
-        "description": "The Red Hibiscus (Hibiscus rosa-sinensis) is a classic garden staple. With a lifespan of 15 Years, it offers offering to ganesha and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-4522435002?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "45 L/day",
-        "medicinalValues": [
-            "Hair oil",
-            "Tea"
-        ],
-        "advantages": [
-            "Offering to Ganesha",
-            "Edible"
-        ],
-        "price": 16,
-        "type": "outdoor",
-        "lifespan": "15 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2043",
-        "name": "Allamanda",
-        "scientificName": "Allamanda cathartica",
-        "description": "The Allamanda (Allamanda cathartica) is a classic garden staple. With a lifespan of 10+ Years, it offers large yellow bells and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-8327866448?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "35 L/day",
-        "medicinalValues": [
-            "Laxative (Toxic)"
-        ],
-        "advantages": [
-            "Large yellow bells",
-            "Climber"
-        ],
-        "price": 36,
-        "type": "outdoor",
-        "lifespan": "10+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "USDA Poisonous Plant Research"
-    },
-    {
-        "id": "p_out_2044",
-        "name": "Tecoma (Yellow Bells)",
-        "scientificName": "Tecoma stans",
-        "description": "The Tecoma (Yellow Bells) (Tecoma stans) is a classic garden staple. With a lifespan of 10-20 Years, it offers attracts bees and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-1490777415?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "40 L/day",
-        "medicinalValues": [
-            "Diabetes control"
-        ],
-        "advantages": [
-            "Attracts bees",
-            "Year round bloom"
-        ],
-        "price": 57,
-        "type": "outdoor",
-        "lifespan": "10-20 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2045",
-        "name": "Rajnigandha (Tuberose)",
-        "scientificName": "Polianthes tuberosa",
-        "description": "The Rajnigandha (Tuberose) (Polianthes tuberosa) is a classic garden staple. With a lifespan of Perennial, it offers best fragrance and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-1358332088?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "20 L/day",
-        "medicinalValues": [
-            "Calming"
-        ],
-        "advantages": [
-            "Best fragrance",
-            "Cut flowers"
-        ],
-        "price": 11,
-        "type": "outdoor",
-        "lifespan": "Perennial",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2046",
-        "name": "Canna Lily",
-        "scientificName": "Canna indica",
-        "description": "The Canna Lily (Canna indica) is a classic garden staple. With a lifespan of Perennial, it offers tropical foliage and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-8538552051?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "35 L/day",
-        "medicinalValues": [
-            "Root starch"
-        ],
-        "advantages": [
-            "Tropical foliage",
-            "Tall"
-        ],
-        "price": 67,
-        "type": "outdoor",
-        "lifespan": "Perennial",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2047",
-        "name": "Spider Lily",
-        "scientificName": "Hymenocallis littoralis",
-        "description": "The Spider Lily (Hymenocallis littoralis) is a classic garden staple. With a lifespan of Perennial, it offers unique white spidery flowers and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-3453974759?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Sun/Part Shade",
-        "oxygenLevel": "25 L/day",
-        "medicinalValues": [
-            "Wound healing"
-        ],
-        "advantages": [
-            "Unique white spidery flowers",
-            "Rain lover"
-        ],
-        "price": 71,
-        "type": "outdoor",
-        "lifespan": "Perennial",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2048",
-        "name": "Rain Lily",
-        "scientificName": "Zephyranthes",
-        "description": "The Rain Lily (Zephyranthes) is a classic garden staple. With a lifespan of Perennial, it offers blooms after rain and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-4749186329?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "10 L/day",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Blooms after rain",
-            "Ground cover"
-        ],
-        "price": 53,
-        "type": "outdoor",
-        "lifespan": "Perennial",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2049",
-        "name": "Curtain Creeper",
-        "scientificName": "Vernonia elaeagnifolia",
-        "description": "The Curtain Creeper (Vernonia elaeagnifolia) is a classic garden staple. With a lifespan of 10+ Years, it offers natural screen and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-8968359300?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Sun/Part Shade",
-        "oxygenLevel": "45 L/day",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Natural screen",
-            "Privacy"
-        ],
-        "price": 24,
-        "type": "outdoor",
-        "lifespan": "10+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2050",
-        "name": "Passion Flower (Krishna Kamal)",
-        "scientificName": "Passiflora incarnata",
-        "description": "The Passion Flower (Krishna Kamal) (Passiflora incarnata) is a classic garden staple. With a lifespan of 5-7 Years, it offers complex flower structure and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-3397859346?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "30 L/day",
-        "medicinalValues": [
-            "Insomnia",
-            "Anxiety"
-        ],
-        "advantages": [
-            "Complex flower structure",
-            "Mythology"
-        ],
-        "price": 60,
-        "type": "outdoor",
-        "lifespan": "5-7 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2051",
-        "name": "Duranta (Golden Dewdrop)",
-        "scientificName": "Duranta erecta",
-        "description": "The Duranta (Golden Dewdrop) (Duranta erecta) is a classic garden staple. With a lifespan of 15 Years, it offers gold foliage hedge and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-9170953937?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "30 L/day",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Gold foliage hedge",
-            "Blue flowers"
-        ],
-        "price": 19,
-        "type": "outdoor",
-        "lifespan": "15 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2052",
-        "name": "Lantana",
-        "scientificName": "Lantana camara",
-        "description": "The Lantana (Lantana camara) is a classic garden staple. With a lifespan of Perennial, it offers butterfly magnet and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-7684083613?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "25 L/day",
-        "medicinalValues": [
-            "Antiseptic (Traditional)"
-        ],
-        "advantages": [
-            "Butterfly magnet",
-            "Hardy"
-        ],
-        "price": 24,
-        "type": "outdoor",
-        "lifespan": "Perennial",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2053",
-        "name": "Portulaca (9 O'Clock)",
-        "scientificName": "Portulaca grandiflora",
-        "description": "The Portulaca (9 O'Clock) (Portulaca grandiflora) is a classic garden staple. With a lifespan of 1 Year, it offers colorful carpet and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-3304404583?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "15 L/day",
-        "medicinalValues": [
-            "Burns"
-        ],
-        "advantages": [
-            "Colorful carpet",
-            "Succulent"
-        ],
-        "price": 76,
-        "type": "outdoor",
-        "lifespan": "1 Year",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2054",
-        "name": "Balsam",
-        "scientificName": "Impatiens balsamina",
-        "description": "The Balsam (Impatiens balsamina) is a classic garden staple. With a lifespan of 1 Year, it offers traditional playing flower and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-4420445004?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Sun/Part Shade",
+        "sunlight": "Low (200-1000 Lux)",
         "oxygenLevel": "18 L/day",
         "medicinalValues": [
-            "Cooling burns"
+            "Air cleaning"
         ],
         "advantages": [
-            "Traditional playing flower",
-            "Self seeding"
+            "Extremely hardy",
+            "Low light champion"
         ],
-        "price": 44,
-        "type": "outdoor",
-        "lifespan": "1 Year",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "20-50 Years"
     },
     {
-        "id": "p_out_2055",
-        "name": "Gomphrena",
-        "scientificName": "Gomphrena globosa",
-        "description": "The Gomphrena (Gomphrena globosa) is a classic garden staple. With a lifespan of 1 Year, it offers button flowers and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-7233430503?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
+        "id": "mock_399",
+        "name": "Dracaena Marginata",
+        "scientificName": "Dracaena marginata",
+        "description": "The Dracaena Marginata is a dragon tree with thin red-edged leaves on woody stems.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 16,
+        "idealTempMax": 24,
+        "minHumidity": 40,
+        "sunlight": "Bright indirect (1500-2500 Lux)",
+        "oxygenLevel": "30 L/day",
+        "medicinalValues": [
+            "Benzene removal",
+            "Trichloroethylene removal"
+        ],
+        "advantages": [
+            "Architectural form",
+            "Air purifier"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "10-15 Years"
+    },
+    {
+        "id": "mock_400",
+        "name": "Kentia Palm",
+        "scientificName": "Howea forsteriana",
+        "description": "The Kentia Palm is a graceful indoor palm with arching fronds perfect for large spaces.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 16,
+        "idealTempMax": 27,
+        "minHumidity": 50,
+        "sunlight": "Low to bright (500-2000 Lux)",
+        "oxygenLevel": "55 L/day",
+        "medicinalValues": [
+            "Air purification"
+        ],
+        "advantages": [
+            "Elegant appearance",
+            "Low maintenance"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "40-100 Years",
+        "petFriendly": true
+    },
+    {
+        "id": "mock_401",
+        "name": "Yucca",
+        "scientificName": "Yucca elephantipes",
+        "description": "The Yucca is a drought-tolerant indoor plant with sword-like leaves on a woody trunk.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 13,
+        "idealTempMax": 30,
         "minHumidity": 30,
-        "sunlight": "Full Sun",
+        "sunlight": "Bright direct (2000-4000 Lux)",
+        "oxygenLevel": "35 L/day",
+        "medicinalValues": [
+            "Air cleaning"
+        ],
+        "advantages": [
+            "Drought tolerant",
+            "Architectural"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "20-50 Years"
+    },
+    {
+        "id": "mock_402",
+        "name": "Ponytail Palm",
+        "scientificName": "Beaucarnea recurvata",
+        "description": "The Ponytail Palm is a unique succulent with a bulbous trunk and cascading leaves.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 13,
+        "idealTempMax": 27,
+        "minHumidity": 30,
+        "sunlight": "Bright direct (2000-3000 Lux)",
+        "oxygenLevel": "20 L/day",
+        "medicinalValues": [
+            "Air purification"
+        ],
+        "advantages": [
+            "Drought tolerant",
+            "Unique appearance"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "20-100 Years",
+        "petFriendly": true
+    },
+    {
+        "id": "mock_403",
+        "name": "Tradescantia",
+        "scientificName": "Tradescantia zebrina",
+        "description": "The Tradescantia is a wandering jew plant with purple and silver striped trailing leaves.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 16,
+        "idealTempMax": 27,
+        "minHumidity": 40,
+        "sunlight": "Bright indirect (1500-2500 Lux)",
         "oxygenLevel": "15 L/day",
         "medicinalValues": [
-            "Cough"
+            "Air cleaning"
         ],
         "advantages": [
-            "Button flowers",
-            "Long lasting"
+            "Fast growing",
+            "Colorful foliage"
         ],
-        "price": 54,
-        "type": "outdoor",
-        "lifespan": "1 Year",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "2-5 Years"
     },
     {
-        "id": "p_out_2056",
-        "name": "Cockscomb",
-        "scientificName": "Celosia argentea",
-        "description": "The Cockscomb (Celosia argentea) is a classic garden staple. With a lifespan of 1 Year, it offers velvet texture and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-3456366290?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
+        "id": "mock_404",
+        "name": "Oxalis",
+        "scientificName": "Oxalis triangularis",
+        "description": "The Oxalis is a shamrock plant with purple triangular leaves that fold at night.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 16,
+        "idealTempMax": 24,
+        "minHumidity": 40,
+        "sunlight": "Bright indirect (1500-2500 Lux)",
+        "oxygenLevel": "12 L/day",
+        "medicinalValues": [
+            "None"
+        ],
+        "advantages": [
+            "Unique purple color",
+            "Delicate flowers"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "Perennial"
+    },
+    {
+        "id": "mock_405",
+        "name": "Stromanthe",
+        "scientificName": "Stromanthe sanguinea",
+        "description": "The Stromanthe is a prayer plant with stunning pink and green variegated leaves.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 18,
+        "idealTempMax": 27,
+        "minHumidity": 60,
+        "sunlight": "Medium (1000-2000 Lux)",
         "oxygenLevel": "20 L/day",
         "medicinalValues": [
-            "Mouth sores"
+            "Air purification"
         ],
         "advantages": [
-            "Velvet texture",
-            "Unique shape"
+            "Colorful undersides",
+            "Prayer movement"
         ],
-        "price": 44,
-        "type": "outdoor",
-        "lifespan": "1 Year",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "3-10 Years",
+        "petFriendly": true
     },
     {
-        "id": "p_out_2057",
-        "name": "Kochia",
-        "scientificName": "Bassia scoparia",
-        "description": "The Kochia (Bassia scoparia) is a classic garden staple. With a lifespan of 1 Year, it offers foliage ball and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-6914374315?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "25 L/day",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Foliage ball",
-            "Green to Red"
-        ],
-        "price": 75,
-        "type": "outdoor",
-        "lifespan": "1 Year",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2058",
-        "name": "Morning Glory",
-        "scientificName": "Ipomoea purpurea",
-        "description": "The Morning Glory (Ipomoea purpurea) is a classic garden staple. With a lifespan of 1 Year, it offers fast climber and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-6186142152?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "30 L/day",
-        "medicinalValues": [
-            "Laxative (seeds toxic)"
-        ],
-        "advantages": [
-            "Fast climber",
-            "Morning blooms"
-        ],
-        "price": 11,
-        "type": "outdoor",
-        "lifespan": "1 Year",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "USDA Poisonous Plant Research"
-    },
-    {
-        "id": "p_out_2059",
-        "name": "Cypress Vine",
-        "scientificName": "Ipomoea quamoclit",
-        "description": "The Cypress Vine (Ipomoea quamoclit) is a classic garden staple. With a lifespan of 1 Year, it offers star flowers and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-4487357619?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "25 L/day",
-        "medicinalValues": [
-            "Cooling"
-        ],
-        "advantages": [
-            "Star flowers",
-            "Feathery leaves"
-        ],
-        "price": 50,
-        "type": "outdoor",
-        "lifespan": "1 Year",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2060",
-        "name": "Bleeding Heart Vine",
-        "scientificName": "Clerodendrum thomsoniae",
-        "description": "The Bleeding Heart Vine (Clerodendrum thomsoniae) is a classic garden staple. With a lifespan of 10+ Years, it offers bicolor flowers and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-2525791569?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Part Shade",
-        "oxygenLevel": "30 L/day",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Bicolor flowers",
-            "Shade climber"
-        ],
-        "price": 7,
-        "type": "outdoor",
-        "lifespan": "10+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2061",
-        "name": "Bottle Brush",
-        "scientificName": "Callistemon",
-        "description": "The Bottle Brush (Callistemon) is a classic garden staple. With a lifespan of 40+ Years, it offers unique red bristles and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-1269661968?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "60 L/day",
-        "medicinalValues": [
-            "Antimicrobial"
-        ],
-        "advantages": [
-            "Unique red bristles",
-            "Bird attractor"
-        ],
-        "price": 14,
-        "type": "outdoor",
-        "lifespan": "40+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2062",
-        "name": "Indian Almond",
-        "scientificName": "Terminalia catappa",
-        "description": "The Indian Almond (Terminalia catappa) is a classic garden staple. With a lifespan of 60+ Years, it offers shade and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-6335175222?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "150 L/day",
-        "medicinalValues": [
-            "Leaf for fish tank",
-            "Astringent"
-        ],
-        "advantages": [
-            "Shade",
-            "Fall colors in tropics"
-        ],
-        "price": 59,
-        "type": "outdoor",
-        "lifespan": "60+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2063",
-        "name": "Jackfruit",
-        "scientificName": "Artocarpus heterophyllus",
-        "description": "The Jackfruit (Artocarpus heterophyllus) is a classic garden staple. With a lifespan of 100+ Years, it offers largest fruit and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-3129339298?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "180 L/day",
-        "medicinalValues": [
-            "Leaves for diabetes"
-        ],
-        "advantages": [
-            "Largest fruit",
-            "Timber"
-        ],
-        "price": 30,
-        "type": "outdoor",
-        "lifespan": "100+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "USDA FoodData Central"
-    },
-    {
-        "id": "p_out_2064",
-        "name": "Amaltas (Golden Shower)",
-        "scientificName": "Cassia fistula",
-        "description": "The Amaltas (Golden Shower) (Cassia fistula) is a classic garden staple. With a lifespan of 50 Years, it offers yellow rain flowers and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-6302868840?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "90 L/day",
-        "medicinalValues": [
-            "Laxative (Fruit pulp)"
-        ],
-        "advantages": [
-            "Yellow rain flowers",
-            "Ornamental"
-        ],
-        "price": 22,
-        "type": "outdoor",
-        "lifespan": "50 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "Ayurvedic Pharmacopoeia of India"
-    },
-    {
-        "id": "p_out_2065",
-        "name": "Pride of India",
-        "scientificName": "Lagerstroemia speciosa",
-        "description": "The Pride of India (Lagerstroemia speciosa) is a classic garden staple. With a lifespan of 50 Years, it offers purple finish and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-2886448667?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "85 L/day",
-        "medicinalValues": [
-            "Diabetes tea"
-        ],
-        "advantages": [
-            "Purple finish",
-            "Roadside beauty"
-        ],
-        "price": 35,
-        "type": "outdoor",
-        "lifespan": "50 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2066",
-        "name": "Sitaphal (Custard Apple)",
-        "scientificName": "Annona squamosa",
-        "description": "The Sitaphal (Custard Apple) (Annona squamosa) is a classic garden staple. With a lifespan of 20 Years, it offers tasty fruit and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-2021190262?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "50 L/day",
-        "medicinalValues": [
-            "Leaves antimicrobial"
-        ],
-        "advantages": [
-            "Tasty fruit",
-            "Small tree"
-        ],
-        "price": 41,
-        "type": "outdoor",
-        "lifespan": "20 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2067",
-        "name": "Chiku (Sapodilla)",
-        "scientificName": "Manilkara zapota",
-        "description": "The Chiku (Sapodilla) (Manilkara zapota) is a classic garden staple. With a lifespan of 100 Years, it offers sweet fruit and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-5551442516?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "110 L/day",
-        "medicinalValues": [
-            "Bark Astringent"
-        ],
-        "advantages": [
-            "Sweet fruit",
-            "Dense canopy"
-        ],
-        "price": 58,
-        "type": "outdoor",
-        "lifespan": "100 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2068",
-        "name": "Drumstick (Moringa)",
-        "scientificName": "Moringa oleifera",
-        "description": "The Drumstick (Moringa) (Moringa oleifera) is a classic garden staple. With a lifespan of 20 Years, it offers fastest growing and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-5192471080?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "100 L/day",
-        "medicinalValues": [
-            "Superfood"
-        ],
-        "advantages": [
-            "Fastest growing",
-            "Nutritious"
-        ],
-        "price": 43,
-        "type": "outdoor",
-        "lifespan": "20 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "USDA FoodData Central"
-    },
-    {
-        "id": "p_out_2069",
-        "name": "Wisteria",
-        "scientificName": "Wisteria sinensis",
-        "description": "The Wisteria (Wisteria sinensis) is a classic garden staple. With a lifespan of 50+ Years, it offers cascading flowers and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-7903135031?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "80 L/day",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Cascading flowers",
-            "Stunning purple"
-        ],
-        "price": 57,
-        "type": "outdoor",
-        "lifespan": "50+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2070",
-        "name": "Clematis",
-        "scientificName": "Clematis",
-        "description": "The Clematis (Clematis) is a classic garden staple. With a lifespan of 20-50 Years, it offers queen of climbers and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-1734251902?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Sun (Roots shade)",
-        "oxygenLevel": "40 L/day",
-        "medicinalValues": [
-            "Anti-inflammatory (History)"
-        ],
-        "advantages": [
-            "Queen of Climbers",
-            "Diverse colors"
-        ],
-        "price": 42,
-        "type": "outdoor",
-        "lifespan": "20-50 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2071",
-        "name": "Honeysuckle",
-        "scientificName": "Lonicera",
-        "description": "The Honeysuckle (Lonicera) is a classic garden staple. With a lifespan of 20+ Years, it offers heavenly scent and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-2415264645?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "50 L/day",
-        "medicinalValues": [
-            "Cooling herb"
-        ],
-        "advantages": [
-            "Heavenly scent",
-            "Pollinator magnet"
-        ],
-        "price": 9,
-        "type": "outdoor",
-        "lifespan": "20+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2072",
-        "name": "Black Eyed Susan",
-        "scientificName": "Rudbeckia hirta",
-        "description": "The Black Eyed Susan (Rudbeckia hirta) is a classic garden staple. With a lifespan of 2-3 Years, it offers bright yellow and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-1519763999?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "30 L/day",
-        "medicinalValues": [
-            "Immune boost root"
-        ],
-        "advantages": [
-            "Bright yellow",
-            "Native beauty"
-        ],
-        "price": 69,
-        "type": "outdoor",
-        "lifespan": "2-3 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2073",
-        "name": "Coneflower",
-        "scientificName": "Echinacea purpurea",
-        "description": "The Coneflower (Echinacea purpurea) is a classic garden staple. With a lifespan of 3-5 Years, it offers medicinal tea and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-5755287641?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "35 L/day",
-        "medicinalValues": [
-            "Cold remedy"
-        ],
-        "advantages": [
-            "Medicinal tea",
-            "Butterfly fave"
-        ],
-        "price": 74,
-        "type": "outdoor",
-        "lifespan": "3-5 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2074",
-        "name": "Bleeding Heart",
-        "scientificName": "Lamprocapnos spectabilis",
-        "description": "The Bleeding Heart (Lamprocapnos spectabilis) is a classic garden staple. With a lifespan of Perennial, it offers heart shaped flower and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-6989119286?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Shade",
-        "oxygenLevel": "25 L/day",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Heart shaped flower",
-            "Shade lover"
-        ],
-        "price": 52,
-        "type": "outdoor",
-        "lifespan": "Perennial",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2075",
-        "name": "Astilbe",
-        "scientificName": "Astilbe",
-        "description": "The Astilbe (Astilbe) is a classic garden staple. With a lifespan of 15+ Years, it offers feathery plumes and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-3131552610?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Shade",
-        "oxygenLevel": "30 L/day",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Feathery plumes",
-            "Fern-like foliage"
-        ],
-        "price": 15,
-        "type": "outdoor",
-        "lifespan": "15+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2076",
-        "name": "Hosta",
-        "scientificName": "Hosta",
-        "description": "The Hosta (Hosta) is a classic garden staple. With a lifespan of 30+ Years, it offers foliage king and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-2306122314?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Shade",
-        "oxygenLevel": "40 L/day",
-        "medicinalValues": [
-            "Edible shoots"
-        ],
-        "advantages": [
-            "Foliage king",
-            "Shade tolerant"
-        ],
-        "price": 56,
-        "type": "outdoor",
-        "lifespan": "30+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2077",
-        "name": "Coral Bells",
-        "scientificName": "Heuchera",
-        "description": "The Coral Bells (Heuchera) is a classic garden staple. With a lifespan of 3-5 Years, it offers colorful leaves and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-8407297157?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Part Shade",
-        "oxygenLevel": "25 L/day",
-        "medicinalValues": [
-            "Astringent root"
-        ],
-        "advantages": [
-            "Colorful leaves",
-            "Evergreen"
-        ],
-        "price": 57,
-        "type": "outdoor",
-        "lifespan": "3-5 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2078",
-        "name": "Foxglove",
-        "scientificName": "Digitalis purpurea",
-        "description": "The Foxglove (Digitalis purpurea) is a classic garden staple. With a lifespan of 2 Years (Biennial), it offers tall spikes and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-3580498795?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Part Shade",
-        "oxygenLevel": "35 L/day",
-        "medicinalValues": [
-            "Heart medicine (Toxic)"
-        ],
-        "advantages": [
-            "Tall spikes",
-            "Cottage garden"
-        ],
-        "price": 11,
-        "type": "outdoor",
-        "lifespan": "2 Years (Biennial)",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "USDA Poisonous Plant Research"
-    },
-    {
-        "id": "p_out_2079",
-        "name": "Delphinium",
-        "scientificName": "Delphinium",
-        "description": "The Delphinium (Delphinium) is a classic garden staple. With a lifespan of 3-5 Years, it offers true blue color and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-5469091435?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "40 L/day",
-        "medicinalValues": [
-            "None (Toxic)"
-        ],
-        "advantages": [
-            "True blue color",
-            "Tall spikes"
-        ],
-        "price": 24,
-        "type": "outdoor",
-        "lifespan": "3-5 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "USDA Poisonous Plant Research"
-    },
-    {
-        "id": "p_out_2080",
-        "name": "Snapdragon",
-        "scientificName": "Antirrhinum majus",
-        "description": "The Snapdragon (Antirrhinum majus) is a classic garden staple. With a lifespan of 1 Year, it offers dragon mouth flowers and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-6846811828?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "20 L/day",
-        "medicinalValues": [
-            "Anti-inflammatory"
-        ],
-        "advantages": [
-            "Dragon mouth flowers",
-            "Kids love"
-        ],
-        "price": 37,
-        "type": "outdoor",
-        "lifespan": "1 Year",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2081",
-        "name": "Zinnia",
-        "scientificName": "Zinnia elegans",
-        "description": "The Zinnia (Zinnia elegans) is a classic garden staple. With a lifespan of 1 Year, it offers cut flowers and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-5958498176?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "25 L/day",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Cut flowers",
-            "Butterfly magnet"
-        ],
-        "price": 16,
-        "type": "outdoor",
-        "lifespan": "1 Year",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2082",
-        "name": "Cosmos",
-        "scientificName": "Cosmos bipinnatus",
-        "description": "The Cosmos (Cosmos bipinnatus) is a classic garden staple. With a lifespan of 1 Year, it offers airy foliage and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-4724464754?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
+        "id": "mock_406",
+        "name": "Alocasia",
+        "scientificName": "Alocasia amazonica",
+        "description": "The Alocasia is an elephant ear plant with dramatic arrow-shaped leaves and white veins.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 18,
+        "idealTempMax": 27,
+        "minHumidity": 60,
+        "sunlight": "Bright indirect (1500-2500 Lux)",
         "oxygenLevel": "28 L/day",
         "medicinalValues": [
-            "None"
+            "Air purification"
         ],
         "advantages": [
-            "Airy foliage",
-            "Daisy like"
+            "Dramatic foliage",
+            "Tropical look"
         ],
-        "price": 53,
-        "type": "outdoor",
-        "lifespan": "1 Year",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "5-10 Years"
     },
     {
-        "id": "p_out_2083",
-        "name": "Sweet Pea",
-        "scientificName": "Lathyrus odoratus",
-        "description": "The Sweet Pea (Lathyrus odoratus) is a classic garden staple. With a lifespan of 1 Year, it offers fragrance and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-1564557636?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "30 L/day",
+        "id": "mock_407",
+        "name": "Begonia Rex",
+        "scientificName": "Begonia rex-cultorum",
+        "description": "The Begonia Rex is a painted-leaf begonia with spectacular multicolored foliage patterns.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 16,
+        "idealTempMax": 24,
+        "minHumidity": 50,
+        "sunlight": "Medium (1000-2000 Lux)",
+        "oxygenLevel": "15 L/day",
         "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Fragrance",
-            "Climber"
-        ],
-        "price": 11,
-        "type": "outdoor",
-        "lifespan": "1 Year",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2084",
-        "name": "Nasturtium",
-        "scientificName": "Tropaeolum majus",
-        "description": "The Nasturtium (Tropaeolum majus) is a classic garden staple. With a lifespan of 1 Year, it offers edible flowers/leaves and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-1718651842?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "35 L/day",
-        "medicinalValues": [
-            "Antibiotic"
-        ],
-        "advantages": [
-            "Edible flowers/leaves",
-            "Peppery"
-        ],
-        "price": 69,
-        "type": "outdoor",
-        "lifespan": "1 Year",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2085",
-        "name": "Dahlia",
-        "scientificName": "Dahlia pinnata",
-        "description": "The Dahlia (Dahlia pinnata) is a classic garden staple. With a lifespan of Perennial Tuber, it offers showy blooms and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-3060972878?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "45 L/day",
-        "medicinalValues": [
-            "Insulin source (historical)"
-        ],
-        "advantages": [
-            "Showy blooms",
-            "Variety"
-        ],
-        "price": 7,
-        "type": "outdoor",
-        "lifespan": "Perennial Tuber",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2086",
-        "name": "Gladiolus",
-        "scientificName": "Gladiolus",
-        "description": "The Gladiolus (Gladiolus) is a classic garden staple. With a lifespan of Perennial Corm, it offers tall sword flower and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-1118206230?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "30 L/day",
-        "medicinalValues": [
-            "Drawing out thorns"
-        ],
-        "advantages": [
-            "Tall sword flower",
-            "Cut flower"
-        ],
-        "price": 63,
-        "type": "outdoor",
-        "lifespan": "Perennial Corm",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2087",
-        "name": "Calla Lily",
-        "scientificName": "Zantedeschia aethiopica",
-        "description": "The Calla Lily (Zantedeschia aethiopica) is a classic garden staple. With a lifespan of Perennial, it offers elegant trumpet and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-6528744482?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Sun/Part Shade",
-        "oxygenLevel": "35 L/day",
-        "medicinalValues": [
-            "None (Toxic)"
-        ],
-        "advantages": [
-            "Elegant trumpet",
-            "Wet soil"
-        ],
-        "price": 68,
-        "type": "outdoor",
-        "lifespan": "Perennial",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "USDA Poisonous Plant Research"
-    },
-    {
-        "id": "p_out_2088",
-        "name": "Daylily",
-        "scientificName": "Hemerocallis",
-        "description": "The Daylily (Hemerocallis) is a classic garden staple. With a lifespan of Perennial, it offers tough and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-7103578933?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Sun",
-        "oxygenLevel": "30 L/day",
-        "medicinalValues": [
-            "Edible flower buds"
-        ],
-        "advantages": [
-            "Tough",
-            "Blooms for one day"
-        ],
-        "price": 8,
-        "type": "outdoor",
-        "lifespan": "Perennial",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2089",
-        "name": "Iris",
-        "scientificName": "Iris germanica",
-        "description": "The Iris (Iris germanica) is a classic garden staple. With a lifespan of Perennial, it offers bearded flowers and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-5454535325?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "32 L/day",
-        "medicinalValues": [
-            "Orris root (perfume)"
-        ],
-        "advantages": [
-            "Bearded flowers",
-            "Sword leaves"
-        ],
-        "price": 55,
-        "type": "outdoor",
-        "lifespan": "Perennial",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2090",
-        "name": "Camellia",
-        "scientificName": "Camellia japonica",
-        "description": "The Camellia (Camellia japonica) is a classic garden staple. With a lifespan of 50+ Years, it offers winter blooms and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-7002743533?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Part Shade",
-        "oxygenLevel": "55 L/day",
-        "medicinalValues": [
-            "Oil for hair"
-        ],
-        "advantages": [
-            "Winter blooms",
-            "Rose-like"
-        ],
-        "price": 11,
-        "type": "outdoor",
-        "lifespan": "50+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2091",
-        "name": "Gardenia",
-        "scientificName": "Gardenia jasminoides",
-        "description": "The Gardenia (Gardenia jasminoides) is a classic garden staple. With a lifespan of 20-40 Years, it offers intense fragrance and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-6142936420?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Part Shade",
-        "oxygenLevel": "40 L/day",
-        "medicinalValues": [
-            "Chinese medicine"
-        ],
-        "advantages": [
-            "Intense fragrance",
-            "White blooms"
-        ],
-        "price": 65,
-        "type": "outdoor",
-        "lifespan": "20-40 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "Traditional Chinese Medicine (TCM) Database"
-    },
-    {
-        "id": "p_out_2092",
-        "name": "Rhododendron",
-        "scientificName": "Rhododendron ferrugineum",
-        "description": "The Rhododendron (Rhododendron ferrugineum) is a classic garden staple. With a lifespan of 50+ Years, it offers spectacular spring and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-3570237588?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Part Shade",
-        "oxygenLevel": "60 L/day",
-        "medicinalValues": [
-            "None (Toxic)"
-        ],
-        "advantages": [
-            "Spectacular spring",
-            "Evergreen"
-        ],
-        "price": 37,
-        "type": "outdoor",
-        "lifespan": "50+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "USDA Poisonous Plant Research"
-    },
-    {
-        "id": "p_out_2093",
-        "name": "Forsythia",
-        "scientificName": "Forsythia suspensa",
-        "description": "The Forsythia (Forsythia suspensa) is a classic garden staple. With a lifespan of 40+ Years, it offers first yellow of spring and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-9638374734?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "45 L/day",
-        "medicinalValues": [
-            "Detox"
-        ],
-        "advantages": [
-            "First yellow of spring",
-            "Hardy"
-        ],
-        "price": 78,
-        "type": "outdoor",
-        "lifespan": "40+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2094",
-        "name": "Weigela",
-        "scientificName": "Weigela florida",
-        "description": "The Weigela (Weigela florida) is a classic garden staple. With a lifespan of 30+ Years, it offers tubular flowers and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-5947868640?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "40 L/day",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Tubular flowers",
-            "Hummingbirds"
-        ],
-        "price": 72,
-        "type": "outdoor",
-        "lifespan": "30+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2095",
-        "name": "Spirea",
-        "scientificName": "Spiraea japonica",
-        "description": "The Spirea (Spiraea japonica) is a classic garden staple. With a lifespan of 20+ Years, it offers easy shrub and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-5700344830?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "35 L/day",
-        "medicinalValues": [
-            "Aspirin source (Salicylic acid)"
-        ],
-        "advantages": [
-            "Easy shrub",
-            "Pink/White"
-        ],
-        "price": 62,
-        "type": "outdoor",
-        "lifespan": "20+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2096",
-        "name": "Holly",
-        "scientificName": "Ilex aquifolium",
-        "description": "The Holly (Ilex aquifolium) is a classic garden staple. With a lifespan of 50+ Years, it offers winter red berries and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-5328706880?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Sun/Part Shade",
-        "oxygenLevel": "55 L/day",
-        "medicinalValues": [
-            "None (Berries toxic)"
-        ],
-        "advantages": [
-            "Winter red berries",
-            "Security"
-        ],
-        "price": 63,
-        "type": "outdoor",
-        "lifespan": "50+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "USDA Poisonous Plant Research"
-    },
-    {
-        "id": "p_out_2097",
-        "name": "Juniper",
-        "scientificName": "Juniperus communis",
-        "description": "The Juniper (Juniperus communis) is a classic garden staple. With a lifespan of 100+ Years, it offers evergreen and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-2556370635?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "70 L/day",
-        "medicinalValues": [
-            "Gin flavoring",
-            "Antiseptic"
-        ],
-        "advantages": [
-            "Evergreen",
-            "Berries"
-        ],
-        "price": 33,
-        "type": "outdoor",
-        "lifespan": "100+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2098",
-        "name": "Yew",
-        "scientificName": "Taxus baccata",
-        "description": "The Yew (Taxus baccata) is a classic garden staple. With a lifespan of 500+ Years, it offers long lived and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-1436086684?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Shade/Sun",
-        "oxygenLevel": "80 L/day",
-        "medicinalValues": [
-            "Taxol (Cancer drug)"
-        ],
-        "advantages": [
-            "Long lived",
-            "Hedge"
-        ],
-        "price": 67,
-        "type": "outdoor",
-        "lifespan": "500+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "The Gymnosperm Database"
-    },
-    {
-        "id": "p_out_2099",
-        "name": "Arborvitae",
-        "scientificName": "Thuja occidentalis",
-        "description": "The Arborvitae (Thuja occidentalis) is a classic garden staple. With a lifespan of 50+ Years, it offers privacy screen and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-6343885476?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "90 L/day",
-        "medicinalValues": [
-            "Vitamin C tea"
-        ],
-        "advantages": [
-            "Privacy screen",
-            "Evergreen"
-        ],
-        "price": 12,
-        "type": "outdoor",
-        "lifespan": "50+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2100",
-        "name": "Japanese Maple",
-        "scientificName": "Acer palmatum",
-        "description": "The Japanese Maple (Acer palmatum) is a classic garden staple. With a lifespan of 50-100 Years, it offers stunning foliage and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-9411116103?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Part Shade",
-        "oxygenLevel": "120 L/day",
-        "medicinalValues": [
-            "Eye wash"
+            "Air cleaning"
         ],
         "advantages": [
             "Stunning foliage",
-            "Form"
-        ],
-        "price": 36,
-        "type": "outdoor",
-        "lifespan": "50-100 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2101",
-        "name": "Dogwood",
-        "scientificName": "Cornus florida",
-        "description": "The Dogwood (Cornus florida) is a classic garden staple. With a lifespan of 50+ Years, it offers spring bracts and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-6279445716?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Part Shade",
-        "oxygenLevel": "110 L/day",
-        "medicinalValues": [
-            "Fever bark"
-        ],
-        "advantages": [
-            "Spring bracts",
-            "Fall color"
-        ],
-        "price": 77,
-        "type": "outdoor",
-        "lifespan": "50+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2102",
-        "name": "Redbud",
-        "scientificName": "Cercis canadensis",
-        "description": "The Redbud (Cercis canadensis) is a classic garden staple. With a lifespan of 50 Years, it offers pink stems and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-2774373896?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Part Shade",
-        "oxygenLevel": "100 L/day",
-        "medicinalValues": [
-            "Astringent"
-        ],
-        "advantages": [
-            "Pink stems",
-            "Heart leaves"
-        ],
-        "price": 34,
-        "type": "outdoor",
-        "lifespan": "50 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2103",
-        "name": "Crape Myrtle",
-        "scientificName": "Lagerstroemia indica",
-        "description": "The Crape Myrtle (Lagerstroemia indica) is a classic garden staple. With a lifespan of 50+ Years, it offers summer blooms and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-6927428694?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "95 L/day",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Summer blooms",
-            "Peeling bark"
-        ],
-        "price": 18,
-        "type": "outdoor",
-        "lifespan": "50+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2104",
-        "name": "Ginkgo",
-        "scientificName": "Ginkgo biloba",
-        "description": "The Ginkgo (Ginkgo biloba) is a classic garden staple. With a lifespan of 1000+ Years, it offers living fossil and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-9463641297?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "250 L/day",
-        "medicinalValues": [
-            "Memory"
-        ],
-        "advantages": [
-            "Living fossil",
-            "Yellow fall"
-        ],
-        "price": 45,
-        "type": "outdoor",
-        "lifespan": "1000+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "The Gymnosperm Database"
-    },
-    {
-        "id": "p_out_2105",
-        "name": "Birch",
-        "scientificName": "Betula pendula",
-        "description": "The Birch (Betula pendula) is a classic garden staple. With a lifespan of 40-60 Years, it offers white bark and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-5730967103?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "180 L/day",
-        "medicinalValues": [
-            "Sap wine",
-            "Skin"
-        ],
-        "advantages": [
-            "White bark",
-            "Elegant"
-        ],
-        "price": 77,
-        "type": "outdoor",
-        "lifespan": "40-60 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2106",
-        "name": "Willow",
-        "scientificName": "Salix babylonica",
-        "description": "The Willow (Salix babylonica) is a classic garden staple. With a lifespan of 30-50 Years, it offers weeping form and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-5780467822?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "160 L/day",
-        "medicinalValues": [
-            "Aspirin source"
-        ],
-        "advantages": [
-            "Weeping form",
-            "Water loving"
-        ],
-        "price": 36,
-        "type": "outdoor",
-        "lifespan": "30-50 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2107",
-        "name": "Oak",
-        "scientificName": "Quercus robur",
-        "description": "The Oak (Quercus robur) is a classic garden staple. With a lifespan of 500+ Years, it offers wildlife support and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-6209296738?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "300 L/day",
-        "medicinalValues": [
-            "Astringent bark"
-        ],
-        "advantages": [
-            "Wildlife support",
-            "Strength"
-        ],
-        "price": 64,
-        "type": "outdoor",
-        "lifespan": "500+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "The Gymnosperm Database"
-    },
-    {
-        "id": "p_out_2108",
-        "name": "Maple",
-        "scientificName": "Acer saccharum",
-        "description": "The Maple (Acer saccharum) is a classic garden staple. With a lifespan of 200+ Years, it offers fall color and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-8553029282?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "280 L/day",
-        "medicinalValues": [
-            "Syrup"
-        ],
-        "advantages": [
-            "Fall color",
-            "Syrup"
-        ],
-        "price": 32,
-        "type": "outdoor",
-        "lifespan": "200+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2109",
-        "name": "Pine",
-        "scientificName": "Pinus strobus",
-        "description": "The Pine (Pinus strobus) is a classic garden staple. With a lifespan of 200+ Years, it offers evergreen and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-5683124127?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "260 L/day",
-        "medicinalValues": [
-            "Needle tea (Vit C)"
-        ],
-        "advantages": [
-            "Evergreen",
-            "Scent"
-        ],
-        "price": 29,
-        "type": "outdoor",
-        "lifespan": "200+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2110",
-        "name": "Palm (Fan)",
-        "scientificName": "Washingtonia robusta",
-        "description": "The Palm (Fan) (Washingtonia robusta) is a classic garden staple. With a lifespan of 50-100 Years, it offers skyline accent and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-8515398393?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "150 L/day",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Skyline accent",
-            "Drought"
-        ],
-        "price": 19,
-        "type": "outdoor",
-        "lifespan": "50-100 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2111",
-        "name": "Olive",
-        "scientificName": "Olea europaea",
-        "description": "The Olive (Olea europaea) is a classic garden staple. With a lifespan of 1000+ Years, it offers peace symbol and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-1726798114?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "120 L/day",
-        "medicinalValues": [
-            "Leaf extract",
-            "Oil"
-        ],
-        "advantages": [
-            "Peace symbol",
-            "Fruit"
-        ],
-        "price": 20,
-        "type": "outdoor",
-        "lifespan": "1000+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "The Gymnosperm Database"
-    },
-    {
-        "id": "p_out_2112",
-        "name": "Fig",
-        "scientificName": "Ficus carica",
-        "description": "The Fig (Ficus carica) is a classic garden staple. With a lifespan of 50+ Years, it offers edible fruit and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-1980332622?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "100 L/day",
-        "medicinalValues": [
-            "Latex for warts"
-        ],
-        "advantages": [
-            "Edible fruit",
-            "Leaves"
-        ],
-        "price": 20,
-        "type": "outdoor",
-        "lifespan": "50+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2113",
-        "name": "Grapevine",
-        "scientificName": "Vitis vinifera",
-        "description": "The Grapevine (Vitis vinifera) is a classic garden staple. With a lifespan of 50-100 Years, it offers wine/jam and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-4362244984?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "90 L/day",
-        "medicinalValues": [
-            "Antioxidant seeds"
-        ],
-        "advantages": [
-            "Wine/Jam",
-            "Shade arbor"
-        ],
-        "price": 47,
-        "type": "outdoor",
-        "lifespan": "50-100 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2114",
-        "name": "Strawberry",
-        "scientificName": "Fragaria x ananassa",
-        "description": "The Strawberry (Fragaria x ananassa) is a classic garden staple. With a lifespan of 3 Years, it offers delicious and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-3416673092?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "25 L/day",
-        "medicinalValues": [
-            "Teeth whitening (fruit)"
-        ],
-        "advantages": [
-            "Delicious",
-            "Ground cover"
-        ],
-        "price": 51,
-        "type": "outdoor",
-        "lifespan": "3 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2115",
-        "name": "Blueberry",
-        "scientificName": "Vaccinium corymbosum",
-        "description": "The Blueberry (Vaccinium corymbosum) is a classic garden staple. With a lifespan of 40+ Years, it offers berries and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-9872942837?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "40 L/day",
-        "medicinalValues": [
-            "Superfood"
-        ],
-        "advantages": [
-            "Berries",
-            "Fall red leaves"
+            "Compact size"
         ],
         "price": 25,
-        "type": "outdoor",
-        "lifespan": "40+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+        "type": "indoor",
+        "lifespan": "2-5 Years"
     },
     {
-        "id": "p_out_2116",
-        "name": "Raspberry",
-        "scientificName": "Rubus idaeus",
-        "description": "The Raspberry (Rubus idaeus) is a classic garden staple. With a lifespan of 10+ Years, it offers fruit and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-4499499402?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "35 L/day",
+        "id": "mock_408",
+        "name": "Columnea",
+        "scientificName": "Columnea gloriosa",
+        "description": "The Columnea is a goldfish plant with tubular orange flowers resembling goldfish.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 18,
+        "idealTempMax": 24,
+        "minHumidity": 50,
+        "sunlight": "Bright indirect (1500-2500 Lux)",
+        "oxygenLevel": "18 L/day",
         "medicinalValues": [
-            "Leaf tea for labor"
+            "Air purification"
         ],
         "advantages": [
-            "Fruit",
-            "Easy grow"
+            "Unique flowers",
+            "Trailing habit"
         ],
-        "price": 74,
-        "type": "outdoor",
-        "lifespan": "10+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "5-10 Years"
     },
     {
-        "id": "p_out_2117",
-        "name": "Blackberry",
-        "scientificName": "Rubus fruticosus",
-        "description": "The Blackberry (Rubus fruticosus) is a classic garden staple. With a lifespan of 10+ Years, it offers fruit and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-3011261617?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "35 L/day",
+        "id": "mock_409",
+        "name": "Ctenanthe",
+        "scientificName": "Ctenanthe burle-marxii",
+        "description": "The Ctenanthe is a fishbone prayer plant with herringbone patterned leaves.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 18,
+        "idealTempMax": 27,
+        "minHumidity": 60,
+        "sunlight": "Medium (1000-2000 Lux)",
+        "oxygenLevel": "20 L/day",
         "medicinalValues": [
-            "Antioxidant"
+            "Air purification"
         ],
         "advantages": [
-            "Fruit",
-            "Aggressive"
+            "Unique patterns",
+            "Prayer movement"
         ],
-        "price": 5,
-        "type": "outdoor",
-        "lifespan": "10+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "3-8 Years",
+        "petFriendly": true
     },
     {
-        "id": "p_out_2118",
-        "name": "Sunflower (Giant)",
-        "scientificName": "Helianthus giganteus",
-        "description": "The Sunflower (Giant) (Helianthus giganteus) is a classic garden staple. With a lifespan of 1 Year, it offers 12ft tall and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-2911828225?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "80 L/day",
+        "id": "mock_410",
+        "name": "Pilea Cadierei",
+        "scientificName": "Pilea cadierei",
+        "description": "The Pilea Cadierei is an aluminum plant with silver-marked leaves creating a metallic effect.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 16,
+        "idealTempMax": 24,
+        "minHumidity": 50,
+        "sunlight": "Bright indirect (1500-2500 Lux)",
+        "oxygenLevel": "15 L/day",
         "medicinalValues": [
-            "Seeds"
+            "Air cleaning"
         ],
         "advantages": [
-            "12ft tall",
-            "Competitions"
+            "Metallic appearance",
+            "Easy care"
         ],
-        "price": 23,
-        "type": "outdoor",
-        "lifespan": "1 Year",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "3-5 Years"
     },
     {
-        "id": "p_out_2119",
-        "name": "Corpse Flower (Giant)",
-        "scientificName": "Rafflesia arnoldii",
-        "description": "The Corpse Flower (Giant) (Rafflesia arnoldii) is a classic garden staple. With a lifespan of Parasitic, it offers worlds largest flower and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-4334563373?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Jungle Floor",
-        "oxygenLevel": "5 L/day",
+        "id": "mock_411",
+        "name": "Episcia",
+        "scientificName": "Episcia cupreata",
+        "description": "The Episcia is a flame violet with velvety leaves and bright tubular flowers.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 18,
+        "idealTempMax": 27,
+        "minHumidity": 60,
+        "sunlight": "Medium (1000-2000 Lux)",
+        "oxygenLevel": "15 L/day",
         "medicinalValues": [
-            "Fever (Traditional)"
+            "Air purification"
         ],
         "advantages": [
-            "Worlds largest flower",
-            "Rare"
+            "Colorful flowers",
+            "Trailing habit"
         ],
-        "price": 74,
-        "type": "outdoor",
-        "lifespan": "Parasitic",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "IUCN Red List / Kew Gardens Science"
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "2-5 Years"
     },
     {
-        "id": "p_out_2120",
-        "name": "Jade Vine",
-        "scientificName": "Strongylodon macrobotrys",
-        "description": "The Jade Vine (Strongylodon macrobotrys) is a classic garden staple. With a lifespan of 20+ Years, it offers neon teal flowers and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-5114409663?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Part Shade",
-        "oxygenLevel": "60 L/day",
+        "id": "mock_412",
+        "name": "Rhipsalis",
+        "scientificName": "Rhipsalis baccifera",
+        "description": "The Rhipsalis is a mistletoe cactus with trailing cylindrical stems and small berries.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 16,
+        "idealTempMax": 27,
+        "minHumidity": 40,
+        "sunlight": "Bright indirect (1500-2500 Lux)",
+        "oxygenLevel": "12 L/day",
         "medicinalValues": [
-            "None"
+            "Air purification"
         ],
         "advantages": [
-            "Neon teal flowers",
-            "Vining"
+            "Unique form",
+            "Low maintenance"
         ],
-        "price": 69,
-        "type": "outdoor",
-        "lifespan": "20+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "10-20 Years"
     },
     {
-        "id": "p_out_2121",
-        "name": "Ghost Orchid",
-        "scientificName": "Dendrophylax lindenii",
-        "description": "The Ghost Orchid (Dendrophylax lindenii) is a classic garden staple. With a lifespan of 10+ Years, it offers no leaves and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-7158674851?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
+        "id": "mock_413",
+        "name": "Haworthia",
+        "scientificName": "Haworthia fasciata",
+        "description": "The Haworthia is a zebra plant succulent with white striped leaves in a rosette form.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 13,
+        "idealTempMax": 27,
         "minHumidity": 30,
-        "sunlight": "Dappled Swamp",
+        "sunlight": "Bright indirect (1500-2500 Lux)",
         "oxygenLevel": "10 L/day",
         "medicinalValues": [
-            "None"
+            "Air cleaning"
         ],
         "advantages": [
-            "No leaves",
-            "Floats in air"
-        ],
-        "price": 70,
-        "type": "outdoor",
-        "lifespan": "10+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2122",
-        "name": "Chocolate Cosmos",
-        "scientificName": "Cosmos atrosanguineus",
-        "description": "The Chocolate Cosmos (Cosmos atrosanguineus) is a classic garden staple. With a lifespan of Perennial, it offers smells like chocolate and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-2319724443?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "20 L/day",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Smells like chocolate",
-            "Dark red"
-        ],
-        "price": 57,
-        "type": "outdoor",
-        "lifespan": "Perennial",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2123",
-        "name": "Giant Water Lily",
-        "scientificName": "Victoria amazonica",
-        "description": "The Giant Water Lily (Victoria amazonica) is a classic garden staple. With a lifespan of Perennial, it offers huge floating leaves and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-3882388467?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "90 L/day",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Huge floating leaves",
-            "Support a child"
-        ],
-        "price": 71,
-        "type": "outdoor",
-        "lifespan": "Perennial",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2124",
-        "name": "Parrot's Beak",
-        "scientificName": "Lotus berthelotii",
-        "description": "The Parrot's Beak (Lotus berthelotii) is a classic garden staple. With a lifespan of 3-5 Years, it offers orange claw flowers and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-3000390101?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "20 L/day",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Orange claw flowers",
-            "Silver foliage"
-        ],
-        "price": 72,
-        "type": "outdoor",
-        "lifespan": "3-5 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2125",
-        "name": "Kangaroo Paw",
-        "scientificName": "Anigozanthos flavidus",
-        "description": "The Kangaroo Paw (Anigozanthos flavidus) is a classic garden staple. With a lifespan of 5-10 Years, it offers fuzzy paw flowers and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-6247878522?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "30 L/day",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Fuzzy paw flowers",
-            "Unique"
-        ],
-        "price": 59,
-        "type": "outdoor",
-        "lifespan": "5-10 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2126",
-        "name": "Protea King",
-        "scientificName": "Protea cynaroides",
-        "description": "The Protea King (Protea cynaroides) is a classic garden staple. With a lifespan of 20+ Years, it offers huge artichoke flower and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-4230200291?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "50 L/day",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Huge artichoke flower",
-            "Dinosaur era"
-        ],
-        "price": 36,
-        "type": "outdoor",
-        "lifespan": "20+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2127",
-        "name": "Banksia",
-        "scientificName": "Banksia",
-        "description": "The Banksia (Banksia) is a classic garden staple. With a lifespan of 50+ Years, it offers bottle brush cone and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-4692225236?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "60 L/day",
-        "medicinalValues": [
-            "Nectar source"
-        ],
-        "advantages": [
-            "Bottle brush cone",
-            "Fire hardy"
-        ],
-        "price": 69,
-        "type": "outdoor",
-        "lifespan": "50+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2128",
-        "name": "Waratah",
-        "scientificName": "Telopea speciosissima",
-        "description": "The Waratah (Telopea speciosissima) is a classic garden staple. With a lifespan of 20+ Years, it offers red emblem and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-9366207274?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Part Shade",
-        "oxygenLevel": "55 L/day",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Red emblem",
-            "Structural"
-        ],
-        "price": 62,
-        "type": "outdoor",
-        "lifespan": "20+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2129",
-        "name": "Bird of Paradise (Giant)",
-        "scientificName": "Strelitzia nicolai",
-        "description": "The Bird of Paradise (Giant) (Strelitzia nicolai) is a classic garden staple. With a lifespan of 50+ Years, it offers 30ft tall and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-3386081804?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "150 L/day",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "30ft tall",
-            "White bird"
-        ],
-        "price": 39,
-        "type": "outdoor",
-        "lifespan": "50+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2130",
-        "name": "Traveler's Palm",
-        "scientificName": "Ravenala madagascariensis",
-        "description": "The Traveler's Palm (Ravenala madagascariensis) is a classic garden staple. With a lifespan of 50+ Years, it offers east-west alignment and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-6644077574?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "200 L/day",
-        "medicinalValues": [
-            "Water source"
-        ],
-        "advantages": [
-            "East-West alignment",
-            "Fan shape"
-        ],
-        "price": 31,
-        "type": "outdoor",
-        "lifespan": "50+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2131",
-        "name": "Baobab",
-        "scientificName": "Adansonia",
-        "description": "The Baobab (Adansonia) is a classic garden staple. With a lifespan of 2000+ Years, it offers tree of life and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-7573162241?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "300 L/day",
-        "medicinalValues": [
-            "Superfruit",
-            "Bark"
-        ],
-        "advantages": [
-            "Tree of Life",
-            "Water storage"
-        ],
-        "price": 68,
-        "type": "outdoor",
-        "lifespan": "2000+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2132",
-        "name": "Dragon Blood Tree",
-        "scientificName": "Dracaena cinnabari",
-        "description": "The Dragon Blood Tree (Dracaena cinnabari) is a classic garden staple. With a lifespan of 500+ Years, it offers ufo shape and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-4032123805?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "180 L/day",
-        "medicinalValues": [
-            "Red resin (blood)"
-        ],
-        "advantages": [
-            "UFO shape",
-            "Rare"
-        ],
-        "price": 60,
-        "type": "outdoor",
-        "lifespan": "500+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "IUCN Red List / Kew Gardens Science"
-    },
-    {
-        "id": "p_out_2133",
-        "name": "Rainbow Eucalyptus",
-        "scientificName": "Eucalyptus deglupta",
-        "description": "The Rainbow Eucalyptus (Eucalyptus deglupta) is a classic garden staple. With a lifespan of 100+ Years, it offers multicolored bark and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-9544131863?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "400 L/day",
-        "medicinalValues": [
-            "Oil"
-        ],
-        "advantages": [
-            "Multicolored bark",
-            "Fast growth"
-        ],
-        "price": 66,
-        "type": "outdoor",
-        "lifespan": "100+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2134",
-        "name": "Jacaranda",
-        "scientificName": "Jacaranda mimosifolia",
-        "description": "The Jacaranda (Jacaranda mimosifolia) is a classic garden staple. With a lifespan of 50+ Years, it offers purple canopy and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-7309564713?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "150 L/day",
-        "medicinalValues": [
-            "Antibiotic"
-        ],
-        "advantages": [
-            "Purple canopy",
-            "Fern leaves"
+            "Compact size",
+            "Drought tolerant"
         ],
         "price": 25,
-        "type": "outdoor",
-        "lifespan": "50+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+        "type": "indoor",
+        "lifespan": "10-50 Years",
+        "petFriendly": true
     },
     {
-        "id": "p_out_2135",
-        "name": "Wollemi Pine",
-        "scientificName": "Wollemia nobilis",
-        "description": "The Wollemi Pine (Wollemia nobilis) is a classic garden staple. With a lifespan of 1000+ Years, it offers living fossil (dino) and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-2625014018?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
+        "id": "mock_414",
+        "name": "Echeveria",
+        "scientificName": "Echeveria elegans",
+        "description": "The Echeveria is a hen and chicks succulent with rosette-shaped powdery blue-green leaves.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 13,
+        "idealTempMax": 27,
         "minHumidity": 30,
-        "sunlight": "Part Shade",
-        "oxygenLevel": "200 L/day",
+        "sunlight": "Bright direct (2000-3000 Lux)",
+        "oxygenLevel": "10 L/day",
         "medicinalValues": [
-            "None"
+            "Air purification"
         ],
         "advantages": [
-            "Living fossil (Dino)",
-            "Bubbly bark"
-        ],
-        "price": 34,
-        "type": "outdoor",
-        "lifespan": "1000+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "IUCN Red List / Kew Gardens Science"
-    },
-    {
-        "id": "p_out_2136",
-        "name": "Monkey Puzzle Tree",
-        "scientificName": "Araucaria araucana",
-        "description": "The Monkey Puzzle Tree (Araucaria araucana) is a classic garden staple. With a lifespan of 1000+ Years, it offers spiky puzzle and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-9748498611?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "220 L/day",
-        "medicinalValues": [
-            "Edible seeds"
-        ],
-        "advantages": [
-            "Spiky puzzle",
-            "Ancient"
-        ],
-        "price": 24,
-        "type": "outdoor",
-        "lifespan": "1000+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "The Gymnosperm Database"
-    },
-    {
-        "id": "p_out_2137",
-        "name": "Coast Redwood",
-        "scientificName": "Sequoia sempervirens",
-        "description": "The Coast Redwood (Sequoia sempervirens) is a classic garden staple. With a lifespan of 2000+ Years, it offers tallest tree and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-7299008049?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Foggy Sun",
-        "oxygenLevel": "1000 L/day",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Tallest tree",
-            "Fog lover"
-        ],
-        "price": 48,
-        "type": "outdoor",
-        "lifespan": "2000+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2138",
-        "name": "Giant Sequoia",
-        "scientificName": "Sequoiadendron giganteum",
-        "description": "The Giant Sequoia (Sequoiadendron giganteum) is a classic garden staple. With a lifespan of 3000+ Years, it offers largest tree volume and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-9155787348?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "1200 L/day",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Largest tree volume",
-            "Fire resistant"
-        ],
-        "price": 46,
-        "type": "outdoor",
-        "lifespan": "3000+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2139",
-        "name": "Bristlecone Pine",
-        "scientificName": "Pinus longaeva",
-        "description": "The Bristlecone Pine (Pinus longaeva) is a classic garden staple. With a lifespan of 5000+ Years, it offers oldest living thing and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-7487973736?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "100 L/day",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Oldest living thing",
-            "Twisted"
-        ],
-        "price": 74,
-        "type": "outdoor",
-        "lifespan": "5000+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "The Gymnosperm Database"
-    },
-    {
-        "id": "p_out_2140",
-        "name": "Quaking Aspen",
-        "scientificName": "Populus tremuloides",
-        "description": "The Quaking Aspen (Populus tremuloides) is a classic garden staple. With a lifespan of 100 Years (Clone 80k), it offers leaves shake and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-4204112212?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "200 L/day",
-        "medicinalValues": [
-            "Aspirin"
-        ],
-        "advantages": [
-            "Leaves shake",
-            "Yellow fall"
-        ],
-        "price": 53,
-        "type": "outdoor",
-        "lifespan": "100 Years (Clone 80k)",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2141",
-        "name": "Franklin Tree",
-        "scientificName": "Franklinia alatamaha",
-        "description": "The Franklin Tree (Franklinia alatamaha) is a classic garden staple. With a lifespan of 50 Years, it offers extinct in wild and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-3308970759?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "80 L/day",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Extinct in wild",
-            "White flower"
-        ],
-        "price": 5,
-        "type": "outdoor",
-        "lifespan": "50 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2142",
-        "name": "Dawn Redwood",
-        "scientificName": "Metasequoia glyptostroboides",
-        "description": "The Dawn Redwood (Metasequoia glyptostroboides) is a classic garden staple. With a lifespan of 600 Years, it offers deciduous conifer and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-5900108112?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "300 L/day",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Deciduous conifer",
-            "Fast"
-        ],
-        "price": 13,
-        "type": "outdoor",
-        "lifespan": "600 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2143",
-        "name": "Golden Chain Tree",
-        "scientificName": "Laburnum anagyroides",
-        "description": "The Golden Chain Tree (Laburnum anagyroides) is a classic garden staple. With a lifespan of 50 Years, it offers yellow hanging chains and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-9328061029?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "90 L/day",
-        "medicinalValues": [
-            "None (Toxic)"
-        ],
-        "advantages": [
-            "Yellow hanging chains",
-            "Tunnel tree"
-        ],
-        "price": 47,
-        "type": "outdoor",
-        "lifespan": "50 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "USDA Poisonous Plant Research"
-    },
-    {
-        "id": "p_out_2144",
-        "name": "Angel's Trumpet",
-        "scientificName": "Brugmansia",
-        "description": "The Angel's Trumpet (Brugmansia) is a classic garden staple. With a lifespan of 10-20 Years, it offers huge hanging bells and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-1478284477?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Sun/Part Shade",
-        "oxygenLevel": "80 L/day",
-        "medicinalValues": [
-            "Hallucinogen (Toxic)"
-        ],
-        "advantages": [
-            "Huge hanging bells",
-            "Scent"
-        ],
-        "price": 42,
-        "type": "outdoor",
-        "lifespan": "10-20 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "USDA Poisonous Plant Research"
-    },
-    {
-        "id": "p_out_2145",
-        "name": "Passion Fruit Vine",
-        "scientificName": "Passiflora edulis",
-        "description": "The Passion Fruit Vine (Passiflora edulis) is a classic garden staple. With a lifespan of 7 Years, it offers edible fruit and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-8892745025?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "50 L/day",
-        "medicinalValues": [
-            "Sleep aid"
-        ],
-        "advantages": [
-            "Edible fruit",
-            "Alien flower"
-        ],
-        "price": 77,
-        "type": "outdoor",
-        "lifespan": "7 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2146",
-        "name": "Kiwi Vine",
-        "scientificName": "Actinidia deliciosa",
-        "description": "The Kiwi Vine (Actinidia deliciosa) is a classic garden staple. With a lifespan of 50 Years, it offers fuzzy fruit and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-1021353683?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "60 L/day",
-        "medicinalValues": [
-            "Vitamin C"
-        ],
-        "advantages": [
-            "Fuzzy fruit",
-            "Vigorous"
-        ],
-        "price": 19,
-        "type": "outdoor",
-        "lifespan": "50 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2147",
-        "name": "Hops",
-        "scientificName": "Humulus lupulus",
-        "description": "The Hops (Humulus lupulus) is a classic garden staple. With a lifespan of 20+ Years, it offers fast growth and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-7018300464?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "55 L/day",
-        "medicinalValues": [
-            "Sleep",
-            "Beer"
-        ],
-        "advantages": [
-            "Fast growth",
-            "Cones"
-        ],
-        "price": 68,
-        "type": "outdoor",
-        "lifespan": "20+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2148",
-        "name": "Virginia Creeper",
-        "scientificName": "Parthenocissus quinquefolia",
-        "description": "The Virginia Creeper (Parthenocissus quinquefolia) is a classic garden staple. With a lifespan of 30+ Years, it offers red fall color and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-7604799981?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Sun/Shade",
-        "oxygenLevel": "60 L/day",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Red fall color",
-            "Native"
-        ],
-        "price": 76,
-        "type": "outdoor",
-        "lifespan": "30+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2149",
-        "name": "Boston Ivy",
-        "scientificName": "Parthenocissus tricuspidata",
-        "description": "The Boston Ivy (Parthenocissus tricuspidata) is a classic garden staple. With a lifespan of 50+ Years, it offers covers universities and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-2552428673?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Sun/Shade",
-        "oxygenLevel": "70 L/day",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Covers universities",
-            "Polished"
-        ],
-        "price": 38,
-        "type": "outdoor",
-        "lifespan": "50+ Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2150",
-        "name": "Agapanthus",
-        "scientificName": "Agapanthus africanus",
-        "description": "The Agapanthus (Agapanthus africanus) is a classic garden staple. With a lifespan of Perennial, it offers lily of nile and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-2965183114?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "30 L/day",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Lily of Nile",
-            "Blue balls"
+            "Sculptural form",
+            "Drought tolerant"
         ],
         "price": 25,
-        "type": "outdoor",
-        "lifespan": "Perennial",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+        "type": "indoor",
+        "lifespan": "3-10 Years"
     },
     {
-        "id": "p_out_2151",
-        "name": "Red Hot Poker",
-        "scientificName": "Kniphofia",
-        "description": "The Red Hot Poker (Kniphofia) is a classic garden staple. With a lifespan of Perennial, it offers torch flowers and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-3197900024?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
+        "id": "mock_415",
+        "name": "Sedum",
+        "scientificName": "Sedum morganianum",
+        "description": "The Sedum is a burro\u0027s tail succulent with trailing stems covered in plump leaves.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 13,
+        "idealTempMax": 27,
         "minHumidity": 30,
-        "sunlight": "Full Sun",
+        "sunlight": "Bright direct (2000-3000 Lux)",
+        "oxygenLevel": "12 L/day",
+        "medicinalValues": [
+            "Air cleaning"
+        ],
+        "advantages": [
+            "Trailing habit",
+            "Drought tolerant"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "5-10 Years"
+    },
+    {
+        "id": "mock_416",
+        "name": "Crassula Ovata Gollum",
+        "scientificName": "Crassula ovata \u0027Gollum\u0027",
+        "description": "The Crassula Ovata Gollum is a jade plant with tubular finger-like leaves.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 13,
+        "idealTempMax": 27,
+        "minHumidity": 30,
+        "sunlight": "Bright direct (2000-3000 Lux)",
+        "oxygenLevel": "15 L/day",
+        "medicinalValues": [
+            "Air purification"
+        ],
+        "advantages": [
+            "Unique form",
+            "Easy care"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "20-70 Years"
+    },
+    {
+        "id": "mock_417",
+        "name": "Senecio Rowleyanus",
+        "scientificName": "Senecio rowleyanus",
+        "description": "The Senecio Rowleyanus is a string of pearls succulent with bead-like leaves on trailing stems.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 13,
+        "idealTempMax": 24,
+        "minHumidity": 30,
+        "sunlight": "Bright indirect (1500-2500 Lux)",
+        "oxygenLevel": "10 L/day",
+        "medicinalValues": [
+            "Air cleaning"
+        ],
+        "advantages": [
+            "Unique appearance",
+            "Trailing habit"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "3-5 Years"
+    },
+    {
+        "id": "mock_418",
+        "name": "Ceropegia Woodii",
+        "scientificName": "Ceropegia woodii",
+        "description": "The Ceropegia Woodii is a string of hearts with heart-shaped leaves on delicate trailing vines.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 16,
+        "idealTempMax": 27,
+        "minHumidity": 40,
+        "sunlight": "Bright indirect (1500-2500 Lux)",
+        "oxygenLevel": "10 L/day",
+        "medicinalValues": [
+            "Air purification"
+        ],
+        "advantages": [
+            "Romantic appearance",
+            "Easy propagation"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "5-10 Years"
+    },
+    {
+        "id": "mock_419",
+        "name": "Lithops",
+        "scientificName": "Lithops species",
+        "description": "The Lithops are living stones that mimic pebbles with their unique succulent form.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 16,
+        "idealTempMax": 30,
+        "minHumidity": 20,
+        "sunlight": "Bright direct (2500-4000 Lux)",
+        "oxygenLevel": "5 L/day",
+        "medicinalValues": [
+            "None"
+        ],
+        "advantages": [
+            "Unique camouflage",
+            "Minimal care"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "10-50 Years"
+    },
+    {
+        "id": "mock_420",
+        "name": "Kalanchoe Tomentosa",
+        "scientificName": "Kalanchoe tomentosa",
+        "description": "The Kalanchoe Tomentosa is a panda plant with fuzzy silver leaves edged in brown.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 16,
+        "idealTempMax": 27,
+        "minHumidity": 30,
+        "sunlight": "Bright direct (2000-3000 Lux)",
+        "oxygenLevel": "12 L/day",
+        "medicinalValues": [
+            "Air cleaning"
+        ],
+        "advantages": [
+            "Fuzzy texture",
+            "Compact size"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "5-10 Years"
+    },
+    {
+        "id": "mock_421",
+        "name": "Gasteria",
+        "scientificName": "Gasteria species",
+        "description": "The Gasteria is an ox tongue succulent with thick tongue-shaped leaves in a rosette.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 13,
+        "idealTempMax": 27,
+        "minHumidity": 30,
+        "sunlight": "Bright indirect (1500-2500 Lux)",
+        "oxygenLevel": "10 L/day",
+        "medicinalValues": [
+            "Air purification"
+        ],
+        "advantages": [
+            "Low light tolerant",
+            "Drought tolerant"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "10-30 Years"
+    },
+    {
+        "id": "mock_422",
+        "name": "Crassula Perforata",
+        "scientificName": "Crassula perforata",
+        "description": "The Crassula Perforata is a string of buttons succulent with stacked triangular leaves.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 13,
+        "idealTempMax": 27,
+        "minHumidity": 30,
+        "sunlight": "Bright direct (2000-3000 Lux)",
+        "oxygenLevel": "12 L/day",
+        "medicinalValues": [
+            "Air cleaning"
+        ],
+        "advantages": [
+            "Architectural form",
+            "Easy care"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "5-15 Years"
+    },
+    {
+        "id": "mock_423",
+        "name": "Sempervivum",
+        "scientificName": "Sempervivum tectorum",
+        "description": "The Sempervivum is a houseleek succulent with rosettes that produce offsets freely.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 10,
+        "idealTempMax": 27,
+        "minHumidity": 30,
+        "sunlight": "Bright direct (2000-3000 Lux)",
+        "oxygenLevel": "10 L/day",
+        "medicinalValues": [
+            "Traditional wound healing"
+        ],
+        "advantages": [
+            "Cold hardy",
+            "Self-propagating"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "3-5 Years"
+    },
+    {
+        "id": "mock_424",
+        "name": "Aeonium",
+        "scientificName": "Aeonium arboreum",
+        "description": "The Aeonium is a tree houseleek with rosettes of fleshy leaves on branching stems.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 13,
+        "idealTempMax": 27,
+        "minHumidity": 30,
+        "sunlight": "Bright direct (2000-3000 Lux)",
+        "oxygenLevel": "15 L/day",
+        "medicinalValues": [
+            "Air purification"
+        ],
+        "advantages": [
+            "Architectural form",
+            "Colorful varieties"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "5-10 Years"
+    },
+    {
+        "id": "mock_425",
+        "name": "Graptoveria",
+        "scientificName": "Graptoveria \u0027Fred Ives\u0027",
+        "description": "The Graptoveria is a hybrid succulent with colorful rosettes that change with sun exposure.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 13,
+        "idealTempMax": 27,
+        "minHumidity": 30,
+        "sunlight": "Bright direct (2000-3000 Lux)",
+        "oxygenLevel": "10 L/day",
+        "medicinalValues": [
+            "Air cleaning"
+        ],
+        "advantages": [
+            "Color changing",
+            "Easy care"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "5-10 Years"
+    },
+    {
+        "id": "mock_426",
+        "name": "Pachyphytum",
+        "scientificName": "Pachyphytum oviferum",
+        "description": "The Pachyphytum is a moonstones succulent with plump egg-shaped leaves covered in powder.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 13,
+        "idealTempMax": 27,
+        "minHumidity": 30,
+        "sunlight": "Bright direct (2000-3000 Lux)",
+        "oxygenLevel": "10 L/day",
+        "medicinalValues": [
+            "Air purification"
+        ],
+        "advantages": [
+            "Unique appearance",
+            "Compact size"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "5-10 Years"
+    },
+    {
+        "id": "mock_427",
+        "name": "Adromischus",
+        "scientificName": "Adromischus cristatus",
+        "description": "The Adromischus is a crinkle-leaf plant with wavy-edged succulent leaves.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 13,
+        "idealTempMax": 27,
+        "minHumidity": 30,
+        "sunlight": "Bright indirect (1500-2500 Lux)",
+        "oxygenLevel": "8 L/day",
+        "medicinalValues": [
+            "Air cleaning"
+        ],
+        "advantages": [
+            "Unique texture",
+            "Compact size"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "5-15 Years"
+    },
+    {
+        "id": "mock_428",
+        "name": "Cotyledon",
+        "scientificName": "Cotyledon tomentosa",
+        "description": "The Cotyledon is a bear\u0027s paw succulent with fuzzy paw-shaped leaves.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 13,
+        "idealTempMax": 27,
+        "minHumidity": 30,
+        "sunlight": "Bright direct (2000-3000 Lux)",
+        "oxygenLevel": "12 L/day",
+        "medicinalValues": [
+            "Air purification"
+        ],
+        "advantages": [
+            "Adorable appearance",
+            "Easy care"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "5-10 Years"
+    },
+    {
+        "id": "mock_429",
+        "name": "Senecio Serpens",
+        "scientificName": "Senecio serpens",
+        "description": "The Senecio Serpens is a blue chalksticks succulent with cylindrical blue-gray leaves.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 13,
+        "idealTempMax": 27,
+        "minHumidity": 30,
+        "sunlight": "Bright direct (2000-3000 Lux)",
+        "oxygenLevel": "15 L/day",
+        "medicinalValues": [
+            "Air cleaning"
+        ],
+        "advantages": [
+            "Unique color",
+            "Spreading habit"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "5-10 Years"
+    },
+    {
+        "id": "mock_430",
+        "name": "Portulacaria Afra",
+        "scientificName": "Portulacaria afra",
+        "description": "The Portulacaria Afra is an elephant bush with small round leaves on red stems.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 13,
+        "idealTempMax": 27,
+        "minHumidity": 30,
+        "sunlight": "Bright direct (2000-3000 Lux)",
+        "oxygenLevel": "18 L/day",
+        "medicinalValues": [
+            "Air purification",
+            "Carbon sequestration"
+        ],
+        "advantages": [
+            "Fast growing",
+            "Bonsai potential"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "10-30 Years"
+    },
+    {
+        "id": "mock_431",
+        "name": "Crassula Muscosa",
+        "scientificName": "Crassula muscosa",
+        "description": "The Crassula Muscosa is a watch chain succulent with tightly packed scale-like leaves.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 13,
+        "idealTempMax": 27,
+        "minHumidity": 30,
+        "sunlight": "Bright direct (2000-3000 Lux)",
+        "oxygenLevel": "10 L/day",
+        "medicinalValues": [
+            "Air cleaning"
+        ],
+        "advantages": [
+            "Unique texture",
+            "Compact growth"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "5-15 Years"
+    },
+    {
+        "id": "mock_432",
+        "name": "Aloe Aristata",
+        "scientificName": "Aloe aristata",
+        "description": "The Aloe Aristata is a lace aloe with white-spotted leaves forming tight rosettes.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 13,
+        "idealTempMax": 27,
+        "minHumidity": 30,
+        "sunlight": "Bright indirect (1500-2500 Lux)",
+        "oxygenLevel": "15 L/day",
+        "medicinalValues": [
+            "Air purification"
+        ],
+        "advantages": [
+            "Compact size",
+            "Easy flowering"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "10-20 Years"
+    },
+    {
+        "id": "mock_433",
+        "name": "Sansevieria Cylindrica",
+        "scientificName": "Sansevieria cylindrica",
+        "description": "The Sansevieria Cylindrica is a cylindrical snake plant with round spear-like leaves.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 15,
+        "idealTempMax": 30,
+        "minHumidity": 30,
+        "sunlight": "Low to bright (250-2000 Lux)",
+        "oxygenLevel": "28 L/day",
+        "medicinalValues": [
+            "Air purification",
+            "Oxygen at night"
+        ],
+        "advantages": [
+            "Architectural form",
+            "Extremely hardy"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "10-25 Years"
+    },
+    {
+        "id": "mock_434",
+        "name": "Euphorbia Trigona",
+        "scientificName": "Euphorbia trigona",
+        "description": "The Euphorbia Trigona is an African milk tree with triangular stems and small leaves.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 16,
+        "idealTempMax": 27,
+        "minHumidity": 30,
+        "sunlight": "Bright direct (2000-3000 Lux)",
         "oxygenLevel": "25 L/day",
         "medicinalValues": [
-            "None"
+            "Air purification"
         ],
         "advantages": [
-            "Torch flowers",
-            "Hummingbirds"
+            "Fast growing",
+            "Architectural"
         ],
-        "price": 57,
-        "type": "outdoor",
-        "lifespan": "Perennial",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "10-30 Years"
     },
     {
-        "id": "p_out_2152",
-        "name": "Sea Holly",
-        "scientificName": "Eryngium",
-        "description": "The Sea Holly (Eryngium) is a classic garden staple. With a lifespan of Perennial, it offers metallic blue and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-4988191472?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
+        "id": "mock_435",
+        "name": "Zamioculcas Raven",
+        "scientificName": "Zamioculcas zamiifolia \u0027Raven\u0027",
+        "description": "The Zamioculcas Raven is a black ZZ plant with dark purple-black glossy leaves.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 15,
+        "idealTempMax": 30,
         "minHumidity": 30,
-        "sunlight": "Full Sun",
+        "sunlight": "Low to bright (100-2000 Lux)",
+        "oxygenLevel": "18 L/day",
+        "medicinalValues": [
+            "Air purification"
+        ],
+        "advantages": [
+            "Dramatic color",
+            "Extremely hardy"
+        ],
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "5-10 Years"
+    },
+    {
+        "id": "mock_436",
+        "name": "Scindapsus Pictus",
+        "scientificName": "Scindapsus pictus",
+        "description": "The Scindapsus Pictus is a satin pothos with heart-shaped leaves splashed with silver.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 16,
+        "idealTempMax": 27,
+        "minHumidity": 50,
+        "sunlight": "Low to medium (500-1500 Lux)",
         "oxygenLevel": "20 L/day",
         "medicinalValues": [
-            "Root edible"
+            "Air purification"
         ],
         "advantages": [
-            "Metallic blue",
-            "Spiky"
+            "Silvery foliage",
+            "Easy care"
         ],
         "price": 25,
-        "type": "outdoor",
-        "lifespan": "Perennial",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+        "type": "indoor",
+        "lifespan": "5-10 Years"
     },
     {
-        "id": "p_out_2153",
-        "name": "Globe Thistle",
-        "scientificName": "Echinops",
-        "description": "The Globe Thistle (Echinops) is a classic garden staple. With a lifespan of Perennial, it offers perfect balls and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-4973350686?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "22 L/day",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Perfect balls",
-            "Bees love"
-        ],
-        "price": 63,
-        "type": "outdoor",
-        "lifespan": "Perennial",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2154",
-        "name": "Russian Sage",
-        "scientificName": "Perovskia atriplicifolia",
-        "description": "The Russian Sage (Perovskia atriplicifolia) is a classic garden staple. With a lifespan of Perennial, it offers haze of blue and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-1183998139?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "30 L/day",
-        "medicinalValues": [
-            "Fever"
-        ],
-        "advantages": [
-            "Haze of blue",
-            "Tough"
-        ],
-        "price": 18,
-        "type": "outdoor",
-        "lifespan": "Perennial",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2155",
-        "name": "Butterfly Bush",
-        "scientificName": "Buddleja davidii",
-        "description": "The Butterfly Bush (Buddleja davidii) is a classic garden staple. With a lifespan of 20 Years, it offers pollinator magnet and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-2818491690?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "50 L/day",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Pollinator magnet",
-            "Honey scent"
-        ],
-        "price": 10,
-        "type": "outdoor",
-        "lifespan": "20 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2156",
-        "name": "Smoke Bush",
-        "scientificName": "Cotinus coggygria",
-        "description": "The Smoke Bush (Cotinus coggygria) is a classic garden staple. With a lifespan of 50 Years, it offers purple fog effect and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-3116412175?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "60 L/day",
-        "medicinalValues": [
-            "Yellow dye"
-        ],
-        "advantages": [
-            "Purple fog effect",
-            "Dark leaves"
-        ],
-        "price": 67,
-        "type": "outdoor",
-        "lifespan": "50 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2157",
-        "name": "Beautyberry",
-        "scientificName": "Callicarpa",
-        "description": "The Beautyberry (Callicarpa) is a classic garden staple. With a lifespan of 30 Years, it offers metallic purple berries and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-3696197957?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Sun/Part Shade",
+        "id": "mock_437",
+        "name": "Monstera Adansonii",
+        "scientificName": "Monstera adansonii",
+        "description": "The Monstera Adansonii is a Swiss cheese vine with perforated heart-shaped leaves.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 18,
+        "idealTempMax": 27,
+        "minHumidity": 60,
+        "sunlight": "Bright indirect (1500-2500 Lux)",
         "oxygenLevel": "35 L/day",
         "medicinalValues": [
-            "Insect repellent"
+            "Air purification"
         ],
         "advantages": [
-            "Metallic purple berries",
-            "Native"
-        ],
-        "price": 11,
-        "type": "outdoor",
-        "lifespan": "30 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2158",
-        "name": "Witch Hazel",
-        "scientificName": "Hamamelis",
-        "description": "The Witch Hazel (Hamamelis) is a classic garden staple. With a lifespan of 50 Years, it offers winter bloom and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-6174542729?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Sun/Part Shade",
-        "oxygenLevel": "45 L/day",
-        "medicinalValues": [
-            "Skin toner"
-        ],
-        "advantages": [
-            "Winter bloom",
-            "Spidery"
-        ],
-        "price": 47,
-        "type": "outdoor",
-        "lifespan": "50 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2159",
-        "name": "Winter Sweet",
-        "scientificName": "Chimonanthus praecox",
-        "description": "The Winter Sweet (Chimonanthus praecox) is a classic garden staple. With a lifespan of 50 Years, it offers intense winter scent and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-7612525660?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Sun/Part Shade",
-        "oxygenLevel": "40 L/day",
-        "medicinalValues": [
-            "Oil"
-        ],
-        "advantages": [
-            "Intense winter scent",
-            "Translucent"
-        ],
-        "price": 55,
-        "type": "outdoor",
-        "lifespan": "50 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2160",
-        "name": "Edgeworthia (Paper Bush)",
-        "scientificName": "Edgeworthia chrysantha",
-        "description": "The Edgeworthia (Paper Bush) (Edgeworthia chrysantha) is a classic garden staple. With a lifespan of 30 Years, it offers yellow pom-poms and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-8514045225?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Part Shade",
-        "oxygenLevel": "40 L/day",
-        "medicinalValues": [
-            "Paper making"
-        ],
-        "advantages": [
-            "Yellow pom-poms",
-            "Scented"
-        ],
-        "price": 50,
-        "type": "outdoor",
-        "lifespan": "30 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2161",
-        "name": "Harry Lauder's Walking Stick",
-        "scientificName": "Corylus avellana 'Contorta'",
-        "description": "The Harry Lauder's Walking Stick (Corylus avellana 'Contorta') is a classic garden staple. With a lifespan of 50 Years, it offers twisted branches and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-9364738777?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Sun/Part Shade",
-        "oxygenLevel": "50 L/day",
-        "medicinalValues": [
-            "Nuts"
-        ],
-        "advantages": [
-            "Twisted branches",
-            "Winter interest"
-        ],
-        "price": 61,
-        "type": "outdoor",
-        "lifespan": "50 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2162",
-        "name": "Pussy Willow",
-        "scientificName": "Salix discolor",
-        "description": "The Pussy Willow (Salix discolor) is a classic garden staple. With a lifespan of 30 Years, it offers fuzzy catkins and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-1048634163?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "45 L/day",
-        "medicinalValues": [
-            "Aspirin"
-        ],
-        "advantages": [
-            "Fuzzy catkins",
-            "Spring sign"
-        ],
-        "price": 9,
-        "type": "outdoor",
-        "lifespan": "30 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2163",
-        "name": "Mimosa Tree (Silk Tree)",
-        "scientificName": "Albizia julibrissin",
-        "description": "The Mimosa Tree (Silk Tree) (Albizia julibrissin) is a classic garden staple. With a lifespan of 20 Years, it offers pink puffs and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-6513364908?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "80 L/day",
-        "medicinalValues": [
-            "Calming tea"
-        ],
-        "advantages": [
-            "Pink puffs",
-            "Ferny"
-        ],
-        "price": 64,
-        "type": "outdoor",
-        "lifespan": "20 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2164",
-        "name": "Empress Tree",
-        "scientificName": "Paulownia tomentosa",
-        "description": "The Empress Tree (Paulownia tomentosa) is a classic garden staple. With a lifespan of 70 Years, it offers fastest growing and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-2852111926?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "150 L/day",
-        "medicinalValues": [
-            "Wood"
-        ],
-        "advantages": [
-            "Fastest growing",
-            "Purple flowers"
-        ],
-        "price": 5,
-        "type": "outdoor",
-        "lifespan": "70 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2165",
-        "name": "Tree Fern",
-        "scientificName": "Dicksonia antarctica",
-        "description": "The Tree Fern (Dicksonia antarctica) is a classic garden staple. With a lifespan of 500 Years, it offers prehistoric and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-3221926967?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Shade/Wet",
-        "oxygenLevel": "100 L/day",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Prehistoric",
-            "Trunk is roots"
-        ],
-        "price": 29,
-        "type": "outdoor",
-        "lifespan": "500 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "The Gymnosperm Database"
-    },
-    {
-        "id": "p_out_2166",
-        "name": "Gunnera (Dino Food)",
-        "scientificName": "Gunnera manicata",
-        "description": "The Gunnera (Dino Food) (Gunnera manicata) is a classic garden staple. With a lifespan of 50 Years, it offers leaves usually 6ft wide and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-2152438255?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Wet Sun",
-        "oxygenLevel": "120 L/day",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Leaves usually 6ft wide",
-            "Giant"
-        ],
-        "price": 37,
-        "type": "outdoor",
-        "lifespan": "50 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2167",
-        "name": "Rhubarb",
-        "scientificName": "Rheum rhabarbarum",
-        "description": "The Rhubarb (Rheum rhabarbarum) is a classic garden staple. With a lifespan of 10 Years, it offers edible stalks and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-3296454853?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Sun",
-        "oxygenLevel": "30 L/day",
-        "medicinalValues": [
-            "Laxative root"
-        ],
-        "advantages": [
-            "Edible stalks",
-            "Huge leaves"
-        ],
-        "price": 78,
-        "type": "outdoor",
-        "lifespan": "10 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2168",
-        "name": "Artichoke",
-        "scientificName": "Cynara cardunculus",
-        "description": "The Artichoke (Cynara cardunculus) is a classic garden staple. With a lifespan of 5 Years, it offers edible bud and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-5232711226?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "40 L/day",
-        "medicinalValues": [
-            "Liver health"
-        ],
-        "advantages": [
-            "Edible bud",
-            "Thistle flower"
-        ],
-        "price": 52,
-        "type": "outdoor",
-        "lifespan": "5 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2169",
-        "name": "Japanese Maple",
-        "scientificName": "Acer palmatum",
-        "description": "The Japanese Maple (Acer palmatum) is a classic garden staple. With a lifespan of 100 Years, it offers red foliage and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-4445787496?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Part Shade",
-        "oxygenLevel": "60 L/day",
-        "medicinalValues": [
-            "Traditional tonic"
-        ],
-        "advantages": [
-            "Red foliage",
-            "Bonsai favorite"
-        ],
-        "price": 11,
-        "type": "outdoor",
-        "lifespan": "100 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2170",
-        "name": "Eastern Redbud",
-        "scientificName": "Cercis canadensis",
-        "description": "The Eastern Redbud (Cercis canadensis) is a classic garden staple. With a lifespan of 50 Years, it offers pink flowers on bark and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-5723668269?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Sun/Part Shade",
-        "oxygenLevel": "55 L/day",
-        "medicinalValues": [
-            "Astringent bark"
-        ],
-        "advantages": [
-            "Pink flowers on bark",
-            "Heart leaves"
-        ],
-        "price": 34,
-        "type": "outdoor",
-        "lifespan": "50 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2171",
-        "name": "Flowering Dogwood",
-        "scientificName": "Cornus florida",
-        "description": "The Flowering Dogwood (Cornus florida) is a classic garden staple. With a lifespan of 80 Years, it offers white bracts and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-3452439890?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Part Shade",
-        "oxygenLevel": "50 L/day",
-        "medicinalValues": [
-            "Quinine substitute"
-        ],
-        "advantages": [
-            "White bracts",
-            "Red berries"
-        ],
-        "price": 55,
-        "type": "outdoor",
-        "lifespan": "80 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2172",
-        "name": "Southern Magnolia",
-        "scientificName": "Magnolia grandiflora",
-        "description": "The Southern Magnolia (Magnolia grandiflora) is a classic garden staple. With a lifespan of 120 Years, it offers giant white flowers and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-9486363530?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Sun/Part Shade",
-        "oxygenLevel": "110 L/day",
-        "medicinalValues": [
-            "Bark tonic"
-        ],
-        "advantages": [
-            "Giant white flowers",
-            "Evergreen"
-        ],
-        "price": 41,
-        "type": "outdoor",
-        "lifespan": "120 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2173",
-        "name": "Tulip Poplar",
-        "scientificName": "Liriodendron tulipifera",
-        "description": "The Tulip Poplar (Liriodendron tulipifera) is a classic garden staple. With a lifespan of 250 Years, it offers tulip-shaped flowers and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-8855619798?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "140 L/day",
-        "medicinalValues": [
-            "Root stimulant"
-        ],
-        "advantages": [
-            "Tulip-shaped flowers",
-            "Tailored leaves"
-        ],
-        "price": 26,
-        "type": "outdoor",
-        "lifespan": "250 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2174",
-        "name": "Live Oak",
-        "scientificName": "Quercus virginiana",
-        "description": "The Live Oak (Quercus virginiana) is a classic garden staple. With a lifespan of 500 Years, it offers massive canopy and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-8708219451?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "200 L/day",
-        "medicinalValues": [
-            "Astringent galls"
-        ],
-        "advantages": [
-            "Massive canopy",
-            "Spanish moss host"
-        ],
-        "price": 62,
-        "type": "outdoor",
-        "lifespan": "500 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "The Gymnosperm Database"
-    },
-    {
-        "id": "p_out_2175",
-        "name": "Longleaf Pine",
-        "scientificName": "Pinus palustris",
-        "description": "The Longleaf Pine (Pinus palustris) is a classic garden staple. With a lifespan of 300 Years, it offers long needles and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-1222048404?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "130 L/day",
-        "medicinalValues": [
-            "Turpentine"
-        ],
-        "advantages": [
-            "Long needles",
-            "Fire resistant"
-        ],
-        "price": 48,
-        "type": "outdoor",
-        "lifespan": "300 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2176",
-        "name": "Bald Cypress",
-        "scientificName": "Taxodium distichum",
-        "description": "The Bald Cypress (Taxodium distichum) is a classic garden staple. With a lifespan of 600 Years, it offers knees (roots) and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-1005463759?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Wet/Sun",
-        "oxygenLevel": "125 L/day",
-        "medicinalValues": [
-            "Resin for wounds"
-        ],
-        "advantages": [
-            "Knees (roots)",
-            "Deciduous conifer"
-        ],
-        "price": 47,
-        "type": "outdoor",
-        "lifespan": "600 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2177",
-        "name": "Maidenhair Tree",
-        "scientificName": "Ginkgo biloba",
-        "description": "The Maidenhair Tree (Ginkgo biloba) is a classic garden staple. With a lifespan of 1000 Years, it offers living fossil and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-4561692379?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "90 L/day",
-        "medicinalValues": [
-            "Memory aid"
-        ],
-        "advantages": [
-            "Living fossil",
-            "Fan leaves"
-        ],
-        "price": 28,
-        "type": "outdoor",
-        "lifespan": "1000 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "The Gymnosperm Database"
-    },
-    {
-        "id": "p_out_2178",
-        "name": "Dawn Redwood",
-        "scientificName": "Metasequoia glyptostroboides",
-        "description": "The Dawn Redwood (Metasequoia glyptostroboides) is a classic garden staple. With a lifespan of 600 Years, it offers ancient lineage and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-2092413529?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "135 L/day",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Ancient lineage",
-            "Fast growing"
-        ],
-        "price": 42,
-        "type": "outdoor",
-        "lifespan": "600 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2179",
-        "name": "River Birch",
-        "scientificName": "Betula nigra",
-        "description": "The River Birch (Betula nigra) is a classic garden staple. With a lifespan of 70 Years, it offers peeling bark and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-9756105239?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Sun",
-        "oxygenLevel": "65 L/day",
-        "medicinalValues": [
-            "Sap vinegar"
-        ],
-        "advantages": [
-            "Peeling bark",
-            "Wet soil lover"
+            "Unique fenestrations",
+            "Vining habit"
         ],
         "price": 25,
-        "type": "outdoor",
-        "lifespan": "70 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+        "type": "indoor",
+        "lifespan": "10-40 Years"
     },
     {
-        "id": "p_out_2180",
-        "name": "Weeping Willow",
-        "scientificName": "Salix babylonica",
-        "description": "The Weeping Willow (Salix babylonica) is a classic garden staple. With a lifespan of 50 Years, it offers dramatic sweep and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-2709637410?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Sun",
-        "oxygenLevel": "85 L/day",
+        "id": "mock_438",
+        "name": "Philodendron Birkin",
+        "scientificName": "Philodendron \u0027Birkin\u0027",
+        "description": "The Philodendron Birkin is a variegated philodendron with white pinstripes on dark green leaves.",
+        "imageUrl": "https://images.unsplash.com/photo-1545241047-6083a3684587?auto=format\u0026fit=crop\u0026q=80",
+        "idealTempMin": 16,
+        "idealTempMax": 27,
+        "minHumidity": 50,
+        "sunlight": "Bright indirect (1500-2500 Lux)",
+        "oxygenLevel": "25 L/day",
         "medicinalValues": [
-            "Salicylic acid"
+            "Air purification"
         ],
         "advantages": [
-            "Dramatic sweep",
-            "Water lover"
+            "Unique variegation",
+            "Compact growth"
         ],
-        "price": 51,
-        "type": "outdoor",
-        "lifespan": "50 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+        "price": 25,
+        "type": "indoor",
+        "lifespan": "10-20 Years"
     },
-    {
-        "id": "p_out_2181",
-        "name": "Eastern Red Cedar",
-        "scientificName": "Juniperus virginiana",
-        "description": "The Eastern Red Cedar (Juniperus virginiana) is a classic garden staple. With a lifespan of 150 Years, it offers aromatic wood and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-5590358432?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "70 L/day",
-        "medicinalValues": [
-            "Gin flavoring"
+    "Count": 50
+];
+const outdoorPlants =, {
+    "id": "p_out_2000",
+    "name": "Lavender",
+    "scientificName": "Lavandula angustifolia",
+    "description": "The Lavender (Lavandula angustifolia) is a classic garden staple. With a lifespan of 10-15 Years, it offers fragrant and is perfect for natural settings.",
+    "imageUrl": "https://images.unsplash.com/photo-6359979411?auto=format&fit=crop&w=800&q=80",
+    "idealTempMin": 5,
+    "idealTempMax": 35,
+    "minHumidity": 30,
+    "sunlight": "Full Sun (10,000+ Lux)",
+    "oxygenLevel": "40 L/day",
+    "medicinalValues": [
+            "Sleep aid",
+    "Anxiety relief"
         ],
-        "advantages": [
-            "Aromatic wood",
-            "Blue berries"
-        ],
-        "price": 17,
+"advantages": [
+    "Fragrant",
+    "Attracts bees"
+],
+    "price": 75,
         "type": "outdoor",
-        "lifespan": "150 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+            "lifespan": "10-15 Years",
+                "foliageTexture": "Textured",
+                    "leafShape": "Lanceolate",
+                        "stemStructure": "Woody",
+                            "overallHabit": "Spreading",
+                                "biometricFeatures": [
+                                    "Hardy",
+                                    "Weather resistant"
+                                ],
+                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
     },
-    {
-        "id": "p_out_2182",
-        "name": "American Holly",
-        "scientificName": "Ilex opaca",
-        "description": "The American Holly (Ilex opaca) is a classic garden staple. With a lifespan of 100 Years, it offers red berries and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-4935620059?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Sun/Shade",
-        "oxygenLevel": "55 L/day",
-        "medicinalValues": [
-            "Tea (Caution)"
-        ],
-        "advantages": [
-            "Red berries",
-            "Spiky evergreen"
-        ],
-        "price": 30,
-        "type": "outdoor",
-        "lifespan": "100 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2183",
-        "name": "Bigleaf Hydrangea",
-        "scientificName": "Hydrangea macrophylla",
-        "description": "The Bigleaf Hydrangea (Hydrangea macrophylla) is a classic garden staple. With a lifespan of 50 Years, it offers color changes w/ ph and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-2434215866?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Part Shade",
-        "oxygenLevel": "40 L/day",
-        "medicinalValues": [
-            "Diuretic root"
-        ],
-        "advantages": [
-            "Color changes w/ pH",
-            "Big balls"
-        ],
-        "price": 23,
-        "type": "outdoor",
-        "lifespan": "50 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2184",
-        "name": "Oakleaf Hydrangea",
-        "scientificName": "Hydrangea quercifolia",
-        "description": "The Oakleaf Hydrangea (Hydrangea quercifolia) is a classic garden staple. With a lifespan of 50 Years, it offers native and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-7956284211?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Part Shade",
-        "oxygenLevel": "42 L/day",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Native",
-            "Cone flowers"
-        ],
-        "price": 53,
-        "type": "outdoor",
-        "lifespan": "50 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2185",
-        "name": "Southern Azalea",
-        "scientificName": "Rhododendron indicum",
-        "description": "The Southern Azalea (Rhododendron indicum) is a classic garden staple. With a lifespan of 50 Years, it offers spring show and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-4614789517?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Part Shade",
-        "oxygenLevel": "35 L/day",
-        "medicinalValues": [
-            "Toxic"
-        ],
-        "advantages": [
-            "Spring show",
-            "Evergreen"
-        ],
-        "price": 66,
-        "type": "outdoor",
-        "lifespan": "50 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "USDA Poisonous Plant Research"
-    },
-    {
-        "id": "p_out_2186",
+{
+    "id": "p_out_2001",
+        "name": "Sunflower",
+            "scientificName": "Helianthus annuus",
+                "description": "The Sunflower (Helianthus annuus) is a classic garden staple. With a lifespan of 1 Year, it offers fast growth and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-6239949466?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun (10,000+ Lux)",
+                                        "oxygenLevel": "60 L/day",
+                                            "medicinalValues": [
+                                                "seeds rich in Vitamin E"
+                                            ],
+                                                "advantages": [
+                                                    "Fast growth",
+                                                    "Edible seeds"
+                                                ],
+                                                    "price": 40,
+                                                        "type": "outdoor",
+                                                            "lifespan": "1 Year",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2002",
+        "name": "Rose",
+            "scientificName": "Rosa",
+                "description": "The Rose (Rosa) is a classic garden staple. With a lifespan of 15-20 Years, it offers classic beauty and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-4392484250?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun (6+ hours)",
+                                        "oxygenLevel": "35 L/day",
+                                            "medicinalValues": [
+                                                "Rose hips (Vitamin C)",
+                                                "Skin toner"
+                                            ],
+                                                "advantages": [
+                                                    "Classic beauty",
+                                                    "Fragrance"
+                                                ],
+                                                    "price": 64,
+                                                        "type": "outdoor",
+                                                            "lifespan": "15-20 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2003",
+        "name": "Marigold",
+            "scientificName": "Tagetes",
+                "description": "The Marigold (Tagetes) is a classic garden staple. With a lifespan of 1 Year, it offers pest repellent and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-5337118955?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "25 L/day",
+                                            "medicinalValues": [
+                                                "Antiseptic",
+                                                "Anti-inflammatory"
+                                            ],
+                                                "advantages": [
+                                                    "Pest repellent",
+                                                    "Vibrant color"
+                                                ],
+                                                    "price": 76,
+                                                        "type": "outdoor",
+                                                            "lifespan": "1 Year",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2004",
+        "name": "Basil",
+            "scientificName": "Ocimum basilicum",
+                "description": "The Basil (Ocimum basilicum) is a classic garden staple. With a lifespan of 1 Year, it offers culinary herb and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-6684641778?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "20 L/day",
+                                            "medicinalValues": [
+                                                "Digestion aid",
+                                                "Anti-bacterial"
+                                            ],
+                                                "advantages": [
+                                                    "Culinary herb",
+                                                    "Aromatic"
+                                                ],
+                                                    "price": 55,
+                                                        "type": "outdoor",
+                                                            "lifespan": "1 Year",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2005",
+        "name": "Mint",
+            "scientificName": "Mentha",
+                "description": "The Mint (Mentha) is a classic garden staple. With a lifespan of Perennial, it offers fast growing and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-7365087712?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Partial Shade to Sun",
+                                        "oxygenLevel": "22 L/day",
+                                            "medicinalValues": [
+                                                "Stomach relief",
+                                                "Headache relief"
+                                            ],
+                                                "advantages": [
+                                                    "Fast growing",
+                                                    "Tea ingredient"
+                                                ],
+                                                    "price": 66,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Perennial",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2006",
+        "name": "Rosemary",
+            "scientificName": "Salvia rosmarinus",
+                "description": "The Rosemary (Salvia rosmarinus) is a classic garden staple. With a lifespan of 15-20 Years, it offers evergreen shrub and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-6356274725?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "30 L/day",
+                                            "medicinalValues": [
+                                                "Memory boost",
+                                                "Hair growth"
+                                            ],
+                                                "advantages": [
+                                                    "Evergreen shrub",
+                                                    "Culinary use"
+                                                ],
+                                                    "price": 80,
+                                                        "type": "outdoor",
+                                                            "lifespan": "15-20 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2007",
+        "name": "Tulip",
+            "scientificName": "Tulipa",
+                "description": "The Tulip (Tulipa) is a classic garden staple. With a lifespan of Perennial, it offers spring blooms and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-7262759396?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "15 L/day",
+                                            "medicinalValues": [
+                                                "Skin poultice (traditional)"
+                                            ],
+                                                "advantages": [
+                                                    "Spring blooms",
+                                                    "Infinite colors"
+                                                ],
+                                                    "price": 39,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Perennial",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2008",
+        "name": "Daffodil",
+            "scientificName": "Narcissus",
+                "description": "The Daffodil (Narcissus) is a classic garden staple. With a lifespan of Perennial, it offers early spring color and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-8316950394?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "15 L/day",
+                                            "medicinalValues": [
+                                                "None (Toxic bulb)"
+                                            ],
+                                                "advantages": [
+                                                    "Early spring color",
+                                                    "Deer resistant"
+                                                ],
+                                                    "price": 66,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Perennial",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "USDA Poisonous Plant Research"
+},
+{
+    "id": "p_out_2009",
+        "name": "Hydrangea",
+            "scientificName": "Hydrangea macrophylla",
+                "description": "The Hydrangea (Hydrangea macrophylla) is a classic garden staple. With a lifespan of 50+ Years, it offers massive flower heads and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-7455751654?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Morning Sun / Shade",
+                                        "oxygenLevel": "40 L/day",
+                                            "medicinalValues": [
+                                                "Diuretic (root)"
+                                            ],
+                                                "advantages": [
+                                                    "Massive flower heads",
+                                                    "Color changes with pH"
+                                                ],
+                                                    "price": 50,
+                                                        "type": "outdoor",
+                                                            "lifespan": "50+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2010",
+        "name": "Peony",
+            "scientificName": "Paeonia",
+                "description": "The Peony (Paeonia) is a classic garden staple. With a lifespan of 50-100 Years, it offers huge blooms and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-6670980096?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "38 L/day",
+                                            "medicinalValues": [
+                                                "Muscle relaxant (white peony)"
+                                            ],
+                                                "advantages": [
+                                                    "Huge blooms",
+                                                    "Long lifespan"
+                                                ],
+                                                    "price": 68,
+                                                        "type": "outdoor",
+                                                            "lifespan": "50-100 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2011",
+        "name": "Chrysanthemum",
+            "scientificName": "Chrysanthemum",
+                "description": "The Chrysanthemum (Chrysanthemum) is a classic garden staple. With a lifespan of 3-5 Years, it offers fall blooms and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-5281181155?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "25 L/day",
+                                            "medicinalValues": [
+                                                "Tea for cooling",
+                                                "Eye health"
+                                            ],
+                                                "advantages": [
+                                                    "Fall blooms",
+                                                    "Pest repellent"
+                                                ],
+                                                    "price": 65,
+                                                        "type": "outdoor",
+                                                            "lifespan": "3-5 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2012",
+        "name": "Geranium",
+            "scientificName": "Pelargonium",
+                "description": "The Geranium (Pelargonium) is a classic garden staple. With a lifespan of 1-3 Years, it offers mosquito repellent and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-5633562435?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "20 L/day",
+                                            "medicinalValues": [
+                                                "Skin healing oil"
+                                            ],
+                                                "advantages": [
+                                                    "Mosquito repellent",
+                                                    "Container friendly"
+                                                ],
+                                                    "price": 56,
+                                                        "type": "outdoor",
+                                                            "lifespan": "1-3 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2013",
+        "name": "Hibiscus",
+            "scientificName": "Hibiscus rosa-sinensis",
+                "description": "The Hibiscus (Hibiscus rosa-sinensis) is a classic garden staple. With a lifespan of 5-10 Years, it offers tropical flair and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-8343732685?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "45 L/day",
+                                            "medicinalValues": [
+                                                "Lower blood pressure (tea)"
+                                            ],
+                                                "advantages": [
+                                                    "Tropical flair",
+                                                    "Edible flowers"
+                                                ],
+                                                    "price": 59,
+                                                        "type": "outdoor",
+                                                            "lifespan": "5-10 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2014",
+        "name": "Jasmine",
+            "scientificName": "Jasminum",
+                "description": "The Jasmine (Jasminum) is a classic garden staple. With a lifespan of 10-20 Years, it offers intense fragrance and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-3123231645?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun to Part Shade",
+                                        "oxygenLevel": "30 L/day",
+                                            "medicinalValues": [
+                                                "Stress relief aroma"
+                                            ],
+                                                "advantages": [
+                                                    "Intense fragrance",
+                                                    "Climbing vine"
+                                                ],
+                                                    "price": 15,
+                                                        "type": "outdoor",
+                                                            "lifespan": "10-20 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2015",
+        "name": "Azalea",
+            "scientificName": "Rhododendron",
+                "description": "The Azalea (Rhododendron) is a classic garden staple. With a lifespan of 20-50 Years, it offers shade tolerant and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-3864980435?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Shade / Dappled Light",
+                                        "oxygenLevel": "35 L/day",
+                                            "medicinalValues": [
+                                                "None (Toxic)"
+                                            ],
+                                                "advantages": [
+                                                    "Shade tolerant",
+                                                    "Spring spectacle"
+                                                ],
+                                                    "price": 16,
+                                                        "type": "outdoor",
+                                                            "lifespan": "20-50 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "USDA Poisonous Plant Research"
+},
+{
+    "id": "p_out_2016",
+        "name": "Magnolia",
+            "scientificName": "Magnolia grandiflora",
+                "description": "The Magnolia (Magnolia grandiflora) is a classic garden staple. With a lifespan of 80+ Years, it offers grand southern tree and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-5679398954?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "200 L/day",
+                                            "medicinalValues": [
+                                                "Anxiety relief",
+                                                "Weight loss aid"
+                                            ],
+                                                "advantages": [
+                                                    "Grand Southern tree",
+                                                    "Glossy leaves"
+                                                ],
+                                                    "price": 70,
+                                                        "type": "outdoor",
+                                                            "lifespan": "80+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2017",
+        "name": "Lilac",
+            "scientificName": "Syringa vulgaris",
+                "description": "The Lilac (Syringa vulgaris) is a classic garden staple. With a lifespan of 75+ Years, it offers nostalgic scent and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-1012150789?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "60 L/day",
+                                            "medicinalValues": [
+                                                "Aromatherapy"
+                                            ],
+                                                "advantages": [
+                                                    "Nostalgic scent",
+                                                    "Cold hardy"
+                                                ],
+                                                    "price": 64,
+                                                        "type": "outdoor",
+                                                            "lifespan": "75+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2018",
+        "name": "Boxwood",
+            "scientificName": "Buxus",
+                "description": "The Boxwood (Buxus) is a classic garden staple. With a lifespan of 20-30 Years, it offers formal hedges and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-4831396820?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Sun or Shade",
+                                        "oxygenLevel": "40 L/day",
+                                            "medicinalValues": [
+                                                "Fever reducer (historic, risky)"
+                                            ],
+                                                "advantages": [
+                                                    "Formal hedges",
+                                                    "Evergreen"
+                                                ],
+                                                    "price": 6,
+                                                        "type": "outdoor",
+                                                            "lifespan": "20-30 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2019",
+        "name": "Pansy",
+            "scientificName": "Viola tricolor",
+                "description": "The Pansy (Viola tricolor) is a classic garden staple. With a lifespan of 2 Years, it offers winter/spring color and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-7429399706?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Sun / Part Shade",
+                                        "oxygenLevel": "10 L/day",
+                                            "medicinalValues": [
+                                                "Expectorant"
+                                            ],
+                                                "advantages": [
+                                                    "Winter/Spring color",
+                                                    "Edible flowers"
+                                                ],
+                                                    "price": 22,
+                                                        "type": "outdoor",
+                                                            "lifespan": "2 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2020",
+        "name": "Neem",
+            "scientificName": "Azadirachta indica",
+                "description": "The Neem (Azadirachta indica) is a classic garden staple. With a lifespan of 100+ Years, it offers miracle tree and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-4975058419?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "150 L/day",
+                                            "medicinalValues": [
+                                                "Antiseptic",
+                                                "Skin cure"
+                                            ],
+                                                "advantages": [
+                                                    "Miracle tree",
+                                                    "Air cooling"
+                                                ],
+                                                    "price": 39,
+                                                        "type": "outdoor",
+                                                            "lifespan": "100+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "Ayurvedic Pharmacopoeia of India"
+},
+{
+    "id": "p_out_2021",
+        "name": "Ashoka Tree",
+            "scientificName": "Saraca asoca",
+                "description": "The Ashoka Tree (Saraca asoca) is a classic garden staple. With a lifespan of 50+ Years, it offers sacred tree and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-6352765029?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun / Part Shade",
+                                        "oxygenLevel": "100 L/day",
+                                            "medicinalValues": [
+                                                "Gynaecological health"
+                                            ],
+                                                "advantages": [
+                                                    "Sacred tree",
+                                                    "Beautiful flowers"
+                                                ],
+                                                    "price": 64,
+                                                        "type": "outdoor",
+                                                            "lifespan": "50+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "Ayurvedic Pharmacopoeia of India"
+},
+{
+    "id": "p_out_2022",
+        "name": "Gulmohar (Flame of Forest)",
+            "scientificName": "Delonix regia",
+                "description": "The Gulmohar (Flame of Forest) (Delonix regia) is a classic garden staple. With a lifespan of 40-60 Years, it offers stunning red canopy and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-9130619580?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "180 L/day",
+                                            "medicinalValues": [
+                                                "Gum used for pain"
+                                            ],
+                                                "advantages": [
+                                                    "Stunning red canopy",
+                                                    "Shade"
+                                                ],
+                                                    "price": 28,
+                                                        "type": "outdoor",
+                                                            "lifespan": "40-60 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2023",
+        "name": "Peepal (Bodhi Tree)",
+            "scientificName": "Ficus religiosa",
+                "description": "The Peepal (Bodhi Tree) (Ficus religiosa) is a classic garden staple. With a lifespan of 1000+ Years, it offers produces o2 24/7 (myth/high output) and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-6837794734?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "200 L/day",
+                                            "medicinalValues": [
+                                                "Asthma",
+                                                "Diabetes trade"
+                                            ],
+                                                "advantages": [
+                                                    "Produces O2 24/7 (myth/high output)",
+                                                    "Sacred"
+                                                ],
+                                                    "price": 17,
+                                                        "type": "outdoor",
+                                                            "lifespan": "1000+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "The Gymnosperm Database"
+},
+{
+    "id": "p_out_2024",
+        "name": "Banyan",
+            "scientificName": "Ficus benghalensis",
+                "description": "The Banyan (Ficus benghalensis) is a classic garden staple. With a lifespan of 200+ Years, it offers national tree of india and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-5934198151?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "220 L/day",
+                                            "medicinalValues": [
+                                                "Hair tonic",
+                                                "Teeth care"
+                                            ],
+                                                "advantages": [
+                                                    "National Tree of India",
+                                                    "Huge shade"
+                                                ],
+                                                    "price": 35,
+                                                        "type": "outdoor",
+                                                            "lifespan": "200+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2025",
+        "name": "Mango",
+            "scientificName": "Mangifera indica",
+                "description": "The Mango (Mangifera indica) is a classic garden staple. With a lifespan of 100+ Years, it offers king of fruits and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-5704340801?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "140 L/day",
+                                            "medicinalValues": [
+                                                "Leaves regulate insulin"
+                                            ],
+                                                "advantages": [
+                                                    "King of Fruits",
+                                                    "Dense shade"
+                                                ],
+                                                    "price": 69,
+                                                        "type": "outdoor",
+                                                            "lifespan": "100+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "USDA FoodData Central"
+},
+{
+    "id": "p_out_2026",
+        "name": "Guava",
+            "scientificName": "Psidium guajava",
+                "description": "The Guava (Psidium guajava) is a classic garden staple. With a lifespan of 30-40 Years, it offers vitamin c rich fruit and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-6460075030?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "80 L/day",
+                                            "medicinalValues": [
+                                                "Stomach health"
+                                            ],
+                                                "advantages": [
+                                                    "Vitamin C rich fruit",
+                                                    "Hardy"
+                                                ],
+                                                    "price": 58,
+                                                        "type": "outdoor",
+                                                            "lifespan": "30-40 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "USDA FoodData Central"
+},
+{
+    "id": "p_out_2027",
+        "name": "Pomegranate",
+            "scientificName": "Punica granatum",
+                "description": "The Pomegranate (Punica granatum) is a classic garden staple. With a lifespan of 20-30 Years, it offers beautiful flowers and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-1424530531?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "60 L/day",
+                                            "medicinalValues": [
+                                                "Heart health",
+                                                "Antioxidant"
+                                            ],
+                                                "advantages": [
+                                                    "Beautiful flowers",
+                                                    "Healthy fruit"
+                                                ],
+                                                    "price": 14,
+                                                        "type": "outdoor",
+                                                            "lifespan": "20-30 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2028",
+        "name": "Lemon",
+            "scientificName": "Citrus limon",
+                "description": "The Lemon (Citrus limon) is a classic garden staple. With a lifespan of 50+ Years, it offers daily kitchen use and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-7589454404?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "50 L/day",
+                                            "medicinalValues": [
+                                                "Vitamin C",
+                                                "Digestion"
+                                            ],
+                                                "advantages": [
+                                                    "Daily kitchen use",
+                                                    "Fragrant leaves"
+                                                ],
+                                                    "price": 72,
+                                                        "type": "outdoor",
+                                                            "lifespan": "50+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "USDA FoodData Central"
+},
+{
+    "id": "p_out_2029",
+        "name": "Papaya",
+            "scientificName": "Carica papaya",
+                "description": "The Papaya (Carica papaya) is a classic garden staple. With a lifespan of 3-4 Years, it offers fast fruit and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-6249743720?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "60 L/day",
+                                            "medicinalValues": [
+                                                "Leaf juice for Dengue"
+                                            ],
+                                                "advantages": [
+                                                    "Fast fruit",
+                                                    "Digestive enzyme"
+                                                ],
+                                                    "price": 77,
+                                                        "type": "outdoor",
+                                                            "lifespan": "3-4 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "USDA FoodData Central"
+},
+{
+    "id": "p_out_2030",
+        "name": "Banana",
+            "scientificName": "Musa acominata",
+                "description": "The Banana (Musa acominata) is a classic garden staple. With a lifespan of 1-2 Years (Regrows), it offers fruit and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-1640432248?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "100 L/day",
+                                            "medicinalValues": [
+                                                "Stem juice for kidney stones"
+                                            ],
+                                                "advantages": [
+                                                    "Fruit",
+                                                    "Leaves as plates"
+                                                ],
+                                                    "price": 79,
+                                                        "type": "outdoor",
+                                                            "lifespan": "1-2 Years (Regrows)",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "USDA FoodData Central"
+},
+{
+    "id": "p_out_2031",
+        "name": "Coconut",
+            "scientificName": "Cocos nucifera",
+                "description": "The Coconut (Cocos nucifera) is a classic garden staple. With a lifespan of 60-80 Years, it offers kalpavriksha (gives everything) and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-6069153457?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "120 L/day",
+                                            "medicinalValues": [
+                                                "Water is electrolyte rich"
+                                            ],
+                                                "advantages": [
+                                                    "Kalpavriksha (Gives everything)",
+                                                    "Coastal"
+                                                ],
+                                                    "price": 18,
+                                                        "type": "outdoor",
+                                                            "lifespan": "60-80 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "USDA FoodData Central"
+},
+{
+    "id": "p_out_2032",
+        "name": "Champa (Plumeria)",
+            "scientificName": "Plumeria rubra",
+                "description": "The Champa (Plumeria) (Plumeria rubra) is a classic garden staple. With a lifespan of 40+ Years, it offers temple flower and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-7515782031?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "50 L/day",
+                                            "medicinalValues": [
+                                                "Rheumatism (Bark)"
+                                            ],
+                                                "advantages": [
+                                                    "Temple flower",
+                                                    "Divine scent"
+                                                ],
+                                                    "price": 23,
+                                                        "type": "outdoor",
+                                                            "lifespan": "40+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2033",
+        "name": "Parijat (Night Jasmine)",
+            "scientificName": "Nyctanthes arbor-tristis",
+                "description": "The Parijat (Night Jasmine) (Nyctanthes arbor-tristis) is a classic garden staple. With a lifespan of 20 Years, it offers night fragrance and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-6566848741?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Sun/Part Shade",
+                                        "oxygenLevel": "40 L/day",
+                                            "medicinalValues": [
+                                                "Sciatica",
+                                                "Arthritis"
+                                            ],
+                                                "advantages": [
+                                                    "Night fragrance",
+                                                    "Carpet of flowers"
+                                                ],
+                                                    "price": 7,
+                                                        "type": "outdoor",
+                                                            "lifespan": "20 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2034",
+        "name": "Raat Ki Rani",
+            "scientificName": "Cestrum nocturnum",
+                "description": "The Raat Ki Rani (Cestrum nocturnum) is a classic garden staple. With a lifespan of 10-15 Years, it offers extreme fragrance at night and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-7384147952?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Part Shade",
+                                        "oxygenLevel": "35 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Extreme fragrance at night",
+                                                    "Fast growth"
+                                                ],
+                                                    "price": 24,
+                                                        "type": "outdoor",
+                                                            "lifespan": "10-15 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2035",
+        "name": "Mogra (Arabian Jasmine)",
+            "scientificName": "Jasminum sambac",
+                "description": "The Mogra (Arabian Jasmine) (Jasminum sambac) is a classic garden staple. With a lifespan of 10 Years, it offers perfume and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-8344965624?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "30 L/day",
+                                            "medicinalValues": [
+                                                "Cooling effect",
+                                                "Eye wash"
+                                            ],
+                                                "advantages": [
+                                                    "Perfume",
+                                                    "Garlands"
+                                                ],
+                                                    "price": 42,
+                                                        "type": "outdoor",
+                                                            "lifespan": "10 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2036",
+        "name": "Vinca (Sadabahar)",
+            "scientificName": "Catharanthus roseus",
+                "description": "The Vinca (Sadabahar) (Catharanthus roseus) is a classic garden staple. With a lifespan of Perennial, it offers blooms daily and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-2758854938?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "20 L/day",
+                                            "medicinalValues": [
+                                                "Cancer fighting alkaloids",
+                                                "Diabetes"
+                                            ],
+                                                "advantages": [
+                                                    "Blooms daily",
+                                                    "Drought resistant"
+                                                ],
+                                                    "price": 54,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Perennial",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2037",
+        "name": "Oleander (Kaner)",
+            "scientificName": "Nerium oleander",
+                "description": "The Oleander (Kaner) (Nerium oleander) is a classic garden staple. With a lifespan of 20+ Years, it offers roadside hardy and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-6993879105?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "35 L/day",
+                                            "medicinalValues": [
+                                                "Toxic (used carefully in cardiac meds)"
+                                            ],
+                                                "advantages": [
+                                                    "Roadside hardy",
+                                                    "Colorful"
+                                                ],
+                                                    "price": 79,
+                                                        "type": "outdoor",
+                                                            "lifespan": "20+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "USDA Poisonous Plant Research"
+},
+{
+    "id": "p_out_2038",
+        "name": "Bougainvillea",
+            "scientificName": "Bougainvillea spectabilis",
+                "description": "The Bougainvillea (Bougainvillea spectabilis) is a classic garden staple. With a lifespan of 20+ Years, it offers paper flowers and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-7063119527?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "40 L/day",
+                                            "medicinalValues": [
+                                                "Cough syrup"
+                                            ],
+                                                "advantages": [
+                                                    "Paper flowers",
+                                                    "Security hedge"
+                                                ],
+                                                    "price": 79,
+                                                        "type": "outdoor",
+                                                            "lifespan": "20+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2039",
+        "name": "Rangoon Creeper",
+            "scientificName": "Combretum indicum",
+                "description": "The Rangoon Creeper (Combretum indicum) is a classic garden staple. With a lifespan of 20+ Years, it offers fragrant color changing flowers and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-6777610126?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "50 L/day",
+                                            "medicinalValues": [
+                                                "Parasite worms"
+                                            ],
+                                                "advantages": [
+                                                    "Fragrant color changing flowers",
+                                                    "Vine"
+                                                ],
+                                                    "price": 57,
+                                                        "type": "outdoor",
+                                                            "lifespan": "20+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2040",
+        "name": "Aparajita (Butterfly Pea)",
+            "scientificName": "Clitoria ternatea",
+                "description": "The Aparajita (Butterfly Pea) (Clitoria ternatea) is a classic garden staple. With a lifespan of Perennial, it offers nitrogen fixer and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-6822563677?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "25 L/day",
+                                            "medicinalValues": [
+                                                "Memory booster",
+                                                "Blue tea"
+                                            ],
+                                                "advantages": [
+                                                    "Nitrogen fixer",
+                                                    "Holy flower"
+                                                ],
+                                                    "price": 50,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Perennial",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2041",
+        "name": "Ixora (Rugmini)",
+            "scientificName": "Ixora coccinea",
+                "description": "The Ixora (Rugmini) (Ixora coccinea) is a classic garden staple. With a lifespan of 10+ Years, it offers hedge plant and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-7183853886?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "30 L/day",
+                                            "medicinalValues": [
+                                                "Root for fever"
+                                            ],
+                                                "advantages": [
+                                                    "Hedge plant",
+                                                    "Neon flowers"
+                                                ],
+                                                    "price": 55,
+                                                        "type": "outdoor",
+                                                            "lifespan": "10+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2042",
+        "name": "Red Hibiscus",
+            "scientificName": "Hibiscus rosa-sinensis",
+                "description": "The Red Hibiscus (Hibiscus rosa-sinensis) is a classic garden staple. With a lifespan of 15 Years, it offers offering to ganesha and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-4522435002?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "45 L/day",
+                                            "medicinalValues": [
+                                                "Hair oil",
+                                                "Tea"
+                                            ],
+                                                "advantages": [
+                                                    "Offering to Ganesha",
+                                                    "Edible"
+                                                ],
+                                                    "price": 16,
+                                                        "type": "outdoor",
+                                                            "lifespan": "15 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2043",
+        "name": "Allamanda",
+            "scientificName": "Allamanda cathartica",
+                "description": "The Allamanda (Allamanda cathartica) is a classic garden staple. With a lifespan of 10+ Years, it offers large yellow bells and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-8327866448?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "35 L/day",
+                                            "medicinalValues": [
+                                                "Laxative (Toxic)"
+                                            ],
+                                                "advantages": [
+                                                    "Large yellow bells",
+                                                    "Climber"
+                                                ],
+                                                    "price": 36,
+                                                        "type": "outdoor",
+                                                            "lifespan": "10+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "USDA Poisonous Plant Research"
+},
+{
+    "id": "p_out_2044",
+        "name": "Tecoma (Yellow Bells)",
+            "scientificName": "Tecoma stans",
+                "description": "The Tecoma (Yellow Bells) (Tecoma stans) is a classic garden staple. With a lifespan of 10-20 Years, it offers attracts bees and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-1490777415?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "40 L/day",
+                                            "medicinalValues": [
+                                                "Diabetes control"
+                                            ],
+                                                "advantages": [
+                                                    "Attracts bees",
+                                                    "Year round bloom"
+                                                ],
+                                                    "price": 57,
+                                                        "type": "outdoor",
+                                                            "lifespan": "10-20 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2045",
+        "name": "Rajnigandha (Tuberose)",
+            "scientificName": "Polianthes tuberosa",
+                "description": "The Rajnigandha (Tuberose) (Polianthes tuberosa) is a classic garden staple. With a lifespan of Perennial, it offers best fragrance and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-1358332088?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "20 L/day",
+                                            "medicinalValues": [
+                                                "Calming"
+                                            ],
+                                                "advantages": [
+                                                    "Best fragrance",
+                                                    "Cut flowers"
+                                                ],
+                                                    "price": 11,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Perennial",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2046",
+        "name": "Canna Lily",
+            "scientificName": "Canna indica",
+                "description": "The Canna Lily (Canna indica) is a classic garden staple. With a lifespan of Perennial, it offers tropical foliage and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-8538552051?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "35 L/day",
+                                            "medicinalValues": [
+                                                "Root starch"
+                                            ],
+                                                "advantages": [
+                                                    "Tropical foliage",
+                                                    "Tall"
+                                                ],
+                                                    "price": 67,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Perennial",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2047",
+        "name": "Spider Lily",
+            "scientificName": "Hymenocallis littoralis",
+                "description": "The Spider Lily (Hymenocallis littoralis) is a classic garden staple. With a lifespan of Perennial, it offers unique white spidery flowers and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-3453974759?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Sun/Part Shade",
+                                        "oxygenLevel": "25 L/day",
+                                            "medicinalValues": [
+                                                "Wound healing"
+                                            ],
+                                                "advantages": [
+                                                    "Unique white spidery flowers",
+                                                    "Rain lover"
+                                                ],
+                                                    "price": 71,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Perennial",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2048",
+        "name": "Rain Lily",
+            "scientificName": "Zephyranthes",
+                "description": "The Rain Lily (Zephyranthes) is a classic garden staple. With a lifespan of Perennial, it offers blooms after rain and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-4749186329?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "10 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Blooms after rain",
+                                                    "Ground cover"
+                                                ],
+                                                    "price": 53,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Perennial",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2049",
+        "name": "Curtain Creeper",
+            "scientificName": "Vernonia elaeagnifolia",
+                "description": "The Curtain Creeper (Vernonia elaeagnifolia) is a classic garden staple. With a lifespan of 10+ Years, it offers natural screen and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-8968359300?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Sun/Part Shade",
+                                        "oxygenLevel": "45 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Natural screen",
+                                                    "Privacy"
+                                                ],
+                                                    "price": 24,
+                                                        "type": "outdoor",
+                                                            "lifespan": "10+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2050",
+        "name": "Passion Flower (Krishna Kamal)",
+            "scientificName": "Passiflora incarnata",
+                "description": "The Passion Flower (Krishna Kamal) (Passiflora incarnata) is a classic garden staple. With a lifespan of 5-7 Years, it offers complex flower structure and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-3397859346?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "30 L/day",
+                                            "medicinalValues": [
+                                                "Insomnia",
+                                                "Anxiety"
+                                            ],
+                                                "advantages": [
+                                                    "Complex flower structure",
+                                                    "Mythology"
+                                                ],
+                                                    "price": 60,
+                                                        "type": "outdoor",
+                                                            "lifespan": "5-7 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2051",
+        "name": "Duranta (Golden Dewdrop)",
+            "scientificName": "Duranta erecta",
+                "description": "The Duranta (Golden Dewdrop) (Duranta erecta) is a classic garden staple. With a lifespan of 15 Years, it offers gold foliage hedge and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-9170953937?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "30 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Gold foliage hedge",
+                                                    "Blue flowers"
+                                                ],
+                                                    "price": 19,
+                                                        "type": "outdoor",
+                                                            "lifespan": "15 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2052",
+        "name": "Lantana",
+            "scientificName": "Lantana camara",
+                "description": "The Lantana (Lantana camara) is a classic garden staple. With a lifespan of Perennial, it offers butterfly magnet and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-7684083613?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "25 L/day",
+                                            "medicinalValues": [
+                                                "Antiseptic (Traditional)"
+                                            ],
+                                                "advantages": [
+                                                    "Butterfly magnet",
+                                                    "Hardy"
+                                                ],
+                                                    "price": 24,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Perennial",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2053",
+        "name": "Portulaca (9 O'Clock)",
+            "scientificName": "Portulaca grandiflora",
+                "description": "The Portulaca (9 O'Clock) (Portulaca grandiflora) is a classic garden staple. With a lifespan of 1 Year, it offers colorful carpet and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-3304404583?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "15 L/day",
+                                            "medicinalValues": [
+                                                "Burns"
+                                            ],
+                                                "advantages": [
+                                                    "Colorful carpet",
+                                                    "Succulent"
+                                                ],
+                                                    "price": 76,
+                                                        "type": "outdoor",
+                                                            "lifespan": "1 Year",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2054",
+        "name": "Balsam",
+            "scientificName": "Impatiens balsamina",
+                "description": "The Balsam (Impatiens balsamina) is a classic garden staple. With a lifespan of 1 Year, it offers traditional playing flower and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-4420445004?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Sun/Part Shade",
+                                        "oxygenLevel": "18 L/day",
+                                            "medicinalValues": [
+                                                "Cooling burns"
+                                            ],
+                                                "advantages": [
+                                                    "Traditional playing flower",
+                                                    "Self seeding"
+                                                ],
+                                                    "price": 44,
+                                                        "type": "outdoor",
+                                                            "lifespan": "1 Year",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2055",
+        "name": "Gomphrena",
+            "scientificName": "Gomphrena globosa",
+                "description": "The Gomphrena (Gomphrena globosa) is a classic garden staple. With a lifespan of 1 Year, it offers button flowers and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-7233430503?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "15 L/day",
+                                            "medicinalValues": [
+                                                "Cough"
+                                            ],
+                                                "advantages": [
+                                                    "Button flowers",
+                                                    "Long lasting"
+                                                ],
+                                                    "price": 54,
+                                                        "type": "outdoor",
+                                                            "lifespan": "1 Year",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2056",
+        "name": "Cockscomb",
+            "scientificName": "Celosia argentea",
+                "description": "The Cockscomb (Celosia argentea) is a classic garden staple. With a lifespan of 1 Year, it offers velvet texture and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-3456366290?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "20 L/day",
+                                            "medicinalValues": [
+                                                "Mouth sores"
+                                            ],
+                                                "advantages": [
+                                                    "Velvet texture",
+                                                    "Unique shape"
+                                                ],
+                                                    "price": 44,
+                                                        "type": "outdoor",
+                                                            "lifespan": "1 Year",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2057",
+        "name": "Kochia",
+            "scientificName": "Bassia scoparia",
+                "description": "The Kochia (Bassia scoparia) is a classic garden staple. With a lifespan of 1 Year, it offers foliage ball and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-6914374315?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "25 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Foliage ball",
+                                                    "Green to Red"
+                                                ],
+                                                    "price": 75,
+                                                        "type": "outdoor",
+                                                            "lifespan": "1 Year",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2058",
+        "name": "Morning Glory",
+            "scientificName": "Ipomoea purpurea",
+                "description": "The Morning Glory (Ipomoea purpurea) is a classic garden staple. With a lifespan of 1 Year, it offers fast climber and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-6186142152?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "30 L/day",
+                                            "medicinalValues": [
+                                                "Laxative (seeds toxic)"
+                                            ],
+                                                "advantages": [
+                                                    "Fast climber",
+                                                    "Morning blooms"
+                                                ],
+                                                    "price": 11,
+                                                        "type": "outdoor",
+                                                            "lifespan": "1 Year",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "USDA Poisonous Plant Research"
+},
+{
+    "id": "p_out_2059",
+        "name": "Cypress Vine",
+            "scientificName": "Ipomoea quamoclit",
+                "description": "The Cypress Vine (Ipomoea quamoclit) is a classic garden staple. With a lifespan of 1 Year, it offers star flowers and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-4487357619?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "25 L/day",
+                                            "medicinalValues": [
+                                                "Cooling"
+                                            ],
+                                                "advantages": [
+                                                    "Star flowers",
+                                                    "Feathery leaves"
+                                                ],
+                                                    "price": 50,
+                                                        "type": "outdoor",
+                                                            "lifespan": "1 Year",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2060",
+        "name": "Bleeding Heart Vine",
+            "scientificName": "Clerodendrum thomsoniae",
+                "description": "The Bleeding Heart Vine (Clerodendrum thomsoniae) is a classic garden staple. With a lifespan of 10+ Years, it offers bicolor flowers and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-2525791569?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Part Shade",
+                                        "oxygenLevel": "30 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Bicolor flowers",
+                                                    "Shade climber"
+                                                ],
+                                                    "price": 7,
+                                                        "type": "outdoor",
+                                                            "lifespan": "10+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2061",
+        "name": "Bottle Brush",
+            "scientificName": "Callistemon",
+                "description": "The Bottle Brush (Callistemon) is a classic garden staple. With a lifespan of 40+ Years, it offers unique red bristles and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-1269661968?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "60 L/day",
+                                            "medicinalValues": [
+                                                "Antimicrobial"
+                                            ],
+                                                "advantages": [
+                                                    "Unique red bristles",
+                                                    "Bird attractor"
+                                                ],
+                                                    "price": 14,
+                                                        "type": "outdoor",
+                                                            "lifespan": "40+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2062",
+        "name": "Indian Almond",
+            "scientificName": "Terminalia catappa",
+                "description": "The Indian Almond (Terminalia catappa) is a classic garden staple. With a lifespan of 60+ Years, it offers shade and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-6335175222?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "150 L/day",
+                                            "medicinalValues": [
+                                                "Leaf for fish tank",
+                                                "Astringent"
+                                            ],
+                                                "advantages": [
+                                                    "Shade",
+                                                    "Fall colors in tropics"
+                                                ],
+                                                    "price": 59,
+                                                        "type": "outdoor",
+                                                            "lifespan": "60+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2063",
+        "name": "Jackfruit",
+            "scientificName": "Artocarpus heterophyllus",
+                "description": "The Jackfruit (Artocarpus heterophyllus) is a classic garden staple. With a lifespan of 100+ Years, it offers largest fruit and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-3129339298?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "180 L/day",
+                                            "medicinalValues": [
+                                                "Leaves for diabetes"
+                                            ],
+                                                "advantages": [
+                                                    "Largest fruit",
+                                                    "Timber"
+                                                ],
+                                                    "price": 30,
+                                                        "type": "outdoor",
+                                                            "lifespan": "100+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "USDA FoodData Central"
+},
+{
+    "id": "p_out_2064",
+        "name": "Amaltas (Golden Shower)",
+            "scientificName": "Cassia fistula",
+                "description": "The Amaltas (Golden Shower) (Cassia fistula) is a classic garden staple. With a lifespan of 50 Years, it offers yellow rain flowers and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-6302868840?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "90 L/day",
+                                            "medicinalValues": [
+                                                "Laxative (Fruit pulp)"
+                                            ],
+                                                "advantages": [
+                                                    "Yellow rain flowers",
+                                                    "Ornamental"
+                                                ],
+                                                    "price": 22,
+                                                        "type": "outdoor",
+                                                            "lifespan": "50 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "Ayurvedic Pharmacopoeia of India"
+},
+{
+    "id": "p_out_2065",
+        "name": "Pride of India",
+            "scientificName": "Lagerstroemia speciosa",
+                "description": "The Pride of India (Lagerstroemia speciosa) is a classic garden staple. With a lifespan of 50 Years, it offers purple finish and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-2886448667?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "85 L/day",
+                                            "medicinalValues": [
+                                                "Diabetes tea"
+                                            ],
+                                                "advantages": [
+                                                    "Purple finish",
+                                                    "Roadside beauty"
+                                                ],
+                                                    "price": 35,
+                                                        "type": "outdoor",
+                                                            "lifespan": "50 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2066",
+        "name": "Sitaphal (Custard Apple)",
+            "scientificName": "Annona squamosa",
+                "description": "The Sitaphal (Custard Apple) (Annona squamosa) is a classic garden staple. With a lifespan of 20 Years, it offers tasty fruit and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-2021190262?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "50 L/day",
+                                            "medicinalValues": [
+                                                "Leaves antimicrobial"
+                                            ],
+                                                "advantages": [
+                                                    "Tasty fruit",
+                                                    "Small tree"
+                                                ],
+                                                    "price": 41,
+                                                        "type": "outdoor",
+                                                            "lifespan": "20 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2067",
+        "name": "Chiku (Sapodilla)",
+            "scientificName": "Manilkara zapota",
+                "description": "The Chiku (Sapodilla) (Manilkara zapota) is a classic garden staple. With a lifespan of 100 Years, it offers sweet fruit and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-5551442516?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "110 L/day",
+                                            "medicinalValues": [
+                                                "Bark Astringent"
+                                            ],
+                                                "advantages": [
+                                                    "Sweet fruit",
+                                                    "Dense canopy"
+                                                ],
+                                                    "price": 58,
+                                                        "type": "outdoor",
+                                                            "lifespan": "100 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2068",
+        "name": "Drumstick (Moringa)",
+            "scientificName": "Moringa oleifera",
+                "description": "The Drumstick (Moringa) (Moringa oleifera) is a classic garden staple. With a lifespan of 20 Years, it offers fastest growing and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-5192471080?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "100 L/day",
+                                            "medicinalValues": [
+                                                "Superfood"
+                                            ],
+                                                "advantages": [
+                                                    "Fastest growing",
+                                                    "Nutritious"
+                                                ],
+                                                    "price": 43,
+                                                        "type": "outdoor",
+                                                            "lifespan": "20 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "USDA FoodData Central"
+},
+{
+    "id": "p_out_2069",
+        "name": "Wisteria",
+            "scientificName": "Wisteria sinensis",
+                "description": "The Wisteria (Wisteria sinensis) is a classic garden staple. With a lifespan of 50+ Years, it offers cascading flowers and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-7903135031?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "80 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Cascading flowers",
+                                                    "Stunning purple"
+                                                ],
+                                                    "price": 57,
+                                                        "type": "outdoor",
+                                                            "lifespan": "50+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2070",
+        "name": "Clematis",
+            "scientificName": "Clematis",
+                "description": "The Clematis (Clematis) is a classic garden staple. With a lifespan of 20-50 Years, it offers queen of climbers and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-1734251902?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Sun (Roots shade)",
+                                        "oxygenLevel": "40 L/day",
+                                            "medicinalValues": [
+                                                "Anti-inflammatory (History)"
+                                            ],
+                                                "advantages": [
+                                                    "Queen of Climbers",
+                                                    "Diverse colors"
+                                                ],
+                                                    "price": 42,
+                                                        "type": "outdoor",
+                                                            "lifespan": "20-50 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2071",
+        "name": "Honeysuckle",
+            "scientificName": "Lonicera",
+                "description": "The Honeysuckle (Lonicera) is a classic garden staple. With a lifespan of 20+ Years, it offers heavenly scent and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-2415264645?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "50 L/day",
+                                            "medicinalValues": [
+                                                "Cooling herb"
+                                            ],
+                                                "advantages": [
+                                                    "Heavenly scent",
+                                                    "Pollinator magnet"
+                                                ],
+                                                    "price": 9,
+                                                        "type": "outdoor",
+                                                            "lifespan": "20+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2072",
+        "name": "Black Eyed Susan",
+            "scientificName": "Rudbeckia hirta",
+                "description": "The Black Eyed Susan (Rudbeckia hirta) is a classic garden staple. With a lifespan of 2-3 Years, it offers bright yellow and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-1519763999?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "30 L/day",
+                                            "medicinalValues": [
+                                                "Immune boost root"
+                                            ],
+                                                "advantages": [
+                                                    "Bright yellow",
+                                                    "Native beauty"
+                                                ],
+                                                    "price": 69,
+                                                        "type": "outdoor",
+                                                            "lifespan": "2-3 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2073",
+        "name": "Coneflower",
+            "scientificName": "Echinacea purpurea",
+                "description": "The Coneflower (Echinacea purpurea) is a classic garden staple. With a lifespan of 3-5 Years, it offers medicinal tea and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-5755287641?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "35 L/day",
+                                            "medicinalValues": [
+                                                "Cold remedy"
+                                            ],
+                                                "advantages": [
+                                                    "Medicinal tea",
+                                                    "Butterfly fave"
+                                                ],
+                                                    "price": 74,
+                                                        "type": "outdoor",
+                                                            "lifespan": "3-5 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2074",
+        "name": "Bleeding Heart",
+            "scientificName": "Lamprocapnos spectabilis",
+                "description": "The Bleeding Heart (Lamprocapnos spectabilis) is a classic garden staple. With a lifespan of Perennial, it offers heart shaped flower and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-6989119286?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Shade",
+                                        "oxygenLevel": "25 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Heart shaped flower",
+                                                    "Shade lover"
+                                                ],
+                                                    "price": 52,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Perennial",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2075",
+        "name": "Astilbe",
+            "scientificName": "Astilbe",
+                "description": "The Astilbe (Astilbe) is a classic garden staple. With a lifespan of 15+ Years, it offers feathery plumes and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-3131552610?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Shade",
+                                        "oxygenLevel": "30 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Feathery plumes",
+                                                    "Fern-like foliage"
+                                                ],
+                                                    "price": 15,
+                                                        "type": "outdoor",
+                                                            "lifespan": "15+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2076",
+        "name": "Hosta",
+            "scientificName": "Hosta",
+                "description": "The Hosta (Hosta) is a classic garden staple. With a lifespan of 30+ Years, it offers foliage king and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-2306122314?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Shade",
+                                        "oxygenLevel": "40 L/day",
+                                            "medicinalValues": [
+                                                "Edible shoots"
+                                            ],
+                                                "advantages": [
+                                                    "Foliage king",
+                                                    "Shade tolerant"
+                                                ],
+                                                    "price": 56,
+                                                        "type": "outdoor",
+                                                            "lifespan": "30+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2077",
+        "name": "Coral Bells",
+            "scientificName": "Heuchera",
+                "description": "The Coral Bells (Heuchera) is a classic garden staple. With a lifespan of 3-5 Years, it offers colorful leaves and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-8407297157?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Part Shade",
+                                        "oxygenLevel": "25 L/day",
+                                            "medicinalValues": [
+                                                "Astringent root"
+                                            ],
+                                                "advantages": [
+                                                    "Colorful leaves",
+                                                    "Evergreen"
+                                                ],
+                                                    "price": 57,
+                                                        "type": "outdoor",
+                                                            "lifespan": "3-5 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2078",
+        "name": "Foxglove",
+            "scientificName": "Digitalis purpurea",
+                "description": "The Foxglove (Digitalis purpurea) is a classic garden staple. With a lifespan of 2 Years (Biennial), it offers tall spikes and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-3580498795?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Part Shade",
+                                        "oxygenLevel": "35 L/day",
+                                            "medicinalValues": [
+                                                "Heart medicine (Toxic)"
+                                            ],
+                                                "advantages": [
+                                                    "Tall spikes",
+                                                    "Cottage garden"
+                                                ],
+                                                    "price": 11,
+                                                        "type": "outdoor",
+                                                            "lifespan": "2 Years (Biennial)",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "USDA Poisonous Plant Research"
+},
+{
+    "id": "p_out_2079",
+        "name": "Delphinium",
+            "scientificName": "Delphinium",
+                "description": "The Delphinium (Delphinium) is a classic garden staple. With a lifespan of 3-5 Years, it offers true blue color and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-5469091435?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "40 L/day",
+                                            "medicinalValues": [
+                                                "None (Toxic)"
+                                            ],
+                                                "advantages": [
+                                                    "True blue color",
+                                                    "Tall spikes"
+                                                ],
+                                                    "price": 24,
+                                                        "type": "outdoor",
+                                                            "lifespan": "3-5 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "USDA Poisonous Plant Research"
+},
+{
+    "id": "p_out_2080",
+        "name": "Snapdragon",
+            "scientificName": "Antirrhinum majus",
+                "description": "The Snapdragon (Antirrhinum majus) is a classic garden staple. With a lifespan of 1 Year, it offers dragon mouth flowers and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-6846811828?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "20 L/day",
+                                            "medicinalValues": [
+                                                "Anti-inflammatory"
+                                            ],
+                                                "advantages": [
+                                                    "Dragon mouth flowers",
+                                                    "Kids love"
+                                                ],
+                                                    "price": 37,
+                                                        "type": "outdoor",
+                                                            "lifespan": "1 Year",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2081",
+        "name": "Zinnia",
+            "scientificName": "Zinnia elegans",
+                "description": "The Zinnia (Zinnia elegans) is a classic garden staple. With a lifespan of 1 Year, it offers cut flowers and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-5958498176?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "25 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Cut flowers",
+                                                    "Butterfly magnet"
+                                                ],
+                                                    "price": 16,
+                                                        "type": "outdoor",
+                                                            "lifespan": "1 Year",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2082",
+        "name": "Cosmos",
+            "scientificName": "Cosmos bipinnatus",
+                "description": "The Cosmos (Cosmos bipinnatus) is a classic garden staple. With a lifespan of 1 Year, it offers airy foliage and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-4724464754?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "28 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Airy foliage",
+                                                    "Daisy like"
+                                                ],
+                                                    "price": 53,
+                                                        "type": "outdoor",
+                                                            "lifespan": "1 Year",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2083",
+        "name": "Sweet Pea",
+            "scientificName": "Lathyrus odoratus",
+                "description": "The Sweet Pea (Lathyrus odoratus) is a classic garden staple. With a lifespan of 1 Year, it offers fragrance and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-1564557636?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "30 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Fragrance",
+                                                    "Climber"
+                                                ],
+                                                    "price": 11,
+                                                        "type": "outdoor",
+                                                            "lifespan": "1 Year",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2084",
+        "name": "Nasturtium",
+            "scientificName": "Tropaeolum majus",
+                "description": "The Nasturtium (Tropaeolum majus) is a classic garden staple. With a lifespan of 1 Year, it offers edible flowers/leaves and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-1718651842?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "35 L/day",
+                                            "medicinalValues": [
+                                                "Antibiotic"
+                                            ],
+                                                "advantages": [
+                                                    "Edible flowers/leaves",
+                                                    "Peppery"
+                                                ],
+                                                    "price": 69,
+                                                        "type": "outdoor",
+                                                            "lifespan": "1 Year",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2085",
+        "name": "Dahlia",
+            "scientificName": "Dahlia pinnata",
+                "description": "The Dahlia (Dahlia pinnata) is a classic garden staple. With a lifespan of Perennial Tuber, it offers showy blooms and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-3060972878?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "45 L/day",
+                                            "medicinalValues": [
+                                                "Insulin source (historical)"
+                                            ],
+                                                "advantages": [
+                                                    "Showy blooms",
+                                                    "Variety"
+                                                ],
+                                                    "price": 7,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Perennial Tuber",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2086",
+        "name": "Gladiolus",
+            "scientificName": "Gladiolus",
+                "description": "The Gladiolus (Gladiolus) is a classic garden staple. With a lifespan of Perennial Corm, it offers tall sword flower and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-1118206230?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "30 L/day",
+                                            "medicinalValues": [
+                                                "Drawing out thorns"
+                                            ],
+                                                "advantages": [
+                                                    "Tall sword flower",
+                                                    "Cut flower"
+                                                ],
+                                                    "price": 63,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Perennial Corm",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2087",
+        "name": "Calla Lily",
+            "scientificName": "Zantedeschia aethiopica",
+                "description": "The Calla Lily (Zantedeschia aethiopica) is a classic garden staple. With a lifespan of Perennial, it offers elegant trumpet and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-6528744482?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Sun/Part Shade",
+                                        "oxygenLevel": "35 L/day",
+                                            "medicinalValues": [
+                                                "None (Toxic)"
+                                            ],
+                                                "advantages": [
+                                                    "Elegant trumpet",
+                                                    "Wet soil"
+                                                ],
+                                                    "price": 68,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Perennial",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "USDA Poisonous Plant Research"
+},
+{
+    "id": "p_out_2088",
+        "name": "Daylily",
+            "scientificName": "Hemerocallis",
+                "description": "The Daylily (Hemerocallis) is a classic garden staple. With a lifespan of Perennial, it offers tough and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-7103578933?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Sun",
+                                        "oxygenLevel": "30 L/day",
+                                            "medicinalValues": [
+                                                "Edible flower buds"
+                                            ],
+                                                "advantages": [
+                                                    "Tough",
+                                                    "Blooms for one day"
+                                                ],
+                                                    "price": 8,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Perennial",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2089",
+        "name": "Iris",
+            "scientificName": "Iris germanica",
+                "description": "The Iris (Iris germanica) is a classic garden staple. With a lifespan of Perennial, it offers bearded flowers and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-5454535325?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "32 L/day",
+                                            "medicinalValues": [
+                                                "Orris root (perfume)"
+                                            ],
+                                                "advantages": [
+                                                    "Bearded flowers",
+                                                    "Sword leaves"
+                                                ],
+                                                    "price": 55,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Perennial",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2090",
         "name": "Camellia",
-        "scientificName": "Camellia japonica",
-        "description": "The Camellia (Camellia japonica) is a classic garden staple. With a lifespan of 100 Years, it offers winter rose and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-6819815335?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Shade",
-        "oxygenLevel": "50 L/day",
-        "medicinalValues": [
-            "Tea oil"
-        ],
-        "advantages": [
-            "Winter rose",
-            "Glossy leaves"
-        ],
-        "price": 58,
-        "type": "outdoor",
-        "lifespan": "100 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2187",
+            "scientificName": "Camellia japonica",
+                "description": "The Camellia (Camellia japonica) is a classic garden staple. With a lifespan of 50+ Years, it offers winter blooms and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-7002743533?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Part Shade",
+                                        "oxygenLevel": "55 L/day",
+                                            "medicinalValues": [
+                                                "Oil for hair"
+                                            ],
+                                                "advantages": [
+                                                    "Winter blooms",
+                                                    "Rose-like"
+                                                ],
+                                                    "price": 11,
+                                                        "type": "outdoor",
+                                                            "lifespan": "50+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2091",
         "name": "Gardenia",
-        "scientificName": "Gardenia jasminoides",
-        "description": "The Gardenia (Gardenia jasminoides) is a classic garden staple. With a lifespan of 50 Years, it offers intense scent and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-7433415279?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Part Sun",
-        "oxygenLevel": "45 L/day",
-        "medicinalValues": [
-            "Fruit dye"
-        ],
-        "advantages": [
-            "Intense scent",
-            "Creamy flowers"
-        ],
-        "price": 64,
-        "type": "outdoor",
-        "lifespan": "50 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2188",
+            "scientificName": "Gardenia jasminoides",
+                "description": "The Gardenia (Gardenia jasminoides) is a classic garden staple. With a lifespan of 20-40 Years, it offers intense fragrance and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-6142936420?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Part Shade",
+                                        "oxygenLevel": "40 L/day",
+                                            "medicinalValues": [
+                                                "Chinese medicine"
+                                            ],
+                                                "advantages": [
+                                                    "Intense fragrance",
+                                                    "White blooms"
+                                                ],
+                                                    "price": 65,
+                                                        "type": "outdoor",
+                                                            "lifespan": "20-40 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "Traditional Chinese Medicine (TCM) Database"
+},
+{
+    "id": "p_out_2092",
+        "name": "Rhododendron",
+            "scientificName": "Rhododendron ferrugineum",
+                "description": "The Rhododendron (Rhododendron ferrugineum) is a classic garden staple. With a lifespan of 50+ Years, it offers spectacular spring and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-3570237588?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Part Shade",
+                                        "oxygenLevel": "60 L/day",
+                                            "medicinalValues": [
+                                                "None (Toxic)"
+                                            ],
+                                                "advantages": [
+                                                    "Spectacular spring",
+                                                    "Evergreen"
+                                                ],
+                                                    "price": 37,
+                                                        "type": "outdoor",
+                                                            "lifespan": "50+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "USDA Poisonous Plant Research"
+},
+{
+    "id": "p_out_2093",
+        "name": "Forsythia",
+            "scientificName": "Forsythia suspensa",
+                "description": "The Forsythia (Forsythia suspensa) is a classic garden staple. With a lifespan of 40+ Years, it offers first yellow of spring and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-9638374734?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "45 L/day",
+                                            "medicinalValues": [
+                                                "Detox"
+                                            ],
+                                                "advantages": [
+                                                    "First yellow of spring",
+                                                    "Hardy"
+                                                ],
+                                                    "price": 78,
+                                                        "type": "outdoor",
+                                                            "lifespan": "40+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2094",
+        "name": "Weigela",
+            "scientificName": "Weigela florida",
+                "description": "The Weigela (Weigela florida) is a classic garden staple. With a lifespan of 30+ Years, it offers tubular flowers and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-5947868640?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "40 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Tubular flowers",
+                                                    "Hummingbirds"
+                                                ],
+                                                    "price": 72,
+                                                        "type": "outdoor",
+                                                            "lifespan": "30+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2095",
+        "name": "Spirea",
+            "scientificName": "Spiraea japonica",
+                "description": "The Spirea (Spiraea japonica) is a classic garden staple. With a lifespan of 20+ Years, it offers easy shrub and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-5700344830?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "35 L/day",
+                                            "medicinalValues": [
+                                                "Aspirin source (Salicylic acid)"
+                                            ],
+                                                "advantages": [
+                                                    "Easy shrub",
+                                                    "Pink/White"
+                                                ],
+                                                    "price": 62,
+                                                        "type": "outdoor",
+                                                            "lifespan": "20+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2096",
+        "name": "Holly",
+            "scientificName": "Ilex aquifolium",
+                "description": "The Holly (Ilex aquifolium) is a classic garden staple. With a lifespan of 50+ Years, it offers winter red berries and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-5328706880?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Sun/Part Shade",
+                                        "oxygenLevel": "55 L/day",
+                                            "medicinalValues": [
+                                                "None (Berries toxic)"
+                                            ],
+                                                "advantages": [
+                                                    "Winter red berries",
+                                                    "Security"
+                                                ],
+                                                    "price": 63,
+                                                        "type": "outdoor",
+                                                            "lifespan": "50+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "USDA Poisonous Plant Research"
+},
+{
+    "id": "p_out_2097",
+        "name": "Juniper",
+            "scientificName": "Juniperus communis",
+                "description": "The Juniper (Juniperus communis) is a classic garden staple. With a lifespan of 100+ Years, it offers evergreen and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-2556370635?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "70 L/day",
+                                            "medicinalValues": [
+                                                "Gin flavoring",
+                                                "Antiseptic"
+                                            ],
+                                                "advantages": [
+                                                    "Evergreen",
+                                                    "Berries"
+                                                ],
+                                                    "price": 33,
+                                                        "type": "outdoor",
+                                                            "lifespan": "100+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2098",
+        "name": "Yew",
+            "scientificName": "Taxus baccata",
+                "description": "The Yew (Taxus baccata) is a classic garden staple. With a lifespan of 500+ Years, it offers long lived and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-1436086684?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Shade/Sun",
+                                        "oxygenLevel": "80 L/day",
+                                            "medicinalValues": [
+                                                "Taxol (Cancer drug)"
+                                            ],
+                                                "advantages": [
+                                                    "Long lived",
+                                                    "Hedge"
+                                                ],
+                                                    "price": 67,
+                                                        "type": "outdoor",
+                                                            "lifespan": "500+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "The Gymnosperm Database"
+},
+{
+    "id": "p_out_2099",
+        "name": "Arborvitae",
+            "scientificName": "Thuja occidentalis",
+                "description": "The Arborvitae (Thuja occidentalis) is a classic garden staple. With a lifespan of 50+ Years, it offers privacy screen and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-6343885476?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "90 L/day",
+                                            "medicinalValues": [
+                                                "Vitamin C tea"
+                                            ],
+                                                "advantages": [
+                                                    "Privacy screen",
+                                                    "Evergreen"
+                                                ],
+                                                    "price": 12,
+                                                        "type": "outdoor",
+                                                            "lifespan": "50+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2100",
+        "name": "Japanese Maple",
+            "scientificName": "Acer palmatum",
+                "description": "The Japanese Maple (Acer palmatum) is a classic garden staple. With a lifespan of 50-100 Years, it offers stunning foliage and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-9411116103?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Part Shade",
+                                        "oxygenLevel": "120 L/day",
+                                            "medicinalValues": [
+                                                "Eye wash"
+                                            ],
+                                                "advantages": [
+                                                    "Stunning foliage",
+                                                    "Form"
+                                                ],
+                                                    "price": 36,
+                                                        "type": "outdoor",
+                                                            "lifespan": "50-100 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2101",
+        "name": "Dogwood",
+            "scientificName": "Cornus florida",
+                "description": "The Dogwood (Cornus florida) is a classic garden staple. With a lifespan of 50+ Years, it offers spring bracts and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-6279445716?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Part Shade",
+                                        "oxygenLevel": "110 L/day",
+                                            "medicinalValues": [
+                                                "Fever bark"
+                                            ],
+                                                "advantages": [
+                                                    "Spring bracts",
+                                                    "Fall color"
+                                                ],
+                                                    "price": 77,
+                                                        "type": "outdoor",
+                                                            "lifespan": "50+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2102",
+        "name": "Redbud",
+            "scientificName": "Cercis canadensis",
+                "description": "The Redbud (Cercis canadensis) is a classic garden staple. With a lifespan of 50 Years, it offers pink stems and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-2774373896?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Part Shade",
+                                        "oxygenLevel": "100 L/day",
+                                            "medicinalValues": [
+                                                "Astringent"
+                                            ],
+                                                "advantages": [
+                                                    "Pink stems",
+                                                    "Heart leaves"
+                                                ],
+                                                    "price": 34,
+                                                        "type": "outdoor",
+                                                            "lifespan": "50 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2103",
         "name": "Crape Myrtle",
-        "scientificName": "Lagerstroemia indica",
-        "description": "The Crape Myrtle (Lagerstroemia indica) is a classic garden staple. With a lifespan of 50 Years, it offers summer bloom and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-5751858324?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "55 L/day",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Summer bloom",
-            "Peeling bark"
-        ],
-        "price": 37,
-        "type": "outdoor",
-        "lifespan": "50 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2189",
+            "scientificName": "Lagerstroemia indica",
+                "description": "The Crape Myrtle (Lagerstroemia indica) is a classic garden staple. With a lifespan of 50+ Years, it offers summer blooms and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-6927428694?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "95 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Summer blooms",
+                                                    "Peeling bark"
+                                                ],
+                                                    "price": 18,
+                                                        "type": "outdoor",
+                                                            "lifespan": "50+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2104",
+        "name": "Ginkgo",
+            "scientificName": "Ginkgo biloba",
+                "description": "The Ginkgo (Ginkgo biloba) is a classic garden staple. With a lifespan of 1000+ Years, it offers living fossil and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-9463641297?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "250 L/day",
+                                            "medicinalValues": [
+                                                "Memory"
+                                            ],
+                                                "advantages": [
+                                                    "Living fossil",
+                                                    "Yellow fall"
+                                                ],
+                                                    "price": 45,
+                                                        "type": "outdoor",
+                                                            "lifespan": "1000+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "The Gymnosperm Database"
+},
+{
+    "id": "p_out_2105",
+        "name": "Birch",
+            "scientificName": "Betula pendula",
+                "description": "The Birch (Betula pendula) is a classic garden staple. With a lifespan of 40-60 Years, it offers white bark and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-5730967103?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "180 L/day",
+                                            "medicinalValues": [
+                                                "Sap wine",
+                                                "Skin"
+                                            ],
+                                                "advantages": [
+                                                    "White bark",
+                                                    "Elegant"
+                                                ],
+                                                    "price": 77,
+                                                        "type": "outdoor",
+                                                            "lifespan": "40-60 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2106",
+        "name": "Willow",
+            "scientificName": "Salix babylonica",
+                "description": "The Willow (Salix babylonica) is a classic garden staple. With a lifespan of 30-50 Years, it offers weeping form and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-5780467822?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "160 L/day",
+                                            "medicinalValues": [
+                                                "Aspirin source"
+                                            ],
+                                                "advantages": [
+                                                    "Weeping form",
+                                                    "Water loving"
+                                                ],
+                                                    "price": 36,
+                                                        "type": "outdoor",
+                                                            "lifespan": "30-50 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2107",
+        "name": "Oak",
+            "scientificName": "Quercus robur",
+                "description": "The Oak (Quercus robur) is a classic garden staple. With a lifespan of 500+ Years, it offers wildlife support and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-6209296738?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "300 L/day",
+                                            "medicinalValues": [
+                                                "Astringent bark"
+                                            ],
+                                                "advantages": [
+                                                    "Wildlife support",
+                                                    "Strength"
+                                                ],
+                                                    "price": 64,
+                                                        "type": "outdoor",
+                                                            "lifespan": "500+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "The Gymnosperm Database"
+},
+{
+    "id": "p_out_2108",
+        "name": "Maple",
+            "scientificName": "Acer saccharum",
+                "description": "The Maple (Acer saccharum) is a classic garden staple. With a lifespan of 200+ Years, it offers fall color and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-8553029282?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "280 L/day",
+                                            "medicinalValues": [
+                                                "Syrup"
+                                            ],
+                                                "advantages": [
+                                                    "Fall color",
+                                                    "Syrup"
+                                                ],
+                                                    "price": 32,
+                                                        "type": "outdoor",
+                                                            "lifespan": "200+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2109",
+        "name": "Pine",
+            "scientificName": "Pinus strobus",
+                "description": "The Pine (Pinus strobus) is a classic garden staple. With a lifespan of 200+ Years, it offers evergreen and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-5683124127?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "260 L/day",
+                                            "medicinalValues": [
+                                                "Needle tea (Vit C)"
+                                            ],
+                                                "advantages": [
+                                                    "Evergreen",
+                                                    "Scent"
+                                                ],
+                                                    "price": 29,
+                                                        "type": "outdoor",
+                                                            "lifespan": "200+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2110",
+        "name": "Palm (Fan)",
+            "scientificName": "Washingtonia robusta",
+                "description": "The Palm (Fan) (Washingtonia robusta) is a classic garden staple. With a lifespan of 50-100 Years, it offers skyline accent and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-8515398393?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "150 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Skyline accent",
+                                                    "Drought"
+                                                ],
+                                                    "price": 19,
+                                                        "type": "outdoor",
+                                                            "lifespan": "50-100 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2111",
+        "name": "Olive",
+            "scientificName": "Olea europaea",
+                "description": "The Olive (Olea europaea) is a classic garden staple. With a lifespan of 1000+ Years, it offers peace symbol and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-1726798114?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "120 L/day",
+                                            "medicinalValues": [
+                                                "Leaf extract",
+                                                "Oil"
+                                            ],
+                                                "advantages": [
+                                                    "Peace symbol",
+                                                    "Fruit"
+                                                ],
+                                                    "price": 20,
+                                                        "type": "outdoor",
+                                                            "lifespan": "1000+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "The Gymnosperm Database"
+},
+{
+    "id": "p_out_2112",
+        "name": "Fig",
+            "scientificName": "Ficus carica",
+                "description": "The Fig (Ficus carica) is a classic garden staple. With a lifespan of 50+ Years, it offers edible fruit and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-1980332622?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "100 L/day",
+                                            "medicinalValues": [
+                                                "Latex for warts"
+                                            ],
+                                                "advantages": [
+                                                    "Edible fruit",
+                                                    "Leaves"
+                                                ],
+                                                    "price": 20,
+                                                        "type": "outdoor",
+                                                            "lifespan": "50+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2113",
+        "name": "Grapevine",
+            "scientificName": "Vitis vinifera",
+                "description": "The Grapevine (Vitis vinifera) is a classic garden staple. With a lifespan of 50-100 Years, it offers wine/jam and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-4362244984?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "90 L/day",
+                                            "medicinalValues": [
+                                                "Antioxidant seeds"
+                                            ],
+                                                "advantages": [
+                                                    "Wine/Jam",
+                                                    "Shade arbor"
+                                                ],
+                                                    "price": 47,
+                                                        "type": "outdoor",
+                                                            "lifespan": "50-100 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2114",
+        "name": "Strawberry",
+            "scientificName": "Fragaria x ananassa",
+                "description": "The Strawberry (Fragaria x ananassa) is a classic garden staple. With a lifespan of 3 Years, it offers delicious and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-3416673092?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "25 L/day",
+                                            "medicinalValues": [
+                                                "Teeth whitening (fruit)"
+                                            ],
+                                                "advantages": [
+                                                    "Delicious",
+                                                    "Ground cover"
+                                                ],
+                                                    "price": 51,
+                                                        "type": "outdoor",
+                                                            "lifespan": "3 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2115",
+        "name": "Blueberry",
+            "scientificName": "Vaccinium corymbosum",
+                "description": "The Blueberry (Vaccinium corymbosum) is a classic garden staple. With a lifespan of 40+ Years, it offers berries and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-9872942837?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "40 L/day",
+                                            "medicinalValues": [
+                                                "Superfood"
+                                            ],
+                                                "advantages": [
+                                                    "Berries",
+                                                    "Fall red leaves"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "40+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2116",
+        "name": "Raspberry",
+            "scientificName": "Rubus idaeus",
+                "description": "The Raspberry (Rubus idaeus) is a classic garden staple. With a lifespan of 10+ Years, it offers fruit and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-4499499402?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "35 L/day",
+                                            "medicinalValues": [
+                                                "Leaf tea for labor"
+                                            ],
+                                                "advantages": [
+                                                    "Fruit",
+                                                    "Easy grow"
+                                                ],
+                                                    "price": 74,
+                                                        "type": "outdoor",
+                                                            "lifespan": "10+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2117",
+        "name": "Blackberry",
+            "scientificName": "Rubus fruticosus",
+                "description": "The Blackberry (Rubus fruticosus) is a classic garden staple. With a lifespan of 10+ Years, it offers fruit and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-3011261617?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "35 L/day",
+                                            "medicinalValues": [
+                                                "Antioxidant"
+                                            ],
+                                                "advantages": [
+                                                    "Fruit",
+                                                    "Aggressive"
+                                                ],
+                                                    "price": 5,
+                                                        "type": "outdoor",
+                                                            "lifespan": "10+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2118",
+        "name": "Sunflower (Giant)",
+            "scientificName": "Helianthus giganteus",
+                "description": "The Sunflower (Giant) (Helianthus giganteus) is a classic garden staple. With a lifespan of 1 Year, it offers 12ft tall and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-2911828225?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "80 L/day",
+                                            "medicinalValues": [
+                                                "Seeds"
+                                            ],
+                                                "advantages": [
+                                                    "12ft tall",
+                                                    "Competitions"
+                                                ],
+                                                    "price": 23,
+                                                        "type": "outdoor",
+                                                            "lifespan": "1 Year",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2119",
+        "name": "Corpse Flower (Giant)",
+            "scientificName": "Rafflesia arnoldii",
+                "description": "The Corpse Flower (Giant) (Rafflesia arnoldii) is a classic garden staple. With a lifespan of Parasitic, it offers worlds largest flower and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-4334563373?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Jungle Floor",
+                                        "oxygenLevel": "5 L/day",
+                                            "medicinalValues": [
+                                                "Fever (Traditional)"
+                                            ],
+                                                "advantages": [
+                                                    "Worlds largest flower",
+                                                    "Rare"
+                                                ],
+                                                    "price": 74,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Parasitic",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "IUCN Red List / Kew Gardens Science"
+},
+{
+    "id": "p_out_2120",
+        "name": "Jade Vine",
+            "scientificName": "Strongylodon macrobotrys",
+                "description": "The Jade Vine (Strongylodon macrobotrys) is a classic garden staple. With a lifespan of 20+ Years, it offers neon teal flowers and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-5114409663?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Part Shade",
+                                        "oxygenLevel": "60 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Neon teal flowers",
+                                                    "Vining"
+                                                ],
+                                                    "price": 69,
+                                                        "type": "outdoor",
+                                                            "lifespan": "20+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2121",
+        "name": "Ghost Orchid",
+            "scientificName": "Dendrophylax lindenii",
+                "description": "The Ghost Orchid (Dendrophylax lindenii) is a classic garden staple. With a lifespan of 10+ Years, it offers no leaves and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-7158674851?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Dappled Swamp",
+                                        "oxygenLevel": "10 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "No leaves",
+                                                    "Floats in air"
+                                                ],
+                                                    "price": 70,
+                                                        "type": "outdoor",
+                                                            "lifespan": "10+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2122",
+        "name": "Chocolate Cosmos",
+            "scientificName": "Cosmos atrosanguineus",
+                "description": "The Chocolate Cosmos (Cosmos atrosanguineus) is a classic garden staple. With a lifespan of Perennial, it offers smells like chocolate and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-2319724443?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "20 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Smells like chocolate",
+                                                    "Dark red"
+                                                ],
+                                                    "price": 57,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Perennial",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2123",
+        "name": "Giant Water Lily",
+            "scientificName": "Victoria amazonica",
+                "description": "The Giant Water Lily (Victoria amazonica) is a classic garden staple. With a lifespan of Perennial, it offers huge floating leaves and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-3882388467?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "90 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Huge floating leaves",
+                                                    "Support a child"
+                                                ],
+                                                    "price": 71,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Perennial",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2124",
+        "name": "Parrot's Beak",
+            "scientificName": "Lotus berthelotii",
+                "description": "The Parrot's Beak (Lotus berthelotii) is a classic garden staple. With a lifespan of 3-5 Years, it offers orange claw flowers and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-3000390101?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "20 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Orange claw flowers",
+                                                    "Silver foliage"
+                                                ],
+                                                    "price": 72,
+                                                        "type": "outdoor",
+                                                            "lifespan": "3-5 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2125",
+        "name": "Kangaroo Paw",
+            "scientificName": "Anigozanthos flavidus",
+                "description": "The Kangaroo Paw (Anigozanthos flavidus) is a classic garden staple. With a lifespan of 5-10 Years, it offers fuzzy paw flowers and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-6247878522?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "30 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Fuzzy paw flowers",
+                                                    "Unique"
+                                                ],
+                                                    "price": 59,
+                                                        "type": "outdoor",
+                                                            "lifespan": "5-10 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2126",
+        "name": "Protea King",
+            "scientificName": "Protea cynaroides",
+                "description": "The Protea King (Protea cynaroides) is a classic garden staple. With a lifespan of 20+ Years, it offers huge artichoke flower and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-4230200291?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "50 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Huge artichoke flower",
+                                                    "Dinosaur era"
+                                                ],
+                                                    "price": 36,
+                                                        "type": "outdoor",
+                                                            "lifespan": "20+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2127",
+        "name": "Banksia",
+            "scientificName": "Banksia",
+                "description": "The Banksia (Banksia) is a classic garden staple. With a lifespan of 50+ Years, it offers bottle brush cone and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-4692225236?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "60 L/day",
+                                            "medicinalValues": [
+                                                "Nectar source"
+                                            ],
+                                                "advantages": [
+                                                    "Bottle brush cone",
+                                                    "Fire hardy"
+                                                ],
+                                                    "price": 69,
+                                                        "type": "outdoor",
+                                                            "lifespan": "50+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2128",
+        "name": "Waratah",
+            "scientificName": "Telopea speciosissima",
+                "description": "The Waratah (Telopea speciosissima) is a classic garden staple. With a lifespan of 20+ Years, it offers red emblem and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-9366207274?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Part Shade",
+                                        "oxygenLevel": "55 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Red emblem",
+                                                    "Structural"
+                                                ],
+                                                    "price": 62,
+                                                        "type": "outdoor",
+                                                            "lifespan": "20+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2129",
+        "name": "Bird of Paradise (Giant)",
+            "scientificName": "Strelitzia nicolai",
+                "description": "The Bird of Paradise (Giant) (Strelitzia nicolai) is a classic garden staple. With a lifespan of 50+ Years, it offers 30ft tall and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-3386081804?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "150 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "30ft tall",
+                                                    "White bird"
+                                                ],
+                                                    "price": 39,
+                                                        "type": "outdoor",
+                                                            "lifespan": "50+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2130",
+        "name": "Traveler's Palm",
+            "scientificName": "Ravenala madagascariensis",
+                "description": "The Traveler's Palm (Ravenala madagascariensis) is a classic garden staple. With a lifespan of 50+ Years, it offers east-west alignment and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-6644077574?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "200 L/day",
+                                            "medicinalValues": [
+                                                "Water source"
+                                            ],
+                                                "advantages": [
+                                                    "East-West alignment",
+                                                    "Fan shape"
+                                                ],
+                                                    "price": 31,
+                                                        "type": "outdoor",
+                                                            "lifespan": "50+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2131",
+        "name": "Baobab",
+            "scientificName": "Adansonia",
+                "description": "The Baobab (Adansonia) is a classic garden staple. With a lifespan of 2000+ Years, it offers tree of life and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-7573162241?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "300 L/day",
+                                            "medicinalValues": [
+                                                "Superfruit",
+                                                "Bark"
+                                            ],
+                                                "advantages": [
+                                                    "Tree of Life",
+                                                    "Water storage"
+                                                ],
+                                                    "price": 68,
+                                                        "type": "outdoor",
+                                                            "lifespan": "2000+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2132",
+        "name": "Dragon Blood Tree",
+            "scientificName": "Dracaena cinnabari",
+                "description": "The Dragon Blood Tree (Dracaena cinnabari) is a classic garden staple. With a lifespan of 500+ Years, it offers ufo shape and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-4032123805?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "180 L/day",
+                                            "medicinalValues": [
+                                                "Red resin (blood)"
+                                            ],
+                                                "advantages": [
+                                                    "UFO shape",
+                                                    "Rare"
+                                                ],
+                                                    "price": 60,
+                                                        "type": "outdoor",
+                                                            "lifespan": "500+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "IUCN Red List / Kew Gardens Science"
+},
+{
+    "id": "p_out_2133",
+        "name": "Rainbow Eucalyptus",
+            "scientificName": "Eucalyptus deglupta",
+                "description": "The Rainbow Eucalyptus (Eucalyptus deglupta) is a classic garden staple. With a lifespan of 100+ Years, it offers multicolored bark and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-9544131863?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "400 L/day",
+                                            "medicinalValues": [
+                                                "Oil"
+                                            ],
+                                                "advantages": [
+                                                    "Multicolored bark",
+                                                    "Fast growth"
+                                                ],
+                                                    "price": 66,
+                                                        "type": "outdoor",
+                                                            "lifespan": "100+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2134",
+        "name": "Jacaranda",
+            "scientificName": "Jacaranda mimosifolia",
+                "description": "The Jacaranda (Jacaranda mimosifolia) is a classic garden staple. With a lifespan of 50+ Years, it offers purple canopy and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-7309564713?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "150 L/day",
+                                            "medicinalValues": [
+                                                "Antibiotic"
+                                            ],
+                                                "advantages": [
+                                                    "Purple canopy",
+                                                    "Fern leaves"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "50+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2135",
+        "name": "Wollemi Pine",
+            "scientificName": "Wollemia nobilis",
+                "description": "The Wollemi Pine (Wollemia nobilis) is a classic garden staple. With a lifespan of 1000+ Years, it offers living fossil (dino) and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-2625014018?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Part Shade",
+                                        "oxygenLevel": "200 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Living fossil (Dino)",
+                                                    "Bubbly bark"
+                                                ],
+                                                    "price": 34,
+                                                        "type": "outdoor",
+                                                            "lifespan": "1000+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "IUCN Red List / Kew Gardens Science"
+},
+{
+    "id": "p_out_2136",
+        "name": "Monkey Puzzle Tree",
+            "scientificName": "Araucaria araucana",
+                "description": "The Monkey Puzzle Tree (Araucaria araucana) is a classic garden staple. With a lifespan of 1000+ Years, it offers spiky puzzle and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-9748498611?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "220 L/day",
+                                            "medicinalValues": [
+                                                "Edible seeds"
+                                            ],
+                                                "advantages": [
+                                                    "Spiky puzzle",
+                                                    "Ancient"
+                                                ],
+                                                    "price": 24,
+                                                        "type": "outdoor",
+                                                            "lifespan": "1000+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "The Gymnosperm Database"
+},
+{
+    "id": "p_out_2137",
+        "name": "Coast Redwood",
+            "scientificName": "Sequoia sempervirens",
+                "description": "The Coast Redwood (Sequoia sempervirens) is a classic garden staple. With a lifespan of 2000+ Years, it offers tallest tree and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-7299008049?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Foggy Sun",
+                                        "oxygenLevel": "1000 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Tallest tree",
+                                                    "Fog lover"
+                                                ],
+                                                    "price": 48,
+                                                        "type": "outdoor",
+                                                            "lifespan": "2000+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2138",
+        "name": "Giant Sequoia",
+            "scientificName": "Sequoiadendron giganteum",
+                "description": "The Giant Sequoia (Sequoiadendron giganteum) is a classic garden staple. With a lifespan of 3000+ Years, it offers largest tree volume and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-9155787348?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "1200 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Largest tree volume",
+                                                    "Fire resistant"
+                                                ],
+                                                    "price": 46,
+                                                        "type": "outdoor",
+                                                            "lifespan": "3000+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2139",
+        "name": "Bristlecone Pine",
+            "scientificName": "Pinus longaeva",
+                "description": "The Bristlecone Pine (Pinus longaeva) is a classic garden staple. With a lifespan of 5000+ Years, it offers oldest living thing and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-7487973736?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "100 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Oldest living thing",
+                                                    "Twisted"
+                                                ],
+                                                    "price": 74,
+                                                        "type": "outdoor",
+                                                            "lifespan": "5000+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "The Gymnosperm Database"
+},
+{
+    "id": "p_out_2140",
+        "name": "Quaking Aspen",
+            "scientificName": "Populus tremuloides",
+                "description": "The Quaking Aspen (Populus tremuloides) is a classic garden staple. With a lifespan of 100 Years (Clone 80k), it offers leaves shake and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-4204112212?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "200 L/day",
+                                            "medicinalValues": [
+                                                "Aspirin"
+                                            ],
+                                                "advantages": [
+                                                    "Leaves shake",
+                                                    "Yellow fall"
+                                                ],
+                                                    "price": 53,
+                                                        "type": "outdoor",
+                                                            "lifespan": "100 Years (Clone 80k)",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2141",
+        "name": "Franklin Tree",
+            "scientificName": "Franklinia alatamaha",
+                "description": "The Franklin Tree (Franklinia alatamaha) is a classic garden staple. With a lifespan of 50 Years, it offers extinct in wild and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-3308970759?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "80 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Extinct in wild",
+                                                    "White flower"
+                                                ],
+                                                    "price": 5,
+                                                        "type": "outdoor",
+                                                            "lifespan": "50 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2142",
+        "name": "Dawn Redwood",
+            "scientificName": "Metasequoia glyptostroboides",
+                "description": "The Dawn Redwood (Metasequoia glyptostroboides) is a classic garden staple. With a lifespan of 600 Years, it offers deciduous conifer and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-5900108112?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "300 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Deciduous conifer",
+                                                    "Fast"
+                                                ],
+                                                    "price": 13,
+                                                        "type": "outdoor",
+                                                            "lifespan": "600 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2143",
+        "name": "Golden Chain Tree",
+            "scientificName": "Laburnum anagyroides",
+                "description": "The Golden Chain Tree (Laburnum anagyroides) is a classic garden staple. With a lifespan of 50 Years, it offers yellow hanging chains and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-9328061029?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "90 L/day",
+                                            "medicinalValues": [
+                                                "None (Toxic)"
+                                            ],
+                                                "advantages": [
+                                                    "Yellow hanging chains",
+                                                    "Tunnel tree"
+                                                ],
+                                                    "price": 47,
+                                                        "type": "outdoor",
+                                                            "lifespan": "50 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "USDA Poisonous Plant Research"
+},
+{
+    "id": "p_out_2144",
+        "name": "Angel's Trumpet",
+            "scientificName": "Brugmansia",
+                "description": "The Angel's Trumpet (Brugmansia) is a classic garden staple. With a lifespan of 10-20 Years, it offers huge hanging bells and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-1478284477?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Sun/Part Shade",
+                                        "oxygenLevel": "80 L/day",
+                                            "medicinalValues": [
+                                                "Hallucinogen (Toxic)"
+                                            ],
+                                                "advantages": [
+                                                    "Huge hanging bells",
+                                                    "Scent"
+                                                ],
+                                                    "price": 42,
+                                                        "type": "outdoor",
+                                                            "lifespan": "10-20 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "USDA Poisonous Plant Research"
+},
+{
+    "id": "p_out_2145",
+        "name": "Passion Fruit Vine",
+            "scientificName": "Passiflora edulis",
+                "description": "The Passion Fruit Vine (Passiflora edulis) is a classic garden staple. With a lifespan of 7 Years, it offers edible fruit and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-8892745025?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "50 L/day",
+                                            "medicinalValues": [
+                                                "Sleep aid"
+                                            ],
+                                                "advantages": [
+                                                    "Edible fruit",
+                                                    "Alien flower"
+                                                ],
+                                                    "price": 77,
+                                                        "type": "outdoor",
+                                                            "lifespan": "7 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2146",
+        "name": "Kiwi Vine",
+            "scientificName": "Actinidia deliciosa",
+                "description": "The Kiwi Vine (Actinidia deliciosa) is a classic garden staple. With a lifespan of 50 Years, it offers fuzzy fruit and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-1021353683?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "60 L/day",
+                                            "medicinalValues": [
+                                                "Vitamin C"
+                                            ],
+                                                "advantages": [
+                                                    "Fuzzy fruit",
+                                                    "Vigorous"
+                                                ],
+                                                    "price": 19,
+                                                        "type": "outdoor",
+                                                            "lifespan": "50 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2147",
+        "name": "Hops",
+            "scientificName": "Humulus lupulus",
+                "description": "The Hops (Humulus lupulus) is a classic garden staple. With a lifespan of 20+ Years, it offers fast growth and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-7018300464?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "55 L/day",
+                                            "medicinalValues": [
+                                                "Sleep",
+                                                "Beer"
+                                            ],
+                                                "advantages": [
+                                                    "Fast growth",
+                                                    "Cones"
+                                                ],
+                                                    "price": 68,
+                                                        "type": "outdoor",
+                                                            "lifespan": "20+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2148",
+        "name": "Virginia Creeper",
+            "scientificName": "Parthenocissus quinquefolia",
+                "description": "The Virginia Creeper (Parthenocissus quinquefolia) is a classic garden staple. With a lifespan of 30+ Years, it offers red fall color and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-7604799981?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Sun/Shade",
+                                        "oxygenLevel": "60 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Red fall color",
+                                                    "Native"
+                                                ],
+                                                    "price": 76,
+                                                        "type": "outdoor",
+                                                            "lifespan": "30+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2149",
+        "name": "Boston Ivy",
+            "scientificName": "Parthenocissus tricuspidata",
+                "description": "The Boston Ivy (Parthenocissus tricuspidata) is a classic garden staple. With a lifespan of 50+ Years, it offers covers universities and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-2552428673?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Sun/Shade",
+                                        "oxygenLevel": "70 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Covers universities",
+                                                    "Polished"
+                                                ],
+                                                    "price": 38,
+                                                        "type": "outdoor",
+                                                            "lifespan": "50+ Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2150",
+        "name": "Agapanthus",
+            "scientificName": "Agapanthus africanus",
+                "description": "The Agapanthus (Agapanthus africanus) is a classic garden staple. With a lifespan of Perennial, it offers lily of nile and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-2965183114?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "30 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Lily of Nile",
+                                                    "Blue balls"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Perennial",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2151",
+        "name": "Red Hot Poker",
+            "scientificName": "Kniphofia",
+                "description": "The Red Hot Poker (Kniphofia) is a classic garden staple. With a lifespan of Perennial, it offers torch flowers and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-3197900024?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "25 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Torch flowers",
+                                                    "Hummingbirds"
+                                                ],
+                                                    "price": 57,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Perennial",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2152",
+        "name": "Sea Holly",
+            "scientificName": "Eryngium",
+                "description": "The Sea Holly (Eryngium) is a classic garden staple. With a lifespan of Perennial, it offers metallic blue and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-4988191472?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "20 L/day",
+                                            "medicinalValues": [
+                                                "Root edible"
+                                            ],
+                                                "advantages": [
+                                                    "Metallic blue",
+                                                    "Spiky"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Perennial",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2153",
+        "name": "Globe Thistle",
+            "scientificName": "Echinops",
+                "description": "The Globe Thistle (Echinops) is a classic garden staple. With a lifespan of Perennial, it offers perfect balls and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-4973350686?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "22 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Perfect balls",
+                                                    "Bees love"
+                                                ],
+                                                    "price": 63,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Perennial",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2154",
+        "name": "Russian Sage",
+            "scientificName": "Perovskia atriplicifolia",
+                "description": "The Russian Sage (Perovskia atriplicifolia) is a classic garden staple. With a lifespan of Perennial, it offers haze of blue and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-1183998139?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "30 L/day",
+                                            "medicinalValues": [
+                                                "Fever"
+                                            ],
+                                                "advantages": [
+                                                    "Haze of blue",
+                                                    "Tough"
+                                                ],
+                                                    "price": 18,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Perennial",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2155",
+        "name": "Butterfly Bush",
+            "scientificName": "Buddleja davidii",
+                "description": "The Butterfly Bush (Buddleja davidii) is a classic garden staple. With a lifespan of 20 Years, it offers pollinator magnet and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-2818491690?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "50 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Pollinator magnet",
+                                                    "Honey scent"
+                                                ],
+                                                    "price": 10,
+                                                        "type": "outdoor",
+                                                            "lifespan": "20 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2156",
+        "name": "Smoke Bush",
+            "scientificName": "Cotinus coggygria",
+                "description": "The Smoke Bush (Cotinus coggygria) is a classic garden staple. With a lifespan of 50 Years, it offers purple fog effect and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-3116412175?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "60 L/day",
+                                            "medicinalValues": [
+                                                "Yellow dye"
+                                            ],
+                                                "advantages": [
+                                                    "Purple fog effect",
+                                                    "Dark leaves"
+                                                ],
+                                                    "price": 67,
+                                                        "type": "outdoor",
+                                                            "lifespan": "50 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2157",
+        "name": "Beautyberry",
+            "scientificName": "Callicarpa",
+                "description": "The Beautyberry (Callicarpa) is a classic garden staple. With a lifespan of 30 Years, it offers metallic purple berries and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-3696197957?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Sun/Part Shade",
+                                        "oxygenLevel": "35 L/day",
+                                            "medicinalValues": [
+                                                "Insect repellent"
+                                            ],
+                                                "advantages": [
+                                                    "Metallic purple berries",
+                                                    "Native"
+                                                ],
+                                                    "price": 11,
+                                                        "type": "outdoor",
+                                                            "lifespan": "30 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2158",
+        "name": "Witch Hazel",
+            "scientificName": "Hamamelis",
+                "description": "The Witch Hazel (Hamamelis) is a classic garden staple. With a lifespan of 50 Years, it offers winter bloom and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-6174542729?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Sun/Part Shade",
+                                        "oxygenLevel": "45 L/day",
+                                            "medicinalValues": [
+                                                "Skin toner"
+                                            ],
+                                                "advantages": [
+                                                    "Winter bloom",
+                                                    "Spidery"
+                                                ],
+                                                    "price": 47,
+                                                        "type": "outdoor",
+                                                            "lifespan": "50 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2159",
+        "name": "Winter Sweet",
+            "scientificName": "Chimonanthus praecox",
+                "description": "The Winter Sweet (Chimonanthus praecox) is a classic garden staple. With a lifespan of 50 Years, it offers intense winter scent and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-7612525660?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Sun/Part Shade",
+                                        "oxygenLevel": "40 L/day",
+                                            "medicinalValues": [
+                                                "Oil"
+                                            ],
+                                                "advantages": [
+                                                    "Intense winter scent",
+                                                    "Translucent"
+                                                ],
+                                                    "price": 55,
+                                                        "type": "outdoor",
+                                                            "lifespan": "50 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2160",
+        "name": "Edgeworthia (Paper Bush)",
+            "scientificName": "Edgeworthia chrysantha",
+                "description": "The Edgeworthia (Paper Bush) (Edgeworthia chrysantha) is a classic garden staple. With a lifespan of 30 Years, it offers yellow pom-poms and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-8514045225?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Part Shade",
+                                        "oxygenLevel": "40 L/day",
+                                            "medicinalValues": [
+                                                "Paper making"
+                                            ],
+                                                "advantages": [
+                                                    "Yellow pom-poms",
+                                                    "Scented"
+                                                ],
+                                                    "price": 50,
+                                                        "type": "outdoor",
+                                                            "lifespan": "30 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2161",
+        "name": "Harry Lauder's Walking Stick",
+            "scientificName": "Corylus avellana 'Contorta'",
+                "description": "The Harry Lauder's Walking Stick (Corylus avellana 'Contorta') is a classic garden staple. With a lifespan of 50 Years, it offers twisted branches and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-9364738777?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Sun/Part Shade",
+                                        "oxygenLevel": "50 L/day",
+                                            "medicinalValues": [
+                                                "Nuts"
+                                            ],
+                                                "advantages": [
+                                                    "Twisted branches",
+                                                    "Winter interest"
+                                                ],
+                                                    "price": 61,
+                                                        "type": "outdoor",
+                                                            "lifespan": "50 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2162",
+        "name": "Pussy Willow",
+            "scientificName": "Salix discolor",
+                "description": "The Pussy Willow (Salix discolor) is a classic garden staple. With a lifespan of 30 Years, it offers fuzzy catkins and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-1048634163?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "45 L/day",
+                                            "medicinalValues": [
+                                                "Aspirin"
+                                            ],
+                                                "advantages": [
+                                                    "Fuzzy catkins",
+                                                    "Spring sign"
+                                                ],
+                                                    "price": 9,
+                                                        "type": "outdoor",
+                                                            "lifespan": "30 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2163",
+        "name": "Mimosa Tree (Silk Tree)",
+            "scientificName": "Albizia julibrissin",
+                "description": "The Mimosa Tree (Silk Tree) (Albizia julibrissin) is a classic garden staple. With a lifespan of 20 Years, it offers pink puffs and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-6513364908?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "80 L/day",
+                                            "medicinalValues": [
+                                                "Calming tea"
+                                            ],
+                                                "advantages": [
+                                                    "Pink puffs",
+                                                    "Ferny"
+                                                ],
+                                                    "price": 64,
+                                                        "type": "outdoor",
+                                                            "lifespan": "20 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2164",
+        "name": "Empress Tree",
+            "scientificName": "Paulownia tomentosa",
+                "description": "The Empress Tree (Paulownia tomentosa) is a classic garden staple. With a lifespan of 70 Years, it offers fastest growing and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-2852111926?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "150 L/day",
+                                            "medicinalValues": [
+                                                "Wood"
+                                            ],
+                                                "advantages": [
+                                                    "Fastest growing",
+                                                    "Purple flowers"
+                                                ],
+                                                    "price": 5,
+                                                        "type": "outdoor",
+                                                            "lifespan": "70 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2165",
+        "name": "Tree Fern",
+            "scientificName": "Dicksonia antarctica",
+                "description": "The Tree Fern (Dicksonia antarctica) is a classic garden staple. With a lifespan of 500 Years, it offers prehistoric and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-3221926967?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Shade/Wet",
+                                        "oxygenLevel": "100 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Prehistoric",
+                                                    "Trunk is roots"
+                                                ],
+                                                    "price": 29,
+                                                        "type": "outdoor",
+                                                            "lifespan": "500 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "The Gymnosperm Database"
+},
+{
+    "id": "p_out_2166",
+        "name": "Gunnera (Dino Food)",
+            "scientificName": "Gunnera manicata",
+                "description": "The Gunnera (Dino Food) (Gunnera manicata) is a classic garden staple. With a lifespan of 50 Years, it offers leaves usually 6ft wide and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-2152438255?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Wet Sun",
+                                        "oxygenLevel": "120 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Leaves usually 6ft wide",
+                                                    "Giant"
+                                                ],
+                                                    "price": 37,
+                                                        "type": "outdoor",
+                                                            "lifespan": "50 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2167",
+        "name": "Rhubarb",
+            "scientificName": "Rheum rhabarbarum",
+                "description": "The Rhubarb (Rheum rhabarbarum) is a classic garden staple. With a lifespan of 10 Years, it offers edible stalks and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-3296454853?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Sun",
+                                        "oxygenLevel": "30 L/day",
+                                            "medicinalValues": [
+                                                "Laxative root"
+                                            ],
+                                                "advantages": [
+                                                    "Edible stalks",
+                                                    "Huge leaves"
+                                                ],
+                                                    "price": 78,
+                                                        "type": "outdoor",
+                                                            "lifespan": "10 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2168",
+        "name": "Artichoke",
+            "scientificName": "Cynara cardunculus",
+                "description": "The Artichoke (Cynara cardunculus) is a classic garden staple. With a lifespan of 5 Years, it offers edible bud and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-5232711226?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "40 L/day",
+                                            "medicinalValues": [
+                                                "Liver health"
+                                            ],
+                                                "advantages": [
+                                                    "Edible bud",
+                                                    "Thistle flower"
+                                                ],
+                                                    "price": 52,
+                                                        "type": "outdoor",
+                                                            "lifespan": "5 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2169",
+        "name": "Japanese Maple",
+            "scientificName": "Acer palmatum",
+                "description": "The Japanese Maple (Acer palmatum) is a classic garden staple. With a lifespan of 100 Years, it offers red foliage and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-4445787496?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Part Shade",
+                                        "oxygenLevel": "60 L/day",
+                                            "medicinalValues": [
+                                                "Traditional tonic"
+                                            ],
+                                                "advantages": [
+                                                    "Red foliage",
+                                                    "Bonsai favorite"
+                                                ],
+                                                    "price": 11,
+                                                        "type": "outdoor",
+                                                            "lifespan": "100 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2170",
+        "name": "Eastern Redbud",
+            "scientificName": "Cercis canadensis",
+                "description": "The Eastern Redbud (Cercis canadensis) is a classic garden staple. With a lifespan of 50 Years, it offers pink flowers on bark and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-5723668269?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Sun/Part Shade",
+                                        "oxygenLevel": "55 L/day",
+                                            "medicinalValues": [
+                                                "Astringent bark"
+                                            ],
+                                                "advantages": [
+                                                    "Pink flowers on bark",
+                                                    "Heart leaves"
+                                                ],
+                                                    "price": 34,
+                                                        "type": "outdoor",
+                                                            "lifespan": "50 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2171",
+        "name": "Flowering Dogwood",
+            "scientificName": "Cornus florida",
+                "description": "The Flowering Dogwood (Cornus florida) is a classic garden staple. With a lifespan of 80 Years, it offers white bracts and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-3452439890?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Part Shade",
+                                        "oxygenLevel": "50 L/day",
+                                            "medicinalValues": [
+                                                "Quinine substitute"
+                                            ],
+                                                "advantages": [
+                                                    "White bracts",
+                                                    "Red berries"
+                                                ],
+                                                    "price": 55,
+                                                        "type": "outdoor",
+                                                            "lifespan": "80 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2172",
+        "name": "Southern Magnolia",
+            "scientificName": "Magnolia grandiflora",
+                "description": "The Southern Magnolia (Magnolia grandiflora) is a classic garden staple. With a lifespan of 120 Years, it offers giant white flowers and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-9486363530?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Sun/Part Shade",
+                                        "oxygenLevel": "110 L/day",
+                                            "medicinalValues": [
+                                                "Bark tonic"
+                                            ],
+                                                "advantages": [
+                                                    "Giant white flowers",
+                                                    "Evergreen"
+                                                ],
+                                                    "price": 41,
+                                                        "type": "outdoor",
+                                                            "lifespan": "120 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2173",
+        "name": "Tulip Poplar",
+            "scientificName": "Liriodendron tulipifera",
+                "description": "The Tulip Poplar (Liriodendron tulipifera) is a classic garden staple. With a lifespan of 250 Years, it offers tulip-shaped flowers and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-8855619798?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "140 L/day",
+                                            "medicinalValues": [
+                                                "Root stimulant"
+                                            ],
+                                                "advantages": [
+                                                    "Tulip-shaped flowers",
+                                                    "Tailored leaves"
+                                                ],
+                                                    "price": 26,
+                                                        "type": "outdoor",
+                                                            "lifespan": "250 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2174",
+        "name": "Live Oak",
+            "scientificName": "Quercus virginiana",
+                "description": "The Live Oak (Quercus virginiana) is a classic garden staple. With a lifespan of 500 Years, it offers massive canopy and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-8708219451?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "200 L/day",
+                                            "medicinalValues": [
+                                                "Astringent galls"
+                                            ],
+                                                "advantages": [
+                                                    "Massive canopy",
+                                                    "Spanish moss host"
+                                                ],
+                                                    "price": 62,
+                                                        "type": "outdoor",
+                                                            "lifespan": "500 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "The Gymnosperm Database"
+},
+{
+    "id": "p_out_2175",
+        "name": "Longleaf Pine",
+            "scientificName": "Pinus palustris",
+                "description": "The Longleaf Pine (Pinus palustris) is a classic garden staple. With a lifespan of 300 Years, it offers long needles and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-1222048404?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "130 L/day",
+                                            "medicinalValues": [
+                                                "Turpentine"
+                                            ],
+                                                "advantages": [
+                                                    "Long needles",
+                                                    "Fire resistant"
+                                                ],
+                                                    "price": 48,
+                                                        "type": "outdoor",
+                                                            "lifespan": "300 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2176",
+        "name": "Bald Cypress",
+            "scientificName": "Taxodium distichum",
+                "description": "The Bald Cypress (Taxodium distichum) is a classic garden staple. With a lifespan of 600 Years, it offers knees (roots) and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-1005463759?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Wet/Sun",
+                                        "oxygenLevel": "125 L/day",
+                                            "medicinalValues": [
+                                                "Resin for wounds"
+                                            ],
+                                                "advantages": [
+                                                    "Knees (roots)",
+                                                    "Deciduous conifer"
+                                                ],
+                                                    "price": 47,
+                                                        "type": "outdoor",
+                                                            "lifespan": "600 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2177",
+        "name": "Maidenhair Tree",
+            "scientificName": "Ginkgo biloba",
+                "description": "The Maidenhair Tree (Ginkgo biloba) is a classic garden staple. With a lifespan of 1000 Years, it offers living fossil and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-4561692379?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "90 L/day",
+                                            "medicinalValues": [
+                                                "Memory aid"
+                                            ],
+                                                "advantages": [
+                                                    "Living fossil",
+                                                    "Fan leaves"
+                                                ],
+                                                    "price": 28,
+                                                        "type": "outdoor",
+                                                            "lifespan": "1000 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "The Gymnosperm Database"
+},
+{
+    "id": "p_out_2178",
+        "name": "Dawn Redwood",
+            "scientificName": "Metasequoia glyptostroboides",
+                "description": "The Dawn Redwood (Metasequoia glyptostroboides) is a classic garden staple. With a lifespan of 600 Years, it offers ancient lineage and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-2092413529?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "135 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Ancient lineage",
+                                                    "Fast growing"
+                                                ],
+                                                    "price": 42,
+                                                        "type": "outdoor",
+                                                            "lifespan": "600 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2179",
+        "name": "River Birch",
+            "scientificName": "Betula nigra",
+                "description": "The River Birch (Betula nigra) is a classic garden staple. With a lifespan of 70 Years, it offers peeling bark and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-9756105239?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Sun",
+                                        "oxygenLevel": "65 L/day",
+                                            "medicinalValues": [
+                                                "Sap vinegar"
+                                            ],
+                                                "advantages": [
+                                                    "Peeling bark",
+                                                    "Wet soil lover"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "70 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2180",
+        "name": "Weeping Willow",
+            "scientificName": "Salix babylonica",
+                "description": "The Weeping Willow (Salix babylonica) is a classic garden staple. With a lifespan of 50 Years, it offers dramatic sweep and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-2709637410?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Sun",
+                                        "oxygenLevel": "85 L/day",
+                                            "medicinalValues": [
+                                                "Salicylic acid"
+                                            ],
+                                                "advantages": [
+                                                    "Dramatic sweep",
+                                                    "Water lover"
+                                                ],
+                                                    "price": 51,
+                                                        "type": "outdoor",
+                                                            "lifespan": "50 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2181",
+        "name": "Eastern Red Cedar",
+            "scientificName": "Juniperus virginiana",
+                "description": "The Eastern Red Cedar (Juniperus virginiana) is a classic garden staple. With a lifespan of 150 Years, it offers aromatic wood and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-5590358432?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "70 L/day",
+                                            "medicinalValues": [
+                                                "Gin flavoring"
+                                            ],
+                                                "advantages": [
+                                                    "Aromatic wood",
+                                                    "Blue berries"
+                                                ],
+                                                    "price": 17,
+                                                        "type": "outdoor",
+                                                            "lifespan": "150 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2182",
+        "name": "American Holly",
+            "scientificName": "Ilex opaca",
+                "description": "The American Holly (Ilex opaca) is a classic garden staple. With a lifespan of 100 Years, it offers red berries and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-4935620059?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Sun/Shade",
+                                        "oxygenLevel": "55 L/day",
+                                            "medicinalValues": [
+                                                "Tea (Caution)"
+                                            ],
+                                                "advantages": [
+                                                    "Red berries",
+                                                    "Spiky evergreen"
+                                                ],
+                                                    "price": 30,
+                                                        "type": "outdoor",
+                                                            "lifespan": "100 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2183",
+        "name": "Bigleaf Hydrangea",
+            "scientificName": "Hydrangea macrophylla",
+                "description": "The Bigleaf Hydrangea (Hydrangea macrophylla) is a classic garden staple. With a lifespan of 50 Years, it offers color changes w/ ph and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-2434215866?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Part Shade",
+                                        "oxygenLevel": "40 L/day",
+                                            "medicinalValues": [
+                                                "Diuretic root"
+                                            ],
+                                                "advantages": [
+                                                    "Color changes w/ pH",
+                                                    "Big balls"
+                                                ],
+                                                    "price": 23,
+                                                        "type": "outdoor",
+                                                            "lifespan": "50 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2184",
+        "name": "Oakleaf Hydrangea",
+            "scientificName": "Hydrangea quercifolia",
+                "description": "The Oakleaf Hydrangea (Hydrangea quercifolia) is a classic garden staple. With a lifespan of 50 Years, it offers native and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-7956284211?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Part Shade",
+                                        "oxygenLevel": "42 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Native",
+                                                    "Cone flowers"
+                                                ],
+                                                    "price": 53,
+                                                        "type": "outdoor",
+                                                            "lifespan": "50 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2185",
+        "name": "Southern Azalea",
+            "scientificName": "Rhododendron indicum",
+                "description": "The Southern Azalea (Rhododendron indicum) is a classic garden staple. With a lifespan of 50 Years, it offers spring show and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-4614789517?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Part Shade",
+                                        "oxygenLevel": "35 L/day",
+                                            "medicinalValues": [
+                                                "Toxic"
+                                            ],
+                                                "advantages": [
+                                                    "Spring show",
+                                                    "Evergreen"
+                                                ],
+                                                    "price": 66,
+                                                        "type": "outdoor",
+                                                            "lifespan": "50 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "USDA Poisonous Plant Research"
+},
+{
+    "id": "p_out_2186",
+        "name": "Camellia",
+            "scientificName": "Camellia japonica",
+                "description": "The Camellia (Camellia japonica) is a classic garden staple. With a lifespan of 100 Years, it offers winter rose and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-6819815335?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Shade",
+                                        "oxygenLevel": "50 L/day",
+                                            "medicinalValues": [
+                                                "Tea oil"
+                                            ],
+                                                "advantages": [
+                                                    "Winter rose",
+                                                    "Glossy leaves"
+                                                ],
+                                                    "price": 58,
+                                                        "type": "outdoor",
+                                                            "lifespan": "100 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2187",
+        "name": "Gardenia",
+            "scientificName": "Gardenia jasminoides",
+                "description": "The Gardenia (Gardenia jasminoides) is a classic garden staple. With a lifespan of 50 Years, it offers intense scent and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-7433415279?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Part Sun",
+                                        "oxygenLevel": "45 L/day",
+                                            "medicinalValues": [
+                                                "Fruit dye"
+                                            ],
+                                                "advantages": [
+                                                    "Intense scent",
+                                                    "Creamy flowers"
+                                                ],
+                                                    "price": 64,
+                                                        "type": "outdoor",
+                                                            "lifespan": "50 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2188",
+        "name": "Crape Myrtle",
+            "scientificName": "Lagerstroemia indica",
+                "description": "The Crape Myrtle (Lagerstroemia indica) is a classic garden staple. With a lifespan of 50 Years, it offers summer bloom and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-5751858324?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "55 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Summer bloom",
+                                                    "Peeling bark"
+                                                ],
+                                                    "price": 37,
+                                                        "type": "outdoor",
+                                                            "lifespan": "50 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2189",
         "name": "Chinese Wisteria",
-        "scientificName": "Wisteria sinensis",
-        "description": "The Chinese Wisteria (Wisteria sinensis) is a classic garden staple. With a lifespan of 100 Years, it offers cascading purple and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-4039333061?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Full Sun",
-        "oxygenLevel": "75 L/day",
-        "medicinalValues": [
-            "Toxic seeds"
-        ],
-        "advantages": [
-            "Cascading purple",
-            "Vigorous"
-        ],
-        "price": 75,
-        "type": "outdoor",
-        "lifespan": "100 Years",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "USDA Poisonous Plant Research"
-    },
-    {
-        "id": "p_out_2190",
+            "scientificName": "Wisteria sinensis",
+                "description": "The Chinese Wisteria (Wisteria sinensis) is a classic garden staple. With a lifespan of 100 Years, it offers cascading purple and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-4039333061?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "75 L/day",
+                                            "medicinalValues": [
+                                                "Toxic seeds"
+                                            ],
+                                                "advantages": [
+                                                    "Cascading purple",
+                                                    "Vigorous"
+                                                ],
+                                                    "price": 75,
+                                                        "type": "outdoor",
+                                                            "lifespan": "100 Years",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "USDA Poisonous Plant Research"
+},
+{
+    "id": "p_out_2190",
         "name": "Passion Flower",
-        "scientificName": "Passiflora incarnata",
-        "description": "The Passion Flower (Passiflora incarnata) is a classic garden staple. With a lifespan of Perennial, it offers alien flower and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-4726816358?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Sun",
-        "oxygenLevel": "30 L/day",
-        "medicinalValues": [
-            "Calmative"
-        ],
-        "advantages": [
-            "Alien flower",
-            "Edible fruit"
-        ],
-        "price": 57,
-        "type": "outdoor",
-        "lifespan": "Perennial",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2191",
+            "scientificName": "Passiflora incarnata",
+                "description": "The Passion Flower (Passiflora incarnata) is a classic garden staple. With a lifespan of Perennial, it offers alien flower and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-4726816358?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Sun",
+                                        "oxygenLevel": "30 L/day",
+                                            "medicinalValues": [
+                                                "Calmative"
+                                            ],
+                                                "advantages": [
+                                                    "Alien flower",
+                                                    "Edible fruit"
+                                                ],
+                                                    "price": 57,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Perennial",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2191",
         "name": "Coral Honeysuckle",
-        "scientificName": "Lonicera sempervirens",
-        "description": "The Coral Honeysuckle (Lonicera sempervirens) is a classic garden staple. With a lifespan of Perennial, it offers hummingbird magnet and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-4324764929?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Sun",
-        "oxygenLevel": "35 L/day",
-        "medicinalValues": [
-            "None"
-        ],
-        "advantages": [
-            "Hummingbird magnet",
-            "Native"
-        ],
-        "price": 41,
-        "type": "outdoor",
-        "lifespan": "Perennial",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    },
-    {
-        "id": "p_out_2192",
+            "scientificName": "Lonicera sempervirens",
+                "description": "The Coral Honeysuckle (Lonicera sempervirens) is a classic garden staple. With a lifespan of Perennial, it offers hummingbird magnet and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-4324764929?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Sun",
+                                        "oxygenLevel": "35 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Hummingbird magnet",
+                                                    "Native"
+                                                ],
+                                                    "price": 41,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Perennial",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+},
+{
+    "id": "p_out_2192",
         "name": "Carolina Jessamine",
-        "scientificName": "Gelsemium sempervirens",
-        "description": "The Carolina Jessamine (Gelsemium sempervirens) is a classic garden staple. With a lifespan of Perennial, it offers yellow trumpets and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-3310528224?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Sun",
-        "oxygenLevel": "32 L/day",
-        "medicinalValues": [
-            "Toxic"
-        ],
-        "advantages": [
-            "Yellow trumpets",
-            "Early bloom"
-        ],
-        "price": 30,
-        "type": "outdoor",
-        "lifespan": "Perennial",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "USDA Poisonous Plant Research"
-    },
-    {
-        "id": "p_out_2193",
+            "scientificName": "Gelsemium sempervirens",
+                "description": "The Carolina Jessamine (Gelsemium sempervirens) is a classic garden staple. With a lifespan of Perennial, it offers yellow trumpets and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-3310528224?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Sun",
+                                        "oxygenLevel": "32 L/day",
+                                            "medicinalValues": [
+                                                "Toxic"
+                                            ],
+                                                "advantages": [
+                                                    "Yellow trumpets",
+                                                    "Early bloom"
+                                                ],
+                                                    "price": 30,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Perennial",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "USDA Poisonous Plant Research"
+},
+{
+    "id": "p_out_2193",
         "name": "Purple Coneflower",
-        "scientificName": "Echinacea purpurea",
-        "description": "The Purple Coneflower (Echinacea purpurea) is a classic garden staple. With a lifespan of Perennial, it offers butterfly magnet and is perfect for natural settings.",
-        "imageUrl": "https://images.unsplash.com/photo-8170071345?auto=format&fit=crop&w=800&q=80",
-        "idealTempMin": 5,
-        "idealTempMax": 35,
-        "minHumidity": 30,
-        "sunlight": "Sun",
-        "oxygenLevel": "25 L/day",
-        "medicinalValues": [
-            "Immune boost"
-        ],
-        "advantages": [
-            "Butterfly magnet",
-            "Native"
-        ],
-        "price": 8,
-        "type": "outdoor",
-        "lifespan": "Perennial",
-        "foliageTexture": "Textured",
-        "leafShape": "Lanceolate",
-        "stemStructure": "Woody",
-        "overallHabit": "Spreading",
-        "biometricFeatures": [
-            "Hardy",
-            "Weather resistant"
-        ],
-        "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
-    }
+            "scientificName": "Echinacea purpurea",
+                "description": "The Purple Coneflower (Echinacea purpurea) is a classic garden staple. With a lifespan of Perennial, it offers butterfly magnet and is perfect for natural settings.",
+                    "imageUrl": "https://images.unsplash.com/photo-8170071345?auto=format&fit=crop&w=800&q=80",
+                        "idealTempMin": 5,
+                            "idealTempMax": 35,
+                                "minHumidity": 30,
+                                    "sunlight": "Sun",
+                                        "oxygenLevel": "25 L/day",
+                                            "medicinalValues": [
+                                                "Immune boost"
+                                            ],
+                                                "advantages": [
+                                                    "Butterfly magnet",
+                                                    "Native"
+                                                ],
+                                                    "price": 8,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Perennial",
+                                                                "foliageTexture": "Textured",
+                                                                    "leafShape": "Lanceolate",
+                                                                        "stemStructure": "Woody",
+                                                                            "overallHabit": "Spreading",
+                                                                                "biometricFeatures": [
+                                                                                    "Hardy",
+                                                                                    "Weather resistant"
+                                                                                ],
+                                                                                    "verifiedSource": "World Flora Online (WFO) / Missouri Botanical Garden"
+}
 , {
-                      "id":  "mock_439",
-                      "name":  "Butterfly Bush",
-                      "scientificName":  "Buddleja davidii",
-                      "description":  "The Butterfly Bush is a flowering shrub that attracts butterflies with fragrant purple flower spikes.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  10,
-                      "idealTempMax":  30,
-                      "minHumidity":  40,
-                      "sunlight":  "Full Sun (6+ hours)",
-                      "oxygenLevel":  "45 L/day",
-                      "medicinalValues":  [
-                                              "Traditional wound healing"
-                                          ],
-                      "advantages":  [
-                                         "Butterfly magnet",
-                                         "Fragrant blooms"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "15-20 Years"
-                  },
-                  {
-                      "id":  "mock_440",
-                      "name":  "Forsythia",
-                      "scientificName":  "Forsythia × intermedia",
-                      "description":  "The Forsythia is an early spring bloomer with bright yellow flowers before leaves emerge.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  7,
-                      "idealTempMax":  27,
-                      "minHumidity":  40,
-                      "sunlight":  "Full Sun",
-                      "oxygenLevel":  "50 L/day",
-                      "medicinalValues":  [
-                                              "Anti-inflammatory (traditional)"
-                                          ],
-                      "advantages":  [
-                                         "Early spring color",
-                                         "Fast growing"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "20-30 Years"
-                  },
-                  {
-                      "id":  "mock_441",
-                      "name":  "Weigela",
-                      "scientificName":  "Weigela florida",
-                      "description":  "The Weigela is a flowering shrub with tubular pink flowers that attract hummingbirds.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  10,
-                      "idealTempMax":  30,
-                      "minHumidity":  40,
-                      "sunlight":  "Full Sun to Part Shade",
-                      "oxygenLevel":  "40 L/day",
-                      "medicinalValues":  [
-                                              "None"
-                                          ],
-                      "advantages":  [
-                                         "Hummingbird attractor",
-                                         "Repeat bloomer"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "20-30 Years"
-                  },
-                  {
-                      "id":  "mock_442",
-                      "name":  "Spirea",
-                      "scientificName":  "Spiraea japonica",
-                      "description":  "The Spirea is a compact shrub with clusters of pink or white flowers and colorful foliage.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  10,
-                      "idealTempMax":  30,
-                      "minHumidity":  40,
-                      "sunlight":  "Full Sun",
-                      "oxygenLevel":  "35 L/day",
-                      "medicinalValues":  [
-                                              "Traditional pain relief"
-                                          ],
-                      "advantages":  [
-                                         "Low maintenance",
-                                         "Colorful foliage"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "15-20 Years"
-                  },
-                  {
-                      "id":  "mock_443",
-                      "name":  "Viburnum",
-                      "scientificName":  "Viburnum opulus",
-                      "description":  "The Viburnum is a snowball bush with large white flower clusters and fall berries.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  10,
-                      "idealTempMax":  27,
-                      "minHumidity":  50,
-                      "sunlight":  "Full Sun to Part Shade",
-                      "oxygenLevel":  "55 L/day",
-                      "medicinalValues":  [
-                                              "Muscle relaxant (bark)"
-                                          ],
-                      "advantages":  [
-                                         "Fragrant flowers",
-                                         "Wildlife food"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "20-40 Years"
-                  },
-                  {
-                      "id":  "mock_444",
-                      "name":  "Potentilla",
-                      "scientificName":  "Potentilla fruticosa",
-                      "description":  "The Potentilla is a cinquefoil shrub with cheerful yellow flowers blooming all summer.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  7,
-                      "idealTempMax":  27,
-                      "minHumidity":  40,
-                      "sunlight":  "Full Sun",
-                      "oxygenLevel":  "30 L/day",
-                      "medicinalValues":  [
-                                              "Digestive aid (traditional)"
-                                          ],
-                      "advantages":  [
-                                         "Long blooming",
-                                         "Cold hardy"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "10-15 Years"
-                  },
-                  {
-                      "id":  "mock_445",
-                      "name":  "Deutzia",
-                      "scientificName":  "Deutzia gracilis",
-                      "description":  "The Deutzia is a slender shrub covered in white star-shaped flowers in spring.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  10,
-                      "idealTempMax":  27,
-                      "minHumidity":  40,
-                      "sunlight":  "Full Sun to Part Shade",
-                      "oxygenLevel":  "35 L/day",
-                      "medicinalValues":  [
-                                              "None"
-                                          ],
-                      "advantages":  [
-                                         "Profuse blooms",
-                                         "Compact size"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "15-20 Years"
-                  },
-                  {
-                      "id":  "mock_446",
-                      "name":  "Mock Orange",
-                      "scientificName":  "Philadelphus coronarius",
-                      "description":  "The Mock Orange is a fragrant shrub with white flowers that smell like orange blossoms.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  10,
-                      "idealTempMax":  30,
-                      "minHumidity":  40,
-                      "sunlight":  "Full Sun to Part Shade",
-                      "oxygenLevel":  "50 L/day",
-                      "medicinalValues":  [
-                                              "Aromatherapy"
-                                          ],
-                      "advantages":  [
-                                         "Intense fragrance",
-                                         "Easy care"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "20-30 Years"
-                  },
-                  {
-                      "id":  "mock_447",
-                      "name":  "Ninebark",
-                      "scientificName":  "Physocarpus opulifolius",
-                      "description":  "The Ninebark is a native shrub with peeling bark and clusters of white or pink flowers.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  7,
-                      "idealTempMax":  30,
-                      "minHumidity":  40,
-                      "sunlight":  "Full Sun to Part Shade",
-                      "oxygenLevel":  "45 L/day",
-                      "medicinalValues":  [
-                                              "None"
-                                          ],
-                      "advantages":  [
-                                         "Four-season interest",
-                                         "Native plant"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "20-30 Years"
-                  },
-                  {
-                      "id":  "mock_448",
-                      "name":  "Smokebush",
-                      "scientificName":  "Cotinus coggygria",
-                      "description":  "The Smokebush is a dramatic shrub with smoky pink plumes and purple foliage.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  10,
-                      "idealTempMax":  30,
-                      "minHumidity":  40,
-                      "sunlight":  "Full Sun",
-                      "oxygenLevel":  "40 L/day",
-                      "medicinalValues":  [
-                                              "Tannin source"
-                                          ],
-                      "advantages":  [
-                                         "Unique appearance",
-                                         "Fall color"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "30-50 Years"
-                  },
-                  {
-                      "id":  "mock_449",
-                      "name":  "Barberry",
-                      "scientificName":  "Berberis thunbergii",
-                      "description":  "The Barberry is a thorny shrub with colorful foliage and small red berries.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  7,
-                      "idealTempMax":  30,
-                      "minHumidity":  40,
-                      "sunlight":  "Full Sun to Part Shade",
-                      "oxygenLevel":  "30 L/day",
-                      "medicinalValues":  [
-                                              "Berberine compound"
-                                          ],
-                      "advantages":  [
-                                         "Deer resistant",
-                                         "Colorful foliage"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "15-20 Years"
-                  },
-                  {
-                      "id":  "mock_450",
-                      "name":  "Beautyberry",
-                      "scientificName":  "Callicarpa americana",
-                      "description":  "The Beautyberry is a native shrub with stunning purple berries in fall.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  10,
-                      "idealTempMax":  30,
-                      "minHumidity":  50,
-                      "sunlight":  "Full Sun to Part Shade",
-                      "oxygenLevel":  "35 L/day",
-                      "medicinalValues":  [
-                                              "Insect repellent (traditional)"
-                                          ],
-                      "advantages":  [
-                                         "Purple berries",
-                                         "Wildlife food"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "10-15 Years"
-                  },
-                  {
-                      "id":  "mock_451",
-                      "name":  "Elderberry",
-                      "scientificName":  "Sambucus nigra",
-                      "description":  "The Elderberry is a fast-growing shrub with white flowers and edible dark berries.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  10,
-                      "idealTempMax":  30,
-                      "minHumidity":  50,
-                      "sunlight":  "Full Sun to Part Shade",
-                      "oxygenLevel":  "60 L/day",
-                      "medicinalValues":  [
-                                              "Immune support",
-                                              "Cold remedy"
-                                          ],
-                      "advantages":  [
-                                         "Edible berries",
-                                         "Medicinal"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "10-15 Years"
-                  },
-                  {
-                      "id":  "mock_452",
-                      "name":  "Serviceberry",
-                      "scientificName":  "Amelanchier canadensis",
-                      "description":  "The Serviceberry is a native tree with white spring flowers and edible berries.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  7,
-                      "idealTempMax":  27,
-                      "minHumidity":  40,
-                      "sunlight":  "Full Sun to Part Shade",
-                      "oxygenLevel":  "70 L/day",
-                      "medicinalValues":  [
-                                              "Antioxidant berries"
-                                          ],
-                      "advantages":  [
-                                         "Four-season beauty",
-                                         "Edible fruit"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "20-40 Years"
-                  },
-                  {
-                      "id":  "mock_453",
-                      "name":  "Redbud",
-                      "scientificName":  "Cercis canadensis",
-                      "description":  "The Redbud is a native tree with pink flowers blooming on bare branches in spring.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  10,
-                      "idealTempMax":  30,
-                      "minHumidity":  40,
-                      "sunlight":  "Full Sun to Part Shade",
-                      "oxygenLevel":  "80 L/day",
-                      "medicinalValues":  [
-                                              "Edible flowers"
-                                          ],
-                      "advantages":  [
-                                         "Early spring color",
-                                         "Heart-shaped leaves"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "50-70 Years"
-                  },
-                  {
-                      "id":  "mock_454",
-                      "name":  "Dogwood",
-                      "scientificName":  "Cornus florida",
-                      "description":  "The Dogwood is a flowering tree with showy white or pink bracts and red fall berries.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  10,
-                      "idealTempMax":  27,
-                      "minHumidity":  50,
-                      "sunlight":  "Part Shade to Sun",
-                      "oxygenLevel":  "90 L/day",
-                      "medicinalValues":  [
-                                              "Bark tonic (traditional)"
-                                          ],
-                      "advantages":  [
-                                         "Spring blooms",
-                                         "Fall color"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "80+ Years"
-                  },
-                  {
-                      "id":  "mock_455",
-                      "name":  "Crabapple",
-                      "scientificName":  "Malus species",
-                      "description":  "The Crabapple is a flowering tree with spring blossoms and small decorative fruits.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  7,
-                      "idealTempMax":  27,
-                      "minHumidity":  40,
-                      "sunlight":  "Full Sun",
-                      "oxygenLevel":  "100 L/day",
-                      "medicinalValues":  [
-                                              "Pectin source"
-                                          ],
-                      "advantages":  [
-                                         "Spring flowers",
-                                         "Wildlife food"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "30-70 Years"
-                  },
-                  {
-                      "id":  "mock_456",
-                      "name":  "Hawthorn",
-                      "scientificName":  "Crataegus monogyna",
-                      "description":  "The Hawthorn is a thorny tree with white flowers and red berries used medicinally.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  7,
-                      "idealTempMax":  27,
-                      "minHumidity":  40,
-                      "sunlight":  "Full Sun",
-                      "oxygenLevel":  "85 L/day",
-                      "medicinalValues":  [
-                                              "Heart health",
-                                              "Blood pressure"
-                                          ],
-                      "advantages":  [
-                                         "Medicinal berries",
-                                         "Wildlife habitat"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "100+ Years"
-                  },
-                  {
-                      "id":  "mock_457",
-                      "name":  "Japanese Maple",
-                      "scientificName":  "Acer palmatum",
-                      "description":  "The Japanese Maple is an ornamental tree with delicate lacy leaves in vibrant colors.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  10,
-                      "idealTempMax":  27,
-                      "minHumidity":  50,
-                      "sunlight":  "Part Shade to Sun",
-                      "oxygenLevel":  "75 L/day",
-                      "medicinalValues":  [
-                                              "None"
-                                          ],
-                      "advantages":  [
-                                         "Stunning foliage",
-                                         "Compact varieties"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "60-100 Years"
-                  },
-                  {
-                      "id":  "mock_458",
-                      "name":  "Crepe Myrtle",
-                      "scientificName":  "Lagerstroemia indica",
-                      "description":  "The Crepe Myrtle is a summer-blooming tree with crinkled flowers and peeling bark.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  15,
-                      "idealTempMax":  35,
-                      "minHumidity":  40,
-                      "sunlight":  "Full Sun",
-                      "oxygenLevel":  "80 L/day",
-                      "medicinalValues":  [
-                                              "Diabetes management (research)"
-                                          ],
-                      "advantages":  [
-                                         "Long blooming",
-                                         "Drought tolerant"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "50+ Years"
-                  },
-                  {
-                      "id":  "mock_459",
-                      "name":  "Witch Hazel",
-                      "scientificName":  "Hamamelis virginiana",
-                      "description":  "The Witch Hazel is a native shrub with fragrant yellow flowers blooming in fall.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  7,
-                      "idealTempMax":  27,
-                      "minHumidity":  50,
-                      "sunlight":  "Part Shade to Sun",
-                      "oxygenLevel":  "45 L/day",
-                      "medicinalValues":  [
-                                              "Skin astringent",
-                                              "Anti-inflammatory"
-                                          ],
-                      "advantages":  [
-                                         "Medicinal extract",
-                                         "Fall bloomer"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "30-50 Years"
-                  },
-                  {
-                      "id":  "mock_460",
-                      "name":  "Sumac",
-                      "scientificName":  "Rhus typhina",
-                      "description":  "The Sumac is a staghorn shrub with fuzzy red fruit clusters and brilliant fall color.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  7,
-                      "idealTempMax":  30,
-                      "minHumidity":  40,
-                      "sunlight":  "Full Sun",
-                      "oxygenLevel":  "55 L/day",
-                      "medicinalValues":  [
-                                              "Antioxidant spice"
-                                          ],
-                      "advantages":  [
-                                         "Fall color",
-                                         "Drought tolerant"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "20-30 Years"
-                  },
-                  {
-                      "id":  "mock_461",
-                      "name":  "Honeysuckle Vine",
-                      "scientificName":  "Lonicera periclymenum",
-                      "description":  "The Honeysuckle Vine is a climbing plant with fragrant tubular flowers.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  10,
-                      "idealTempMax":  30,
-                      "minHumidity":  40,
-                      "sunlight":  "Full Sun to Part Shade",
-                      "oxygenLevel":  "40 L/day",
-                      "medicinalValues":  [
-                                              "Respiratory aid (traditional)"
-                                          ],
-                      "advantages":  [
-                                         "Fragrant flowers",
-                                         "Hummingbird attractor"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "20+ Years"
-                  },
-                  {
-                      "id":  "mock_462",
-                      "name":  "Clematis",
-                      "scientificName":  "Clematis hybrids",
-                      "description":  "The Clematis is a flowering vine with large showy blooms in various colors.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  10,
-                      "idealTempMax":  27,
-                      "minHumidity":  50,
-                      "sunlight":  "Full Sun (roots shaded)",
-                      "oxygenLevel":  "35 L/day",
-                      "medicinalValues":  [
-                                              "None (toxic)"
-                                          ],
-                      "advantages":  [
-                                         "Spectacular blooms",
-                                         "Vertical interest"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "20-50 Years"
-                  },
-                  {
-                      "id":  "mock_463",
-                      "name":  "Wisteria",
-                      "scientificName":  "Wisteria sinensis",
-                      "description":  "The Wisteria is a vigorous vine with cascading purple flower clusters.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  10,
-                      "idealTempMax":  30,
-                      "minHumidity":  40,
-                      "sunlight":  "Full Sun",
-                      "oxygenLevel":  "60 L/day",
-                      "medicinalValues":  [
-                                              "None (toxic)"
-                                          ],
-                      "advantages":  [
-                                         "Dramatic blooms",
-                                         "Fragrant"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "50-100 Years"
-                  },
-                  {
-                      "id":  "mock_464",
-                      "name":  "Trumpet Vine",
-                      "scientificName":  "Campsis radicans",
-                      "description":  "The Trumpet Vine is a vigorous climber with orange trumpet-shaped flowers.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  10,
-                      "idealTempMax":  35,
-                      "minHumidity":  40,
-                      "sunlight":  "Full Sun",
-                      "oxygenLevel":  "50 L/day",
-                      "medicinalValues":  [
-                                              "None"
-                                          ],
-                      "advantages":  [
-                                         "Hummingbird magnet",
-                                         "Fast growing"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "20+ Years"
-                  },
-                  {
-                      "id":  "mock_465",
-                      "name":  "Virginia Creeper",
-                      "scientificName":  "Parthenocissus quinquefolia",
-                      "description":  "The Virginia Creeper is a native vine with five-leaflet leaves turning red in fall.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  7,
-                      "idealTempMax":  30,
-                      "minHumidity":  40,
-                      "sunlight":  "Sun to Shade",
-                      "oxygenLevel":  "45 L/day",
-                      "medicinalValues":  [
-                                              "None"
-                                          ],
-                      "advantages":  [
-                                         "Fall color",
-                                         "Wildlife food"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "20+ Years"
-                  },
-                  {
-                      "id":  "mock_466",
-                      "name":  "Boston Ivy",
-                      "scientificName":  "Parthenocissus tricuspidata",
-                      "description":  "The Boston Ivy is a clinging vine with three-lobed leaves and brilliant fall color.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  10,
-                      "idealTempMax":  30,
-                      "minHumidity":  40,
-                      "sunlight":  "Sun to Part Shade",
-                      "oxygenLevel":  "50 L/day",
-                      "medicinalValues":  [
-                                              "None"
-                                          ],
-                      "advantages":  [
-                                         "Wall coverage",
-                                         "Fall color"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "20+ Years"
-                  },
-                  {
-                      "id":  "mock_467",
-                      "name":  "Passionflower",
-                      "scientificName":  "Passiflora incarnata",
-                      "description":  "The Passionflower is an exotic vine with intricate purple and white flowers.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  15,
-                      "idealTempMax":  30,
-                      "minHumidity":  50,
-                      "sunlight":  "Full Sun",
-                      "oxygenLevel":  "35 L/day",
-                      "medicinalValues":  [
-                                              "Anxiety relief",
-                                              "Sleep aid"
-                                          ],
-                      "advantages":  [
-                                         "Unique flowers",
-                                         "Edible fruit"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "5-10 Years"
-                  },
-                  {
-                      "id":  "mock_468",
-                      "name":  "Climbing Hydrangea",
-                      "scientificName":  "Hydrangea anomala petiolaris",
-                      "description":  "The Climbing Hydrangea is a woody vine with white lace-cap flowers and peeling bark.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  10,
-                      "idealTempMax":  27,
-                      "minHumidity":  50,
-                      "sunlight":  "Part Shade to Sun",
-                      "oxygenLevel":  "55 L/day",
-                      "medicinalValues":  [
-                                              "None"
-                                          ],
-                      "advantages":  [
-                                         "Shade tolerant",
-                                         "Fragrant flowers"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "50+ Years"
-                  },
-                  {
-                      "id":  "mock_469",
-                      "name":  "Coral Bells",
-                      "scientificName":  "Heuchera sanguinea",
-                      "description":  "The Coral Bells is a perennial with colorful foliage and delicate flower spikes.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  10,
-                      "idealTempMax":  27,
-                      "minHumidity":  40,
-                      "sunlight":  "Part Shade to Sun",
-                      "oxygenLevel":  "15 L/day",
-                      "medicinalValues":  [
-                                              "Astringent (traditional)"
-                                          ],
-                      "advantages":  [
-                                         "Colorful foliage",
-                                         "Shade tolerant"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "3-5 Years"
-                  },
-                  {
-                      "id":  "mock_470",
-                      "name":  "Hosta",
-                      "scientificName":  "Hosta species",
-                      "description":  "The Hosta is a shade-loving perennial with large decorative leaves and lavender flowers.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  10,
-                      "idealTempMax":  27,
-                      "minHumidity":  50,
-                      "sunlight":  "Shade to Part Shade",
-                      "oxygenLevel":  "20 L/day",
-                      "medicinalValues":  [
-                                              "Edible shoots"
-                                          ],
-                      "advantages":  [
-                                         "Shade champion",
-                                         "Low maintenance"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "Perennial"
-                  },
-                  {
-                      "id":  "mock_471",
-                      "name":  "Astilbe",
-                      "scientificName":  "Astilbe chinensis",
-                      "description":  "The Astilbe is a shade perennial with feathery plume-like flowers in pink or white.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  10,
-                      "idealTempMax":  24,
-                      "minHumidity":  60,
-                      "sunlight":  "Part Shade to Shade",
-                      "oxygenLevel":  "18 L/day",
-                      "medicinalValues":  [
-                                              "None"
-                                          ],
-                      "advantages":  [
-                                         "Shade bloomer",
-                                         "Moisture loving"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "Perennial"
-                  },
-                  {
-                      "id":  "mock_472",
-                      "name":  "Bleeding Heart",
-                      "scientificName":  "Lamprocapnos spectabilis",
-                      "description":  "The Bleeding Heart is a spring perennial with heart-shaped pink and white flowers.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  10,
-                      "idealTempMax":  24,
-                      "minHumidity":  50,
-                      "sunlight":  "Part Shade to Shade",
-                      "oxygenLevel":  "20 L/day",
-                      "medicinalValues":  [
-                                              "None (toxic)"
-                                          ],
-                      "advantages":  [
-                                         "Unique flowers",
-                                         "Shade loving"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "Perennial"
-                  },
-                  {
-                      "id":  "mock_473",
-                      "name":  "Columbine",
-                      "scientificName":  "Aquilegia species",
-                      "description":  "The Columbine is a woodland perennial with spurred flowers in various colors.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  10,
-                      "idealTempMax":  27,
-                      "minHumidity":  40,
-                      "sunlight":  "Part Shade to Sun",
-                      "oxygenLevel":  "15 L/day",
-                      "medicinalValues":  [
-                                              "None (toxic)"
-                                          ],
-                      "advantages":  [
-                                         "Hummingbird attractor",
-                                         "Self-seeding"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "3-5 Years"
-                  },
-                  {
-                      "id":  "mock_474",
-                      "name":  "Lungwort",
-                      "scientificName":  "Pulmonaria officinalis",
-                      "description":  "The Lungwort is a shade perennial with spotted leaves and pink-to-blue flowers.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  10,
-                      "idealTempMax":  24,
-                      "minHumidity":  50,
-                      "sunlight":  "Shade to Part Shade",
-                      "oxygenLevel":  "12 L/day",
-                      "medicinalValues":  [
-                                              "Respiratory aid (traditional)"
-                                          ],
-                      "advantages":  [
-                                         "Early bloomer",
-                                         "Spotted foliage"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "Perennial"
-                  },
-                  {
-                      "id":  "mock_475",
-                      "name":  "Hellebore",
-                      "scientificName":  "Helleborus orientalis",
-                      "description":  "The Hellebore is a winter-blooming perennial with nodding cup-shaped flowers.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  7,
-                      "idealTempMax":  24,
-                      "minHumidity":  50,
-                      "sunlight":  "Part Shade to Shade",
-                      "oxygenLevel":  "18 L/day",
-                      "medicinalValues":  [
-                                              "None (toxic)"
-                                          ],
-                      "advantages":  [
-                                         "Winter blooms",
-                                         "Evergreen"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "Perennial"
-                  },
-                  {
-                      "id":  "mock_476",
-                      "name":  "Brunnera",
-                      "scientificName":  "Brunnera macrophylla",
-                      "description":  "The Brunnera is a Siberian bugloss with heart-shaped silver leaves and blue flowers.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  10,
-                      "idealTempMax":  24,
-                      "minHumidity":  50,
-                      "sunlight":  "Part Shade to Shade",
-                      "oxygenLevel":  "15 L/day",
-                      "medicinalValues":  [
-                                              "None"
-                                          ],
-                      "advantages":  [
-                                         "Silver foliage",
-                                         "Shade tolerant"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "Perennial"
-                  },
-                  {
-                      "id":  "mock_477",
-                      "name":  "Ferns (Mixed)",
-                      "scientificName":  "Various species",
-                      "description":  "Ferns are ancient shade-loving plants with delicate fronds in various forms.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  10,
-                      "idealTempMax":  27,
-                      "minHumidity":  60,
-                      "sunlight":  "Shade to Part Shade",
-                      "oxygenLevel":  "25 L/day",
-                      "medicinalValues":  [
-                                              "Some edible fiddleheads"
-                                          ],
-                      "advantages":  [
-                                         "Shade champion",
-                                         "Low maintenance"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "Perennial"
-                  },
-                  {
-                      "id":  "mock_478",
-                      "name":  "Ligularia",
-                      "scientificName":  "Ligularia dentata",
-                      "description":  "The Ligularia is a bold perennial with large leaves and yellow daisy-like flowers.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  10,
-                      "idealTempMax":  24,
-                      "minHumidity":  60,
-                      "sunlight":  "Part Shade",
-                      "oxygenLevel":  "30 L/day",
-                      "medicinalValues":  [
-                                              "None"
-                                          ],
-                      "advantages":  [
-                                         "Bold foliage",
-                                         "Moisture loving"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "Perennial"
-                  },
-                  {
-                      "id":  "mock_479",
-                      "name":  "Rodgersia",
-                      "scientificName":  "Rodgersia pinnata",
-                      "description":  "The Rodgersia is a dramatic perennial with large compound leaves and pink flower plumes.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  10,
-                      "idealTempMax":  24,
-                      "minHumidity":  60,
-                      "sunlight":  "Part Shade to Shade",
-                      "oxygenLevel":  "35 L/day",
-                      "medicinalValues":  [
-                                              "None"
-                                          ],
-                      "advantages":  [
-                                         "Architectural foliage",
-                                         "Moisture loving"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "Perennial"
-                  },
-                  {
-                      "id":  "mock_480",
-                      "name":  "Tiarella",
-                      "scientificName":  "Tiarella cordifolia",
-                      "description":  "The Tiarella is a foam flower with maple-like leaves and white flower spikes.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  10,
-                      "idealTempMax":  24,
-                      "minHumidity":  50,
-                      "sunlight":  "Shade to Part Shade",
-                      "oxygenLevel":  "12 L/day",
-                      "medicinalValues":  [
-                                              "Diuretic (traditional)"
-                                          ],
-                      "advantages":  [
-                                         "Groundcover",
-                                         "Native plant"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "Perennial"
-                  },
-                  {
-                      "id":  "mock_481",
-                      "name":  "Epimedium",
-                      "scientificName":  "Epimedium grandiflorum",
-                      "description":  "The Epimedium is a barrenwort with heart-shaped leaves and delicate spurred flowers.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  10,
-                      "idealTempMax":  24,
-                      "minHumidity":  50,
-                      "sunlight":  "Shade to Part Shade",
-                      "oxygenLevel":  "10 L/day",
-                      "medicinalValues":  [
-                                              "Libido enhancer (traditional)"
-                                          ],
-                      "advantages":  [
-                                         "Dry shade tolerant",
-                                         "Groundcover"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "Perennial"
-                  },
-                  {
-                      "id":  "mock_482",
-                      "name":  "Solomon\u0027s Seal",
-                      "scientificName":  "Polygonatum biflorum",
-                      "description":  "The Solomon\u0027s Seal is a woodland perennial with arching stems and hanging white bells.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  10,
-                      "idealTempMax":  24,
-                      "minHumidity":  50,
-                      "sunlight":  "Shade to Part Shade",
-                      "oxygenLevel":  "15 L/day",
-                      "medicinalValues":  [
-                                              "Joint health (traditional)"
-                                          ],
-                      "advantages":  [
-                                         "Graceful form",
-                                         "Native plant"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "Perennial"
-                  },
-                  {
-                      "id":  "mock_483",
-                      "name":  "Trillium",
-                      "scientificName":  "Trillium grandiflorum",
-                      "description":  "The Trillium is a spring wildflower with three-petaled white flowers and three leaves.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  7,
-                      "idealTempMax":  21,
-                      "minHumidity":  50,
-                      "sunlight":  "Shade to Part Shade",
-                      "oxygenLevel":  "10 L/day",
-                      "medicinalValues":  [
-                                              "Childbirth aid (traditional)"
-                                          ],
-                      "advantages":  [
-                                         "Native wildflower",
-                                         "Spring ephemeral"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "Perennial"
-                  },
-                  {
-                      "id":  "mock_484",
-                      "name":  "Jack-in-the-Pulpit",
-                      "scientificName":  "Arisaema triphyllum",
-                      "description":  "The Jack-in-the-Pulpit is a unique woodland plant with a hooded flower and red berries.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  10,
-                      "idealTempMax":  24,
-                      "minHumidity":  60,
-                      "sunlight":  "Shade to Part Shade",
-                      "oxygenLevel":  "12 L/day",
-                      "medicinalValues":  [
-                                              "None (toxic raw)"
-                                          ],
-                      "advantages":  [
-                                         "Unique appearance",
-                                         "Native plant"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "Perennial"
-                  },
-                  {
-                      "id":  "mock_485",
-                      "name":  "Wild Ginger",
-                      "scientificName":  "Asarum canadense",
-                      "description":  "The Wild Ginger is a groundcover with heart-shaped leaves and hidden maroon flowers.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  10,
-                      "idealTempMax":  24,
-                      "minHumidity":  60,
-                      "sunlight":  "Shade",
-                      "oxygenLevel":  "10 L/day",
-                      "medicinalValues":  [
-                                              "Ginger substitute (root)"
-                                          ],
-                      "advantages":  [
-                                         "Dense groundcover",
-                                         "Native plant"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "Perennial"
-                  },
-                  {
-                      "id":  "mock_486",
-                      "name":  "Bloodroot",
-                      "scientificName":  "Sanguinaria canadensis",
-                      "description":  "The Bloodroot is a spring ephemeral with white flowers and red-orange sap.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  7,
-                      "idealTempMax":  21,
-                      "minHumidity":  50,
-                      "sunlight":  "Part Shade to Shade",
-                      "oxygenLevel":  "8 L/day",
-                      "medicinalValues":  [
-                                              "Dental health (traditional)"
-                                          ],
-                      "advantages":  [
-                                         "Early spring blooms",
-                                         "Native wildflower"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "Perennial"
-                  },
-                  {
-                      "id":  "mock_487",
-                      "name":  "Virginia Bluebells",
-                      "scientificName":  "Mertensia virginica",
-                      "description":  "The Virginia Bluebells are spring ephemerals with pink buds opening to blue bell flowers.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  10,
-                      "idealTempMax":  21,
-                      "minHumidity":  50,
-                      "sunlight":  "Part Shade to Shade",
-                      "oxygenLevel":  "15 L/day",
-                      "medicinalValues":  [
-                                              "None"
-                                          ],
-                      "advantages":  [
-                                         "Spring color",
-                                         "Native wildflower"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "Perennial"
-                  },
-                  {
-                      "id":  "mock_488",
-                      "name":  "Mayapple",
-                      "scientificName":  "Podophyllum peltatum",
-                      "description":  "The Mayapple is a woodland plant with umbrella-like leaves and hidden white flowers.",
-                      "imageUrl":  "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
-                      "idealTempMin":  10,
-                      "idealTempMax":  24,
-                      "minHumidity":  60,
-                      "sunlight":  "Shade to Part Shade",
-                      "oxygenLevel":  "18 L/day",
-                      "medicinalValues":  [
-                                              "Cancer research compound"
-                                          ],
-                      "advantages":  [
-                                         "Groundcover",
-                                         "Native plant"
-                                     ],
-                      "price":  25,
-                      "type":  "outdoor",
-                      "lifespan":  "Perennial"
-                  },
-    "Count":  50
+    "id": "mock_439",
+        "name": "Butterfly Bush",
+            "scientificName": "Buddleja davidii",
+                "description": "The Butterfly Bush is a flowering shrub that attracts butterflies with fragrant purple flower spikes.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 10,
+                            "idealTempMax": 30,
+                                "minHumidity": 40,
+                                    "sunlight": "Full Sun (6+ hours)",
+                                        "oxygenLevel": "45 L/day",
+                                            "medicinalValues": [
+                                                "Traditional wound healing"
+                                            ],
+                                                "advantages": [
+                                                    "Butterfly magnet",
+                                                    "Fragrant blooms"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "15-20 Years"
+},
+{
+    "id": "mock_440",
+        "name": "Forsythia",
+            "scientificName": "Forsythia × intermedia",
+                "description": "The Forsythia is an early spring bloomer with bright yellow flowers before leaves emerge.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 7,
+                            "idealTempMax": 27,
+                                "minHumidity": 40,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "50 L/day",
+                                            "medicinalValues": [
+                                                "Anti-inflammatory (traditional)"
+                                            ],
+                                                "advantages": [
+                                                    "Early spring color",
+                                                    "Fast growing"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "20-30 Years"
+},
+{
+    "id": "mock_441",
+        "name": "Weigela",
+            "scientificName": "Weigela florida",
+                "description": "The Weigela is a flowering shrub with tubular pink flowers that attract hummingbirds.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 10,
+                            "idealTempMax": 30,
+                                "minHumidity": 40,
+                                    "sunlight": "Full Sun to Part Shade",
+                                        "oxygenLevel": "40 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Hummingbird attractor",
+                                                    "Repeat bloomer"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "20-30 Years"
+},
+{
+    "id": "mock_442",
+        "name": "Spirea",
+            "scientificName": "Spiraea japonica",
+                "description": "The Spirea is a compact shrub with clusters of pink or white flowers and colorful foliage.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 10,
+                            "idealTempMax": 30,
+                                "minHumidity": 40,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "35 L/day",
+                                            "medicinalValues": [
+                                                "Traditional pain relief"
+                                            ],
+                                                "advantages": [
+                                                    "Low maintenance",
+                                                    "Colorful foliage"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "15-20 Years"
+},
+{
+    "id": "mock_443",
+        "name": "Viburnum",
+            "scientificName": "Viburnum opulus",
+                "description": "The Viburnum is a snowball bush with large white flower clusters and fall berries.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 10,
+                            "idealTempMax": 27,
+                                "minHumidity": 50,
+                                    "sunlight": "Full Sun to Part Shade",
+                                        "oxygenLevel": "55 L/day",
+                                            "medicinalValues": [
+                                                "Muscle relaxant (bark)"
+                                            ],
+                                                "advantages": [
+                                                    "Fragrant flowers",
+                                                    "Wildlife food"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "20-40 Years"
+},
+{
+    "id": "mock_444",
+        "name": "Potentilla",
+            "scientificName": "Potentilla fruticosa",
+                "description": "The Potentilla is a cinquefoil shrub with cheerful yellow flowers blooming all summer.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 7,
+                            "idealTempMax": 27,
+                                "minHumidity": 40,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "30 L/day",
+                                            "medicinalValues": [
+                                                "Digestive aid (traditional)"
+                                            ],
+                                                "advantages": [
+                                                    "Long blooming",
+                                                    "Cold hardy"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "10-15 Years"
+},
+{
+    "id": "mock_445",
+        "name": "Deutzia",
+            "scientificName": "Deutzia gracilis",
+                "description": "The Deutzia is a slender shrub covered in white star-shaped flowers in spring.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 10,
+                            "idealTempMax": 27,
+                                "minHumidity": 40,
+                                    "sunlight": "Full Sun to Part Shade",
+                                        "oxygenLevel": "35 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Profuse blooms",
+                                                    "Compact size"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "15-20 Years"
+},
+{
+    "id": "mock_446",
+        "name": "Mock Orange",
+            "scientificName": "Philadelphus coronarius",
+                "description": "The Mock Orange is a fragrant shrub with white flowers that smell like orange blossoms.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 10,
+                            "idealTempMax": 30,
+                                "minHumidity": 40,
+                                    "sunlight": "Full Sun to Part Shade",
+                                        "oxygenLevel": "50 L/day",
+                                            "medicinalValues": [
+                                                "Aromatherapy"
+                                            ],
+                                                "advantages": [
+                                                    "Intense fragrance",
+                                                    "Easy care"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "20-30 Years"
+},
+{
+    "id": "mock_447",
+        "name": "Ninebark",
+            "scientificName": "Physocarpus opulifolius",
+                "description": "The Ninebark is a native shrub with peeling bark and clusters of white or pink flowers.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 7,
+                            "idealTempMax": 30,
+                                "minHumidity": 40,
+                                    "sunlight": "Full Sun to Part Shade",
+                                        "oxygenLevel": "45 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Four-season interest",
+                                                    "Native plant"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "20-30 Years"
+},
+{
+    "id": "mock_448",
+        "name": "Smokebush",
+            "scientificName": "Cotinus coggygria",
+                "description": "The Smokebush is a dramatic shrub with smoky pink plumes and purple foliage.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 10,
+                            "idealTempMax": 30,
+                                "minHumidity": 40,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "40 L/day",
+                                            "medicinalValues": [
+                                                "Tannin source"
+                                            ],
+                                                "advantages": [
+                                                    "Unique appearance",
+                                                    "Fall color"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "30-50 Years"
+},
+{
+    "id": "mock_449",
+        "name": "Barberry",
+            "scientificName": "Berberis thunbergii",
+                "description": "The Barberry is a thorny shrub with colorful foliage and small red berries.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 7,
+                            "idealTempMax": 30,
+                                "minHumidity": 40,
+                                    "sunlight": "Full Sun to Part Shade",
+                                        "oxygenLevel": "30 L/day",
+                                            "medicinalValues": [
+                                                "Berberine compound"
+                                            ],
+                                                "advantages": [
+                                                    "Deer resistant",
+                                                    "Colorful foliage"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "15-20 Years"
+},
+{
+    "id": "mock_450",
+        "name": "Beautyberry",
+            "scientificName": "Callicarpa americana",
+                "description": "The Beautyberry is a native shrub with stunning purple berries in fall.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 10,
+                            "idealTempMax": 30,
+                                "minHumidity": 50,
+                                    "sunlight": "Full Sun to Part Shade",
+                                        "oxygenLevel": "35 L/day",
+                                            "medicinalValues": [
+                                                "Insect repellent (traditional)"
+                                            ],
+                                                "advantages": [
+                                                    "Purple berries",
+                                                    "Wildlife food"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "10-15 Years"
+},
+{
+    "id": "mock_451",
+        "name": "Elderberry",
+            "scientificName": "Sambucus nigra",
+                "description": "The Elderberry is a fast-growing shrub with white flowers and edible dark berries.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 10,
+                            "idealTempMax": 30,
+                                "minHumidity": 50,
+                                    "sunlight": "Full Sun to Part Shade",
+                                        "oxygenLevel": "60 L/day",
+                                            "medicinalValues": [
+                                                "Immune support",
+                                                "Cold remedy"
+                                            ],
+                                                "advantages": [
+                                                    "Edible berries",
+                                                    "Medicinal"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "10-15 Years"
+},
+{
+    "id": "mock_452",
+        "name": "Serviceberry",
+            "scientificName": "Amelanchier canadensis",
+                "description": "The Serviceberry is a native tree with white spring flowers and edible berries.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 7,
+                            "idealTempMax": 27,
+                                "minHumidity": 40,
+                                    "sunlight": "Full Sun to Part Shade",
+                                        "oxygenLevel": "70 L/day",
+                                            "medicinalValues": [
+                                                "Antioxidant berries"
+                                            ],
+                                                "advantages": [
+                                                    "Four-season beauty",
+                                                    "Edible fruit"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "20-40 Years"
+},
+{
+    "id": "mock_453",
+        "name": "Redbud",
+            "scientificName": "Cercis canadensis",
+                "description": "The Redbud is a native tree with pink flowers blooming on bare branches in spring.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 10,
+                            "idealTempMax": 30,
+                                "minHumidity": 40,
+                                    "sunlight": "Full Sun to Part Shade",
+                                        "oxygenLevel": "80 L/day",
+                                            "medicinalValues": [
+                                                "Edible flowers"
+                                            ],
+                                                "advantages": [
+                                                    "Early spring color",
+                                                    "Heart-shaped leaves"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "50-70 Years"
+},
+{
+    "id": "mock_454",
+        "name": "Dogwood",
+            "scientificName": "Cornus florida",
+                "description": "The Dogwood is a flowering tree with showy white or pink bracts and red fall berries.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 10,
+                            "idealTempMax": 27,
+                                "minHumidity": 50,
+                                    "sunlight": "Part Shade to Sun",
+                                        "oxygenLevel": "90 L/day",
+                                            "medicinalValues": [
+                                                "Bark tonic (traditional)"
+                                            ],
+                                                "advantages": [
+                                                    "Spring blooms",
+                                                    "Fall color"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "80+ Years"
+},
+{
+    "id": "mock_455",
+        "name": "Crabapple",
+            "scientificName": "Malus species",
+                "description": "The Crabapple is a flowering tree with spring blossoms and small decorative fruits.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 7,
+                            "idealTempMax": 27,
+                                "minHumidity": 40,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "100 L/day",
+                                            "medicinalValues": [
+                                                "Pectin source"
+                                            ],
+                                                "advantages": [
+                                                    "Spring flowers",
+                                                    "Wildlife food"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "30-70 Years"
+},
+{
+    "id": "mock_456",
+        "name": "Hawthorn",
+            "scientificName": "Crataegus monogyna",
+                "description": "The Hawthorn is a thorny tree with white flowers and red berries used medicinally.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 7,
+                            "idealTempMax": 27,
+                                "minHumidity": 40,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "85 L/day",
+                                            "medicinalValues": [
+                                                "Heart health",
+                                                "Blood pressure"
+                                            ],
+                                                "advantages": [
+                                                    "Medicinal berries",
+                                                    "Wildlife habitat"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "100+ Years"
+},
+{
+    "id": "mock_457",
+        "name": "Japanese Maple",
+            "scientificName": "Acer palmatum",
+                "description": "The Japanese Maple is an ornamental tree with delicate lacy leaves in vibrant colors.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 10,
+                            "idealTempMax": 27,
+                                "minHumidity": 50,
+                                    "sunlight": "Part Shade to Sun",
+                                        "oxygenLevel": "75 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Stunning foliage",
+                                                    "Compact varieties"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "60-100 Years"
+},
+{
+    "id": "mock_458",
+        "name": "Crepe Myrtle",
+            "scientificName": "Lagerstroemia indica",
+                "description": "The Crepe Myrtle is a summer-blooming tree with crinkled flowers and peeling bark.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 15,
+                            "idealTempMax": 35,
+                                "minHumidity": 40,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "80 L/day",
+                                            "medicinalValues": [
+                                                "Diabetes management (research)"
+                                            ],
+                                                "advantages": [
+                                                    "Long blooming",
+                                                    "Drought tolerant"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "50+ Years"
+},
+{
+    "id": "mock_459",
+        "name": "Witch Hazel",
+            "scientificName": "Hamamelis virginiana",
+                "description": "The Witch Hazel is a native shrub with fragrant yellow flowers blooming in fall.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 7,
+                            "idealTempMax": 27,
+                                "minHumidity": 50,
+                                    "sunlight": "Part Shade to Sun",
+                                        "oxygenLevel": "45 L/day",
+                                            "medicinalValues": [
+                                                "Skin astringent",
+                                                "Anti-inflammatory"
+                                            ],
+                                                "advantages": [
+                                                    "Medicinal extract",
+                                                    "Fall bloomer"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "30-50 Years"
+},
+{
+    "id": "mock_460",
+        "name": "Sumac",
+            "scientificName": "Rhus typhina",
+                "description": "The Sumac is a staghorn shrub with fuzzy red fruit clusters and brilliant fall color.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 7,
+                            "idealTempMax": 30,
+                                "minHumidity": 40,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "55 L/day",
+                                            "medicinalValues": [
+                                                "Antioxidant spice"
+                                            ],
+                                                "advantages": [
+                                                    "Fall color",
+                                                    "Drought tolerant"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "20-30 Years"
+},
+{
+    "id": "mock_461",
+        "name": "Honeysuckle Vine",
+            "scientificName": "Lonicera periclymenum",
+                "description": "The Honeysuckle Vine is a climbing plant with fragrant tubular flowers.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 10,
+                            "idealTempMax": 30,
+                                "minHumidity": 40,
+                                    "sunlight": "Full Sun to Part Shade",
+                                        "oxygenLevel": "40 L/day",
+                                            "medicinalValues": [
+                                                "Respiratory aid (traditional)"
+                                            ],
+                                                "advantages": [
+                                                    "Fragrant flowers",
+                                                    "Hummingbird attractor"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "20+ Years"
+},
+{
+    "id": "mock_462",
+        "name": "Clematis",
+            "scientificName": "Clematis hybrids",
+                "description": "The Clematis is a flowering vine with large showy blooms in various colors.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 10,
+                            "idealTempMax": 27,
+                                "minHumidity": 50,
+                                    "sunlight": "Full Sun (roots shaded)",
+                                        "oxygenLevel": "35 L/day",
+                                            "medicinalValues": [
+                                                "None (toxic)"
+                                            ],
+                                                "advantages": [
+                                                    "Spectacular blooms",
+                                                    "Vertical interest"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "20-50 Years"
+},
+{
+    "id": "mock_463",
+        "name": "Wisteria",
+            "scientificName": "Wisteria sinensis",
+                "description": "The Wisteria is a vigorous vine with cascading purple flower clusters.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 10,
+                            "idealTempMax": 30,
+                                "minHumidity": 40,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "60 L/day",
+                                            "medicinalValues": [
+                                                "None (toxic)"
+                                            ],
+                                                "advantages": [
+                                                    "Dramatic blooms",
+                                                    "Fragrant"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "50-100 Years"
+},
+{
+    "id": "mock_464",
+        "name": "Trumpet Vine",
+            "scientificName": "Campsis radicans",
+                "description": "The Trumpet Vine is a vigorous climber with orange trumpet-shaped flowers.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 10,
+                            "idealTempMax": 35,
+                                "minHumidity": 40,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "50 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Hummingbird magnet",
+                                                    "Fast growing"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "20+ Years"
+},
+{
+    "id": "mock_465",
+        "name": "Virginia Creeper",
+            "scientificName": "Parthenocissus quinquefolia",
+                "description": "The Virginia Creeper is a native vine with five-leaflet leaves turning red in fall.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 7,
+                            "idealTempMax": 30,
+                                "minHumidity": 40,
+                                    "sunlight": "Sun to Shade",
+                                        "oxygenLevel": "45 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Fall color",
+                                                    "Wildlife food"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "20+ Years"
+},
+{
+    "id": "mock_466",
+        "name": "Boston Ivy",
+            "scientificName": "Parthenocissus tricuspidata",
+                "description": "The Boston Ivy is a clinging vine with three-lobed leaves and brilliant fall color.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 10,
+                            "idealTempMax": 30,
+                                "minHumidity": 40,
+                                    "sunlight": "Sun to Part Shade",
+                                        "oxygenLevel": "50 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Wall coverage",
+                                                    "Fall color"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "20+ Years"
+},
+{
+    "id": "mock_467",
+        "name": "Passionflower",
+            "scientificName": "Passiflora incarnata",
+                "description": "The Passionflower is an exotic vine with intricate purple and white flowers.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 15,
+                            "idealTempMax": 30,
+                                "minHumidity": 50,
+                                    "sunlight": "Full Sun",
+                                        "oxygenLevel": "35 L/day",
+                                            "medicinalValues": [
+                                                "Anxiety relief",
+                                                "Sleep aid"
+                                            ],
+                                                "advantages": [
+                                                    "Unique flowers",
+                                                    "Edible fruit"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "5-10 Years"
+},
+{
+    "id": "mock_468",
+        "name": "Climbing Hydrangea",
+            "scientificName": "Hydrangea anomala petiolaris",
+                "description": "The Climbing Hydrangea is a woody vine with white lace-cap flowers and peeling bark.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 10,
+                            "idealTempMax": 27,
+                                "minHumidity": 50,
+                                    "sunlight": "Part Shade to Sun",
+                                        "oxygenLevel": "55 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Shade tolerant",
+                                                    "Fragrant flowers"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "50+ Years"
+},
+{
+    "id": "mock_469",
+        "name": "Coral Bells",
+            "scientificName": "Heuchera sanguinea",
+                "description": "The Coral Bells is a perennial with colorful foliage and delicate flower spikes.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 10,
+                            "idealTempMax": 27,
+                                "minHumidity": 40,
+                                    "sunlight": "Part Shade to Sun",
+                                        "oxygenLevel": "15 L/day",
+                                            "medicinalValues": [
+                                                "Astringent (traditional)"
+                                            ],
+                                                "advantages": [
+                                                    "Colorful foliage",
+                                                    "Shade tolerant"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "3-5 Years"
+},
+{
+    "id": "mock_470",
+        "name": "Hosta",
+            "scientificName": "Hosta species",
+                "description": "The Hosta is a shade-loving perennial with large decorative leaves and lavender flowers.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 10,
+                            "idealTempMax": 27,
+                                "minHumidity": 50,
+                                    "sunlight": "Shade to Part Shade",
+                                        "oxygenLevel": "20 L/day",
+                                            "medicinalValues": [
+                                                "Edible shoots"
+                                            ],
+                                                "advantages": [
+                                                    "Shade champion",
+                                                    "Low maintenance"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Perennial"
+},
+{
+    "id": "mock_471",
+        "name": "Astilbe",
+            "scientificName": "Astilbe chinensis",
+                "description": "The Astilbe is a shade perennial with feathery plume-like flowers in pink or white.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 10,
+                            "idealTempMax": 24,
+                                "minHumidity": 60,
+                                    "sunlight": "Part Shade to Shade",
+                                        "oxygenLevel": "18 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Shade bloomer",
+                                                    "Moisture loving"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Perennial"
+},
+{
+    "id": "mock_472",
+        "name": "Bleeding Heart",
+            "scientificName": "Lamprocapnos spectabilis",
+                "description": "The Bleeding Heart is a spring perennial with heart-shaped pink and white flowers.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 10,
+                            "idealTempMax": 24,
+                                "minHumidity": 50,
+                                    "sunlight": "Part Shade to Shade",
+                                        "oxygenLevel": "20 L/day",
+                                            "medicinalValues": [
+                                                "None (toxic)"
+                                            ],
+                                                "advantages": [
+                                                    "Unique flowers",
+                                                    "Shade loving"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Perennial"
+},
+{
+    "id": "mock_473",
+        "name": "Columbine",
+            "scientificName": "Aquilegia species",
+                "description": "The Columbine is a woodland perennial with spurred flowers in various colors.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 10,
+                            "idealTempMax": 27,
+                                "minHumidity": 40,
+                                    "sunlight": "Part Shade to Sun",
+                                        "oxygenLevel": "15 L/day",
+                                            "medicinalValues": [
+                                                "None (toxic)"
+                                            ],
+                                                "advantages": [
+                                                    "Hummingbird attractor",
+                                                    "Self-seeding"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "3-5 Years"
+},
+{
+    "id": "mock_474",
+        "name": "Lungwort",
+            "scientificName": "Pulmonaria officinalis",
+                "description": "The Lungwort is a shade perennial with spotted leaves and pink-to-blue flowers.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 10,
+                            "idealTempMax": 24,
+                                "minHumidity": 50,
+                                    "sunlight": "Shade to Part Shade",
+                                        "oxygenLevel": "12 L/day",
+                                            "medicinalValues": [
+                                                "Respiratory aid (traditional)"
+                                            ],
+                                                "advantages": [
+                                                    "Early bloomer",
+                                                    "Spotted foliage"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Perennial"
+},
+{
+    "id": "mock_475",
+        "name": "Hellebore",
+            "scientificName": "Helleborus orientalis",
+                "description": "The Hellebore is a winter-blooming perennial with nodding cup-shaped flowers.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 7,
+                            "idealTempMax": 24,
+                                "minHumidity": 50,
+                                    "sunlight": "Part Shade to Shade",
+                                        "oxygenLevel": "18 L/day",
+                                            "medicinalValues": [
+                                                "None (toxic)"
+                                            ],
+                                                "advantages": [
+                                                    "Winter blooms",
+                                                    "Evergreen"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Perennial"
+},
+{
+    "id": "mock_476",
+        "name": "Brunnera",
+            "scientificName": "Brunnera macrophylla",
+                "description": "The Brunnera is a Siberian bugloss with heart-shaped silver leaves and blue flowers.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 10,
+                            "idealTempMax": 24,
+                                "minHumidity": 50,
+                                    "sunlight": "Part Shade to Shade",
+                                        "oxygenLevel": "15 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Silver foliage",
+                                                    "Shade tolerant"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Perennial"
+},
+{
+    "id": "mock_477",
+        "name": "Ferns (Mixed)",
+            "scientificName": "Various species",
+                "description": "Ferns are ancient shade-loving plants with delicate fronds in various forms.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 10,
+                            "idealTempMax": 27,
+                                "minHumidity": 60,
+                                    "sunlight": "Shade to Part Shade",
+                                        "oxygenLevel": "25 L/day",
+                                            "medicinalValues": [
+                                                "Some edible fiddleheads"
+                                            ],
+                                                "advantages": [
+                                                    "Shade champion",
+                                                    "Low maintenance"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Perennial"
+},
+{
+    "id": "mock_478",
+        "name": "Ligularia",
+            "scientificName": "Ligularia dentata",
+                "description": "The Ligularia is a bold perennial with large leaves and yellow daisy-like flowers.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 10,
+                            "idealTempMax": 24,
+                                "minHumidity": 60,
+                                    "sunlight": "Part Shade",
+                                        "oxygenLevel": "30 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Bold foliage",
+                                                    "Moisture loving"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Perennial"
+},
+{
+    "id": "mock_479",
+        "name": "Rodgersia",
+            "scientificName": "Rodgersia pinnata",
+                "description": "The Rodgersia is a dramatic perennial with large compound leaves and pink flower plumes.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 10,
+                            "idealTempMax": 24,
+                                "minHumidity": 60,
+                                    "sunlight": "Part Shade to Shade",
+                                        "oxygenLevel": "35 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Architectural foliage",
+                                                    "Moisture loving"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Perennial"
+},
+{
+    "id": "mock_480",
+        "name": "Tiarella",
+            "scientificName": "Tiarella cordifolia",
+                "description": "The Tiarella is a foam flower with maple-like leaves and white flower spikes.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 10,
+                            "idealTempMax": 24,
+                                "minHumidity": 50,
+                                    "sunlight": "Shade to Part Shade",
+                                        "oxygenLevel": "12 L/day",
+                                            "medicinalValues": [
+                                                "Diuretic (traditional)"
+                                            ],
+                                                "advantages": [
+                                                    "Groundcover",
+                                                    "Native plant"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Perennial"
+},
+{
+    "id": "mock_481",
+        "name": "Epimedium",
+            "scientificName": "Epimedium grandiflorum",
+                "description": "The Epimedium is a barrenwort with heart-shaped leaves and delicate spurred flowers.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 10,
+                            "idealTempMax": 24,
+                                "minHumidity": 50,
+                                    "sunlight": "Shade to Part Shade",
+                                        "oxygenLevel": "10 L/day",
+                                            "medicinalValues": [
+                                                "Libido enhancer (traditional)"
+                                            ],
+                                                "advantages": [
+                                                    "Dry shade tolerant",
+                                                    "Groundcover"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Perennial"
+},
+{
+    "id": "mock_482",
+        "name": "Solomon\u0027s Seal",
+            "scientificName": "Polygonatum biflorum",
+                "description": "The Solomon\u0027s Seal is a woodland perennial with arching stems and hanging white bells.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 10,
+                            "idealTempMax": 24,
+                                "minHumidity": 50,
+                                    "sunlight": "Shade to Part Shade",
+                                        "oxygenLevel": "15 L/day",
+                                            "medicinalValues": [
+                                                "Joint health (traditional)"
+                                            ],
+                                                "advantages": [
+                                                    "Graceful form",
+                                                    "Native plant"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Perennial"
+},
+{
+    "id": "mock_483",
+        "name": "Trillium",
+            "scientificName": "Trillium grandiflorum",
+                "description": "The Trillium is a spring wildflower with three-petaled white flowers and three leaves.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 7,
+                            "idealTempMax": 21,
+                                "minHumidity": 50,
+                                    "sunlight": "Shade to Part Shade",
+                                        "oxygenLevel": "10 L/day",
+                                            "medicinalValues": [
+                                                "Childbirth aid (traditional)"
+                                            ],
+                                                "advantages": [
+                                                    "Native wildflower",
+                                                    "Spring ephemeral"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Perennial"
+},
+{
+    "id": "mock_484",
+        "name": "Jack-in-the-Pulpit",
+            "scientificName": "Arisaema triphyllum",
+                "description": "The Jack-in-the-Pulpit is a unique woodland plant with a hooded flower and red berries.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 10,
+                            "idealTempMax": 24,
+                                "minHumidity": 60,
+                                    "sunlight": "Shade to Part Shade",
+                                        "oxygenLevel": "12 L/day",
+                                            "medicinalValues": [
+                                                "None (toxic raw)"
+                                            ],
+                                                "advantages": [
+                                                    "Unique appearance",
+                                                    "Native plant"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Perennial"
+},
+{
+    "id": "mock_485",
+        "name": "Wild Ginger",
+            "scientificName": "Asarum canadense",
+                "description": "The Wild Ginger is a groundcover with heart-shaped leaves and hidden maroon flowers.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 10,
+                            "idealTempMax": 24,
+                                "minHumidity": 60,
+                                    "sunlight": "Shade",
+                                        "oxygenLevel": "10 L/day",
+                                            "medicinalValues": [
+                                                "Ginger substitute (root)"
+                                            ],
+                                                "advantages": [
+                                                    "Dense groundcover",
+                                                    "Native plant"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Perennial"
+},
+{
+    "id": "mock_486",
+        "name": "Bloodroot",
+            "scientificName": "Sanguinaria canadensis",
+                "description": "The Bloodroot is a spring ephemeral with white flowers and red-orange sap.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 7,
+                            "idealTempMax": 21,
+                                "minHumidity": 50,
+                                    "sunlight": "Part Shade to Shade",
+                                        "oxygenLevel": "8 L/day",
+                                            "medicinalValues": [
+                                                "Dental health (traditional)"
+                                            ],
+                                                "advantages": [
+                                                    "Early spring blooms",
+                                                    "Native wildflower"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Perennial"
+},
+{
+    "id": "mock_487",
+        "name": "Virginia Bluebells",
+            "scientificName": "Mertensia virginica",
+                "description": "The Virginia Bluebells are spring ephemerals with pink buds opening to blue bell flowers.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 10,
+                            "idealTempMax": 21,
+                                "minHumidity": 50,
+                                    "sunlight": "Part Shade to Shade",
+                                        "oxygenLevel": "15 L/day",
+                                            "medicinalValues": [
+                                                "None"
+                                            ],
+                                                "advantages": [
+                                                    "Spring color",
+                                                    "Native wildflower"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Perennial"
+},
+{
+    "id": "mock_488",
+        "name": "Mayapple",
+            "scientificName": "Podophyllum peltatum",
+                "description": "The Mayapple is a woodland plant with umbrella-like leaves and hidden white flowers.",
+                    "imageUrl": "https://images.unsplash.com/photo-1558904541-efa843a96f01?auto=format\u0026fit=crop\u0026q=80",
+                        "idealTempMin": 10,
+                            "idealTempMax": 24,
+                                "minHumidity": 60,
+                                    "sunlight": "Shade to Part Shade",
+                                        "oxygenLevel": "18 L/day",
+                                            "medicinalValues": [
+                                                "Cancer research compound"
+                                            ],
+                                                "advantages": [
+                                                    "Groundcover",
+                                                    "Native plant"
+                                                ],
+                                                    "price": 25,
+                                                        "type": "outdoor",
+                                                            "lifespan": "Perennial"
+},
+"Count": 50
 ];
 
 module.exports = { indoorPlants, outdoorPlants };
