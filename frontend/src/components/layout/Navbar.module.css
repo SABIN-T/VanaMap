@@ -18,11 +18,11 @@
     /* Fixed compact height */
 }
 
-/* Light Mode Navbar - Premium Green Glass */
+/* Light Mode Navbar - Premium Black Glass */
 [data-theme='light'] .navbar {
-    background: rgba(255, 255, 255, 0.85);
-    border-bottom: 1px solid rgba(16, 185, 129, 0.15);
-    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.08);
+    background: rgba(15, 23, 42, 0.95);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 @media (min-width: 1024px) {
