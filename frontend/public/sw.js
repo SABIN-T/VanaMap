@@ -1,6 +1,6 @@
 // Service Worker for VanaMap - Offline & Fast Loading
-const CACHE_NAME = 'vanamap-v1';
-const RUNTIME_CACHE = 'vanamap-runtime-v1';
+const CACHE_NAME = 'vanamap-v2';
+const RUNTIME_CACHE = 'vanamap-runtime-v2';
 
 // Critical assets to cache immediately
 const PRECACHE_ASSETS = [
@@ -98,9 +98,24 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
-    // Static assets - Cache first
+    // Static assets - Network first for CSS, Cache first for others
+    if (request.destination === 'style') {
+        // CSS: Always fetch fresh, fallback to cache
+        event.respondWith(
+            fetch(request).then((response) => {
+                if (response.ok) {
+                    const responseClone = response.clone();
+                    caches.open(RUNTIME_CACHE).then((cache) => {
+                        cache.put(request, responseClone);
+                    });
+                }
+                return response;
+            }).catch(() => caches.match(request))
+        );
+        return;
+    }
+
     if (request.destination === 'image' ||
-        request.destination === 'style' ||
         request.destination === 'script' ||
         request.destination === 'font') {
         event.respondWith(
