@@ -53,60 +53,59 @@ html {
 }
 
 [data-theme='light'] {
-  /* Premium Botanical Green Theme - Enhanced Contrast */
-  /* UPDATED: Using soft mint green background like Auth page */
-  --color-bg: #d1f4e0;
-  /* Soft mint green - main background (matches Auth page) */
-  --color-bg-alt: #c7f0d8;
-  /* Slightly darker mint for variation */
+  /* Ink Wash Color Palette - Premium Minimalist Theme */
+  --color-bg: #FFFFE3;
+  /* Cream/Ivory - main background */
+  --color-bg-alt: #f5f5dc;
+  /* Slightly darker cream for variation */
   --color-bg-card: #ffffff;
-  /* Pure white cards for maximum contrast */
-  --color-bg-card-hover: #f0fdf4;
-  /* Very light mint on hover */
+  /* Pure white cards for contrast */
+  --color-bg-card-hover: #f8f8f0;
+  /* Very light cream on hover */
 
-  /* UPDATED: Much darker text colors for better readability */
-  --color-text-main: #064e3b;
-  /* Deep forest green - primary text (WCAG AAA compliant) */
-  --color-text-muted: #065f46;
-  /* Darker medium green - secondary text */
-  --color-text-dim: #047857;
-  /* Medium-dark green - tertiary text */
+  /* Text Colors - Dark Gray Hierarchy */
+  --color-text-main: #4A4A4A;
+  /* Dark gray - primary text */
+  --color-text-muted: #6b6b6b;
+  /* Medium gray - secondary text */
+  --color-text-dim: #8a8a8a;
+  /* Light gray - tertiary text */
 
-  --color-border: rgba(16, 185, 129, 0.15);
-  /* Soft green border */
+  --color-border: #CBCBCB;
+  /* Light gray border */
   --glass-bg: rgba(255, 255, 255, 0.95);
   /* Almost opaque white glass */
-  --glass-border: 1px solid rgba(16, 185, 129, 0.2);
-  /* Green-tinted glass border */
-  --glass-shadow: 0 20px 50px -12px rgba(16, 185, 129, 0.15);
-  /* Soft green shadow */
-  --card-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.1), 0 4px 6px -2px rgba(16, 185, 129, 0.05);
-  /* Green-tinted card shadow */
+  --glass-border: 1px solid #CBCBCB;
+  /* Light gray glass border */
+  --glass-shadow: 0 20px 50px -12px rgba(109, 129, 150, 0.15);
+  /* Soft slate blue shadow */
+  --card-shadow: 0 10px 15px -3px rgba(109, 129, 150, 0.1), 0 4px 6px -2px rgba(109, 129, 150, 0.05);
+  /* Slate blue-tinted card shadow */
 
-  /* Premium green accents for buttons and interactive elements */
-  --color-primary: #10b981;
-  /* Emerald for buttons */
-  --color-primary-hover: #059669;
-  /* Darker emerald on hover */
-  --color-accent-light: #34d399;
-  /* Light emerald accent */
+  /* Slate Blue accents for buttons and interactive elements */
+  --color-primary: #6D8196;
+  /* Slate blue for buttons */
+  --color-primary-hover: #5a6b7d;
+  /* Darker slate blue on hover */
+  --color-accent-light: #8a9fb4;
+  /* Light slate blue accent */
 
   /* Additional text colors for specific use cases */
-  --color-heading: #022c22;
-  /* Almost black green for headings */
-  --color-body: #064e3b;
-  /* Dark green for body text */
-  --color-label: #065f46;
-  /* Dark green for labels */
-  --color-placeholder: #6b7280;
-  /* Gray for placeholders */
+  --color-heading: #3a3a3a;
+  /* Almost black for headings */
+  --color-body: #4A4A4A;
+  /* Dark gray for body text */
+  --color-label: #6b6b6b;
+  /* Medium gray for labels */
+  --color-placeholder: #8a8a8a;
+  /* Light gray for placeholders */
 
-  --map-bg: #d1f4e0;
-  /* Soft mint for map background */
+  --map-bg: #FFFFE3;
+  /* Cream for map background */
   --map-popup-bg: #ffffff;
   /* White popups */
-  --map-popup-text: #064e3b;
-  /* Deep green text */
+  --map-popup-text: #4A4A4A;
+  /* Dark gray text */
 
   color-scheme: light;
 }
