@@ -9,7 +9,7 @@
     [data-theme='light'] .container,
     [data-theme='light'] .page-container,
     [data-theme='light'] .main-container {
-        background: #d1f4e0 !important;
+        background: #FFFFE3 !important;
     }
 
     /* All cards must be white on mobile */
@@ -26,8 +26,8 @@
     [data-theme='light'] .modal-content,
     [data-theme='light'] .popup-content {
         background: #ffffff !important;
-        border-color: rgba(16, 185, 129, 0.2) !important;
-        color: #064e3b !important;
+        border-color: rgba(109, 129, 150, 0.2) !important;
+        color: #4A4A4A !important;
     }
 
     /* Fix any dark overlays */
@@ -42,7 +42,7 @@
     [data-theme='light'] .section,
     [data-theme='light'] .block {
         background: #ffffff !important;
-        color: #064e3b !important;
+        color: #4A4A4A !important;
     }
 
     /* Fix any remaining dark backgrounds */
@@ -63,14 +63,14 @@
     [data-theme='light'] h6,
     [data-theme='light'] .title,
     [data-theme='light'] .heading {
-        color: #064e3b !important;
+        color: #4A4A4A !important;
     }
 
     [data-theme='light'] p,
     [data-theme='light'] span,
     [data-theme='light'] .text,
     [data-theme='light'] .description {
-        color: #065f46 !important;
+        color: #6b6b6b !important;
     }
 
     /* Fix labels and small text */
@@ -78,22 +78,22 @@
     [data-theme='light'] .label,
     [data-theme='light'] small,
     [data-theme='light'] .small-text {
-        color: #065f46 !important;
+        color: #6b6b6b !important;
     }
 
     /* Fix buttons on mobile */
     [data-theme='light'] button,
     [data-theme='light'] .btn {
-        background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+        background: linear-gradient(135deg, #6D8196 0%, #6D8196 100%) !important;
         color: #ffffff !important;
         border-color: transparent !important;
     }
 
     [data-theme='light'] button.secondary,
     [data-theme='light'] .btn-secondary {
-        background: rgba(16, 185, 129, 0.1) !important;
-        color: #065f46 !important;
-        border-color: rgba(16, 185, 129, 0.3) !important;
+        background: rgba(109, 129, 150, 0.1) !important;
+        color: #6b6b6b !important;
+        border-color: rgba(109, 129, 150, 0.3) !important;
     }
 
     /* Fix input fields on mobile */
@@ -101,15 +101,15 @@
     [data-theme='light'] textarea,
     [data-theme='light'] select {
         background: #ffffff !important;
-        color: #064e3b !important;
-        border-color: rgba(16, 185, 129, 0.2) !important;
+        color: #4A4A4A !important;
+        border-color: rgba(109, 129, 150, 0.2) !important;
     }
 
     /* Fix lists and items */
     [data-theme='light'] ul,
     [data-theme='light'] ol,
     [data-theme='light'] li {
-        color: #065f46 !important;
+        color: #6b6b6b !important;
     }
 
     /* Fix tables on mobile */
@@ -118,12 +118,12 @@
     }
 
     [data-theme='light'] th {
-        background: rgba(16, 185, 129, 0.08) !important;
-        color: #064e3b !important;
+        background: rgba(109, 129, 150, 0.08) !important;
+        color: #4A4A4A !important;
     }
 
     [data-theme='light'] td {
-        color: #065f46 !important;
+        color: #6b6b6b !important;
         background: #ffffff !important;
     }
 
@@ -132,24 +132,24 @@
     [data-theme='light'] .nav,
     [data-theme='light'] .navigation {
         background: rgba(255, 255, 255, 0.95) !important;
-        border-color: rgba(16, 185, 129, 0.15) !important;
+        border-color: rgba(109, 129, 150, 0.15) !important;
     }
 
     /* Fix footer on mobile */
     [data-theme='light'] footer,
     [data-theme='light'] .footer {
         background: rgba(255, 255, 255, 0.95) !important;
-        color: #065f46 !important;
-        border-top-color: rgba(16, 185, 129, 0.15) !important;
+        color: #6b6b6b !important;
+        border-top-color: rgba(109, 129, 150, 0.15) !important;
     }
 
     /* Fix badges and tags on mobile */
     [data-theme='light'] .badge,
     [data-theme='light'] .tag,
     [data-theme='light'] .chip {
-        background: rgba(16, 185, 129, 0.15) !important;
-        color: #065f46 !important;
-        border-color: rgba(16, 185, 129, 0.3) !important;
+        background: rgba(109, 129, 150, 0.15) !important;
+        color: #6b6b6b !important;
+        border-color: rgba(109, 129, 150, 0.3) !important;
     }
 
     /* Fix alerts on mobile */
@@ -157,8 +157,8 @@
     [data-theme='light'] .notification,
     [data-theme='light'] .toast {
         background: #ffffff !important;
-        color: #064e3b !important;
-        border-color: rgba(16, 185, 129, 0.2) !important;
+        color: #4A4A4A !important;
+        border-color: rgba(109, 129, 150, 0.2) !important;
     }
 
     /* Fix dropdown menus */
@@ -166,55 +166,55 @@
     [data-theme='light'] .menu,
     [data-theme='light'] .select-menu {
         background: #ffffff !important;
-        border-color: rgba(16, 185, 129, 0.2) !important;
+        border-color: rgba(109, 129, 150, 0.2) !important;
     }
 
     [data-theme='light'] .dropdown-item,
     [data-theme='light'] .menu-item {
-        color: #065f46 !important;
+        color: #6b6b6b !important;
     }
 
     [data-theme='light'] .dropdown-item:hover,
     [data-theme='light'] .menu-item:hover {
-        background: rgba(16, 185, 129, 0.1) !important;
-        color: #064e3b !important;
+        background: rgba(109, 129, 150, 0.1) !important;
+        color: #4A4A4A !important;
     }
 
     /* Fix loading states */
     [data-theme='light'] .loading,
     [data-theme='light'] .spinner,
     [data-theme='light'] .skeleton {
-        background: rgba(16, 185, 129, 0.1) !important;
+        background: rgba(109, 129, 150, 0.1) !important;
     }
 
     /* Fix empty states */
     [data-theme='light'] .empty-state,
     [data-theme='light'] .no-results {
         background: #ffffff !important;
-        color: #065f46 !important;
+        color: #6b6b6b !important;
     }
 
     /* Fix icons to be visible */
     [data-theme='light'] svg,
     [data-theme='light'] .icon {
-        color: #065f46 !important;
+        color: #6b6b6b !important;
     }
 
     /* Fix any remaining dark elements with inline styles */
     [data-theme='light'] [style*="color: rgb(255, 255, 255)"],
     [data-theme='light'] [style*="color: #fff"],
     [data-theme='light'] [style*="color: white"] {
-        color: #064e3b !important;
+        color: #4A4A4A !important;
     }
 
     [data-theme='light'] [style*="color: rgb(148, 163, 184)"],
     [data-theme='light'] [style*="color: #94a3b8"] {
-        color: #065f46 !important;
+        color: #6b6b6b !important;
     }
 
     [data-theme='light'] [style*="color: rgb(100, 116, 139)"],
     [data-theme='light'] [style*="color: #64748b"] {
-        color: #065f46 !important;
+        color: #6b6b6b !important;
     }
 }
 
@@ -224,23 +224,23 @@
 [data-theme='light'] .scan-result,
 [data-theme='light'] .analysis-result {
     background: #ffffff !important;
-    border: 1px solid rgba(16, 185, 129, 0.2) !important;
-    color: #064e3b !important;
+    border: 1px solid rgba(109, 129, 150, 0.2) !important;
+    color: #4A4A4A !important;
 }
 
 [data-theme='light'] .result-title,
 [data-theme='light'] .detection-title {
-    color: #064e3b !important;
+    color: #4A4A4A !important;
 }
 
 [data-theme='light'] .result-description,
 [data-theme='light'] .detection-info {
-    color: #065f46 !important;
+    color: #6b6b6b !important;
 }
 
 [data-theme='light'] .confidence-score,
 [data-theme='light'] .accuracy-indicator {
-    color: #10b981 !important;
+    color: #6D8196 !important;
 }
 
 /* Fix for any glassmorphism that might look dark */
@@ -259,7 +259,7 @@
     [data-theme='light'] .drawer,
     [data-theme='light'] .slide-up {
         background: #ffffff !important;
-        color: #064e3b !important;
+        color: #4A4A4A !important;
     }
 
     /* Fix action sheets */
@@ -269,11 +269,11 @@
     }
 
     [data-theme='light'] .action-item {
-        color: #065f46 !important;
+        color: #6b6b6b !important;
     }
 
     [data-theme='light'] .action-item:active {
-        background: rgba(16, 185, 129, 0.1) !important;
+        background: rgba(109, 129, 150, 0.1) !important;
     }
 }
 
@@ -281,67 +281,67 @@
 [data-theme='light'] .install-prompt,
 [data-theme='light'] .pwa-banner {
     background: #ffffff !important;
-    border-color: rgba(16, 185, 129, 0.2) !important;
-    color: #064e3b !important;
+    border-color: rgba(109, 129, 150, 0.2) !important;
+    color: #4A4A4A !important;
 }
 
 /* Fix for any tooltips */
 [data-theme='light'] .tooltip,
 [data-theme='light'] .popover {
     background: #ffffff !important;
-    color: #064e3b !important;
-    border: 1px solid rgba(16, 185, 129, 0.2) !important;
-    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.15) !important;
+    color: #4A4A4A !important;
+    border: 1px solid rgba(109, 129, 150, 0.2) !important;
+    box-shadow: 0 8px 24px rgba(109, 129, 150, 0.15) !important;
 }
 
 /* Fix for progress bars */
 [data-theme='light'] .progress-bar,
 [data-theme='light'] .progress-track {
-    background: rgba(16, 185, 129, 0.1) !important;
+    background: rgba(109, 129, 150, 0.1) !important;
 }
 
 [data-theme='light'] .progress-fill {
-    background: linear-gradient(90deg, #10b981 0%, #059669 100%) !important;
+    background: linear-gradient(90deg, #6D8196 0%, #6D8196 100%) !important;
 }
 
 /* Fix for switches and toggles */
 [data-theme='light'] .switch,
 [data-theme='light'] .toggle {
-    background: rgba(16, 185, 129, 0.2) !important;
+    background: rgba(109, 129, 150, 0.2) !important;
 }
 
 [data-theme='light'] .switch.active,
 [data-theme='light'] .toggle.active {
-    background: #10b981 !important;
+    background: #6D8196 !important;
 }
 
 /* Fix for tabs */
 [data-theme='light'] .tabs,
 [data-theme='light'] .tab-list {
-    background: rgba(16, 185, 129, 0.05) !important;
-    border-color: rgba(16, 185, 129, 0.15) !important;
+    background: rgba(109, 129, 150, 0.05) !important;
+    border-color: rgba(109, 129, 150, 0.15) !important;
 }
 
 [data-theme='light'] .tab {
-    color: #065f46 !important;
+    color: #6b6b6b !important;
 }
 
 [data-theme='light'] .tab.active {
     background: #ffffff !important;
-    color: #064e3b !important;
+    color: #4A4A4A !important;
 }
 
 /* Fix for accordions */
 [data-theme='light'] .accordion,
 [data-theme='light'] .collapsible {
     background: #ffffff !important;
-    border-color: rgba(16, 185, 129, 0.15) !important;
+    border-color: rgba(109, 129, 150, 0.15) !important;
 }
 
 [data-theme='light'] .accordion-header {
-    color: #064e3b !important;
+    color: #4A4A4A !important;
 }
 
 [data-theme='light'] .accordion-content {
-    color: #065f46 !important;
+    color: #6b6b6b !important;
 }

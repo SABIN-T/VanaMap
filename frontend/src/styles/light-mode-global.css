@@ -1,6 +1,6 @@
 /* ============================================
    COMPREHENSIVE LIGHT MODE STYLES
-   Premium Green Botanical Theme
+   Ink Wash Minimalist Theme
    ============================================ */
 
 /* ============================================
@@ -8,50 +8,50 @@
    ============================================ */
 
 [data-theme='light'] .homeContainer {
-    background: #d1f4e0;
-    color: #064e3b;
+    background: #FFFFE3;
+    color: #4A4A4A;
 }
 
 [data-theme='light'] .hero {
-    background: #d1f4e0;
+    background: #FFFFE3;
     background-image: none;
 }
 
 [data-theme='light'] .heroTitle {
-    background: linear-gradient(135deg, #022c22 0%, #064e3b 100%);
+    background: linear-gradient(135deg, #3a3a3a 0%, #4A4A4A 100%);
     -webkit-background-clip: text;
     background-clip: text;
 }
 
 [data-theme='light'] .heroSubtitle {
-    color: #065f46;
+    color: #6b6b6b;
 }
 
 [data-theme='light'] .heroBadge {
-    background: rgba(16, 185, 129, 0.15);
-    color: #065f46;
-    border-color: rgba(16, 185, 129, 0.3);
+    background: rgba(109, 129, 150, 0.15);
+    color: #6b6b6b;
+    border-color: rgba(109, 129, 150, 0.3);
 }
 
 [data-theme='light'] .actionContainer {
     background: rgba(255, 255, 255, 0.9);
-    border-color: rgba(16, 185, 129, 0.2);
-    box-shadow: 0 25px 50px -12px rgba(16, 185, 129, 0.15);
+    border-color: rgba(109, 129, 150, 0.2);
+    box-shadow: 0 25px 50px -12px rgba(109, 129, 150, 0.15);
 }
 
 [data-theme='light'] .searchBox {
-    background: rgba(16, 185, 129, 0.05);
-    border-color: rgba(16, 185, 129, 0.2);
+    background: rgba(109, 129, 150, 0.05);
+    border-color: rgba(109, 129, 150, 0.2);
 }
 
 [data-theme='light'] .searchBox:focus-within {
     background: rgba(255, 255, 255, 0.95);
-    border-color: #10b981;
-    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
+    border-color: #6D8196;
+    box-shadow: 0 0 0 4px rgba(109, 129, 150, 0.15);
 }
 
 [data-theme='light'] .searchInput {
-    color: #064e3b;
+    color: #4A4A4A;
 }
 
 [data-theme='light'] .searchInput::placeholder {
@@ -59,37 +59,37 @@
 }
 
 [data-theme='light'] .searchIcon {
-    color: #065f46;
+    color: #6b6b6b;
 }
 
 [data-theme='light'] .suggestionsList {
     background: #ffffff;
-    border-color: rgba(16, 185, 129, 0.2);
-    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.2);
+    border-color: rgba(109, 129, 150, 0.2);
+    box-shadow: 0 10px 30px rgba(109, 129, 150, 0.2);
 }
 
 [data-theme='light'] .suggestionItem {
-    color: #064e3b;
+    color: #4A4A4A;
 }
 
 [data-theme='light'] .suggestionItem:hover {
-    background: rgba(16, 185, 129, 0.15);
-    color: #022c22;
+    background: rgba(109, 129, 150, 0.15);
+    color: #3a3a3a;
 }
 
 [data-theme='light'] .divider span {
-    color: #065f46;
+    color: #6b6b6b;
 }
 
 [data-theme='light'] .ghostBtn {
-    border-color: rgba(16, 185, 129, 0.2) !important;
-    color: #047857 !important;
+    border-color: rgba(109, 129, 150, 0.2) !important;
+    color: #6b6b6b !important;
 }
 
 [data-theme='light'] .ghostBtn:hover {
-    background: rgba(16, 185, 129, 0.1) !important;
-    color: #064e3b !important;
-    border-color: rgba(16, 185, 129, 0.3) !important;
+    background: rgba(109, 129, 150, 0.1) !important;
+    color: #4A4A4A !important;
+    border-color: rgba(109, 129, 150, 0.3) !important;
 }
 
 /* Weather Cards & Explainer */
@@ -99,20 +99,20 @@
 [data-theme='light'] .statsCard,
 [data-theme='light'] .card {
     background: #ffffff !important;
-    border-color: rgba(16, 185, 129, 0.2) !important;
-    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.1) !important;
+    border-color: rgba(109, 129, 150, 0.2) !important;
+    box-shadow: 0 10px 30px rgba(109, 129, 150, 0.1) !important;
 }
 
 [data-theme='light'] .weatherTitle,
 [data-theme='light'] .explainerTitle,
 [data-theme='light'] .cardTitle {
-    color: #064e3b !important;
+    color: #4A4A4A !important;
 }
 
 [data-theme='light'] .weatherDesc,
 [data-theme='light'] .explainerDesc,
 [data-theme='light'] .cardDesc {
-    color: #065f46 !important;
+    color: #6b6b6b !important;
 }
 
 /* ============================================
@@ -120,21 +120,21 @@
    ============================================ */
 
 [data-theme='light'] .shopsContainer {
-    background: #d1f4e0;
-    color: #064e3b;
+    background: #FFFFE3;
+    color: #4A4A4A;
 }
 
 [data-theme='light'] .filterCard,
 [data-theme='light'] .plantCard {
     background: #ffffff;
-    border-color: rgba(16, 185, 129, 0.15);
-    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.08);
+    border-color: rgba(109, 129, 150, 0.15);
+    box-shadow: 0 4px 15px rgba(109, 129, 150, 0.08);
 }
 
 [data-theme='light'] .filterCard:hover,
 [data-theme='light'] .plantCard:hover {
-    border-color: rgba(16, 185, 129, 0.3);
-    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.15);
+    border-color: rgba(109, 129, 150, 0.3);
+    box-shadow: 0 8px 25px rgba(109, 129, 150, 0.15);
 }
 
 /* ============================================
@@ -142,18 +142,18 @@
    ============================================ */
 
 [data-theme='light'] .cartContainer {
-    background: #d1f4e0;
+    background: #FFFFE3;
 }
 
 [data-theme='light'] .cartItem {
     background: #ffffff;
-    border-color: rgba(16, 185, 129, 0.15);
+    border-color: rgba(109, 129, 150, 0.15);
 }
 
 [data-theme='light'] .cartSummary {
     background: #ffffff;
-    border-color: rgba(16, 185, 129, 0.2);
-    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.1);
+    border-color: rgba(109, 129, 150, 0.2);
+    box-shadow: 0 10px 30px rgba(109, 129, 150, 0.1);
 }
 
 /* ============================================
@@ -161,13 +161,13 @@
    ============================================ */
 
 [data-theme='light'] .container {
-    background: #d1f4e0;
-    color: #064e3b;
+    background: #FFFFE3;
+    color: #4A4A4A;
 }
 
 [data-theme='light'] .header {
     background: #ffffff;
-    border-bottom-color: rgba(16, 185, 129, 0.15);
+    border-bottom-color: rgba(109, 129, 150, 0.15);
 }
 
 [data-theme='light'] .chatContainer {
@@ -176,17 +176,17 @@
 
 [data-theme='light'] .message {
     background: #ffffff;
-    border-color: rgba(16, 185, 129, 0.15);
+    border-color: rgba(109, 129, 150, 0.15);
 }
 
 [data-theme='light'] .userMessage {
-    background: rgba(16, 185, 129, 0.1);
-    border-color: rgba(16, 185, 129, 0.25);
+    background: rgba(109, 129, 150, 0.1);
+    border-color: rgba(109, 129, 150, 0.25);
 }
 
 [data-theme='light'] .inputContainer {
     background: #ffffff;
-    border-top-color: rgba(16, 185, 129, 0.15);
+    border-top-color: rgba(109, 129, 150, 0.15);
 }
 
 /* ============================================
@@ -194,13 +194,13 @@
    ============================================ */
 
 [data-theme='light'] .heavenContainer {
-    background: #d1f4e0;
+    background: #FFFFE3;
 }
 
 [data-theme='light'] .gameCard {
     background: #ffffff;
-    border-color: rgba(16, 185, 129, 0.2);
-    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.1);
+    border-color: rgba(109, 129, 150, 0.2);
+    box-shadow: 0 10px 30px rgba(109, 129, 150, 0.1);
 }
 
 /* ============================================
@@ -208,17 +208,17 @@
    ============================================ */
 
 [data-theme='light'] .nearbyContainer {
-    background: #d1f4e0;
+    background: #FFFFE3;
 }
 
 [data-theme='light'] .vendorCard {
     background: #ffffff;
-    border-color: rgba(16, 185, 129, 0.15);
+    border-color: rgba(109, 129, 150, 0.15);
 }
 
 [data-theme='light'] .vendorCard:hover {
-    border-color: rgba(16, 185, 129, 0.3);
-    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.15);
+    border-color: rgba(109, 129, 150, 0.3);
+    box-shadow: 0 8px 25px rgba(109, 129, 150, 0.15);
 }
 
 /* ============================================
@@ -226,17 +226,17 @@
    ============================================ */
 
 [data-theme='light'] .premiumContainer {
-    background: #d1f4e0;
+    background: #FFFFE3;
 }
 
 [data-theme='light'] .pricingCard {
     background: #ffffff;
-    border-color: rgba(16, 185, 129, 0.2);
+    border-color: rgba(109, 129, 150, 0.2);
 }
 
 [data-theme='light'] .featuredCard {
-    border-color: #10b981;
-    box-shadow: 0 20px 50px rgba(16, 185, 129, 0.2);
+    border-color: #6D8196;
+    box-shadow: 0 20px 50px rgba(109, 129, 150, 0.2);
 }
 
 /* ============================================
@@ -244,17 +244,17 @@
    ============================================ */
 
 [data-theme='light'] .dashboardContainer {
-    background: #d1f4e0;
+    background: #FFFFE3;
 }
 
 [data-theme='light'] .statsCard {
     background: #ffffff;
-    border-color: rgba(16, 185, 129, 0.15);
+    border-color: rgba(109, 129, 150, 0.15);
 }
 
 [data-theme='light'] .activityItem {
     background: #ffffff;
-    border-color: rgba(16, 185, 129, 0.1);
+    border-color: rgba(109, 129, 150, 0.1);
 }
 
 /* ============================================
@@ -262,12 +262,12 @@
    ============================================ */
 
 [data-theme='light'] .vendorContainer {
-    background: #d1f4e0;
+    background: #FFFFE3;
 }
 
 [data-theme='light'] .inventoryCard {
     background: #ffffff;
-    border-color: rgba(16, 185, 129, 0.15);
+    border-color: rgba(109, 129, 150, 0.15);
 }
 
 /* ============================================
@@ -276,28 +276,28 @@
 
 [data-theme='light'] .plantCard {
     background: #ffffff;
-    border-color: rgba(16, 185, 129, 0.15);
-    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.08);
+    border-color: rgba(109, 129, 150, 0.15);
+    box-shadow: 0 4px 15px rgba(109, 129, 150, 0.08);
 }
 
 [data-theme='light'] .plantCard:hover {
-    border-color: rgba(16, 185, 129, 0.3);
-    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.15);
+    border-color: rgba(109, 129, 150, 0.3);
+    box-shadow: 0 10px 30px rgba(109, 129, 150, 0.15);
     transform: translateY(-4px);
 }
 
 [data-theme='light'] .plantName {
-    color: #064e3b;
+    color: #4A4A4A;
 }
 
 [data-theme='light'] .plantPrice {
-    color: #059669;
+    color: #6D8196;
 }
 
 [data-theme='light'] .plantTag {
-    background: rgba(16, 185, 129, 0.1);
-    color: #047857;
-    border-color: rgba(16, 185, 129, 0.2);
+    background: rgba(109, 129, 150, 0.1);
+    color: #6b6b6b;
+    border-color: rgba(109, 129, 150, 0.2);
 }
 
 /* ============================================
@@ -310,20 +310,20 @@
 
 [data-theme='light'] .modalContent {
     background: #ffffff;
-    border-color: rgba(16, 185, 129, 0.2);
-    box-shadow: 0 25px 60px rgba(16, 185, 129, 0.2);
+    border-color: rgba(109, 129, 150, 0.2);
+    box-shadow: 0 25px 60px rgba(109, 129, 150, 0.2);
 }
 
 [data-theme='light'] .modalHeader {
-    border-bottom-color: rgba(16, 185, 129, 0.15);
+    border-bottom-color: rgba(109, 129, 150, 0.15);
 }
 
 [data-theme='light'] .modalTitle {
-    color: #064e3b;
+    color: #4A4A4A;
 }
 
 [data-theme='light'] .modalBody {
-    color: #047857;
+    color: #6b6b6b;
 }
 
 /* ============================================
@@ -332,17 +332,17 @@
 
 [data-theme='light'] .aboutContainer,
 [data-theme='light'] .contactContainer {
-    background: #d1f4e0;
+    background: #FFFFE3;
 }
 
 [data-theme='light'] .sectionCard {
     background: #ffffff;
-    border-color: rgba(16, 185, 129, 0.15);
+    border-color: rgba(109, 129, 150, 0.15);
 }
 
 [data-theme='light'] .teamMember {
     background: #ffffff;
-    border-color: rgba(16, 185, 129, 0.15);
+    border-color: rgba(109, 129, 150, 0.15);
 }
 
 /* ============================================
@@ -350,17 +350,17 @@
    ============================================ */
 
 [data-theme='light'] .adminContainer {
-    background: #d1f4e0;
+    background: #FFFFE3;
 }
 
 [data-theme='light'] .adminSidebar {
     background: #ffffff;
-    border-right-color: rgba(16, 185, 129, 0.15);
+    border-right-color: rgba(109, 129, 150, 0.15);
 }
 
 [data-theme='light'] .adminCard {
     background: #ffffff;
-    border-color: rgba(16, 185, 129, 0.15);
+    border-color: rgba(109, 129, 150, 0.15);
 }
 
 [data-theme='light'] .adminTable {
@@ -368,7 +368,7 @@
 }
 
 [data-theme='light'] .adminTableRow:hover {
-    background: rgba(16, 185, 129, 0.05);
+    background: rgba(109, 129, 150, 0.05);
 }
 
 /* ============================================
@@ -376,12 +376,12 @@
    ============================================ */
 
 [data-theme='light'] .gameContainer {
-    background: #d1f4e0;
+    background: #FFFFE3;
 }
 
 [data-theme='light'] .scoreCard {
     background: #ffffff;
-    border-color: rgba(16, 185, 129, 0.2);
+    border-color: rgba(109, 129, 150, 0.2);
 }
 
 /* ============================================
@@ -390,31 +390,31 @@
 
 [data-theme='light'] .glass {
     background: rgba(255, 255, 255, 0.85);
-    border-color: rgba(16, 185, 129, 0.2);
+    border-color: rgba(109, 129, 150, 0.2);
 }
 
 [data-theme='light'] .textPrimary {
-    color: #064e3b;
+    color: #4A4A4A;
 }
 
 [data-theme='light'] .textSecondary {
-    color: #047857;
+    color: #6b6b6b;
 }
 
 [data-theme='light'] .textMuted {
-    color: #059669;
+    color: #6D8196;
 }
 
 [data-theme='light'] .bgPrimary {
-    background: #10b981;
+    background: #6D8196;
 }
 
 [data-theme='light'] .bgSecondary {
-    background: #f0fdf4;
+    background: #f8f8f0;
 }
 
 [data-theme='light'] .borderPrimary {
-    border-color: rgba(16, 185, 129, 0.3);
+    border-color: rgba(109, 129, 150, 0.3);
 }
 
 /* ============================================
@@ -428,7 +428,7 @@
 [data-theme='light'] h4,
 [data-theme='light'] h5,
 [data-theme='light'] h6 {
-    color: #022c22 !important;
+    color: #3a3a3a !important;
 }
 
 [data-theme='light'] p,
@@ -442,42 +442,42 @@
 [data-theme='light'] .turquoise,
 [data-theme='light'] .info,
 [data-theme='light'] .highlight {
-    color: #065f46 !important;
+    color: #6b6b6b !important;
 }
 
 /* Weather and score indicators */
 [data-theme='light'] .score,
 [data-theme='light'] .percentage,
 [data-theme='light'] .metric {
-    color: #064e3b !important;
+    color: #4A4A4A !important;
 }
 
 /* Labels and descriptions */
 [data-theme='light'] .label,
 [data-theme='light'] .description,
 [data-theme='light'] .caption {
-    color: #065f46 !important;
+    color: #6b6b6b !important;
 }
 
 /* Status indicators */
 [data-theme='light'] .status,
 [data-theme='light'] .badge,
 [data-theme='light'] .tag {
-    color: #065f46 !important;
+    color: #6b6b6b !important;
 }
 
 /* Links should be visible */
 [data-theme='light'] a {
-    color: #059669 !important;
+    color: #6D8196 !important;
 }
 
 [data-theme='light'] a:hover {
-    color: #064e3b !important;
+    color: #4A4A4A !important;
 }
 
 /* Ensure all icon colors are visible */
 [data-theme='light'] svg {
-    color: #065f46;
+    color: #6b6b6b;
 }
 
 /* Fix any remaining light text */
@@ -485,5 +485,5 @@
 [data-theme='light'] .text-white,
 [data-theme='light'] .text-gray-400,
 [data-theme='light'] .text-gray-500 {
-    color: #064e3b !important;
+    color: #4A4A4A !important;
 }

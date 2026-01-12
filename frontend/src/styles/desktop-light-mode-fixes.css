@@ -17,9 +17,9 @@
 [data-theme='light'] .weatherCard,
 [data-theme='light'] .explainerGlass {
     background: #ffffff !important;
-    border: 1px solid rgba(16, 185, 129, 0.2) !important;
-    color: #064e3b !important;
-    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.08) !important;
+    border: 1px solid rgba(109, 129, 150, 0.2) !important;
+    color: #4A4A4A !important;
+    box-shadow: 0 4px 16px rgba(109, 129, 150, 0.08) !important;
 }
 
 /* Fix any dark panels/sections */
@@ -28,7 +28,7 @@
 [data-theme='light'] .block,
 [data-theme='light'] .widget {
     background: #ffffff !important;
-    color: #064e3b !important;
+    color: #4A4A4A !important;
 }
 
 /* Fix dark backgrounds with inline styles - Slate colors */
@@ -63,7 +63,7 @@
 [data-theme='light'] .card-title,
 [data-theme='light'] .section-label,
 [data-theme='light'] .label {
-    color: #065f46 !important;
+    color: #6b6b6b !important;
     opacity: 1 !important;
 }
 
@@ -72,20 +72,20 @@
 [data-theme='light'] .metric-value,
 [data-theme='light'] .stat-value,
 [data-theme='light'] .value {
-    color: #064e3b !important;
+    color: #4A4A4A !important;
 }
 
 /* Fix descriptions in cards */
 [data-theme='light'] .card-description,
 [data-theme='light'] .card-subtitle,
 [data-theme='light'] .description {
-    color: #065f46 !important;
+    color: #6b6b6b !important;
 }
 
 /* Fix buttons inside dark cards */
 [data-theme='light'] .card button,
 [data-theme='light'] .panel button {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+    background: linear-gradient(135deg, #6D8196 0%, #6D8196 100%) !important;
     color: #ffffff !important;
     border: none !important;
 }
@@ -93,14 +93,14 @@
 /* Fix links inside cards */
 [data-theme='light'] .card a,
 [data-theme='light'] .panel a {
-    color: #10b981 !important;
+    color: #6D8196 !important;
 }
 
 /* Fix icons in cards */
 [data-theme='light'] .card svg,
 [data-theme='light'] .card .icon,
 [data-theme='light'] .panel svg {
-    color: #10b981 !important;
+    color: #6D8196 !important;
 }
 
 /* Fix any text with light gray colors */
@@ -112,7 +112,7 @@
 [data-theme='light'] [style*="color: #cbd5e1"],
 [data-theme='light'] [style*="color: rgb(226, 232, 240)"],
 [data-theme='light'] [style*="color: #e2e8f0"] {
-    color: #065f46 !important;
+    color: #6b6b6b !important;
 }
 
 /* Fix white text */
@@ -121,7 +121,7 @@
 [data-theme='light'] [style*="color: white"],
 [data-theme='light'] [style*="color: #ffffff"],
 [data-theme='light'] [style*="color: #f8fafc"] {
-    color: #064e3b !important;
+    color: #4A4A4A !important;
 }
 
 /* Fix specific Home page elements */
@@ -133,14 +133,14 @@
 [data-theme='light'] .weatherCard,
 [data-theme='light'] .weather-card-item {
     background: #ffffff !important;
-    border-color: rgba(16, 185, 129, 0.2) !important;
+    border-color: rgba(109, 129, 150, 0.2) !important;
 }
 
 /* Fix location section */
 [data-theme='light'] .location-section,
 [data-theme='light'] .location-info {
     background: #ffffff !important;
-    color: #064e3b !important;
+    color: #4A4A4A !important;
 }
 
 /* Fix any glassmorphism that looks dark */
@@ -151,7 +151,7 @@
     background: rgba(255, 255, 255, 0.95) !important;
     backdrop-filter: blur(20px) !important;
     -webkit-backdrop-filter: blur(20px) !important;
-    border: 1px solid rgba(16, 185, 129, 0.15) !important;
+    border: 1px solid rgba(109, 129, 150, 0.15) !important;
 }
 
 /* Fix permissions button and similar dark buttons */
@@ -159,8 +159,8 @@
 [data-theme='light'] [class*="permission"],
 [data-theme='light'] .dark-btn {
     background: #ffffff !important;
-    color: #064e3b !important;
-    border: 1px solid rgba(16, 185, 129, 0.2) !important;
+    color: #4A4A4A !important;
+    border: 1px solid rgba(109, 129, 150, 0.2) !important;
 }
 
 /* Fix any elements with dark class names */
@@ -169,7 +169,7 @@
 [data-theme='light'] .bg-dark,
 [data-theme='light'] .dark-bg {
     background: #ffffff !important;
-    color: #064e3b !important;
+    color: #4A4A4A !important;
 }
 
 /* Fix slate/gray backgrounds */
@@ -187,29 +187,29 @@
 [data-theme='light'] .text-gray-400,
 [data-theme='light'] .text-gray-300,
 [data-theme='light'] .text-white {
-    color: #065f46 !important;
+    color: #6b6b6b !important;
 }
 
 /* Fix specific weather card elements */
 [data-theme='light'] .temperature-value,
 [data-theme='light'] .humidity-value,
 [data-theme='light'] .aqi-value {
-    color: #064e3b !important;
+    color: #4A4A4A !important;
     font-weight: 700 !important;
 }
 
 [data-theme='light'] .weather-label,
 [data-theme='light'] .metric-label {
-    color: #065f46 !important;
+    color: #6b6b6b !important;
     text-transform: uppercase !important;
 }
 
 /* Fix change location button */
 [data-theme='light'] .change-location-btn,
 [data-theme='light'] [class*="change-location"] {
-    background: rgba(16, 185, 129, 0.1) !important;
-    color: #10b981 !important;
-    border-color: rgba(16, 185, 129, 0.3) !important;
+    background: rgba(109, 129, 150, 0.1) !important;
+    color: #6D8196 !important;
+    border-color: rgba(109, 129, 150, 0.3) !important;
 }
 
 /* Fix air quality badge */
@@ -226,7 +226,7 @@
 }
 
 [data-theme='light'] .status-good {
-    color: #059669 !important;
+    color: #6D8196 !important;
 }
 
 [data-theme='light'] .status-bad {
