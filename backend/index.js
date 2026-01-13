@@ -303,26 +303,33 @@ const CommunicationOS = {
         const cleanPhone = phone.replace(/\D/g, '').slice(-10); // Extract last 10 digits for India
 
         if (process.env.FAST2SMS_API_KEY) {
-            return new Promise((resolve) => {
-                const unirest = require('unirest');
-                const req = unirest('POST', 'https://www.fast2sms.com/dev/bulkV2');
-                req.headers({ 'authorization': process.env.FAST2SMS_API_KEY });
-                req.form({
-                    'message': message,
-                    'language': 'english',
-                    'route': 'q', // 'q' = Quick, 'p' = Promotional, 't' = Transactional
-                    'numbers': cleanPhone
+            try {
+                const response = await fetch('https://www.fast2sms.com/dev/bulkV2', {
+                    method: 'POST',
+                    headers: {
+                        'authorization': process.env.FAST2SMS_API_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        'message': message,
+                        'language': 'english',
+                        'route': 'q',
+                        'numbers': cleanPhone
+                    })
                 });
-                req.end((res) => {
-                    if (res.error) {
-                        console.error('[CommOS] Fast2SMS Error:', res.error);
-                        resolve({ success: false, error: res.error });
-                    } else {
-                        console.log('[CommOS] Fast2SMS Sent:', res.body);
-                        resolve({ success: true, provider: 'Fast2SMS', data: res.body });
-                    }
-                });
-            });
+                const data = await response.json();
+
+                if (data.return) {
+                    console.log(`[CommOS] SMS Sent via Fast2SMS to ${cleanPhone}`);
+                    return { success: true, provider: 'Fast2SMS' };
+                } else {
+                    console.error('[CommOS] Fast2SMS API Error:', data);
+                    return { success: false, error: data.message };
+                }
+            } catch (err) {
+                console.error('[CommOS] Fast2SMS Network Error:', err.message);
+                return { success: false, error: err.message };
+            }
         } else {
             console.log(`[CommOS] 📱 SMS Simulation to ${phone}: "${message}"`);
             return { success: true, provider: 'Simulation' };
@@ -2091,12 +2098,20 @@ app.post('/api/vendors', auth, async (req, res) => {
         }
 
         // Allow frontend to specify ID (linking to User ID), fallback to timestamp if missing
+        // SECURITY: Strip sensitive fields that users shouldn't set
+        const safeBody = { ...req.body };
+        delete safeBody.verified;
+        delete safeBody.role;
+        delete safeBody.earnings;
+        delete safeBody.paymentDetails; // Payment details should be set via specific endpoint
+
         const itemData = {
-            id: "v" + Date.now(),
-            userId: req.user.id,
-            ownerEmail: user.email,
-            ...req.body
+            id: safeBody.id || ("v" + Date.now()),
+            ...safeBody,
+            userId: req.user.id, // FORCE correct user ID (cannot be overridden)
+            ownerEmail: user.email // FORCE correct email
         };
+
         const newVendor = new Vendor(itemData);
         await newVendor.save();
 
