@@ -2059,14 +2059,19 @@ app.get('/api/vendors', async (req, res) => {
 
 app.post('/api/vendors', auth, async (req, res) => {
     try {
+        console.log(`[Vendor Registration] Request from user ID: ${req.user.id}`);
+
         // Check if user has verified email or phone
-        const user = await User.findById(req.user.userId);
+        const user = await User.findById(req.user.id);
         if (!user) {
+            console.log(`[Vendor Registration] ❌ User not found for ID: ${req.user.id}`);
             return res.status(404).json({ error: 'User not found' });
         }
 
         // Require email OR phone verification before vendor registration
+        // Google Auth users are verified
         if (!user.emailVerified && !user.phoneVerified && !user.googleAuth) {
+            console.log(`[Vendor Registration] ❌ User verified check failed`);
             return res.status(403).json({
                 error: 'Verification required',
                 message: 'Please verify your email or phone number before registering as a vendor',
@@ -2077,7 +2082,7 @@ app.post('/api/vendors', auth, async (req, res) => {
         }
 
         // Check if user already has a vendor profile
-        const existingVendor = await Vendor.findOne({ userId: req.user.userId });
+        const existingVendor = await Vendor.findOne({ userId: req.user.id });
         if (existingVendor) {
             return res.status(400).json({
                 error: 'Vendor profile already exists',
@@ -2088,7 +2093,7 @@ app.post('/api/vendors', auth, async (req, res) => {
         // Allow frontend to specify ID (linking to User ID), fallback to timestamp if missing
         const itemData = {
             id: "v" + Date.now(),
-            userId: req.user.userId,
+            userId: req.user.id,
             ownerEmail: user.email,
             ...req.body
         };
@@ -2624,7 +2629,8 @@ app.post('/api/auth/signup',
             if (err.code === 11000) {
                 return res.status(400).json({ error: "Email or Phone already registered in our ecosystem." });
             }
-            res.status(500).json({ error: "Registration failed. Please try again later." });
+            // Return specific error message if available (e.g. from nodemailer)
+            res.status(500).json({ error: err.message || "Registration failed. Please try again later." });
         }
     });
 
