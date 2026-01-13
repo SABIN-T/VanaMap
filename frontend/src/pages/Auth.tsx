@@ -75,6 +75,68 @@ export const Auth = () => {
     };
 
 
+    // Auto-detect location when signup view is active
+    useEffect(() => {
+        if (view === 'signup' && !city && !state) {
+            // Auto-detect location on signup
+            const autoDetect = async () => {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(async (position) => {
+                        try {
+                            const { latitude, longitude } = position.coords;
+                            const response = await fetch(
+                                `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+                            );
+                            const data = await response.json();
+
+                            if (data.address) {
+                                // Set country
+                                const countryCode = data.address.country_code?.toUpperCase();
+                                if (countryCode) {
+                                    const countryObj = Country.getCountryByCode(countryCode);
+                                    if (countryObj) {
+                                        setSelectedCountry(countryObj);
+                                        setCountry(countryObj.name);
+                                        setPhoneCode(countryObj.phonecode);
+
+                                        // Set state
+                                        const stateName = data.address.state;
+                                        if (stateName) {
+                                            const states = State.getStatesOfCountry(countryObj.isoCode);
+                                            const foundState = states.find(s =>
+                                                s.name.toLowerCase().includes(stateName.toLowerCase()) ||
+                                                stateName.toLowerCase().includes(s.name.toLowerCase())
+                                            );
+                                            if (foundState) {
+                                                setSelectedState(foundState);
+                                                setState(foundState.name);
+                                            }
+                                        }
+                                    }
+                                }
+
+                                // Set city
+                                const cityVal = data.address.city || data.address.town || data.address.village || data.address.county || '';
+                                if (cityVal) setCity(cityVal);
+
+                                toast.success('📍 Location detected automatically!', { duration: 2000 });
+                            }
+                        } catch (error) {
+                            console.log('Auto-detect failed silently');
+                        }
+                    }, () => {
+                        // Silently fail if permission denied
+                        console.log('Location permission not granted');
+                    });
+                }
+            };
+
+            // Delay auto-detect by 1 second to avoid overwhelming the user
+            const timer = setTimeout(autoDetect, 1000);
+            return () => clearTimeout(timer);
+        }
+    }, [view, city, state]);
+
     useEffect(() => {
         if (user) {
             // Check if there is a pending redirect from a protected route
