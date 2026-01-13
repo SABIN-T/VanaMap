@@ -2127,10 +2127,15 @@ app.post('/api/vendors', auth, async (req, res) => {
     }
 });
 
-app.patch('/api/vendors/:id', auth, async (req, res) => {
+app.patch('/api/vendors/:id', auth, admin, async (req, res) => {
     try {
-        // Only admin or the vendor themselves should update, but for now we protect with auth
+        // Only admin can update vendor status
         const oldVendor = await Vendor.findOne({ id: req.params.id });
+
+        if (!oldVendor) {
+            return res.status(404).json({ error: 'Vendor not found' });
+        }
+
         const vendor = await Vendor.findOneAndUpdate({ id: req.params.id }, req.body, { new: true });
 
         if (!vendor) {
@@ -2214,9 +2219,19 @@ app.patch('/api/vendors/:id', auth, async (req, res) => {
 
 app.delete('/api/vendors/:id', auth, admin, async (req, res) => {
     try {
-        await Vendor.findOneAndDelete({ id: req.params.id });
-        res.json({ message: 'Deleted' });
+        const vendor = await Vendor.findOneAndDelete({ id: req.params.id });
+
+        if (!vendor) {
+            return res.status(404).json({ error: 'Vendor not found' });
+        }
+
+        // 🚀 PERFORMANCE: Invalidate cache
+        cache.del('all_vendors');
+
+        console.log(`[Vendor Delete] Successfully deleted vendor: ${vendor.name} (ID: ${req.params.id})`);
+        res.json({ message: 'Vendor deleted successfully', deletedVendor: vendor.name });
     } catch (err) {
+        console.error('[Vendor Delete] Error:', err);
         res.status(500).json({ error: err.message });
     }
 });
