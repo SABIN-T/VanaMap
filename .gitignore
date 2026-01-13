@@ -28,3 +28,16 @@ yarn-error.log*
 # OS
 .DS_Store
 Thumbs.db
+
+# Sensitive Documentation (Keep Private)
+SECURITY_AUDIT_REPORT.md
+SECURITY_FIXES_APPLIED.md
+VanaMap_Technical_Architecture.tex
+VanaMap_Technical_Architecture.pdf
+*_AUDIT*.md
+*_SECURITY*.md
+*.tex
+*.aux
+*.log
+*.out
+*.toc
