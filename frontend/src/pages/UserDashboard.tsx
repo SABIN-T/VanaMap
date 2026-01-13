@@ -95,6 +95,43 @@ export const UserDashboard = () => {
         getRank();
     }, [user]);
 
+    // Auto-detect location when Hall of Fame modal opens
+    useEffect(() => {
+        if (showLocationModal && !locForm.city && !locForm.state) {
+            const autoDetect = async () => {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(async (position) => {
+                        try {
+                            const { latitude, longitude } = position.coords;
+                            const response = await fetch(
+                                `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+                            );
+                            const data = await response.json();
+
+                            if (data.address) {
+                                const cityVal = data.address.city || data.address.town || data.address.village || data.address.county || '';
+                                const stateVal = data.address.state || '';
+
+                                if (cityVal) {
+                                    setLocForm({ city: cityVal, state: stateVal });
+                                    toast.success('📍 Location detected automatically!', { duration: 2000 });
+                                }
+                            }
+                        } catch (error) {
+                            console.log('Auto-detect failed silently');
+                        }
+                    }, () => {
+                        console.log('Location permission not granted');
+                    });
+                }
+            };
+
+            // Delay auto-detect by 500ms
+            const timer = setTimeout(autoDetect, 500);
+            return () => clearTimeout(timer);
+        }
+    }, [showLocationModal, locForm.city, locForm.state]);
+
     useEffect(() => {
         const loadVendorData = async () => {
             if (user?.role === 'vendor') {
@@ -539,7 +576,41 @@ export const UserDashboard = () => {
 
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', textAlign: 'left', marginBottom: '2rem' }}>
                             <div>
-                                <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#64748b', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Current City</label>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+                                    <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Current City</label>
+                                    <button
+                                        type="button"
+                                        onClick={async () => {
+                                            const tid = toast.loading("Detecting location...");
+                                            if (navigator.geolocation) {
+                                                navigator.geolocation.getCurrentPosition(async (position) => {
+                                                    try {
+                                                        const { latitude, longitude } = position.coords;
+                                                        const response = await fetch(
+                                                            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
+                                                        );
+                                                        const data = await response.json();
+
+                                                        if (data.address) {
+                                                            const cityVal = data.address.city || data.address.town || data.address.village || data.address.county || '';
+                                                            const stateVal = data.address.state || '';
+
+                                                            if (cityVal) setLocForm({ city: cityVal, state: stateVal });
+                                                            toast.success("Location detected!", { id: tid });
+                                                        }
+                                                    } catch {
+                                                        toast.error("Failed to detect address", { id: tid });
+                                                    }
+                                                }, () => toast.error("Permission denied", { id: tid }));
+                                            } else {
+                                                toast.error("Geolocation not supported", { id: tid });
+                                            }
+                                        }}
+                                        style={{ background: 'none', border: 'none', color: '#10b981', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}
+                                    >
+                                        📍 Auto-Detect
+                                    </button>
+                                </div>
                                 <input
                                     type="text"
                                     placeholder="e.g. New Delhi"
