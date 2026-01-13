@@ -90,7 +90,10 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({
     storage: storage,
-    limits: { fileSize: 100 * 1024 * 1024 }
+    limits: {
+        fileSize: 5 * 1024 * 1024,  // 5MB max (secure limit for plant images)
+        files: 1  // Single file per request
+    }
 });
 
 // --- AUTOMATED PREMIUM CHECK (Daily at Midnight) ---
@@ -632,6 +635,13 @@ const sensitiveLimiter = rateLimit({
     windowMs: 60 * 60 * 1000, // 1 hour
     max: 5, // Only 5 attempts per hour (e.g. for password resets or nudges)
     message: { error: "Security limit reached. Please wait an hour before trying again." }
+});
+
+// SECURE: OTP verification rate limiter
+const otpLimiter = rateLimit({
+    windowMs: 60 * 60 * 1000, // 1 hour
+    max: 3, // Only 3 OTP requests per hour
+    message: { error: "Too many OTP requests. Please wait an hour before trying again." }
 });
 
 // Generic Validation Handler
@@ -2512,7 +2522,7 @@ app.post('/api/auth/signup',
                 captchaText: otp // We reuse the 'captchaText' field to store the OTP for verification logic compatibility
             };
 
-            const registrationToken = jwt.sign(registrationData, process.env.JWT_SECRET || 'secret', { expiresIn: '15m' });
+            const registrationToken = jwt.sign(registrationData, JWT_SECRET, { expiresIn: '15m' });
 
             console.log(`[AUTH] Generated OTP for ${email || phone}: ${otp}`);
 
@@ -2535,7 +2545,7 @@ app.post('/api/auth/resend-otp', async (req, res) => {
         const { registrationToken } = req.body;
         if (!registrationToken) return res.status(400).json({ error: "Missing registration session" });
 
-        const decoded = jwt.verify(registrationToken, process.env.JWT_SECRET || 'secret');
+        const decoded = jwt.verify(registrationToken, JWT_SECRET);
 
         // Generate new 6-digit OTP
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
@@ -2545,7 +2555,7 @@ app.post('/api/auth/resend-otp', async (req, res) => {
         if (decoded.phone) await sendSmsOtp(decoded.phone, otp);
 
         const newRegistrationData = { ...decoded, captchaText: otp };
-        const newToken = jwt.sign(newRegistrationData, process.env.JWT_SECRET || 'secret', { expiresIn: '15m' });
+        const newToken = jwt.sign(newRegistrationData, JWT_SECRET, { expiresIn: '15m' });
 
         console.log(`[AUTH] Resent OTP for ${decoded.email || decoded.phone}: ${otp}`);
 
@@ -2565,7 +2575,7 @@ app.post('/api/auth/verify-otp', async (req, res) => {
         const { registrationToken, otp } = req.body;
         if (!registrationToken) return res.status(400).json({ error: "Missing registration session" });
 
-        const data = jwt.verify(registrationToken, process.env.JWT_SECRET || 'secret');
+        const data = jwt.verify(registrationToken, JWT_SECRET);
 
         if (data.captchaText !== otp) {
             return res.status(400).json({ error: "Invalid characters typed. Try again." });

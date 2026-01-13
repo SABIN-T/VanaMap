@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Mail, Inbox, Send, Archive, Search, Clock, CheckCircle2, AlertCircle, Trash2, RefreshCw } from 'lucide-react';
 import { Button } from '../../components/common/Button';
 import toast from 'react-hot-toast';
+import DOMPurify from 'dompurify';
 import styles from './SupportEmails.module.css';
 
 const API_URL = import.meta.env.VITE_API_URL || 'https://plantoxy.onrender.com/api';
@@ -313,7 +314,12 @@ export const SupportEmails = () => {
 
                         <div className={styles.emailContent}>
                             {selectedEmail.html ? (
-                                <div dangerouslySetInnerHTML={{ __html: selectedEmail.html }} />
+                                <div dangerouslySetInnerHTML={{
+                                    __html: DOMPurify.sanitize(selectedEmail.html, {
+                                        ALLOWED_TAGS: ['p', 'br', 'strong', 'em', 'ul', 'li', 'ol', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'a', 'span', 'div'],
+                                        ALLOWED_ATTR: ['href', 'target', 'rel']
+                                    })
+                                }} />
                             ) : (
                                 <pre>{selectedEmail.text}</pre>
                             )}
@@ -323,7 +329,12 @@ export const SupportEmails = () => {
                             <div className={styles.replySection}>
                                 <h4>Your Reply</h4>
                                 <div className={styles.replyContent}>
-                                    <div dangerouslySetInnerHTML={{ __html: selectedEmail.reply.message }} />
+                                    <div dangerouslySetInnerHTML={{
+                                        __html: DOMPurify.sanitize(selectedEmail.reply.message, {
+                                            ALLOWED_TAGS: ['p', 'br', 'strong', 'em', 'ul', 'li', 'ol'],
+                                            ALLOWED_ATTR: []
+                                        })
+                                    }} />
                                     <p className={styles.replyMeta}>
                                         Sent by {selectedEmail.reply.sentBy} on {new Date(selectedEmail.reply.sentAt).toLocaleString()}
                                     </p>
