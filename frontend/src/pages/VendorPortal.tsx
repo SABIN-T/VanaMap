@@ -178,7 +178,7 @@ export const VendorPortal = () => {
         };
         try {
             if (isEditing && existingVendorId) {
-                await updateVendor(existingVendorId, vendorData);
+                await updateVendor(existingVendorId, vendorData, true); // true = self-update
                 toast.success("Profile Updated!");
                 setShowSuccessStep(true);
             } else {

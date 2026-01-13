@@ -2219,6 +2219,49 @@ app.patch('/api/vendors/:id', auth, admin, async (req, res) => {
     }
 });
 
+// Vendor self-update endpoint (vendors can update their own profile)
+app.patch('/api/vendors/profile/:id', auth, async (req, res) => {
+    try {
+        // Verify the vendor is updating their own profile
+        if (!req.user) {
+            return res.status(401).json({ error: 'Authentication required' });
+        }
+
+        // Check if user is vendor and updating their own profile
+        const isOwnProfile = String(req.user.id) === String(req.params.id) ||
+            String(req.user._id) === String(req.params.id);
+
+        if (!isOwnProfile && req.user.role !== 'admin') {
+            return res.status(403).json({ error: 'You can only update your own profile' });
+        }
+
+        // Vendors cannot change their verification status
+        const allowedFields = { ...req.body };
+        delete allowedFields.verified; // Only admins can verify
+        delete allowedFields.role; // Cannot change role
+        delete allowedFields.id; // Cannot change ID
+
+        const vendor = await Vendor.findOneAndUpdate(
+            { id: req.params.id },
+            allowedFields,
+            { new: true }
+        );
+
+        if (!vendor) {
+            return res.status(404).json({ error: 'Vendor not found' });
+        }
+
+        // 🚀 PERFORMANCE: Invalidate cache
+        cache.del('all_vendors');
+
+        console.log(`[Vendor Self-Update] ✅ ${vendor.name} updated their profile`);
+        res.json(vendor);
+    } catch (err) {
+        console.error('[Vendor Self-Update] Error:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
 app.delete('/api/vendors/:id', auth, admin, async (req, res) => {
     try {
         const vendor = await Vendor.findOneAndDelete({ id: req.params.id });

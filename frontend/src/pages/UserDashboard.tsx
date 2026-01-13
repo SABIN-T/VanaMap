@@ -220,15 +220,15 @@ export const UserDashboard = () => {
                 verified: false
             };
 
-            const updated = await updateVendor(myVendor.id, updatePayload);
+            const updated = await updateVendor(myVendor.id, updatePayload, true); // true = self-update
             if (updated) {
                 toast.success("Profile submitted!", { id: tid });
                 setShowVendorModal(false);
             } else {
                 toast.error("Failed to update profile", { id: tid });
             }
-        } catch {
-            toast.error("Network error saving profile", { id: tid });
+        } catch (error: any) {
+            toast.error(error.message || "Network error saving profile", { id: tid });
         }
     };
 

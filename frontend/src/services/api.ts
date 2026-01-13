@@ -95,9 +95,12 @@ export const registerVendor = async (vendorData: Partial<Vendor>): Promise<Vendo
     }
 };
 
-export const updateVendor = async (id: string, updates: Partial<Vendor>): Promise<Vendor | null> => {
+export const updateVendor = async (id: string, updates: Partial<Vendor>, isSelfUpdate: boolean = false): Promise<Vendor | null> => {
     try {
-        const response = await fetch(`${API_URL}/vendors/${id}`, {
+        // Use different endpoint for vendor self-updates vs admin updates
+        const endpoint = isSelfUpdate ? `${API_URL}/vendors/profile/${id}` : `${API_URL}/vendors/${id}`;
+
+        const response = await fetch(endpoint, {
             method: 'PATCH',
             headers: getHeaders(),
             body: JSON.stringify(updates)
