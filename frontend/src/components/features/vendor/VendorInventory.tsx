@@ -132,7 +132,7 @@ export const VendorInventory = ({ vendor, onUpdate }: VendorInventoryProps) => {
 
         const tid = toast.loading("Securely saving...");
         try {
-            const success = await updateVendor(vendor.id, { inventory: newInventory });
+            const success = await updateVendor(vendor.id, { inventory: newInventory }, true);
             if (success) {
                 onUpdate();
                 // FORCE REFRESH LOGIC
@@ -157,7 +157,7 @@ export const VendorInventory = ({ vendor, onUpdate }: VendorInventoryProps) => {
 
         const tid = toast.loading("Removing...");
         try {
-            const success = await updateVendor(vendor.id, { inventory: newInventory });
+            const success = await updateVendor(vendor.id, { inventory: newInventory }, true);
             if (success) {
                 onUpdate();
                 sessionStorage.setItem('vendor_restore', JSON.stringify({
