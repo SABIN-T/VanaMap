@@ -399,20 +399,9 @@ const auth = (req, res, next) => {
 };
 
 const admin = (req, res, next) => {
-    console.log('[Admin Check] User:', req.user);
-    console.log('[Admin Check] Role:', req.user?.role);
-
-    if (!req.user) {
-        console.log('[Admin Check] ❌ No user in request');
-        return res.status(401).json({ error: 'Authentication required' });
-    }
-
-    if (req.user.role !== 'admin') {
-        console.log(`[Admin Check] ❌ Access denied for role: ${req.user.role}`);
+    if (!req.user || req.user.role !== 'admin') {
         return res.status(403).json({ error: 'Access denied. Admin only.' });
     }
-
-    console.log('[Admin Check] ✅ Admin access granted');
     next();
 };
 
