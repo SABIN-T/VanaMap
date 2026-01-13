@@ -2222,16 +2222,43 @@ app.patch('/api/vendors/:id', auth, admin, async (req, res) => {
 // Vendor self-update endpoint (vendors can update their own profile)
 app.patch('/api/vendors/profile/:id', auth, async (req, res) => {
     try {
+        console.log('[Vendor Self-Update] Request received');
+        console.log('[Vendor Self-Update] User:', req.user);
+        console.log('[Vendor Self-Update] Vendor ID param:', req.params.id);
+
         // Verify the vendor is updating their own profile
         if (!req.user) {
+            console.log('[Vendor Self-Update] ❌ No user in request');
             return res.status(401).json({ error: 'Authentication required' });
         }
 
-        // Check if user is vendor and updating their own profile
-        const isOwnProfile = String(req.user.id) === String(req.params.id) ||
-            String(req.user._id) === String(req.params.id);
+        // Try to find the vendor by multiple methods
+        let vendor = await Vendor.findOne({ id: req.params.id });
+
+        if (!vendor) {
+            // Try finding by ownerEmail
+            vendor = await Vendor.findOne({ ownerEmail: req.user.email });
+            console.log('[Vendor Self-Update] Vendor found by email:', !!vendor);
+        }
+
+        if (!vendor) {
+            console.log('[Vendor Self-Update] ❌ Vendor not found in database');
+            console.log('[Vendor Self-Update] Searched for ID:', req.params.id);
+            console.log('[Vendor Self-Update] Searched for email:', req.user.email);
+            return res.status(404).json({ error: 'Vendor not found' });
+        }
+
+        // Check if user is authorized to update this vendor
+        const isOwnProfile = String(req.user.id) === String(vendor.id) ||
+            String(req.user._id) === String(vendor.id) ||
+            req.user.email === vendor.ownerEmail;
 
         if (!isOwnProfile && req.user.role !== 'admin') {
+            console.log('[Vendor Self-Update] ❌ Not authorized');
+            console.log('[Vendor Self-Update] User ID:', req.user.id);
+            console.log('[Vendor Self-Update] Vendor ID:', vendor.id);
+            console.log('[Vendor Self-Update] User email:', req.user.email);
+            console.log('[Vendor Self-Update] Vendor email:', vendor.ownerEmail);
             return res.status(403).json({ error: 'You can only update your own profile' });
         }
 
@@ -2241,21 +2268,22 @@ app.patch('/api/vendors/profile/:id', auth, async (req, res) => {
         delete allowedFields.role; // Cannot change role
         delete allowedFields.id; // Cannot change ID
 
-        const vendor = await Vendor.findOneAndUpdate(
-            { id: req.params.id },
+        const updatedVendor = await Vendor.findOneAndUpdate(
+            { id: vendor.id },
             allowedFields,
             { new: true }
         );
 
-        if (!vendor) {
-            return res.status(404).json({ error: 'Vendor not found' });
+        if (!updatedVendor) {
+            console.log('[Vendor Self-Update] ❌ Update failed');
+            return res.status(404).json({ error: 'Failed to update vendor' });
         }
 
         // 🚀 PERFORMANCE: Invalidate cache
         cache.del('all_vendors');
 
-        console.log(`[Vendor Self-Update] ✅ ${vendor.name} updated their profile`);
-        res.json(vendor);
+        console.log(`[Vendor Self-Update] ✅ ${updatedVendor.name} updated their profile`);
+        res.json(updatedVendor);
     } catch (err) {
         console.error('[Vendor Self-Update] Error:', err);
         res.status(500).json({ error: err.message });
