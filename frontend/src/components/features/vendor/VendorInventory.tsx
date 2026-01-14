@@ -209,9 +209,13 @@ export const VendorInventory = ({ vendor, onUpdate }: VendorInventoryProps) => {
             const data = await res.json();
             if (data.success) {
                 await updateVendor(vendor.id, { shopImage: data.imageUrl }, true);
-                toast.success("Uploaded! Please wait for approval.", { id: tid });
+                toast.success("✓ Shop image saved permanently!", {
+                    id: tid,
+                    duration: 3000,
+                    icon: '🎉'
+                });
                 onUpdate();
-                setTimeout(() => window.location.reload(), 1000);
+                setTimeout(() => window.location.reload(), 1500);
             } else throw new Error(data.error);
         } catch (err: any) {
             console.error('[Shop Image Upload]', err);

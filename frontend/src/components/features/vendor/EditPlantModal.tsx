@@ -60,7 +60,11 @@ export const EditPlantModal = ({ plant, inventoryItem, onSave, onClose }: EditPl
             const data = await res.json();
             if (data.success) {
                 setCustomImages([...customImages, data.imageUrl]);
-                toast.success("Image uploaded", { id: tid });
+                toast.success("✓ Image saved permanently!", {
+                    id: tid,
+                    duration: 2000,
+                    icon: '📸'
+                });
             } else {
                 throw new Error(data.error);
             }
