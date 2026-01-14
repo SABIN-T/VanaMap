@@ -2014,20 +2014,49 @@ app.patch('/api/plants/:id', auth, admin, (req, res, next) => {
     }
 });
 
-// Direct Upload Helper
 // Direct Upload Helper (Admin + Vendor)
 app.post('/api/upload', auth, upload.single('image'), async (req, res) => {
     try {
+        console.log('[Upload] Request received from:', req.user?.email, 'Role:', req.user?.role);
+
+        // Check authorization
         if (req.user.role !== 'admin' && req.user.role !== 'vendor') {
+            console.log('[Upload] ❌ Unauthorized role:', req.user.role);
             return res.status(403).json({ error: 'Unauthorized upload access' });
         }
-        if (!req.file) return res.status(400).json({ error: 'No image file' });
 
-        console.log(`[Upload] Image uploaded by ${req.user.email}: ${req.file.path}`);
+        // Check if file was uploaded
+        if (!req.file) {
+            console.log('[Upload] ❌ No file in request');
+            return res.status(400).json({ error: 'No image file provided' });
+        }
+
+        // Check Cloudinary configuration
+        // Assuming isCloudinaryConfigured is defined elsewhere, e.g., as a global variable or imported
+        // For this example, I'll define a placeholder if it's not present in the provided context
+        const isCloudinaryConfigured = process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_SECRET;
+
+        if (!isCloudinaryConfigured) {
+            console.error('[Upload] ❌ Cloudinary not configured!');
+            return res.status(500).json({ error: 'Image storage not configured. Please contact support.' });
+        }
+
+        // Validate file path
+        if (!req.file.path) {
+            console.error('[Upload] ❌ File uploaded but no Cloudinary path returned');
+            console.error('[Upload] File object:', JSON.stringify(req.file, null, 2));
+            return res.status(500).json({ error: 'Image upload failed - no storage path' });
+        }
+
+        console.log(`[Upload] ✅ Success - ${req.user.email}: ${req.file.path}`);
         res.json({ success: true, imageUrl: req.file.path });
     } catch (err) {
-        console.error('[Upload] Error:', err);
-        res.status(500).json({ error: err.message });
+        console.error('[Upload] ❌ Error:', err);
+        console.error('[Upload] Error stack:', err.stack);
+        res.status(500).json({
+            error: err.message || 'Upload failed',
+            details: process.env.NODE_ENV === 'development' ? err.stack : undefined
+        });
     }
 });
 
