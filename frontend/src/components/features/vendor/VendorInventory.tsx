@@ -290,6 +290,35 @@ export const VendorInventory = ({ vendor, onUpdate }: VendorInventoryProps) => {
 
     return (
         <div className={styles.container}>
+            {/* Shop Profile Header */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', marginBottom: '2rem', padding: '1.5rem', background: 'rgba(30, 41, 59, 0.5)', borderRadius: '1rem', border: '1px solid #334155' }}>
+                <div style={{ position: 'relative', width: '80px', height: '80px' }}>
+                    <img
+                        src={vendor.shopImage || `https://ui-avatars.com/api/?name=${encodeURIComponent(vendor.name)}&background=random`}
+                        alt="Shop Logo"
+                        style={{ width: '100%', height: '100%', borderRadius: '50%', objectFit: 'cover', border: '2px solid #3b82f6' }}
+                    />
+                    <label style={{
+                        position: 'absolute', bottom: -4, right: -4,
+                        background: '#3b82f6', borderRadius: '50%', padding: '6px',
+                        cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        boxShadow: '0 4px 6px rgba(0,0,0,0.3)', border: '2px solid #1e293b'
+                    }} title="Update Shop Logo">
+                        <Upload size={14} color="white" />
+                        <input type="file" hidden accept="image/*" onChange={handleVerifyUpload} />
+                    </label>
+                </div>
+                <div>
+                    <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'white', marginBottom: '0.25rem' }}>{vendor.name}</h2>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                        <span style={{ padding: '0.25rem 0.75rem', background: 'rgba(16, 185, 129, 0.2)', color: '#10b981', borderRadius: '1rem', fontSize: '0.75rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}>
+                            <CheckCircle size={12} /> VERIFIED
+                        </span>
+                        <span style={{ color: '#94a3b8', fontSize: '0.9rem' }}>• {vendor.district || vendor.state || 'Location not set'}</span>
+                    </div>
+                </div>
+            </div>
+
             <div className={styles.header}>
                 <div className={styles.titleGroup}>
                     <h2 className={styles.title}>

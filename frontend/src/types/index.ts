@@ -36,6 +36,9 @@ export interface Vendor {
     latitude: number;
     longitude: number;
     address: string;
+    district?: string;
+    state?: string;
+    country?: string;
     phone: string;
     whatsapp: string;
     website?: string;
