@@ -53,7 +53,6 @@ export default defineConfig({
           'vendor-react': ['react', 'react-dom', 'react-router-dom'],
           'vendor-ui': ['lucide-react', 'react-hot-toast'],
           'vendor-leaflet': ['leaflet', 'react-leaflet'],
-          'vendor-3d': ['three', '@react-three/fiber', '@react-three/drei'],
           'vendor-canvas': ['html2canvas'],
           'country-data': ['country-state-city']
         }
