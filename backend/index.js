@@ -2015,6 +2015,23 @@ app.patch('/api/plants/:id', auth, admin, (req, res, next) => {
 });
 
 // Direct Upload Helper
+// Direct Upload Helper (Admin + Vendor)
+app.post('/api/upload', auth, upload.single('image'), async (req, res) => {
+    try {
+        if (req.user.role !== 'admin' && req.user.role !== 'vendor') {
+            return res.status(403).json({ error: 'Unauthorized upload access' });
+        }
+        if (!req.file) return res.status(400).json({ error: 'No image file' });
+
+        console.log(`[Upload] Image uploaded by ${req.user.email}: ${req.file.path}`);
+        res.json({ success: true, imageUrl: req.file.path });
+    } catch (err) {
+        console.error('[Upload] Error:', err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Legacy Endpoint (Redirect to above if possible, but keeping for compatibility)
 app.post('/api/plants/upload', auth, admin, upload.single('image'), async (req, res) => {
     try {
         if (!req.file) return res.status(400).json({ error: 'No image file' });
@@ -2309,6 +2326,20 @@ app.patch('/api/vendors/profile/:id', auth, async (req, res) => {
         if (!updatedVendor) {
             console.log('[Vendor Self-Update] ❌ Update failed');
             return res.status(404).json({ error: 'Failed to update vendor' });
+        }
+
+        // 🔄 SYNC: Update User Profile Image if Shop Image changed
+        if (allowedFields.shopImage) {
+            try {
+                const userQuery = vendor.userId ? { _id: vendor.userId } : { email: vendor.ownerEmail };
+                await User.updateOne(userQuery, {
+                    profileImage: allowedFields.shopImage,
+                    photoUrl: allowedFields.shopImage
+                });
+                console.log(`[Vendor Sync] Updated User profile image for ${vendor.ownerEmail}`);
+            } catch (syncErr) {
+                console.error('[Vendor Sync] Failed to sync user image:', syncErr);
+            }
         }
 
         // 🚀 PERFORMANCE: Invalidate cache

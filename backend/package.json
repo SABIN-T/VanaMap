@@ -39,6 +39,7 @@
     "resend": "^6.6.0",
     "rss-parser": "^3.13.0",
     "svg-captcha": "^1.4.0",
+    "unirest": "^0.6.0",
     "web-push": "^3.6.7",
     "xss-clean": "^0.1.4"
   },

@@ -82,11 +82,12 @@ export const PlantVendorsModal = ({ plant, onClose }: PlantVendorsModalProps) =>
                 currentPrice: price,
                 realDistance: distance,
                 sellingMode: (invItem?.sellingMode || 'offline') as 'online' | 'offline' | 'both',
-                quantity: invItem?.quantity || 0
+                quantity: invItem?.quantity || 0,
+                customImages: invItem?.customImages || []
             };
             return info;
         })
-        .filter((v): v is (Vendor & { currentPrice: number, realDistance: number, sellingMode: 'online' | 'offline' | 'both', quantity: number }) => v !== null)
+        .filter((v): v is (Vendor & { currentPrice: number, realDistance: number, sellingMode: 'online' | 'offline' | 'both', quantity: number, customImages: string[] }) => v !== null)
         .sort((a, b) => {
             if (a.highlyRecommended && !b.highlyRecommended) return -1;
             if (!a.highlyRecommended && b.highlyRecommended) return 1;
@@ -139,6 +140,17 @@ export const PlantVendorsModal = ({ plant, onClose }: PlantVendorsModalProps) =>
                                 )}
 
                                 <div className={styles.cardContent}>
+                                    {/* Shop Image Avatar */}
+                                    {vendor.shopImage && (
+                                        <div style={{ marginRight: '1rem', flexShrink: 0 }}>
+                                            <img
+                                                src={vendor.shopImage}
+                                                alt={vendor.name}
+                                                style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #334155' }}
+                                            />
+                                        </div>
+                                    )}
+
                                     <div style={{ flex: 1 }}>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
                                             <h3 className={styles.vendorName}>{vendor.name}</h3>
@@ -165,9 +177,23 @@ export const PlantVendorsModal = ({ plant, onClose }: PlantVendorsModalProps) =>
                                             </span>
                                             {vendor.quantity > 0 && <span className={styles.qtyBadge}>In Stock: {vendor.quantity}</span>}
                                         </div>
+
+                                        {/* Custom Plant Images */}
+                                        {vendor.customImages && vendor.customImages.length > 0 && (
+                                            <div style={{ display: 'flex', gap: '8px', marginTop: '8px', overflowX: 'auto', paddingBottom: '4px' }}>
+                                                {vendor.customImages.map((img, idx) => (
+                                                    <img
+                                                        key={idx}
+                                                        src={img}
+                                                        alt="Actual photo"
+                                                        style={{ width: '40px', height: '40px', borderRadius: '4px', objectFit: 'cover', border: '1px solid #475569' }}
+                                                    />
+                                                ))}
+                                            </div>
+                                        )}
                                     </div>
 
-                                    <div style={{ textAlign: 'right' }}>
+                                    <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'space-between' }}>
                                         <div className={styles.price}>{formatCurrency(vendor.currentPrice)}</div>
                                         <button
                                             className={styles.addToCartBtn}

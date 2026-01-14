@@ -82,8 +82,17 @@ export const Navbar = () => {
                                     Admin Panel
                                 </Link>
                             )}
-                            <Link to="/dashboard" className={`${styles.userBadgeBtn} btn btn-primary`} style={{ padding: '0.4rem 1rem', fontSize: '0.85rem' }}>
-                                <UserIcon size={14} /> {user.name?.split(' ')[0] || 'User'}
+                            <Link to="/dashboard" className={`${styles.userBadgeBtn} btn btn-primary`} style={{ padding: '0.4rem 1rem', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                {(user.photoUrl || (user as any).profileImage) ? (
+                                    <img
+                                        src={user.photoUrl || (user as any).profileImage}
+                                        alt=""
+                                        style={{ width: '20px', height: '20px', borderRadius: '50%', objectFit: 'cover' }}
+                                    />
+                                ) : (
+                                    <UserIcon size={14} />
+                                )}
+                                <span>{user.name?.split(' ')[0] || 'User'}</span>
                             </Link>
                             <button onClick={handleLogout} className="btn btn-outline" style={{ padding: '0.4rem' }} title="Logout">
                                 <LogOut size={16} />

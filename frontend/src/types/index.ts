@@ -50,8 +50,10 @@ export interface Vendor {
         status: 'pending' | 'approved';
         inStock: boolean;
         sellingMode: 'online' | 'offline' | 'both';
+        customImages?: string[];
     }[];
     verified?: boolean;
+    shopImage?: string;
     highlyRecommended?: boolean;
     distance?: number;
     category?: string;
@@ -102,4 +104,6 @@ export interface User {
     googleAuth?: boolean;
     emailVerified?: boolean;
     phoneVerified?: boolean;
+    photoUrl?: string;
+    profileImage?: string;
 }

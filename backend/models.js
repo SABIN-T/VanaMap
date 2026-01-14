@@ -48,12 +48,15 @@ const VendorSchema = new mongoose.Schema({
         sellingMode: { type: String, enum: ['online', 'offline', 'both'], default: 'offline' },
         isBoosted: { type: Boolean, default: false },
         boostExpiry: Date,
-        lowStockThreshold: { type: Number, default: 5 }
+        lowStockThreshold: { type: Number, default: 5 },
+        customImages: [String] // Max 3 images per plant
     }],
     verified: { type: Boolean, default: false },
+    shopImage: { type: String, default: '' }, // Shop storefront/avatar
     highlyRecommended: { type: Boolean, default: false },
     category: { type: String, default: 'Plant Shop' },
     ownerEmail: String,
+    userId: String, // Link to User
     isVacationMode: { type: Boolean, default: false },
     lastActive: { type: Date, default: Date.now },
 
