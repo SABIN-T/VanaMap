@@ -270,6 +270,37 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         localStorage.setItem('user', JSON.stringify(data));
     };
 
+    // 🚀 GAMIFICATION: Award points for app usage (100 CP every 5 minutes)
+    useEffect(() => {
+        if (!user || loading) return;
+
+        console.log('[Chlorophyll] Starting usage tracker...');
+        const usageInterval = setInterval(async () => {
+            try {
+                // Force check if tab is active (don't award points if backgrounded for hours)
+                if (document.visibilityState !== 'visible') return;
+
+                const { addPoints } = await import('../services/api');
+                const data = await addPoints(100);
+
+                if (data.success) {
+                    updateUser({ points: data.points });
+                    import('react-hot-toast').then(({ default: toast }) => {
+                        toast.success("100 CP earned for supporting the ecosystem! 🌿", {
+                            id: 'usage-points',
+                            duration: 4000,
+                            icon: '✨'
+                        });
+                    });
+                }
+            } catch (e) {
+                console.error("[Chlorophyll] Usage points failed:", e);
+            }
+        }, 5 * 60 * 1000); // 5 Minutes
+
+        return () => clearInterval(usageInterval);
+    }, [user?._id, loading]);
+
     return (
         <AuthContext.Provider value={{ user, login, signup, googleLogin, logout, verify, toggleFavorite, updateUser, refreshUser, setAuthSession, loading }}>
             {children}

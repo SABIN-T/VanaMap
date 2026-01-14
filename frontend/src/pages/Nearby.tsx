@@ -12,7 +12,7 @@ import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import toast from 'react-hot-toast';
 import styles from './Nearby.module.css';
-import { locationCache, cachedFetch } from '../utils/universalCache'; // 🚀 Boost map speed!
+import { locationCache, apiCache, cachedFetch } from '../utils/universalCache'; // 🚀 Boost map speed!
 import { Helmet } from 'react-helmet-async';
 
 // Geocoding helper removed or handled inline
@@ -158,8 +158,10 @@ export const Nearby = () => {
                 // 1. Fetch Backend Data
                 const allBackendVendors = await fetchVendors();
                 const nearbyBackend = allBackendVendors
-                    .filter(v => v.verified === true && getDistanceFromLatLonInKm(lat, lng, v.latitude, v.longitude) <= currentRadius)
+                    .filter(v => getDistanceFromLatLonInKm(lat, lng, v.latitude, v.longitude) <= currentRadius)
                     .map(v => ({ ...v, distance: getDistanceFromLatLonInKm(lat, lng, v.latitude, v.longitude) }));
+
+                const hasVerifiedNearby = nearbyBackend.some(v => v.verified);
 
                 // 2. Fetch OSM Data
                 const radiusMeters = currentRadius * 1000;
@@ -226,7 +228,13 @@ out center;
                         toast.success(`Broadened search to ${currentRadius}km to find matches!`, { icon: '🔍' });
                         setSearchRadius(currentRadius); // Sync UI slider
                     }
-                    break; // STOP searching if we found something
+
+                    // 🚀 CRITICAL FIX: Only stop expansion if we found a VERIFIED partner,
+                    // or if we've already tried the max radius.
+                    if (hasVerifiedNearby || currentStepIndex === expansionSteps.length - 1) {
+                        break;
+                    }
+                    console.log(`[Nearby] Found shops at ${currentRadius}km but no verified partners. Expanding further...`);
                 }
 
                 // If no results, try next expansion step
@@ -259,6 +267,7 @@ out center;
         if (isManual) {
             // Force refresh when manual button is clicked
             locationCache.clear();
+            apiCache.clear();
         }
 
         if (!navigator.geolocation) {

@@ -1031,7 +1031,7 @@ app.post('/api/payments/verify', auth, async (req, res) => {
             user.premiumExpiry = expiry;
 
             // Add Bonus Points
-            user.points = (user.points || 0) + 200;
+            user.points = (user.points || 0) + 500;
 
             await user.save();
 
@@ -1087,7 +1087,7 @@ app.post('/api/payments/activate-free', auth, async (req, res) => {
         user.premiumExpiry = new Date('2026-02-01'); // Valid until Feb 2026 start?
 
         // Add Bonus Points
-        user.points = (user.points || 0) + 200;
+        user.points = (user.points || 0) + 500;
 
         await user.save();
 
@@ -1180,25 +1180,7 @@ app.get('/api/gamification/leaderboard', async (req, res) => {
     }
 });
 
-app.post('/api/user/complete-purchase', auth, async (req, res) => {
-    try {
-        const { items } = req.body;
-        const user = await User.findById(req.user.id);
-        if (!user) return res.status(404).json({ error: "User not found" });
 
-        // Award 100 points per plant selected for purchase
-        const pointsToAward = (items?.length || 0) * 100;
-        user.points = (user.points || 0) + pointsToAward;
-        await user.save();
-
-        // Create log
-        await broadcastAlert('system', `User ${user.name} earned ${pointsToAward} points for starting a purchase.`, { userId: user._id, points: pointsToAward });
-
-        res.json({ success: true, newPoints: user.points });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});
 
 app.post('/api/tracking/search', async (req, res) => {
     try {
@@ -1221,6 +1203,8 @@ app.post('/api/user/complete-purchase', auth, async (req, res) => {
         if (!user) return res.status(404).json({ error: "User not found" });
 
         const sales = [];
+        let pointsToAward = 0;
+
         for (const item of items) {
             const sale = new Sale({
                 vendorId: item.vendorId,
@@ -1234,6 +1218,9 @@ app.post('/api/user/complete-purchase', auth, async (req, res) => {
             });
             await sale.save();
             sales.push(sale);
+
+            // Award 200 points per plant purchased
+            pointsToAward += (item.quantity || 1) * 200;
 
             // Notify vendor
             await broadcastAlert('sale', `New order: ${item.quantity || 1}x ${item.plantName}`, {
@@ -1253,8 +1240,14 @@ app.post('/api/user/complete-purchase', auth, async (req, res) => {
             }
         }
 
-        // Clear user cart if needed (optional based on front-end flow)
-        await User.findByIdAndUpdate(req.user.id, { $set: { cart: [] } });
+        // Apply Points
+        user.points = (user.points || 0) + pointsToAward;
+
+        // Clear user cart
+        user.cart = [];
+        await user.save();
+
+        await broadcastAlert('system', `User ${user.name} earned ${pointsToAward} CP for completing a purchase! 🌿`, { userId: user._id, points: pointsToAward });
 
         res.json({ success: true, sales });
     } catch (err) {
@@ -1533,7 +1526,19 @@ app.get('/api/suggestions', auth, admin, async (req, res) => {
 
 app.patch('/api/suggestions/:id', auth, admin, async (req, res) => {
     try {
+        const oldSuggestion = await PlantSuggestion.findById(req.params.id);
         const suggestion = await PlantSuggestion.findByIdAndUpdate(req.params.id, req.body, { new: true });
+
+        // 🚀 Award 250 points if newly approved
+        if (req.body.status === 'approved' && oldSuggestion?.status !== 'approved' && suggestion.userId) {
+            const user = await User.findById(suggestion.userId);
+            if (user) {
+                user.points = (user.points || 0) + 250;
+                await user.save();
+                await broadcastAlert('reward', `You earned 250 CP! Your suggestion for "${suggestion.plantName}" was approved. 🌿`, { userId: user._id, title: 'Reward Received! 🎁' });
+            }
+        }
+
         res.json(suggestion);
     } catch (err) {
         res.status(500).json({ error: err.message });
@@ -2795,7 +2800,8 @@ app.post('/api/auth/verify-otp', async (req, res) => {
             country: data.country,
             city: data.city,
             state: data.state,
-            verified: true
+            verified: true,
+            points: 100 // 🚀 Welcome Bonus!
         });
         await user.save();
 
@@ -2935,7 +2941,8 @@ app.post('/api/auth/google', async (req, res) => {
                 country: location?.country,
                 latitude: location?.lat,
                 longitude: location?.lng,
-                phone
+                phone,
+                points: 100 // 🚀 Welcome Bonus!
             });
             await user.save();
 
@@ -3466,6 +3473,9 @@ app.post('/api/admin/users/:id/gift-premium', auth, admin, async (req, res) => {
         user.premiumType = 'gift';
         user.premiumStartDate = new Date();
         user.premiumExpiry = oneYearFromNow;
+
+        // 🚀 Add Bonus Points for Premium
+        user.points = (user.points || 0) + 500;
 
         await user.save();
 
