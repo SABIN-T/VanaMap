@@ -1,9 +1,10 @@
+
 import { useState, useEffect } from 'react';
-import { Search, Save, AlertCircle, CheckCircle, Package, DollarSign, Trash2 } from 'lucide-react';
+import { Search, Save, AlertCircle, CheckCircle, Package, DollarSign, Trash2, RefreshCw } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { fetchPlants, updateVendor } from '../../../services/api';
 import { formatCurrency } from '../../../utils/currency';
-import type { Plant, Vendor } from '../../../types';
+import type { Vendor, Plant } from '../../../types';
 import styles from './VendorInventory.module.css';
 
 interface VendorInventoryProps {
@@ -194,6 +195,29 @@ export const VendorInventory = ({ vendor, onUpdate }: VendorInventoryProps) => {
                         <br /><br />
                         Pricing and inventory controls will be unlocked as soon as your profile is verified by an admin.
                     </p>
+                    <button
+                        onClick={() => {
+                            // Clear cache manually since we can't easily import the instance here without huge changes
+                            // Or better: try to clear the specific key if we know it
+                            localStorage.removeItem('vanamap_api_cache');
+                            window.location.reload();
+                        }}
+                        style={{
+                            marginTop: '1.5rem',
+                            padding: '0.75rem 1.5rem',
+                            background: '#facc15',
+                            color: '#000',
+                            border: 'none',
+                            borderRadius: '0.5rem',
+                            fontWeight: 'bold',
+                            cursor: 'pointer',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '0.5rem'
+                        }}
+                    >
+                        <RefreshCw size={16} /> Check Status
+                    </button>
                 </div>
             </div>
         );
@@ -236,7 +260,7 @@ export const VendorInventory = ({ vendor, onUpdate }: VendorInventoryProps) => {
                                 <div className={styles.imageWrapper}>
                                     <img src={plant.imageUrl} className={styles.image} alt={plant.name} />
                                     {invItem && (
-                                        <div className={`${styles.statusBadge} ${isPending ? styles.statusPending : styles.statusLive}`}>
+                                        <div className={`${styles.statusBadge} ${isPending ? styles.statusPending : styles.statusLive} `}>
                                             {isPending ? <AlertCircle size={10} /> : <CheckCircle size={10} />}
                                             {isPending ? 'Pending' : 'Live'}
                                         </div>
