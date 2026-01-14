@@ -3,6 +3,7 @@ import react from '@vitejs/plugin-react'
 import viteCompression from 'vite-plugin-compression'
 
 // https://vite.dev/config/
+// Build: 2026-01-14 - Cache cleared
 export default defineConfig({
   plugins: [
     react(),
