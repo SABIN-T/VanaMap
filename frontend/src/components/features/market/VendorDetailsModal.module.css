@@ -718,19 +718,133 @@
     cursor: not-allowed;
 }
 
-/* Desktop Adjustments */
+/* Desktop Overhaul - Premium Split Layout */
 @media (min-width: 768px) {
     .overlay {
         align-items: center;
+        padding: 40px;
     }
 
     .modal {
+        width: 100%;
+        max-width: 900px;
+        /* Wider for split view */
+        height: 650px;
+        /* Fixed height for dashboard feel */
+        max-height: 85vh;
         border-radius: 24px;
-        max-height: 90vh;
+        margin-bottom: 0;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        /* Split view */
+        grid-template-rows: auto 1fr;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        background: rgba(15, 23, 42, 0.95);
+        backdrop-filter: blur(20px);
     }
 
+    /* Header spans across both columns on desktop */
+    .header {
+        grid-column: 1 / -1;
+        position: relative;
+        background: rgba(15, 23, 42, 0.4);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        display: flex;
+        justify-content: space-between;
+        padding: 20px 24px;
+    }
+
+    /* Vendor Profile spans across both columns */
+    .vendorProfile {
+        grid-column: 1 / -1;
+        padding: 24px;
+        background: transparent;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .shopImage {
+        width: 64px;
+        height: 64px;
+    }
+
+    .vendorName {
+        font-size: 1.5rem;
+    }
+
+    /* Gallery on the left */
+    .gallery {
+        grid-column: 1;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        background: rgba(0, 0, 0, 0.2);
+        border-right: 1px solid rgba(255, 255, 255, 0.05);
+        padding: 20px;
+        overflow: hidden;
+    }
+
+    .mainImage {
+        width: 100%;
+        height: 100%;
+        border-radius: 16px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    }
+
+    /* Product Details on the right */
+    .productDetails {
+        grid-column: 2;
+        height: 100%;
+        overflow-y: auto;
+        padding: 32px;
+        padding-bottom: 32px;
+        /* Redundant bar removed */
+        background: transparent;
+    }
+
+    /* Custom Scrollbar for Premium Feel */
+    .productDetails::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .productDetails::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    .productDetails::-webkit-scrollbar-thumb {
+        background: rgba(59, 130, 246, 0.2);
+        border-radius: 10px;
+    }
+
+    .productDetails::-webkit-scrollbar-thumb:hover {
+        background: rgba(59, 130, 246, 0.4);
+    }
+
+    .productName {
+        font-size: 1.75rem;
+    }
+
+    .price {
+        font-size: 2rem;
+    }
+
+    /* Remove redundant purchase bar on desktop */
     .purchaseBar {
-        position: sticky;
-        bottom: 0;
+        display: none !important;
+    }
+
+    /* Larger buy button in header for desktop */
+    .headerAction {
+        flex-direction: row;
+        align-items: center;
+        gap: 16px;
+    }
+
+    .headerPrice {
+        font-size: 1.25rem;
+    }
+
+    .headerBuyBtn {
+        padding: 10px 24px;
+        font-size: 0.9rem;
     }
 }
