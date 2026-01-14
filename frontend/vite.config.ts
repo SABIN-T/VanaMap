@@ -8,6 +8,8 @@ export default defineConfig({
   plugins: [
     react(),
     viteCompression(),
+    // Disabled CSS inlining - causing preload errors
+    /*
     {
       name: 'inline-css',
       apply: 'build',
@@ -45,6 +47,7 @@ export default defineConfig({
         });
       }
     }
+    */
   ],
   build: {
     rollupOptions: {
