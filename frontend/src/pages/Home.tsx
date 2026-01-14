@@ -102,18 +102,13 @@ export const Home = () => {
                 const cachedVendors = apiCache.get('/api/vendors', {});
 
                 if (cachedPlants && cachedVendors) {
-                    // Cache HIT - Instant load!
+                    // Cache HIT - Instant load! (Silent for better UX)
                     console.log('[Cache] ✅ Using cached data - instant load!');
                     setPlants(cachedPlants);
                     setVendors(cachedVendors);
                     setPlantsLoading(false);
                     setIsSlowLoading(false);
                     clearTimeout(timer);
-
-                    toast.success('⚡ Loaded from cache!', {
-                        duration: 1500,
-                        icon: '🚀'
-                    });
                     return;
                 }
 
