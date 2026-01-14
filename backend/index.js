@@ -2060,6 +2060,29 @@ app.post('/api/upload', auth, upload.single('image'), async (req, res) => {
     }
 });
 
+// Multer error handling middleware (must be after upload routes)
+app.use((err, req, res, next) => {
+    if (err instanceof multer.MulterError) {
+        console.error('[Multer Error]:', err.message);
+        if (err.code === 'LIMIT_FILE_SIZE') {
+            return res.status(400).json({ error: 'File too large. Maximum size is 5MB.' });
+        }
+        if (err.code === 'LIMIT_UNEXPECTED_FILE') {
+            return res.status(400).json({ error: 'Unexpected file field. Use "image" as field name.' });
+        }
+        return res.status(400).json({ error: `Upload error: ${err.message}` });
+    }
+
+    // Cloudinary-specific errors
+    if (err.message && err.message.includes('cloudinary')) {
+        console.error('[Cloudinary Error]:', err);
+        return res.status(500).json({ error: 'Image storage error. Please try again.' });
+    }
+
+    // Pass to next error handler if not multer/cloudinary related
+    next(err);
+});
+
 // Legacy Endpoint (Redirect to above if possible, but keeping for compatibility)
 app.post('/api/plants/upload', auth, admin, upload.single('image'), async (req, res) => {
     try {
