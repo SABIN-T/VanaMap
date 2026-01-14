@@ -45,6 +45,18 @@ export const EditPlantModal = ({ plant, inventoryItem, onSave, onClose }: EditPl
                 body: formData
             });
 
+            if (!res.ok) {
+                const text = await res.text();
+                let errorMsg = 'Upload failed';
+                try {
+                    const errorData = JSON.parse(text);
+                    errorMsg = errorData.error || errorMsg;
+                } catch {
+                    errorMsg = `Server error (${res.status})`;
+                }
+                throw new Error(errorMsg);
+            }
+
             const data = await res.json();
             if (data.success) {
                 setCustomImages([...customImages, data.imageUrl]);
@@ -53,6 +65,7 @@ export const EditPlantModal = ({ plant, inventoryItem, onSave, onClose }: EditPl
                 throw new Error(data.error);
             }
         } catch (err: any) {
+            console.error('[Plant Image Upload]', err);
             toast.error(err.message || "Upload failed", { id: tid });
         } finally {
             setUploading(false);

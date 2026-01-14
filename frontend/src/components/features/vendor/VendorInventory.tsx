@@ -194,6 +194,18 @@ export const VendorInventory = ({ vendor, onUpdate }: VendorInventoryProps) => {
                 body: formData
             });
 
+            if (!res.ok) {
+                const text = await res.text();
+                let errorMsg = 'Upload failed';
+                try {
+                    const errorData = JSON.parse(text);
+                    errorMsg = errorData.error || errorMsg;
+                } catch {
+                    errorMsg = `Server error (${res.status})`;
+                }
+                throw new Error(errorMsg);
+            }
+
             const data = await res.json();
             if (data.success) {
                 await updateVendor(vendor.id, { shopImage: data.imageUrl }, true);
@@ -202,6 +214,7 @@ export const VendorInventory = ({ vendor, onUpdate }: VendorInventoryProps) => {
                 setTimeout(() => window.location.reload(), 1000);
             } else throw new Error(data.error);
         } catch (err: any) {
+            console.error('[Shop Image Upload]', err);
             toast.error(err.message || "Upload failed", { id: tid });
         }
     };
