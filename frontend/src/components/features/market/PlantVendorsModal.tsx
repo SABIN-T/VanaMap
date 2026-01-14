@@ -14,7 +14,6 @@ interface PlantVendorsModalProps {
 export const PlantVendorsModal = ({ plant, onClose }: PlantVendorsModalProps) => {
     const [vendors, setVendors] = useState<Vendor[]>([]);
     const [loading, setLoading] = useState(true);
-    const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
     const [selectedVendor, setSelectedVendor] = useState<any | null>(null);
 
     useEffect(() => {
@@ -32,16 +31,7 @@ export const PlantVendorsModal = ({ plant, onClose }: PlantVendorsModalProps) =>
         }
     };
 
-    const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
-        const R = 6371;
-        const dLat = (lat2 - lat1) * Math.PI / 180;
-        const dLon = (lon2 - lon1) * Math.PI / 180;
-        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-            Math.sin(dLon / 2) * Math.sin(dLon / 2);
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return R * c;
-    };
+
 
     const availableVendors = vendors
         .map(v => {
@@ -52,9 +42,7 @@ export const PlantVendorsModal = ({ plant, onClose }: PlantVendorsModalProps) =>
             else if (legacyMatch) price = plant.price || 0;
             else return null;
 
-            let distance = 9999;
-            if (userLocation) distance = calculateDistance(userLocation.lat, userLocation.lng, v.latitude, v.longitude);
-            else distance = v.distance || 9999;
+            const distance = v.distance || 9999;
 
             const info = {
                 ...v,
@@ -85,7 +73,12 @@ export const PlantVendorsModal = ({ plant, onClose }: PlantVendorsModalProps) =>
                             <TrendingUp size={12} /> Best Options Found
                         </div>
                         <h2 className={styles.title}>Purchase Options</h2>
-                        <p className={styles.subtitle}>{plant.name}</p>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <p className={styles.subtitle}>{plant.name}</p>
+                            <span style={{ fontSize: '0.7rem', color: '#64748b', background: 'rgba(51, 65, 85, 0.4)', padding: '2px 8px', borderRadius: '4px' }}>
+                                Searching: 50km radius
+                            </span>
+                        </div>
                     </div>
                 </div>
 
