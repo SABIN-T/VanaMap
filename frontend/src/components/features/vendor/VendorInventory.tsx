@@ -277,6 +277,10 @@ export const VendorInventory = ({ vendor, onUpdate }: VendorInventoryProps) => {
                         <span>Upload Verification Photo</span>
                         <input type="file" hidden accept="image/*" onChange={handleVerifyUpload} />
                     </label>
+
+                    <p style={{ color: '#94a3b8', fontSize: '0.75rem', marginTop: '0.75rem', textAlign: 'center' }}>
+                        📸 Max file size: <strong style={{ color: '#3b82f6' }}>20MB</strong> • Formats: JPG, PNG, WebP
+                    </p>
                 </div>
 
                 <button
@@ -327,12 +331,15 @@ export const VendorInventory = ({ vendor, onUpdate }: VendorInventoryProps) => {
                 </div>
                 <div>
                     <h2 style={{ fontSize: '1.5rem', fontWeight: 700, color: 'white', marginBottom: '0.25rem' }}>{vendor.name}</h2>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
                         <span style={{ padding: '0.25rem 0.75rem', background: 'rgba(16, 185, 129, 0.2)', color: '#10b981', borderRadius: '1rem', fontSize: '0.75rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}>
                             <CheckCircle size={12} /> VERIFIED
                         </span>
                         <span style={{ color: '#94a3b8', fontSize: '0.9rem' }}>• {vendor.district || vendor.state || 'Location not set'}</span>
                     </div>
+                    <p style={{ color: '#64748b', fontSize: '0.7rem', margin: 0 }}>
+                        💡 Click camera icon to update shop logo (Max: 20MB)
+                    </p>
                 </div>
             </div>
 

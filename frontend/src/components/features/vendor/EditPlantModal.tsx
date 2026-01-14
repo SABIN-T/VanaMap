@@ -111,9 +111,12 @@ export const EditPlantModal = ({ plant, inventoryItem, onSave, onClose }: EditPl
 
                     {/* LEFT: Images */}
                     <div>
-                        <label style={{ display: 'block', color: '#94a3b8', marginBottom: '0.5rem', fontSize: '0.9rem' }}>
+                        <label style={{ display: 'block', color: '#94a3b8', marginBottom: '0.25rem', fontSize: '0.9rem' }}>
                             Plant Images (Max 3)
                         </label>
+                        <p style={{ color: '#64748b', fontSize: '0.7rem', marginBottom: '0.75rem', margin: 0 }}>
+                            📸 Up to 20MB per image
+                        </p>
 
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.5rem', marginBottom: '1rem' }}>
                             <div style={{
