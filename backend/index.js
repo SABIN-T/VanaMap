@@ -1155,14 +1155,17 @@ app.post('/api/admin/premium/renew', auth, admin, async (req, res) => {
 
 app.get('/api/gamification/leaderboard', async (req, res) => {
     try {
-        // Only real users with role 'user', having at least some points
-        const topUsers = await User.find({ role: 'user', points: { $gt: 0 } })
+        // Include both users AND vendors with points > 0
+        const topUsers = await User.find({
+            role: { $in: ['user', 'vendor'] },
+            points: { $gt: 0 }
+        })
             .sort({ points: -1 })
-            .limit(10)
-            .select('name points city state');
+            .limit(50)
+            .select('name points city state gameLevel role');
 
         const cityRankings = await User.aggregate([
-            { $match: { role: 'user', points: { $gt: 0 } } },
+            { $match: { role: { $in: ['user', 'vendor'] }, points: { $gt: 0 } } },
             {
                 $group: {
                     _id: { city: '$city', state: '$state' },
@@ -3441,25 +3444,7 @@ app.post('/api/user/designs', auth, async (req, res) => {
     }
 });
 
-app.get('/api/gamification/leaderboard', async (req, res) => {
-    try {
-        const users = await User.find({ role: 'user' })
-            .sort({ points: -1 })
-            .limit(50)
-            .select('name city points gameLevel gamePoints');
 
-        const cities = await User.aggregate([
-            { $match: { city: { $exists: true, $ne: null } } },
-            { $group: { _id: { city: "$city" }, totalPoints: { $sum: "$points" }, userCount: { $sum: 1 } } },
-            { $sort: { totalPoints: -1 } },
-            { $limit: 10 }
-        ]);
-
-        res.json({ users, cities });
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
-});
 
 app.post('/api/admin/users/:id/gift-premium', auth, admin, async (req, res) => {
     try {
