@@ -252,25 +252,102 @@
     color: #10b981;
 }
 
-.addToCartBtn {
-    margin-top: 0.5rem;
-    background: white;
-    color: black;
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 0.75rem;
-    font-weight: 700;
-    font-size: 0.85rem;
+.shopAvatarWrapper {
+    margin-right: 1rem;
+    flex-shrink: 0;
+}
+
+.shopAvatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #334155;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.vendorCoreInfo {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.vendorNameRow {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
+    margin-bottom: 0.25rem;
 }
 
-.addToCartBtn:hover {
-    background: #10b981;
+.distanceText {
+    font-size: 0.75rem;
+    color: #94a3b8;
+}
+
+.stockStatus {
+    font-size: 0.65rem;
+    font-weight: 800;
+    color: #10b981;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.actionSection {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+    margin-left: 1rem;
+}
+
+.quickPrice {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #3b82f6;
+    letter-spacing: -0.5px;
+}
+
+.premiumBuyBtn {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
     color: white;
+    border: none;
+    padding: 0.4rem 0.8rem;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.premiumBuyBtn span {
+    display: inline-block;
+}
+
+.premiumBuyBtn:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+    background: linear-gradient(135deg, #60a5fa, #3b82f6);
+}
+
+.premiumBuyBtn:active {
+    transform: translateY(0) scale(0.95);
+}
+
+@media (max-width: 480px) {
+    .premiumBuyBtn span {
+        display: none;
+        /* Hide 'Buy' text on very small screens, show only icon */
+    }
+
+    .premiumBuyBtn {
+        padding: 0.4rem;
+    }
 }
 
 @keyframes fadeIn {

@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
-import { MapPin, Star, ShieldCheck, X, TrendingUp } from 'lucide-react';
+import { MapPin, Star, ShieldCheck, X, TrendingUp, ShoppingCart } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import type { Plant, Vendor } from '../../../types';
 import { fetchVendors } from '../../../services/api';
 import { formatCurrency } from '../../../utils/currency';
+import { useCart } from '../../../context/CartContext';
 import { VendorDetailsModal } from './VendorDetailsModal';
 import styles from './PlantVendorsModal.module.css';
 
@@ -12,9 +14,18 @@ interface PlantVendorsModalProps {
 }
 
 export const PlantVendorsModal = ({ plant, onClose }: PlantVendorsModalProps) => {
+    const navigate = useNavigate();
+    const { addToCart } = useCart();
     const [vendors, setVendors] = useState<Vendor[]>([]);
     const [loading, setLoading] = useState(true);
     const [selectedVendor, setSelectedVendor] = useState<any | null>(null);
+
+    const handleQuickBuy = (e: React.MouseEvent, v: any) => {
+        e.stopPropagation();
+        addToCart(plant, v.id, v.currentPrice);
+        onClose();
+        navigate('/cart');
+    };
 
     useEffect(() => {
         loadVendors();
@@ -104,56 +115,47 @@ export const PlantVendorsModal = ({ plant, onClose }: PlantVendorsModalProps) =>
                                 )}
 
                                 <div className={styles.cardContent}>
-                                    {/* Shop Image Avatar */}
+                                    {/* Left: Shop Avatar */}
                                     {vendor.shopImage && (
-                                        <div style={{ marginRight: '1rem', flexShrink: 0 }}>
+                                        <div className={styles.shopAvatarWrapper}>
                                             <img
                                                 src={vendor.shopImage}
                                                 alt={vendor.name}
-                                                style={{ width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #334155' }}
+                                                className={styles.shopAvatar}
                                             />
                                         </div>
                                     )}
 
-                                    <div style={{ flex: 1 }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
+                                    {/* Middle: Info */}
+                                    <div className={styles.vendorCoreInfo}>
+                                        <div className={styles.vendorNameRow}>
                                             <h3 className={styles.vendorName}>{vendor.name}</h3>
                                             {vendor.verified && <ShieldCheck size={14} color="#3b82f6" />}
                                         </div>
                                         <div className={styles.metaRow}>
-                                            <span>
+                                            <span className={styles.distanceText}>
                                                 <MapPin size={12} /> {vendor.realDistance < 999 ? `${vendor.realDistance.toFixed(1)} km` : 'Regional'}
-                                            </span>
-                                            <span className={styles.clickToView}>
-                                                👆 Tap to view details
                                             </span>
                                         </div>
                                         <div className={styles.sellingDetails}>
                                             <span className={styles.modeBadge}>
-                                                {vendor.sellingMode === 'online' ? '🚚 Delivery Only' :
-                                                    vendor.sellingMode === 'offline' ? '🏪 Store Pickup' :
-                                                        '🔄 Delivery & Pickup'}
+                                                {vendor.sellingMode === 'online' ? '🚚 Online' :
+                                                    vendor.sellingMode === 'offline' ? '🏪 Shop' : '🔄 Both'}
                                             </span>
-                                            {vendor.quantity > 0 && <span className={styles.qtyBadge}>In Stock: {vendor.quantity}</span>}
+                                            {vendor.quantity > 0 && <span className={styles.stockStatus}>In Stock</span>}
                                         </div>
-
-                                        {/* Custom Plant Images */}
-                                        {vendor.customImages && vendor.customImages.length > 0 && (
-                                            <div style={{ display: 'flex', gap: '8px', marginTop: '8px', overflowX: 'auto', paddingBottom: '4px' }}>
-                                                {vendor.customImages.map((img, idx) => (
-                                                    <img
-                                                        key={idx}
-                                                        src={img}
-                                                        alt="Actual photo"
-                                                        style={{ width: '40px', height: '40px', borderRadius: '4px', objectFit: 'cover', border: '1px solid #475569' }}
-                                                    />
-                                                ))}
-                                            </div>
-                                        )}
                                     </div>
 
-                                    <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'space-between' }}>
-                                        <div className={styles.price}>{formatCurrency(vendor.currentPrice)}</div>
+                                    {/* Right: Price & Quick Buy */}
+                                    <div className={styles.actionSection}>
+                                        <div className={styles.quickPrice}>{formatCurrency(vendor.currentPrice)}</div>
+                                        <button
+                                            className={styles.premiumBuyBtn}
+                                            onClick={(e) => handleQuickBuy(e, vendor)}
+                                        >
+                                            <ShoppingCart size={14} />
+                                            <span>Buy</span>
+                                        </button>
                                     </div>
                                 </div>
                             </div>

@@ -1,5 +1,6 @@
 import { X, MapPin, Phone, Globe, ShoppingCart, Star, Shield, Package, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import type { Vendor, Plant } from '../../../types';
 import { formatCurrency } from '../../../utils/currency';
 import { useCart } from '../../../context/CartContext';
@@ -19,6 +20,7 @@ interface VendorDetailsModalProps {
 }
 
 export const VendorDetailsModal = ({ vendor, plant, onClose, onBack }: VendorDetailsModalProps) => {
+    const navigate = useNavigate();
     const { addToCart } = useCart();
     const [selectedImageIndex, setSelectedImageIndex] = useState(0);
 
@@ -30,6 +32,7 @@ export const VendorDetailsModal = ({ vendor, plant, onClose, onBack }: VendorDet
     const handlePurchase = () => {
         addToCart(plant, vendor.id, vendor.currentPrice);
         onClose();
+        navigate('/cart');
     };
 
     const nextImage = () => {
@@ -89,6 +92,18 @@ export const VendorDetailsModal = ({ vendor, plant, onClose, onBack }: VendorDet
                                 </span>
                             )}
                         </div>
+                    </div>
+
+                    <div className={styles.headerAction}>
+                        <div className={styles.headerPrice}>{formatCurrency(vendor.currentPrice)}</div>
+                        <button
+                            className={styles.headerBuyBtn}
+                            onClick={handlePurchase}
+                            disabled={vendor.quantity === 0}
+                        >
+                            <ShoppingCart size={16} />
+                            <span>Buy</span>
+                        </button>
                     </div>
                 </div>
 
