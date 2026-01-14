@@ -14,9 +14,7 @@ interface PlantVendorsModalProps {
 export const PlantVendorsModal = ({ plant, onClose }: PlantVendorsModalProps) => {
     const [vendors, setVendors] = useState<Vendor[]>([]);
     const [loading, setLoading] = useState(true);
-    const [isLocating, setIsLocating] = useState(false);
     const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
-    const [gpsError, setGpsError] = useState<string | null>(null);
     const [selectedVendor, setSelectedVendor] = useState<any | null>(null);
 
     useEffect(() => {
@@ -34,26 +32,7 @@ export const PlantVendorsModal = ({ plant, onClose }: PlantVendorsModalProps) =>
         }
     };
 
-    const enableGPS = () => {
-        if (!navigator.geolocation) {
-            setGpsError("Geolocation not supported.");
-            return;
-        }
-        setIsLocating(true);
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                setUserLocation({ lat: position.coords.latitude, lng: position.coords.longitude });
-                setIsLocating(false);
-            },
-            () => {
-                setGpsError("Permission denied.");
-                setIsLocating(false);
-            },
-            { enableHighAccuracy: true }
-        );
-    };
-
-    const getDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
+    const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number): number => {
         const R = 6371;
         const dLat = (lat2 - lat1) * Math.PI / 180;
         const dLon = (lon2 - lon1) * Math.PI / 180;
@@ -74,7 +53,7 @@ export const PlantVendorsModal = ({ plant, onClose }: PlantVendorsModalProps) =>
             else return null;
 
             let distance = 9999;
-            if (userLocation) distance = getDistance(userLocation.lat, userLocation.lng, v.latitude, v.longitude);
+            if (userLocation) distance = calculateDistance(userLocation.lat, userLocation.lng, v.latitude, v.longitude);
             else distance = v.distance || 9999;
 
             const info = {
@@ -109,19 +88,6 @@ export const PlantVendorsModal = ({ plant, onClose }: PlantVendorsModalProps) =>
                         <p className={styles.subtitle}>{plant.name}</p>
                     </div>
                 </div>
-
-                {!userLocation && (
-                    <div className={styles.gpsPrompt}>
-                        <MapPin size={24} color="#10b981" style={{ marginBottom: '0.5rem' }} />
-                        <p style={{ color: '#94a3b8', fontSize: '0.85rem', maxWidth: '300px', margin: '0 auto 1rem' }}>
-                            We found {availableVendors.length} sellers. Enable GPS to find the closest one to you.
-                        </p>
-                        <button onClick={enableGPS} className={styles.gpsBtn} disabled={isLocating}>
-                            {isLocating ? 'Locating...' : 'Search Nearby'}
-                        </button>
-                        {gpsError && <p style={{ color: '#ef4444', fontSize: '0.7rem', marginTop: '0.5rem' }}>{gpsError}</p>}
-                    </div>
-                )}
 
                 <div className={styles.vendorList}>
                     {loading ? (
