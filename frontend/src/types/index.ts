@@ -39,7 +39,8 @@ export interface Vendor {
     phone: string;
     whatsapp: string;
     website?: string;
-    ownerEmail?: string; // Email of the user who owns this vendor account
+    ownerEmail?: string;
+    userId?: string; // Link to User ID
     inventoryIds: string[]; // List of plant IDs they sell
     // Detailed inventory for price management
     inventory?: {

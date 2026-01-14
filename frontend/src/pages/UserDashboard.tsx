@@ -31,8 +31,8 @@ export const UserDashboard = () => {
     // Vendor Onboarding State
     const [showVendorModal, setShowVendorModal] = useState(false);
     const [myVendor, setMyVendor] = useState<Vendor | null>(null);
-    const [vendorForm, setVendorForm] = useState<{ name: string, phone: string, address: string, latitude: number | null, longitude: number | null }>({
-        name: '', phone: '', address: '', latitude: null, longitude: null
+    const [vendorForm, setVendorForm] = useState<{ name: string, phone: string, whatsapp: string, address: string, latitude: number | null, longitude: number | null }>({
+        name: '', phone: '', whatsapp: '', address: '', latitude: null, longitude: null
     });
     const [detectingLoc, setDetectingLoc] = useState(false);
     const [showCollectionModal, setShowCollectionModal] = useState(false);
@@ -134,31 +134,29 @@ export const UserDashboard = () => {
 
     useEffect(() => {
         const loadVendorData = async () => {
-            if (user?.role === 'vendor') {
+            // Check for vendor existence for ALL users (even if role is 'user', they might be pending)
+            if (user) {
                 try {
                     const vendors = await fetchVendors();
                     const vendor = vendors.find(v =>
-                        String(v.id) === String(user.id) ||
-                        String(v.id) === String(user._id) ||
-                        String(v._id) === String(user.id)
+                        v.ownerEmail === user.email ||
+                        v.id === user.id ||
+                        v.userId === (user as any)._id ||
+                        v.userId === user.id
                     );
                     if (vendor) {
                         setMyVendor(vendor);
-                        setVendorForm(prev => ({
-                            ...prev,
+                        setVendorForm({
                             name: vendor.name,
-                            address: vendor.address || '',
                             phone: vendor.phone || '',
-                            latitude: vendor.latitude || 0,
-                            longitude: vendor.longitude || 0
-                        }));
-
-                        if (!vendor.latitude || !vendor.longitude) {
-                            navigate('/vendor');
-                        }
+                            whatsapp: vendor.whatsapp || '',
+                            address: vendor.address || '',
+                            latitude: vendor.latitude || null,
+                            longitude: vendor.longitude || null
+                        });
                     }
-                } catch (e) {
-                    console.error("Vendor check failed", e);
+                } catch (error) {
+                    console.error("Failed to load vendor profile", error);
                 }
             }
         };
@@ -465,12 +463,12 @@ export const UserDashboard = () => {
             {/* 4. QUICK ACCESS GRID */}
             <h2 className={styles.sectionTitle} style={{ marginBottom: '1rem' }}>Quick Navigation</h2>
             <div className={styles.quickGrid}>
-                {user.role === 'vendor' && (
+                {(user.role === 'vendor' || myVendor) && (
                     <div onClick={() => navigate('/vendor')} className={styles.quickCard} style={{ background: 'rgba(250, 204, 21, 0.05)', borderColor: 'rgba(250, 204, 21, 0.2)' }}>
                         <Store style={{ color: '#facc15' }} size={24} />
                         <div>
                             <strong>Vendor Portal</strong>
-                            <p>Manage Shop</p>
+                            <p>{user.role === 'vendor' ? 'Manage Shop' : 'Application Status'}</p>
                         </div>
                     </div>
                 )}

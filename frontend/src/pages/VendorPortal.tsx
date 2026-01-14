@@ -126,7 +126,8 @@ export const VendorPortal = () => {
     }, [user]);
 
     useEffect(() => {
-        if (user?.role === 'vendor' || user?.role === 'admin') loadVendorData();
+        // Load data even if role is 'user', as they might be a pending vendor
+        if (user) loadVendorData();
     }, [user, loadVendorData]);
 
     const fetchAnalytics = async () => {

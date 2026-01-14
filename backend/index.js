@@ -2115,10 +2115,11 @@ app.post('/api/vendors', auth, async (req, res) => {
         const newVendor = new Vendor(itemData);
         await newVendor.save();
 
-        // 🔄 AUTO-UPGRADE: Change user role to 'vendor'
-        user.role = 'vendor';
-        await user.save();
-        console.log(`[Vendor Registration] User ${user.email} role upgraded to 'vendor'`);
+        // 🔄 PENDING APPROVAL: Do not upgrade role yet. 
+        // User remains 'user' until Admin verifies the vendor profile.
+        console.log(`[Vendor Registration] Vendor profile created for ${user.email}. Pending Admin Approval.`);
+        // user.role = 'vendor'; // DISABLED: Now requires manual approval
+        // await user.save();
 
         // 🚀 PERFORMANCE: Invalidate cache
         cache.del('all_vendors');
@@ -2190,6 +2191,17 @@ app.patch('/api/vendors/:id', auth, admin, async (req, res) => {
                 url: '/nearby',
                 icon: '/logo.png'
             });
+
+            // 🌟 UPGRADE USER ROLE TO VENDOR
+            if (vendor.userId || vendor.ownerEmail) {
+                try {
+                    const userQuery = vendor.userId ? { _id: vendor.userId } : { email: vendor.ownerEmail };
+                    await User.updateOne(userQuery, { role: 'vendor' });
+                    console.log(`[Vendor Approval] User role upgraded to 'vendor' for ${vendor.ownerEmail}`);
+                } catch (err) {
+                    console.error("[Vendor Approval] Failed to upgrade user role:", err);
+                }
+            }
         }
 
         // REJECTION: Vendor got unverified/rejected
