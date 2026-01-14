@@ -25,21 +25,35 @@
 .modal {
     background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
     width: 96%;
-    /* Slightly narrower for mobile */
     max-width: 420px;
-    /* Reduced from 500px */
-    max-height: 75vh;
-    /* Reduced from 85vh to be more compact */
+    max-height: 80vh;
+    /* Slightly more room */
     margin: 0 auto 90px;
-    /* Positioned well above tab bar */
     border-radius: 20px;
-    /* Fully rounded on mobile for a tighter look */
     overflow: hidden;
     display: flex;
     flex-direction: column;
     animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    box-shadow: 0 20px 80px rgba(0, 0, 0, 0.8);
+    box-shadow: 0 40px 100px rgba(0, 0, 0, 0.8);
     border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.scrollContent {
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(59, 130, 246, 0.2) transparent;
+}
+
+.scrollContent::-webkit-scrollbar {
+    width: 4px;
+}
+
+.scrollContent::-webkit-scrollbar-thumb {
+    background: rgba(59, 130, 246, 0.2);
+    border-radius: 10px;
 }
 
 @keyframes slideUp {
@@ -52,17 +66,17 @@
     }
 }
 
-/* Header */
+/* Header - Always Fixed on Top of Modal */
 .header {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 10;
+    position: relative;
+    /* Changed from absolute to work with sticky/grid */
+    z-index: 20;
     display: flex;
     justify-content: space-between;
-    padding: 16px;
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, transparent 100%);
+    padding: 12px 16px;
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .backBtn,
@@ -89,14 +103,12 @@
 
 /* Vendor Profile */
 .vendorProfile {
-    padding: 48px 16px 16px;
-    /* Reduced padding */
-    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    padding: 16px;
+    background: rgba(30, 41, 59, 0.4);
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     display: flex;
     align-items: center;
     gap: 12px;
-    /* Reduced gap */
 }
 
 .shopImageWrapper {
@@ -512,9 +524,8 @@
     flex: 1;
     overflow-y: auto;
     padding: 12px 16px;
-    /* Tightened padding */
-    padding-bottom: 80px;
-    /* Space for purchase bar */
+    padding-bottom: 24px;
+    /* Normal padding */
 }
 
 .productName {
@@ -649,74 +660,7 @@
     transform: translateY(-2px);
 }
 
-/* Purchase Bar */
-.purchaseBar {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    padding: 12px 16px;
-    /* Reduced padding */
-    background: linear-gradient(180deg, transparent 0%, #0f172a 20%);
-    backdrop-filter: blur(12px);
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    /* Reduced gap */
-    z-index: 10;
-}
 
-.purchasePrice {
-    flex: 1;
-}
-
-.priceLabel {
-    display: block;
-    font-size: 0.65rem;
-    /* Smaller font */
-    color: #94a3b8;
-    margin-bottom: 2px;
-}
-
-.priceValue {
-    display: block;
-    font-size: 1.125rem;
-    /* Smaller for mobile */
-    font-weight: 700;
-    color: white;
-}
-
-.purchaseBtn {
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    /* Reduced gap */
-    padding: 12px 20px;
-    /* Reduced padding */
-    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-    color: white;
-    border: none;
-    border-radius: 10px;
-    /* Smaller radius */
-    font-weight: 700;
-    font-size: 0.875rem;
-    /* Smaller font */
-    cursor: pointer;
-    transition: all 0.3s;
-    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
-}
-
-.purchaseBtn:hover:not(:disabled) {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 24px rgba(59, 130, 246, 0.6);
-}
-
-.purchaseBtn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-}
 
 /* Desktop Overhaul - Premium Split Layout */
 @media (min-width: 768px) {
@@ -727,16 +671,15 @@
 
     .modal {
         width: 100%;
-        max-width: 900px;
-        /* Wider for split view */
-        height: 650px;
-        /* Fixed height for dashboard feel */
+        max-width: 960px;
+        /* Slightly wider */
+        height: 700px;
         max-height: 85vh;
         border-radius: 24px;
         margin-bottom: 0;
         display: grid;
-        grid-template-columns: 1fr 1fr;
-        /* Split view */
+        grid-template-columns: 1.2fr 1fr;
+        /* Gallery gets more space */
         grid-template-rows: auto 1fr;
         border: 1px solid rgba(255, 255, 255, 0.1);
         background: rgba(15, 23, 42, 0.95);
@@ -747,18 +690,26 @@
     .header {
         grid-column: 1 / -1;
         position: relative;
-        background: rgba(15, 23, 42, 0.4);
+        padding: 16px 24px;
+        background: rgba(15, 23, 42, 0.8);
         border-bottom: 1px solid rgba(255, 255, 255, 0.05);
         display: flex;
         justify-content: space-between;
-        padding: 20px 24px;
+    }
+
+    .scrollContent {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: 1.2fr 1fr;
+        overflow: hidden;
+        /* Child scrolls instead */
     }
 
     /* Vendor Profile spans across both columns */
     .vendorProfile {
         grid-column: 1 / -1;
-        padding: 24px;
-        background: transparent;
+        padding: 20px 24px;
+        background: rgba(30, 41, 59, 0.2);
         border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     }
 
@@ -777,10 +728,10 @@
         height: 100%;
         display: flex;
         flex-direction: column;
-        background: rgba(0, 0, 0, 0.2);
+        overflow-y: auto;
+        padding: 24px;
+        background: rgba(0, 0, 0, 0.1);
         border-right: 1px solid rgba(255, 255, 255, 0.05);
-        padding: 20px;
-        overflow: hidden;
     }
 
     .mainImage {
@@ -796,8 +747,6 @@
         height: 100%;
         overflow-y: auto;
         padding: 32px;
-        padding-bottom: 32px;
-        /* Redundant bar removed */
         background: transparent;
     }
 
@@ -845,6 +794,6 @@
 
     .headerBuyBtn {
         padding: 10px 24px;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
     }
 }

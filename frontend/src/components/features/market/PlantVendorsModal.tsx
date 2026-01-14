@@ -80,13 +80,13 @@ export const PlantVendorsModal = ({ plant, onClose }: PlantVendorsModalProps) =>
                 <div className={styles.header}>
                     <img src={plant.imageUrl} alt={plant.name} className={styles.plantThumb} />
                     <div>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#10b981', fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                        <div className={styles.optionsHeader}>
                             <TrendingUp size={12} /> Best Options Found
                         </div>
                         <h2 className={styles.title}>Purchase Options</h2>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        <div className={styles.plantNameRow}>
                             <p className={styles.subtitle}>{plant.name}</p>
-                            <span style={{ fontSize: '0.7rem', color: '#64748b', background: 'rgba(51, 65, 85, 0.4)', padding: '2px 8px', borderRadius: '4px' }}>
+                            <span className={styles.searchRadius}>
                                 Searching: 50km radius
                             </span>
                         </div>
@@ -95,9 +95,9 @@ export const PlantVendorsModal = ({ plant, onClose }: PlantVendorsModalProps) =>
 
                 <div className={styles.vendorList}>
                     {loading ? (
-                        <div style={{ padding: '3rem', textAlign: 'center', color: '#475569' }}>Scanning marketplace...</div>
+                        <div className={styles.statusMsg}>Scanning marketplace...</div>
                     ) : availableVendors.length === 0 ? (
-                        <div style={{ padding: '3rem', textAlign: 'center', color: '#64748b' }}>
+                        <div className={styles.statusMsg}>
                             This specimen is currently unavailable in local nurseries.
                         </div>
                     ) : (

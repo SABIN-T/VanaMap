@@ -91,41 +91,42 @@
     margin: 0.25rem 0 0 0;
 }
 
-/* GPS PROMPT */
-.gpsPrompt {
-    background: rgba(16, 185, 129, 0.05);
-    border: 1px solid rgba(16, 185, 129, 0.1);
-    border-radius: 1.5rem;
-    padding: 1.5rem;
-    text-align: center;
-    margin-bottom: 2rem;
-}
-
-.gpsBtn {
-    background: #10b981;
-    color: white;
-    border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: 1rem;
-    font-weight: 700;
+.optionsHeader {
     display: flex;
     align-items: center;
-    justify-content: center;
     gap: 0.5rem;
-    margin: 1rem auto;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.gpsBtn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
-}
-
-.desktopWarning {
+    color: #10b981;
     font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.25rem;
+}
+
+.plantNameRow {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 0.25rem;
+}
+
+.searchRadius {
+    font-size: 0.7rem;
     color: #64748b;
-    margin-top: 1rem;
+    background: rgba(30, 41, 59, 0.6);
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.statusMsg {
+    padding: 3rem;
+    text-align: center;
+    color: #64748b;
+    font-style: italic;
+    background: rgba(255, 255, 255, 0.02);
+    border-radius: 1rem;
+    border: 1px dashed rgba(255, 255, 255, 0.1);
 }
 
 /* VENDOR LIST */
@@ -377,11 +378,23 @@
 
     .modal {
         border-radius: 2.5rem;
-        padding-bottom: 2rem;
+        padding: 2.5rem;
+        height: 700px;
+        max-height: 85vh;
         border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 40px 120px rgba(0, 0, 0, 0.6);
     }
 
     .modal::before {
         display: none;
+    }
+
+    .modal::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .modal::-webkit-scrollbar-thumb {
+        background: rgba(59, 130, 246, 0.2);
+        border-radius: 10px;
     }
 }
