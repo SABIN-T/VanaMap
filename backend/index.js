@@ -91,7 +91,7 @@ const storage = new CloudinaryStorage({
 const upload = multer({
     storage: storage,
     limits: {
-        fileSize: 5 * 1024 * 1024,  // 5MB max (secure limit for plant images)
+        fileSize: 20 * 1024 * 1024,  // 20MB max for high-quality plant images
         files: 1  // Single file per request
     }
 });
@@ -2065,7 +2065,7 @@ app.use((err, req, res, next) => {
     if (err instanceof multer.MulterError) {
         console.error('[Multer Error]:', err.message);
         if (err.code === 'LIMIT_FILE_SIZE') {
-            return res.status(400).json({ error: 'File too large. Maximum size is 5MB.' });
+            return res.status(400).json({ error: 'File too large. Maximum size is 20MB.' });
         }
         if (err.code === 'LIMIT_UNEXPECTED_FILE') {
             return res.status(400).json({ error: 'Unexpected file field. Use "image" as field name.' });
