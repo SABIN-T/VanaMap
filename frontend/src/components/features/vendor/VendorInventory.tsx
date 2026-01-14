@@ -7,7 +7,6 @@ import { formatCurrency } from '../../../utils/currency';
 import type { Vendor, Plant } from '../../../types';
 import styles from './VendorInventory.module.css';
 import { EditPlantModal } from './EditPlantModal';
-import { apiCache } from '../../../utils/universalCache';
 
 interface VendorInventoryProps {
     vendor: Vendor;
@@ -19,7 +18,6 @@ export const VendorInventory = ({ vendor, onUpdate }: VendorInventoryProps) => {
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState('');
     const [editingPlant, setEditingPlant] = useState<{ plant: Plant, item: any } | null>(null);
-    const [showVerifyUpload, setShowVerifyUpload] = useState(false);
     const [editValues, setEditValues] = useState<Record<string, { price: string, quantity: string, inStock: boolean, sellingMode: 'online' | 'offline' | 'both' }>>({});
 
     useEffect(() => {

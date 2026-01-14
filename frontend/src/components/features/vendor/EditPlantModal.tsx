@@ -1,7 +1,6 @@
 import { useState, useRef } from 'react';
-import { X, Upload, Trash2, Image as ImageIcon, Check } from 'lucide-react';
+import { X, Upload, Trash2, Check } from 'lucide-react';
 import { toast } from 'react-hot-toast';
-import { apiCache } from '../../../utils/universalCache';
 
 interface EditPlantModalProps {
     plant: any;
