@@ -90,29 +90,64 @@ export const VendorDetailsModal = ({ vendor, plant, onClose, onBack }: VendorDet
                     </div>
                 </div>
 
-                {/* Image Gallery */}
+                {/* Image Gallery with Modern Carousel */}
                 <div className={styles.gallery}>
                     <div className={styles.mainImage}>
                         <img
                             src={allImages[selectedImageIndex]}
                             alt={`${plant.name} - Image ${selectedImageIndex + 1}`}
                             className={styles.productImage}
+                            key={selectedImageIndex} // Force re-render for animation
                         />
+
+                        {/* Navigation Arrows - Only show if multiple images */}
                         {allImages.length > 1 && (
                             <>
-                                <button className={styles.navBtn} style={{ left: '8px' }} onClick={prevImage}>
-                                    <ChevronLeft size={20} />
+                                <button
+                                    className={`${styles.navBtn} ${styles.navBtnLeft}`}
+                                    onClick={prevImage}
+                                    aria-label="Previous image"
+                                >
+                                    <ChevronLeft size={24} strokeWidth={3} />
                                 </button>
-                                <button className={styles.navBtn} style={{ right: '8px' }} onClick={nextImage}>
-                                    <ChevronRight size={20} />
+                                <button
+                                    className={`${styles.navBtn} ${styles.navBtnRight}`}
+                                    onClick={nextImage}
+                                    aria-label="Next image"
+                                >
+                                    <ChevronRight size={24} strokeWidth={3} />
                                 </button>
+
+                                {/* Image Counter Badge */}
                                 <div className={styles.imageCounter}>
-                                    {selectedImageIndex + 1} / {allImages.length}
+                                    <span className={styles.currentImage}>{selectedImageIndex + 1}</span>
+                                    <span className={styles.counterDivider}>/</span>
+                                    <span className={styles.totalImages}>{allImages.length}</span>
+                                </div>
+
+                                {/* Progress Dots */}
+                                <div className={styles.progressDots}>
+                                    {allImages.map((_, idx) => (
+                                        <button
+                                            key={idx}
+                                            className={`${styles.dot} ${idx === selectedImageIndex ? styles.dotActive : ''}`}
+                                            onClick={() => setSelectedImageIndex(idx)}
+                                            aria-label={`Go to image ${idx + 1}`}
+                                        />
+                                    ))}
                                 </div>
                             </>
                         )}
+
+                        {/* Vendor Badge Overlay */}
+                        {vendor.customImages && vendor.customImages.length > 0 && (
+                            <div className={styles.realPhotoBadge}>
+                                📸 Real Photo
+                            </div>
+                        )}
                     </div>
 
+                    {/* Thumbnail Strip - Horizontal Scrollable */}
                     {allImages.length > 1 && (
                         <div className={styles.thumbnails}>
                             {allImages.map((img, idx) => (
@@ -120,8 +155,14 @@ export const VendorDetailsModal = ({ vendor, plant, onClose, onBack }: VendorDet
                                     key={idx}
                                     className={`${styles.thumbnail} ${idx === selectedImageIndex ? styles.activeThumbnail : ''}`}
                                     onClick={() => setSelectedImageIndex(idx)}
+                                    aria-label={`View image ${idx + 1}`}
                                 >
                                     <img src={img} alt={`Thumbnail ${idx + 1}`} />
+                                    {idx === selectedImageIndex && (
+                                        <div className={styles.thumbnailOverlay}>
+                                            <div className={styles.thumbnailCheck}>✓</div>
+                                        </div>
+                                    )}
                                 </button>
                             ))}
                         </div>
