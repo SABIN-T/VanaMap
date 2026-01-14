@@ -1,7 +1,7 @@
 {
   "name": "server",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.0.1",
+  "description": "VanaMap Backend - Secure, vulnerability-free",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
