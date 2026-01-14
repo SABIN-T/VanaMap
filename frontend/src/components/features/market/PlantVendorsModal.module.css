@@ -198,6 +198,25 @@
     gap: 4px;
 }
 
+.clickToView {
+    color: #3b82f6 !important;
+    font-weight: 600;
+    font-size: 0.75rem !important;
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 0.6;
+    }
+
+    50% {
+        opacity: 1;
+    }
+}
+
 .sellingDetails {
     display: flex;
     gap: 0.5rem;

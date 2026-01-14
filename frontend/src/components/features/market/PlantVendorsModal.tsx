@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
-import { MapPin, Phone, Star, ShieldCheck, ShoppingCart, X, TrendingUp } from 'lucide-react';
+import { MapPin, Star, ShieldCheck, X, TrendingUp } from 'lucide-react';
 import type { Plant, Vendor } from '../../../types';
 import { fetchVendors } from '../../../services/api';
 import { formatCurrency } from '../../../utils/currency';
-import { useCart } from '../../../context/CartContext';
+import { VendorDetailsModal } from './VendorDetailsModal';
 import styles from './PlantVendorsModal.module.css';
 
 interface PlantVendorsModalProps {
@@ -12,12 +12,12 @@ interface PlantVendorsModalProps {
 }
 
 export const PlantVendorsModal = ({ plant, onClose }: PlantVendorsModalProps) => {
-    const { addToCart } = useCart();
     const [vendors, setVendors] = useState<Vendor[]>([]);
     const [loading, setLoading] = useState(true);
     const [isLocating, setIsLocating] = useState(false);
     const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
     const [gpsError, setGpsError] = useState<string | null>(null);
+    const [selectedVendor, setSelectedVendor] = useState<any | null>(null);
 
     useEffect(() => {
         loadVendors();
@@ -132,7 +132,12 @@ export const PlantVendorsModal = ({ plant, onClose }: PlantVendorsModalProps) =>
                         </div>
                     ) : (
                         availableVendors.map(vendor => (
-                            <div key={vendor.id} className={`${styles.vendorCard} ${vendor.highlyRecommended ? styles.recommended : ''}`}>
+                            <div
+                                key={vendor.id}
+                                className={`${styles.vendorCard} ${vendor.highlyRecommended ? styles.recommended : ''}`}
+                                onClick={() => setSelectedVendor(vendor)}
+                                style={{ cursor: 'pointer' }}
+                            >
                                 {vendor.highlyRecommended && (
                                     <div className={styles.badgeRecommended}>
                                         <Star size={10} fill="currentColor" /> Premier Partner
@@ -160,14 +165,9 @@ export const PlantVendorsModal = ({ plant, onClose }: PlantVendorsModalProps) =>
                                             <span>
                                                 <MapPin size={12} /> {vendor.realDistance < 999 ? `${vendor.realDistance.toFixed(1)} km` : 'Regional'}
                                             </span>
-                                            <span>
-                                                <Phone size={12} /> Contact Info
+                                            <span className={styles.clickToView}>
+                                                👆 Tap to view details
                                             </span>
-                                            {vendor.website && (
-                                                <span onClick={() => window.open(vendor.website!.startsWith('http') ? vendor.website! : `https://${vendor.website}`, '_blank')} style={{ cursor: 'pointer', color: '#10b981' }}>
-                                                    <Star size={12} /> Website
-                                                </span>
-                                            )}
                                         </div>
                                         <div className={styles.sellingDetails}>
                                             <span className={styles.modeBadge}>
@@ -195,15 +195,6 @@ export const PlantVendorsModal = ({ plant, onClose }: PlantVendorsModalProps) =>
 
                                     <div style={{ textAlign: 'right', display: 'flex', flexDirection: 'column', alignItems: 'flex-end', justifyContent: 'space-between' }}>
                                         <div className={styles.price}>{formatCurrency(vendor.currentPrice)}</div>
-                                        <button
-                                            className={styles.addToCartBtn}
-                                            onClick={() => {
-                                                addToCart(plant, vendor.id, vendor.currentPrice);
-                                                onClose();
-                                            }}
-                                        >
-                                            <ShoppingCart size={16} /> Purchase
-                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -211,6 +202,16 @@ export const PlantVendorsModal = ({ plant, onClose }: PlantVendorsModalProps) =>
                     )}
                 </div>
             </div>
+
+            {/* Vendor Details Modal */}
+            {selectedVendor && (
+                <VendorDetailsModal
+                    vendor={selectedVendor}
+                    plant={plant}
+                    onClose={onClose}
+                    onBack={() => setSelectedVendor(null)}
+                />
+            )}
         </div>
     );
 };
