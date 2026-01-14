@@ -79,7 +79,9 @@ export const VendorDetailsModal = ({ vendor, plant, onClose, onBack }: VendorDet
                         <div className={styles.vendorMeta}>
                             <span className={styles.metaItem}>
                                 <MapPin size={14} />
-                                {vendor.realDistance < 999 ? `${vendor.realDistance.toFixed(1)} km away` : 'Regional'}
+                                {vendor.realDistance < 999
+                                    ? `${vendor.realDistance.toFixed(1)} km from search center`
+                                    : 'Available in your Region'}
                             </span>
                             {vendor.highlyRecommended && (
                                 <span className={styles.recommendedBadge}>
