@@ -1,16 +1,4 @@
 {
-    "redirects": [
-        {
-            "source": "http://vanamap.online/:path*",
-            "destination": "https://www.vanamap.online/:path*",
-            "permanent": true
-        },
-        {
-            "source": "http://www.vanamap.online/:path*",
-            "destination": "https://www.vanamap.online/:path*",
-            "permanent": true
-        }
-    ],
     "rewrites": [
         {
             "source": "/(.*)",
