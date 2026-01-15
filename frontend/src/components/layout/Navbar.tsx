@@ -32,7 +32,7 @@ export const Navbar = () => {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }}>
                 <div className={styles.logoIcon}>
-                    <img src="/logo.png?v=4" alt="VanaMap Logo" className={styles.logoImage} />
+                    <img src="/logo.png?v=4" alt="VanaMap Logo" className={styles.logoImage} style={{ height: '36px', width: 'auto' }} />
                 </div>
                 <div className={styles.logoText}>
                     <span className={styles.brandName}>VanaMap</span>
@@ -99,7 +99,10 @@ export const Navbar = () => {
                             </button>
                         </div>
                     ) : (
-                        <Link to="/auth" className={`${styles.loginBtn} btn btn-primary`} style={{ padding: '0.4rem 1.25rem', fontSize: '0.85rem' }}>Login</Link>
+                        <Link to="/auth" className={`${styles.loginBtn} btn btn-primary`} style={{ padding: '0.4rem 1.25rem', fontSize: '0.85rem' }}>
+                            <UserIcon size={16} />
+                            <span>Login</span>
+                        </Link>
                     )}
                 </div>
 
@@ -110,7 +113,7 @@ export const Navbar = () => {
             </div>
 
             {/* Mobile Menu Overlay */}
-            <div className={`${styles.mobileMenu} ${isMenuOpen ? styles.open : ''}`}>
+            <div className={`${styles.mobileMenu} ${isMenuOpen ? styles.open : ''}`} style={{ visibility: isMenuOpen ? 'visible' : 'hidden', opacity: isMenuOpen ? 1 : 0 }}>
                 <div className={styles.mobileLinks}>
                     <Link to="/" className={styles.mobileNavLink} onClick={() => setIsMenuOpen(false)}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><Leaf size={20} /> Home</div>
@@ -122,10 +125,13 @@ export const Navbar = () => {
                         <ChevronRight size={18} />
                     </Link>
 
-
-
                     <Link to="/shops" className={styles.mobileNavLink} onClick={() => setIsMenuOpen(false)}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><ShoppingBag size={20} /> Shops</div>
+                        <ChevronRight size={18} />
+                    </Link>
+
+                    <Link to="/heaven" className={styles.mobileNavLink} onClick={() => setIsMenuOpen(false)}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}><Gamepad2 size={20} /> Heaven</div>
                         <ChevronRight size={18} />
                     </Link>
 
@@ -178,29 +184,6 @@ export const Navbar = () => {
                     <div className={styles.divider} />
                 </div>
             </div>
-
-            {/* Mobile Styles Override */}
-            <style>{`
-                @media (max-width: 768px) {
-                    .${styles.desktopLinks}, 
-                    .${styles.menuBtn},
-                    #nav-cart {
-                        display: none !important;
-                    }
-                    /* Ensure Logo and Auth are visible */
-                    .${styles.navbar} {
-                         padding: 0.8rem 1rem;
-                         justify-content: space-between;
-                    }
-                    .${styles.actions} {
-                        display: flex;
-                        gap: 10px;
-                    }
-                    .${styles.authDesktop} {
-                        display: flex !important;
-                    }
-                }
-            `}</style>
         </nav>
     );
 };

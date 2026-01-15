@@ -2,11 +2,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /* Vertical center is key */
     padding: 0.5rem 1.5rem;
-    /* Tighter vertical padding */
     background: rgba(15, 23, 42, 0.7);
-    /* Darker, richer glass */
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
@@ -15,10 +12,8 @@
     z-index: 1000;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     height: 60px;
-    /* Fixed compact height */
 }
 
-/* Light Mode Navbar - Premium Black Glass */
 [data-theme='light'] .navbar {
     background: rgba(15, 23, 42, 0.95);
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -28,7 +23,6 @@
 @media (min-width: 1024px) {
     .navbar {
         padding: 0 4rem;
-        /* Horizontal padding */
     }
 }
 
@@ -52,7 +46,6 @@
 
 .logoImage {
     height: 36px;
-    /* Compact logo */
     width: auto;
     object-fit: contain;
     transition: height 0.3s ease;
@@ -66,7 +59,6 @@
 
 .brandName {
     font-size: 1.1rem;
-    /* Smaller brand name */
     font-weight: 800;
     letter-spacing: -0.02em;
     line-height: 1;
@@ -98,7 +90,6 @@
 .desktopLinks {
     display: flex;
     gap: 1.5rem;
-    /* Reduced gap for density */
     align-items: center;
     height: 100%;
 }
@@ -108,7 +99,6 @@
     color: var(--color-text-muted);
     font-weight: 600;
     font-size: 0.85rem;
-    /* Compact font */
     transition: all 0.2s ease;
     background: transparent;
     border: none;
@@ -130,7 +120,6 @@
     display: flex;
     align-items: center;
     gap: 1rem;
-    /* Tighter actions */
 }
 
 .cartBtn {
@@ -332,6 +321,14 @@
     transition-delay: 0.35s;
 }
 
+.mobileMenu.open .mobileNavLink:nth-child(7) {
+    transition-delay: 0.4s;
+}
+
+.mobileMenu.open .mobileNavLink:nth-child(8) {
+    transition-delay: 0.45s;
+}
+
 .mobileNavLink:active {
     background: rgba(0, 255, 157, 0.1);
     border-color: var(--color-primary);
@@ -352,10 +349,37 @@
 
 /* Responsive */
 @media (max-width: 992px) {
-
-    .desktopLinks,
-    .authDesktop {
+    .desktopLinks {
         display: none;
+    }
+
+    /* Keep auth visible but compact on mobile */
+    .authDesktop {
+        display: flex;
+        margin-right: 0.5rem;
+    }
+
+    /* Hide text in auth buttons on mobile */
+    .authDesktop span {
+        display: none;
+    }
+
+    /* Hide secondary auth buttons (Admin, Logout) on mobile topbar */
+    .authDesktop :global(.btn-outline) {
+        display: none !important;
+    }
+
+    .loginBtn,
+    .userBadgeBtn {
+        padding: 0.4rem !important;
+        font-size: 0 !important;
+        width: 32px;
+        height: 32px;
+        justify-content: center;
+    }
+
+    .authDesktop .btn {
+        padding: 0.4rem !important;
     }
 
     .menuBtn {
@@ -368,8 +392,11 @@
 
     .navbar {
         height: auto;
-        /* Let it grow on mobile */
         padding: 0.75rem 1.25rem;
+    }
+
+    .actions {
+        gap: 0.75rem;
     }
 }
 
@@ -380,5 +407,13 @@
 
     .tagline {
         font-size: 0.5rem;
+    }
+
+    .navbar {
+        padding: 0.6rem 1rem;
+    }
+
+    .logoImage {
+        height: 32px;
     }
 }
