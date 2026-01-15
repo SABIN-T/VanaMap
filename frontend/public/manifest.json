@@ -1,7 +1,7 @@
 {
   "name": "VanaMap - AI Plant Finder & E-Commerce",
   "short_name": "VanaMap",
-  "description": "Discover, identify, and buy plants with AI-powered recommendations and AR visualization",
+  "description": "Discover, identify, and buy plants with AI-powered recommendations",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#030712",
@@ -65,19 +65,6 @@
       "icons": [
         {
           "src": "/icons/shortcut-ai.png",
-          "sizes": "96x96",
-          "type": "image/png"
-        }
-      ]
-    },
-    {
-      "name": "Make It Real",
-      "short_name": "AR Studio",
-      "description": "Visualize plants in your space",
-      "url": "/heaven/make-it-real",
-      "icons": [
-        {
-          "src": "/icons/shortcut-ar.png",
           "sizes": "96x96",
           "type": "image/png"
         }
