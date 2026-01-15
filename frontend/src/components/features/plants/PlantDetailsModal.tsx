@@ -78,7 +78,12 @@ export const PlantDetailsModal = ({ plant, weather, onClose, onBuy }: PlantDetai
         const insights = generatePlantInsights(plant, currentTemp, currentHumidity, aqi);
 
         // Use simulated aptness if simulation is active (even in overview, simulated conditions matter)
-        const displayScore = (simResults.aptness * 100);
+        // FIX: Match the Home Screen card score by default, only switch to sim if controls are touched
+        let displayScore = (simResults.aptness * 100);
+
+        if (plant.score !== undefined && !isACMode && lightLevel === 70) {
+            displayScore = plant.score;
+        }
 
         const getVerdict = () => {
             if (displayScore >= 90) return { label: 'Optimal Match', color: '#10b981', desc: 'Condition analysis complete. Vital signs are within optimal ranges for peak physiological productivity.' };
