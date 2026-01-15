@@ -101,7 +101,6 @@ export const AIDoctor = () => {
 
     const [input, setInput] = useState('');
     const [loading, setLoading] = useState(false);
-    const [streamingMessage, setStreamingMessage] = useState('');
 
     // WebSocket streaming
     const { isConnected: wsConnected, isStreaming, sendMessage: sendWsMessage } = useAIDoctorStream();
@@ -351,7 +350,8 @@ export const AIDoctor = () => {
             };
 
             setMessages(prev => [...prev, placeholderMessage]);
-            setStreamingMessage('');
+
+            let accumulatedContent = '';
 
             sendWsMessage({
                 messages: conversationHistory,
@@ -363,19 +363,15 @@ export const AIDoctor = () => {
                 image: base64Image,
                 persona: persona,
                 onChunk: (chunk: string) => {
-                    setStreamingMessage(prev => {
-                        const newContent = prev + chunk;
-                        setMessages(msgs => msgs.map(m =>
-                            m.id === streamingMessageId
-                                ? { ...m, content: newContent }
-                                : m
-                        ));
-                        return newContent;
-                    });
+                    accumulatedContent += chunk;
+                    setMessages(msgs => msgs.map(m =>
+                        m.id === streamingMessageId
+                            ? { ...m, content: accumulatedContent }
+                            : m
+                    ));
                 },
                 onComplete: (fullMessage: string) => {
                     setLoading(false);
-                    setStreamingMessage('');
 
                     if (messageContent && fullMessage) {
                         mlCache.add(messageContent, fullMessage);
@@ -389,7 +385,6 @@ export const AIDoctor = () => {
                 onError: (error: string) => {
                     console.error('[WebSocket] Error:', error);
                     setLoading(false);
-                    setStreamingMessage('');
                     setMessages(prev => prev.filter(m => m.id !== streamingMessageId));
 
                     console.log('[AI Doctor] Falling back to REST API');

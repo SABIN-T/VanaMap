@@ -21,15 +21,15 @@ export const useAIDoctorStream = () => {
     const wsRef = useRef<WebSocket | null>(null);
     const [isConnected, setIsConnected] = useState(false);
     const [isStreaming, setIsStreaming] = useState(false);
-    const reconnectTimeoutRef = useRef<NodeJS.Timeout>();
+    const reconnectTimeoutRef = useRef<number | undefined>(undefined);
 
     // Get WebSocket URL from API_URL
-    const getWsUrl = () => {
+    const getWsUrl = useCallback(() => {
         const wsProtocol = API_URL.startsWith('https') ? 'wss' : 'ws';
         const baseUrl = API_URL.replace(/^https?:\/\//, '');
         const token = localStorage.getItem('token');
         return `${wsProtocol}://${baseUrl}/ws/chat${token ? `?token=${token}` : ''}`;
-    };
+    }, []);
 
     const connect = useCallback(() => {
         if (wsRef.current?.readyState === WebSocket.OPEN) {
@@ -64,10 +64,10 @@ export const useAIDoctorStream = () => {
                 setIsStreaming(false);
 
                 // Auto-reconnect after 3 seconds
-                reconnectTimeoutRef.current = setTimeout(() => {
+                reconnectTimeoutRef.current = window.setTimeout(() => {
                     console.log('[WS] Attempting to reconnect...');
                     connect();
-                }, 3000);
+                }, 3000) as unknown as number;
             };
 
             ws.onerror = (error) => {
@@ -78,7 +78,7 @@ export const useAIDoctorStream = () => {
         } catch (error) {
             console.error('[WS] Connection failed:', error);
         }
-    }, []);
+    }, [getWsUrl]);
 
     const disconnect = useCallback(() => {
         if (reconnectTimeoutRef.current) {
