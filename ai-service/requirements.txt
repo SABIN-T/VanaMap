@@ -1,7 +1,0 @@
-fastapi
-uvicorn[standard]
-python-multipart
-rembg[cpu]
-pillow
-numpy
-gunicorn
