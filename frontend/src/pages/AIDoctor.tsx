@@ -272,12 +272,12 @@ export const AIDoctor = () => {
     // Web Search for Scientific Plant Data
 
     const handleSend = async (contentOverride?: string) => {
-        stopSpeaking(); // Stop speaking when sending a message
+        stopSpeaking();
         const textToSend = typeof contentOverride === 'string' ? contentOverride : input;
 
         if (!textToSend.trim() && !selectedImage) return;
 
-        const messageContent = textToSend || "What plant is this?"; // Default question if only image
+        const messageContent = textToSend || "What plant is this?";
         let base64Image: string | null = null;
 
         if (selectedImage) {
@@ -302,10 +302,8 @@ export const AIDoctor = () => {
             image: base64Image || undefined
         };
 
-        // Proactive Guard: Check if user is trying an expensive operation (Image/Analysis) while limited
         if (base64Image && isAnalysisLimited) {
             toast.error("🎨 Neural analysis limit reached! Switching to text-only mode.", { icon: '📊' });
-            // Remove image but keep text
             base64Image = null;
             userMessage.image = undefined;
             userMessage.content = textToSend || "Please help me with this plant (limit reached, sending text only)";
@@ -314,50 +312,100 @@ export const AIDoctor = () => {
         setMessages(prev => [...prev, userMessage]);
         setInput('');
         setLoading(true);
-
-
         clearImage();
 
-        try {
-            // 🤖 ML CACHE CHECK - Try to find similar past response
-            // Only check cache for text-only queries (not images)
-            if (!base64Image) {
-                const cachedResponse = mlCache.findSimilar(messageContent);
-
-                if (cachedResponse) {
-                    // Cache hit! Reuse past response
-                    console.log('[ML Cache] ✅ Cache HIT - Reusing response');
-
-                    const cachedMessage: Message = {
-                        id: (Date.now() + 1).toString(),
-                        role: 'assistant',
-                        content: cachedResponse.response + '\n\n_💡 Instant response from learned knowledge_',
-                        timestamp: new Date()
-                    };
-
-                    setMessages(prev => [...prev, cachedMessage]);
-                    setLoading(false);
-
-                    toast.success('⚡ Instant response (saved API call!)', {
-                        duration: 2000,
-                        icon: '🧠'
-                    });
-
-                    return; // Skip API call entirely!
-                }
-
-                console.log('[ML Cache] ❌ Cache MISS - Calling API');
+        // Check ML Cache first (text-only queries)
+        if (!base64Image) {
+            const cachedResponse = mlCache.findSimilar(messageContent);
+            if (cachedResponse) {
+                console.log('[ML Cache] ✅ Cache HIT - Reusing response');
+                const cachedMessage: Message = {
+                    id: (Date.now() + 1).toString(),
+                    role: 'assistant',
+                    content: cachedResponse.response + '\n\n_💡 Instant response from learned knowledge_',
+                    timestamp: new Date()
+                };
+                setMessages(prev => [...prev, cachedMessage]);
+                setLoading(false);
+                toast.success('⚡ Instant response (saved API call!)', { duration: 2000, icon: '🧠' });
+                return;
             }
+        }
 
-            // Include the new user message in the API call
-            // We ensure that if there's an image, it's sent along with the history
-            const conversationHistory = [...messages, userMessage].map(m => ({
-                role: m.role,
-                content: m.content,
-                // VISION CONTINUITY: Pass the image back in history so the AI remembers it
-                image: m.image
-            }));
+        const conversationHistory = [...messages, userMessage].map(m => ({
+            role: m.role,
+            content: m.content,
+            image: m.image
+        }));
 
+        // Try WebSocket streaming for text-only queries
+        if (wsConnected && !base64Image) {
+            console.log('[AI Doctor] Using WebSocket streaming');
+
+            const streamingMessageId = (Date.now() + 1).toString();
+            const placeholderMessage: Message = {
+                id: streamingMessageId,
+                role: 'assistant',
+                content: '',
+                timestamp: new Date()
+            };
+
+            setMessages(prev => [...prev, placeholderMessage]);
+            setStreamingMessage('');
+
+            sendWsMessage({
+                messages: conversationHistory,
+                userContext: {
+                    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+                    city: weather?.city,
+                    weather: weather
+                },
+                image: base64Image,
+                persona: persona,
+                onChunk: (chunk: string) => {
+                    setStreamingMessage(prev => {
+                        const newContent = prev + chunk;
+                        setMessages(msgs => msgs.map(m =>
+                            m.id === streamingMessageId
+                                ? { ...m, content: newContent }
+                                : m
+                        ));
+                        return newContent;
+                    });
+                },
+                onComplete: (fullMessage: string) => {
+                    setLoading(false);
+                    setStreamingMessage('');
+
+                    if (messageContent && fullMessage) {
+                        mlCache.add(messageContent, fullMessage);
+                        console.log('[ML Cache] 💾 Response cached for future use');
+                    }
+
+                    if (user && (fullMessage.includes('DIAGNOSIS:') || fullMessage.includes('TREATMENT:'))) {
+                        setTimeout(fetchMedicalRecords, 3000);
+                    }
+                },
+                onError: (error: string) => {
+                    console.error('[WebSocket] Error:', error);
+                    setLoading(false);
+                    setStreamingMessage('');
+                    setMessages(prev => prev.filter(m => m.id !== streamingMessageId));
+
+                    console.log('[AI Doctor] Falling back to REST API');
+                    handleSendREST(conversationHistory, base64Image, messageContent);
+                }
+            });
+            return;
+        }
+
+        // Use REST API for images or when WebSocket unavailable
+        console.log('[AI Doctor] Using REST API');
+        await handleSendREST(conversationHistory, base64Image, messageContent);
+    };
+
+    const handleSendREST = async (conversationHistory: any[], base64Image: string | null, messageContent: string) => {
+        try {
             const response = await chatWithDrFlora(
                 conversationHistory,
                 {
@@ -365,13 +413,12 @@ export const AIDoctor = () => {
                     city: weather?.city,
                     weather: weather
                 },
-                base64Image, // Current turn image
+                base64Image,
                 persona
             );
 
-            console.log('[AI Doctor] Raw API Response:', response); // Debugging
+            console.log('[AI Doctor] Raw API Response:', response);
 
-            // --- Update Neural Energy Levels ---
             if (response.usageMeta) {
                 const remaining = parseInt(response.usageMeta.remaining || '0') || 0;
                 const limit = parseInt(response.usageMeta.limit || '100000') || 100000;
@@ -390,11 +437,10 @@ export const AIDoctor = () => {
             let aiText = response.choices?.[0]?.message?.content;
 
             if (!aiText) {
-                // Context-aware Fallbacks
                 if (response.refusal) {
                     aiText = `I cannot answer that: ${response.refusal}`;
                 } else if (base64Image) {
-                    aiText = "I apologize, but I couldn't process this photo. **Please give a proper image to analyze** (ensure the plant is well-lit and clearly visible).";
+                    aiText = "I apologize, but I couldn't process this photo. **Please give a proper image to analyze**.";
                 } else {
                     aiText = "I apologize, I'm having trouble connecting right now. Please try asking again.";
                 }
@@ -406,11 +452,10 @@ export const AIDoctor = () => {
                 role: 'assistant',
                 content: aiText,
                 image: response.choices?.[0]?.message?.image,
-                images: response.choices?.[0]?.message?.images, // CAPTURE BOTH FLUX & SDXL
+                images: response.choices?.[0]?.message?.images,
                 timestamp: new Date()
             };
 
-            // Enhanced debug logging for image generation
             console.log('[AI Doctor] 📦 Full API Response:', {
                 hasChoices: !!response.choices,
                 choicesLength: response.choices?.length,
@@ -433,16 +478,12 @@ export const AIDoctor = () => {
 
 
             setMessages(prev => [...prev, assistantMessage]);
+
             if (user && (aiText.includes('DIAGNOSIS:') || aiText.includes('TREATMENT:'))) {
-                // Refresh medical records if a new diagnosis was made
                 setTimeout(fetchMedicalRecords, 3000);
             }
 
-            // 🤖 ML CACHE STORAGE - Save response for future reuse
-            // Only cache text-only responses (not image-based)
-            const isErrorMessage = aiText.includes("trouble connecting to my knowledge base") ||
-                aiText.includes("AI Service Unavailable");
-
+            const isErrorMessage = aiText.includes("trouble connecting") || aiText.includes("AI Service Unavailable");
             if (!base64Image && aiText && messageContent && !isErrorMessage) {
                 mlCache.add(messageContent, aiText);
                 console.log('[ML Cache] 💾 Response cached for future use');
@@ -451,39 +492,36 @@ export const AIDoctor = () => {
         } catch (error: any) {
             console.error('[AI Doctor] Error:', error);
 
-            // AUTO-RECOVERY: If it failed with an image, try one last time WITHOUT image (TEXT-ONLY)
             if (base64Image && !isAnalysisLimited) {
                 console.log('[AI Doctor] Image analysis failed, attempting Text-Only fallback...');
-                setIsAnalysisLimited(true); // Don't try again this session
-                setLoading(true);
+                setIsAnalysisLimited(true);
                 try {
                     const fallbackResponse = await chatWithDrFlora(
                         messages.map(m => ({ role: m.role, content: m.content })),
                         { timezone: Intl.DateTimeFormat().resolvedOptions().timeZone },
-                        null // No image
+                        null
                     );
 
-                    const fallbackAssistantMessage: Message = {
+                    const fallbackMessage: Message = {
                         id: (Date.now() + 2).toString(),
                         role: 'assistant',
-                        content: `⚠️ **I had trouble with that photo.** Please **give a proper image to analyze** for a better diagnosis. In the meantime, I've used my text-only knowledge to help you:\n\n${fallbackResponse.choices?.[0]?.message?.content}`,
+                        content: `⚠️ **I had trouble with that photo.** Please **give a proper image to analyze**.\n\n${fallbackResponse.choices?.[0]?.message?.content}`,
                         timestamp: new Date()
                     };
-                    setMessages(prev => [...prev, fallbackAssistantMessage]);
+                    setMessages(prev => [...prev, fallbackMessage]);
                     setLoading(false);
                     return;
-                    // Don't add text, just store image
                 } catch {
                     console.error("Text fallback failed");
                 }
-
-                setMessages(prev => [...prev, {
-                    id: (Date.now() + 1).toString(),
-                    role: 'assistant',
-                    content: "⚠️ **Dr. Flora is momentarily offline.** I'm undergoing a neural recalibration. Please try again with simple text or check back in a few minutes.",
-                    timestamp: new Date()
-                }]);
             }
+
+            setMessages(prev => [...prev, {
+                id: (Date.now() + 1).toString(),
+                role: 'assistant',
+                content: "⚠️ **Dr. Flora is momentarily offline.** I'm undergoing a neural recalibration. Please try again.",
+                timestamp: new Date()
+            }]);
         } finally {
             setLoading(false);
         }
@@ -911,6 +949,27 @@ export const AIDoctor = () => {
                         </div>
                     )}
 
+                    {/* WebSocket Streaming Status */}
+                    {wsConnected && (
+                        <div className={`${styles.climateBadge} hide-on-mobile`} style={{
+                            background: 'rgba(16, 185, 129, 0.1)',
+                            border: '1px solid rgba(16, 185, 129, 0.3)',
+                            color: '#10b981',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '6px'
+                        }}>
+                            <div style={{
+                                width: '6px',
+                                height: '6px',
+                                borderRadius: '50%',
+                                background: '#10b981',
+                                animation: 'pulse 2s infinite'
+                            }} />
+                            <span>Live</span>
+                        </div>
+                    )}
+
                     <div className={styles.actions}>
                         {/* Neural Energy Display */}
                         {neuralMeta && (
@@ -1204,13 +1263,29 @@ export const AIDoctor = () => {
                         </div>
                     ))}
 
-                    {loading && (
+                    {(loading || isStreaming) && (
                         <div className={`${styles.message} ${styles.assistantMessage}`}>
                             <div className={styles.messageIcon}><Bot size={20} /></div>
                             <div className={styles.messageContent}>
-                                <div className={`${styles.messageText} ${styles.typing}`}>
-                                    <span></span><span></span><span></span>
-                                </div>
+                                {isStreaming ? (
+                                    <div style={{
+                                        padding: '12px',
+                                        background: 'rgba(16, 185, 129, 0.05)',
+                                        borderRadius: '12px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '8px',
+                                        fontSize: '0.9rem',
+                                        color: '#059669'
+                                    }}>
+                                        <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} />
+                                        Dr. Flora is typing...
+                                    </div>
+                                ) : (
+                                    <div className={`${styles.messageText} ${styles.typing}`}>
+                                        <span></span><span></span><span></span>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     )}
