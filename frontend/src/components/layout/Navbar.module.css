@@ -383,11 +383,8 @@
     }
 
     .menuBtn {
-        display: block;
-        padding: 0.5rem;
-        background: var(--color-bg-alt);
-        border-radius: 0.5rem;
-        border: 1px solid var(--color-border);
+        display: none !important;
+        /* User requested removal of top menu on mobile */
     }
 
     .navbar {
