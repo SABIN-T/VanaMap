@@ -1050,7 +1050,7 @@ export const Home = () => {
                                 boxShadow: '0 10px 30px rgba(0,0,0,0.2)',
                                 zIndex: 1
                             }}>
-                                <img src="/logo.png" alt="VanaMap" style={{ width: '60px', height: '60px', objectFit: 'contain' }} />
+                                <img src="/icons/icon-192x192.png" alt="VanaMap" style={{ width: '60px', height: '60px', objectFit: 'contain', borderRadius: '12px' }} />
                             </div>
                             <button
                                 onClick={() => setShowInstallModal(false)}
