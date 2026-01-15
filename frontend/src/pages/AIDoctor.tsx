@@ -8,6 +8,7 @@ import styles from './AIDoctor.module.css';
 import remarkGfm from 'remark-gfm';
 import { mlCache } from '../utils/mlCache';
 import { Helmet } from 'react-helmet-async';
+import { useAIDoctorStream } from '../hooks/useAIDoctorStream';
 
 // Lazy load ReactMarkdown for faster mobile load
 const ReactMarkdown = lazy(() => import('react-markdown'));
@@ -100,6 +101,10 @@ export const AIDoctor = () => {
 
     const [input, setInput] = useState('');
     const [loading, setLoading] = useState(false);
+    const [streamingMessage, setStreamingMessage] = useState('');
+
+    // WebSocket streaming
+    const { isConnected: wsConnected, isStreaming, sendMessage: sendWsMessage } = useAIDoctorStream();
 
     // --- IMAGE UPLOAD (Plant Diagnosis) ---
     const [selectedImage, setSelectedImage] = useState<File | null>(null);

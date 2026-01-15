@@ -5718,4 +5718,12 @@ app.patch('/api/user/persona', optionalAuth, async (req, res) => {
     }
 });
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// Initialize HTTP server for WebSocket support
+const http = require('http');
+const server = http.createServer(app);
+
+// Initialize WebSocket server
+const { initializeWebSocket } = require('./websocket-server');
+initializeWebSocket(server);
+
+server.listen(PORT, () => console.log(`Server running on port ${PORT} with WebSocket support`));
