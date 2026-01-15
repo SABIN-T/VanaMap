@@ -292,7 +292,7 @@ class PWAManager {
      */
     private showInstallButton(deferredPrompt: any): void {
         // Check if user has dismissed the prompt before
-        const dismissed = localStorage.getItem('pwa-install-dismissed');
+        const dismissed = localStorage.getItem('pwa-install-dismissed-v2');
         if (dismissed) return;
 
         const installButton = document.createElement('div');
@@ -398,17 +398,19 @@ class PWAManager {
 
         // Dismiss button click
         document.getElementById('dismiss-install')?.addEventListener('click', () => {
-            localStorage.setItem('pwa-install-dismissed', 'true');
+            localStorage.setItem('pwa-install-dismissed-v2', 'true');
             installButton.remove();
         });
 
-        // Auto-dismiss after 15 seconds
+        // Auto-dismiss removed to ensure visibility
+        /* 
         setTimeout(() => {
             if (document.getElementById('pwa-install-button')) {
                 installButton.style.animation = 'slideUpFade 0.3s ease-out reverse';
                 setTimeout(() => installButton.remove(), 300);
             }
-        }, 15000);
+        }, 15000); 
+        */
     }
 
     /**
