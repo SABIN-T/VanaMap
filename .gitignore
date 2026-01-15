@@ -41,3 +41,11 @@ VanaMap_Technical_Architecture.pdf
 *.log
 *.out
 *.toc
+
+# Hide all documentation from public repo
+*.md
+!README.md
+*.txt
+!robots.txt
+!**/public/robots.txt
+*.tex
