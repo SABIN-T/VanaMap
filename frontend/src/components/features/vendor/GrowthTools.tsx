@@ -121,7 +121,7 @@ export const GrowthTools = ({ vendorId }: GrowthToolsProps) => {
                                 level={"H"}
                                 includeMargin={true}
                                 imageSettings={{
-                                    src: "/logo.png",
+                                    src: "/icons/icon-192x192.png",
                                     x: undefined,
                                     y: undefined,
                                     height: 40,
