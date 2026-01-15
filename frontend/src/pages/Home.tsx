@@ -42,6 +42,8 @@ export const Home = () => {
     const [visibleLimit, setVisibleLimit] = useState(() => window.innerWidth < 768 ? 4 : 8); // Reduced for mobile
     const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
     const [showInstallModal, setShowInstallModal] = useState(false);
+    const [showAbout, setShowAbout] = useState(false);
+    const aboutRef = useRef<HTMLDivElement>(null);
 
     const plantsSectionRef = useRef<HTMLDivElement>(null);
     const filterSectionRef = useRef<HTMLDivElement>(null);
@@ -177,31 +179,7 @@ export const Home = () => {
         }, 100);
     };
 
-    const downloadShortcut = () => {
-        const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
 
-        let content = "";
-        let fileName = "VanaMap_Launcher.url";
-        const type = "application/octet-stream";
-
-        if (isMac) {
-            content = `<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">\n<plist version="1.0">\n<dict>\n\t<key>URL</key>\n\t<string>https://www.vanamap.online</string>\n</dict>\n</plist>`;
-            fileName = "VanaMap.webloc";
-        } else {
-            content = `[InternetShortcut]\nURL=https://www.vanamap.online\nIconFile=https://www.vanamap.online/favicon.svg\nIconIndex=0`;
-            fileName = "VanaMap_Launcher.url";
-        }
-
-        const blob = new Blob([content], { type });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = fileName;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-    };
 
     useEffect(() => {
         const handler = (e: any) => {
@@ -213,10 +191,6 @@ export const Home = () => {
     }, []);
 
     const handleInstallApp = async () => {
-        // ALWAYS trigger a launcher download first to satisfy "automatic download"
-        downloadShortcut();
-        toast.success("VanaMap Launcher Downloaded! 🚀", { duration: 3000 });
-
         if (deferredPrompt) {
             deferredPrompt.prompt();
             const { outcome } = await deferredPrompt.userChoice;
@@ -1008,7 +982,7 @@ export const Home = () => {
                             }}
                         >
                             <Download size={20} />
-                            Download VanaMap App
+                            Install App
                         </Button>
                         <p style={{ color: 'var(--color-text-dim)', fontSize: '0.75rem', marginTop: '1rem', opacity: 0.7 }}>
                             Desktop or Mobile • No Store Required
@@ -1021,7 +995,7 @@ export const Home = () => {
                             <li><a href="/support" style={{ color: 'var(--color-text-muted)', textDecoration: 'none', fontSize: '0.9rem' }}>Suggestions</a></li>
                             <li><a href="/sponsor" style={{ color: 'var(--color-text-muted)', textDecoration: 'none', fontSize: '0.9rem' }}>Sponsorship</a></li>
                             <li><a href="/vendor" style={{ color: 'var(--color-text-muted)', textDecoration: 'none', fontSize: '0.9rem' }}>For Vendors</a></li>
-                            <li><a href="/about" style={{ color: 'var(--color-text-muted)', textDecoration: 'none', fontSize: '0.9rem' }}>About Us</a></li>
+                            <li><button onClick={() => { setShowAbout(!showAbout); setTimeout(() => aboutRef.current?.scrollIntoView({ behavior: 'smooth' }), 100); }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-text-muted)', textDecoration: 'none', fontSize: '0.9rem', padding: 0 }}>About Us</button></li>
                         </ul>
                     </div>
                 </div>
@@ -1175,86 +1149,89 @@ export const Home = () => {
                 </div>
             )}
 
-            {/* SEO Content Section - Hidden but crawlable */}
-            <section className={styles.seoContent} style={{
-                padding: '4rem 2rem',
-                maxWidth: '1200px',
-                margin: '0 auto',
-                background: 'rgba(15, 23, 42, 0.5)',
-                borderRadius: '2rem',
-                marginTop: '4rem'
-            }}>
-                <h2 style={{ fontSize: '2rem', fontWeight: 800, marginBottom: '1.5rem', color: '#10b981' }}>
-                    Why Choose VanaMap for Your Plant Journey?
-                </h2>
-                <p style={{ fontSize: '1.1rem', lineHeight: '1.8', marginBottom: '2rem', color: '#cbd5e1' }}>
-                    VanaMap is your intelligent companion for discovering, identifying, and caring for plants. Whether you're a beginner looking for easy-care houseplants or an expert seeking rare species, our AI-powered platform helps you make informed decisions based on your local climate and indoor conditions.
-                </p>
-
-                <h3 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1rem', color: '#34d399', marginTop: '2rem' }}>
-                    Smart Plant Recommendations Based on Your Location
-                </h3>
-                <p style={{ fontSize: '1rem', lineHeight: '1.8', marginBottom: '1.5rem', color: '#cbd5e1' }}>
-                    Our advanced algorithm analyzes your local temperature, humidity, and air quality to recommend plants that will thrive in your environment. Simply detect your location or search for your city, and we'll show you plants with the highest survival rates for your area. Each plant receives an "Aptness Score" calculated from real-time weather data, ensuring you choose species that are perfectly suited to your climate zone.
-                </p>
-
-                <h3 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1rem', color: '#34d399', marginTop: '2rem' }}>
-                    Find Nearby Plant Nurseries and Shops
-                </h3>
-                <p style={{ fontSize: '1rem', lineHeight: '1.8', marginBottom: '1.5rem', color: '#cbd5e1' }}>
-                    Looking to buy plants locally? Use our <a href="/nearby" style={{ color: '#10b981', textDecoration: 'underline' }}>Nearby Shops</a> feature to discover verified nurseries, garden centers, and plant vendors in your area. We combine data from our verified partner network with public listings from OpenStreetMap to give you the most comprehensive view of plant shopping options near you. Filter by distance, check real-time stock availability, and get directions instantly.
-                </p>
-
-                <h3 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1rem', color: '#34d399', marginTop: '2rem' }}>
-                    AI Plant Doctor - Instant Disease Diagnosis
-                </h3>
-                <p style={{ fontSize: '1rem', lineHeight: '1.8', marginBottom: '1.5rem', color: '#cbd5e1' }}>
-                    Worried about your plant's health? Our <a href="/heaven/ai-doctor" style={{ color: '#10b981', textDecoration: 'underline' }}>AI Plant Doctor</a> can diagnose diseases, identify pests, and provide treatment recommendations in seconds. Simply upload a photo of your plant, and Dr. Flora will analyze it using advanced image recognition technology. Get expert advice on watering schedules, fertilization, pruning, and more - all powered by artificial intelligence trained on thousands of plant species.
-                </p>
-
-                <h3 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1rem', color: '#34d399', marginTop: '2rem' }}>
-                    Indoor Air Quality Simulation
-                </h3>
-                <p style={{ fontSize: '1rem', lineHeight: '1.8', marginBottom: '1.5rem', color: '#cbd5e1' }}>
-                    Did you know that indoor plants can significantly improve your air quality? VanaMap's oxygen calculator simulates how many plants you need based on your room size, occupancy, and current air quality index (AQI). We calculate the exact oxygen production of each species and recommend the optimal number of plants to create a healthier living environment. Perfect for bedrooms, offices, and living spaces where air purification matters most.
-                </p>
-
-                <h3 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1rem', color: '#34d399', marginTop: '2rem' }}>
-                    Gamified Learning and Rewards
-                </h3>
-                <p style={{ fontSize: '1rem', lineHeight: '1.8', marginBottom: '1.5rem', color: '#cbd5e1' }}>
-                    Earn Chlorophyll Points (CP) as you explore plants, complete purchases, and engage with our community. Climb the <a href="/leaderboard" style={{ color: '#10b981', textDecoration: 'underline' }}>Leaderboard</a> to compete with other plant enthusiasts in your city and globally. Unlock achievements, access premium features, and become a VanaMap Guardian by reaching milestone point thresholds. Learning about plants has never been this fun and rewarding!
-                </p>
-
-                <h3 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1rem', color: '#34d399', marginTop: '2rem' }}>
-                    For Students, Vendors, and Plant Lovers
-                </h3>
-                <p style={{ fontSize: '1rem', lineHeight: '1.8', marginBottom: '1.5rem', color: '#cbd5e1' }}>
-                    <strong>Students:</strong> Use VanaMap for biology projects, research papers, and environmental studies. Our detailed plant database includes scientific names, medicinal properties, ecosystem roles, and growth characteristics. Access real-time weather integration for climate-based experiments.
-                </p>
-                <p style={{ fontSize: '1rem', lineHeight: '1.8', marginBottom: '1.5rem', color: '#cbd5e1' }}>
-                    <strong>Vendors:</strong> Register your nursery on our <a href="/shops" style={{ color: '#10b981', textDecoration: 'underline' }}>Shops</a> platform to reach thousands of local plant buyers. Manage your inventory, set prices, and get verified to appear in search results. Join our growing network of trusted plant sellers.
-                </p>
-                <p style={{ fontSize: '1rem', lineHeight: '1.8', marginBottom: '1.5rem', color: '#cbd5e1' }}>
-                    <strong>Plant Lovers:</strong> Build your personal plant collection, track favorites, and discover rare species. Get personalized care reminders, connect with other enthusiasts, and share your green journey on social media.
-                </p>
-
-                <h3 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1rem', color: '#34d399', marginTop: '2rem' }}>
-                    Free to Use, Premium Features Available
-                </h3>
-                <p style={{ fontSize: '1rem', lineHeight: '1.8', marginBottom: '1.5rem', color: '#cbd5e1' }}>
-                    VanaMap offers a comprehensive free tier with plant identification, climate matching, and basic features. Upgrade to <a href="/premium" style={{ color: '#10b981', textDecoration: 'underline' }}>Premium</a> for unlimited AI Doctor scans, advanced analytics, ad-free experience, and priority customer support. Students and educators can access special discounts.
-                </p>
-
-                <div style={{ marginTop: '3rem', padding: '2rem', background: 'rgba(16, 185, 129, 0.1)', borderRadius: '1rem', border: '1px solid rgba(16, 185, 129, 0.3)' }}>
-                    <h3 style={{ fontSize: '1.3rem', fontWeight: 700, marginBottom: '1rem', color: '#10b981' }}>
-                        Start Your Plant Journey Today
-                    </h3>
-                    <p style={{ fontSize: '1rem', lineHeight: '1.8', color: '#cbd5e1' }}>
-                        Join thousands of plant enthusiasts who trust VanaMap for smart plant recommendations, expert care advice, and local shopping. Whether you want to purify your indoor air, beautify your garden, or learn about botany, VanaMap is your all-in-one plant companion. Detect your location above to get started with personalized plant matches for your climate zone.
+            {/* SEO Content Section - Hidden by default */}
+            {showAbout && (
+                <section ref={aboutRef} className={styles.seoContent} style={{
+                    padding: '4rem 2rem',
+                    maxWidth: '1200px',
+                    margin: '0 auto',
+                    background: 'rgba(15, 23, 42, 0.5)',
+                    borderRadius: '2rem',
+                    marginTop: '4rem',
+                    animation: 'fadeIn 0.5s ease-out'
+                }}>
+                    <h2 style={{ fontSize: '2rem', fontWeight: 800, marginBottom: '1.5rem', color: '#10b981' }}>
+                        Why Choose VanaMap for Your Plant Journey?
+                    </h2>
+                    <p style={{ fontSize: '1.1rem', lineHeight: '1.8', marginBottom: '2rem', color: '#cbd5e1' }}>
+                        VanaMap is your intelligent companion for discovering, identifying, and caring for plants. Whether you're a beginner looking for easy-care houseplants or an expert seeking rare species, our AI-powered platform helps you make informed decisions based on your local climate and indoor conditions.
                     </p>
-                </div>
-            </section>
+
+                    <h3 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1rem', color: '#34d399', marginTop: '2rem' }}>
+                        Smart Plant Recommendations Based on Your Location
+                    </h3>
+                    <p style={{ fontSize: '1rem', lineHeight: '1.8', marginBottom: '1.5rem', color: '#cbd5e1' }}>
+                        Our advanced algorithm analyzes your local temperature, humidity, and air quality to recommend plants that will thrive in your environment. Simply detect your location or search for your city, and we'll show you plants with the highest survival rates for your area. Each plant receives an "Aptness Score" calculated from real-time weather data, ensuring you choose species that are perfectly suited to your climate zone.
+                    </p>
+
+                    <h3 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1rem', color: '#34d399', marginTop: '2rem' }}>
+                        Find Nearby Plant Nurseries and Shops
+                    </h3>
+                    <p style={{ fontSize: '1rem', lineHeight: '1.8', marginBottom: '1.5rem', color: '#cbd5e1' }}>
+                        Looking to buy plants locally? Use our <a href="/nearby" style={{ color: '#10b981', textDecoration: 'underline' }}>Nearby Shops</a> feature to discover verified nurseries, garden centers, and plant vendors in your area. We combine data from our verified partner network with public listings from OpenStreetMap to give you the most comprehensive view of plant shopping options near you. Filter by distance, check real-time stock availability, and get directions instantly.
+                    </p>
+
+                    <h3 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1rem', color: '#34d399', marginTop: '2rem' }}>
+                        AI Plant Doctor - Instant Disease Diagnosis
+                    </h3>
+                    <p style={{ fontSize: '1rem', lineHeight: '1.8', marginBottom: '1.5rem', color: '#cbd5e1' }}>
+                        Worried about your plant's health? Our <a href="/heaven/ai-doctor" style={{ color: '#10b981', textDecoration: 'underline' }}>AI Plant Doctor</a> can diagnose diseases, identify pests, and provide treatment recommendations in seconds. Simply upload a photo of your plant, and Dr. Flora will analyze it using advanced image recognition technology. Get expert advice on watering schedules, fertilization, pruning, and more - all powered by artificial intelligence trained on thousands of plant species.
+                    </p>
+
+                    <h3 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1rem', color: '#34d399', marginTop: '2rem' }}>
+                        Indoor Air Quality Simulation
+                    </h3>
+                    <p style={{ fontSize: '1rem', lineHeight: '1.8', marginBottom: '1.5rem', color: '#cbd5e1' }}>
+                        Did you know that indoor plants can significantly improve your air quality? VanaMap's oxygen calculator simulates how many plants you need based on your room size, occupancy, and current air quality index (AQI). We calculate the exact oxygen production of each species and recommend the optimal number of plants to create a healthier living environment. Perfect for bedrooms, offices, and living spaces where air purification matters most.
+                    </p>
+
+                    <h3 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1rem', color: '#34d399', marginTop: '2rem' }}>
+                        Gamified Learning and Rewards
+                    </h3>
+                    <p style={{ fontSize: '1rem', lineHeight: '1.8', marginBottom: '1.5rem', color: '#cbd5e1' }}>
+                        Earn Chlorophyll Points (CP) as you explore plants, complete purchases, and engage with our community. Climb the <a href="/leaderboard" style={{ color: '#10b981', textDecoration: 'underline' }}>Leaderboard</a> to compete with other plant enthusiasts in your city and globally. Unlock achievements, access premium features, and become a VanaMap Guardian by reaching milestone point thresholds. Learning about plants has never been this fun and rewarding!
+                    </p>
+
+                    <h3 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1rem', color: '#34d399', marginTop: '2rem' }}>
+                        For Students, Vendors, and Plant Lovers
+                    </h3>
+                    <p style={{ fontSize: '1rem', lineHeight: '1.8', marginBottom: '1.5rem', color: '#cbd5e1' }}>
+                        <strong>Students:</strong> Use VanaMap for biology projects, research papers, and environmental studies. Our detailed plant database includes scientific names, medicinal properties, ecosystem roles, and growth characteristics. Access real-time weather integration for climate-based experiments.
+                    </p>
+                    <p style={{ fontSize: '1rem', lineHeight: '1.8', marginBottom: '1.5rem', color: '#cbd5e1' }}>
+                        <strong>Vendors:</strong> Register your nursery on our <a href="/shops" style={{ color: '#10b981', textDecoration: 'underline' }}>Shops</a> platform to reach thousands of local plant buyers. Manage your inventory, set prices, and get verified to appear in search results. Join our growing network of trusted plant sellers.
+                    </p>
+                    <p style={{ fontSize: '1rem', lineHeight: '1.8', marginBottom: '1.5rem', color: '#cbd5e1' }}>
+                        <strong>Plant Lovers:</strong> Build your personal plant collection, track favorites, and discover rare species. Get personalized care reminders, connect with other enthusiasts, and share your green journey on social media.
+                    </p>
+
+                    <h3 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1rem', color: '#34d399', marginTop: '2rem' }}>
+                        Free to Use, Premium Features Available
+                    </h3>
+                    <p style={{ fontSize: '1rem', lineHeight: '1.8', marginBottom: '1.5rem', color: '#cbd5e1' }}>
+                        VanaMap offers a comprehensive free tier with plant identification, climate matching, and basic features. Upgrade to <a href="/premium" style={{ color: '#10b981', textDecoration: 'underline' }}>Premium</a> for unlimited AI Doctor scans, advanced analytics, ad-free experience, and priority customer support. Students and educators can access special discounts.
+                    </p>
+
+                    <div style={{ marginTop: '3rem', padding: '2rem', background: 'rgba(16, 185, 129, 0.1)', borderRadius: '1rem', border: '1px solid rgba(16, 185, 129, 0.3)' }}>
+                        <h3 style={{ fontSize: '1.3rem', fontWeight: 700, marginBottom: '1rem', color: '#10b981' }}>
+                            Start Your Plant Journey Today
+                        </h3>
+                        <p style={{ fontSize: '1rem', lineHeight: '1.8', color: '#cbd5e1' }}>
+                            Join thousands of plant enthusiasts who trust VanaMap for smart plant recommendations, expert care advice, and local shopping. Whether you want to purify your indoor air, beautify your garden, or learn about botany, VanaMap is your all-in-one plant companion. Detect your location above to get started with personalized plant matches for your climate zone.
+                        </p>
+                    </div>
+                </section>
+            )}
 
         </div>
     );
