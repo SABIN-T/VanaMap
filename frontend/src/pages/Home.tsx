@@ -14,6 +14,7 @@ const PlantDetailsModal = lazy(() => import('../components/features/plants/Plant
 import { PlantSkeleton } from '../components/features/plants/PlantSkeleton';
 import styles from './Home.module.css';
 import { plantCache, apiCache } from '../utils/universalCache'; // 🚀 Performance boost!
+import { useAuth } from '../context/AuthContext';
 
 export const Home = () => {
     const [plants, setPlants] = useState<Plant[]>([]);
@@ -49,6 +50,7 @@ export const Home = () => {
     const filterSectionRef = useRef<HTMLDivElement>(null);
 
     const navigate = useNavigate();
+    const { user } = useAuth();
 
     // Mobile Card Logic
     const [expandedCards, setExpandedCards] = useState<Record<string, boolean>>({});
@@ -994,7 +996,22 @@ export const Home = () => {
                         <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                             <li><a href="/support" style={{ color: 'var(--color-text-muted)', textDecoration: 'none', fontSize: '0.9rem' }}>Suggestions</a></li>
                             <li><a href="/sponsor" style={{ color: 'var(--color-text-muted)', textDecoration: 'none', fontSize: '0.9rem' }}>Sponsorship</a></li>
-                            <li><a href="/vendor" style={{ color: 'var(--color-text-muted)', textDecoration: 'none', fontSize: '0.9rem' }}>For Vendors</a></li>
+                            <li>
+                                <button
+                                    onClick={() => {
+                                        if (user) {
+                                            navigate('/vendor');
+                                        } else {
+                                            toast.error("Please login to register as a Vendor");
+                                            navigate('/auth');
+                                        }
+                                    }}
+                                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-text-muted)', textDecoration: 'none', fontSize: '0.9rem', padding: 0 }}
+                                    title="Sign in to access vendor registration"
+                                >
+                                    For Vendors
+                                </button>
+                            </li>
                             <li><button onClick={() => { setShowAbout(!showAbout); setTimeout(() => aboutRef.current?.scrollIntoView({ behavior: 'smooth' }), 100); }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-text-muted)', textDecoration: 'none', fontSize: '0.9rem', padding: 0 }}>About Us</button></li>
                         </ul>
                     </div>
