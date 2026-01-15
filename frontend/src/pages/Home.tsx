@@ -1000,7 +1000,8 @@ export const Home = () => {
                                 <button
                                     onClick={() => {
                                         if (user) {
-                                            navigate('/vendor');
+                                            // Direct to profile which acts as Registration Form for new vendors
+                                            navigate('/vendor/profile');
                                         } else {
                                             toast.error("Please login to register as a Vendor");
                                             navigate('/auth');
