@@ -203,6 +203,11 @@
     align-items: center;
 }
 
+/* Hidden on desktop, visible on mobile via media query */
+.mobileLogoutBtn {
+    display: none;
+}
+
 .loginBtn,
 .userBadgeBtn {
     background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
@@ -364,9 +369,33 @@
         display: none;
     }
 
-    /* Hide secondary auth buttons (Admin, Logout) on mobile topbar */
+    /* Hide Admin Panel button on mobile topbar */
     .authDesktop :global(.btn-outline) {
         display: none !important;
+    }
+
+    /* Mobile logout button - always visible in top nav */
+    .mobileLogoutBtn {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border-radius: 8px;
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.25);
+        color: #ef4444;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        padding: 0;
+        flex-shrink: 0;
+    }
+
+    .mobileLogoutBtn:hover,
+    .mobileLogoutBtn:active {
+        background: rgba(239, 68, 68, 0.2);
+        border-color: rgba(239, 68, 68, 0.4);
+        transform: scale(0.95);
     }
 
     .loginBtn,
