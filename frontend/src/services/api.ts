@@ -453,6 +453,38 @@ export const completePurchase = async (items: unknown[]) => {
     return res.json();
 };
 
+export const createCartOrder = async (amount: number, items: { plantId: string; vendorId: string; vendorName: string; quantity: number; price: number; plantName: string }[]) => {
+    const res = await fetch(`${API_URL}/payments/create-cart-order`, {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify({ amount, items })
+    });
+    if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.error || "Failed to create cart order");
+    }
+    return res.json();
+};
+
+export const verifyCartPayment = async (data: {
+    orderId: string;
+    paymentId: string;
+    signature: string;
+    items: { plantId: string; vendorId: string; vendorName: string; quantity: number; price: number; plantName: string }[];
+    totalAmount: number;
+}) => {
+    const res = await fetch(`${API_URL}/payments/verify-cart`, {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify(data)
+    });
+    if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.error || "Payment verification failed");
+    }
+    return res.json();
+};
+
 export const addPoints = async (amount: number) => {
     const res = await fetch(`${API_URL}/user/add-points`, {
         method: 'POST',

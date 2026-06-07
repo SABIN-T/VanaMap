@@ -250,6 +250,59 @@
     box-shadow: 0 8px 20px rgba(37, 211, 102, 0.4);
 }
 
+/* Checkout Buttons Container */
+.checkoutButtons {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+/* Pay Online Button */
+.payOnlineBtn {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    border: none;
+    padding: 0.6rem 1.25rem;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.35);
+    position: relative;
+    overflow: hidden;
+}
+
+.payOnlineBtn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+    transition: left 0.6s ease;
+}
+
+.payOnlineBtn:hover::before {
+    left: 100%;
+}
+
+.payOnlineBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.5);
+}
+
+.payOnlineBtn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
 .loginPrompt {
     display: flex;
     align-items: center;
@@ -482,6 +535,18 @@
         width: 100%;
         justify-content: center;
         padding: 0.5rem 1rem;
+        font-size: 0.85rem;
+    }
+
+    .checkoutButtons {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .payOnlineBtn {
+        width: 100%;
+        justify-content: center;
+        padding: 0.6rem 1rem;
         font-size: 0.85rem;
     }
 
@@ -945,4 +1010,14 @@
 
 [data-theme='light'] .cloud {
     color: rgba(16, 185, 129, 0.05);
+}
+
+/* Pay Online Light Mode */
+[data-theme='light'] .payOnlineBtn {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    box-shadow: 0 4px 14px rgba(16, 185, 129, 0.25);
+}
+
+[data-theme='light'] .payOnlineBtn:hover {
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
 }

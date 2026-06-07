@@ -947,6 +947,127 @@ app.post('/api/payments/create-order', auth, async (req, res) => {
     }
 });
 
+// --- CART PAYMENT ENDPOINTS ---
+
+// Create Cart Order (Dynamic Amount)
+app.post('/api/payments/create-cart-order', auth, async (req, res) => {
+    try {
+        const { amount, items } = req.body;
+        if (!amount || amount <= 0) return res.status(400).json({ error: "Invalid amount" });
+        if (!items || !items.length) return res.status(400).json({ error: "No items provided" });
+
+        if (!razorpay) return res.status(503).json({ error: "Payment gateway not configured" });
+
+        const options = {
+            amount: Math.round(amount * 100), // paise
+            currency: "INR",
+            receipt: `cart_${Date.now()}`,
+            notes: {
+                userId: req.user.id,
+                itemCount: items.length.toString()
+            }
+        };
+
+        const order = await razorpay.orders.create(options);
+        res.json({ ...order, key: process.env.RAZORPAY_KEY_ID });
+    } catch (error) {
+        console.error("Cart Order Error:", error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Verify Cart Payment
+app.post('/api/payments/verify-cart', auth, async (req, res) => {
+    try {
+        const { orderId, paymentId, signature, items, totalAmount } = req.body;
+        const crypto = require('crypto');
+
+        if (!process.env.RAZORPAY_KEY_SECRET) {
+            return res.status(503).json({ error: "Server configuration missing (Payment)" });
+        }
+
+        const generated_signature = crypto.createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
+            .update(orderId + "|" + paymentId)
+            .digest('hex');
+
+        if (generated_signature !== signature) {
+            return res.status(400).json({ success: false, message: "Signature verification failed" });
+        }
+
+        // Payment Verified — Create Sales & Award Points
+        const user = await User.findById(req.user.id);
+        if (!user) return res.status(404).json({ error: "User not found" });
+
+        const sales = [];
+        let pointsToAward = 0;
+
+        for (const item of items) {
+            const sale = new Sale({
+                vendorId: item.vendorId,
+                userId: user._id,
+                userName: user.name,
+                plantId: item.plantId,
+                plantName: item.plantName,
+                price: item.price,
+                quantity: item.quantity || 1,
+                status: 'completed'
+            });
+            await sale.save();
+            sales.push(sale);
+
+            // Award 200 points per plant purchased
+            pointsToAward += (item.quantity || 1) * 200;
+
+            // Notify vendor
+            await broadcastAlert('sale', `New paid order: ${item.quantity || 1}x ${item.plantName}`, {
+                vendorId: item.vendorId,
+                title: 'New Paid Sale! 💰'
+            });
+
+            // Send Purchase Confirmation Email
+            try {
+                await sendEmail({
+                    from: 'VanaMap <support@vanamap.online>',
+                    to: user.email,
+                    subject: `Confirmed: Your purchase of ${item.plantName}! 🌿`,
+                    html: EmailTemplates.plantPurchased(user.name, item.plantName, item.vendorName || 'VanaMap Partner', item.price)
+                });
+            } catch (mailErr) {
+                console.error('[Cart Payment] Email failed:', mailErr.message);
+            }
+        }
+
+        // Apply Points
+        user.points = (user.points || 0) + pointsToAward;
+        user.cart = []; // Clear server-side cart
+        await user.save();
+
+        // Record Payment
+        const payment = new Payment({
+            userId: user.id,
+            userName: user.name,
+            amount: totalAmount,
+            currency: 'INR',
+            orderId,
+            paymentId,
+            signature,
+            status: 'paid',
+            plan: 'cart_purchase'
+        });
+        await payment.save();
+
+        await broadcastAlert('sale', `User ${user.name} completed a paid cart purchase (₹${totalAmount})! 🛒💚`, {
+            userId: user._id,
+            points: pointsToAward
+        });
+
+        res.json({ success: true, sales, pointsAwarded: pointsToAward });
+    } catch (error) {
+        console.error("Cart Verify Error:", error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // --- ADMIN PAYMENTS & SETTINGS ---
 
 // Get All Payments & Premium Users

@@ -2,18 +2,20 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
-import { Trash2, ArrowLeft, Minus, Plus, ShoppingCart, MessageCircle, MapPin, Store, Lock, ShieldCheck, Info, Phone, Smartphone, RefreshCw, CheckCircle2, CloudRain } from 'lucide-react';
+import { Trash2, ArrowLeft, Minus, Plus, ShoppingCart, MessageCircle, MapPin, Store, Lock, ShieldCheck, Info, Phone, Smartphone, RefreshCw, CheckCircle2, CloudRain, CreditCard } from 'lucide-react';
 import { Button } from '../components/common/Button';
-import { fetchVendors, completePurchase } from '../services/api';
+import { fetchVendors, completePurchase, createCartOrder, verifyCartPayment } from '../services/api';
 import { formatCurrency } from '../utils/currency';
+import toast from 'react-hot-toast';
 import type { Vendor, CartItem } from '../types';
 import styles from './Cart.module.css';
 
 export const Cart = () => {
-    const { items, removeFromCart, updateQuantity } = useCart();
-    const { user, loading } = useAuth();
+    const { items, removeFromCart, removeItems, updateQuantity } = useCart();
+    const { user, loading, refreshUser } = useAuth();
     const navigate = useNavigate();
     const [vendors, setVendors] = useState<Record<string, Vendor>>({});
+    const [payingVendor, setPayingVendor] = useState<string | null>(null);
 
     useEffect(() => {
         const loadVendors = async () => {
@@ -75,6 +77,130 @@ export const Cart = () => {
         acc[vId].push(item);
         return acc;
     }, {} as Record<string, CartItem[]>);
+
+    // --- Razorpay Helpers ---
+    const loadRazorpay = (): Promise<boolean> => {
+        return new Promise((resolve) => {
+            if ((window as any).Razorpay) {
+                resolve(true);
+                return;
+            }
+            const script = document.createElement('script');
+            script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+            script.onload = () => resolve(true);
+            script.onerror = () => resolve(false);
+            document.body.appendChild(script);
+        });
+    };
+
+    const handleRazorpayCheckout = async (vendorId: string) => {
+        if (!user) {
+            navigate('/auth');
+            return;
+        }
+
+        const vItems = groupedItems[vendorId];
+        if (!vItems || vItems.length === 0) return;
+
+        const isVanaMap = vendorId === 'vanamap';
+        const vendor = isVanaMap
+            ? { id: 'vanamap', name: 'VanaMap Official' } as Vendor
+            : vendors[vendorId];
+
+        if (!vendor) {
+            toast.error('Vendor information not loaded yet');
+            return;
+        }
+
+        const totalPrice = vItems.reduce((sum, i) => {
+            const price = i.vendorPrice || i.plant.price || 0;
+            return sum + (price * i.quantity);
+        }, 0);
+
+        if (totalPrice <= 0) {
+            toast.error('Cart total must be greater than ₹0');
+            return;
+        }
+
+        setPayingVendor(vendorId);
+
+        const sdkLoaded = await loadRazorpay();
+        if (!sdkLoaded) {
+            toast.error('Razorpay SDK failed to load. Check your connection.');
+            setPayingVendor(null);
+            return;
+        }
+
+        const itemPayload = vItems.map(i => ({
+            plantId: i.plant.id,
+            vendorId: vendor.id,
+            vendorName: vendor.name,
+            quantity: i.quantity,
+            price: i.vendorPrice || i.plant.price || 0,
+            plantName: i.plant.name
+        }));
+
+        try {
+            const order = await createCartOrder(totalPrice, itemPayload);
+
+            const options = {
+                key: order.key,
+                amount: order.amount,
+                currency: order.currency,
+                name: 'VanaMap',
+                description: `Order from ${vendor.name} (${vItems.length} items)`,
+                image: '/logo.png',
+                order_id: order.id,
+                handler: async function (response: any) {
+                    try {
+                        const verifyData = await verifyCartPayment({
+                            orderId: response.razorpay_order_id,
+                            paymentId: response.razorpay_payment_id,
+                            signature: response.razorpay_signature,
+                            items: itemPayload,
+                            totalAmount: totalPrice
+                        });
+
+                        if (verifyData.success) {
+                            toast.success(`Payment successful! +${verifyData.pointsAwarded} CP earned 🌿`);
+                            // Remove purchased items from cart
+                            removeItems(vItems.map(i => ({ plantId: i.plant.id, vendorId: i.vendorId })));
+                            await refreshUser();
+                        } else {
+                            toast.error('Payment verification failed. Contact support.');
+                        }
+                    } catch (err) {
+                        console.error('Verification error:', err);
+                        toast.error('Payment verification failed');
+                    } finally {
+                        setPayingVendor(null);
+                    }
+                },
+                prefill: {
+                    name: user?.name,
+                    email: user?.email,
+                    contact: (user as any)?.phone
+                },
+                theme: {
+                    color: '#10b981'
+                },
+                modal: {
+                    ondismiss: () => setPayingVendor(null)
+                }
+            };
+
+            const paymentObject = new (window as any).Razorpay(options);
+            paymentObject.open();
+        } catch (err: any) {
+            console.error('Cart payment error:', err);
+            if (err.message?.includes('503') || err.message?.includes('not configured')) {
+                toast.error('Payment gateway unavailable. Try WhatsApp checkout.');
+            } else {
+                toast.error(err.message || 'Payment initiation failed');
+            }
+            setPayingVendor(null);
+        }
+    };
 
     const handleWhatsAppCheckout = (vendorId: string) => {
         if (!user) {
@@ -227,12 +353,22 @@ export const Cart = () => {
 
                                         <div className={styles.headerRight}>
                                             {user ? (
-                                                <button
-                                                    className={styles.whatsappBtn}
-                                                    onClick={() => handleWhatsAppCheckout(vendorId)}
-                                                >
-                                                    <MessageCircle size={18} /> Checkout via WhatsApp
-                                                </button>
+                                                <div className={styles.checkoutButtons}>
+                                                    <button
+                                                        className={styles.payOnlineBtn}
+                                                        onClick={() => handleRazorpayCheckout(vendorId)}
+                                                        disabled={payingVendor === vendorId}
+                                                    >
+                                                        <CreditCard size={18} />
+                                                        {payingVendor === vendorId ? 'Processing...' : 'Pay Online'}
+                                                    </button>
+                                                    <button
+                                                        className={styles.whatsappBtn}
+                                                        onClick={() => handleWhatsAppCheckout(vendorId)}
+                                                    >
+                                                        <MessageCircle size={18} /> WhatsApp
+                                                    </button>
+                                                </div>
                                             ) : (
                                                 <div className={styles.loginPrompt}>
                                                     <Lock size={14} /> Login to Order
