@@ -19,7 +19,7 @@ export const Premium = () => {
     const isFreeMode = config.activePromo || config.price === 0 || String(config.price) === '0';
 
     // Access Control
-    const canView = user && (user.favorites?.length > 3 || user.isPremium || user.role === 'admin');
+
 
     useEffect(() => {
         // 1. Fetch Config (Price/Promo)
