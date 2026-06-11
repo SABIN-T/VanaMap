@@ -184,14 +184,21 @@ const sendEmail = async (mailOptions) => {
     // Priority 1: Resend
     if (resend) {
         try {
-            const result = await resend.emails.send({
+            const payload = {
                 from: mailOptions.from || 'VanaMap <support@vanamap.online>', // Use verified domain
                 to: mailOptions.to,
                 subject: mailOptions.subject,
                 html: mailOptions.html
-            });
-            console.log(`[Resend] Sent to ${mailOptions.to} (ID: ${result.data?.id})`)
-                ;
+            };
+            if (mailOptions.attachments) {
+                payload.attachments = mailOptions.attachments.map(att => ({
+                    filename: att.filename,
+                    content: att.content,
+                    path: att.path
+                }));
+            }
+            const result = await resend.emails.send(payload);
+            console.log(`[Resend] Sent to ${mailOptions.to} (ID: ${result.data?.id})`);
             return { messageId: result.data?.id || 'resend-api' };
         } catch (error) {
             console.error('[Resend] Error:', error.message);
@@ -209,10 +216,28 @@ const sendEmail = async (mailOptions) => {
     if (process.env.SENDGRID_API_KEY) {
         const msg = {
             to: mailOptions.to,
-            from: mailOptions.from,
+            from: mailOptions.from || 'VanaMap <support@vanamap.online>',
             subject: mailOptions.subject,
             html: mailOptions.html,
         };
+        if (mailOptions.attachments) {
+            msg.attachments = mailOptions.attachments.map(att => {
+                let base64Content = '';
+                if (Buffer.isBuffer(att.content)) {
+                    base64Content = att.content.toString('base64');
+                } else if (typeof att.content === 'string') {
+                    base64Content = Buffer.from(att.content).toString('base64');
+                } else if (att.path) {
+                    base64Content = fs.readFileSync(att.path).toString('base64');
+                }
+                return {
+                    content: base64Content,
+                    filename: att.filename,
+                    type: att.contentType || 'application/pdf',
+                    disposition: 'attachment'
+                };
+            });
+        }
         try {
             await sgMail.send(msg);
             console.log(`[SendGrid] Sent to ${mailOptions.to}`);
@@ -1236,7 +1261,8 @@ app.patch('/api/admin/orders/:id/status', auth, admin, async (req, res) => {
             // Send order status update email to User
             if (user && user.email) {
                 try {
-                    await sendEmail({
+                    const { generateInvoicePDF } = require('./invoice-helper');
+                    const mailParams = {
                         from: 'VanaMap <support@vanamap.online>',
                         to: user.email,
                         subject: `Update: Your order of ${sale.plantName} is ${status}! 🌿`,
@@ -1249,7 +1275,24 @@ app.patch('/api/admin/orders/:id/status', auth, admin, async (req, res) => {
                             vendorName,
                             sale.deliveryAddress
                         )
-                    });
+                    };
+
+                    // If delivered, generate and attach the estimated invoice PDF
+                    if (status.toLowerCase() === 'delivered') {
+                        try {
+                            const invoiceBuffer = await generateInvoicePDF(sale, user, vendor);
+                            mailParams.attachments = [{
+                                filename: `Invoice-${sale._id.toString().substring(18).toUpperCase()}.pdf`,
+                                content: invoiceBuffer,
+                                contentType: 'application/pdf'
+                            }];
+                            console.log(`[Invoice PDF] Successfully generated invoice attachment for order ${sale._id}`);
+                        } catch (pdfErr) {
+                            console.error('[Invoice PDF] Generation failed:', pdfErr.message);
+                        }
+                    }
+
+                    await sendEmail(mailParams);
                     console.log(`[Order Status Email] Sent update email to user: ${user.email}`);
                 } catch (emailErr) {
                     console.error('[Order Status Email] Failed to send user email:', emailErr.message);
