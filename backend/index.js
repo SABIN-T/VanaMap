@@ -1030,7 +1030,7 @@ app.post('/api/payments/verify-cart', auth, async (req, res) => {
                 deliveryAddress: deliveryInfo
             });
 
-            // Send Purchase Confirmation Email
+            // Send Purchase Confirmation Email to User & New Order Alert to Vendor
             try {
                 await sendEmail({
                     from: 'VanaMap <support@vanamap.online>',
@@ -1040,6 +1040,28 @@ app.post('/api/payments/verify-cart', auth, async (req, res) => {
                 });
             } catch (mailErr) {
                 console.error('[Cart Payment] Email failed:', mailErr.message);
+            }
+
+            try {
+                const vendorObj = await Vendor.findOne({ id: item.vendorId });
+                if (vendorObj && vendorObj.ownerEmail) {
+                    await sendEmail({
+                        from: 'VanaMap Orders <orders@vanamap.online>',
+                        to: vendorObj.ownerEmail,
+                        subject: `New Paid Order: ${item.plantName} from ${user.name}! 🛒`,
+                        html: EmailTemplates.vendorNewOrderAlert(
+                            vendorObj.name,
+                            user.name,
+                            item.plantName,
+                            item.quantity || 1,
+                            item.price,
+                            deliveryInfo
+                        )
+                    });
+                    console.log(`[Cart Payment] Sent new order notification email to vendor: ${vendorObj.ownerEmail}`);
+                }
+            } catch (vendorMailErr) {
+                console.error('[Cart Payment] Vendor email failed:', vendorMailErr.message);
             }
         }
 
@@ -1184,6 +1206,19 @@ app.patch('/api/admin/orders/:id/status', auth, admin, async (req, res) => {
         );
         if (!sale) return res.status(404).json({ error: 'Order not found' });
 
+        // Fetch user and vendor details for email notifications
+        let user = null;
+        let vendor = null;
+
+        if (sale.userId) {
+            user = await User.findById(sale.userId);
+        }
+        if (sale.vendorId) {
+            vendor = await Vendor.findOne({ id: sale.vendorId });
+        }
+
+        const vendorName = vendor ? vendor.name : 'VanaMap Partner';
+
         // Notify the user about status change
         if (sale.userId) {
             const statusMessages = {
@@ -1197,6 +1232,53 @@ app.patch('/api/admin/orders/:id/status', auth, admin, async (req, res) => {
                 userId: sale.userId,
                 title: `Order ${status.charAt(0).toUpperCase() + status.slice(1)} 📋`
             });
+
+            // Send order status update email to User
+            if (user && user.email) {
+                try {
+                    await sendEmail({
+                        from: 'VanaMap <support@vanamap.online>',
+                        to: user.email,
+                        subject: `Update: Your order of ${sale.plantName} is ${status}! 🌿`,
+                        html: EmailTemplates.userOrderStatusUpdate(
+                            user.name,
+                            sale.plantName,
+                            status,
+                            sale.price,
+                            sale._id.toString(),
+                            vendorName,
+                            sale.deliveryAddress
+                        )
+                    });
+                    console.log(`[Order Status Email] Sent update email to user: ${user.email}`);
+                } catch (emailErr) {
+                    console.error('[Order Status Email] Failed to send user email:', emailErr.message);
+                }
+            }
+        }
+
+        // Notify Vendor via email if order is cancelled
+        if (vendor && vendor.ownerEmail && status === 'cancelled') {
+            try {
+                const customerName = user ? user.name : (sale.userName || 'Customer');
+                await sendEmail({
+                    from: 'VanaMap Support <support@vanamap.online>',
+                    to: vendor.ownerEmail,
+                    subject: `ALERT: Order Cancelled by Admin - ${sale.plantName} ❌`,
+                    html: EmailTemplates.vendorOrderStatusAlert(
+                        vendor.name,
+                        customerName,
+                        sale.plantName,
+                        status,
+                        sale.quantity,
+                        sale.price,
+                        sale._id.toString()
+                    )
+                });
+                console.log(`[Order Status Email] Sent cancellation alert email to vendor: ${vendor.ownerEmail}`);
+            } catch (emailErr) {
+                console.error('[Order Status Email] Failed to send vendor email:', emailErr.message);
+            }
         }
 
         res.json({ success: true, sale });
@@ -1504,7 +1586,7 @@ app.post('/api/user/complete-purchase', auth, async (req, res) => {
                 deliveryAddress: deliveryInfo
             });
 
-            // 🚀 Send Purchase Confirmation Email to User
+            // 🚀 Send Purchase Confirmation Email to User & New Order Alert to Vendor
             try {
                 await sendEmail({
                     to: user.email,
@@ -1513,6 +1595,28 @@ app.post('/api/user/complete-purchase', auth, async (req, res) => {
                 });
             } catch (mailErr) {
                 console.error('[Purchase Confirm] Email failed:', mailErr.message);
+            }
+
+            try {
+                const vendorObj = await Vendor.findOne({ id: item.vendorId });
+                if (vendorObj && vendorObj.ownerEmail) {
+                    await sendEmail({
+                        from: 'VanaMap Orders <orders@vanamap.online>',
+                        to: vendorObj.ownerEmail,
+                        subject: `New WhatsApp Order: ${item.plantName} from ${user.name}! 🛒`,
+                        html: EmailTemplates.vendorNewOrderAlert(
+                            vendorObj.name,
+                            user.name,
+                            item.plantName,
+                            item.quantity || 1,
+                            item.price,
+                            deliveryInfo
+                        )
+                    });
+                    console.log(`[Purchase Confirm] Sent new order notification email to vendor: ${vendorObj.ownerEmail}`);
+                }
+            } catch (vendorMailErr) {
+                console.error('[Purchase Confirm] Vendor email failed:', vendorMailErr.message);
             }
         }
 

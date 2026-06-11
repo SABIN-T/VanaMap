@@ -420,6 +420,214 @@ const EmailTemplates = {
             </tr>
         `;
         return createEmailTemplate(content);
+    },
+
+    // 7. User Order Status Update Notification
+    userOrderStatusUpdate: (userName, plantName, status, price, orderId, vendorName, deliveryAddress) => {
+        const statusColors = {
+            pending: { title: 'Order Pending ⏳', color: '#d97706', bg: '#fef3c7', icon: '⏳' },
+            completed: { title: 'Order Confirmed! ✅', color: '#059669', bg: '#ecfdf5', icon: '🌿' },
+            shipped: { title: 'Order Shipped! 🚚', color: '#2563eb', bg: '#eff6ff', icon: '🚚' },
+            delivered: { title: 'Order Delivered! 📦🎉', color: '#059669', bg: '#ecfdf5', icon: '📦' },
+            cancelled: { title: 'Order Cancelled ❌', color: '#dc2626', bg: '#fef2f2', icon: '❌' }
+        };
+        const config = statusColors[status.toLowerCase()] || statusColors.pending;
+        
+        const content = `
+            <tr>
+                <td style="padding: 40px 30px;">
+                    <div style="text-align: center; margin-bottom: 30px;">
+                        <div style="font-size: 60px; margin-bottom: 20px;">${config.icon}</div>
+                        <h2 style="color: #1f2937; margin: 0 0 10px 0; font-size: 28px; font-weight: 600;">
+                            ${config.title}
+                        </h2>
+                        <p style="color: #6b7280; font-size: 16px; margin: 0;">
+                            Hello ${userName}, your order status has been updated.
+                        </p>
+                    </div>
+                    
+                    <div style="background: ${config.bg}; border: 2px solid ${config.color}; border-radius: 12px; padding: 25px; margin: 30px 0;">
+                        <h3 style="color: #1f2937; font-size: 16px; margin: 0 0 15px 0; font-weight: 600;">
+                            Order Status: <span style="color: ${config.color}; text-transform: uppercase;">${status}</span>
+                        </h3>
+                        <table width="100%" cellpadding="8" cellspacing="0">
+                            <tr>
+                                <td style="color: #6b7280; font-size: 14px; padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.05);">Order ID:</td>
+                                <td style="color: #1f2937; font-size: 14px; font-weight: 600; text-align: right; padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.05);">${orderId}</td>
+                            </tr>
+                            <tr>
+                                <td style="color: #6b7280; font-size: 14px; padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.05);">Plant Ordered:</td>
+                                <td style="color: #1f2937; font-size: 14px; font-weight: 600; text-align: right; padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.05);">${plantName}</td>
+                            </tr>
+                            <tr>
+                                <td style="color: #6b7280; font-size: 14px; padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.05);">Shop:</td>
+                                <td style="color: #1f2937; font-size: 14px; font-weight: 600; text-align: right; padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.05);">${vendorName}</td>
+                            </tr>
+                            <tr>
+                                <td style="color: #6b7280; font-size: 14px; padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.05);">Amount Paid:</td>
+                                <td style="color: #10b981; font-size: 16px; font-weight: 700; text-align: right; padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.05);">₹${price}</td>
+                            </tr>
+                            <tr>
+                                <td style="color: #6b7280; font-size: 14px; padding: 8px 0;">Delivery Address:</td>
+                                <td style="color: #1f2937; font-size: 14px; text-align: right; padding: 8px 0;">
+                                    ${deliveryAddress ? `${deliveryAddress.address || ''}, ${deliveryAddress.city || ''} ${deliveryAddress.pincode || ''}` : 'Not provided'}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    ${status.toLowerCase() === 'shipped' ? `
+                    <div style="background: #eff6ff; border-left: 4px solid #3b82f6; padding: 15px; border-radius: 8px; margin: 30px 0;">
+                        <p style="color: #1e40af; font-size: 14px; margin: 0; line-height: 1.6;">
+                            <strong>🚚 Shipping Alert:</strong> Your green friend is on the way! Please make sure someone is available at the delivery location to receive the parcel.
+                        </p>
+                    </div>
+                    ` : ''}
+
+                    ${status.toLowerCase() === 'delivered' ? `
+                    <div style="background: #ecfdf5; border-left: 4px solid #10b981; padding: 15px; border-radius: 8px; margin: 30px 0;">
+                        <p style="color: #065f46; font-size: 14px; margin: 0; line-height: 1.6;">
+                            <strong>📦 Delivered:</strong> Your plant has been successfully delivered! Don't forget to unbox it immediately and give it some water. Happy gardening! 🌱
+                        </p>
+                    </div>
+                    ` : ''}
+
+                    ${status.toLowerCase() === 'cancelled' ? `
+                    <div style="background: #fef2f2; border-left: 4px solid #ef4444; padding: 15px; border-radius: 8px; margin: 30px 0;">
+                        <p style="color: #991b1b; font-size: 14px; margin: 0; line-height: 1.6;">
+                            <strong>❌ Cancellation Notice:</strong> Your order has been cancelled. If payment was made online, it will be refunded back to your account within 5-7 business days.
+                        </p>
+                    </div>
+                    ` : ''}
+                    
+                    <div style="text-align: center; margin: 30px 0;">
+                        <a href="https://vanamap.online/orders" style="display: inline-block; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 50px; font-weight: 600; font-size: 16px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);">
+                            View Order Status
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        `;
+        return createEmailTemplate(content);
+    },
+
+    // 8. Vendor New Order Alert Notification
+    vendorNewOrderAlert: (vendorName, customerName, plantName, quantity, price, deliveryAddress) => {
+        const hasCoords = deliveryAddress?.latitude && deliveryAddress?.longitude;
+        const googleMapsLink = hasCoords ? `https://www.google.com/maps?q=${deliveryAddress.latitude},${deliveryAddress.longitude}` : '';
+
+        const content = `
+            <tr>
+                <td style="padding: 40px 30px;">
+                    <div style="text-align: center; margin-bottom: 30px;">
+                        <div style="font-size: 60px; margin-bottom: 20px;">🏪</div>
+                        <h2 style="color: #1f2937; margin: 0 0 10px 0; font-size: 28px; font-weight: 600;">
+                            New Order Received!
+                        </h2>
+                        <p style="color: #6b7280; font-size: 16px; margin: 0;">
+                            Hello ${vendorName}, you have a new customer order.
+                        </p>
+                    </div>
+                    
+                    <div style="background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%); border: 2px solid #10b981; border-radius: 12px; padding: 25px; margin: 30px 0;">
+                        <h3 style="color: #065f46; font-size: 18px; margin: 0 0 15px 0; font-weight: 600;">
+                            Order Details
+                        </h3>
+                        <table width="100%" cellpadding="8" cellspacing="0">
+                            <tr>
+                                <td style="color: #6b7280; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #bbf7d0;">Customer:</td>
+                                <td style="color: #1f2937; font-size: 14px; font-weight: 600; text-align: right; padding: 8px 0; border-bottom: 1px solid #bbf7d0;">${customerName}</td>
+                            </tr>
+                            <tr>
+                                <td style="color: #6b7280; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #bbf7d0;">Plant:</td>
+                                <td style="color: #1f2937; font-size: 14px; font-weight: 600; text-align: right; padding: 8px 0; border-bottom: 1px solid #bbf7d0;">${plantName} (x${quantity})</td>
+                            </tr>
+                            <tr>
+                                <td style="color: #6b7280; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #bbf7d0;">Total Value:</td>
+                                <td style="color: #10b981; font-size: 18px; font-weight: 700; text-align: right; padding: 8px 0; border-bottom: 1px solid #bbf7d0;">₹${price * quantity}</td>
+                            </tr>
+                            <tr>
+                                <td style="color: #6b7280; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #bbf7d0;">Delivery Address:</td>
+                                <td style="color: #1f2937; font-size: 14px; font-weight: 600; text-align: right; padding: 8px 0; border-bottom: 1px solid #bbf7d0;">
+                                    ${deliveryAddress?.address ? `${deliveryAddress.address}, ${deliveryAddress.city || ''} ${deliveryAddress.pincode || ''}` : 'Not provided'}
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    ${hasCoords ? `
+                    <div style="background: #eff6ff; border-left: 4px solid #3b82f6; padding: 15px; border-radius: 8px; margin: 30px 0; text-align: center;">
+                        <p style="color: #1e40af; font-size: 14px; margin: 0 0 12px 0; line-height: 1.5;">
+                            📍 The customer has pinned their exact coordinates for delivery.
+                        </p>
+                        <a href="${googleMapsLink}" target="_blank" style="display: inline-block; background: #3b82f6; color: #ffffff; text-decoration: none; padding: 10px 20px; border-radius: 6px; font-weight: 600; font-size: 14px;">
+                            Open in Google Maps
+                        </a>
+                    </div>
+                    ` : ''}
+                    
+                    <div style="text-align: center; margin: 30px 0;">
+                        <a href="https://vanamap.online/vendor" style="display: inline-block; background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #ffffff; text-decoration: none; padding: 14px 32px; border-radius: 50px; font-weight: 600; font-size: 16px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);">
+                            Open Vendor Portal
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        `;
+        return createEmailTemplate(content);
+    },
+
+    // 9. Vendor Order Status Alert Notification (For cancellations)
+    vendorOrderStatusAlert: (vendorName, customerName, plantName, status, quantity, price, orderId) => {
+        const isCancelled = status.toLowerCase() === 'cancelled';
+        const content = `
+            <tr>
+                <td style="padding: 40px 30px;">
+                    <div style="text-align: center; margin-bottom: 30px;">
+                        <div style="font-size: 60px; margin-bottom: 20px;">📢</div>
+                        <h2 style="color: #1f2937; margin: 0 0 10px 0; font-size: 28px; font-weight: 600;">
+                            Order Status Update
+                        </h2>
+                        <p style="color: #6b7280; font-size: 16px; margin: 0;">
+                            Hello ${vendorName}, order ${orderId} has been updated.
+                        </p>
+                    </div>
+                    
+                    <div style="background: ${isCancelled ? '#fef2f2' : '#f9fafb'}; border: 2px solid ${isCancelled ? '#ef4444' : '#e5e7eb'}; border-radius: 12px; padding: 25px; margin: 30px 0;">
+                        <h3 style="color: #1f2937; font-size: 16px; margin: 0 0 15px 0; font-weight: 600;">
+                            New Status: <span style="color: ${isCancelled ? '#ef4444' : '#4b5563'}; text-transform: uppercase;">${status}</span>
+                        </h3>
+                        <table width="100%" cellpadding="8" cellspacing="0">
+                            <tr>
+                                <td style="color: #6b7280; font-size: 14px; padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.05);">Order ID:</td>
+                                <td style="color: #1f2937; font-size: 14px; font-weight: 600; text-align: right; padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.05);">${orderId}</td>
+                            </tr>
+                            <tr>
+                                <td style="color: #6b7280; font-size: 14px; padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.05);">Customer:</td>
+                                <td style="color: #1f2937; font-size: 14px; font-weight: 600; text-align: right; padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.05);">${customerName}</td>
+                            </tr>
+                            <tr>
+                                <td style="color: #6b7280; font-size: 14px; padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.05);">Plant:</td>
+                                <td style="color: #1f2937; font-size: 14px; font-weight: 600; text-align: right; padding: 8px 0; border-bottom: 1px solid rgba(0,0,0,0.05);">${plantName} (x${quantity})</td>
+                            </tr>
+                            <tr>
+                                <td style="color: #6b7280; font-size: 14px; padding: 8px 0;">Amount:</td>
+                                <td style="color: #1f2937; font-size: 14px; font-weight: 600; text-align: right; padding: 8px 0;">₹${price * quantity}</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    ${isCancelled ? `
+                    <div style="background: #fef2f2; border-left: 4px solid #ef4444; padding: 15px; border-radius: 8px; margin: 30px 0;">
+                        <p style="color: #991b1b; font-size: 14px; margin: 0; line-height: 1.6;">
+                            <strong>⚠️ Order Cancelled:</strong> Please halt any packaging or shipping operations for this order.
+                        </p>
+                    </div>
+                    ` : ''}
+                </td>
+            </tr>
+        `;
+        return createEmailTemplate(content);
     }
 };
 
