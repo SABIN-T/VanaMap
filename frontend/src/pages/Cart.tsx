@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
-import { Trash2, ArrowLeft, Minus, Plus, ShoppingCart, MessageCircle, MapPin, Store, Lock, ShieldCheck, Info, Phone, Smartphone, RefreshCw, CheckCircle2, CloudRain, CreditCard } from 'lucide-react';
+import { Trash2, ArrowLeft, Minus, Plus, ShoppingCart, MessageCircle, MapPin, Store, Lock, ShieldCheck, Info, Phone, Smartphone, RefreshCw, CheckCircle2, CloudRain, CreditCard, Navigation, ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from '../components/common/Button';
 import { fetchVendors, completePurchase, createCartOrder, verifyCartPayment } from '../services/api';
 import { formatCurrency } from '../utils/currency';
@@ -10,12 +10,68 @@ import toast from 'react-hot-toast';
 import type { Vendor, CartItem } from '../types';
 import styles from './Cart.module.css';
 
+// Leaflet imports
+import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+
+// Fix Leaflet default marker icon
+delete (L.Icon.Default.prototype as any)._getIconUrl;
+L.Icon.Default.mergeOptions({
+    iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon-2x.png',
+    iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-icon.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+});
+
+interface DeliveryAddress {
+    address: string;
+    city: string;
+    state: string;
+    pincode: string;
+    latitude: number | null;
+    longitude: number | null;
+}
+
+// Draggable marker sub-component
+const DraggableMarker = ({ position, onDrag }: { position: [number, number]; onDrag: (lat: number, lng: number) => void }) => {
+    const markerRef = useRef<L.Marker>(null);
+
+    useMapEvents({
+        click(e) {
+            onDrag(e.latlng.lat, e.latlng.lng);
+        }
+    });
+
+    const eventHandlers = {
+        dragend() {
+            const marker = markerRef.current;
+            if (marker) {
+                const ll = marker.getLatLng();
+                onDrag(ll.lat, ll.lng);
+            }
+        }
+    };
+
+    return <Marker draggable position={position} ref={markerRef} eventHandlers={eventHandlers} />;
+};
+
 export const Cart = () => {
     const { items, removeFromCart, removeItems, updateQuantity } = useCart();
     const { user, loading, refreshUser } = useAuth();
     const navigate = useNavigate();
     const [vendors, setVendors] = useState<Record<string, Vendor>>({});
     const [payingVendor, setPayingVendor] = useState<string | null>(null);
+    const [deliveryExpanded, setDeliveryExpanded] = useState(true);
+    const [locating, setLocating] = useState(false);
+    const [deliveryAddress, setDeliveryAddress] = useState<DeliveryAddress>({
+        address: '',
+        city: '',
+        state: '',
+        pincode: '',
+        latitude: null,
+        longitude: null
+    });
+    const mapRef = useRef<L.Map | null>(null);
 
     useEffect(() => {
         const loadVendors = async () => {
@@ -25,6 +81,67 @@ export const Cart = () => {
             setVendors(map);
         };
         loadVendors();
+    }, []);
+
+    // Auto-fill from user location if available
+    useEffect(() => {
+        if (user && (user as any).latitude && (user as any).longitude) {
+            setDeliveryAddress(prev => ({
+                ...prev,
+                latitude: prev.latitude || (user as any).latitude,
+                longitude: prev.longitude || (user as any).longitude,
+                city: prev.city || (user as any).city || '',
+                state: prev.state || (user as any).state || ''
+            }));
+        }
+    }, [user]);
+
+    const handleUseMyLocation = useCallback(() => {
+        if (!navigator.geolocation) {
+            toast.error('Geolocation is not supported by your browser');
+            return;
+        }
+        setLocating(true);
+        navigator.geolocation.getCurrentPosition(
+            async (position) => {
+                const lat = position.coords.latitude;
+                const lng = position.coords.longitude;
+                setDeliveryAddress(prev => ({ ...prev, latitude: lat, longitude: lng }));
+
+                // Reverse geocode
+                try {
+                    const resp = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`);
+                    const data = await resp.json();
+                    if (data.address) {
+                        setDeliveryAddress(prev => ({
+                            ...prev,
+                            address: data.display_name?.split(',').slice(0, 3).join(', ') || prev.address,
+                            city: data.address.city || data.address.town || data.address.village || prev.city,
+                            state: data.address.state || prev.state,
+                            pincode: data.address.postcode || prev.pincode
+                        }));
+                    }
+                } catch (e) {
+                    console.error('Reverse geocode failed:', e);
+                }
+
+                if (mapRef.current) {
+                    mapRef.current.setView([lat, lng], 15);
+                }
+                setLocating(false);
+                toast.success('Location captured!');
+            },
+            (error) => {
+                setLocating(false);
+                toast.error('Unable to get your location. Please enter manually.');
+                console.error('Geolocation error:', error);
+            },
+            { enableHighAccuracy: true, timeout: 10000 }
+        );
+    }, []);
+
+    const handleMarkerDrag = useCallback((lat: number, lng: number) => {
+        setDeliveryAddress(prev => ({ ...prev, latitude: lat, longitude: lng }));
     }, []);
 
     // Auth Gate for Cart
@@ -40,7 +157,7 @@ export const Cart = () => {
                 <div className={styles.lockOverlay}>
                     <div className={styles.lockCard}>
                         <div className={styles.lockIcon}><ShoppingCart size={40} /></div>
-                        <h1 className={styles.lockTitle}>Secure Bag 🛒</h1>
+                        <h1 className={styles.lockTitle}>Secure Bag ðŸ›’</h1>
                         <p className={styles.lockDesc}>
                             Please <strong>sign in</strong> to manage your orders, sync your cart across devices, and arrange WhatsApp delivery.
                         </p>
@@ -78,6 +195,19 @@ export const Cart = () => {
         return acc;
     }, {} as Record<string, CartItem[]>);
 
+    // Get the delivery address data to send
+    const getDeliveryData = () => {
+        if (!deliveryAddress.address && !deliveryAddress.city) return undefined;
+        return {
+            address: deliveryAddress.address,
+            city: deliveryAddress.city,
+            state: deliveryAddress.state,
+            pincode: deliveryAddress.pincode,
+            latitude: deliveryAddress.latitude || undefined,
+            longitude: deliveryAddress.longitude || undefined
+        };
+    };
+
     // --- Razorpay Helpers ---
     const loadRazorpay = (): Promise<boolean> => {
         return new Promise((resolve) => {
@@ -96,6 +226,14 @@ export const Cart = () => {
     const handleRazorpayCheckout = async (vendorId: string) => {
         if (!user) {
             navigate('/auth');
+            return;
+        }
+
+        // Require delivery address
+        if (!deliveryAddress.address || !deliveryAddress.city) {
+            toast.error('Please enter your delivery address and city before checkout');
+            setDeliveryExpanded(true);
+            document.getElementById('delivery-address')?.focus();
             return;
         }
 
@@ -118,7 +256,7 @@ export const Cart = () => {
         }, 0);
 
         if (totalPrice <= 0) {
-            toast.error('Cart total must be greater than ₹0');
+            toast.error('Cart total must be greater than â‚¹0');
             return;
         }
 
@@ -140,8 +278,10 @@ export const Cart = () => {
             plantName: i.plant.name
         }));
 
+        const delivery = getDeliveryData();
+
         try {
-            const order = await createCartOrder(totalPrice, itemPayload);
+            const order = await createCartOrder(totalPrice, itemPayload, delivery);
 
             const options = {
                 key: order.key,
@@ -158,11 +298,12 @@ export const Cart = () => {
                             paymentId: response.razorpay_payment_id,
                             signature: response.razorpay_signature,
                             items: itemPayload,
-                            totalAmount: totalPrice
+                            totalAmount: totalPrice,
+                            deliveryAddress: delivery
                         });
 
                         if (verifyData.success) {
-                            toast.success(`Payment successful! +${verifyData.pointsAwarded} CP earned 🌿`);
+                            toast.success(`Payment successful! +${verifyData.pointsAwarded} CP earned ðŸŒ¿`);
                             // Remove purchased items from cart
                             removeItems(vItems.map(i => ({ plantId: i.plant.id, vendorId: i.vendorId })));
                             await refreshUser();
@@ -208,6 +349,14 @@ export const Cart = () => {
             return;
         }
 
+        // Require delivery address
+        if (!deliveryAddress.address || !deliveryAddress.city) {
+            toast.error('Please enter your delivery address and city before checkout');
+            setDeliveryExpanded(true);
+            document.getElementById('delivery-address')?.focus();
+            return;
+        }
+
         let vendor = vendors[vendorId];
         const vItems = groupedItems[vendorId];
 
@@ -225,6 +374,8 @@ export const Cart = () => {
 
         if (!vendor || !vItems) return;
 
+        const delivery = getDeliveryData();
+
         // Construct Message
         let msg = `Hi, I am ${user.name}. I found your shop on VanaMap and would like to place an order.\n\n*Order Details:*\n`;
         let total = 0;
@@ -241,6 +392,18 @@ export const Cart = () => {
         if (total > 0) {
             msg += `\n*Total Estimated Value: ${formatCurrency(total)}*\n`;
         }
+
+        // Add delivery address to WhatsApp message
+        if (delivery) {
+            msg += `\n*ðŸ“ Delivery Location:*\n`;
+            if (delivery.address) msg += `${delivery.address}\n`;
+            if (delivery.city || delivery.state) msg += `${delivery.city || ''}${delivery.city && delivery.state ? ', ' : ''}${delivery.state || ''}\n`;
+            if (delivery.pincode) msg += `PIN: ${delivery.pincode}\n`;
+            if (delivery.latitude && delivery.longitude) {
+                msg += `ðŸ“Œ Map: https://www.google.com/maps?q=${delivery.latitude},${delivery.longitude}\n`;
+            }
+        }
+
         msg += `\nPlease confirm stock availability and delivery timeline.`;
 
         // Open WhatsApp
@@ -257,13 +420,18 @@ export const Cart = () => {
             price: i.vendorPrice || i.plant.price || 0,
             plantName: i.plant.name
         }));
-        completePurchase(purchaseData).catch(console.error);
+        completePurchase(purchaseData, delivery).catch(console.error);
 
         window.open(url, '_blank');
 
         // Note: We don't automatically remove items to allow user to retry if WA fails, 
         // or we could prompt "Did you complete the order?". For now, keep them.
     };
+
+    const mapCenter: [number, number] = [
+        deliveryAddress.latitude || (user as any)?.latitude || 10.0,
+        deliveryAddress.longitude || (user as any)?.longitude || 76.3
+    ];
 
     return (
         <div className={styles.container}>
@@ -287,6 +455,114 @@ export const Cart = () => {
                     <div className={styles.multiVendorAlert}>
                         <Info size={20} />
                         <span>Your cart contains items from multiple sellers. Please checkout from each seller separately to ensure separate delivery.</span>
+                    </div>
+                )}
+
+                {/* Delivery Location Section */}
+                {items.length > 0 && user && (
+                    <div className={styles.deliverySection}>
+                        <button
+                            className={styles.deliveryToggle}
+                            onClick={() => setDeliveryExpanded(!deliveryExpanded)}
+                            id="delivery-toggle"
+                        >
+                            <div className={styles.deliveryToggleLeft}>
+                                <MapPin size={20} className={styles.deliveryIcon} />
+                                <div>
+                                    <span className={styles.deliveryTitle}>Delivery Location</span>
+                                    {deliveryAddress.address && !deliveryExpanded && (
+                                        <span className={styles.deliveryPreview}>{deliveryAddress.address}</span>
+                                    )}
+                                </div>
+                            </div>
+                            {deliveryExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                        </button>
+
+                        {deliveryExpanded && (
+                            <div className={styles.deliveryForm}>
+                                <div className={styles.deliveryRow}>
+                                    <div className={styles.deliveryField} style={{ flex: 2 }}>
+                                        <label>Full Address</label>
+                                        <input
+                                            type="text"
+                                            id="delivery-address"
+                                            placeholder="House/Street/Area"
+                                            value={deliveryAddress.address}
+                                            onChange={e => setDeliveryAddress(prev => ({ ...prev, address: e.target.value }))}
+                                            className={styles.deliveryInput}
+                                        />
+                                    </div>
+                                </div>
+                                <div className={styles.deliveryRow}>
+                                    <div className={styles.deliveryField}>
+                                        <label>City</label>
+                                        <input
+                                            type="text"
+                                            id="delivery-city"
+                                            placeholder="City/Town"
+                                            value={deliveryAddress.city}
+                                            onChange={e => setDeliveryAddress(prev => ({ ...prev, city: e.target.value }))}
+                                            className={styles.deliveryInput}
+                                        />
+                                    </div>
+                                    <div className={styles.deliveryField}>
+                                        <label>State</label>
+                                        <input
+                                            type="text"
+                                            id="delivery-state"
+                                            placeholder="State"
+                                            value={deliveryAddress.state}
+                                            onChange={e => setDeliveryAddress(prev => ({ ...prev, state: e.target.value }))}
+                                            className={styles.deliveryInput}
+                                        />
+                                    </div>
+                                    <div className={styles.deliveryField}>
+                                        <label>Pincode</label>
+                                        <input
+                                            type="text"
+                                            id="delivery-pincode"
+                                            placeholder="PIN"
+                                            value={deliveryAddress.pincode}
+                                            onChange={e => setDeliveryAddress(prev => ({ ...prev, pincode: e.target.value }))}
+                                            className={styles.deliveryInput}
+                                            maxLength={6}
+                                        />
+                                    </div>
+                                </div>
+
+                                <button
+                                    className={styles.locateBtn}
+                                    onClick={handleUseMyLocation}
+                                    disabled={locating}
+                                    id="use-my-location"
+                                >
+                                    <Navigation size={16} className={locating ? styles.spinning : ''} />
+                                    {locating ? 'Locating...' : 'Use My Current Location'}
+                                </button>
+
+                                <div className={styles.miniMapContainer}>
+                                    <MapContainer
+                                        center={mapCenter}
+                                        zoom={deliveryAddress.latitude ? 15 : 5}
+                                        style={{ height: '200px', width: '100%', borderRadius: '12px' }}
+                                        ref={mapRef}
+                                        scrollWheelZoom={false}
+                                    >
+                                        <TileLayer
+                                            attribution='&copy; <a href="https://www.openstreetmap.org/">OSM</a>'
+                                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                        />
+                                        {(deliveryAddress.latitude && deliveryAddress.longitude) && (
+                                            <DraggableMarker
+                                                position={[deliveryAddress.latitude, deliveryAddress.longitude]}
+                                                onDrag={handleMarkerDrag}
+                                            />
+                                        )}
+                                    </MapContainer>
+                                    <p className={styles.mapHint}>ðŸ“ Click the map or drag the pin to set exact delivery location</p>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 )}
 
@@ -401,7 +677,7 @@ export const Cart = () => {
 
                                                         {isCustomPot && (
                                                             <div className={styles.comingSoonBadge}>
-                                                                <Info size={12} /> Stay tuned! This buying option is coming soon 🚀
+                                                                <Info size={12} /> Stay tuned! This buying option is coming soon ðŸš€
                                                             </div>
                                                         )}
 

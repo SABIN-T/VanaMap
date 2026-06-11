@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import {
-    LayoutDashboard, Sprout, Store,
+    LayoutDashboard, Sprout, Store, ShoppingBag,
     Users, Activity, Bell, Settings, Layers, Sparkles,
     Menu, X, LogOut, ChevronRight, MessageSquare, DollarSign, Trophy, Database, ScanLine, Bot, Mail
 } from 'lucide-react';
@@ -47,6 +47,7 @@ export const AdminLayout = ({ title, children }: AdminLayoutProps) => {
         { path: '/admin/pot-designs', icon: Layers, label: 'Pot Designs', sub: true },
         { path: '/admin/add-plant', icon: Activity, label: 'Add New Plant', sub: true },
         { path: '/admin/manage-vendors', icon: Store, label: 'Manage Vendors', badge: stats.unread?.vendors },
+        { path: '/admin/shop-orders', icon: ShoppingBag, label: 'Shop Orders', badge: stats.unread?.orders },
         { path: '/admin/price-management', icon: DollarSign, label: 'Price Management', badge: stats.unread?.prices },
         { path: '/admin/manage-points', icon: Trophy, label: 'Leaderboard Points' },
         { path: '/admin/seed-bank', icon: Database, label: 'Seed Data Bank' },

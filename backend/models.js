@@ -216,6 +216,22 @@ const PaymentSchema = new mongoose.Schema({
     signature: String,
     status: { type: String, enum: ['created', 'paid', 'failed'], default: 'created' },
     plan: String,
+    items: [{
+        plantId: String,
+        plantName: String,
+        vendorId: String,
+        vendorName: String,
+        quantity: Number,
+        price: Number
+    }],
+    deliveryAddress: {
+        address: String,
+        city: String,
+        state: String,
+        pincode: String,
+        latitude: Number,
+        longitude: Number
+    },
     date: { type: Date, default: Date.now }
 });
 
@@ -227,7 +243,15 @@ const SaleSchema = new mongoose.Schema({
     plantName: String,
     price: { type: Number, required: true },
     quantity: { type: Number, default: 1 },
-    status: { type: String, enum: ['pending', 'completed', 'cancelled'], default: 'completed' },
+    status: { type: String, enum: ['pending', 'completed', 'shipped', 'delivered', 'cancelled'], default: 'completed' },
+    deliveryAddress: {
+        address: String,
+        city: String,
+        state: String,
+        pincode: String,
+        latitude: Number,
+        longitude: Number
+    },
     timestamp: { type: Date, default: Date.now }
 });
 

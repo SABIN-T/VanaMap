@@ -952,7 +952,7 @@ app.post('/api/payments/create-order', auth, async (req, res) => {
 // Create Cart Order (Dynamic Amount)
 app.post('/api/payments/create-cart-order', auth, async (req, res) => {
     try {
-        const { amount, items } = req.body;
+        const { amount, items, deliveryAddress } = req.body;
         if (!amount || amount <= 0) return res.status(400).json({ error: "Invalid amount" });
         if (!items || !items.length) return res.status(400).json({ error: "No items provided" });
 
@@ -964,7 +964,9 @@ app.post('/api/payments/create-cart-order', auth, async (req, res) => {
             receipt: `cart_${Date.now()}`,
             notes: {
                 userId: req.user.id,
-                itemCount: items.length.toString()
+                itemCount: items.length.toString(),
+                deliveryCity: deliveryAddress?.city || '',
+                deliveryState: deliveryAddress?.state || ''
             }
         };
 
@@ -979,7 +981,7 @@ app.post('/api/payments/create-cart-order', auth, async (req, res) => {
 // Verify Cart Payment
 app.post('/api/payments/verify-cart', auth, async (req, res) => {
     try {
-        const { orderId, paymentId, signature, items, totalAmount } = req.body;
+        const { orderId, paymentId, signature, items, totalAmount, deliveryAddress } = req.body;
         const crypto = require('crypto');
 
         if (!process.env.RAZORPAY_KEY_SECRET) {
@@ -1000,6 +1002,8 @@ app.post('/api/payments/verify-cart', auth, async (req, res) => {
 
         const sales = [];
         let pointsToAward = 0;
+        const deliveryInfo = deliveryAddress || {};
+        const deliveryStr = deliveryInfo.address ? `\nDelivery: ${deliveryInfo.address}, ${deliveryInfo.city || ''} ${deliveryInfo.state || ''} ${deliveryInfo.pincode || ''}` : '';
 
         for (const item of items) {
             const sale = new Sale({
@@ -1010,7 +1014,8 @@ app.post('/api/payments/verify-cart', auth, async (req, res) => {
                 plantName: item.plantName,
                 price: item.price,
                 quantity: item.quantity || 1,
-                status: 'completed'
+                status: 'completed',
+                deliveryAddress: deliveryInfo
             });
             await sale.save();
             sales.push(sale);
@@ -1018,10 +1023,11 @@ app.post('/api/payments/verify-cart', auth, async (req, res) => {
             // Award 200 points per plant purchased
             pointsToAward += (item.quantity || 1) * 200;
 
-            // Notify vendor
-            await broadcastAlert('sale', `New paid order: ${item.quantity || 1}x ${item.plantName}`, {
+            // Notify vendor with delivery info
+            await broadcastAlert('sale', `New paid order: ${item.quantity || 1}x ${item.plantName} by ${user.name}${deliveryStr}`, {
                 vendorId: item.vendorId,
-                title: 'New Paid Sale! 💰'
+                title: 'New Paid Sale! 💰',
+                deliveryAddress: deliveryInfo
             });
 
             // Send Purchase Confirmation Email
@@ -1042,7 +1048,7 @@ app.post('/api/payments/verify-cart', auth, async (req, res) => {
         user.cart = []; // Clear server-side cart
         await user.save();
 
-        // Record Payment
+        // Record Payment with delivery address and items
         const payment = new Payment({
             userId: user.id,
             userName: user.name,
@@ -1052,7 +1058,9 @@ app.post('/api/payments/verify-cart', auth, async (req, res) => {
             paymentId,
             signature,
             status: 'paid',
-            plan: 'cart_purchase'
+            plan: 'cart_purchase',
+            items: items.map(i => ({ plantId: i.plantId, plantName: i.plantName, vendorId: i.vendorId, vendorName: i.vendorName, quantity: i.quantity, price: i.price })),
+            deliveryAddress: deliveryInfo
         });
         await payment.save();
 
@@ -1077,6 +1085,146 @@ app.get('/api/admin/payments', auth, admin, async (req, res) => {
         const premiumUsers = await User.find({ isPremium: true }).select('name email premiumType premiumExpiry');
         res.json({ payments, premiumUsers });
     } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
+// --- ADMIN SHOP ORDERS ---
+
+// Get All Orders (Sales) with delivery info — for admin shop orders page
+app.get('/api/admin/orders', auth, admin, async (req, res) => {
+    try {
+        const { vendorId, status, search, page = 1, limit = 50 } = req.query;
+        const filter = {};
+        if (vendorId) filter.vendorId = vendorId;
+        if (status) filter.status = status;
+        if (search) {
+            filter.$or = [
+                { plantName: { $regex: search, $options: 'i' } },
+                { userName: { $regex: search, $options: 'i' } }
+            ];
+        }
+
+        const skip = (parseInt(page) - 1) * parseInt(limit);
+        const total = await Sale.countDocuments(filter);
+        const orders = await Sale.find(filter)
+            .sort({ timestamp: -1 })
+            .skip(skip)
+            .limit(parseInt(limit));
+
+        // Get vendor names for display
+        const vendorIds = [...new Set(orders.map(o => o.vendorId))];
+        const vendors = await Vendor.find({ id: { $in: vendorIds } }).select('id name address phone');
+        const vendorMap = {};
+        vendors.forEach(v => vendorMap[v.id] = { name: v.name, address: v.address, phone: v.phone });
+
+        res.json({
+            orders: orders.map(o => ({
+                ...o.toObject(),
+                vendorInfo: vendorMap[o.vendorId] || { name: 'Unknown Vendor' }
+            })),
+            total,
+            page: parseInt(page),
+            totalPages: Math.ceil(total / parseInt(limit))
+        });
+    } catch (e) {
+        console.error('Admin Orders Error:', e);
+        res.status(500).json({ error: e.message });
+    }
+});
+
+// Get Orders Map Data (lightweight for markers)
+app.get('/api/admin/orders/map', auth, admin, async (req, res) => {
+    try {
+        const orders = await Sale.find({
+            'deliveryAddress.latitude': { $exists: true, $ne: null }
+        }).select('plantName userName vendorId quantity price deliveryAddress timestamp status').sort({ timestamp: -1 }).limit(500);
+
+        const vendorIds = [...new Set(orders.map(o => o.vendorId))];
+        const vendors = await Vendor.find({ id: { $in: vendorIds } }).select('id name');
+        const vendorMap = {};
+        vendors.forEach(v => vendorMap[v.id] = v.name);
+
+        res.json(orders.map(o => ({
+            _id: o._id,
+            plantName: o.plantName,
+            userName: o.userName,
+            vendorName: vendorMap[o.vendorId] || 'Unknown',
+            vendorId: o.vendorId,
+            quantity: o.quantity,
+            price: o.price,
+            lat: o.deliveryAddress?.latitude,
+            lng: o.deliveryAddress?.longitude,
+            address: o.deliveryAddress?.address,
+            city: o.deliveryAddress?.city,
+            state: o.deliveryAddress?.state,
+            pincode: o.deliveryAddress?.pincode,
+            timestamp: o.timestamp,
+            status: o.status
+        })));
+    } catch (e) {
+        console.error('Admin Orders Map Error:', e);
+        res.status(500).json({ error: e.message });
+    }
+});
+
+// Update Order Status (Admin)
+app.patch('/api/admin/orders/:id/status', auth, admin, async (req, res) => {
+    try {
+        const { status } = req.body;
+        const validStatuses = ['pending', 'completed', 'shipped', 'delivered', 'cancelled'];
+        if (!validStatuses.includes(status)) {
+            return res.status(400).json({ error: `Invalid status. Must be one of: ${validStatuses.join(', ')}` });
+        }
+
+        const sale = await Sale.findByIdAndUpdate(
+            req.params.id,
+            { status },
+            { new: true }
+        );
+        if (!sale) return res.status(404).json({ error: 'Order not found' });
+
+        // Notify the user about status change
+        if (sale.userId) {
+            const statusMessages = {
+                shipped: `Your order of ${sale.plantName} has been shipped! 🚚`,
+                delivered: `Your order of ${sale.plantName} has been delivered! 📦✅`,
+                cancelled: `Your order of ${sale.plantName} has been cancelled. ❌`,
+                pending: `Your order of ${sale.plantName} is now pending. ⏳`,
+                completed: `Your order of ${sale.plantName} is confirmed! ✅`
+            };
+            await broadcastAlert('order_status', statusMessages[status] || `Order status updated to ${status}`, {
+                userId: sale.userId,
+                title: `Order ${status.charAt(0).toUpperCase() + status.slice(1)} 📋`
+            });
+        }
+
+        res.json({ success: true, sale });
+    } catch (e) {
+        console.error('Update Order Status Error:', e);
+        res.status(500).json({ error: e.message });
+    }
+});
+
+// User Order History
+app.get('/api/user/orders', auth, async (req, res) => {
+    try {
+        const orders = await Sale.find({ userId: req.user.id })
+            .sort({ timestamp: -1 })
+            .limit(100);
+
+        // Get vendor names
+        const vendorIds = [...new Set(orders.map(o => o.vendorId))];
+        const vendors = await Vendor.find({ id: { $in: vendorIds } }).select('id name phone');
+        const vendorMap = {};
+        vendors.forEach(v => vendorMap[v.id] = { name: v.name, phone: v.phone });
+
+        res.json(orders.map(o => ({
+            ...o.toObject(),
+            vendorInfo: vendorMap[o.vendorId] || { name: 'VanaMap Official' }
+        })));
+    } catch (e) {
+        console.error('User Orders Error:', e);
         res.status(500).json({ error: e.message });
     }
 });
@@ -1320,7 +1468,7 @@ app.post('/api/tracking/search', async (req, res) => {
 // New Endpoint: Complete Purchase (Real Sales Tracking)
 app.post('/api/user/complete-purchase', auth, async (req, res) => {
     try {
-        const { items } = req.body; // Array of { plantId, vendorId, vendorName, quantity, price, plantName }
+        const { items, deliveryAddress } = req.body; // Array of { plantId, vendorId, vendorName, quantity, price, plantName }
         if (!items || !items.length) return res.status(400).json({ error: "No items in cart" });
 
         const user = await User.findById(req.user.id);
@@ -1328,6 +1476,8 @@ app.post('/api/user/complete-purchase', auth, async (req, res) => {
 
         const sales = [];
         let pointsToAward = 0;
+        const deliveryInfo = deliveryAddress || {};
+        const deliveryStr = deliveryInfo.address ? `\nDelivery: ${deliveryInfo.address}, ${deliveryInfo.city || ''} ${deliveryInfo.state || ''} ${deliveryInfo.pincode || ''}` : '';
 
         for (const item of items) {
             const sale = new Sale({
@@ -1338,7 +1488,8 @@ app.post('/api/user/complete-purchase', auth, async (req, res) => {
                 plantName: item.plantName,
                 price: item.price,
                 quantity: item.quantity || 1,
-                status: 'completed'
+                status: 'completed',
+                deliveryAddress: deliveryInfo
             });
             await sale.save();
             sales.push(sale);
@@ -1346,10 +1497,11 @@ app.post('/api/user/complete-purchase', auth, async (req, res) => {
             // Award 200 points per plant purchased
             pointsToAward += (item.quantity || 1) * 200;
 
-            // Notify vendor
-            await broadcastAlert('sale', `New order: ${item.quantity || 1}x ${item.plantName}`, {
+            // Notify vendor with delivery info
+            await broadcastAlert('sale', `New order: ${item.quantity || 1}x ${item.plantName} by ${user.name}${deliveryStr}`, {
                 vendorId: item.vendorId,
-                title: 'New Sale! 💰'
+                title: 'New Sale! 💰',
+                deliveryAddress: deliveryInfo
             });
 
             // 🚀 Send Purchase Confirmation Email to User

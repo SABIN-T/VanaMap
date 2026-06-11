@@ -93,7 +93,6 @@
     border: 1px solid rgba(52, 211, 153, 0.2);
 }
 
-/* Multi-Vendor Alert */
 .multiVendorAlert {
     background: rgba(56, 189, 248, 0.1);
     border: 1px dashed rgba(56, 189, 248, 0.3);
@@ -105,6 +104,210 @@
     gap: 0.75rem;
     margin-bottom: 1.5rem;
     font-size: 0.85rem;
+}
+
+/* ========== DELIVERY LOCATION SECTION ========== */
+.deliverySection {
+    background: rgba(16, 185, 129, 0.04);
+    border: 1px solid rgba(16, 185, 129, 0.15);
+    border-radius: 1.25rem;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.deliveryToggle {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    background: transparent;
+    border: none;
+    color: #e2e8f0;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.deliveryToggle:hover {
+    background: rgba(16, 185, 129, 0.06);
+}
+
+.deliveryToggleLeft {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.deliveryIcon {
+    color: #10b981;
+    flex-shrink: 0;
+}
+
+.deliveryTitle {
+    font-weight: 700;
+    font-size: 1rem;
+    display: block;
+}
+
+.deliveryPreview {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    display: block;
+    margin-top: 0.15rem;
+    max-width: 300px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.deliveryForm {
+    padding: 0 1.25rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+    from { opacity: 0; max-height: 0; }
+    to { opacity: 1; max-height: 600px; }
+}
+
+.deliveryRow {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.deliveryField {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.deliveryField label {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.deliveryInput {
+    background: rgba(15, 23, 42, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #e2e8f0;
+    padding: 0.6rem 0.75rem;
+    border-radius: 0.6rem;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.deliveryInput:focus {
+    border-color: rgba(16, 185, 129, 0.5);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.deliveryInput::placeholder {
+    color: #475569;
+}
+
+.locateBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1rem;
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    color: #10b981;
+    border-radius: 0.6rem;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    width: 100%;
+}
+
+.locateBtn:hover:not(:disabled) {
+    background: rgba(16, 185, 129, 0.15);
+    border-color: rgba(16, 185, 129, 0.4);
+    transform: translateY(-1px);
+}
+
+.locateBtn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.spinning {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.miniMapContainer {
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    position: relative;
+}
+
+.mapHint {
+    text-align: center;
+    font-size: 0.75rem;
+    color: #64748b;
+    margin: 0.5rem 0 0;
+    padding: 0;
+}
+
+@media (max-width: 768px) {
+    .deliveryRow {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .deliverySection {
+        border-radius: 1rem;
+    }
+
+    .deliveryForm {
+        padding: 0 1rem 1rem;
+    }
+}
+
+/* Light mode delivery */
+[data-theme='light'] .deliverySection {
+    background: rgba(16, 185, 129, 0.05);
+    border-color: rgba(16, 185, 129, 0.2);
+}
+
+[data-theme='light'] .deliveryToggle {
+    color: #1e293b;
+}
+
+[data-theme='light'] .deliveryInput {
+    background: #f1f5f9;
+    border-color: #e2e8f0;
+    color: #1e293b;
+}
+
+[data-theme='light'] .deliveryInput:focus {
+    border-color: #10b981;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+}
+
+[data-theme='light'] .deliveryField label {
+    color: #64748b;
+}
+
+[data-theme='light'] .deliveryPreview {
+    color: #64748b;
 }
 
 /* Empty State */

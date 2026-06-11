@@ -3,12 +3,13 @@ import { useCart } from '../context/CartContext';
 import { Button } from '../components/common/Button';
 import {
     ShoppingBag, MapPin, Heart, ArrowRight, Loader2,
-    Shield, Lock, Trophy, Zap, Wind, CheckCircle, Store
+    Shield, Lock, Trophy, Zap, Wind, CheckCircle, Store, Package, Truck, CheckCircle2, XCircle, Clock
 } from 'lucide-react';
 import { VerificationModal } from '../components/auth/VerificationModal';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { fetchPlants, fetchVendors, updateVendor, changePassword, fetchLeaderboard, updateLocation } from '../services/api';
+import { fetchPlants, fetchVendors, updateVendor, changePassword, fetchLeaderboard, updateLocation, fetchUserOrders } from '../services/api';
+import { formatCurrency } from '../utils/currency';
 import type { Plant, Vendor } from '../types';
 import toast from 'react-hot-toast';
 import styles from './UserDashboard.module.css';
@@ -37,6 +38,9 @@ export const UserDashboard = () => {
     const [detectingLoc, setDetectingLoc] = useState(false);
     const [showCollectionModal, setShowCollectionModal] = useState(false);
     const [showLocationModal, setShowLocationModal] = useState(false);
+    const [showOrdersModal, setShowOrdersModal] = useState(false);
+    const [myOrders, setMyOrders] = useState<any[]>([]);
+    const [loadingOrders, setLoadingOrders] = useState(false);
     const [locForm, setLocForm] = useState({ city: '', state: '' });
 
     // Verification State
@@ -506,6 +510,25 @@ export const UserDashboard = () => {
                         <p>{items.length} Pending</p>
                     </div>
                 </div>
+
+                <div onClick={async () => {
+                    setShowOrdersModal(true);
+                    setLoadingOrders(true);
+                    try {
+                        const data = await fetchUserOrders();
+                        setMyOrders(data);
+                    } catch (e) {
+                        console.error('Failed to load orders', e);
+                    } finally {
+                        setLoadingOrders(false);
+                    }
+                }} className={styles.quickCard} style={{ background: 'rgba(168, 85, 247, 0.05)', borderColor: 'rgba(168, 85, 247, 0.2)' }}>
+                    <Package style={{ color: '#a855f7' }} size={24} />
+                    <div>
+                        <strong>My Orders</strong>
+                        <p>Order History</p>
+                    </div>
+                </div>
             </div>
 
             {/* --- MODALS --- */}
@@ -698,6 +721,99 @@ export const UserDashboard = () => {
                                         </div>
                                     </div>
                                 ))}
+                            </div>
+                        )}
+                    </div>
+                </div>
+            )}
+
+            {showOrdersModal && (
+                <div style={{
+                    position: 'fixed', inset: 0, zIndex: 1005,
+                    background: 'rgba(0,0,0,0.9)', backdropFilter: 'blur(5px)',
+                    display: 'flex', flexDirection: 'column',
+                    animation: 'fadeIn 0.2s'
+                }}>
+                    <div style={{ padding: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                        <h2 style={{ margin: 0, fontSize: '1.4rem', fontWeight: 700, color: 'white', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                            <Package color="#a855f7" /> My Orders
+                        </h2>
+                        <button onClick={() => setShowOrdersModal(false)} style={{ background: 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '50%', width: '36px', height: '36px', color: 'white', cursor: 'pointer' }}>
+                            <ArrowRight size={20} />
+                        </button>
+                    </div>
+
+                    <div style={{ flex: 1, overflowY: 'auto', padding: '1.5rem' }}>
+                        {loadingOrders ? (
+                            <div className={styles.loadingBox}><Loader2 className="animate-spin" /></div>
+                        ) : myOrders.length === 0 ? (
+                            <div className={styles.emptyState}>
+                                <p>No orders yet. Start shopping!</p>
+                                <Button onClick={() => { setShowOrdersModal(false); navigate('/'); }}>Browse Plants</Button>
+                            </div>
+                        ) : (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                                {myOrders.map((order: any) => {
+                                    const statusConfig: Record<string, { color: string; bg: string; icon: React.ReactNode }> = {
+                                        pending: { color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.1)', icon: <Clock size={14} /> },
+                                        completed: { color: '#10b981', bg: 'rgba(16, 185, 129, 0.1)', icon: <CheckCircle size={14} /> },
+                                        shipped: { color: '#3b82f6', bg: 'rgba(59, 130, 246, 0.1)', icon: <Truck size={14} /> },
+                                        delivered: { color: '#10b981', bg: 'rgba(16, 185, 129, 0.15)', icon: <CheckCircle2 size={14} /> },
+                                        cancelled: { color: '#ef4444', bg: 'rgba(239, 68, 68, 0.1)', icon: <XCircle size={14} /> }
+                                    };
+                                    const sc = statusConfig[order.status] || statusConfig.pending;
+
+                                    return (
+                                        <div key={order._id} style={{
+                                            background: 'rgba(255,255,255,0.03)',
+                                            border: '1px solid rgba(255,255,255,0.08)',
+                                            borderRadius: '1rem',
+                                            padding: '1rem 1.25rem',
+                                            transition: 'all 0.2s'
+                                        }}>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '1rem' }}>
+                                                <div style={{ flex: 1, minWidth: 0 }}>
+                                                    <h4 style={{ margin: '0 0 0.25rem', fontSize: '1rem', fontWeight: 700, color: '#f1f5f9' }}>
+                                                        {order.plantName}
+                                                    </h4>
+                                                    <p style={{ margin: 0, fontSize: '0.8rem', color: '#94a3b8' }}>
+                                                        {order.quantity > 1 ? `${order.quantity}x · ` : ''}
+                                                        from <span style={{ color: '#e2e8f0', fontWeight: 600 }}>{order.vendorInfo?.name || 'Unknown'}</span>
+                                                    </p>
+                                                </div>
+                                                <div style={{ textAlign: 'right', flexShrink: 0 }}>
+                                                    <div style={{ fontSize: '1rem', fontWeight: 800, color: '#10b981' }}>
+                                                        {formatCurrency(order.price * (order.quantity || 1))}
+                                                    </div>
+                                                    <div style={{
+                                                        display: 'inline-flex', alignItems: 'center', gap: '0.3rem',
+                                                        padding: '0.2rem 0.5rem', borderRadius: '999px',
+                                                        background: sc.bg, color: sc.color,
+                                                        fontSize: '0.7rem', fontWeight: 700, textTransform: 'uppercase',
+                                                        marginTop: '0.3rem'
+                                                    }}>
+                                                        {sc.icon} {order.status}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.75rem', paddingTop: '0.6rem', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+                                                <div style={{ fontSize: '0.75rem', color: '#64748b' }}>
+                                                    {order.deliveryAddress?.address ? (
+                                                        <span style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
+                                                            <MapPin size={11} /> {order.deliveryAddress.address}{order.deliveryAddress.city ? `, ${order.deliveryAddress.city}` : ''}
+                                                        </span>
+                                                    ) : (
+                                                        <span style={{ fontStyle: 'italic' }}>No address</span>
+                                                    )}
+                                                </div>
+                                                <div style={{ fontSize: '0.7rem', color: '#475569' }}>
+                                                    {new Date(order.timestamp).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    );
+                                })}
                             </div>
                         )}
                     </div>
