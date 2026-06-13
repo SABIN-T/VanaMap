@@ -317,6 +317,14 @@ export const fetchAdminStats = async () => {
     return res.json();
 };
 
+export const fetchAdminDiagnostics = async () => {
+    const res = await fetch(`${API_URL}/admin/diagnostics`, {
+        headers: getHeaders()
+    });
+    if (!res.ok) throw new Error("Failed to fetch diagnostics");
+    return res.json();
+};
+
 export const fetchVendorNotifications = async () => {
     try {
         const res = await fetch(`${API_URL}/vendor/notifications`, { headers: getHeaders() });
