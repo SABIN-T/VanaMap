@@ -879,5 +879,29 @@ export const deleteKidsProduct = async (id: string) => {
     return res.json();
 };
 
+export const fetchSystemSetting = async (key: string) => {
+    try {
+        const res = await fetch(`${API_URL}/settings/${key}`);
+        if (!res.ok) {
+            if (res.status === 404) return null;
+            throw new Error("Failed to fetch setting");
+        }
+        return await res.json();
+    } catch (e) {
+        console.error("fetchSystemSetting error:", e);
+        return null;
+    }
+};
+
+export const updateSystemSetting = async (key: string, value: any) => {
+    const res = await fetch(`${API_URL}/admin/settings`, {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify({ key, value })
+    });
+    if (!res.ok) throw new Error("Failed to update setting");
+    return await res.json();
+};
+
 
 
