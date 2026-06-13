@@ -1,4 +1,4 @@
-import type { Plant, Vendor } from '../types';
+import type { Plant, Vendor, KidsProduct } from '../types';
 import { PLANTS } from '../data/mocks';
 import { plantCache, apiCache, cachedFetch } from '../utils/universalCache'; // 🚀 Performance boost!
 
@@ -751,6 +751,55 @@ export const chatWithDrFlora = async (messages: any[], userContext: any, image?:
         }
         throw new Error("AI Service Unavailable");
     }
+    return res.json();
+};
+
+// --- KIDS PRODUCTS ---
+export const fetchKidsProducts = async (): Promise<KidsProduct[]> => {
+    try {
+        const response = await fetch(`${API_URL}/kids-products`);
+        if (!response.ok) throw new Error('Failed to fetch kids products');
+        return await response.json();
+    } catch (error) {
+        console.error("Error fetching kids products:", error);
+        return [];
+    }
+};
+
+export const addKidsProduct = async (productData: Partial<KidsProduct> | FormData) => {
+    const isFormData = productData instanceof FormData;
+    const headers = { ...getHeaders() };
+    if (isFormData) delete headers['Content-Type'];
+
+    const res = await fetch(`${API_URL}/kids-products`, {
+        method: 'POST',
+        headers,
+        body: isFormData ? productData : JSON.stringify(productData)
+    });
+    if (!res.ok) throw new Error("Failed to add kids product");
+    return res.json();
+};
+
+export const updateKidsProduct = async (id: string, updates: Partial<KidsProduct> | FormData) => {
+    const isFormData = updates instanceof FormData;
+    const headers = { ...getHeaders() };
+    if (isFormData) delete headers['Content-Type'];
+
+    const res = await fetch(`${API_URL}/kids-products/${id}`, {
+        method: 'PATCH',
+        headers,
+        body: isFormData ? updates : JSON.stringify(updates)
+    });
+    if (!res.ok) throw new Error("Failed to update kids product");
+    return res.json();
+};
+
+export const deleteKidsProduct = async (id: string) => {
+    const res = await fetch(`${API_URL}/kids-products/${id}`, {
+        method: 'DELETE',
+        headers: getHeaders()
+    });
+    if (!res.ok) throw new Error("Failed to delete kids product");
     return res.json();
 };
 

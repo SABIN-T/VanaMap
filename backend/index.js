@@ -3,7 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
-const { Plant, Vendor, User, Payment, Notification, Chat, PlantSuggestion, SearchLog, PushSubscription, SystemSettings, CustomPot, SupportTicket, AIFeedback, ApiKey, NewsletterSubscriber, Sale, Review, SupportEmail, DiagnosisRecord } = require('./models');
+const { Plant, Vendor, User, Payment, Notification, Chat, PlantSuggestion, SearchLog, PushSubscription, SystemSettings, CustomPot, SupportTicket, AIFeedback, ApiKey, NewsletterSubscriber, Sale, Review, SupportEmail, DiagnosisRecord, KidsProduct } = require('./models');
 const Razorpay = require('razorpay');
 const webpush = require('web-push');
 const helmet = require('helmet');
@@ -2113,6 +2113,126 @@ app.delete('/api/plants/:id', auth, admin, async (req, res) => {
 
         res.json({ message: 'Deleted' });
     } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// --- KIDS PRODUCTS ENDPOINTS ---
+
+// Get all Kids Products
+app.get('/api/kids-products', async (req, res) => {
+    try {
+        console.log('GET /api/kids-products - Fetching from database...');
+        const products = await KidsProduct.find().lean();
+        
+        // Optimize image URLs
+        const optimizedProducts = products.map(p => ({
+            ...p,
+            imageUrl: p.imageUrl && p.imageUrl.includes('cloudinary.com') && !p.imageUrl.includes('f_auto')
+                ? p.imageUrl.replace('/upload/', '/upload/f_auto,q_auto,w_500,c_limit/')
+                : p.imageUrl
+        }));
+        
+        res.json(optimizedProducts);
+    } catch (err) {
+        console.error("GET /api/kids-products ERROR:", err);
+        res.status(500).json({ error: "DB Error: " + err.message });
+    }
+});
+
+// Add Kids Product
+app.post('/api/kids-products', auth, admin, upload.single('image'), async (req, res) => {
+    try {
+        const productData = req.body;
+        
+        // If image uploaded, use Cloudinary URL
+        if (req.file) {
+            productData.imageUrl = req.file.path;
+            console.log('[KIDS] Image auto-uploaded:', productData.imageUrl);
+        }
+        
+        // Convert comma-separated strings to arrays if they are sent as strings
+        if (typeof productData.includes === 'string') {
+            try {
+                productData.includes = JSON.parse(productData.includes);
+            } catch (e) {
+                productData.includes = productData.includes.split(',').map(s => s.trim()).filter(Boolean);
+            }
+        }
+        if (typeof productData.tags === 'string') {
+            try {
+                productData.tags = JSON.parse(productData.tags);
+            } catch (e) {
+                productData.tags = productData.tags.split(',').map(s => s.trim()).filter(Boolean);
+            }
+        }
+        
+        const product = new KidsProduct(productData);
+        await product.save();
+        
+        res.status(201).json(product);
+    } catch (err) {
+        console.error("Add Kids Product Error:", err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Edit Kids Product
+app.patch('/api/kids-products/:id', auth, admin, (req, res, next) => {
+    upload.single('image')(req, res, (err) => {
+        if (err) {
+            console.error("Upload Error:", err);
+            if (err instanceof multer.MulterError) {
+                return res.status(400).json({ error: `Upload error: ${err.message}` });
+            }
+            return res.status(500).json({ error: `Cloud update failed: ${err.message}` });
+        }
+        next();
+    });
+}, async (req, res) => {
+    try {
+        const updates = req.body;
+        
+        if (req.file) {
+            updates.imageUrl = req.file.path;
+            console.log('[KIDS] Updated image:', updates.imageUrl);
+        }
+        
+        // Convert comma-separated strings to arrays if they are sent as strings
+        if (typeof updates.includes === 'string') {
+            try {
+                updates.includes = JSON.parse(updates.includes);
+            } catch (e) {
+                updates.includes = updates.includes.split(',').map(s => s.trim()).filter(Boolean);
+            }
+        }
+        if (typeof updates.tags === 'string') {
+            try {
+                updates.tags = JSON.parse(updates.tags);
+            } catch (e) {
+                updates.tags = updates.tags.split(',').map(s => s.trim()).filter(Boolean);
+            }
+        }
+        
+        delete updates._id;
+        delete updates.createdAt;
+        delete updates.updatedAt;
+        
+        const product = await KidsProduct.findOneAndUpdate({ id: req.params.id }, updates, { new: true });
+        res.json(product);
+    } catch (err) {
+        console.error("Edit Kids Product Error:", err);
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// Delete Kids Product
+app.delete('/api/kids-products/:id', auth, admin, async (req, res) => {
+    try {
+        await KidsProduct.findOneAndDelete({ id: req.params.id });
+        res.json({ message: 'Deleted' });
+    } catch (err) {
+        console.error("Delete Kids Product Error:", err);
         res.status(500).json({ error: err.message });
     }
 });

@@ -22,7 +22,8 @@ const PlantSchema = new mongoose.Schema({
     leafShape: String, // e.g. "Ovate", "Lanceolate", "Cordate"
     stemStructure: String, // e.g. "Woody", "Herbaceous", "Succulent"
     overallHabit: String, // e.g. "Climbing", "Bushy", "Tree-like"
-    biometricFeatures: [String] // e.g. ["Serrated Edges", "Variegated Patterns"]
+    biometricFeatures: [String], // e.g. ["Serrated Edges", "Variegated Patterns"]
+    audience: { type: String, enum: ['children', 'adult', 'both'], default: 'both' } // Target audience filter
 }, { timestamps: true });
 
 const VendorSchema = new mongoose.Schema({
@@ -353,5 +354,20 @@ module.exports = {
         status: { type: String, enum: ['active', 'resolved', 'monitoring'], default: 'active' },
         severity: { type: String, enum: ['low', 'medium', 'high', 'critical'], default: 'low' },
         timestamp: { type: Date, default: Date.now }
-    }))
+    })),
+    KidsProduct: mongoose.model('KidsProduct', new mongoose.Schema({
+        id: { type: String, required: true, unique: true },
+        name: { type: String, required: true },
+        description: String,
+        imageUrl: String,
+        price: { type: Number, default: 0 },
+        category: { type: String, enum: ['kit', 'toy', 'educational', 'seeds', 'accessory', 'craft'], default: 'kit' },
+        type: { type: String, enum: ['indoor', 'outdoor'], default: 'indoor' },
+        ageRange: { type: String, default: '5-12' },
+        includes: [String],
+        tags: [String],
+        inStock: { type: Boolean, default: true },
+        stockQuantity: { type: Number, default: 0 },
+        featured: { type: Boolean, default: false }
+    }, { timestamps: true }))
 };

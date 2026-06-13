@@ -36,6 +36,7 @@ const SimulationData = lazy(() => import('../../pages/admin/SimulationData').the
 const PotDesigns = lazy(() => import('../../pages/admin/PotDesigns').then(m => ({ default: m.default })));
 const Premium = lazy(() => import('../../pages/admin/Premium').then(m => ({ default: m.Premium })));
 const PublicPremium = lazy(() => import('../../pages/Premium').then(m => ({ default: m.Premium })));
+const KidsSection = lazy(() => import('../../pages/admin/KidsSection').then(m => ({ default: m.KidsSection })));
 
 const ForestGame = lazy(() => import('../../pages/ForestGame').then(m => ({ default: m.ForestGame })));
 const PotDesigner = lazy(() => import('../../pages/PotDesigner').then(m => ({ default: m.PotDesigner })));
@@ -151,6 +152,7 @@ export const AnimatedRoutes = () => {
                         <Route path="/admin/pot-designs" element={<PotDesigns />} />
                         <Route path="/admin/premium" element={<Premium />} />
                         <Route path="/admin/broadcast" element={<BroadcastCenter />} />
+                        <Route path="/admin/kids-section" element={<KidsSection />} />
 
                         <Route path="/admin/edit-plant/:id" element={<EditPlant />} />
 

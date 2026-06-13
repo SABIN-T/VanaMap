@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
-import type { Plant, Vendor } from '../types';
-import { fetchPlants, fetchVendors, logSearch } from '../services/api';
+import type { Plant, Vendor, KidsProduct } from '../types';
+import { fetchPlants, fetchVendors, logSearch, fetchKidsProducts } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import { Search, ShoppingBag, AlertCircle } from 'lucide-react';
 import { PlantVendorsModal } from '../components/features/market/PlantVendorsModal';
@@ -14,10 +14,12 @@ export const Shops = () => {
     const location = useLocation();
     const { user } = useAuth();
     const [plants, setPlants] = useState<Plant[]>([]);
+    const [kidsProducts, setKidsProducts] = useState<KidsProduct[]>([]);
     const [vendors, setVendors] = useState<Vendor[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [activeCategory, setActiveCategory] = useState<'all' | 'indoor' | 'outdoor'>('all');
     const [stockFilter, setStockFilter] = useState<'all' | 'inStock' | 'outOfStock'>('all');
+    const [audience, setAudience] = useState<'adult' | 'children'>('adult');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [selectedPlant, setSelectedPlant] = useState<Plant | null>(null);
@@ -38,6 +40,10 @@ export const Shops = () => {
                 console.log('[Cache] ✅ Shops loaded from cache - instant!');
                 setPlants(cachedPlants);
                 setVendors(cachedVendors.filter((v: Vendor) => v.verified));
+                
+                // Fetch kids products in background
+                fetchKidsProducts().then(setKidsProducts).catch(console.error);
+
                 setLoading(false);
                 setIsSlow(false);
                 clearTimeout(slowTimer);
@@ -78,9 +84,10 @@ export const Shops = () => {
             }
 
             // 🚀 STEP 2: Load full data in background
-            const [plantsData, vendorsData] = await Promise.all([
+            const [plantsData, vendorsData, kidsProductsData] = await Promise.all([
                 fetchPlants(),
-                fetchVendors()
+                fetchVendors(),
+                fetchKidsProducts()
             ]);
 
             // Store in cache for next time
@@ -88,13 +95,9 @@ export const Shops = () => {
             apiCache.set('/api/vendors', vendorsData, {});
             console.log('[Cache] 💾 Shops data cached for future use');
 
-            if (plantsData.length === 0) {
-                // Potential silent fail or empty DB
-                console.warn("No plants fetched from server");
-            }
-
             setPlants(plantsData);
             setVendors(vendorsData.filter(v => v.verified));
+            setKidsProducts(kidsProductsData);
 
             // Check for auto-open request from navigation
             if (location.state && (location.state as any).openPlantId) {
@@ -149,23 +152,36 @@ export const Shops = () => {
         return () => clearTimeout(timer);
     }, [searchQuery, user]);
 
-    const getStockStatus = useCallback((plant: Plant) => {
-        const selling = vendors.filter(v => v.inventory?.some(i => i.plantId === plant.id && i.inStock));
+    const getStockStatus = useCallback((item: Plant | KidsProduct) => {
+        if (audience === 'children') {
+            const kidProd = item as KidsProduct;
+            return { inStock: kidProd.inStock, count: kidProd.stockQuantity || 0 };
+        }
+        const selling = vendors.filter(v => v.inventory?.some(i => i.plantId === item.id && i.inStock));
         let count = 0;
         selling.forEach(v => {
-            const item = v.inventory?.find(i => i.plantId === plant.id);
-            const qty = (item as any).quantity;
+            const invItem = v.inventory?.find(i => i.plantId === item.id);
+            const qty = (invItem as any).quantity;
             count += (typeof qty === 'number' ? qty : 1);
         });
         return { inStock: count > 0, count };
-    }, [vendors]);
+    }, [vendors, audience]);
 
-    const getPriceInfo = (plant: Plant) => {
-        // Collect all potential prices
+    const getPriceInfo = (item: Plant | KidsProduct) => {
+        if (audience === 'children') {
+            return {
+                display: `Rs. ${item.price}`,
+                value: item.price,
+                hasVendors: false,
+                count: 0
+            };
+        }
+        
+        // Collect all potential prices for plants
         const potentialPrices: number[] = [];
 
         vendors.forEach(v => {
-            const invItem = v.inventory?.find(i => i.plantId === plant.id && i.inStock);
+            const invItem = v.inventory?.find(i => i.plantId === item.id && i.inStock);
             if (invItem) {
                 potentialPrices.push(invItem.price);
             }
@@ -182,7 +198,7 @@ export const Shops = () => {
         }
 
         // Fallback to base price
-        const base = plant.price || ((plant.name.charCodeAt(0) % 5 + 1) * 150);
+        const base = (item as Plant).price || (((item as Plant).name.charCodeAt(0) % 5 + 1) * 150);
         return {
             display: `Approx Rs. ${base}`,
             value: base,
@@ -191,8 +207,36 @@ export const Shops = () => {
         };
     };
 
-    const filteredPlants = useMemo(() => {
+    const filteredItems = useMemo(() => {
+        if (audience === 'children') {
+            return kidsProducts.filter(p => {
+                let matchesCategory = true;
+                if (activeCategory === 'indoor') {
+                    // "Fun Kits": toy, accessory, craft
+                    matchesCategory = ['toy', 'accessory', 'craft'].includes(p.category);
+                } else if (activeCategory === 'outdoor') {
+                    // "Growing Sets": kit, seeds, educational
+                    matchesCategory = ['kit', 'seeds', 'educational'].includes(p.category);
+                }
+
+                const q = searchQuery.toLowerCase();
+                const matchesSearch = p.name.toLowerCase().includes(q) ||
+                    p.category.toLowerCase().includes(q) ||
+                    (p.description?.toLowerCase().includes(q) ?? false);
+
+                const matchesStock = stockFilter === 'all' 
+                    ? true 
+                    : (stockFilter === 'inStock' ? p.inStock : !p.inStock);
+
+                return matchesCategory && matchesSearch && matchesStock;
+            });
+        }
+
         return plants.filter(p => {
+            // Audience filter: show products matching selected audience or tagged as 'both'
+            const plantAudience = p.audience || 'both';
+            const matchesAudience = plantAudience === 'both' || plantAudience === audience;
+
             const matchesCategory = activeCategory === 'all' ? true : p.type === activeCategory;
             const q = searchQuery.toLowerCase();
             const matchesSearch = p.name.toLowerCase().includes(q) ||
@@ -201,9 +245,9 @@ export const Shops = () => {
             const { inStock } = getStockStatus(p);
             const matchesStock = stockFilter === 'all' ? true : (stockFilter === 'inStock' ? inStock : !inStock);
 
-            return matchesCategory && matchesSearch && matchesStock;
+            return matchesAudience && matchesCategory && matchesSearch && matchesStock;
         });
-    }, [plants, activeCategory, searchQuery, stockFilter, vendors, getStockStatus]);
+    }, [plants, kidsProducts, audience, activeCategory, searchQuery, stockFilter, getStockStatus]);
 
     return (
         <div className={styles.shopContainer}>
@@ -218,14 +262,35 @@ export const Shops = () => {
                     <ShoppingBag size={16} /> OFFICIAL MARKET
                 </div>
                 <h1 className={styles.titleMain}>VANAMAP<br />MARKET</h1>
-                <p className={styles.subtitleMain}>Curated specimens for your premium home ecosystem.</p>
+                <p className={styles.subtitleMain}>
+                    {audience === 'children'
+                        ? 'Fun gardening kits & toys for young explorers.'
+                        : 'Curated specimens for your premium home ecosystem.'}
+                </p>
+
+                {/* Audience Toggle */}
+                <div className={styles.audienceToggle} id="audience-toggle">
+                    <button
+                        className={audience === 'children' ? styles.audienceActive : ''}
+                        onClick={() => { setAudience('children'); setActiveCategory('all'); }}
+                    >
+                        <span className={styles.audienceEmoji}>🌱</span> Children
+                    </button>
+                    <button
+                        className={audience === 'adult' ? styles.audienceActive : ''}
+                        onClick={() => { setAudience('adult'); setActiveCategory('all'); }}
+                    >
+                        <span className={styles.audienceEmoji}>🌿</span> Adult
+                    </button>
+                    <div className={`${styles.audienceSlider} ${audience === 'children' ? styles.sliderLeft : styles.sliderRight}`} />
+                </div>
 
                 {/* Search Bar */}
                 <div className={styles.searchContainer}>
                     <Search size={20} className={styles.searchIcon} />
                     <input
                         type="text"
-                        placeholder="Search species..."
+                        placeholder={audience === 'children' ? 'Search kits & toys...' : 'Search species...'}
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         className={styles.searchInput}
@@ -238,10 +303,10 @@ export const Shops = () => {
                         className={`${styles.filterCard} ${activeCategory === 'indoor' ? styles.active : ''}`}
                         onClick={() => setActiveCategory(activeCategory === 'indoor' ? 'all' : 'indoor')}
                     >
-                        <div className={styles.filterIcon}>🏠</div>
+                        <div className={styles.filterIcon}>{audience === 'children' ? '🎨' : '🏠'}</div>
                         <div className={styles.filterInfo}>
-                            <span className={styles.filterName}>Indoor</span>
-                            <span className={styles.filterDesc}>Interior Species</span>
+                            <span className={styles.filterName}>{audience === 'children' ? 'Fun Kits' : 'Indoor'}</span>
+                            <span className={styles.filterDesc}>{audience === 'children' ? 'Garden playsets & kits' : 'Interior Species'}</span>
                         </div>
                     </div>
 
@@ -249,10 +314,10 @@ export const Shops = () => {
                         className={`${styles.filterCard} ${activeCategory === 'outdoor' ? styles.active : ''}`}
                         onClick={() => setActiveCategory(activeCategory === 'outdoor' ? 'all' : 'outdoor')}
                     >
-                        <div className={styles.filterIcon}>🌲</div>
+                        <div className={styles.filterIcon}>{audience === 'children' ? '🌱' : '🌲'}</div>
                         <div className={styles.filterInfo}>
-                            <span className={styles.filterName}>Outdoor</span>
-                            <span className={styles.filterDesc}>Natural Resilience</span>
+                            <span className={styles.filterName}>{audience === 'children' ? 'Growing Sets' : 'Outdoor'}</span>
+                            <span className={styles.filterDesc}>{audience === 'children' ? 'Watch it grow!' : 'Natural Resilience'}</span>
                         </div>
                     </div>
                 </div>
@@ -293,7 +358,7 @@ export const Shops = () => {
                         Retry Connection
                     </button>
                 </div>
-            ) : filteredPlants.length === 0 ? (
+            ) : filteredItems.length === 0 ? (
                 <div style={{ textAlign: 'center', padding: '6rem 2rem', color: '#94a3b8' }}>
                     <Search size={48} style={{ marginBottom: '1rem', opacity: 0.2 }} />
                     <p style={{ fontSize: '1.2rem', fontWeight: 600 }}>No species matching your criteria.</p>
@@ -310,111 +375,139 @@ export const Shops = () => {
                 </div>
             ) : (
                 <div className={styles.grid}>
-                    {filteredPlants.map(plant => (
-                        <div key={plant.id} className={styles.card} onClick={() => setSelectedPlant(plant)}>
-                            {/* Image Area */}
-                            <div className={styles.imageContainer}>
-                                <img
-                                    src={(() => {
-                                        if (!plant.imageUrl) return '';
-                                        if (plant.imageUrl.includes('cloudinary.com') && !plant.imageUrl.includes('f_auto')) {
-                                            return plant.imageUrl.replace('/upload/', '/upload/f_auto,q_auto,w_600/');
-                                        }
-                                        return plant.imageUrl;
-                                    })()}
-                                    alt={plant.name}
-                                    className={styles.image}
-                                    loading="lazy"
-                                />
+                    {filteredItems.map(item => {
+                        const isKids = audience === 'children';
+                        const kidItem = item as KidsProduct;
 
-                                {(() => {
-                                    const { inStock, count } = getStockStatus(plant);
-                                    return (
-                                        <div style={{
-                                            position: 'absolute',
-                                            bottom: '54px',
-                                            left: '12px',
-                                            zIndex: 10,
-                                            background: inStock ? 'rgba(16, 185, 129, 0.95)' : 'rgba(239, 68, 68, 0.95)',
-                                            color: 'white',
-                                            padding: '4px 8px',
-                                            borderRadius: '6px',
-                                            fontSize: '0.65rem',
-                                            fontWeight: '800',
-                                            letterSpacing: '0.5px',
-                                            backdropFilter: 'blur(4px)',
-                                            boxShadow: '0 4px 6px rgba(0,0,0,0.15)',
-                                            display: 'flex',
-                                            alignItems: 'center',
-                                            gap: '4px',
-                                            border: '1px solid rgba(255,255,255,0.2)'
-                                        }}>
-                                            {inStock ? (
+                        return (
+                            <div key={item.id} className={styles.card} onClick={() => !isKids && setSelectedPlant(item as Plant)}>
+                                {/* Image Area */}
+                                <div className={styles.imageContainer}>
+                                    <img
+                                        src={(() => {
+                                            if (!item.imageUrl) return '';
+                                            if (item.imageUrl.includes('cloudinary.com') && !item.imageUrl.includes('f_auto')) {
+                                                return item.imageUrl.replace('/upload/', '/upload/f_auto,q_auto,w_600/');
+                                            }
+                                            return item.imageUrl;
+                                        })()}
+                                        alt={item.name}
+                                        className={styles.image}
+                                        loading="lazy"
+                                    />
+
+                                    {(() => {
+                                        const { inStock, count } = getStockStatus(item);
+                                        return (
+                                            <div style={{
+                                                position: 'absolute',
+                                                bottom: '54px',
+                                                left: '12px',
+                                                zIndex: 10,
+                                                background: inStock ? 'rgba(16, 185, 129, 0.95)' : 'rgba(239, 68, 68, 0.95)',
+                                                color: 'white',
+                                                padding: '4px 8px',
+                                                borderRadius: '6px',
+                                                fontSize: '0.65rem',
+                                                fontWeight: '800',
+                                                letterSpacing: '0.5px',
+                                                backdropFilter: 'blur(4px)',
+                                                boxShadow: '0 4px 6px rgba(0,0,0,0.15)',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: '4px',
+                                                border: '1px solid rgba(255,255,255,0.2)'
+                                            }}>
+                                                {inStock ? (
+                                                    <>
+                                                        <span style={{ width: '6px', height: '6px', background: 'white', borderRadius: '50%' }}></span>
+                                                        IN STOCK ({count})
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        <AlertCircle size={10} /> OUT OF STOCK
+                                                    </>
+                                                )}
+                                            </div>
+                                        );
+                                    })()}
+
+                                    <div className={styles.badge}>
+                                        {isKids ? kidItem.category : (item as Plant).type}
+                                    </div>
+                                </div>
+
+                                {/* Content Area */}
+                                <div className={styles.content}>
+                                    <div style={{ marginBottom: 'auto' }}>
+                                        <h3 className={styles.title}>{item.name}</h3>
+                                        <p className={styles.scientific}>
+                                            {isKids ? `Age: ${kidItem.ageRange || 'All Ages'}` : (item as Plant).scientificName}
+                                        </p>
+
+                                        <div className={styles.tags}>
+                                            {isKids ? (
                                                 <>
-                                                    <span style={{ width: '6px', height: '6px', background: 'white', borderRadius: '50%' }}></span>
-                                                    IN STOCK ({count})
+                                                    <span className={styles.tag}>👦 Kid Friendly</span>
+                                                    {kidItem.tags && kidItem.tags.slice(0, 2).map(t => (
+                                                        <span key={t} className={styles.tag}>{t}</span>
+                                                    ))}
                                                 </>
                                             ) : (
                                                 <>
-                                                    <AlertCircle size={10} /> OUT OF STOCK
+                                                    <span className={styles.tag}>Air Purifying</span>
+                                                    {(() => {
+                                                        const selling = vendors.filter(v => v.inventory?.some(i => i.plantId === item.id && i.inStock));
+                                                        const hasOnline = selling.some(v => v.inventory?.find(i => i.plantId === item.id)?.sellingMode !== 'offline');
+                                                        const hasOffline = selling.some(v => v.inventory?.find(i => i.plantId === item.id)?.sellingMode !== 'online');
+
+                                                        return (
+                                                            <>
+                                                                {hasOnline && <span className={styles.deliveryTag} title="Available for Home Delivery">🚚 Delivery</span>}
+                                                                {hasOffline && <span className={styles.storefrontTag} title="Available for Store Pickup">🏪 In-Store</span>}
+                                                            </>
+                                                        );
+                                                    })()}
                                                 </>
                                             )}
                                         </div>
-                                    );
-                                })()}
+                                    </div>
 
-                                <div className={styles.badge}>
-                                    {plant.type === 'indoor' ? 'Indoor' : 'Outdoor'}
-                                </div>
-                            </div>
-
-                            {/* Content Area */}
-                            <div className={styles.content}>
-                                <div style={{ marginBottom: 'auto' }}>
-                                    <h3 className={styles.title}>{plant.name}</h3>
-                                    <p className={styles.scientific}>{plant.scientificName}</p>
-
-                                    <div className={styles.tags}>
-                                        <span className={styles.tag}>Air Purifying</span>
-                                        {(() => {
-                                            const selling = vendors.filter(v => v.inventory?.some(i => i.plantId === plant.id && i.inStock));
-                                            const hasOnline = selling.some(v => v.inventory?.find(i => i.plantId === plant.id)?.sellingMode !== 'offline');
-                                            const hasOffline = selling.some(v => v.inventory?.find(i => i.plantId === plant.id)?.sellingMode !== 'online');
-
-                                            return (
-                                                <>
-                                                    {hasOnline && <span className={styles.deliveryTag} title="Available for Home Delivery">🚚 Delivery</span>}
-                                                    {hasOffline && <span className={styles.storefrontTag} title="Available for Store Pickup">🏪 In-Store</span>}
-                                                </>
-                                            );
-                                        })()}
+                                    {/* Price and Action */}
+                                    <div className={styles.footer}>
+                                        <div className={styles.price}>
+                                            {(() => {
+                                                const info = getPriceInfo(item);
+                                                return (
+                                                    <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                                        <span style={{ fontSize: '1.1rem', fontWeight: 700 }}>{info.display}</span>
+                                                        {info.hasVendors && (
+                                                            <span style={{ fontSize: '0.7rem', color: '#10b981' }}>
+                                                                {info.count} local seller{info.count !== 1 ? 's' : ''}
+                                                            </span>
+                                                        )}
+                                                    </div>
+                                                );
+                                            })()}
+                                        </div>
+                                        <button 
+                                            className={styles.btn}
+                                            onClick={(e) => {
+                                                if (isKids) {
+                                                    e.stopPropagation();
+                                                    import('react-hot-toast').then(({ default: toast }) => {
+                                                        toast.success(`🎉 Added ${item.name} to cart!`, { icon: '🛒' });
+                                                    });
+                                                }
+                                            }}
+                                        >
+                                            {isKids ? 'Add to Cart' : 'View Options'}
+                                        </button>
                                     </div>
                                 </div>
-
-                                {/* Price and Action */}
-                                <div className={styles.footer}>
-                                    <div className={styles.price}>
-                                        {(() => {
-                                            const info = getPriceInfo(plant);
-                                            return (
-                                                <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                                    <span style={{ fontSize: '1.1rem', fontWeight: 700 }}>{info.display}</span>
-                                                    {info.hasVendors && (
-                                                        <span style={{ fontSize: '0.7rem', color: '#10b981' }}>
-                                                            {info.count} local seller{info.count !== 1 ? 's' : ''}
-                                                        </span>
-                                                    )}
-                                                </div>
-                                            );
-                                        })()}
-                                    </div>
-                                    <button className={styles.btn}>
-                                        View Options
-                                    </button>
-                                </div>
                             </div>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
             )}
 

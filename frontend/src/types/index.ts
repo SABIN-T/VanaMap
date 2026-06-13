@@ -27,6 +27,7 @@ export interface Plant {
     ecosystemDescription?: string;
     score?: number; // Calculated aptness based on local environment
     petFriendly?: boolean;
+    audience?: 'children' | 'adult' | 'both';
 }
 
 export interface Vendor {
@@ -109,4 +110,21 @@ export interface User {
     phoneVerified?: boolean;
     photoUrl?: string;
     profileImage?: string;
+}
+
+export interface KidsProduct {
+    id: string;
+    _id?: string;
+    name: string;
+    description: string;
+    imageUrl: string;
+    price: number;
+    category: 'kit' | 'toy' | 'educational' | 'seeds' | 'accessory' | 'craft';
+    type: 'indoor' | 'outdoor';
+    ageRange: string;
+    includes: string[];
+    tags: string[];
+    inStock: boolean;
+    stockQuantity: number;
+    featured: boolean;
 }
