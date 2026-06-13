@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { toast } from 'react-hot-toast';
-import { Edit, Trash2, Upload, Search, Baby } from 'lucide-react';
+import { Edit, Trash2, Upload, Search, Baby, X } from 'lucide-react';
 import { AdminLayout } from './AdminLayout';
 import { fetchKidsProducts, addKidsProduct, updateKidsProduct, deleteKidsProduct } from '../../services/api';
 import type { KidsProduct } from '../../types';
@@ -62,6 +62,8 @@ export const KidsSection = () => {
 
     // Form states
     const [form, setForm] = useState(initialFormState);
+    const [images, setImages] = useState<string[]>([]);
+    const [urlInput, setUrlInput] = useState('');
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const loadProducts = async () => {
@@ -98,13 +100,45 @@ export const KidsSection = () => {
         const tid = toast.loading('Compressing image...');
         try {
             const compressedBase64 = await compressImage(file);
-            setForm(prev => ({ ...prev, imageUrl: compressedBase64 }));
-            toast.success('Image set successfully', { id: tid });
+            setImages(prev => {
+                const updated = [...prev, compressedBase64];
+                setForm(p => ({
+                    ...p,
+                    imageUrl: p.imageUrl || compressedBase64,
+                }));
+                return updated;
+            });
+            toast.success('Image added to gallery', { id: tid });
         } catch (err) {
             toast.error('Image compression failed', { id: tid });
         } finally {
             e.target.value = '';
         }
+    };
+
+    const removeImage = (index: number) => {
+        setImages(prev => {
+            const updated = prev.filter((_, i) => i !== index);
+            const nextPrimary = updated[0] || '';
+            setForm(p => ({
+                ...p,
+                imageUrl: nextPrimary,
+            }));
+            return updated;
+        });
+    };
+
+    const addUrlImage = () => {
+        if (!urlInput.trim()) return;
+        setImages(prev => {
+            const updated = [...prev, urlInput.trim()];
+            setForm(p => ({
+                ...p,
+                imageUrl: p.imageUrl || urlInput.trim(),
+            }));
+            return updated;
+        });
+        setUrlInput('');
     };
 
     const handleEdit = (product: KidsProduct) => {
@@ -124,6 +158,7 @@ export const KidsSection = () => {
             stockQuantity: product.stockQuantity || 0,
             featured: product.featured || false
         });
+        setImages(product.images || (product.imageUrl ? [product.imageUrl] : []));
         // Scroll form into view for mobile devices
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
@@ -132,6 +167,8 @@ export const KidsSection = () => {
         setIsEditing(false);
         setEditingId(null);
         setForm(initialFormState);
+        setImages([]);
+        setUrlInput('');
     };
 
     const handleDelete = async (id: string) => {
@@ -151,8 +188,8 @@ export const KidsSection = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!form.name || !form.imageUrl) {
-            toast.error('Please enter product name and choose an image.');
+        if (!form.name || images.length === 0) {
+            toast.error('Please enter product name and add at least one image.');
             return;
         }
 
@@ -172,7 +209,8 @@ export const KidsSection = () => {
             ageRange: form.ageRange,
             includes: includesArray,
             tags: tagsArray,
-            imageUrl: form.imageUrl,
+            imageUrl: images[0] || '',
+            images: images,
             inStock: form.inStock,
             stockQuantity: Number(form.stockQuantity),
             featured: form.featured
@@ -189,6 +227,8 @@ export const KidsSection = () => {
                 toast.success('Product created!', { id: tid });
             }
             setForm(initialFormState);
+            setImages([]);
+            setUrlInput('');
             setIsEditing(false);
             setEditingId(null);
             loadProducts();
@@ -216,7 +256,7 @@ export const KidsSection = () => {
 
                         <form onSubmit={handleSubmit}>
                             <div className={styles.inputGroup}>
-                                <label className={styles.label}>Product Image</label>
+                                <label className={styles.label}>Product Images Gallery</label>
                                 <div 
                                     className={styles.imageUploadArea} 
                                     onClick={() => fileInputRef.current?.click()}
@@ -232,18 +272,55 @@ export const KidsSection = () => {
                                         <div>
                                             <img src={form.imageUrl} alt="Preview" className={styles.previewImage} />
                                             <p className={styles.imageUploadText} style={{ marginTop: '0.5rem' }}>
-                                                Click to change image
+                                                Click to upload and add another image to gallery
                                             </p>
                                         </div>
                                     ) : (
                                         <div>
                                             <Upload className={styles.uploadIcon} size={28} style={{ margin: '0 auto' }} />
                                             <p className={styles.imageUploadText}>
-                                                Click to upload high-quality product image
+                                                Click to upload a product image
                                             </p>
                                         </div>
                                     )}
                                 </div>
+                                
+                                <div className="mt-3 flex gap-2" onClick={(e) => e.stopPropagation()}>
+                                    <input
+                                        value={urlInput}
+                                        onChange={(e) => setUrlInput(e.target.value)}
+                                        placeholder="Or paste external Image URL..."
+                                        className="w-full bg-slate-900/80 border border-white/10 rounded-xl px-3 py-2 text-sm text-white outline-none focus:border-emerald-500 transition-colors"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={addUrlImage}
+                                        className="bg-emerald-500 text-white text-sm px-4 py-2 rounded-xl hover:bg-emerald-600 transition-colors font-bold whitespace-nowrap"
+                                    >
+                                        Add URL
+                                    </button>
+                                </div>
+
+                                {/* Staged gallery thumbnails */}
+                                {images.length > 0 && (
+                                    <div className="mt-4 p-3 bg-slate-900/60 border border-white/5 rounded-2xl" onClick={(e) => e.stopPropagation()}>
+                                        <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-2">Gallery ({images.length} photos - Hover to delete):</p>
+                                        <div className="flex flex-wrap gap-2">
+                                            {images.map((img, idx) => (
+                                                <div key={idx} className="relative w-12 h-12 rounded-xl overflow-hidden border border-white/10 group">
+                                                    <img src={img} className="w-full h-full object-cover" alt="thumbnail" />
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => removeImage(idx)}
+                                                        className="absolute inset-0 bg-red-600/80 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                                                    >
+                                                        <X size={14} />
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
                             </div>
 
                             <div className={styles.inputGroup}>

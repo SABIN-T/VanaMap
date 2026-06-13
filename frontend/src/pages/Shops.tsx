@@ -9,6 +9,200 @@ import styles from './Shops.module.css';
 import { plantCache, apiCache } from '../utils/universalCache'; // 🚀 Performance boost!
 import { Helmet } from 'react-helmet-async';
 
+interface ShopItemCardProps {
+    item: Plant | KidsProduct;
+    isKids: boolean;
+    vendors: Vendor[];
+    setSelectedPlant: (plant: Plant) => void;
+    getStockStatus: (item: Plant | KidsProduct) => { inStock: boolean; count: number };
+    getPriceInfo: (item: Plant | KidsProduct) => { display: string; value?: number; hasVendors: boolean; count: number };
+}
+
+const ShopItemCard = ({
+    item,
+    isKids,
+    vendors,
+    setSelectedPlant,
+    getStockStatus,
+    getPriceInfo
+}: ShopItemCardProps) => {
+    const kidItem = item as KidsProduct;
+    const itemImages = item.images && item.images.length > 0 ? item.images : (item.imageUrl ? [item.imageUrl] : []);
+    const [currIndex, setCurrIndex] = useState(0);
+
+    return (
+        <div className={styles.card} onClick={() => !isKids && setSelectedPlant(item as Plant)}>
+            {/* Image Area */}
+            <div className={styles.imageContainer}>
+                <div className={styles.imageWrapper}>
+                    {itemImages.map((imgUrl, idx) => (
+                        <img
+                            key={idx}
+                            src={(() => {
+                                if (!imgUrl) return '';
+                                if (imgUrl.includes('cloudinary.com') && !imgUrl.includes('f_auto')) {
+                                    return imgUrl.replace('/upload/', '/upload/f_auto,q_auto,w_600/');
+                                }
+                                return imgUrl;
+                            })()}
+                            alt={`${item.name} - ${idx}`}
+                            className={`${styles.image} ${idx === currIndex ? styles.imageActive : styles.imageInactive}`}
+                            loading="lazy"
+                        />
+                    ))}
+                </div>
+
+                {itemImages.length > 1 && (
+                    <>
+                        <button
+                            type="button"
+                            className={styles.navArrowLeft}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setCurrIndex((prev) => (prev === 0 ? itemImages.length - 1 : prev - 1));
+                            }}
+                        >
+                            ‹
+                        </button>
+                        <button
+                            type="button"
+                            className={styles.navArrowRight}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setCurrIndex((prev) => (prev === itemImages.length - 1 ? 0 : prev + 1));
+                            }}
+                        >
+                            ›
+                        </button>
+                        <div className={styles.dotsContainer}>
+                            {itemImages.map((_, idx) => (
+                                <button
+                                    key={idx}
+                                    type="button"
+                                    className={`${styles.dot} ${idx === currIndex ? styles.dotActive : ''}`}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        setCurrIndex(idx);
+                                    }}
+                                />
+                            ))}
+                        </div>
+                    </>
+                )}
+
+                {(() => {
+                    const { inStock, count } = getStockStatus(item);
+                    return (
+                        <div style={{
+                            position: 'absolute',
+                            bottom: '54px',
+                            left: '12px',
+                            zIndex: 10,
+                            background: inStock ? 'rgba(16, 185, 129, 0.95)' : 'rgba(239, 68, 68, 0.95)',
+                            color: 'white',
+                            padding: '4px 8px',
+                            borderRadius: '6px',
+                            fontSize: '0.65rem',
+                            fontWeight: '800',
+                            letterSpacing: '0.5px',
+                            backdropFilter: 'blur(4px)',
+                            boxShadow: '0 4px 6px rgba(0,0,0,0.15)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '4px',
+                            border: '1px solid rgba(255,255,255,0.2)'
+                        }}>
+                            {inStock ? (
+                                <>
+                                    <span style={{ width: '6px', height: '6px', background: 'white', borderRadius: '50%' }}></span>
+                                    IN STOCK ({count})
+                                </>
+                            ) : (
+                                <>
+                                    <AlertCircle size={10} /> OUT OF STOCK
+                                </>
+                            )}
+                        </div>
+                    );
+                })()}
+
+                <div className={styles.badge}>
+                    {isKids ? kidItem.category : (item as Plant).type}
+                </div>
+            </div>
+
+            {/* Content Area */}
+            <div className={styles.content}>
+                <div style={{ marginBottom: 'auto' }}>
+                    <h3 className={styles.title}>{item.name}</h3>
+                    <p className={styles.scientific}>
+                        {isKids ? `Age: ${kidItem.ageRange || 'All Ages'}` : (item as Plant).scientificName}
+                    </p>
+
+                    <div className={styles.tags}>
+                        {isKids ? (
+                            <>
+                                <span className={styles.tag}>👦 Kid Friendly</span>
+                                {kidItem.tags && kidItem.tags.slice(0, 2).map(t => (
+                                    <span key={t} className={styles.tag}>{t}</span>
+                                ))}
+                            </>
+                        ) : (
+                            <>
+                                <span className={styles.tag}>Air Purifying</span>
+                                {(() => {
+                                    const selling = vendors.filter(v => v.inventory?.some(i => i.plantId === item.id && i.inStock));
+                                    const hasOnline = selling.some(v => v.inventory?.find(i => i.plantId === item.id)?.sellingMode !== 'offline');
+                                    const hasOffline = selling.some(v => v.inventory?.find(i => i.plantId === item.id)?.sellingMode !== 'online');
+
+                                    return (
+                                        <>
+                                            {hasOnline && <span className={styles.deliveryTag} title="Available for Home Delivery">🚚 Delivery</span>}
+                                            {hasOffline && <span className={styles.storefrontTag} title="Available for Store Pickup">🏪 In-Store</span>}
+                                        </>
+                                    );
+                                })()}
+                            </>
+                        )}
+                    </div>
+                </div>
+
+                {/* Price and Action */}
+                <div className={styles.footer}>
+                    <div className={styles.price}>
+                        {(() => {
+                            const info = getPriceInfo(item);
+                            return (
+                                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                    <span style={{ fontSize: '1.1rem', fontWeight: 700 }}>{info.display}</span>
+                                    {info.hasVendors && (
+                                        <span style={{ fontSize: '0.7rem', color: '#10b981' }}>
+                                            {info.count} local seller{info.count !== 1 ? 's' : ''}
+                                        </span>
+                                    )}
+                                </div>
+                            );
+                        })()}
+                    </div>
+                    <button 
+                        className={styles.btn}
+                        onClick={(e) => {
+                            if (isKids) {
+                                e.stopPropagation();
+                                import('react-hot-toast').then(({ default: toast }) => {
+                                    toast.success(`🎉 Added ${item.name} to cart!`, { icon: '🛒' });
+                                });
+                            }
+                        }}
+                    >
+                        {isKids ? 'Add to Cart' : 'View Options'}
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
 export const Shops = () => {
     const navigate = useNavigate();
     const location = useLocation();
@@ -375,139 +569,17 @@ export const Shops = () => {
                 </div>
             ) : (
                 <div className={styles.grid}>
-                    {filteredItems.map(item => {
-                        const isKids = audience === 'children';
-                        const kidItem = item as KidsProduct;
-
-                        return (
-                            <div key={item.id} className={styles.card} onClick={() => !isKids && setSelectedPlant(item as Plant)}>
-                                {/* Image Area */}
-                                <div className={styles.imageContainer}>
-                                    <img
-                                        src={(() => {
-                                            if (!item.imageUrl) return '';
-                                            if (item.imageUrl.includes('cloudinary.com') && !item.imageUrl.includes('f_auto')) {
-                                                return item.imageUrl.replace('/upload/', '/upload/f_auto,q_auto,w_600/');
-                                            }
-                                            return item.imageUrl;
-                                        })()}
-                                        alt={item.name}
-                                        className={styles.image}
-                                        loading="lazy"
-                                    />
-
-                                    {(() => {
-                                        const { inStock, count } = getStockStatus(item);
-                                        return (
-                                            <div style={{
-                                                position: 'absolute',
-                                                bottom: '54px',
-                                                left: '12px',
-                                                zIndex: 10,
-                                                background: inStock ? 'rgba(16, 185, 129, 0.95)' : 'rgba(239, 68, 68, 0.95)',
-                                                color: 'white',
-                                                padding: '4px 8px',
-                                                borderRadius: '6px',
-                                                fontSize: '0.65rem',
-                                                fontWeight: '800',
-                                                letterSpacing: '0.5px',
-                                                backdropFilter: 'blur(4px)',
-                                                boxShadow: '0 4px 6px rgba(0,0,0,0.15)',
-                                                display: 'flex',
-                                                alignItems: 'center',
-                                                gap: '4px',
-                                                border: '1px solid rgba(255,255,255,0.2)'
-                                            }}>
-                                                {inStock ? (
-                                                    <>
-                                                        <span style={{ width: '6px', height: '6px', background: 'white', borderRadius: '50%' }}></span>
-                                                        IN STOCK ({count})
-                                                    </>
-                                                ) : (
-                                                    <>
-                                                        <AlertCircle size={10} /> OUT OF STOCK
-                                                    </>
-                                                )}
-                                            </div>
-                                        );
-                                    })()}
-
-                                    <div className={styles.badge}>
-                                        {isKids ? kidItem.category : (item as Plant).type}
-                                    </div>
-                                </div>
-
-                                {/* Content Area */}
-                                <div className={styles.content}>
-                                    <div style={{ marginBottom: 'auto' }}>
-                                        <h3 className={styles.title}>{item.name}</h3>
-                                        <p className={styles.scientific}>
-                                            {isKids ? `Age: ${kidItem.ageRange || 'All Ages'}` : (item as Plant).scientificName}
-                                        </p>
-
-                                        <div className={styles.tags}>
-                                            {isKids ? (
-                                                <>
-                                                    <span className={styles.tag}>👦 Kid Friendly</span>
-                                                    {kidItem.tags && kidItem.tags.slice(0, 2).map(t => (
-                                                        <span key={t} className={styles.tag}>{t}</span>
-                                                    ))}
-                                                </>
-                                            ) : (
-                                                <>
-                                                    <span className={styles.tag}>Air Purifying</span>
-                                                    {(() => {
-                                                        const selling = vendors.filter(v => v.inventory?.some(i => i.plantId === item.id && i.inStock));
-                                                        const hasOnline = selling.some(v => v.inventory?.find(i => i.plantId === item.id)?.sellingMode !== 'offline');
-                                                        const hasOffline = selling.some(v => v.inventory?.find(i => i.plantId === item.id)?.sellingMode !== 'online');
-
-                                                        return (
-                                                            <>
-                                                                {hasOnline && <span className={styles.deliveryTag} title="Available for Home Delivery">🚚 Delivery</span>}
-                                                                {hasOffline && <span className={styles.storefrontTag} title="Available for Store Pickup">🏪 In-Store</span>}
-                                                            </>
-                                                        );
-                                                    })()}
-                                                </>
-                                            )}
-                                        </div>
-                                    </div>
-
-                                    {/* Price and Action */}
-                                    <div className={styles.footer}>
-                                        <div className={styles.price}>
-                                            {(() => {
-                                                const info = getPriceInfo(item);
-                                                return (
-                                                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                                        <span style={{ fontSize: '1.1rem', fontWeight: 700 }}>{info.display}</span>
-                                                        {info.hasVendors && (
-                                                            <span style={{ fontSize: '0.7rem', color: '#10b981' }}>
-                                                                {info.count} local seller{info.count !== 1 ? 's' : ''}
-                                                            </span>
-                                                        )}
-                                                    </div>
-                                                );
-                                            })()}
-                                        </div>
-                                        <button 
-                                            className={styles.btn}
-                                            onClick={(e) => {
-                                                if (isKids) {
-                                                    e.stopPropagation();
-                                                    import('react-hot-toast').then(({ default: toast }) => {
-                                                        toast.success(`🎉 Added ${item.name} to cart!`, { icon: '🛒' });
-                                                    });
-                                                }
-                                            }}
-                                        >
-                                            {isKids ? 'Add to Cart' : 'View Options'}
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        );
-                    })}
+                    {filteredItems.map(item => (
+                        <ShopItemCard
+                            key={item.id}
+                            item={item}
+                            isKids={audience === 'children'}
+                            vendors={vendors}
+                            setSelectedPlant={setSelectedPlant}
+                            getStockStatus={getStockStatus}
+                            getPriceInfo={getPriceInfo}
+                        />
+                    ))}
                 </div>
             )}
 

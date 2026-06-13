@@ -2334,12 +2334,21 @@ app.get('/api/plants', async (req, res) => {
         const plants = await query;
 
         // Optimize all image URLs
-        const optimizedPlants = plants.map(p => ({
-            ...p,
-            imageUrl: p.imageUrl && p.imageUrl.includes('cloudinary.com') && !p.imageUrl.includes('f_auto')
+        const optimizedPlants = plants.map(p => {
+            const imageUrl = p.imageUrl && p.imageUrl.includes('cloudinary.com') && !p.imageUrl.includes('f_auto')
                 ? p.imageUrl.replace('/upload/', '/upload/f_auto,q_auto,w_500,c_limit/')
-                : p.imageUrl
-        }));
+                : p.imageUrl;
+            const images = p.images && p.images.length > 0
+                ? p.images.map(img => img && img.includes('cloudinary.com') && !img.includes('f_auto')
+                    ? img.replace('/upload/', '/upload/f_auto,q_auto,w_500,c_limit/')
+                    : img)
+                : (imageUrl ? [imageUrl] : []);
+            return {
+                ...p,
+                imageUrl,
+                images
+            };
+        });
 
         console.log(`GET /api/plants - Found ${optimizedPlants.length} plants`);
 
@@ -2382,6 +2391,19 @@ app.post('/api/plants', auth, admin, upload.single('image'), async (req, res) =>
             console.log('[PLANT] Image auto-uploaded:', plantData.imageUrl);
         }
 
+        if (typeof plantData.images === 'string') {
+            try {
+                plantData.images = JSON.parse(plantData.images);
+            } catch (e) {
+                plantData.images = plantData.images.split(',').map(s => s.trim()).filter(Boolean);
+            }
+        }
+
+        // Synchronize images with imageUrl if images array is empty but imageUrl is present
+        if ((!plantData.images || plantData.images.length === 0) && plantData.imageUrl) {
+            plantData.images = [plantData.imageUrl];
+        }
+
         const plant = new Plant(plantData);
         await plant.save();
 
@@ -2420,6 +2442,24 @@ app.patch('/api/plants/:id', auth, admin, (req, res, next) => {
         if (req.file) {
             updates.imageUrl = req.file.path;
             console.log('[PLANT] Updated image:', updates.imageUrl);
+        }
+
+        if (typeof updates.images === 'string') {
+            try {
+                updates.images = JSON.parse(updates.images);
+            } catch (e) {
+                updates.images = updates.images.split(',').map(s => s.trim()).filter(Boolean);
+            }
+        }
+
+        // Synchronize images with imageUrl if updates contains new imageUrl
+        if (req.file && updates.imageUrl) {
+            if (updates.images && Array.isArray(updates.images)) {
+                // Prepend or add the new imageUrl
+                updates.images = [updates.imageUrl, ...updates.images];
+            } else {
+                updates.images = [updates.imageUrl];
+            }
         }
 
         // IMPORTANT: Security/Sanity Check
@@ -2545,13 +2585,21 @@ app.get('/api/kids-products', async (req, res) => {
         console.log('GET /api/kids-products - Fetching from database...');
         const products = await KidsProduct.find().lean();
         
-        // Optimize image URLs
-        const optimizedProducts = products.map(p => ({
-            ...p,
-            imageUrl: p.imageUrl && p.imageUrl.includes('cloudinary.com') && !p.imageUrl.includes('f_auto')
+        const optimizedProducts = products.map(p => {
+            const imageUrl = p.imageUrl && p.imageUrl.includes('cloudinary.com') && !p.imageUrl.includes('f_auto')
                 ? p.imageUrl.replace('/upload/', '/upload/f_auto,q_auto,w_500,c_limit/')
-                : p.imageUrl
-        }));
+                : p.imageUrl;
+            const images = p.images && p.images.length > 0
+                ? p.images.map(img => img && img.includes('cloudinary.com') && !img.includes('f_auto')
+                    ? img.replace('/upload/', '/upload/f_auto,q_auto,w_500,c_limit/')
+                    : img)
+                : (imageUrl ? [imageUrl] : []);
+            return {
+                ...p,
+                imageUrl,
+                images
+            };
+        });
         
         res.json(optimizedProducts);
     } catch (err) {
@@ -2569,6 +2617,19 @@ app.post('/api/kids-products', auth, admin, upload.single('image'), async (req, 
         if (req.file) {
             productData.imageUrl = req.file.path;
             console.log('[KIDS] Image auto-uploaded:', productData.imageUrl);
+        }
+
+        if (typeof productData.images === 'string') {
+            try {
+                productData.images = JSON.parse(productData.images);
+            } catch (e) {
+                productData.images = productData.images.split(',').map(s => s.trim()).filter(Boolean);
+            }
+        }
+
+        // Synchronize images with imageUrl if images array is empty but imageUrl is present
+        if ((!productData.images || productData.images.length === 0) && productData.imageUrl) {
+            productData.images = [productData.imageUrl];
         }
         
         // Convert comma-separated strings to arrays if they are sent as strings
@@ -2616,6 +2677,23 @@ app.patch('/api/kids-products/:id', auth, admin, (req, res, next) => {
         if (req.file) {
             updates.imageUrl = req.file.path;
             console.log('[KIDS] Updated image:', updates.imageUrl);
+        }
+
+        if (typeof updates.images === 'string') {
+            try {
+                updates.images = JSON.parse(updates.images);
+            } catch (e) {
+                updates.images = updates.images.split(',').map(s => s.trim()).filter(Boolean);
+            }
+        }
+
+        // Synchronize images with imageUrl if updates contains new imageUrl
+        if (req.file && updates.imageUrl) {
+            if (updates.images && Array.isArray(updates.images)) {
+                updates.images = [updates.imageUrl, ...updates.images];
+            } else {
+                updates.images = [updates.imageUrl];
+            }
         }
         
         // Convert comma-separated strings to arrays if they are sent as strings

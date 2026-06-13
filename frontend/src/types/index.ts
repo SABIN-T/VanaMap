@@ -28,6 +28,7 @@ export interface Plant {
     score?: number; // Calculated aptness based on local environment
     petFriendly?: boolean;
     audience?: 'children' | 'adult' | 'both';
+    images?: string[];
 }
 
 export interface Vendor {
@@ -127,4 +128,5 @@ export interface KidsProduct {
     inStock: boolean;
     stockQuantity: number;
     featured: boolean;
+    images?: string[];
 }

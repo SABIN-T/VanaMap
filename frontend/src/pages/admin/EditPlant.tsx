@@ -4,7 +4,7 @@ import { toast } from 'react-hot-toast';
 import {
     ChevronLeft, Save, Image as ImageIcon, Sparkles,
     Thermometer, Droplets, Upload, Wind, Sun, Leaf, Activity,
-    ShieldCheck, PlusCircle, XCircle
+    ShieldCheck, PlusCircle, XCircle, X
 } from 'lucide-react';
 import { AdminLayout } from './AdminLayout';
 import { fetchPlants, updatePlant } from '../../services/api';
@@ -50,7 +50,8 @@ export const EditPlant = () => {
     const [loading, setLoading] = useState(true);
     const [saving, setSaving] = useState(false);
     const [plant, setPlant] = useState<Partial<Plant>>({});
-    const [imageFile, setImageFile] = useState<File | null>(null);
+    const [images, setImages] = useState<string[]>([]);
+    const [urlInput, setUrlInput] = useState('');
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     // Tags state for array fields
@@ -69,6 +70,7 @@ export const EditPlant = () => {
                         medicinalValues: found.medicinalValues || [],
                         advantages: found.advantages || []
                     });
+                    setImages(found.images || (found.imageUrl ? [found.imageUrl] : []));
                 } else {
                     toast.error("Plant not found in registry");
                     navigate('/admin/manage-plants');
@@ -87,19 +89,52 @@ export const EditPlant = () => {
         const file = e.target.files?.[0];
         if (!file) return;
 
-        setImageFile(file); // Store raw file for upload
-
         const tid = toast.loading("Processing preview...");
         try {
             const compressedBase64 = await compressImage(file);
-            setPlant({ ...plant, imageUrl: compressedBase64 });
-            toast.success("Image selected", { id: tid });
+            setImages(prev => {
+                const updated = [...prev, compressedBase64];
+                setPlant(p => ({
+                    ...p,
+                    imageUrl: p.imageUrl || compressedBase64,
+                    images: updated
+                }));
+                return updated;
+            });
+            toast.success("Image added to gallery", { id: tid });
         } catch (err) {
             toast.error("Preview failed", { id: tid });
         } finally {
             // Reset input value
             e.target.value = '';
         }
+    };
+
+    const removeImage = (index: number) => {
+        setImages(prev => {
+            const updated = prev.filter((_, i) => i !== index);
+            const nextPrimary = updated[0] || '';
+            setPlant(p => ({
+                ...p,
+                imageUrl: nextPrimary,
+                images: updated
+            }));
+            return updated;
+        });
+    };
+
+    const addUrlImage = () => {
+        if (!urlInput.trim()) return;
+        setImages(prev => {
+            const updated = [...prev, urlInput.trim()];
+            setPlant(p => ({
+                ...p,
+                imageUrl: p.imageUrl || urlInput.trim(),
+                images: updated
+            }));
+            return updated;
+        });
+        setUrlInput('');
     };
 
     const handleSave = async (e: React.FormEvent) => {
@@ -118,30 +153,8 @@ export const EditPlant = () => {
             };
 
             const payload = getCleanPayload(plant);
-
-            if (imageFile) {
-                const formData = new FormData();
-
-                Object.keys(payload).forEach(key => {
-                    const value = payload[key];
-                    if (value === undefined || value === null) return;
-
-                    if (key === 'imageUrl') return; // Skip image URL (handled by file)
-
-                    if (Array.isArray(value)) {
-                        value.forEach(item => formData.append(key, String(item)));
-                    } else if (typeof value === 'object') {
-                        formData.append(key, JSON.stringify(value));
-                    } else {
-                        formData.append(key, String(value));
-                    }
-                });
-
-                formData.append('image', imageFile);
-                await updatePlant(id, formData);
-            } else {
-                await updatePlant(id, payload);
-            }
+            payload.images = images;
+            await updatePlant(id, payload);
 
             toast.success("Plant updated successfully", { id: tid });
             setTimeout(() => navigate('/admin/manage-plants'), 1000);
@@ -452,9 +465,42 @@ export const EditPlant = () => {
                             )}
                             <div className={styles.uploadOverlay}>
                                 <button type="button" onClick={() => fileInputRef.current?.click()} className={styles.uploadBtn}>
-                                    <Upload size={18} /> Update Photo
+                                    <Upload size={18} /> Add Photo to Gallery
                                 </button>
-                                <p className="text-[10px] text-white/60 mt-2 uppercase tracking-tight">Auto-compressed JPG</p>
+                                
+                                <div className="mt-4 flex gap-1 px-3 w-full" onClick={(e) => e.stopPropagation()}>
+                                    <input
+                                        value={urlInput}
+                                        onChange={(e) => setUrlInput(e.target.value)}
+                                        placeholder="Paste Image URL..."
+                                        className="bg-black/60 border border-white/20 rounded px-2 py-1 text-xs text-white outline-none w-full focus:border-emerald-500 transition-colors"
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={addUrlImage}
+                                        className="bg-emerald-500 hover:bg-emerald-600 text-white text-xs px-2 py-1 rounded transition-colors font-bold"
+                                    >
+                                        Add
+                                    </button>
+                                </div>
+
+                                {/* Staged gallery thumbnails */}
+                                {images.length > 0 && (
+                                    <div className="mt-4 flex flex-wrap gap-2 justify-center max-w-[280px] p-2 bg-black/60 backdrop-blur border border-white/10 rounded-xl z-20" onClick={(e) => e.stopPropagation()}>
+                                        {images.map((img, idx) => (
+                                            <div key={idx} className="relative w-8 h-8 rounded overflow-hidden border border-white/20 group">
+                                                <img src={img} className="w-full h-full object-cover" alt="thumbnail" />
+                                                <button
+                                                    type="button"
+                                                    onClick={() => removeImage(idx)}
+                                                    className="absolute inset-0 bg-red-600/80 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                                                >
+                                                    <X size={10} />
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                )}
                             </div>
                             <div className={styles.badge}>{plant.type}</div>
                         </div>

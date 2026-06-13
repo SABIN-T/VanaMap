@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '../../components/common/Button';
 import { addPlant, fetchPlants, chatWithDrFlora } from '../../services/api';
 import { AdminLayout } from './AdminLayout';
-import { Search, Upload, Thermometer, Wind, Droplets, Leaf, ArrowRight, Sparkles, ScanLine, Bot } from 'lucide-react';
+import { Search, Upload, Thermometer, Wind, Droplets, Leaf, ArrowRight, Sparkles, ScanLine, Bot, X } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { INDIAN_PLANT_DB } from '../../data/indianPlants';
 import type { Plant } from '../../types';
@@ -225,6 +225,8 @@ export const AddPlant = () => {
     });
 
     const fileInputRef = useRef<HTMLInputElement>(null);
+    const [images, setImages] = useState<string[]>([]);
+    const [urlInput, setUrlInput] = useState('');
     const [aiLoading, setAiLoading] = useState(false);
 
     const handleAIAutoFill = async () => {
@@ -346,14 +348,49 @@ Please be specific and accurate.`;
         const tid = toast.loading("Processing...");
         try {
             const compressedBase64 = await compressImage(file);
-            setNewPlant({ ...newPlant, imageUrl: compressedBase64 });
-            toast.success("Image Set", { id: tid });
+            setImages(prev => {
+                const updated = [...prev, compressedBase64];
+                setNewPlant(p => ({
+                    ...p,
+                    imageUrl: p.imageUrl || compressedBase64,
+                    images: updated
+                }));
+                return updated;
+            });
+            toast.success("Image added to gallery", { id: tid });
         } catch (err) {
             toast.error("Image Error", { id: tid });
         } finally {
             // Reset input value so same file can be selected again
             e.target.value = '';
         }
+    };
+
+    const removeImage = (index: number) => {
+        setImages(prev => {
+            const updated = prev.filter((_, i) => i !== index);
+            const nextPrimary = updated[0] || '';
+            setNewPlant(p => ({
+                ...p,
+                imageUrl: nextPrimary,
+                images: updated
+            }));
+            return updated;
+        });
+    };
+
+    const addUrlImage = () => {
+        if (!urlInput.trim()) return;
+        setImages(prev => {
+            const updated = [...prev, urlInput.trim()];
+            setNewPlant(p => ({
+                ...p,
+                imageUrl: p.imageUrl || urlInput.trim(),
+                images: updated
+            }));
+            return updated;
+        });
+        setUrlInput('');
     };
 
     const handleAddPlant = async (e: React.FormEvent) => {
@@ -392,7 +429,8 @@ Please be specific and accurate.`;
                 stemStructure: newPlant.stemStructure,
                 overallHabit: newPlant.overallHabit,
                 biometricFeatures: newPlant.biometricFeatures || [],
-                lifespan: newPlant.lifespan || 'Unknown'
+                lifespan: newPlant.lifespan || 'Unknown',
+                images: images
             };
             await addPlant(plantData);
             toast.success("Specimen Registered", { id: tid });
@@ -405,6 +443,8 @@ Please be specific and accurate.`;
                 oxygenLevel: 'high', medicinalValues: [], advantages: [],
                 foliageTexture: '', leafShape: '', stemStructure: '', overallHabit: '', biometricFeatures: [], lifespan: ''
             });
+            setImages([]);
+            setUrlInput('');
             setScientificNameSearch('');
 
             // Navigate to ManagePlants to show the newly added plant
@@ -455,19 +495,42 @@ Please be specific and accurate.`;
                                 onClick={() => fileInputRef.current?.click()}
                                 className="bg-white text-black hover:bg-slate-200 shadow-xl mb-4"
                             >
-                                <Upload size={18} className="mr-2" /> Upload Photo
+                                <Upload size={18} className="mr-2" /> Add Photo to Gallery
                             </Button>
 
-                            <div className="w-64">
-                                <span className="text-xs text-slate-300 font-medium mb-1 block text-center">Or paste external URL</span>
+                            <div className="w-64 flex gap-2" onClick={(e) => e.stopPropagation()}>
                                 <input
-                                    value={newPlant.imageUrl}
-                                    onChange={(e) => setNewPlant({ ...newPlant, imageUrl: e.target.value })}
-                                    placeholder="https://..."
-                                    className="w-full bg-black/50 border border-white/20 rounded px-3 py-1.5 text-xs text-white outline-none text-center focus:border-emerald-500 transition-colors"
-                                    onClick={(e) => e.stopPropagation()}
+                                    value={urlInput}
+                                    onChange={(e) => setUrlInput(e.target.value)}
+                                    placeholder="Paste Image URL..."
+                                    className="w-full bg-black/50 border border-white/20 rounded px-3 py-1.5 text-xs text-white outline-none focus:border-emerald-500 transition-colors"
                                 />
+                                <button
+                                    type="button"
+                                    onClick={addUrlImage}
+                                    className="bg-emerald-500 text-white text-xs px-3 py-1.5 rounded hover:bg-emerald-600 transition-colors font-bold"
+                                >
+                                    Add
+                                </button>
                             </div>
+
+                            {/* Staged gallery thumbnails */}
+                            {images.length > 0 && (
+                                <div className="mt-4 flex flex-wrap gap-2 justify-center max-w-[320px] p-2 bg-black/60 backdrop-blur border border-white/10 rounded-xl z-20" onClick={(e) => e.stopPropagation()}>
+                                    {images.map((img, idx) => (
+                                        <div key={idx} className="relative w-10 h-10 rounded-lg overflow-hidden border border-white/20 group">
+                                            <img src={img} className="w-full h-full object-cover" alt="thumbnail" />
+                                            <button
+                                                type="button"
+                                                onClick={() => removeImage(idx)}
+                                                className="absolute inset-0 bg-red-600/80 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                                            >
+                                                <X size={10} />
+                                            </button>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
 
                             <input
                                 ref={fileInputRef}

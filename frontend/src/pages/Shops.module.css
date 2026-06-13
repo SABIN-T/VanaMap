@@ -303,15 +303,122 @@
     overflow: hidden;
 }
 
+.imageWrapper {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
 .image {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+    transition: opacity 0.5s ease-in-out, transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
 }
 
-.card:hover .image {
+.imageActive {
+    opacity: 1;
+    z-index: 1;
+    transform: scale(1);
+}
+
+.imageInactive {
+    opacity: 0;
+    z-index: 0;
+    transform: scale(1.05);
+    pointer-events: none;
+}
+
+.card:hover .imageActive {
     transform: scale(1.1);
+}
+
+/* Nav arrows style */
+.navArrowLeft,
+.navArrowRight {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%) scale(0.9);
+    width: 36px;
+    height: 36px;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 15;
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    user-select: none;
+}
+
+.navArrowLeft {
+    left: 12px;
+}
+
+.navArrowRight {
+    right: 12px;
+}
+
+.card:hover .navArrowLeft,
+.card:hover .navArrowRight {
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+}
+
+.navArrowLeft:hover,
+.navArrowRight:hover {
+    background: var(--color-primary);
+    color: black;
+    border-color: transparent;
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+}
+
+/* Dots Container */
+.dotsContainer {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    display: flex;
+    gap: 6px;
+    z-index: 15;
+    background: rgba(15, 23, 42, 0.6);
+    padding: 5px 8px;
+    border-radius: 99px;
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.4);
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.dotActive {
+    background: var(--color-primary);
+    width: 12px;
+    border-radius: 3px;
+}
+
+.dot:hover {
+    background: white;
 }
 
 .badge {

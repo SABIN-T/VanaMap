@@ -23,7 +23,8 @@ const PlantSchema = new mongoose.Schema({
     stemStructure: String, // e.g. "Woody", "Herbaceous", "Succulent"
     overallHabit: String, // e.g. "Climbing", "Bushy", "Tree-like"
     biometricFeatures: [String], // e.g. ["Serrated Edges", "Variegated Patterns"]
-    audience: { type: String, enum: ['children', 'adult', 'both'], default: 'both' } // Target audience filter
+    audience: { type: String, enum: ['children', 'adult', 'both'], default: 'both' }, // Target audience filter
+    images: [String] // Array of image URLs/base64 strings
 }, { timestamps: true });
 
 const VendorSchema = new mongoose.Schema({
@@ -392,6 +393,7 @@ module.exports = {
         tags: [String],
         inStock: { type: Boolean, default: true },
         stockQuantity: { type: Number, default: 0 },
-        featured: { type: Boolean, default: false }
+        featured: { type: Boolean, default: false },
+        images: [String] // Array of image URLs/base64 strings
     }, { timestamps: true }))
 };
