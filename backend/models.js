@@ -145,6 +145,8 @@ const UserSchema = new mongoose.Schema({
     phoneVerified: { type: Boolean, default: false },
     contactVerificationOTP: String,
     contactOTPExpires: Date,
+    deleteAccountOTP: String,
+    deleteAccountOTPExpires: Date,
     googleAuth: { type: Boolean, default: false },
     profilePicture: String,
     latitude: Number,

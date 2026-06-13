@@ -3833,6 +3833,160 @@ app.get('/api/user/verification-status', auth, async (req, res) => {
     }
 });
 
+// --- ACCOUNT DELETION ROUTES ---
+
+app.post('/api/user/request-delete-account', auth, async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Generate 6-digit OTP
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+
+        // Save OTP (expires in 10 minutes)
+        user.deleteAccountOTP = otp;
+        user.deleteAccountOTPExpires = new Date(Date.now() + 10 * 60 * 1000);
+        await user.save();
+
+        // Send OTP Email with severe warnings
+        const mailOptions = {
+            from: 'VanaMap Security <support@vanamap.online>',
+            to: user.email,
+            subject: '🚨 VanaMap - Account Deletion Verification Code',
+            html: `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                </head>
+                <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background-color: #fef2f2;">
+                    <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #fef2f2; padding: 40px 20px;">
+                        <tr>
+                            <td align="center">
+                                <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 16px; box-shadow: 0 4px 12px rgba(220, 38, 38, 0.1); overflow: hidden; border: 1px solid #fee2e2;">
+                                    <!-- Header with Severe Warning Banner -->
+                                    <tr>
+                                        <td style="background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); padding: 30px; text-align: center;">
+                                            <h1 style="color: #ffffff; margin: 0; font-size: 24px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;">Account Deletion Request</h1>
+                                        </td>
+                                    </tr>
+                                    
+                                    <!-- Content -->
+                                    <tr>
+                                        <td style="padding: 40px 30px;">
+                                            <h2 style="color: #111827; margin: 0 0 20px 0; font-size: 20px; font-weight: 700;">Important Security Warning</h2>
+                                            
+                                            <p style="color: #374151; font-size: 15px; line-height: 1.6; margin: 0 0 15px 0;">
+                                                Hello <strong>${user.name}</strong>,
+                                            </p>
+                                            
+                                            <p style="color: #374151; font-size: 15px; line-height: 1.6; margin: 0 0 15px 0;">
+                                                We received a request to permanently delete your VanaMap account. By confirming this request:
+                                            </p>
+                                            
+                                            <ul style="color: #b91c1c; font-size: 14px; line-height: 1.6; margin: 0 0 25px 20px; padding: 0;">
+                                                <li style="margin-bottom: 8px;">Your profile data and security keys will be purged.</li>
+                                                <li style="margin-bottom: 8px;">All accumulated Chlorophyll Points (CP) will be deleted forever.</li>
+                                                <li style="margin-bottom: 8px;">Any active Premium plan and features will be cancelled.</li>
+                                                <li style="margin-bottom: 8px;">Your plants shopping cart and order history will be deleted.</li>
+                                            </ul>
+                                            
+                                            <p style="color: #4b5563; font-size: 15px; line-height: 1.6; margin: 0 0 25px 0;">
+                                                If you are certain you want to proceed, use the 6-digit confirmation code below inside the deletion screen:
+                                            </p>
+                                            
+                                            <!-- OTP Code Box -->
+                                            <div style="background-color: #fef2f2; border: 2px dashed #ef4444; border-radius: 12px; padding: 25px; text-align: center; margin: 25px 0;">
+                                                <p style="color: #991b1b; font-size: 12px; margin: 0 0 8px 0; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;">YOUR DELETION CODE</p>
+                                                <h1 style="color: #b91c1c; font-size: 42px; font-weight: 800; margin: 0; letter-spacing: 6px; font-family: monospace;">${otp}</h1>
+                                            </div>
+                                            
+                                            <p style="color: #6b7280; font-size: 14px; margin: 20px 0 0 0;">
+                                                ⏱️ This security code is valid for <strong>10 minutes</strong>.
+                                            </p>
+                                            
+                                            <p style="color: #9ca3af; font-size: 13px; line-height: 1.6; margin: 30px 0 0 0; padding-top: 20px; border-top: 1px solid #f3f4f6;">
+                                                🛡️ If you did not request account deletion, please change your password immediately.
+                                            </p>
+                                        </td>
+                                    </tr>
+                                    
+                                    <!-- Footer -->
+                                    <tr>
+                                        <td style="background-color: #f9fafb; padding: 20px 30px; text-align: center; border-top: 1px solid #e5e7eb;">
+                                            <p style="color: #9ca3af; font-size: 11px; margin: 0; line-height: 1.5;">
+                                                © 2026 VanaMap. All rights reserved.<br/>
+                                                <a href="https://vanamap.online" style="color: #dc2626; text-decoration: none;">vanamap.online</a>
+                                            </p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </body>
+                </html>
+            `
+        };
+
+        await sendEmail(mailOptions);
+        console.log(`[Delete Account OTP] Sent code to ${user.email}`);
+
+        res.json({
+            success: true,
+            message: 'A security code has been sent to your email.'
+        });
+    } catch (error) {
+        console.error('[Request Delete Account] Error:', error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.post('/api/user/confirm-delete-account', auth, async (req, res) => {
+    try {
+        const { otp } = req.body;
+        if (!otp) {
+            return res.status(400).json({ error: 'Verification code is required' });
+        }
+
+        const user = await User.findById(req.user.id);
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+
+        // Verify OTP expiration
+        if (!user.deleteAccountOTPExpires || new Date() > user.deleteAccountOTPExpires) {
+            return res.status(400).json({ error: 'Code expired. Please request a new code.' });
+        }
+
+        // Check if OTP matches
+        if (user.deleteAccountOTP !== otp) {
+            return res.status(400).json({ error: 'Invalid verification code' });
+        }
+
+        // Deleting related vendor profiles if user is a vendor
+        if (user.role === 'vendor') {
+            await Vendor.findOneAndDelete({ userId: user._id });
+            console.log(`[Delete User] Cleared associated vendor profile for: ${user.email}`);
+        }
+
+        // Delete user
+        await User.findByIdAndDelete(req.user.id);
+        console.log(`[Delete User] Account permanently deleted: ${user.email}`);
+
+        res.json({
+            success: true,
+            message: 'Account permanently deleted.'
+        });
+    } catch (error) {
+        console.error('[Confirm Delete Account] Error:', error);
+        res.status(500).json({ error: 'Delete request failed. Please try again later.' });
+    }
+});
+
 app.post('/api/auth/login',
     [
         body('email').trim().notEmpty().withMessage('Email/Phone is required'),

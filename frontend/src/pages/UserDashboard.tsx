@@ -3,7 +3,7 @@ import { useCart } from '../context/CartContext';
 import { Button } from '../components/common/Button';
 import {
     ShoppingBag, MapPin, Heart, ArrowRight, Loader2,
-    Shield, Lock, Trophy, Zap, Wind, CheckCircle, Store, Package, Truck, CheckCircle2, XCircle, Clock
+    Shield, Lock, Trophy, Zap, Wind, CheckCircle, Store, Package, Truck, CheckCircle2, XCircle, Clock, Trash2
 } from 'lucide-react';
 import { VerificationModal } from '../components/auth/VerificationModal';
 import { useNavigate } from 'react-router-dom';
@@ -16,7 +16,7 @@ import styles from './UserDashboard.module.css';
 import { UserDashboardLayout } from './UserDashboardLayout';
 
 export const UserDashboard = () => {
-    const { user, toggleFavorite, loading } = useAuth();
+    const { user, toggleFavorite, loading, logout } = useAuth();
     const { items } = useCart();
     const navigate = useNavigate();
 
@@ -47,6 +47,13 @@ export const UserDashboard = () => {
     const [verStatus, setVerStatus] = useState({ email: false, phone: false });
     const [showVerifyModal, setShowVerifyModal] = useState(false);
     const isFullyVerified = verStatus.email && verStatus.phone;
+
+    // Delete Account State
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [deleteStep, setDeleteStep] = useState<'initial' | 'otp'>('initial');
+    const [deleteOtp, setDeleteOtp] = useState('');
+    const [requestingDelete, setRequestingDelete] = useState(false);
+    const [confirmingDelete, setConfirmingDelete] = useState(false);
 
     // Check verification status
     useEffect(() => {
@@ -300,6 +307,67 @@ export const UserDashboard = () => {
         }
     };
 
+    const requestDeleteOTP = async () => {
+        if (!user) return;
+        setRequestingDelete(true);
+        const tid = toast.loading(`Sending security code to ${user.email}...`);
+        try {
+            const savedUser = localStorage.getItem('user');
+            const token = savedUser ? JSON.parse(savedUser).token : null;
+            if (!token) throw new Error("No authorization token");
+
+            const res = await fetch(`${import.meta.env.VITE_API_URL || 'https://plantoxy.onrender.com/api'}/user/request-delete-account`, {
+                method: 'POST',
+                headers: { 
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || "Failed to send code");
+
+            toast.success("Security code sent successfully!", { id: tid });
+            setDeleteStep('otp');
+        } catch (error: any) {
+            toast.error(error.message || "Failed to request code", { id: tid });
+        } finally {
+            setRequestingDelete(false);
+        }
+    };
+
+    const confirmDeleteAccount = async () => {
+        if (!deleteOtp.trim()) {
+            toast.error("Please enter the verification code");
+            return;
+        }
+        setConfirmingDelete(true);
+        const tid = toast.loading("Confirming verification code...");
+        try {
+            const savedUser = localStorage.getItem('user');
+            const token = savedUser ? JSON.parse(savedUser).token : null;
+            if (!token) throw new Error("No authorization token");
+
+            const res = await fetch(`${import.meta.env.VITE_API_URL || 'https://plantoxy.onrender.com/api'}/user/confirm-delete-account`, {
+                method: 'POST',
+                headers: { 
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ otp: deleteOtp.trim() })
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || "Failed to confirm deletion");
+
+            toast.success("Account permanently deleted", { id: tid });
+            setShowDeleteModal(false);
+            logout();
+        } catch (error: any) {
+            toast.error(error.message || "Invalid OTP code", { id: tid });
+        } finally {
+            setConfirmingDelete(false);
+        }
+    };
+
     if (loading) {
         return (
             <div style={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
@@ -460,6 +528,31 @@ export const UserDashboard = () => {
                         style={{ background: '#facc15', color: '#000', border: 'none' }}
                     >
                         Visit Center
+                    </Button>
+                </div>
+
+                {/* Danger Zone Card */}
+                <div className={styles.actionCard} style={{ borderColor: 'rgba(239, 68, 68, 0.15)' }}>
+                    <div className={styles.actionHeader}>
+                        <div className={styles.actionIconBox} style={{ background: 'linear-gradient(135deg, #ef4444 0%, #991b1b 100%)' }}>
+                            <Trash2 size={18} />
+                        </div>
+                        <div className={styles.actionContent}>
+                            <h4 className={styles.actionTitle}>Danger Zone</h4>
+                            <p className={styles.actionDesc}>Delete Account</p>
+                        </div>
+                    </div>
+                    <Button
+                        onClick={() => {
+                            setDeleteStep('initial');
+                            setDeleteOtp('');
+                            setShowDeleteModal(true);
+                        }}
+                        size="sm"
+                        className={styles.actionBtn}
+                        style={{ background: '#ef4444', color: 'white', border: 'none' }}
+                    >
+                        Delete Account
                     </Button>
                 </div>
             </div>
@@ -827,6 +920,94 @@ export const UserDashboard = () => {
                     onSuccess={() => { window.location.reload(); toast.success("Verified!"); }}
                     onClose={() => setShowVerifyModal(false)}
                 />
+            )}
+
+            {showDeleteModal && (
+                <div style={{
+                    position: 'fixed', inset: 0, zIndex: 3000,
+                    background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(8px)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem'
+                }}>
+                    <div className="glass-panel" style={{ width: '100%', maxWidth: '400px', padding: '2.5rem 2rem', borderRadius: '24px', border: '1px solid rgba(239, 68, 68, 0.2)' }}>
+                        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '1.25rem' }}>
+                            <div style={{ background: 'rgba(239, 68, 68, 0.1)', padding: '1rem', borderRadius: '50%', color: '#ef4444' }}>
+                                <Trash2 size={32} />
+                            </div>
+                        </div>
+                        
+                        {deleteStep === 'initial' ? (
+                            <>
+                                <h2 style={{ textAlign: 'center', marginBottom: '0.75rem', color: '#fff', fontSize: '1.4rem', fontWeight: 800 }}>Delete Account?</h2>
+                                <p style={{ color: '#94a3b8', fontSize: '0.875rem', lineHeight: '1.5', textAlign: 'center', marginBottom: '1.75rem' }}>
+                                    Warning: Deleting your account is <span style={{ color: '#ef4444', fontWeight: 700 }}>permanent</span>. All your point scores, plants collection, orders, and premium access will be lost forever.
+                                </p>
+                                <div style={{ display: 'flex', gap: '1rem' }}>
+                                    <Button type="button" variant="outline" onClick={() => setShowDeleteModal(false)} style={{ flex: 1 }}>
+                                        Cancel
+                                    </Button>
+                                    <Button 
+                                        type="button" 
+                                        onClick={requestDeleteOTP} 
+                                        disabled={requestingDelete}
+                                        style={{ flex: 1, background: '#ef4444', border: 'none', color: '#fff' }}
+                                    >
+                                        {requestingDelete ? 'Sending...' : 'Send OTP'}
+                                    </Button>
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <h2 style={{ textAlign: 'center', marginBottom: '0.75rem', color: '#fff', fontSize: '1.4rem', fontWeight: 800 }}>Enter Deletion Code</h2>
+                                <p style={{ color: '#94a3b8', fontSize: '0.875rem', lineHeight: '1.5', textAlign: 'center', marginBottom: '1.5rem' }}>
+                                    We've sent a 6-digit security key to <span style={{ color: '#f1f5f9', fontWeight: 600 }}>{user.email}</span>. Use it to confirm your deletion.
+                                </p>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem', marginBottom: '1.75rem' }}>
+                                    <input 
+                                        type="text" 
+                                        maxLength={6}
+                                        placeholder="Enter 6-digit OTP" 
+                                        value={deleteOtp} 
+                                        onChange={e => setDeleteOtp(e.target.value.replace(/\D/g, ''))}
+                                        style={{ 
+                                            padding: '0.85rem', 
+                                            borderRadius: '0.75rem', 
+                                            background: 'rgba(255,255,255,0.03)', 
+                                            border: '1px solid rgba(255,255,255,0.1)', 
+                                            color: 'white',
+                                            textAlign: 'center',
+                                            fontSize: '1.25rem',
+                                            letterSpacing: '4px',
+                                            fontWeight: 700,
+                                            outline: 'none'
+                                        }} 
+                                    />
+                                    <div style={{ textAlign: 'center' }}>
+                                        <button 
+                                            type="button"
+                                            onClick={requestDeleteOTP}
+                                            style={{ background: 'none', border: 'none', color: '#64748b', fontSize: '0.75rem', cursor: 'pointer', textDecoration: 'underline' }}
+                                        >
+                                            Resend Code
+                                        </button>
+                                    </div>
+                                </div>
+                                <div style={{ display: 'flex', gap: '1rem' }}>
+                                    <Button type="button" variant="outline" onClick={() => setDeleteStep('initial')} style={{ flex: 1 }}>
+                                        Back
+                                    </Button>
+                                    <Button 
+                                        type="button" 
+                                        onClick={confirmDeleteAccount}
+                                        disabled={confirmingDelete}
+                                        style={{ flex: 1, background: '#dc2626', border: 'none', color: '#fff', fontWeight: 800 }}
+                                    >
+                                        {confirmingDelete ? 'Deleting...' : 'Confirm Purge'}
+                                    </Button>
+                                </div>
+                            </>
+                        )}
+                    </div>
+                </div>
             )}
 
         </UserDashboardLayout>
