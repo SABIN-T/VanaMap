@@ -19,7 +19,7 @@ export const Premium = () => {
     const isFreeMode = config.activePromo || config.price === 0 || String(config.price) === '0';
 
     // Access Control
-    const canView = user && (user.favorites?.length > 3 || user.isPremium || user.role === 'admin');
+
 
     useEffect(() => {
         // 1. Fetch Config (Price/Promo)
@@ -37,13 +37,10 @@ export const Premium = () => {
         fetchConfig();
 
         // 2. Route Protection
-        if (user && !canView && user.role !== 'admin') {
-            toast("Add more than 3 plants to favorites to unlock Premium!", { icon: '🔒' });
-            navigate('/');
-        } else if (user?.isPremium) {
+        if (user?.isPremium) {
             navigate('/heaven');
         }
-    }, [user, canView, navigate]);
+    }, [user, navigate]);
 
     // Helpers
     const loadRazorpay = () => {

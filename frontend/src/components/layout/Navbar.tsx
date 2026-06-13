@@ -74,6 +74,13 @@ export const Navbar = () => {
                     {theme === 'dark' ? <Sun size={20} color="#facc15" /> : <Moon size={20} color="#333" />}
                 </button>
 
+                {/* Mobile-only logout button */}
+                {user && (
+                    <button onClick={handleLogout} className={styles.mobileLogoutBtn} title="Logout">
+                        <LogOut size={16} />
+                    </button>
+                )}
+
                 <div className={styles.authDesktop}>
                     {user ? (
                         <div style={{ display: 'flex', gap: '0.8rem', alignItems: 'center' }}>

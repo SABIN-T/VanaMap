@@ -443,13 +443,81 @@ export const fetchVendorAnalytics = async (vendorId: string) => {
     return res.json();
 };
 
-export const completePurchase = async (items: unknown[]) => {
+export const completePurchase = async (items: unknown[], deliveryAddress?: { address?: string; city?: string; state?: string; pincode?: string; latitude?: number; longitude?: number }) => {
     const res = await fetch(`${API_URL}/user/complete-purchase`, {
         method: 'POST',
         headers: getHeaders(),
-        body: JSON.stringify({ items })
+        body: JSON.stringify({ items, deliveryAddress })
     });
     if (!res.ok) throw new Error("Failed to complete purchase");
+    return res.json();
+};
+
+export const createCartOrder = async (amount: number, items: { plantId: string; vendorId: string; vendorName: string; quantity: number; price: number; plantName: string }[], deliveryAddress?: { address?: string; city?: string; state?: string; pincode?: string; latitude?: number; longitude?: number }) => {
+    const res = await fetch(`${API_URL}/payments/create-cart-order`, {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify({ amount, items, deliveryAddress })
+    });
+    if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.error || "Failed to create cart order");
+    }
+    return res.json();
+};
+
+export const verifyCartPayment = async (data: {
+    orderId: string;
+    paymentId: string;
+    signature: string;
+    items: { plantId: string; vendorId: string; vendorName: string; quantity: number; price: number; plantName: string }[];
+    totalAmount: number;
+    deliveryAddress?: { address?: string; city?: string; state?: string; pincode?: string; latitude?: number; longitude?: number };
+}) => {
+    const res = await fetch(`${API_URL}/payments/verify-cart`, {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify(data)
+    });
+    if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        throw new Error(errorData.error || "Payment verification failed");
+    }
+    return res.json();
+};
+
+// --- ADMIN SHOP ORDERS ---
+export const fetchAdminOrders = async (params?: { vendorId?: string; status?: string; search?: string; page?: number; limit?: number }) => {
+    const query = new URLSearchParams();
+    if (params?.vendorId) query.set('vendorId', params.vendorId);
+    if (params?.status) query.set('status', params.status);
+    if (params?.search) query.set('search', params.search);
+    if (params?.page) query.set('page', params.page.toString());
+    if (params?.limit) query.set('limit', params.limit.toString());
+    const res = await fetch(`${API_URL}/admin/orders?${query.toString()}`, { headers: getHeaders() });
+    if (!res.ok) throw new Error("Failed to fetch orders");
+    return res.json();
+};
+
+export const fetchAdminOrdersMap = async () => {
+    const res = await fetch(`${API_URL}/admin/orders/map`, { headers: getHeaders() });
+    if (!res.ok) throw new Error("Failed to fetch order map data");
+    return res.json();
+};
+
+export const updateOrderStatus = async (orderId: string, status: string) => {
+    const res = await fetch(`${API_URL}/admin/orders/${orderId}/status`, {
+        method: 'PATCH',
+        headers: getHeaders(),
+        body: JSON.stringify({ status })
+    });
+    if (!res.ok) throw new Error("Failed to update order status");
+    return res.json();
+};
+
+export const fetchUserOrders = async () => {
+    const res = await fetch(`${API_URL}/user/orders`, { headers: getHeaders() });
+    if (!res.ok) throw new Error("Failed to fetch orders");
     return res.json();
 };
 

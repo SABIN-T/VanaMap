@@ -184,14 +184,21 @@ const sendEmail = async (mailOptions) => {
     // Priority 1: Resend
     if (resend) {
         try {
-            const result = await resend.emails.send({
+            const payload = {
                 from: mailOptions.from || 'VanaMap <support@vanamap.online>', // Use verified domain
                 to: mailOptions.to,
                 subject: mailOptions.subject,
                 html: mailOptions.html
-            });
-            console.log(`[Resend] Sent to ${mailOptions.to} (ID: ${result.data?.id})`)
-                ;
+            };
+            if (mailOptions.attachments) {
+                payload.attachments = mailOptions.attachments.map(att => ({
+                    filename: att.filename,
+                    content: att.content,
+                    path: att.path
+                }));
+            }
+            const result = await resend.emails.send(payload);
+            console.log(`[Resend] Sent to ${mailOptions.to} (ID: ${result.data?.id})`);
             return { messageId: result.data?.id || 'resend-api' };
         } catch (error) {
             console.error('[Resend] Error:', error.message);
@@ -209,10 +216,28 @@ const sendEmail = async (mailOptions) => {
     if (process.env.SENDGRID_API_KEY) {
         const msg = {
             to: mailOptions.to,
-            from: mailOptions.from,
+            from: mailOptions.from || 'VanaMap <support@vanamap.online>',
             subject: mailOptions.subject,
             html: mailOptions.html,
         };
+        if (mailOptions.attachments) {
+            msg.attachments = mailOptions.attachments.map(att => {
+                let base64Content = '';
+                if (Buffer.isBuffer(att.content)) {
+                    base64Content = att.content.toString('base64');
+                } else if (typeof att.content === 'string') {
+                    base64Content = Buffer.from(att.content).toString('base64');
+                } else if (att.path) {
+                    base64Content = fs.readFileSync(att.path).toString('base64');
+                }
+                return {
+                    content: base64Content,
+                    filename: att.filename,
+                    type: att.contentType || 'application/pdf',
+                    disposition: 'attachment'
+                };
+            });
+        }
         try {
             await sgMail.send(msg);
             console.log(`[SendGrid] Sent to ${mailOptions.to}`);
@@ -947,6 +972,157 @@ app.post('/api/payments/create-order', auth, async (req, res) => {
     }
 });
 
+// --- CART PAYMENT ENDPOINTS ---
+
+// Create Cart Order (Dynamic Amount)
+app.post('/api/payments/create-cart-order', auth, async (req, res) => {
+    try {
+        const { amount, items, deliveryAddress } = req.body;
+        if (!amount || amount <= 0) return res.status(400).json({ error: "Invalid amount" });
+        if (!items || !items.length) return res.status(400).json({ error: "No items provided" });
+
+        if (!razorpay) return res.status(503).json({ error: "Payment gateway not configured" });
+
+        const options = {
+            amount: Math.round(amount * 100), // paise
+            currency: "INR",
+            receipt: `cart_${Date.now()}`,
+            notes: {
+                userId: req.user.id,
+                itemCount: items.length.toString(),
+                deliveryCity: deliveryAddress?.city || '',
+                deliveryState: deliveryAddress?.state || ''
+            }
+        };
+
+        const order = await razorpay.orders.create(options);
+        res.json({ ...order, key: process.env.RAZORPAY_KEY_ID });
+    } catch (error) {
+        console.error("Cart Order Error:", error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
+// Verify Cart Payment
+app.post('/api/payments/verify-cart', auth, async (req, res) => {
+    try {
+        const { orderId, paymentId, signature, items, totalAmount, deliveryAddress } = req.body;
+        const crypto = require('crypto');
+
+        if (!process.env.RAZORPAY_KEY_SECRET) {
+            return res.status(503).json({ error: "Server configuration missing (Payment)" });
+        }
+
+        const generated_signature = crypto.createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
+            .update(orderId + "|" + paymentId)
+            .digest('hex');
+
+        if (generated_signature !== signature) {
+            return res.status(400).json({ success: false, message: "Signature verification failed" });
+        }
+
+        // Payment Verified — Create Sales & Award Points
+        const user = await User.findById(req.user.id);
+        if (!user) return res.status(404).json({ error: "User not found" });
+
+        const sales = [];
+        let pointsToAward = 0;
+        const deliveryInfo = deliveryAddress || {};
+        const deliveryStr = deliveryInfo.address ? `\nDelivery: ${deliveryInfo.address}, ${deliveryInfo.city || ''} ${deliveryInfo.state || ''} ${deliveryInfo.pincode || ''}` : '';
+
+        for (const item of items) {
+            const sale = new Sale({
+                vendorId: item.vendorId,
+                userId: user._id,
+                userName: user.name,
+                plantId: item.plantId,
+                plantName: item.plantName,
+                price: item.price,
+                quantity: item.quantity || 1,
+                status: 'completed',
+                deliveryAddress: deliveryInfo
+            });
+            await sale.save();
+            sales.push(sale);
+
+            // Award 200 points per plant purchased
+            pointsToAward += (item.quantity || 1) * 200;
+
+            // Notify vendor with delivery info
+            await broadcastAlert('sale', `New paid order: ${item.quantity || 1}x ${item.plantName} by ${user.name}${deliveryStr}`, {
+                vendorId: item.vendorId,
+                title: 'New Paid Sale! 💰',
+                deliveryAddress: deliveryInfo
+            });
+
+            // Send Purchase Confirmation Email to User & New Order Alert to Vendor
+            try {
+                await sendEmail({
+                    from: 'VanaMap <support@vanamap.online>',
+                    to: user.email,
+                    subject: `Confirmed: Your purchase of ${item.plantName}! 🌿`,
+                    html: EmailTemplates.plantPurchased(user.name, item.plantName, item.vendorName || 'VanaMap Partner', item.price)
+                });
+            } catch (mailErr) {
+                console.error('[Cart Payment] Email failed:', mailErr.message);
+            }
+
+            try {
+                const vendorObj = await Vendor.findOne({ id: item.vendorId });
+                if (vendorObj && vendorObj.ownerEmail) {
+                    await sendEmail({
+                        from: 'VanaMap Orders <orders@vanamap.online>',
+                        to: vendorObj.ownerEmail,
+                        subject: `New Paid Order: ${item.plantName} from ${user.name}! 🛒`,
+                        html: EmailTemplates.vendorNewOrderAlert(
+                            vendorObj.name,
+                            user.name,
+                            item.plantName,
+                            item.quantity || 1,
+                            item.price,
+                            deliveryInfo
+                        )
+                    });
+                    console.log(`[Cart Payment] Sent new order notification email to vendor: ${vendorObj.ownerEmail}`);
+                }
+            } catch (vendorMailErr) {
+                console.error('[Cart Payment] Vendor email failed:', vendorMailErr.message);
+            }
+        }
+
+        // Apply Points
+        user.points = (user.points || 0) + pointsToAward;
+        user.cart = []; // Clear server-side cart
+        await user.save();
+
+        // Record Payment with delivery address and items
+        const payment = new Payment({
+            userId: user.id,
+            userName: user.name,
+            amount: totalAmount,
+            currency: 'INR',
+            orderId,
+            paymentId,
+            signature,
+            status: 'paid',
+            plan: 'cart_purchase',
+            items: items.map(i => ({ plantId: i.plantId, plantName: i.plantName, vendorId: i.vendorId, vendorName: i.vendorName, quantity: i.quantity, price: i.price })),
+            deliveryAddress: deliveryInfo
+        });
+        await payment.save();
+
+        await broadcastAlert('sale', `User ${user.name} completed a paid cart purchase (₹${totalAmount})! 🛒💚`, {
+            userId: user._id,
+            points: pointsToAward
+        });
+
+        res.json({ success: true, sales, pointsAwarded: pointsToAward });
+    } catch (error) {
+        console.error("Cart Verify Error:", error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
 // --- ADMIN PAYMENTS & SETTINGS ---
 
 // Get All Payments & Premium Users
@@ -956,6 +1132,224 @@ app.get('/api/admin/payments', auth, admin, async (req, res) => {
         const premiumUsers = await User.find({ isPremium: true }).select('name email premiumType premiumExpiry');
         res.json({ payments, premiumUsers });
     } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
+// --- ADMIN SHOP ORDERS ---
+
+// Get All Orders (Sales) with delivery info — for admin shop orders page
+app.get('/api/admin/orders', auth, admin, async (req, res) => {
+    try {
+        const { vendorId, status, search, page = 1, limit = 50 } = req.query;
+        const filter = {};
+        if (vendorId) filter.vendorId = vendorId;
+        if (status) filter.status = status;
+        if (search) {
+            filter.$or = [
+                { plantName: { $regex: search, $options: 'i' } },
+                { userName: { $regex: search, $options: 'i' } }
+            ];
+        }
+
+        const skip = (parseInt(page) - 1) * parseInt(limit);
+        const total = await Sale.countDocuments(filter);
+        const orders = await Sale.find(filter)
+            .sort({ timestamp: -1 })
+            .skip(skip)
+            .limit(parseInt(limit));
+
+        // Get vendor names for display
+        const vendorIds = [...new Set(orders.map(o => o.vendorId))];
+        const vendors = await Vendor.find({ id: { $in: vendorIds } }).select('id name address phone');
+        const vendorMap = {};
+        vendors.forEach(v => vendorMap[v.id] = { name: v.name, address: v.address, phone: v.phone });
+
+        res.json({
+            orders: orders.map(o => ({
+                ...o.toObject(),
+                vendorInfo: vendorMap[o.vendorId] || { name: 'Unknown Vendor' }
+            })),
+            total,
+            page: parseInt(page),
+            totalPages: Math.ceil(total / parseInt(limit))
+        });
+    } catch (e) {
+        console.error('Admin Orders Error:', e);
+        res.status(500).json({ error: e.message });
+    }
+});
+
+// Get Orders Map Data (lightweight for markers)
+app.get('/api/admin/orders/map', auth, admin, async (req, res) => {
+    try {
+        const orders = await Sale.find({
+            'deliveryAddress.latitude': { $exists: true, $ne: null }
+        }).select('plantName userName vendorId quantity price deliveryAddress timestamp status').sort({ timestamp: -1 }).limit(500);
+
+        const vendorIds = [...new Set(orders.map(o => o.vendorId))];
+        const vendors = await Vendor.find({ id: { $in: vendorIds } }).select('id name');
+        const vendorMap = {};
+        vendors.forEach(v => vendorMap[v.id] = v.name);
+
+        res.json(orders.map(o => ({
+            _id: o._id,
+            plantName: o.plantName,
+            userName: o.userName,
+            vendorName: vendorMap[o.vendorId] || 'Unknown',
+            vendorId: o.vendorId,
+            quantity: o.quantity,
+            price: o.price,
+            lat: o.deliveryAddress?.latitude,
+            lng: o.deliveryAddress?.longitude,
+            address: o.deliveryAddress?.address,
+            city: o.deliveryAddress?.city,
+            state: o.deliveryAddress?.state,
+            pincode: o.deliveryAddress?.pincode,
+            timestamp: o.timestamp,
+            status: o.status
+        })));
+    } catch (e) {
+        console.error('Admin Orders Map Error:', e);
+        res.status(500).json({ error: e.message });
+    }
+});
+
+// Update Order Status (Admin)
+app.patch('/api/admin/orders/:id/status', auth, admin, async (req, res) => {
+    try {
+        const { status } = req.body;
+        const validStatuses = ['pending', 'completed', 'shipped', 'delivered', 'cancelled'];
+        if (!validStatuses.includes(status)) {
+            return res.status(400).json({ error: `Invalid status. Must be one of: ${validStatuses.join(', ')}` });
+        }
+
+        const sale = await Sale.findByIdAndUpdate(
+            req.params.id,
+            { status },
+            { new: true }
+        );
+        if (!sale) return res.status(404).json({ error: 'Order not found' });
+
+        // Fetch user and vendor details for email notifications
+        let user = null;
+        let vendor = null;
+
+        if (sale.userId) {
+            user = await User.findById(sale.userId);
+        }
+        if (sale.vendorId) {
+            vendor = await Vendor.findOne({ id: sale.vendorId });
+        }
+
+        const vendorName = vendor ? vendor.name : 'VanaMap Partner';
+
+        // Notify the user about status change
+        if (sale.userId) {
+            const statusMessages = {
+                shipped: `Your order of ${sale.plantName} has been shipped! 🚚`,
+                delivered: `Your order of ${sale.plantName} has been delivered! 📦✅`,
+                cancelled: `Your order of ${sale.plantName} has been cancelled. ❌`,
+                pending: `Your order of ${sale.plantName} is now pending. ⏳`,
+                completed: `Your order of ${sale.plantName} is confirmed! ✅`
+            };
+            await broadcastAlert('order_status', statusMessages[status] || `Order status updated to ${status}`, {
+                userId: sale.userId,
+                title: `Order ${status.charAt(0).toUpperCase() + status.slice(1)} 📋`
+            });
+
+            // Send order status update email to User
+            if (user && user.email) {
+                try {
+                    const { generateInvoicePDF } = require('./invoice-helper');
+                    const mailParams = {
+                        from: 'VanaMap <support@vanamap.online>',
+                        to: user.email,
+                        subject: `Update: Your order of ${sale.plantName} is ${status}! 🌿`,
+                        html: EmailTemplates.userOrderStatusUpdate(
+                            user.name,
+                            sale.plantName,
+                            status,
+                            sale.price,
+                            sale._id.toString(),
+                            vendorName,
+                            sale.deliveryAddress
+                        )
+                    };
+
+                    // If delivered, generate and attach the estimated invoice PDF
+                    if (status.toLowerCase() === 'delivered') {
+                        try {
+                            const invoiceBuffer = await generateInvoicePDF(sale, user, vendor);
+                            mailParams.attachments = [{
+                                filename: `Invoice-${sale._id.toString().substring(18).toUpperCase()}.pdf`,
+                                content: invoiceBuffer,
+                                contentType: 'application/pdf'
+                            }];
+                            console.log(`[Invoice PDF] Successfully generated invoice attachment for order ${sale._id}`);
+                        } catch (pdfErr) {
+                            console.error('[Invoice PDF] Generation failed:', pdfErr.message);
+                        }
+                    }
+
+                    await sendEmail(mailParams);
+                    console.log(`[Order Status Email] Sent update email to user: ${user.email}`);
+                } catch (emailErr) {
+                    console.error('[Order Status Email] Failed to send user email:', emailErr.message);
+                }
+            }
+        }
+
+        // Notify Vendor via email if order is cancelled
+        if (vendor && vendor.ownerEmail && status === 'cancelled') {
+            try {
+                const customerName = user ? user.name : (sale.userName || 'Customer');
+                await sendEmail({
+                    from: 'VanaMap Support <support@vanamap.online>',
+                    to: vendor.ownerEmail,
+                    subject: `ALERT: Order Cancelled by Admin - ${sale.plantName} ❌`,
+                    html: EmailTemplates.vendorOrderStatusAlert(
+                        vendor.name,
+                        customerName,
+                        sale.plantName,
+                        status,
+                        sale.quantity,
+                        sale.price,
+                        sale._id.toString()
+                    )
+                });
+                console.log(`[Order Status Email] Sent cancellation alert email to vendor: ${vendor.ownerEmail}`);
+            } catch (emailErr) {
+                console.error('[Order Status Email] Failed to send vendor email:', emailErr.message);
+            }
+        }
+
+        res.json({ success: true, sale });
+    } catch (e) {
+        console.error('Update Order Status Error:', e);
+        res.status(500).json({ error: e.message });
+    }
+});
+
+// User Order History
+app.get('/api/user/orders', auth, async (req, res) => {
+    try {
+        const orders = await Sale.find({ userId: req.user.id })
+            .sort({ timestamp: -1 })
+            .limit(100);
+
+        // Get vendor names
+        const vendorIds = [...new Set(orders.map(o => o.vendorId))];
+        const vendors = await Vendor.find({ id: { $in: vendorIds } }).select('id name phone');
+        const vendorMap = {};
+        vendors.forEach(v => vendorMap[v.id] = { name: v.name, phone: v.phone });
+
+        res.json(orders.map(o => ({
+            ...o.toObject(),
+            vendorInfo: vendorMap[o.vendorId] || { name: 'VanaMap Official' }
+        })));
+    } catch (e) {
+        console.error('User Orders Error:', e);
         res.status(500).json({ error: e.message });
     }
 });
@@ -1199,7 +1593,7 @@ app.post('/api/tracking/search', async (req, res) => {
 // New Endpoint: Complete Purchase (Real Sales Tracking)
 app.post('/api/user/complete-purchase', auth, async (req, res) => {
     try {
-        const { items } = req.body; // Array of { plantId, vendorId, vendorName, quantity, price, plantName }
+        const { items, deliveryAddress } = req.body; // Array of { plantId, vendorId, vendorName, quantity, price, plantName }
         if (!items || !items.length) return res.status(400).json({ error: "No items in cart" });
 
         const user = await User.findById(req.user.id);
@@ -1207,6 +1601,8 @@ app.post('/api/user/complete-purchase', auth, async (req, res) => {
 
         const sales = [];
         let pointsToAward = 0;
+        const deliveryInfo = deliveryAddress || {};
+        const deliveryStr = deliveryInfo.address ? `\nDelivery: ${deliveryInfo.address}, ${deliveryInfo.city || ''} ${deliveryInfo.state || ''} ${deliveryInfo.pincode || ''}` : '';
 
         for (const item of items) {
             const sale = new Sale({
@@ -1217,7 +1613,8 @@ app.post('/api/user/complete-purchase', auth, async (req, res) => {
                 plantName: item.plantName,
                 price: item.price,
                 quantity: item.quantity || 1,
-                status: 'completed'
+                status: 'completed',
+                deliveryAddress: deliveryInfo
             });
             await sale.save();
             sales.push(sale);
@@ -1225,13 +1622,14 @@ app.post('/api/user/complete-purchase', auth, async (req, res) => {
             // Award 200 points per plant purchased
             pointsToAward += (item.quantity || 1) * 200;
 
-            // Notify vendor
-            await broadcastAlert('sale', `New order: ${item.quantity || 1}x ${item.plantName}`, {
+            // Notify vendor with delivery info
+            await broadcastAlert('sale', `New order: ${item.quantity || 1}x ${item.plantName} by ${user.name}${deliveryStr}`, {
                 vendorId: item.vendorId,
-                title: 'New Sale! 💰'
+                title: 'New Sale! 💰',
+                deliveryAddress: deliveryInfo
             });
 
-            // 🚀 Send Purchase Confirmation Email to User
+            // 🚀 Send Purchase Confirmation Email to User & New Order Alert to Vendor
             try {
                 await sendEmail({
                     to: user.email,
@@ -1240,6 +1638,28 @@ app.post('/api/user/complete-purchase', auth, async (req, res) => {
                 });
             } catch (mailErr) {
                 console.error('[Purchase Confirm] Email failed:', mailErr.message);
+            }
+
+            try {
+                const vendorObj = await Vendor.findOne({ id: item.vendorId });
+                if (vendorObj && vendorObj.ownerEmail) {
+                    await sendEmail({
+                        from: 'VanaMap Orders <orders@vanamap.online>',
+                        to: vendorObj.ownerEmail,
+                        subject: `New WhatsApp Order: ${item.plantName} from ${user.name}! 🛒`,
+                        html: EmailTemplates.vendorNewOrderAlert(
+                            vendorObj.name,
+                            user.name,
+                            item.plantName,
+                            item.quantity || 1,
+                            item.price,
+                            deliveryInfo
+                        )
+                    });
+                    console.log(`[Purchase Confirm] Sent new order notification email to vendor: ${vendorObj.ownerEmail}`);
+                }
+            } catch (vendorMailErr) {
+                console.error('[Purchase Confirm] Vendor email failed:', vendorMailErr.message);
             }
         }
 
@@ -4183,27 +4603,38 @@ app.post('/api/admin/broadcast', auth, admin, broadcastUpload.single('image'), a
             </html>
         `;
 
-        // --- Send in Batches ---
+        // --- Send in Batches (Chunked for performance) ---
         let successCount = 0;
         let failedCount = 0;
+        const chunkSize = 30;
 
-        // Simple loop for now (for production, use a queue)
-        for (const recipient of recipients) {
-            try {
-                await sendEmail({
-                    from: 'VanaMap Broadcast <support@vanamap.online>',
-                    to: recipient.email,
-                    subject: subject,
-                    html: fullHTML
-                });
-                successCount++;
-            } catch (err) {
-                console.error("Broadcast Send Error:", err.message);
-                failedCount++;
-            }
+        for (let i = 0; i < recipients.length; i += chunkSize) {
+            const chunk = recipients.slice(i, i + chunkSize);
+            await Promise.all(
+                chunk.map(async (recipient) => {
+                    try {
+                        await sendEmail({
+                            from: 'VanaMap Broadcast <support@vanamap.online>',
+                            to: recipient.email,
+                            subject: subject,
+                            html: fullHTML
+                        });
+                        successCount++;
+                    } catch (err) {
+                        console.error(`Broadcast Send Error for ${recipient.email}:`, err.message);
+                        failedCount++;
+                    }
+                })
+            );
         }
 
-        res.json({ success: true, sent: successCount, failed: failedCount, message: `Sent to ${successCount} users.` });
+        res.json({ 
+            success: true, 
+            sent: successCount, 
+            failed: failedCount, 
+            recipientCount: successCount, 
+            message: `Sent to ${successCount} users.` 
+        });
 
     } catch (e) {
         console.error("Broadcast Error:", e);
@@ -5586,88 +6017,7 @@ app.get('/api/admin/support-emails/:id', auth, admin, async (req, res) => {
     }
 });
 
-// --- ADMIN BROADCAST ENDPOINTS ---
 
-// Search users for broadcast
-app.get('/api/admin/search-users', auth, admin, async (req, res) => {
-    try {
-        const query = req.query.q;
-        if (!query) return res.json({ users: [] });
-
-        const users = await User.find({
-            $or: [
-                { name: { $regex: query, $options: 'i' } },
-                { email: { $regex: query, $options: 'i' } }
-            ]
-        }).select('id name email phone role');
-
-        const mappedUsers = users.map(u => ({
-            id: u._id,
-            name: u.name,
-            email: u.email,
-            phone: u.phone,
-            role: u.role
-        }));
-
-        res.json({ users: mappedUsers });
-    } catch (error) {
-        console.error('Search Users Error:', error);
-        res.status(500).json({ error: 'Search failed' });
-    }
-});
-
-// Send broadcast
-app.post('/api/admin/broadcast', auth, admin, upload.single('image'), async (req, res) => {
-    try {
-        const { recipientType, subject, messageText, recipientId } = req.body;
-        const imageUrl = req.file ? req.file.path : null;
-
-        let recipients = [];
-        if (recipientType === 'single') {
-            if (!recipientId) return res.status(400).json({ error: 'Recipient ID required' });
-            const user = await User.findById(recipientId);
-            if (user) recipients.push(user);
-        } else {
-            // All users (active)
-            recipients = await User.find({}).select('email name');
-        }
-
-        if (recipients.length === 0) {
-            return res.status(404).json({ error: 'No recipients found' });
-        }
-
-        // Send via Resend
-        if (resend) {
-            // Process in chunks of 50
-            const chunkSize = 50;
-            for (let i = 0; i < recipients.length; i += chunkSize) {
-                const chunk = recipients.slice(i, i + chunkSize);
-                await Promise.all(chunk.map(user =>
-                    resend.emails.send({
-                        from: 'VanaMap Updates <updates@vanamap.online>',
-                        to: user.email,
-                        subject: subject,
-                        html: `
-                            <div style="font-family: sans-serif; color: #1e293b; max-width: 600px; margin: 0 auto;">
-                                ${imageUrl ? `<img src="${imageUrl}" style="width: 100%; border-radius: 8px; margin-bottom: 24px;" />` : ''}
-                                <div style="font-size: 16px; line-height: 1.6;">${messageText.replace(/\n/g, '<br>')}</div>
-                                <hr style="margin: 32px 0; border: 0; border-top: 1px solid #e2e8f0;">
-                                <p style="font-size: 12px; color: #94a3b8; text-align: center;">
-                                    Sent via VanaMap Broadcast Center • <a href="https://vanamap.online" style="color: #94a3b8;">Unsubscribe</a>
-                                </p>
-                            </div>
-                        `
-                    }).catch(e => console.error(`Failed to send to ${user.email}`, e))
-                ));
-            }
-        }
-
-        res.json({ success: true, recipientCount: recipients.length });
-    } catch (error) {
-        console.error('Broadcast Error:', error);
-        res.status(500).json({ error: error.message });
-    }
-});
 
 // Update email status (Admin only)
 app.put('/api/admin/support-emails/:id/status', auth, admin, async (req, res) => {

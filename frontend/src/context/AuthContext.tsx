@@ -65,13 +65,18 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                     userData.favorites = Array.isArray(userData.favorites) ? userData.favorites : [];
                     userData.cart = Array.isArray(userData.cart) ? userData.cart : [];
                     setUser(userData);
+                    if (userData.token) {
+                        localStorage.setItem('token', userData.token);
+                    }
                 } else {
                     console.warn("Invalid user session detected, purging local storage.");
                     localStorage.removeItem('user');
+                    localStorage.removeItem('token');
                 }
             } catch (e) {
                 console.error("Local storage corruption", e);
                 localStorage.removeItem('user');
+                localStorage.removeItem('token');
             }
         }
         setLoading(false);
@@ -98,6 +103,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
             setUser(userData);
             localStorage.setItem('user', JSON.stringify(userData));
+            if (data.token) {
+                localStorage.setItem('token', data.token);
+            }
             return { success: true };
         } catch (err: unknown) {
             const error = err as Error;
@@ -145,6 +153,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             const fullUser = { ...data.user, token: data.token };
             setUser(fullUser);
             localStorage.setItem('user', JSON.stringify(fullUser));
+            if (data.token) {
+                localStorage.setItem('token', data.token);
+            }
             return { success: true };
         } catch (err: unknown) {
             const error = err as Error;
@@ -205,6 +216,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 const freshUser = { ...data, token };
                 setUser(freshUser);
                 localStorage.setItem('user', JSON.stringify(freshUser));
+                localStorage.setItem('token', token);
             }
         } catch (e) {
             console.error("Refresh failed", e);
@@ -214,6 +226,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const logout = () => {
         setUser(null);
         localStorage.removeItem('user');
+        localStorage.removeItem('token');
         window.location.href = '/';
     };
 
@@ -268,6 +281,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const setAuthSession = (data: User) => {
         setUser(data);
         localStorage.setItem('user', JSON.stringify(data));
+        if (data.token) {
+            localStorage.setItem('token', data.token);
+        }
     };
 
     // 🚀 GAMIFICATION: Award points for app usage (100 CP every 5 minutes)
