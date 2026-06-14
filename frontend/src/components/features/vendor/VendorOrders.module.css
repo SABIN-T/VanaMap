@@ -1,0 +1,377 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    font-family: 'Outfit', sans-serif;
+    color: #f8fafc;
+    width: 100%;
+}
+
+/* TOOLBAR & SEARCH */
+.toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    background: rgba(15, 23, 42, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    padding: 1rem;
+    border-radius: 1.25rem;
+    backdrop-filter: blur(8px);
+}
+
+.searchBox {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 0.85rem;
+    padding: 0.6rem 1rem;
+    gap: 0.6rem;
+    flex: 1;
+    min-width: 280px;
+    transition: all 0.2s;
+}
+
+.searchBox:focus-within {
+    border-color: #facc15;
+    background: rgba(255, 255, 255, 0.04);
+    box-shadow: 0 0 15px rgba(250, 204, 21, 0.1);
+}
+
+.searchInput {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #fff;
+    width: 100%;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.searchInput::placeholder {
+    color: #475569;
+}
+
+.tabs {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.tabBtn {
+    padding: 0.6rem 1rem;
+    border-radius: 0.75rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    color: #94a3b8;
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tabBtn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+}
+
+.tabBtnActive {
+    background: rgba(250, 204, 21, 0.08) !important;
+    border-color: rgba(250, 204, 21, 0.3) !important;
+    color: #facc15 !important;
+    box-shadow: 0 4px 12px rgba(250, 204, 21, 0.05);
+}
+
+/* FEED GRID */
+.ordersGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 1.25rem;
+    width: 100%;
+}
+
+.orderCard {
+    background: rgba(15, 23, 42, 0.35);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    border-radius: 1.25rem;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(12px);
+    position: relative;
+    overflow: hidden;
+}
+
+.orderCard:hover {
+    background: rgba(30, 41, 59, 0.45);
+    border-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-3px);
+    box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.6);
+}
+
+/* CARD HEADER */
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    padding-bottom: 0.75rem;
+}
+
+.orderId {
+    display: block;
+    font-size: 1rem;
+    font-weight: 800;
+    color: #f1f5f9;
+    letter-spacing: -0.3px;
+}
+
+.dateLabel {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.72rem;
+    color: #64748b;
+    margin-top: 0.2rem;
+    font-weight: 500;
+}
+
+.statusBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+/* CARD CONTENT */
+.cardContent {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    flex: 1;
+}
+
+.plantBlock {
+    background: rgba(255, 255, 255, 0.01);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    border-radius: 0.85rem;
+    padding: 0.85rem;
+}
+
+.plantName {
+    margin: 0 0 0.5rem 0;
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #fff;
+}
+
+.pricingDetails {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8rem;
+    color: #94a3b8;
+}
+
+.totalPrice {
+    font-size: 0.95rem;
+    color: #10b981;
+    font-weight: 800;
+}
+
+.feeBreakdown {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.72rem;
+    color: #64748b;
+    margin-top: 0.35rem;
+    border-top: 1px dashed rgba(255,255,255,0.05);
+    padding-top: 0.35rem;
+}
+
+.buyerBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.buyerBlock h5 {
+    margin: 0 0 0.25rem 0;
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.infoLine {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: #cbd5e1;
+}
+
+.infoLine span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* CARD ACTIONS */
+.cardActions {
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+    padding-top: 0.85rem;
+    margin-top: auto;
+}
+
+.actionBtn {
+    width: 100%;
+    height: 38px;
+    border-radius: 0.75rem;
+    border: none;
+    font-size: 0.8rem;
+    font-weight: 800;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.actionBtn:hover:not(:disabled) {
+    transform: translateY(-1px);
+    filter: brightness(1.1);
+}
+
+.actionBtn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.actionBtn:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+/* OTP FORM DELIVERY */
+.deliveryForm {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.otpInputWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.75rem;
+    padding: 0.5rem 0.85rem;
+    gap: 0.5rem;
+    transition: all 0.2s;
+}
+
+.otpInputWrapper:focus-within {
+    border-color: #10b981;
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.otpIcon {
+    color: #64748b;
+}
+
+.otpInput {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #fff;
+    width: 100%;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+}
+
+.otpInput::placeholder {
+    letter-spacing: 0px;
+    font-weight: 500;
+    color: #475569;
+}
+
+.completedBanner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    color: #10b981;
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(16, 185, 129, 0.15);
+    border-radius: 0.75rem;
+    padding: 0.6rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+/* STATES */
+.loadingState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 5rem 2rem;
+    gap: 1rem;
+    color: #64748b;
+}
+
+.spinner {
+    width: 32px;
+    height: 32px;
+    color: #facc15;
+    animation: spin-pulse 1.2s infinite linear;
+}
+
+.emptyState {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: rgba(15, 23, 42, 0.2);
+    border: 1px dashed rgba(255, 255, 255, 0.08);
+    border-radius: 1.5rem;
+}
+
+.emptyState h3 {
+    margin: 1rem 0 0.5rem 0;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #fff;
+}
+
+.emptyState p {
+    margin: 0;
+    color: #64748b;
+    font-size: 0.85rem;
+}
+
+@keyframes spin-pulse {
+    0% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(180deg) scale(1.1); }
+    100% { transform: rotate(360deg) scale(1); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}

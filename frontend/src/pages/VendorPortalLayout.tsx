@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import {
-    LayoutDashboard, Store,
-    LogOut, Menu, X, ChevronRight, Leaf,
-    Package, BarChart2, ShieldCheck, TrendingUp
+    LayoutDashboard, Store, LogOut, Menu, X, ChevronRight, Leaf,
+    Package, BarChart2, ShieldCheck, TrendingUp, ShoppingBag
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import styles from './UserDashboardLayout.module.css'; // Reuse the updated premium styles
@@ -35,6 +34,7 @@ export const VendorPortalLayout = ({ title, children }: VendorPortalLayoutProps)
 
     const navItems = [
         { path: '/vendor', icon: LayoutDashboard, label: 'Portal Overview' },
+        { path: '/vendor/orders', icon: ShoppingBag, label: 'Customer Orders' },
         { path: '/vendor/inventory', icon: Package, label: 'My Inventory' },
         { path: '/vendor/insights', icon: BarChart2, label: 'Market Insights' },
         { path: '/vendor/growth', icon: TrendingUp, label: 'Growth Tools' },

@@ -258,6 +258,7 @@ const SaleSchema = new mongoose.Schema({
     },
     deliveryFee: { type: Number, default: 0 },
     deliveryDistance: { type: Number, default: 0 },
+    deliveryOTP: { type: String },
     timestamp: { type: Date, default: Date.now }
 });
 

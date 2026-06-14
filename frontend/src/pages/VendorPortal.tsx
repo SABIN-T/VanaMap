@@ -15,6 +15,7 @@ import toast from 'react-hot-toast';
 import type { LatLng } from 'leaflet';
 import type { Vendor } from '../types';
 import { VendorInventory } from '../components/features/vendor/VendorInventory';
+import { VendorOrders } from '../components/features/vendor/VendorOrders';
 import { MarketInsights } from '../components/features/vendor/MarketInsights';
 import { GrowthTools } from '../components/features/vendor/GrowthTools';
 import { PaymentSettings } from '../components/features/vendor/PaymentSettings';
@@ -83,6 +84,7 @@ export const VendorPortal = () => {
     const activeSection = useMemo(() => {
         const path = location.pathname;
         if (path.endsWith('/inventory')) return 'inventory';
+        if (path.endsWith('/orders')) return 'orders';
         if (path.endsWith('/insights')) return 'insights';
         if (path.endsWith('/growth')) return 'growth';
         if (path.endsWith('/payments')) return 'payments';
@@ -214,6 +216,7 @@ export const VendorPortal = () => {
     const getTitle = () => {
         switch (activeSection) {
             case 'inventory': return 'Catalog Manager';
+            case 'orders': return 'Customer Orders';
             case 'insights': return 'Performance Data';
             case 'growth': return 'Growth Engine';
             case 'profile': return 'Shop Settings';
@@ -229,6 +232,13 @@ export const VendorPortal = () => {
                     <VendorInventory
                         vendor={currentVendor}
                         onUpdate={() => { loadVendorData(); fetchAnalytics(); }}
+                    />
+                )}
+
+                {/* SECTION: ORDERS */}
+                {activeSection === 'orders' && currentVendor && (
+                    <VendorOrders
+                        vendor={currentVendor}
                     />
                 )}
 

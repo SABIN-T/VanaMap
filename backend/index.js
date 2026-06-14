@@ -1460,6 +1460,174 @@ app.get('/api/user/orders', auth, async (req, res) => {
     }
 });
 
+// Get Vendor Shop Orders
+app.get('/api/vendor/orders', auth, async (req, res) => {
+    try {
+        const vendor = await Vendor.findOne({
+            $or: [
+                { userId: req.user.id },
+                { ownerEmail: req.user.email }
+            ]
+        });
+
+        if (!vendor) {
+            return res.status(404).json({ error: 'Vendor profile not found for this user.' });
+        }
+
+        const orders = await Sale.find({ vendorId: vendor.id }).sort({ timestamp: -1 });
+
+        const userIds = [...new Set(orders.map(o => o.userId).filter(Boolean))];
+        const users = await User.find({ _id: { $in: userIds } }).select('email name phone');
+        const userMap = {};
+        users.forEach(u => userMap[u._id.toString()] = { email: u.email, name: u.name, phone: u.phone });
+
+        res.json(orders.map(o => ({
+            ...o.toObject(),
+            userInfo: o.userId ? userMap[o.userId] : null
+        })));
+    } catch (e) {
+        console.error('Vendor Fetch Orders Error:', e);
+        res.status(500).json({ error: e.message });
+    }
+});
+
+// Update Order Status with OTP Verification (Vendor)
+app.patch('/api/vendor/orders/:id/status', auth, async (req, res) => {
+    try {
+        const { status, otp } = req.body;
+        const validStatuses = ['pending', 'completed', 'shipped', 'delivered', 'cancelled'];
+        if (!validStatuses.includes(status)) {
+            return res.status(400).json({ error: `Invalid status. Must be one of: ${validStatuses.join(', ')}` });
+        }
+
+        const sale = await Sale.findById(req.params.id);
+        if (!sale) return res.status(404).json({ error: 'Order not found' });
+
+        const vendor = await Vendor.findOne({ id: sale.vendorId });
+        if (!vendor || (vendor.userId !== req.user.id && vendor.ownerEmail !== req.user.email)) {
+            return res.status(403).json({ error: 'Access denied. You do not own this shop.' });
+        }
+
+        // OTP Check on Deliver transition
+        if (status === 'delivered') {
+            if (!sale.deliveryOTP) {
+                return res.status(400).json({ error: 'Delivery OTP has not been generated. Please mark order as shipped first.' });
+            }
+            if (sale.deliveryOTP.trim() !== (otp || '').toString().trim()) {
+                return res.status(400).json({ error: 'Invalid delivery OTP code. Please enter the correct code from the buyer.' });
+            }
+        }
+
+        // Generate and Send OTP on Ship transition
+        if (status === 'shipped') {
+            const deliveryOtp = Math.floor(100000 + Math.random() * 900000).toString();
+            sale.deliveryOTP = deliveryOtp;
+        }
+
+        sale.status = status;
+        await sale.save();
+
+        let user = null;
+        if (sale.userId) {
+            user = await User.findById(sale.userId);
+        }
+
+        const vendorName = vendor ? vendor.name : 'VanaMap Partner';
+
+        // Notify user about status update
+        if (sale.userId) {
+            const statusMessages = {
+                shipped: `Your order of ${sale.plantName} has been shipped! 🚚`,
+                delivered: `Your order of ${sale.plantName} has been delivered! 📦✅`,
+                cancelled: `Your order of ${sale.plantName} has been cancelled. ❌`,
+                pending: `Your order of ${sale.plantName} is now pending. ⏳`,
+                completed: `Your order of ${sale.plantName} is now packed! ✅`
+            };
+            await broadcastAlert('order_status', statusMessages[status] || `Order status updated to ${status}`, {
+                userId: sale.userId,
+                title: `Order ${status.charAt(0).toUpperCase() + status.slice(1)} 📋`
+            });
+
+            // Send notification email
+            if (user && user.email) {
+                try {
+                    const { generateInvoicePDF } = require('./invoice-helper');
+                    let mailParams = {
+                        from: 'VanaMap <support@vanamap.online>',
+                        to: user.email,
+                        subject: `Update: Your order of ${sale.plantName} is ${status}! 🌿`,
+                        html: EmailTemplates.userOrderStatusUpdate(
+                            user.name,
+                            sale.plantName,
+                            status,
+                            sale.price,
+                            sale._id.toString(),
+                            vendorName,
+                            sale.deliveryAddress
+                        )
+                    };
+
+                    // If delivered, generate and attach the estimated invoice PDF
+                    if (status === 'delivered') {
+                        try {
+                            const invoiceBuffer = await generateInvoicePDF(sale, user, vendor);
+                            mailParams.attachments = [{
+                                filename: `Invoice-${sale._id.toString().substring(18).toUpperCase()}.pdf`,
+                                content: invoiceBuffer,
+                                contentType: 'application/pdf'
+                            }];
+                        } catch (pdfErr) {
+                            console.error('[Invoice PDF] Generation failed:', pdfErr.message);
+                        }
+                    }
+
+                    await sendEmail(mailParams);
+                    console.log(`[Order Status Email] Sent update email to user: ${user.email}`);
+                } catch (emailErr) {
+                    console.error('[Order Status Email] Failed to send user email:', emailErr.message);
+                }
+            }
+        }
+
+        // If shipped, send another email to the user with the OTP code
+        if (status === 'shipped' && user && user.email) {
+            try {
+                await sendEmail({
+                    from: 'VanaMap Delivery <delivery@vanamap.online>',
+                    to: user.email,
+                    subject: `VanaMap Delivery OTP: ${sale.deliveryOTP} 🌿`,
+                    html: `
+                        <div style="font-family: Arial, sans-serif; padding: 20px; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 12px; background: #fff;">
+                            <div style="text-align: center; border-bottom: 2px solid #10b981; padding-bottom: 15px; margin-bottom: 20px;">
+                                <h1 style="color: #10b981; margin: 0; font-size: 24px;">VanaMap Delivery Verification</h1>
+                            </div>
+                            <p>Hello <strong>${sale.userName || user.name || 'Valued Customer'}</strong>,</p>
+                            <p>Your order for <strong>${sale.plantName}</strong> (Qty: ${sale.quantity}) from <strong>${vendor.name}</strong> is shipped and on its way to you! 🚚</p>
+                            <p>To verify and confirm the delivery, please provide the following One-Time Password (OTP) to the delivery agent when they arrive:</p>
+                            <div style="text-align: center; margin: 30px 0;">
+                                <span style="font-size: 32px; font-weight: 800; color: #10b981; letter-spacing: 5px; background: #f0fdf4; padding: 12px 24px; border: 1px solid #bbf7d0; border-radius: 8px; display: inline-block;">
+                                    ${sale.deliveryOTP}
+                                </span>
+                            </div>
+                            <p style="color: #64748b; font-size: 14px;">If you did not request this delivery or have questions, please contact our support team immediately.</p>
+                            <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 20px 0;" />
+                            <p style="font-size: 11px; color: #94a3b8; text-align: center; margin: 0;">This email was sent automatically by the VanaMap Logistics Platform.</p>
+                        </div>
+                    `
+                });
+                console.log(`[Delivery OTP Email] Sent OTP ${sale.deliveryOTP} to buyer: ${user.email}`);
+            } catch (mailErr) {
+                console.error('[Delivery OTP Email] Failed to send email:', mailErr.message);
+            }
+        }
+
+        res.json(sale);
+    } catch (e) {
+        console.error('Vendor Order Status Update Error:', e);
+        res.status(500).json({ error: e.message });
+    }
+});
+
 // Get Restricted Pages
 app.get('/api/admin/settings/restricted-pages', auth, admin, async (req, res) => {
     try {

@@ -529,6 +529,25 @@ export const fetchUserOrders = async () => {
     return res.json();
 };
 
+export const fetchVendorOrders = async () => {
+    const res = await fetch(`${API_URL}/vendor/orders`, { headers: getHeaders() });
+    if (!res.ok) throw new Error("Failed to fetch vendor orders");
+    return res.json();
+};
+
+export const updateVendorOrderStatus = async (orderId: string, status: string, otp?: string) => {
+    const res = await fetch(`${API_URL}/vendor/orders/${orderId}/status`, {
+        method: 'PATCH',
+        headers: getHeaders(),
+        body: JSON.stringify({ status, otp })
+    });
+    if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(errData.error || "Failed to update vendor order status");
+    }
+    return res.json();
+};
+
 export const addPoints = async (amount: number) => {
     const res = await fetch(`${API_URL}/user/add-points`, {
         method: 'POST',
