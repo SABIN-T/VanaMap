@@ -1030,6 +1030,8 @@ app.post('/api/payments/verify-cart', auth, async (req, res) => {
         const user = await User.findById(req.user.id);
         if (!user) return res.status(404).json({ error: "User not found" });
 
+        const cofounderEmails = await getVerifiedCofounders();
+
         const sales = [];
         let pointsToAward = 0;
         const deliveryInfo = deliveryAddress || {};
@@ -1097,6 +1099,39 @@ app.post('/api/payments/verify-cart', auth, async (req, res) => {
                 }
             } catch (vendorMailErr) {
                 console.error('[Cart Payment] Vendor email failed:', vendorMailErr.message);
+            }
+
+            // Send copy of notifications to verified cofounders
+            if (cofounderEmails && cofounderEmails.length > 0) {
+                for (const cofounderEmail of cofounderEmails) {
+                    try {
+                        // Copy of user purchase confirmation
+                        await sendEmail({
+                            from: 'VanaMap <support@vanamap.online>',
+                            to: cofounderEmail,
+                            subject: `[Cofounder Alert] User Purchase: ${item.plantName} by ${user.name} 🌿`,
+                            html: EmailTemplates.plantPurchased(user.name, item.plantName, item.vendorName || 'VanaMap Partner', item.price)
+                        });
+                        
+                        // Copy of vendor new order alert
+                        await sendEmail({
+                            from: 'VanaMap Orders <orders@vanamap.online>',
+                            to: cofounderEmail,
+                            subject: `[Cofounder Alert] Vendor New Order: ${item.plantName} from ${user.name} 🛒`,
+                            html: EmailTemplates.vendorNewOrderAlert(
+                                item.vendorName || 'VanaMap Partner',
+                                user.name,
+                                item.plantName,
+                                item.quantity || 1,
+                                item.price,
+                                deliveryInfo
+                            )
+                        });
+                        console.log(`[Cofounder Alert] Sent copies to cofounder: ${cofounderEmail}`);
+                    } catch (cofounderErr) {
+                        console.error('[Cofounder Alert] Failed to send order copies to cofounder:', cofounderErr.message);
+                    }
+                }
             }
         }
 
@@ -1330,6 +1365,8 @@ app.patch('/api/admin/orders/:id/status', auth, admin, async (req, res) => {
             return res.status(400).json({ error: `Invalid status. Must be one of: ${validStatuses.join(', ')}` });
         }
 
+        const cofounderEmails = await getVerifiedCofounders();
+
         const sale = await Sale.findByIdAndUpdate(
             req.params.id,
             { status },
@@ -1430,6 +1467,52 @@ app.patch('/api/admin/orders/:id/status', auth, admin, async (req, res) => {
             }
         }
 
+        // Send order status update email copy to cofounders
+        if (cofounderEmails && cofounderEmails.length > 0) {
+            for (const cofounderEmail of cofounderEmails) {
+                try {
+                    const { generateInvoicePDF } = require('./invoice-helper');
+                    let mailParams = {
+                        from: 'VanaMap <support@vanamap.online>',
+                        to: cofounderEmail,
+                        subject: `[Cofounder Alert] Order ${status.charAt(0).toUpperCase() + status.slice(1)}: ${sale.plantName} (Customer: ${sale.userName || (user ? user.name : 'Customer')}) 🌿`,
+                        html: EmailTemplates.userOrderStatusUpdate(
+                            sale.userName || (user ? user.name : 'Customer'),
+                            sale.plantName,
+                            status,
+                            sale.price,
+                            sale._id.toString(),
+                            vendorName,
+                            sale.deliveryAddress
+                        )
+                    };
+
+                    // If delivered, generate and attach the estimated invoice PDF
+                    if (status.toLowerCase() === 'delivered') {
+                        try {
+                            const invoiceBuffer = await generateInvoicePDF(
+                                sale,
+                                user || { name: sale.userName || 'Customer', email: '' },
+                                vendor || { name: vendorName }
+                            );
+                            mailParams.attachments = [{
+                                filename: `Invoice-${sale._id.toString().substring(18).toUpperCase()}.pdf`,
+                                content: invoiceBuffer,
+                                contentType: 'application/pdf'
+                            }];
+                        } catch (pdfErr) {
+                            console.error('[Cofounder Alert Invoice PDF] Generation failed:', pdfErr.message);
+                        }
+                    }
+
+                    await sendEmail(mailParams);
+                    console.log(`[Cofounder Alert Status] Sent update email to cofounder: ${cofounderEmail}`);
+                } catch (emailErr) {
+                    console.error('[Cofounder Alert Status] Failed to send cofounder email:', emailErr.message);
+                }
+            }
+        }
+
         res.json({ success: true, sale });
     } catch (e) {
         console.error('Update Order Status Error:', e);
@@ -1527,6 +1610,8 @@ app.patch('/api/vendor/orders/:id/status', auth, async (req, res) => {
         sale.status = status;
         await sale.save();
 
+        const cofounderEmails = await getVerifiedCofounders();
+
         let user = null;
         if (sale.userId) {
             user = await User.findById(sale.userId);
@@ -1618,6 +1703,52 @@ app.patch('/api/vendor/orders/:id/status', auth, async (req, res) => {
                 console.log(`[Delivery OTP Email] Sent OTP ${sale.deliveryOTP} to buyer: ${user.email}`);
             } catch (mailErr) {
                 console.error('[Delivery OTP Email] Failed to send email:', mailErr.message);
+            }
+        }
+
+        // Send order status update email copy to cofounders
+        if (cofounderEmails && cofounderEmails.length > 0) {
+            for (const cofounderEmail of cofounderEmails) {
+                try {
+                    const { generateInvoicePDF } = require('./invoice-helper');
+                    let mailParams = {
+                        from: 'VanaMap <support@vanamap.online>',
+                        to: cofounderEmail,
+                        subject: `[Cofounder Alert] Order ${status.charAt(0).toUpperCase() + status.slice(1)}: ${sale.plantName} (Customer: ${sale.userName || (user ? user.name : 'Customer')}) 🌿`,
+                        html: EmailTemplates.userOrderStatusUpdate(
+                            sale.userName || (user ? user.name : 'Customer'),
+                            sale.plantName,
+                            status,
+                            sale.price,
+                            sale._id.toString(),
+                            vendorName,
+                            sale.deliveryAddress
+                        )
+                    };
+
+                    // If delivered, generate and attach the estimated invoice PDF
+                    if (status === 'delivered') {
+                        try {
+                            const invoiceBuffer = await generateInvoicePDF(
+                                sale,
+                                user || { name: sale.userName || 'Customer', email: '' },
+                                vendor || { name: vendorName }
+                            );
+                            mailParams.attachments = [{
+                                filename: `Invoice-${sale._id.toString().substring(18).toUpperCase()}.pdf`,
+                                content: invoiceBuffer,
+                                contentType: 'application/pdf'
+                            }];
+                        } catch (pdfErr) {
+                            console.error('[Cofounder Alert Invoice PDF] Generation failed:', pdfErr.message);
+                        }
+                    }
+
+                    await sendEmail(mailParams);
+                    console.log(`[Cofounder Alert Status] Sent update email to cofounder: ${cofounderEmail}`);
+                } catch (emailErr) {
+                    console.error('[Cofounder Alert Status] Failed to send cofounder email:', emailErr.message);
+                }
             }
         }
 
@@ -1873,6 +2004,8 @@ app.post('/api/user/complete-purchase', auth, async (req, res) => {
         const user = await User.findById(req.user.id);
         if (!user) return res.status(404).json({ error: "User not found" });
 
+        const cofounderEmails = await getVerifiedCofounders();
+
         const sales = [];
         let pointsToAward = 0;
         const deliveryInfo = deliveryAddress || {};
@@ -1939,6 +2072,39 @@ app.post('/api/user/complete-purchase', auth, async (req, res) => {
                 }
             } catch (vendorMailErr) {
                 console.error('[Purchase Confirm] Vendor email failed:', vendorMailErr.message);
+            }
+
+            // Send copy of notifications to verified cofounders
+            if (cofounderEmails && cofounderEmails.length > 0) {
+                for (const cofounderEmail of cofounderEmails) {
+                    try {
+                        // Copy of user purchase confirmation
+                        await sendEmail({
+                            from: 'VanaMap <support@vanamap.online>',
+                            to: cofounderEmail,
+                            subject: `[Cofounder Alert] User Purchase: ${item.plantName} by ${user.name} 🌿`,
+                            html: EmailTemplates.plantPurchased(user.name, item.plantName, item.vendorName || 'VanaMap Partner', item.price)
+                        });
+                        
+                        // Copy of vendor new order alert
+                        await sendEmail({
+                            from: 'VanaMap Orders <orders@vanamap.online>',
+                            to: cofounderEmail,
+                            subject: `[Cofounder Alert] Vendor New WhatsApp Order: ${item.plantName} from ${user.name} 🛒`,
+                            html: EmailTemplates.vendorNewOrderAlert(
+                                item.vendorName || 'VanaMap Partner',
+                                user.name,
+                                item.plantName,
+                                item.quantity || 1,
+                                item.price,
+                                deliveryInfo
+                            )
+                        });
+                        console.log(`[Cofounder Alert] Sent WhatsApp order copies to cofounder: ${cofounderEmail}`);
+                    } catch (cofounderErr) {
+                        console.error('[Cofounder Alert] Failed to send WhatsApp order copies to cofounder:', cofounderErr.message);
+                    }
+                }
             }
         }
 
@@ -4992,6 +5158,196 @@ app.post('/api/admin/settings', auth, admin, async (req, res) => {
         await setting.save();
         res.json({ success: true, setting });
     } catch (e) { res.status(500).json({ error: e.message }); }
+});
+
+// --- COFOUNDER TEAM MANAGEMENT ---
+async function getVerifiedCofounders() {
+    try {
+        const setting = await SystemSettings.findOne({ key: 'team_members' });
+        if (setting && Array.isArray(setting.value)) {
+            return setting.value
+                .filter(m => m.role === 'Cofounder' && m.verified)
+                .map(m => m.email);
+        }
+    } catch (e) {
+        console.error("Failed to fetch cofounders", e);
+    }
+    return [];
+}
+
+app.get('/api/admin/team', auth, admin, async (req, res) => {
+    try {
+        let setting = await SystemSettings.findOne({ key: 'team_members' });
+        if (!setting) {
+            // Default team members
+            const defaultTeam = [
+                { name: "Admin User", email: "admin@plantfinder.com", role: "Owner", verified: true },
+                { name: "Support Lead", email: "support@plantfinder.com", role: "Editor", verified: true }
+            ];
+            setting = new SystemSettings({ key: 'team_members', value: defaultTeam });
+            await setting.save();
+        }
+
+        const safeTeam = setting.value.map(member => {
+            const { otp, otpExpires, ...safeMember } = member;
+            return safeMember;
+        });
+
+        res.json(safeTeam);
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
+app.post('/api/admin/team/invite', auth, admin, async (req, res) => {
+    try {
+        const { email, name } = req.body;
+        if (!email || !name) {
+            return res.status(400).json({ error: "Email and name are required." });
+        }
+
+        let setting = await SystemSettings.findOne({ key: 'team_members' });
+        if (!setting) {
+            const defaultTeam = [
+                { name: "Admin User", email: "admin@plantfinder.com", role: "Owner", verified: true },
+                { name: "Support Lead", email: "support@plantfinder.com", role: "Editor", verified: true }
+            ];
+            setting = new SystemSettings({ key: 'team_members', value: defaultTeam });
+        }
+
+        const existingMember = setting.value.find(m => m.email.toLowerCase() === email.toLowerCase());
+        if (existingMember && existingMember.verified) {
+            return res.status(400).json({ error: "This email is already a verified team member." });
+        }
+
+        const otp = Math.floor(100000 + Math.random() * 900000).toString();
+        const otpExpires = new Date(Date.now() + 15 * 60 * 1000); // 15 mins
+
+        if (existingMember) {
+            existingMember.name = name;
+            existingMember.otp = otp;
+            existingMember.otpExpires = otpExpires;
+            existingMember.verified = false;
+        } else {
+            setting.value.push({
+                name,
+                email,
+                role: 'Cofounder',
+                verified: false,
+                otp,
+                otpExpires
+            });
+        }
+
+        // Mark the value as modified if it's a mixed type / array
+        setting.markModified('value');
+        await setting.save();
+
+        // Send OTP email
+        try {
+            await sendEmail({
+                from: 'VanaMap <support@vanamap.online>',
+                to: email,
+                subject: 'Invite: Cofounder Verification OTP Code 🌿',
+                html: `
+                    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; color: #1e293b; background-color: #f8fafc; border-radius: 16px;">
+                        <h2 style="color: #10b981; text-align: center;">VanaMap Team Invitation</h2>
+                        <p>Hello <strong>${name}</strong>,</p>
+                        <p>You have been invited as a <strong>Cofounder</strong> of VanaMap. Please share the following verification OTP code with the Admin to complete your onboarding:</p>
+                        <div style="text-align: center; margin: 20px 0;">
+                            <span style="font-size: 28px; font-weight: bold; background: #e2e8f0; color: #0f172a; padding: 10px 24px; border-radius: 8px; letter-spacing: 4px; display: inline-block;">
+                                ${otp}
+                            </span>
+                        </div>
+                        <p style="color: #64748b; font-size: 13px;">This verification code is valid for 15 minutes. If you did not expect this request, you can safely ignore this email.</p>
+                        <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 20px 0;" />
+                        <p style="font-size: 11px; color: #94a3b8; text-align: center;">Sent automatically by VanaMap Administrative Suite.</p>
+                    </div>
+                `
+            });
+            console.log(`[Team Invite] Sent verification OTP to: ${email}`);
+        } catch (mailErr) {
+            console.error('[Team Invite] Email sending failed:', mailErr.message);
+            return res.status(500).json({ error: "Failed to send invitation email, but setting was updated. Check SMTP configuration." });
+        }
+
+        res.json({ success: true, message: `OTP sent to ${email}` });
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
+app.post('/api/admin/team/verify', auth, admin, async (req, res) => {
+    try {
+        const { email, otp } = req.body;
+        if (!email || !otp) {
+            return res.status(400).json({ error: "Email and OTP are required." });
+        }
+
+        const setting = await SystemSettings.findOne({ key: 'team_members' });
+        if (!setting) {
+            return res.status(404).json({ error: "No pending invitations found." });
+        }
+
+        const member = setting.value.find(m => m.email.toLowerCase() === email.toLowerCase());
+        if (!member) {
+            return res.status(404).json({ error: "Invitation not found for this email." });
+        }
+
+        if (member.verified) {
+            return res.status(400).json({ error: "Cofounder is already verified." });
+        }
+
+        if (member.otp !== otp) {
+            return res.status(400).json({ error: "Invalid OTP code." });
+        }
+
+        if (new Date() > new Date(member.otpExpires)) {
+            return res.status(400).json({ error: "OTP code has expired. Please request a new invitation." });
+        }
+
+        member.verified = true;
+        delete member.otp;
+        delete member.otpExpires;
+
+        setting.markModified('value');
+        await setting.save();
+
+        res.json({ success: true, message: "Cofounder successfully verified and added to the team!" });
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
+app.post('/api/admin/team/remove', auth, admin, async (req, res) => {
+    try {
+        const { email } = req.body;
+        if (!email) {
+            return res.status(400).json({ error: "Email is required." });
+        }
+
+        const setting = await SystemSettings.findOne({ key: 'team_members' });
+        if (!setting) {
+            return res.status(404).json({ error: "Team members list not found." });
+        }
+
+        const member = setting.value.find(m => m.email.toLowerCase() === email.toLowerCase());
+        if (!member) {
+            return res.status(404).json({ error: "Member not found." });
+        }
+
+        if (member.role === 'Owner') {
+            return res.status(400).json({ error: "Cannot remove the Owner account." });
+        }
+
+        setting.value = setting.value.filter(m => m.email.toLowerCase() !== email.toLowerCase());
+        setting.markModified('value');
+        await setting.save();
+
+        res.json({ success: true, message: "Team member removed successfully." });
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
 });
 
 // --- ADMIN SEED ROUTE (SYSTEM FIX) ---

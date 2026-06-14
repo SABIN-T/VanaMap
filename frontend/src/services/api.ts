@@ -922,5 +922,60 @@ export const updateSystemSetting = async (key: string, value: any) => {
     return await res.json();
 };
 
+export interface TeamMember {
+    name: string;
+    email: string;
+    role: string;
+    verified: boolean;
+}
+
+export const fetchTeamMembers = async (): Promise<TeamMember[]> => {
+    const res = await fetch(`${API_URL}/admin/team`, {
+        headers: getHeaders()
+    });
+    if (!res.ok) throw new Error("Failed to fetch team members");
+    return await res.json();
+};
+
+export const inviteTeamMember = async (name: string, email: string) => {
+    const res = await fetch(`${API_URL}/admin/team/invite`, {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify({ name, email })
+    });
+    if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || "Failed to invite team member");
+    }
+    return await res.json();
+};
+
+export const verifyTeamMember = async (email: string, otp: string) => {
+    const res = await fetch(`${API_URL}/admin/team/verify`, {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify({ email, otp })
+    });
+    if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || "Failed to verify team member");
+    }
+    return await res.json();
+};
+
+export const removeTeamMember = async (email: string) => {
+    const res = await fetch(`${API_URL}/admin/team/remove`, {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify({ email })
+    });
+    if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || "Failed to remove team member");
+    }
+    return await res.json();
+};
+
+
 
 

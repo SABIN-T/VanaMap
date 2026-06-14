@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { AdminLayout } from './AdminLayout';
 import { Lock, Bell, Database, Shield, Zap, Globe, Mail, Key, UserPlus, Fingerprint, Smartphone, MessageSquare, Webhook, Code2, Users, Truck } from 'lucide-react';
 import { toast } from 'react-hot-toast';
-import { fetchSystemSetting, updateSystemSetting } from '../../services/api';
+import { fetchSystemSetting, updateSystemSetting, fetchTeamMembers, inviteTeamMember, verifyTeamMember, removeTeamMember } from '../../services/api';
+import type { TeamMember } from '../../services/api';
 import styles from './Settings.module.css';
 
 type Tab = 'general' | 'security' | 'notifications' | 'api' | 'team' | 'delivery';
@@ -33,6 +34,95 @@ export const Settings = () => {
         biometric: false,
         webhookEnabled: true
     });
+
+    const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
+    const [teamLoading, setTeamLoading] = useState(false);
+
+    // Invitation/Verification Modal state
+    const [showInviteModal, setShowInviteModal] = useState(false);
+    const [inviteName, setInviteName] = useState('');
+    const [inviteEmail, setInviteEmail] = useState('');
+    const [inviteStep, setInviteStep] = useState<'invite' | 'verify'>('invite');
+    const [otpCode, setOtpCode] = useState('');
+    const [targetEmail, setTargetEmail] = useState('');
+
+    const loadTeamMembers = async () => {
+        try {
+            setTeamLoading(true);
+            const data = await fetchTeamMembers();
+            setTeamMembers(data);
+        } catch (err: any) {
+            console.error("Failed to load team members:", err);
+            toast.error(err.message || "Failed to load team members");
+        } finally {
+            setTeamLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        if (activeTab === 'team') {
+            loadTeamMembers();
+        }
+    }, [activeTab]);
+
+    const handleInviteMember = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!inviteName || !inviteEmail) {
+            toast.error("Please provide both name and email.");
+            return;
+        }
+        const tid = toast.loading("Sending invitation email...");
+        try {
+            await inviteTeamMember(inviteName, inviteEmail);
+            toast.success(`Invitation OTP code sent to ${inviteEmail}!`, { id: tid });
+            setTargetEmail(inviteEmail);
+            setInviteStep('verify');
+        } catch (err: any) {
+            console.error(err);
+            toast.error(err.message || "Failed to invite member", { id: tid });
+        }
+    };
+
+    const handleVerifyMember = async (e: React.FormEvent) => {
+        e.preventDefault();
+        if (!otpCode) {
+            toast.error("Please enter the 6-digit OTP code.");
+            return;
+        }
+        const tid = toast.loading("Verifying OTP code...");
+        try {
+            await verifyTeamMember(targetEmail, otpCode);
+            toast.success("Team member verified and activated successfully!", { id: tid });
+            setShowInviteModal(false);
+            setInviteName('');
+            setInviteEmail('');
+            setOtpCode('');
+            setInviteStep('invite');
+            loadTeamMembers();
+        } catch (err: any) {
+            console.error(err);
+            toast.error(err.message || "Invalid or expired OTP code", { id: tid });
+        }
+    };
+
+    const handleRemoveMember = async (email: string, role: string) => {
+        if (role === 'Owner') {
+            toast.error("Cannot remove the Owner account.");
+            return;
+        }
+        if (!window.confirm(`Are you sure you want to remove ${email} from the team?`)) {
+            return;
+        }
+        const tid = toast.loading("Removing team member...");
+        try {
+            await removeTeamMember(email);
+            toast.success("Team member removed successfully!", { id: tid });
+            loadTeamMembers();
+        } catch (err: any) {
+            console.error(err);
+            toast.error(err.message || "Failed to remove team member", { id: tid });
+        }
+    };
 
     const loadSettings = async () => {
         try {
@@ -354,27 +444,65 @@ export const Settings = () => {
                                     </div>
 
                                     <div className={styles.teamList}>
-                                        <div className={styles.teamMember}>
-                                            <div className={styles.avatar} style={{ backgroundColor: '#6366f1' }}>A</div>
-                                            <div style={{ flex: 1 }}>
-                                                <div style={{ fontWeight: 'bold', color: '#fff' }}>Admin User</div>
-                                                <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>admin@plantfinder.com</div>
+                                        {teamLoading ? (
+                                            <div style={{ display: 'flex', justifyContent: 'center', padding: '2rem' }}>
+                                                <div className="pre-loader-pulse"></div>
                                             </div>
-                                            <div className={styles.roleBadge}>Owner</div>
-                                        </div>
-                                        <div className={styles.teamMember}>
-                                            <div className={styles.avatar} style={{ backgroundColor: '#10b981' }}>S</div>
-                                            <div style={{ flex: 1 }}>
-                                                <div style={{ fontWeight: 'bold', color: '#fff' }}>Support Lead</div>
-                                                <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>support@plantfinder.com</div>
-                                            </div>
-                                            <div className={styles.roleBadge}>Editor</div>
-                                            <button className={styles.removeBtn} onClick={() => toast.error("Cannot remove verified staff")}>Remove</button>
-                                        </div>
+                                        ) : teamMembers.length === 0 ? (
+                                            <div style={{ color: '#94a3b8', textAlign: 'center', padding: '2rem' }}>No team members found.</div>
+                                        ) : (
+                                            teamMembers.map((member, index) => {
+                                                const initials = (member.name || '').substring(0, 1).toUpperCase() || 'U';
+                                                const avatarColor = member.role === 'Owner' ? '#6366f1' : member.role === 'Editor' ? '#10b981' : '#f59e0b';
+                                                return (
+                                                    <div key={index} className={styles.teamMember}>
+                                                        <div className={styles.avatar} style={{ backgroundColor: avatarColor }}>{initials}</div>
+                                                        <div style={{ flex: 1 }}>
+                                                            <div style={{ fontWeight: 'bold', color: '#fff', display: 'flex', alignItems: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
+                                                                {member.name}
+                                                                {member.verified ? (
+                                                                    <span className={styles.statusBadgeVerified}>Verified</span>
+                                                                ) : (
+                                                                    <span className={styles.statusBadgePending}>Pending Verification</span>
+                                                                )}
+                                                            </div>
+                                                            <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>{member.email}</div>
+                                                        </div>
+                                                        <div className={styles.roleBadge}>{member.role}</div>
+                                                        
+                                                        {!member.verified && (
+                                                            <button
+                                                                className={styles.actionBtnOutline}
+                                                                style={{ fontSize: '0.75rem', padding: '0.25rem 0.5rem' }}
+                                                                onClick={() => {
+                                                                    setTargetEmail(member.email);
+                                                                    setInviteStep('verify');
+                                                                    setShowInviteModal(true);
+                                                                }}
+                                                            >
+                                                                Enter OTP
+                                                            </button>
+                                                        )}
+                                                        
+                                                        {member.role !== 'Owner' && (
+                                                            <button
+                                                                className={styles.removeBtn}
+                                                                onClick={() => handleRemoveMember(member.email, member.role)}
+                                                            >
+                                                                Remove
+                                                            </button>
+                                                        )}
+                                                    </div>
+                                                );
+                                            })
+                                        )}
                                     </div>
 
                                     <div style={{ marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '1px solid rgba(255, 255, 255, 0.08)' }}>
-                                        <button className={styles.inviteBtn}>
+                                        <button className={styles.inviteBtn} onClick={() => {
+                                            setInviteStep('invite');
+                                            setShowInviteModal(true);
+                                        }}>
                                             <UserPlus size={18} /> Invite New Member
                                         </button>
                                     </div>
@@ -492,6 +620,93 @@ export const Settings = () => {
                                 </form>
                             )}
 
+                        </div>
+                    </div>
+                )}
+
+                {/* Team Invite & OTP Verification Modal */}
+                {showInviteModal && (
+                    <div className={styles.modalOverlay}>
+                        <div className={styles.modalContent}>
+                            <div className={styles.modalHeader}>
+                                <h3 className={styles.modalTitle}>
+                                    {inviteStep === 'invite' ? 'Invite Team Member' : 'Enter Verification OTP'}
+                                </h3>
+                                <button className={styles.modalClose} onClick={() => {
+                                    setShowInviteModal(false);
+                                    setInviteStep('invite');
+                                    setInviteName('');
+                                    setInviteEmail('');
+                                    setOtpCode('');
+                                }}>×</button>
+                            </div>
+                            
+                            {inviteStep === 'invite' ? (
+                                <form onSubmit={handleInviteMember} className={styles.modalBody}>
+                                    <p className={styles.modalSubtitle}>
+                                        Invite a new cofounder to access the administrative suite. They will receive a 6-digit verification code.
+                                    </p>
+                                    <div className={styles.formGroup}>
+                                        <label className={styles.fieldLabel}>Name</label>
+                                        <input
+                                            type="text"
+                                            className={styles.inputField}
+                                            placeholder="John Doe"
+                                            value={inviteName}
+                                            onChange={e => setInviteName(e.target.value)}
+                                            required
+                                        />
+                                    </div>
+                                    <div className={styles.formGroup}>
+                                        <label className={styles.fieldLabel}>Email Address</label>
+                                        <input
+                                            type="email"
+                                            className={styles.inputField}
+                                            placeholder="john@example.com"
+                                            value={inviteEmail}
+                                            onChange={e => setInviteEmail(e.target.value)}
+                                            required
+                                        />
+                                    </div>
+                                    <div className={styles.modalFooter}>
+                                        <button type="button" className={styles.cancelBtn} onClick={() => setShowInviteModal(false)}>
+                                            Cancel
+                                        </button>
+                                        <button type="submit" className={styles.submitBtn}>
+                                            Send Invitation
+                                        </button>
+                                    </div>
+                                </form>
+                            ) : (
+                                <form onSubmit={handleVerifyMember} className={styles.modalBody}>
+                                    <p className={styles.modalSubtitle}>
+                                        Please enter the 6-digit OTP code sent to <strong>{targetEmail}</strong>.
+                                    </p>
+                                    <div className={styles.formGroup} style={{ alignItems: 'center' }}>
+                                        <input
+                                            type="text"
+                                            className={styles.inputField}
+                                            placeholder="Enter 6-digit code"
+                                            style={{ letterSpacing: '4px', textAlign: 'center', fontSize: '1.25rem', fontWeight: 'bold', width: '220px' }}
+                                            maxLength={6}
+                                            value={otpCode}
+                                            onChange={e => setOtpCode(e.target.value)}
+                                            required
+                                        />
+                                    </div>
+                                    <div className={styles.modalFooter}>
+                                        <button type="button" className={styles.cancelBtn} onClick={() => {
+                                            setInviteStep('invite');
+                                            setOtpCode('');
+                                        }}>
+                                            Back
+                                        </button>
+                                        <button type="submit" className={styles.submitBtn}>
+                                            Verify & Activate
+                                        </button>
+                                    </div>
+                                </form>
+                            )}
                         </div>
                     </div>
                 )}
