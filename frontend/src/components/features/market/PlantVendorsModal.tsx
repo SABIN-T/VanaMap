@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
-import { MapPin, Star, ShieldCheck, X, TrendingUp, ShoppingCart } from 'lucide-react';
+import { MapPin, Star, ShieldCheck, X, TrendingUp, ShoppingCart, AlertCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import type { Plant, Vendor } from '../../../types';
 import { fetchVendors } from '../../../services/api';
 import { formatCurrency } from '../../../utils/currency';
 import { useCart } from '../../../context/CartContext';
 import { VendorDetailsModal } from './VendorDetailsModal';
+import { getDistanceFromLatLonInKm } from '../../../utils/logic';
+import toast from 'react-hot-toast';
 import styles from './PlantVendorsModal.module.css';
 
 interface PlantVendorsModalProps {
@@ -19,6 +21,8 @@ export const PlantVendorsModal = ({ plant, onClose }: PlantVendorsModalProps) =>
     const [vendors, setVendors] = useState<Vendor[]>([]);
     const [loading, setLoading] = useState(true);
     const [selectedVendor, setSelectedVendor] = useState<any | null>(null);
+    const [userCoords, setUserCoords] = useState<{ lat: number; lng: number } | null>(null);
+    const [locationBlocked, setLocationBlocked] = useState(false);
 
     const handleQuickBuy = (e: React.MouseEvent, v: any) => {
         e.stopPropagation();
@@ -29,6 +33,34 @@ export const PlantVendorsModal = ({ plant, onClose }: PlantVendorsModalProps) =>
 
     useEffect(() => {
         loadVendors();
+
+        // 1. Try to load location from sessionStorage
+        const savedLat = sessionStorage.getItem('user_latitude');
+        const savedLng = sessionStorage.getItem('user_longitude');
+        if (savedLat && savedLng) {
+            setUserCoords({ lat: parseFloat(savedLat), lng: parseFloat(savedLng) });
+            return;
+        }
+
+        // 2. Otherwise query geolocation silently
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    const coords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+                    setUserCoords(coords);
+                    setLocationBlocked(false);
+                    sessionStorage.setItem('user_latitude', coords.lat.toString());
+                    sessionStorage.setItem('user_longitude', coords.lng.toString());
+                },
+                (err) => {
+                    console.warn("Silent location capture in modal failed:", err);
+                    if (err.code === err.PERMISSION_DENIED) {
+                        setLocationBlocked(true);
+                    }
+                },
+                { timeout: 5000, enableHighAccuracy: false }
+            );
+        }
     }, []);
 
     const loadVendors = async () => {
@@ -53,7 +85,9 @@ export const PlantVendorsModal = ({ plant, onClose }: PlantVendorsModalProps) =>
             else if (legacyMatch) price = plant.price || 0;
             else return null;
 
-            const distance = v.distance || 9999;
+            const distance = userCoords 
+                ? getDistanceFromLatLonInKm(userCoords.lat, userCoords.lng, v.latitude, v.longitude)
+                : (v.distance || 9999);
 
             const info = {
                 ...v,
@@ -69,6 +103,10 @@ export const PlantVendorsModal = ({ plant, onClose }: PlantVendorsModalProps) =>
         .sort((a, b) => {
             if (a.highlyRecommended && !b.highlyRecommended) return -1;
             if (!a.highlyRecommended && b.highlyRecommended) return 1;
+            // Also sort by distance if prices are equal and coordinates available
+            if (a.currentPrice === b.currentPrice) {
+                return a.realDistance - b.realDistance;
+            }
             return a.currentPrice - b.currentPrice;
         });
 
@@ -92,6 +130,55 @@ export const PlantVendorsModal = ({ plant, onClose }: PlantVendorsModalProps) =>
                         </div>
                     </div>
                 </div>
+
+                {locationBlocked && (
+                    <div style={{
+                        background: 'rgba(239, 68, 68, 0.1)',
+                        border: '1px solid rgba(239, 68, 68, 0.2)',
+                        borderRadius: '12px',
+                        padding: '10px 12px',
+                        margin: '12px 24px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '8px',
+                        fontSize: '0.75rem',
+                        color: '#fecaca',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+                    }}>
+                        <AlertCircle size={14} color="#ef4444" style={{ flexShrink: 0 }} />
+                        <span style={{ flexGrow: 1 }}>Location is not enabled. Please enable location, otherwise nearby shops will not show.</span>
+                        <button
+                            onClick={() => {
+                                navigator.geolocation.getCurrentPosition(
+                                    (pos) => {
+                                        const coords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+                                        setUserCoords(coords);
+                                        setLocationBlocked(false);
+                                        sessionStorage.setItem('user_latitude', coords.lat.toString());
+                                        sessionStorage.setItem('user_longitude', coords.lng.toString());
+                                        toast.success("Location enabled!");
+                                    },
+                                    (err) => {
+                                        console.warn(err);
+                                        toast.error("Location blocked. Please adjust your browser settings.");
+                                    }
+                                );
+                            }}
+                            style={{
+                                background: '#ef4444',
+                                color: '#white',
+                                border: 'none',
+                                padding: '4px 10px',
+                                borderRadius: '6px',
+                                cursor: 'pointer',
+                                fontWeight: 700,
+                                whiteSpace: 'nowrap'
+                            }}
+                        >
+                            Enable
+                        </button>
+                    </div>
+                )}
 
                 <div className={styles.vendorList}>
                     {loading ? (

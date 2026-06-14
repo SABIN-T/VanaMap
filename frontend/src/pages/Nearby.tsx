@@ -46,6 +46,8 @@ export const Nearby = () => {
     const [nearbyVendors, setNearbyVendors] = useState<Vendor[]>([]);
     const [loading, setLoading] = useState(false);
     const [loadingStatus, setLoadingStatus] = useState("Scanning nearby network...");
+    const [permissionState, setPermissionState] = useState<'granted' | 'denied' | 'prompt' | 'unsupported'>('prompt');
+    const [gpsError, setGpsError] = useState<string | null>(null);
 
     // Initialize tab from navigation state or default to verified
     const [activeTab, setActiveTab] = useState<'verified' | 'unverified' | 'all'>((location.state as { tab?: 'verified' | 'unverified' | 'all' })?.tab || 'all');
@@ -263,6 +265,7 @@ out center;
         if (loading) return;
         const tid = isManual ? toast.loading("Syncing with satellite...") : null;
         setLoading(true);
+        setGpsError(null);
 
         if (isManual) {
             // Force refresh when manual button is clicked
@@ -272,6 +275,8 @@ out center;
 
         if (!navigator.geolocation) {
             if (tid) toast.error("GPS Not Supported", { id: tid });
+            setPermissionState('unsupported');
+            setGpsError("GPS is not supported by your browser");
             setLoading(false);
             return;
         }
@@ -280,11 +285,26 @@ out center;
             async (pos) => {
                 const { latitude, longitude } = pos.coords;
                 setPosition([latitude, longitude]);
+                setPermissionState('granted');
+                setGpsError(null);
+
+                // Store coordinates in sessionStorage so other pages can use it instantly
+                sessionStorage.setItem('user_latitude', latitude.toString());
+                sessionStorage.setItem('user_longitude', longitude.toString());
+
                 if (tid) toast.success("Satellites locked!", { id: tid });
                 await fetchAllData(latitude, longitude, searchRadius, isManual);
             },
             async (err) => {
                 console.warn(`GPS failed: ${err.message}. Trying IP fallback...`);
+                
+                if (err.code === err.PERMISSION_DENIED) {
+                    setPermissionState('denied');
+                    setGpsError("Location is not enabled. Please enable location, otherwise nearby shops will not show.");
+                } else {
+                    setGpsError(`GPS capture failed: ${err.message}`);
+                }
+
                 try {
                     const response = await fetch('https://ipapi.co/json/');
                     const data = await response.json();
@@ -305,6 +325,27 @@ out center;
             { enableHighAccuracy: true, timeout: 8000 }
         );
     }, [loading, searchRadius]);
+
+    useEffect(() => {
+        if (!navigator.permissions || !navigator.permissions.query) {
+            setPermissionState('unsupported');
+            return;
+        }
+        navigator.permissions.query({ name: 'geolocation' as PermissionName })
+            .then((status) => {
+                setPermissionState(status.state as any);
+                status.onchange = () => {
+                    setPermissionState(status.state as any);
+                    if (status.state === 'granted') {
+                        setGpsError(null);
+                        handleGetLocation(false);
+                    }
+                };
+            })
+            .catch(() => {
+                setPermissionState('unsupported');
+            });
+    }, [handleGetLocation]);
 
     useEffect(() => {
         if (!hasInitialLocateRef.current) {
@@ -338,23 +379,59 @@ out center;
                 <meta property="og:image" content="https://www.vanamap.online/vanamap_social_card.png" />
                 <link rel="canonical" href="https://www.vanamap.online/nearby" />
             </Helmet>
-            <div className={styles.noticeBanner} style={{ background: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.2)' }}>
-                <MapPin className={styles.noticeIcon} size={20} color="#10b981" />
-                <div className={styles.noticeText} style={{ color: '#ecfdf5' }}>
-                    {placeName ? (
-                        <>
-                            <span style={{ color: '#34d399', fontWeight: 700 }}>{placeName.toUpperCase()}</span> — Identifying nearby green spaces...
-                        </>
-                    ) : (
-                        <>
-                            <span>GPS Active:</span> Finding the best plant shops around you.
-                        </>
-                    )}
+            {permissionState === 'denied' || gpsError ? (
+                <div className={styles.noticeBanner} style={{ background: 'rgba(239, 68, 68, 0.15)', border: '1px solid rgba(239, 68, 68, 0.3)' }}>
+                    <AlertCircle className={styles.noticeIcon} size={20} color="#ef4444" />
+                    <div className={styles.noticeText} style={{ color: '#fecaca' }}>
+                        <span>Location is not enabled. Please enable location, otherwise nearby shops will not show.</span>
+                    </div>
+                    <div style={{ display: 'flex', gap: '8px', marginLeft: 'auto' }}>
+                        <Button variant="outline" size="sm" onClick={() => {
+                            toast((t) => (
+                                <div style={{ fontSize: '0.85rem', color: '#fff', padding: '4px' }}>
+                                    <p style={{ margin: 0, fontWeight: 700, color: '#fca5a5' }}>How to enable location:</p>
+                                    <p style={{ margin: '6px 0', opacity: 0.9, fontSize: '0.75rem', lineHeight: '1.4' }}>
+                                        <strong>Desktop:</strong> Click the settings/lock icon next to the URL in your browser bar and set Location to "Allow".<br />
+                                        <strong>Mobile:</strong> Tap browser settings or app info ➔ Permissions ➔ Location ➔ Allow.
+                                    </p>
+                                    <button 
+                                        onClick={() => {
+                                            toast.dismiss(t.id);
+                                            handleGetLocation(true);
+                                        }}
+                                        style={{ marginTop: '8px', background: '#10b981', color: '#fff', border: 'none', padding: '5px 12px', borderRadius: '6px', cursor: 'pointer', fontWeight: 700 }}
+                                    >
+                                        Try Enable
+                                    </button>
+                                </div>
+                            ), { duration: 10000, style: { background: '#1e293b', border: '1px solid #334155' } });
+                        }} style={{ borderColor: 'rgba(239, 68, 68, 0.4)', color: '#f87171' }}>
+                            Enable Location
+                        </Button>
+                        <Button variant="outline" size="sm" onClick={() => handleGetLocation(true)} disabled={loading} style={{ borderColor: 'rgba(255,255,255,0.2)', color: 'white' }}>
+                            <RefreshCw size={14} className={loading ? 'animate-spin' : ''} /> Retry GPS
+                        </Button>
+                    </div>
                 </div>
-                <Button variant="outline" size="sm" onClick={() => handleGetLocation(true)} disabled={loading} style={{ marginLeft: 'auto', borderColor: 'rgba(255,255,255,0.2)', color: 'white' }}>
-                    <RefreshCw size={14} className={loading ? 'animate-spin' : ''} /> Refresh GPS
-                </Button>
-            </div>
+            ) : (
+                <div className={styles.noticeBanner} style={{ background: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.2)' }}>
+                    <MapPin className={styles.noticeIcon} size={20} color="#10b981" />
+                    <div className={styles.noticeText} style={{ color: '#ecfdf5' }}>
+                        {placeName ? (
+                            <>
+                                <span style={{ color: '#34d399', fontWeight: 700 }}>{placeName.toUpperCase()}</span> — Identifying nearby green spaces...
+                            </>
+                        ) : (
+                            <>
+                                <span>GPS Active:</span> Finding the best plant shops around you.
+                            </>
+                        )}
+                    </div>
+                    <Button variant="outline" size="sm" onClick={() => handleGetLocation(true)} disabled={loading} style={{ marginLeft: 'auto', borderColor: 'rgba(255,255,255,0.2)', color: 'white' }}>
+                        <RefreshCw size={14} className={loading ? 'animate-spin' : ''} /> Refresh GPS
+                    </Button>
+                </div>
+            )}
 
             <div className={styles.headerSection} style={{ textAlign: 'center', marginBottom: '3rem' }}>
                 <h1 className={styles.title} style={{ fontSize: '2.5rem', fontWeight: 900, marginBottom: '0.5rem' }}>Plant Shops Near You</h1>
@@ -516,6 +593,58 @@ out center;
                             </button>
                         </div>
                     </div>
+
+                    {/* Persistent Geolocation Blocked Banner */}
+                    {(permissionState === 'denied' || gpsError) && (
+                        <div style={{
+                            marginBottom: '1rem',
+                            padding: '1.25rem',
+                            background: 'rgba(239, 68, 68, 0.08)',
+                            border: '1px solid rgba(239, 68, 68, 0.25)',
+                            borderRadius: '16px',
+                            boxShadow: '0 4px 15px rgba(0,0,0,0.15)',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            gap: '1rem',
+                            animation: 'fadeIn 0.5s ease-out'
+                        }}>
+                            <div style={{ display: 'flex', gap: '0.8rem', alignItems: 'flex-start' }}>
+                                <div style={{
+                                    padding: '10px',
+                                    background: 'rgba(239, 68, 68, 0.15)',
+                                    borderRadius: '12px',
+                                    flexShrink: 0
+                                }}>
+                                    <AlertCircle size={20} color="#ef4444" />
+                                </div>
+                                <div>
+                                    <h4 style={{ margin: '0 0 4px 0', fontSize: '0.95rem', fontWeight: 700, color: '#fca5a5' }}>Location access is not enabled</h4>
+                                    <p style={{ margin: 0, fontSize: '0.82rem', lineHeight: '1.4', color: '#cbd5e1' }}>
+                                        Please enable location, otherwise nearby shops will not show. Using fallback IP location instead.
+                                    </p>
+                                </div>
+                            </div>
+                            <Button
+                                size="md"
+                                onClick={() => handleGetLocation(true)}
+                                style={{
+                                    width: '100%',
+                                    background: 'linear-gradient(135deg, #ef4444 0%, #b91c1c 100%)',
+                                    color: '#fff',
+                                    borderRadius: '10px',
+                                    fontWeight: 700,
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    gap: '8px',
+                                    border: 'none',
+                                    height: '44px'
+                                }}
+                            >
+                                <MapPin size={16} /> Enable Location
+                            </Button>
+                        </div>
+                    )}
 
                     {/* Public/All Tab Warning Hint Actions - Shown only when no results found AND not scanning */}
                     {!loading && !isScanningPublic && (activeTab === 'unverified' || activeTab === 'all') && displayVendors.length === 0 && (
