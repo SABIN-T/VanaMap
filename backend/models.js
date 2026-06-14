@@ -271,6 +271,18 @@ VendorSchema.index({ city: 1, state: 1 });
 VendorSchema.index({ verified: 1 });
 VendorSchema.index({ verified: 1, 'inventory.plantId': 1 }); // Shop queries with stock checks
 
+// Speed up chat retrieval for users
+ChatSchema.index({ userId: 1, timestamp: -1 });
+
+// Speed up sales tracking for vendors
+SaleSchema.index({ vendorId: 1, timestamp: -1 });
+
+// Speed up notifications display and filtering
+NotificationSchema.index({ read: 1, date: -1 });
+
+// Speed up review lookups for vendor pages
+ReviewSchema.index({ vendorId: 1, rating: -1 });
+
 // Speed up login and auth checks
 // UserSchema.index({ email: 1 }); // Already defined in schema with unique: true
 

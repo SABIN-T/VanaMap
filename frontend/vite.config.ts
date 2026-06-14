@@ -1,13 +1,29 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import viteCompression from 'vite-plugin-compression'
+import path from 'path'
 
 // https://vite.dev/config/
 // Build: 2026-01-14 - Cache cleared
 export default defineConfig({
+  resolve: {
+    alias: [
+      { find: 'react', replacement: path.resolve(__dirname, 'node_modules/react') },
+      { find: 'react-dom', replacement: path.resolve(__dirname, 'node_modules/react-dom') },
+      { find: 'react-router-dom', replacement: path.resolve(__dirname, 'node_modules/react-router-dom') },
+      { find: /^react-router$/, replacement: path.resolve(__dirname, 'node_modules/react-router') }
+    ]
+  },
   plugins: [
     react(),
-    viteCompression(),
+    viteCompression({
+      algorithm: 'gzip',
+      ext: '.gz',
+    }),
+    viteCompression({
+      algorithm: 'brotliCompress',
+      ext: '.br',
+    }),
     // Disabled CSS inlining - causing preload errors
     /*
     {
