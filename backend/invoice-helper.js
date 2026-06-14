@@ -140,9 +140,13 @@ const generateInvoicePDF = (sale, user, vendor) => {
                .text('Subtotal:', 350, y, { width: 90, align: 'right' })
                .text('Delivery Charge:', 350, y + 16, { width: 90, align: 'right' });
 
+            const itemSubtotal = sale.price * sale.quantity;
+            const delFee = sale.deliveryFee || 0;
+            const finalTotal = itemSubtotal + delFee;
+
             doc.fillColor(COLORS.dark)
-               .text(`₹${sale.price * sale.quantity}`, 455, y, { width: 80, align: 'right' })
-               .text('₹0 (Free Delivery)', 455, y + 16, { width: 80, align: 'right' });
+               .text(`₹${itemSubtotal}`, 455, y, { width: 80, align: 'right' })
+               .text(delFee > 0 ? `₹${delFee}` : '₹0 (Free Delivery)', 455, y + 16, { width: 80, align: 'right' });
 
             y += 38;
             doc.rect(340, y, 205.28, 24).fill(COLORS.lightBg);
@@ -154,7 +158,7 @@ const generateInvoicePDF = (sale, user, vendor) => {
 
             doc.fontSize(11).font('Helvetica-Bold').fillColor(COLORS.primaryDark)
                .text('TOTAL PAID:', 350, y + 6, { width: 95 })
-               .text(`₹${sale.price * sale.quantity}`, 450, y + 6, { width: 85, align: 'right' });
+               .text(`₹${finalTotal}`, 450, y + 6, { width: 85, align: 'right' });
 
             y += 60;
 

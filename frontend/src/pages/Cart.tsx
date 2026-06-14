@@ -332,10 +332,22 @@ export const Cart = () => {
             return;
         }
 
-        const { fee, outOfRange } = getDeliveryDetails(vendorId);
+        const { fee, distance, outOfRange } = getDeliveryDetails(vendorId);
         if (outOfRange) {
             toast.error('Your delivery location is out of range for this vendor');
             return;
+        }
+
+        // Validate stock quantities
+        if (!isVanaMap && vendor.inventory) {
+            for (const item of vItems) {
+                const invItem = vendor.inventory.find(i => i.plantId === item.plant.id);
+                const stockQty = invItem?.quantity !== undefined ? invItem.quantity : 0;
+                if (stockQty < item.quantity) {
+                    toast.error(`Insufficient stock for ${item.plant.name}. Only ${stockQty} available.`);
+                    return;
+                }
+            }
         }
 
         const totalWithDelivery = totalPrice + fee;
@@ -349,13 +361,15 @@ export const Cart = () => {
             return;
         }
 
-        const itemPayload = vItems.map(i => ({
+        const itemPayload = vItems.map((i, index) => ({
             plantId: i.plant.id,
             vendorId: vendor.id,
             vendorName: vendor.name,
             quantity: i.quantity,
             price: i.vendorPrice || i.plant.price || 0,
-            plantName: i.plant.name
+            plantName: i.plant.name,
+            deliveryFee: index === 0 ? fee : 0,
+            deliveryDistance: distance
         }));
 
         const delivery = getDeliveryData();
@@ -461,6 +475,18 @@ export const Cart = () => {
             return;
         }
 
+        // Validate stock quantities
+        if (vendorId !== 'vanamap' && vendor.inventory) {
+            for (const item of vItems) {
+                const invItem = vendor.inventory.find(i => i.plantId === item.plant.id);
+                const stockQty = invItem?.quantity !== undefined ? invItem.quantity : 0;
+                if (stockQty < item.quantity) {
+                    toast.error(`Insufficient stock for ${item.plant.name}. Only ${stockQty} available.`);
+                    return;
+                }
+            }
+        }
+
         const delivery = getDeliveryData();
 
         // Construct Message
@@ -501,13 +527,15 @@ export const Cart = () => {
         const url = `https://wa.me/${cleanNumber.length < 10 ? '91' + cleanNumber : cleanNumber}?text=${encodeURIComponent(msg)}`;
 
         // Background award points and track sale
-        const purchaseData = vItems.map(i => ({
+        const purchaseData = vItems.map((i, index) => ({
             plantId: i.plant.id,
             vendorId: vendor.id,
             vendorName: vendor.name,
             quantity: i.quantity,
             price: i.vendorPrice || i.plant.price || 0,
-            plantName: i.plant.name
+            plantName: i.plant.name,
+            deliveryFee: index === 0 ? fee : 0,
+            deliveryDistance: distance
         }));
         completePurchase(purchaseData, delivery).catch(console.error);
 

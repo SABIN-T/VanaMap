@@ -14,6 +14,18 @@ import type { Plant, Vendor } from '../types';
 import toast from 'react-hot-toast';
 import styles from './UserDashboard.module.css';
 import { UserDashboardLayout } from './UserDashboardLayout';
+import L from 'leaflet';
+import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet';
+import icon from 'leaflet/dist/images/marker-icon.png';
+import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+
+const DefaultIcon = L.icon({
+    iconUrl: icon,
+    shadowUrl: iconShadow,
+    iconSize: [25, 41],
+    iconAnchor: [12, 41]
+});
+L.Marker.prototype.options.icon = DefaultIcon;
 
 export const UserDashboard = () => {
     const { user, toggleFavorite, loading, logout } = useAuth();
@@ -41,6 +53,7 @@ export const UserDashboard = () => {
     const [showOrdersModal, setShowOrdersModal] = useState(false);
     const [myOrders, setMyOrders] = useState<any[]>([]);
     const [loadingOrders, setLoadingOrders] = useState(false);
+    const [expandedOrderId, setExpandedOrderId] = useState<string | null>(null);
     const [locForm, setLocForm] = useState({ city: '', state: '' });
 
     // Verification State
@@ -855,6 +868,20 @@ export const UserDashboard = () => {
                                         cancelled: { color: '#ef4444', bg: 'rgba(239, 68, 68, 0.1)', icon: <XCircle size={14} /> }
                                     };
                                     const sc = statusConfig[order.status] || statusConfig.pending;
+                                    
+                                    const isExpanded = expandedOrderId === order._id;
+                                    const customerLat = order.deliveryAddress?.latitude;
+                                    const customerLng = order.deliveryAddress?.longitude;
+                                    const vendorLat = order.vendorInfo?.latitude;
+                                    const vendorLng = order.vendorInfo?.longitude;
+                                    const hasRoute = !!(customerLat && customerLng && vendorLat && vendorLng);
+
+                                    const steps = [
+                                        { label: 'Placed', active: !order.status || ['pending', 'completed', 'shipped', 'delivered'].includes(order.status) },
+                                        { label: 'Packed', active: ['completed', 'shipped', 'delivered'].includes(order.status) },
+                                        { label: 'Shipped', active: ['shipped', 'delivered'].includes(order.status) },
+                                        { label: 'Delivered', active: ['delivered'].includes(order.status) }
+                                    ];
 
                                     return (
                                         <div key={order._id} style={{
@@ -891,19 +918,196 @@ export const UserDashboard = () => {
                                             </div>
 
                                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '0.75rem', paddingTop: '0.6rem', borderTop: '1px solid rgba(255,255,255,0.05)' }}>
-                                                <div style={{ fontSize: '0.75rem', color: '#64748b' }}>
+                                                <div style={{ fontSize: '0.75rem', color: '#64748b', flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginRight: '1rem' }}>
                                                     {order.deliveryAddress?.address ? (
                                                         <span style={{ display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
-                                                            <MapPin size={11} /> {order.deliveryAddress.address}{order.deliveryAddress.city ? `, ${order.deliveryAddress.city}` : ''}
+                                                            <MapPin size={11} style={{ flexShrink: 0 }} /> {order.deliveryAddress.address}{order.deliveryAddress.city ? `, ${order.deliveryAddress.city}` : ''}
                                                         </span>
                                                     ) : (
                                                         <span style={{ fontStyle: 'italic' }}>No address</span>
                                                     )}
                                                 </div>
-                                                <div style={{ fontSize: '0.7rem', color: '#475569' }}>
-                                                    {new Date(order.timestamp).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexShrink: 0 }}>
+                                                    <div style={{ fontSize: '0.75rem', color: '#475569' }}>
+                                                        {new Date(order.timestamp).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                                    </div>
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setExpandedOrderId(isExpanded ? null : order._id);
+                                                        }}
+                                                        style={{
+                                                            background: isExpanded ? 'rgba(255,255,255,0.1)' : 'rgba(168, 85, 247, 0.1)',
+                                                            border: 'none',
+                                                            borderRadius: '0.4rem',
+                                                            padding: '0.25rem 0.5rem',
+                                                            color: isExpanded ? '#fff' : '#a855f7',
+                                                            fontSize: '0.7rem',
+                                                            fontWeight: 700,
+                                                            cursor: 'pointer'
+                                                        }}
+                                                    >
+                                                        {isExpanded ? 'Hide Tracker' : 'Track Route'}
+                                                    </button>
                                                 </div>
                                             </div>
+
+                                            {isExpanded && (
+                                                <div style={{ marginTop: '1rem', borderTop: '1px dashed rgba(255,255,255,0.1)', paddingTop: '1rem' }}>
+                                                    {/* Timeline Tracker */}
+                                                    {order.status === 'cancelled' ? (
+                                                        <div style={{ color: '#ef4444', fontSize: '0.85rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                                                            <XCircle size={16} /> This order was cancelled.
+                                                        </div>
+                                                    ) : (
+                                                        <div style={{ marginBottom: '1.25rem' }}>
+                                                            <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative', padding: '0 0.5rem' }}>
+                                                                {/* Background line */}
+                                                                <div style={{
+                                                                    position: 'absolute',
+                                                                    top: '12px',
+                                                                    left: '5%',
+                                                                    right: '5%',
+                                                                    height: '2px',
+                                                                    background: 'rgba(255, 255, 255, 0.1)',
+                                                                    zIndex: 0
+                                                                }} />
+                                                                {/* Progress line */}
+                                                                <div style={{
+                                                                    position: 'absolute',
+                                                                    top: '12px',
+                                                                    left: '5%',
+                                                                    width: `${
+                                                                        order.status === 'delivered' ? '90%' :
+                                                                        order.status === 'shipped' ? '60%' :
+                                                                        order.status === 'completed' ? '30%' : '0%'
+                                                                    }`,
+                                                                    height: '2px',
+                                                                    background: '#10b981',
+                                                                    zIndex: 0,
+                                                                    transition: 'width 0.4s ease'
+                                                                }} />
+
+                                                                {steps.map((step, idx) => (
+                                                                    <div key={idx} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 1, position: 'relative', width: '25%' }}>
+                                                                        <div style={{
+                                                                            width: '24px',
+                                                                            height: '24px',
+                                                                            borderRadius: '50%',
+                                                                            background: step.active ? '#10b981' : '#1e293b',
+                                                                            border: `2px solid ${step.active ? '#10b981' : 'rgba(255, 255, 255, 0.2)'}`,
+                                                                            display: 'flex',
+                                                                            alignItems: 'center',
+                                                                            justifyContent: 'center',
+                                                                            color: step.active ? '#000' : 'rgba(255, 255, 255, 0.4)',
+                                                                            fontSize: '10px',
+                                                                            fontWeight: 800,
+                                                                            transition: 'all 0.3s ease'
+                                                                        }}>
+                                                                            {step.active ? '✓' : idx + 1}
+                                                                        </div>
+                                                                        <span style={{
+                                                                            marginTop: '0.4rem',
+                                                                            fontSize: '0.75rem',
+                                                                            fontWeight: step.active ? 700 : 500,
+                                                                            color: step.active ? '#fff' : 'rgba(255, 255, 255, 0.4)'
+                                                                        }}>
+                                                                            {step.label}
+                                                                        </span>
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        </div>
+                                                    )}
+
+                                                    {/* Delivery Routing Map */}
+                                                    {hasRoute ? (
+                                                        <div style={{ height: '220px', width: '100%', borderRadius: '0.75rem', overflow: 'hidden', marginTop: '1.25rem', border: '1px solid rgba(255, 255, 255, 0.1)', position: 'relative', zIndex: 1 }}>
+                                                            <MapContainer
+                                                                center={[(customerLat + vendorLat) / 2, (customerLng + vendorLng) / 2]}
+                                                                zoom={12}
+                                                                style={{ height: '100%', width: '100%' }}
+                                                                zoomControl={false}
+                                                            >
+                                                                <TileLayer
+                                                                    url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+                                                                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+                                                                />
+                                                                <Marker position={[vendorLat, vendorLng]}>
+                                                                    <Popup>
+                                                                        <div style={{ color: '#000', fontSize: '0.8rem' }}>
+                                                                            <strong>Shop:</strong> {order.vendorInfo?.name || 'Vendor Shop'}<br/>
+                                                                            <span>Store Pickup Point</span>
+                                                                        </div>
+                                                                    </Popup>
+                                                                </Marker>
+                                                                <Marker position={[customerLat, customerLng]}>
+                                                                    <Popup>
+                                                                        <div style={{ color: '#000', fontSize: '0.8rem' }}>
+                                                                            <strong>Delivery Location</strong><br/>
+                                                                            <span>{order.deliveryAddress?.address}</span>
+                                                                        </div>
+                                                                    </Popup>
+                                                                </Marker>
+                                                                <Polyline
+                                                                    positions={[[vendorLat, vendorLng], [customerLat, customerLng]]}
+                                                                    pathOptions={{
+                                                                        color: '#10b981',
+                                                                        dashArray: '8, 8',
+                                                                        weight: 4,
+                                                                        opacity: 0.8
+                                                                    }}
+                                                                />
+                                                            </MapContainer>
+                                                        </div>
+                                                    ) : (
+                                                        <div style={{
+                                                            background: 'rgba(245, 158, 11, 0.05)',
+                                                            border: '1px solid rgba(245, 158, 11, 0.15)',
+                                                            borderRadius: '0.75rem',
+                                                            padding: '0.75rem',
+                                                            marginTop: '1.25rem',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            gap: '0.5rem',
+                                                            fontSize: '0.8rem',
+                                                            color: '#f59e0b'
+                                                        }}>
+                                                            <MapPin size={16} />
+                                                            <span>Delivery map routing unavailable: shop or delivery coordinates missing.</span>
+                                                        </div>
+                                                    )}
+
+                                                    {/* Invoice Download Action */}
+                                                    <div style={{ marginTop: '1.25rem', display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                                                        <button
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                const token = JSON.parse(localStorage.getItem('user') || '{}').token;
+                                                                window.open(`${import.meta.env.VITE_API_URL || 'https://plantoxy.onrender.com/api'}/user/orders/${order._id}/invoice?token=${token}`, '_blank');
+                                                            }}
+                                                            style={{
+                                                                background: 'rgba(16, 185, 129, 0.15)',
+                                                                border: '1px solid rgba(16, 185, 129, 0.3)',
+                                                                color: '#10b981',
+                                                                borderRadius: '0.5rem',
+                                                                padding: '0.4rem 0.8rem',
+                                                                fontSize: '0.8rem',
+                                                                fontWeight: 700,
+                                                                cursor: 'pointer',
+                                                                display: 'flex',
+                                                                alignItems: 'center',
+                                                                gap: '0.4rem',
+                                                                transition: 'all 0.2s'
+                                                            }}
+                                                            onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(16, 185, 129, 0.25)'}
+                                                            onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(16, 185, 129, 0.15)'}
+                                                        >
+                                                            📄 Download Invoice
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            )}
                                         </div>
                                     );
                                 })}

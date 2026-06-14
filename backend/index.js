@@ -414,7 +414,12 @@ if (!JWT_SECRET) {
 const auth = (req, res, next) => {
     let token = req.header('Authorization')?.replace('Bearer ', '');
 
-    // Fallback to cookie if header is missing
+    // Fallback to query parameters if header is missing
+    if (!token && req.query && req.query.token) {
+        token = req.query.token;
+    }
+
+    // Fallback to cookie if header and query are missing
     if (!token && req.cookies && req.cookies.token) {
         token = req.cookies.token;
     }
@@ -1040,10 +1045,15 @@ app.post('/api/payments/verify-cart', auth, async (req, res) => {
                 price: item.price,
                 quantity: item.quantity || 1,
                 status: 'completed',
-                deliveryAddress: deliveryInfo
+                deliveryAddress: deliveryInfo,
+                deliveryFee: item.deliveryFee || 0,
+                deliveryDistance: item.deliveryDistance || 0
             });
             await sale.save();
             sales.push(sale);
+
+            // Auto-deduct inventory
+            await deductInventory(item.vendorId, item.plantId, item.quantity || 1);
 
             // Award 200 points per plant purchased
             pointsToAward += (item.quantity || 1) * 200;
@@ -1120,6 +1130,102 @@ app.post('/api/payments/verify-cart', auth, async (req, res) => {
     } catch (error) {
         console.error("Cart Verify Error:", error);
         res.status(500).json({ error: error.message });
+    }
+});
+
+// Inventory Deduction and Low Stock Alert Helper
+const deductInventory = async (vendorId, plantId, quantityDeducted) => {
+    try {
+        const vendor = await Vendor.findOne({ id: vendorId });
+        if (!vendor) return;
+
+        const item = vendor.inventory.find(i => i.plantId === plantId);
+        if (!item) return;
+
+        const oldQty = item.quantity || 0;
+        const newQty = Math.max(0, oldQty - quantityDeducted);
+        item.quantity = newQty;
+
+        if (newQty === 0) {
+            item.inStock = false;
+        }
+
+        await vendor.save();
+
+        const threshold = item.lowStockThreshold !== undefined ? item.lowStockThreshold : 5;
+        if (newQty <= threshold) {
+            const plant = await Plant.findOne({ id: plantId });
+            const plantName = plant ? plant.name : plantId;
+            
+            await broadcastAlert('low_stock', `Low Stock Alert: ${plantName} has only ${newQty} items left! ⚠️`, {
+                vendorId: vendor.id,
+                title: 'Low Stock Alert ⚠️',
+                plantId
+            });
+
+            if (vendor.ownerEmail) {
+                try {
+                    await sendEmail({
+                        from: 'VanaMap Inventory <inventory@vanamap.online>',
+                        to: vendor.ownerEmail,
+                        subject: `Alert: Low stock for ${plantName}! ⚠️`,
+                        html: `
+                            <div style="font-family: Arial, sans-serif; padding: 20px; color: #333;">
+                                <h2 style="color: #d97706;">⚠️ Low Stock Alert</h2>
+                                <p>Hello <strong>${vendor.name}</strong>,</p>
+                                <p>This is to notify you that the inventory for <strong>${plantName}</strong> has dropped below your threshold.</p>
+                                <div style="background: #fef3c7; border: 1px solid #f59e0b; padding: 15px; border-radius: 8px; margin: 20px 0;">
+                                    <p style="margin: 0; font-size: 16px;">Current Quantity: <strong>${newQty}</strong></p>
+                                    <p style="margin: 5px 0 0; font-size: 14px; color: #b45309;">Threshold: ${threshold}</p>
+                                </div>
+                                <p>Please restock soon to ensure customers can continue ordering this specimen online.</p>
+                                <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;" />
+                                <p style="font-size: 12px; color: #777;">Sent automatically by VanaMap Inventory System.</p>
+                            </div>
+                        `
+                    });
+                    console.log(`[Low Stock Email] Sent alert to vendor: ${vendor.ownerEmail}`);
+                } catch (mailErr) {
+                    console.error('[Low Stock Email] Failed to send email:', mailErr.message);
+                }
+            }
+        }
+    } catch (err) {
+        console.error('Inventory Deduction Error:', err);
+    }
+};
+
+// Get Order Invoice PDF Download
+app.get('/api/user/orders/:id/invoice', auth, async (req, res) => {
+    try {
+        const sale = await Sale.findById(req.params.id);
+        if (!sale) return res.status(404).json({ error: 'Order not found' });
+        
+        const isBuyer = sale.userId && sale.userId.toString() === req.user.id;
+        
+        let isVendor = false;
+        const vendor = await Vendor.findOne({ id: sale.vendorId });
+        if (vendor && (vendor.userId === req.user.id || vendor.ownerEmail === req.user.email)) {
+            isVendor = true;
+        }
+        
+        const isAdmin = req.user.role === 'admin';
+        
+        if (!isBuyer && !isVendor && !isAdmin) {
+            return res.status(403).json({ error: 'Access denied' });
+        }
+        
+        const user = sale.userId ? await User.findById(sale.userId) : null;
+        
+        const { generateInvoicePDF } = require('./invoice-helper');
+        const invoiceBuffer = await generateInvoicePDF(sale, user, vendor);
+        
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', `attachment; filename=Invoice-${sale._id.toString().substring(18).toUpperCase()}.pdf`);
+        res.send(invoiceBuffer);
+    } catch (e) {
+        console.error('Invoice PDF Download Error:', e);
+        res.status(500).json({ error: e.message });
     }
 });
 
@@ -1340,9 +1446,9 @@ app.get('/api/user/orders', auth, async (req, res) => {
 
         // Get vendor names
         const vendorIds = [...new Set(orders.map(o => o.vendorId))];
-        const vendors = await Vendor.find({ id: { $in: vendorIds } }).select('id name phone');
+        const vendors = await Vendor.find({ id: { $in: vendorIds } }).select('id name phone latitude longitude');
         const vendorMap = {};
-        vendors.forEach(v => vendorMap[v.id] = { name: v.name, phone: v.phone });
+        vendors.forEach(v => vendorMap[v.id] = { name: v.name, phone: v.phone, latitude: v.latitude, longitude: v.longitude });
 
         res.json(orders.map(o => ({
             ...o.toObject(),
@@ -1614,10 +1720,15 @@ app.post('/api/user/complete-purchase', auth, async (req, res) => {
                 price: item.price,
                 quantity: item.quantity || 1,
                 status: 'completed',
-                deliveryAddress: deliveryInfo
+                deliveryAddress: deliveryInfo,
+                deliveryFee: item.deliveryFee || 0,
+                deliveryDistance: item.deliveryDistance || 0
             });
             await sale.save();
             sales.push(sale);
+
+            // Auto-deduct inventory
+            await deductInventory(item.vendorId, item.plantId, item.quantity || 1);
 
             // Award 200 points per plant purchased
             pointsToAward += (item.quantity || 1) * 200;

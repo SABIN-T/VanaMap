@@ -256,6 +256,8 @@ const SaleSchema = new mongoose.Schema({
         latitude: Number,
         longitude: Number
     },
+    deliveryFee: { type: Number, default: 0 },
+    deliveryDistance: { type: Number, default: 0 },
     timestamp: { type: Date, default: Date.now }
 });
 
