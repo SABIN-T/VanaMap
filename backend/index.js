@@ -6990,7 +6990,16 @@ app.post('/api/webhooks/resend-email', express.raw({ type: 'application/json' })
         // const signature = req.headers['resend-signature'];
         // TODO: Implement signature verification when Resend supports it
 
-        const event = JSON.parse(req.body.toString());
+        let event;
+        if (Buffer.isBuffer(req.body)) {
+            event = JSON.parse(req.body.toString());
+        } else if (typeof req.body === 'string') {
+            event = JSON.parse(req.body);
+        } else if (req.body && typeof req.body === 'object') {
+            event = req.body;
+        } else {
+            throw new Error("Invalid request body");
+        }
 
         if (event.type === 'email.received') {
             const emailData = event.data;

@@ -1279,3 +1279,218 @@
     background: rgba(16, 185, 129, 0.1);
     color: #065f46;
 }
+
+/* Layout columns */
+.cartContentLayout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    align-items: start;
+}
+
+@media (min-width: 1024px) {
+    .cartContentLayout {
+        grid-template-columns: 1fr 380px;
+    }
+    .container {
+        max-width: 1200px;
+    }
+}
+
+.cartMainCol {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.cartSidebarCol {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.stickySidebar {
+    position: static;
+}
+
+@media (min-width: 1024px) {
+    .stickySidebar {
+        position: sticky;
+        top: 100px;
+    }
+}
+
+.sidebarTitle {
+    font-size: 1.25rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    color: #fff;
+}
+
+/* Summary Card */
+.summaryCard {
+    background: rgba(30, 41, 59, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 1.5rem;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    backdrop-filter: blur(12px);
+}
+
+.summaryCard:hover {
+    box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.3);
+    border-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+.summaryHeader {
+    background: rgba(15, 23, 42, 0.6);
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.summaryVendorName {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 180px;
+}
+
+.summaryBody {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.summaryRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9rem;
+    color: #94a3b8;
+}
+
+.summaryDivider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.05);
+    margin: 0.5rem 0;
+}
+
+.outOfRangeAlert {
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+    color: #ef4444;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    text-align: center;
+    font-weight: 600;
+}
+
+.freeDeliveryAlert {
+    background: rgba(16, 185, 129, 0.1);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+    color: #10b981;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    text-align: center;
+    font-weight: 600;
+}
+
+.pendingAddressAlert {
+    background: rgba(245, 158, 11, 0.05);
+    border: 1px solid rgba(245, 158, 11, 0.15);
+    color: #f59e0b;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    text-align: center;
+    font-weight: 600;
+}
+
+.summaryFooter {
+    padding: 0 1.25rem 1.25rem;
+}
+
+.sidebarCheckoutButtons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+/* Group Header Left Only (simplification of vendor group card header) */
+.groupHeaderLeftOnly {
+    background: rgba(15, 23, 42, 0.6);
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    align-items: center;
+}
+
+/* Light mode overrides */
+[data-theme='light'] .sidebarTitle {
+    color: #064e3b;
+}
+
+[data-theme='light'] .summaryCard {
+    background: #ffffff;
+    border-color: rgba(16, 185, 129, 0.2);
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.05);
+}
+
+[data-theme='light'] .summaryCard:hover {
+    box-shadow: 0 20px 40px -10px rgba(16, 185, 129, 0.15);
+    border-color: rgba(16, 185, 129, 0.3);
+}
+
+[data-theme='light'] .summaryHeader {
+    background: rgba(16, 185, 129, 0.05);
+    border-bottom-color: rgba(16, 185, 129, 0.15);
+}
+
+[data-theme='light'] .summaryVendorName {
+    color: #064e3b;
+}
+
+[data-theme='light'] .summaryRow {
+    color: #475569;
+}
+
+[data-theme='light'] .summaryDivider {
+    background: rgba(16, 185, 129, 0.1);
+}
+
+[data-theme='light'] .outOfRangeAlert {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: rgba(239, 68, 68, 0.3);
+    color: #b91c1c;
+}
+
+[data-theme='light'] .freeDeliveryAlert {
+    background: rgba(16, 185, 129, 0.15);
+    border-color: rgba(16, 185, 129, 0.3);
+    color: #065f46;
+}
+
+[data-theme='light'] .pendingAddressAlert {
+    background: rgba(245, 158, 11, 0.1);
+    border-color: rgba(245, 158, 11, 0.25);
+    color: #b45309;
+}
+
+[data-theme='light'] .groupHeaderLeftOnly {
+    background: rgba(16, 185, 129, 0.05);
+    border-bottom-color: rgba(16, 185, 129, 0.15);
+}

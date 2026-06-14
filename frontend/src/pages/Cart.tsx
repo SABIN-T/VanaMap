@@ -575,147 +575,7 @@ export const Cart = () => {
                     </div>
                 )}
 
-                {/* Delivery Location Section */}
-                {items.length > 0 && user && (
-                    <div className={styles.deliverySection}>
-                        <button
-                            className={styles.deliveryToggle}
-                            onClick={() => setDeliveryExpanded(!deliveryExpanded)}
-                            id="delivery-toggle"
-                        >
-                            <div className={styles.deliveryToggleLeft}>
-                                <MapPin size={20} className={styles.deliveryIcon} />
-                                <div>
-                                    <span className={styles.deliveryTitle}>Delivery Location</span>
-                                    {deliveryAddress.address && !deliveryExpanded && (
-                                        <span className={styles.deliveryPreview}>{deliveryAddress.address}</span>
-                                    )}
-                                </div>
-                            </div>
-                            {deliveryExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
-                        </button>
-
-                        {deliveryExpanded && (
-                            <div className={styles.deliveryForm}>
-                                <div className={styles.deliveryRow}>
-                                    <div className={styles.deliveryField} style={{ flex: 2 }}>
-                                        <label>Full Address</label>
-                                        <input
-                                            type="text"
-                                            id="delivery-address"
-                                            placeholder="House/Street/Area"
-                                            value={deliveryAddress.address}
-                                            onChange={e => setDeliveryAddress(prev => ({ ...prev, address: e.target.value }))}
-                                            className={styles.deliveryInput}
-                                        />
-                                    </div>
-                                </div>
-                                <div className={styles.deliveryRow}>
-                                    <div className={styles.deliveryField}>
-                                        <label>City</label>
-                                        <input
-                                            type="text"
-                                            id="delivery-city"
-                                            placeholder="City/Town"
-                                            value={deliveryAddress.city}
-                                            onChange={e => setDeliveryAddress(prev => ({ ...prev, city: e.target.value }))}
-                                            className={styles.deliveryInput}
-                                        />
-                                    </div>
-                                    <div className={styles.deliveryField}>
-                                        <label>State</label>
-                                        <input
-                                            type="text"
-                                            id="delivery-state"
-                                            placeholder="State"
-                                            value={deliveryAddress.state}
-                                            onChange={e => setDeliveryAddress(prev => ({ ...prev, state: e.target.value }))}
-                                            className={styles.deliveryInput}
-                                        />
-                                    </div>
-                                    <div className={styles.deliveryField}>
-                                        <label>Pincode</label>
-                                        <input
-                                            type="text"
-                                            id="delivery-pincode"
-                                            placeholder="PIN"
-                                            value={deliveryAddress.pincode}
-                                            onChange={e => setDeliveryAddress(prev => ({ ...prev, pincode: e.target.value }))}
-                                            className={styles.deliveryInput}
-                                            maxLength={6}
-                                        />
-                                    </div>
-                                </div>
-
-                                <button
-                                    className={styles.locateBtn}
-                                    onClick={handleUseMyLocation}
-                                    disabled={locating}
-                                    id="use-my-location"
-                                >
-                                    <Navigation size={16} className={locating ? styles.spinning : ''} />
-                                    {locating ? 'Locating...' : 'Use My Current Location'}
-                                </button>
-
-                                <div className={styles.miniMapContainer}>
-                                    <MapContainer
-                                        center={mapCenter}
-                                        zoom={deliveryAddress.latitude ? 15 : 5}
-                                        style={{ height: '200px', width: '100%', borderRadius: '12px' }}
-                                        ref={mapRef}
-                                        scrollWheelZoom={false}
-                                    >
-                                        <TileLayer
-                                            attribution='&copy; <a href="https://www.openstreetmap.org/">OSM</a>'
-                                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                        />
-                                        {(deliveryAddress.latitude && deliveryAddress.longitude) && (
-                                            <DraggableMarker
-                                                position={[deliveryAddress.latitude, deliveryAddress.longitude]}
-                                                onDrag={handleMarkerDrag}
-                                            />
-                                        )}
-                                        {Object.keys(groupedItems).map(vendorId => {
-                                            const isVanaMap = vendorId === 'vanamap';
-                                            const vendor = isVanaMap
-                                                ? { latitude: deliveryRules.hqLatitude, longitude: deliveryRules.hqLongitude, name: 'VanaMap Official' }
-                                                : vendors[vendorId];
-                                            if (!vendor || vendor.latitude === undefined || vendor.longitude === undefined || vendor.latitude === null || vendor.longitude === null) {
-                                                return null;
-                                            }
-                                            return (
-                                                <Fragment key={vendorId}>
-                                                    <Marker position={[vendor.latitude, vendor.longitude]}>
-                                                        <Popup>
-                                                            <strong>{vendor.name}</strong>
-                                                            <br />
-                                                            Free Delivery: {deliveryRules.freeRadiusKm} km
-                                                            <br />
-                                                            Max Delivery Range: {deliveryRules.maxDistanceKm} km
-                                                        </Popup>
-                                                    </Marker>
-                                                    <Circle
-                                                        center={[vendor.latitude, vendor.longitude]}
-                                                        radius={deliveryRules.freeRadiusKm * 1000}
-                                                        pathOptions={{ color: '#10b981', fillColor: '#10b981', fillOpacity: 0.15 }}
-                                                    />
-                                                    <Circle
-                                                        center={[vendor.latitude, vendor.longitude]}
-                                                        radius={deliveryRules.maxDistanceKm * 1000}
-                                                        pathOptions={{ color: '#ef4444', dashArray: '5, 5', fillOpacity: 0.02 }}
-                                                    />
-                                                </Fragment>
-                                            );
-                                        })}
-                                    </MapContainer>
-                                    <p className={styles.mapHint}>📍 Click the map or drag the pin to set exact delivery location</p>
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                )}
-
-                {/* Empty State */}
+                {/* Delivery Location Section & Items List */}
                 {items.length === 0 ? (
                     <div className={styles.emptyState}>
                         <div className={styles.emptyIconBox}>
@@ -730,196 +590,363 @@ export const Cart = () => {
                         </Button>
                     </div>
                 ) : (
-                    <div className="space-y-8">
-                        {/* Iterating Groups */}
-                        {Object.entries(groupedItems).map(([vendorId, cartItems]) => {
-                            const isVanaMap = vendorId === 'vanamap';
-                            const vendor = vendors[vendorId];
-                            const totalPrice = cartItems.reduce((sum, i) => {
-                                const price = i.vendorPrice || i.plant.price || 0;
-                                return sum + (price * i.quantity);
-                            }, 0);
+                    <div className={styles.cartContentLayout}>
+                        {/* Left Column - Delivery Mapper & Items List */}
+                        <div className={styles.cartMainCol}>
+                            {/* Delivery Location Section */}
+                            {user && (
+                                <div className={styles.deliverySection}>
+                                    <button
+                                        className={styles.deliveryToggle}
+                                        onClick={() => setDeliveryExpanded(!deliveryExpanded)}
+                                        id="delivery-toggle"
+                                    >
+                                        <div className={styles.deliveryToggleLeft}>
+                                            <MapPin size={20} className={styles.deliveryIcon} />
+                                            <div>
+                                                <span className={styles.deliveryTitle}>Delivery Location</span>
+                                                {deliveryAddress.address && !deliveryExpanded && (
+                                                    <span className={styles.deliveryPreview}>{deliveryAddress.address}</span>
+                                                )}
+                                            </div>
+                                        </div>
+                                        {deliveryExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                                    </button>
 
-                            // If vendor data is missing (async load), show skeleton or placeholder
-                            const vendorName = isVanaMap ? 'VanaMap Official' : (vendor?.name || 'Loading Vendor...');
-
-                            const { fee, distance, outOfRange, pending } = getDeliveryDetails(vendorId);
-
-                            return (
-                                <div key={vendorId} className={styles.vendorGroup}>
-                                    {/* Group Header */}
-                                    <div className={styles.groupHeader}>
-                                        <div className={styles.vendorInfoWrapper}>
-                                            <div className={styles.vendorTitleRow}>
-                                                <Store size={22} className={isVanaMap ? "text-emerald-400" : "text-amber-400"} />
-                                                <div className={styles.vendorName}>
-                                                    {vendorName}
+                                    {deliveryExpanded && (
+                                        <div className={styles.deliveryForm}>
+                                            <div className={styles.deliveryRow}>
+                                                <div className={styles.deliveryField} style={{ flex: 2 }}>
+                                                    <label>Full Address</label>
+                                                    <input
+                                                        type="text"
+                                                        id="delivery-address"
+                                                        placeholder="House/Street/Area"
+                                                        value={deliveryAddress.address}
+                                                        onChange={e => setDeliveryAddress(prev => ({ ...prev, address: e.target.value }))}
+                                                        className={styles.deliveryInput}
+                                                    />
                                                 </div>
+                                            </div>
+                                            <div className={styles.deliveryRow}>
+                                                <div className={styles.deliveryField}>
+                                                    <label>City</label>
+                                                    <input
+                                                        type="text"
+                                                        id="delivery-city"
+                                                        placeholder="City/Town"
+                                                        value={deliveryAddress.city}
+                                                        onChange={e => setDeliveryAddress(prev => ({ ...prev, city: e.target.value }))}
+                                                        className={styles.deliveryInput}
+                                                    />
+                                                </div>
+                                                <div className={styles.deliveryField}>
+                                                    <label>State</label>
+                                                    <input
+                                                        type="text"
+                                                        id="delivery-state"
+                                                        placeholder="State"
+                                                        value={deliveryAddress.state}
+                                                        onChange={e => setDeliveryAddress(prev => ({ ...prev, state: e.target.value }))}
+                                                        className={styles.deliveryInput}
+                                                    />
+                                                </div>
+                                                <div className={styles.deliveryField}>
+                                                    <label>Pincode</label>
+                                                    <input
+                                                        type="text"
+                                                        id="delivery-pincode"
+                                                        placeholder="PIN"
+                                                        value={deliveryAddress.pincode}
+                                                        onChange={e => setDeliveryAddress(prev => ({ ...prev, pincode: e.target.value }))}
+                                                        className={styles.deliveryInput}
+                                                        maxLength={6}
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <button
+                                                className={styles.locateBtn}
+                                                onClick={handleUseMyLocation}
+                                                disabled={locating}
+                                                id="use-my-location"
+                                            >
+                                                <Navigation size={16} className={locating ? styles.spinning : ''} />
+                                                {locating ? 'Locating...' : 'Use My Current Location'}
+                                            </button>
+
+                                            <div className={styles.miniMapContainer}>
+                                                <MapContainer
+                                                    center={mapCenter}
+                                                    zoom={deliveryAddress.latitude ? 15 : 5}
+                                                    style={{ height: '200px', width: '100%', borderRadius: '12px' }}
+                                                    ref={mapRef}
+                                                    scrollWheelZoom={false}
+                                                >
+                                                    <TileLayer
+                                                        attribution='&copy; <a href="https://www.openstreetmap.org/">OSM</a>'
+                                                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                                    />
+                                                    {(deliveryAddress.latitude && deliveryAddress.longitude) && (
+                                                        <DraggableMarker
+                                                            position={[deliveryAddress.latitude, deliveryAddress.longitude]}
+                                                            onDrag={handleMarkerDrag}
+                                                        />
+                                                    )}
+                                                    {Object.keys(groupedItems).map(vendorId => {
+                                                        const isVanaMap = vendorId === 'vanamap';
+                                                        const vendor = isVanaMap
+                                                            ? { latitude: deliveryRules.hqLatitude, longitude: deliveryRules.hqLongitude, name: 'VanaMap Official' }
+                                                            : vendors[vendorId];
+                                                        if (!vendor || vendor.latitude === undefined || vendor.longitude === undefined || vendor.latitude === null || vendor.longitude === null) {
+                                                            return null;
+                                                        }
+                                                        return (
+                                                            <Fragment key={vendorId}>
+                                                                <Marker position={[vendor.latitude, vendor.longitude]}>
+                                                                    <Popup>
+                                                                        <strong>{vendor.name}</strong>
+                                                                        <br />
+                                                                        Free Delivery: {deliveryRules.freeRadiusKm} km
+                                                                        <br />
+                                                                        Max Delivery Range: {deliveryRules.maxDistanceKm} km
+                                                                    </Popup>
+                                                                </Marker>
+                                                                <Circle
+                                                                    center={[vendor.latitude, vendor.longitude]}
+                                                                    radius={deliveryRules.freeRadiusKm * 1000}
+                                                                    pathOptions={{ color: '#10b981', fillColor: '#10b981', fillOpacity: 0.15 }}
+                                                                />
+                                                                <Circle
+                                                                    center={[vendor.latitude, vendor.longitude]}
+                                                                    radius={deliveryRules.maxDistanceKm * 1000}
+                                                                    pathOptions={{ color: '#ef4444', dashArray: '5, 5', fillOpacity: 0.02 }}
+                                                                />
+                                                            </Fragment>
+                                                        );
+                                                    })}
+                                                </MapContainer>
+                                                <p className={styles.mapHint}>📍 Click the map or drag the pin to set exact delivery location</p>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+
+                            {/* Cart Item Cards grouped by vendor */}
+                            <div className="space-y-6">
+                                {Object.entries(groupedItems).map(([vendorId, cartItems]) => {
+                                    const isVanaMap = vendorId === 'vanamap';
+                                    const vendor = vendors[vendorId];
+                                    const vendorName = isVanaMap ? 'VanaMap Official' : (vendor?.name || 'Loading Vendor...');
+
+                                    return (
+                                        <div key={vendorId} className={styles.vendorGroup}>
+                                            {/* Group Header */}
+                                            <div className={styles.groupHeaderLeftOnly}>
+                                                <div className={styles.vendorInfoWrapper}>
+                                                    <div className={styles.vendorTitleRow}>
+                                                        <Store size={22} className={isVanaMap ? "text-emerald-400" : "text-amber-400"} />
+                                                        <div className={styles.vendorName}>
+                                                            {vendorName}
+                                                        </div>
+                                                        {isVanaMap ? (
+                                                            <span className={styles.officialBadge}><ShieldCheck size={12} /> Official</span>
+                                                        ) : (
+                                                            <span className={styles.partnerBadge}>Partner</span>
+                                                        )}
+                                                    </div>
+
+                                                    {!isVanaMap && vendor && (
+                                                        <div className={styles.vendorMeta}>
+                                                            {vendor.address && (
+                                                                <div className={styles.metaItem}>
+                                                                    <MapPin size={12} /> {vendor.address}
+                                                                </div>
+                                                            )}
+                                                            {vendor.phone && (
+                                                                <div className={styles.metaItem}>
+                                                                    <Phone size={12} /> {vendor.phone}
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+
+                                            {/* Items */}
+                                            <div className={styles.itemsList}>
+                                                {cartItems.map((item) => {
+                                                    const isCustomPot = item.plant.id.startsWith('cp_');
+                                                    return (
+                                                        <div key={`${item.plant.id}-${vendorId}`} className={styles.itemCard}>
+                                                            <img
+                                                                src={item.plant.imageUrl}
+                                                                className={styles.itemThumb}
+                                                                alt={item.plant.name}
+                                                            />
+                                                            <div className={styles.itemDetails}>
+                                                                <div className={styles.itemHeader}>
+                                                                    <div>
+                                                                        <h3 className={styles.itemName}>{item.plant.name}</h3>
+                                                                        <p className={styles.itemScientific}>{item.plant.scientificName}</p>
+                                                                    </div>
+                                                                    <div className={styles.itemPrice}>
+                                                                        {formatCurrency(item.vendorPrice || item.plant.price || 0)}
+                                                                    </div>
+                                                                </div>
+
+                                                                {isCustomPot && (
+                                                                    <div className={styles.comingSoonBadge}>
+                                                                        <Info size={12} /> Stay tuned! This buying option is coming soon 🚀
+                                                                    </div>
+                                                                )}
+
+                                                                <div className={styles.controlsRow}>
+                                                                    <div className={styles.stepper}>
+                                                                        <button
+                                                                            onClick={() => updateQuantity(item.plant.id, item.quantity - 1, item.vendorId)}
+                                                                            className={styles.stepperBtn}
+                                                                        >
+                                                                            <Minus size={14} />
+                                                                        </button>
+                                                                        <span className={styles.quantityVal}>{item.quantity}</span>
+                                                                        <button
+                                                                            onClick={() => updateQuantity(item.plant.id, item.quantity + 1, item.vendorId)}
+                                                                            className={`${styles.stepperBtn} ${styles.add}`}
+                                                                        >
+                                                                            <Plus size={14} />
+                                                                        </button>
+                                                                    </div>
+
+                                                                    <button
+                                                                        onClick={() => removeFromCart(item.plant.id, item.vendorId)}
+                                                                        className={styles.removeBtn}
+                                                                        title="Remove"
+                                                                    >
+                                                                        <Trash2 size={16} /> Remove
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    );
+                                                })}
+                                            </div>
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        </div>
+
+                        {/* Right Column - Sticky Order Summaries & Checkout */}
+                        <div className={styles.cartSidebarCol}>
+                            <div className={styles.stickySidebar}>
+                                <h2 className={styles.sidebarTitle}>Order Summary</h2>
+                                
+                                {Object.entries(groupedItems).map(([vendorId, cartItems]) => {
+                                    const isVanaMap = vendorId === 'vanamap';
+                                    const vendor = vendors[vendorId];
+                                    const totalPrice = cartItems.reduce((sum, i) => {
+                                        const price = i.vendorPrice || i.plant.price || 0;
+                                        return sum + (price * i.quantity);
+                                    }, 0);
+                                    const vendorName = isVanaMap ? 'VanaMap Official' : (vendor?.name || 'Loading Vendor...');
+                                    const { fee, distance, outOfRange, pending } = getDeliveryDetails(vendorId);
+
+                                    return (
+                                        <div key={`summary-${vendorId}`} className={styles.summaryCard}>
+                                            <div className={styles.summaryHeader}>
+                                                <div className={styles.summaryVendorName}>{vendorName}</div>
                                                 {isVanaMap ? (
                                                     <span className={styles.officialBadge}><ShieldCheck size={12} /> Official</span>
                                                 ) : (
                                                     <span className={styles.partnerBadge}>Partner</span>
                                                 )}
                                             </div>
-
-                                            {!isVanaMap && vendor && (
-                                                <div className={styles.vendorMeta}>
-                                                    {vendor.address && (
-                                                        <div className={styles.metaItem}>
-                                                            <MapPin size={12} /> {vendor.address}
-                                                        </div>
-                                                    )}
-                                                    {vendor.phone && (
-                                                        <div className={styles.metaItem}>
-                                                            <Phone size={12} /> {vendor.phone}
-                                                        </div>
-                                                    )}
+                                            
+                                            <div className={styles.summaryBody}>
+                                                <div className={styles.summaryRow}>
+                                                    <span>Subtotal ({cartItems.reduce((acc, i) => acc + i.quantity, 0)} items)</span>
+                                                    <span>{formatCurrency(totalPrice)}</span>
                                                 </div>
-                                            )}
-                                        </div>
-
-                                        <div className={styles.headerRight}>
-                                            {user ? (
-                                                <div className={styles.checkoutButtons}>
-                                                    <button
-                                                        className={styles.payOnlineBtn}
-                                                        onClick={() => handleRazorpayCheckout(vendorId)}
-                                                        disabled={payingVendor === vendorId || outOfRange || pending}
-                                                    >
-                                                        <CreditCard size={18} />
-                                                        {payingVendor === vendorId ? 'Processing...' : 'Pay Online'}
-                                                    </button>
-                                                    <button
-                                                        className={styles.whatsappBtn}
-                                                        onClick={() => handleWhatsAppCheckout(vendorId)}
-                                                        disabled={outOfRange || pending}
-                                                    >
-                                                        <MessageCircle size={18} /> WhatsApp
-                                                    </button>
-                                                </div>
-                                            ) : (
-                                                <div className={styles.loginPrompt}>
-                                                    <Lock size={14} /> Login to Order
-                                                </div>
-                                            )}
-                                        </div>
-                                    </div>
-
-                                    {/* Items */}
-                                    <div className={styles.itemsList}>
-                                        {cartItems.map((item) => {
-                                            const isCustomPot = item.plant.id.startsWith('cp_');
-                                            return (
-                                                <div key={`${item.plant.id}-${vendorId}`} className={styles.itemCard}>
-                                                    <img
-                                                        src={item.plant.imageUrl}
-                                                        className={styles.itemThumb}
-                                                        alt={item.plant.name}
-                                                    />
-                                                    <div className={styles.itemDetails}>
-                                                        <div className={styles.itemHeader}>
-                                                            <div>
-                                                                <h3 className={styles.itemName}>{item.plant.name}</h3>
-                                                                <p className={styles.itemScientific}>{item.plant.scientificName}</p>
-                                                            </div>
-                                                            <div className={styles.itemPrice}>
-                                                                {formatCurrency(item.vendorPrice || item.plant.price || 0)}
-                                                            </div>
+                                                {!pending && (
+                                                    <>
+                                                        <div className={styles.summaryRow}>
+                                                            <span>Delivery Distance</span>
+                                                            <span>{distance.toFixed(1)} km</span>
                                                         </div>
-
-                                                        {isCustomPot && (
-                                                            <div className={styles.comingSoonBadge}>
-                                                                <Info size={12} /> Stay tuned! This buying option is coming soon 🚀
+                                                        <div className={styles.summaryRow}>
+                                                            <span>Delivery Fee</span>
+                                                            <span>{fee > 0 ? formatCurrency(fee) : 'FREE'}</span>
+                                                        </div>
+                                                        {outOfRange ? (
+                                                            <div className={styles.outOfRangeAlert}>
+                                                                📍 Out of delivery range (Max: {deliveryRules.maxDistanceKm} km)
                                                             </div>
+                                                        ) : (
+                                                            fee === 0 && (
+                                                                <div className={styles.freeDeliveryAlert}>
+                                                                    🎉 Within free delivery radius!
+                                                                </div>
+                                                            )
                                                         )}
-
-                                                        <div className={styles.controlsRow}>
-                                                            <div className={styles.stepper}>
-                                                                <button
-                                                                    onClick={() => updateQuantity(item.plant.id, item.quantity - 1, item.vendorId)}
-                                                                    className={styles.stepperBtn}
-                                                                >
-                                                                    <Minus size={14} />
-                                                                </button>
-                                                                <span className={styles.quantityVal}>{item.quantity}</span>
-                                                                <button
-                                                                    onClick={() => updateQuantity(item.plant.id, item.quantity + 1, item.vendorId)}
-                                                                    className={`${styles.stepperBtn} ${styles.add}`}
-                                                                >
-                                                                    <Plus size={14} />
-                                                                </button>
-                                                            </div>
-
-                                                            <button
-                                                                onClick={() => removeFromCart(item.plant.id, item.vendorId)}
-                                                                className={styles.removeBtn}
-                                                                title="Remove"
-                                                            >
-                                                                <Trash2 size={16} /> Remove
-                                                            </button>
+                                                        <div className={styles.summaryDivider} />
+                                                        <div className={`${styles.summaryRow} ${styles.grandTotal}`}>
+                                                            <span>Grand Total</span>
+                                                            <span>{formatCurrency(totalPrice + fee)}</span>
                                                         </div>
+                                                    </>
+                                                )}
+                                                {pending && (
+                                                    <div className={styles.pendingAddressAlert}>
+                                                        📍 Set delivery address to calculate delivery fee
                                                     </div>
-                                                </div>
-                                            );
-                                        })}
-                                    </div>
+                                                )}
+                                            </div>
 
-                                    {/* Subtotal & Delivery Details */}
-                                    <div className={styles.groupFooterDetails}>
-                                        <div className={styles.footerDetailRow}>
-                                            <span>Subtotal ({cartItems.length} items)</span>
-                                            <span>{formatCurrency(totalPrice)}</span>
-                                        </div>
-                                        {!pending && (
-                                            <>
-                                                <div className={styles.footerDetailRow}>
-                                                    <span>Delivery Distance</span>
-                                                    <span>{distance.toFixed(1)} km</span>
-                                                </div>
-                                                <div className={styles.footerDetailRow}>
-                                                    <span>Delivery Fee</span>
-                                                    <span>{fee > 0 ? formatCurrency(fee) : 'FREE'}</span>
-                                                </div>
-                                                {outOfRange ? (
-                                                    <div className={styles.shippingPrompt} style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', border: '1px solid rgba(239, 68, 68, 0.2)', borderRadius: '8px', padding: '0.5rem', marginTop: '0.5rem' }}>
-                                                        📍 Out of delivery range (Max: {deliveryRules.maxDistanceKm} km)
+                                            <div className={styles.summaryFooter}>
+                                                {user ? (
+                                                    <div className={styles.sidebarCheckoutButtons}>
+                                                        <button
+                                                            className={styles.payOnlineBtn}
+                                                            onClick={() => handleRazorpayCheckout(vendorId)}
+                                                            disabled={payingVendor === vendorId || outOfRange || pending}
+                                                        >
+                                                            <CreditCard size={18} />
+                                                            {payingVendor === vendorId ? 'Processing...' : 'Pay Online'}
+                                                        </button>
+                                                        <button
+                                                            className={styles.whatsappBtn}
+                                                            onClick={() => handleWhatsAppCheckout(vendorId)}
+                                                            disabled={outOfRange || pending}
+                                                        >
+                                                            <MessageCircle size={18} /> WhatsApp Order
+                                                        </button>
                                                     </div>
                                                 ) : (
-                                                    fee === 0 && (
-                                                        <div className={styles.shippingPrompt}>
-                                                            🎉 Within free delivery radius!
-                                                        </div>
-                                                    )
+                                                    <div className={styles.loginPrompt}>
+                                                        <Lock size={14} /> Login to Order
+                                                    </div>
                                                 )}
-                                                <div className={`${styles.footerDetailRow} ${styles.grandTotal}`}>
-                                                    <span>Grand Total</span>
-                                                    <span>{formatCurrency(totalPrice + fee)}</span>
-                                                </div>
-                                            </>
-                                        )}
-                                        {pending && (
-                                            <div className={styles.shippingPrompt} style={{ background: 'rgba(245, 158, 11, 0.05)', color: '#f59e0b' }}>
-                                                📍 Please set delivery address to calculate delivery fee
                                             </div>
-                                        )}
-                                    </div>
+                                        </div>
+                                    );
+                                })}
+
+                                <div className={styles.footerNote}>
+                                    <p>Prices are set by individual vendors. Delivery terms and final availability are confirmed upon order via WhatsApp.</p>
+                                    {!user && (
+                                        <Button variant="outline" className="mt-4" onClick={() => navigate('/auth')}>
+                                            Sign In / Register Account
+                                        </Button>
+                                    )}
                                 </div>
-                            );
-                        })}
+                            </div>
+                        </div>
                     </div>
                 )}
 
-                {/* Footer Note */}
-                {items.length > 0 && (
-                    <div className={styles.footerNote}>
-                        <p>Prices are set by individual vendors. Delivery terms and final availability are confirmed upon order via WhatsApp.</p>
-                        {!user && (
-                            <Button variant="outline" className="mt-4" onClick={() => navigate('/auth')}>
-                                Sign In / Register Account
-                            </Button>
-                        )}
-                    </div>
-                )}
+
             </div>
         </div>
     );
