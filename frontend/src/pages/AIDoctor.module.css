@@ -24,17 +24,19 @@
 }
 
 .container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     display: flex;
     flex-direction: column;
-    height: 100vh;
-    height: 100dvh;
     background: var(--flora-bg);
     background-image:
         radial-gradient(circle at 0% 0%, rgba(16, 185, 129, 0.08) 0%, transparent 40%),
         radial-gradient(circle at 100% 100%, rgba(59, 130, 246, 0.08) 0%, transparent 40%);
     font-family: 'Plus Jakarta Sans', sans-serif;
     color: var(--flora-text);
-    position: relative;
     overflow: hidden;
     transition: background 0.5s ease;
 }
@@ -219,9 +221,9 @@
 .chatContainer {
     flex: 1;
     overflow-y: auto;
-    padding: 1.5rem 0;
+    padding: 1.5rem 0 9rem 0; /* Clear space for absolute floating input */
     scroll-behavior: smooth;
-    mask-image: linear-gradient(to bottom, transparent, black 5%, black 95%, transparent);
+    mask-image: linear-gradient(to bottom, transparent, black 5%, black 85%, transparent);
 }
 
 .messagesWrapper {
@@ -354,13 +356,18 @@
 
 /* --- Input Command Center --- */
 .inputContainer {
-    flex-shrink: 0;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
     padding: 1.5rem;
-    background: linear-gradient(to top, var(--flora-bg) 70%, transparent);
+    background: linear-gradient(to top, var(--flora-bg) 15%, transparent);
     z-index: 100;
+    pointer-events: none; /* Let clicks pass through the transparent gradient */
 }
 
 .inputDock {
+    pointer-events: auto; /* Enable inputs inside the dock */
     max-width: 850px;
     margin: 0 auto;
     background: var(--flora-glass);
@@ -759,11 +766,15 @@
     }
 
     .inputContainer {
-        padding: 1rem;
+        padding: 0.75rem;
     }
 
     .inputDock {
         border-radius: 20px;
+    }
+
+    .chatContainer {
+        padding-bottom: 7rem;
     }
 
     .actions .actionBtn:not(:nth-last-child(-n+2)) {
