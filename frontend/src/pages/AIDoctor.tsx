@@ -101,6 +101,7 @@ export const AIDoctor = () => {
 
     const [input, setInput] = useState('');
     const [loading, setLoading] = useState(false);
+    const [activeDossiers, setActiveDossiers] = useState<any[]>([]);
 
     // --- GROWTH SIMULATOR STATES ---
     const [showGrowthSim, setShowGrowthSim] = useState(false);
@@ -426,6 +427,11 @@ export const AIDoctor = () => {
                 },
                 image: base64Image,
                 persona: persona,
+                onMetadata: (metadata: any) => {
+                    if (metadata && Array.isArray(metadata) && metadata.length > 0) {
+                        setActiveDossiers(metadata);
+                    }
+                },
                 onChunk: (chunk: string) => {
                     accumulatedContent += chunk;
                     setMessages(msgs => msgs.map(m =>
@@ -477,6 +483,10 @@ export const AIDoctor = () => {
             );
 
             console.log('[AI Doctor] Raw API Response:', response);
+
+            if (response.matchedFlora && Array.isArray(response.matchedFlora) && response.matchedFlora.length > 0) {
+                setActiveDossiers(response.matchedFlora);
+            }
 
             if (response.usageMeta) {
                 const remaining = parseInt(response.usageMeta.remaining || '0') || 0;
@@ -1407,6 +1417,69 @@ export const AIDoctor = () => {
 
             {/* Premium Command Prism (Input) */}
             <div className={styles.inputContainer}>
+                {activeDossiers && activeDossiers.length > 0 && (
+                    <div className={styles.dossierPanel}>
+                        <div className={styles.dossierHeader}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#10b981' }}>
+                                <ScrollText size={18} />
+                                <h3 style={{ margin: 0, fontSize: '0.9rem', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                                    Active Botanical Dossier
+                                </h3>
+                            </div>
+                            <button className={styles.dossierCloseBtn} onClick={() => setActiveDossiers([])} title="Clear Dossier">
+                                <X size={16} />
+                            </button>
+                        </div>
+                        <div className={styles.dossierList}>
+                            {activeDossiers.map((dossier, idx) => {
+                                const isToxic = dossier.toxicity && dossier.toxicity.toLowerCase().includes('toxic') && !dossier.toxicity.toLowerCase().includes('non-toxic');
+                                const temp = weather?.avgTemp30Days ? parseFloat(weather.avgTemp30Days) : 22;
+                                const humidity = weather?.humidity ? parseFloat(weather.humidity) : 60;
+                                const et0 = (0.015 * temp + 0.15) * (1 - humidity / 100);
+                                const dailyWaterLoss = et0 * (dossier.cropCoefficient || 0.5) * 100;
+
+                                return (
+                                    <div key={idx} className={styles.dossierCard}>
+                                        <div className={styles.dossierCardTitle}>
+                                            <Leaf size={16} style={{ color: '#10b981' }} />
+                                            <span className={styles.scientificName}>{dossier.scientificName}</span>
+                                            {dossier.commonName && dossier.commonName !== dossier.scientificName && (
+                                                <span className={styles.commonName}>({dossier.commonName})</span>
+                                            )}
+                                        </div>
+                                        <div className={styles.dossierBadgeGrid}>
+                                            <div className={`${styles.dossierBadge} ${isToxic ? styles.badgeToxic : styles.badgeSafe}`}>
+                                                {isToxic ? <AlertCircle size={12} /> : <CheckCircle2 size={12} />}
+                                                <span>{isToxic ? 'Toxic to Pets' : 'Pet Safe'}</span>
+                                            </div>
+                                            {dossier.npkRatio && (
+                                                <div className={`${styles.dossierBadge} ${styles.badgeNpk}`}>
+                                                    <Zap size={12} />
+                                                    <span>NPK: {dossier.npkRatio}</span>
+                                                </div>
+                                            )}
+                                            {dossier.soilPH && (
+                                                <div className={`${styles.dossierBadge} ${styles.badgePH}`}>
+                                                    <Settings size={12} />
+                                                    <span>pH: {dossier.soilPH}</span>
+                                                </div>
+                                            )}
+                                            <div className={`${styles.dossierBadge} ${styles.badgeWater}`}>
+                                                <CloudSun size={12} />
+                                                <span>Transpiration: {dailyWaterLoss.toFixed(1)}%/day</span>
+                                            </div>
+                                        </div>
+                                        <div className={styles.dossierDetailText}>
+                                            <strong>Care Info:</strong> {dossier.wateringInstructions || 'No custom watering instructions.'} 
+                                            {dossier.lightRequirement && ` Light: ${dossier.lightRequirement}`}
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                )}
+
                 <div className={styles.inputDock}>
                     <button className={styles.toolBtn} onClick={handleScanClick}>
                         <Camera size={24} />

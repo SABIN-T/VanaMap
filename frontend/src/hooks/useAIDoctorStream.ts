@@ -15,6 +15,7 @@ interface ChatStreamOptions {
     onChunk?: (chunk: string) => void;
     onComplete?: (fullMessage: string) => void;
     onError?: (error: string) => void;
+    onMetadata?: (metadata: any) => void;
 }
 
 export const useAIDoctorStream = () => {
@@ -110,6 +111,10 @@ export const useAIDoctorStream = () => {
                 switch (data.type) {
                     case 'status':
                         // AI is thinking
+                        break;
+
+                    case 'flora_metadata':
+                        options.onMetadata?.(data.matchedFlora);
                         break;
 
                     case 'stream_start':

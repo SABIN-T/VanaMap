@@ -118,11 +118,31 @@ async function handleChatStream(ws, message) {
 
         // Prepare messages for Groq
         const FloraIntelligence = require('./flora-intelligence');
+        const { DiagnosisRecord } = require('./models');
+
         const floraResult = await FloraIntelligence.getRelevantFloraContext(messages, userContext?.weather);
         const floraKnowledge = floraResult.context;
+        const matchedFloraBatch = floraResult.matches;
+
+        // Send matched flora metadata to client (for live dossier panel)
+        ws.send(JSON.stringify({
+            type: 'flora_metadata',
+            matchedFlora: matchedFloraBatch
+        }));
+
+        // Fetch user medical history
+        let medicalHistory = "No previous medical records found.";
+        if (ws.user?.id) {
+            const records = await DiagnosisRecord.find({ userId: ws.user.id }).sort({ timestamp: -1 }).limit(3).lean();
+            if (records.length > 0) {
+                medicalHistory = records.map(r =>
+                    `- ${r.plantName} (${r.scientificName || 'Unknown'}): ${r.diagnosis}. Status: ${r.status}. Severity: ${r.severity}. Treatment: ${r.treatment}`
+                ).join('\n');
+            }
+        }
 
         // Build system prompt based on persona
-        let systemPrompt = getSystemPrompt(persona, floraKnowledge, userContext);
+        let systemPrompt = getSystemPrompt(persona, floraKnowledge, userContext, medicalHistory);
 
         // Prepare API messages
         const apiMessages = [
@@ -137,7 +157,7 @@ async function handleChatStream(ws, message) {
         if (image) {
             const lastMessage = apiMessages[apiMessages.length - 1];
             lastMessage.content = [
-                { type: 'text', text: lastMessage.content },
+                { type: 'text', text: lastMessage.content || "Analyze this plant." },
                 {
                     type: 'image_url',
                     image_url: { url: image }
@@ -155,8 +175,8 @@ async function handleChatStream(ws, message) {
             body: JSON.stringify({
                 model: image ? 'llama-3.2-90b-vision-preview' : 'llama-3.3-70b-versatile',
                 messages: apiMessages,
-                temperature: 0.7,
-                max_tokens: 2000,
+                temperature: 0.3,
+                max_tokens: 4000,
                 stream: true // Enable streaming!
             })
         });
@@ -169,6 +189,7 @@ async function handleChatStream(ws, message) {
         const reader = response.body.getReader();
         const decoder = new TextDecoder();
         let buffer = '';
+        let fullMessage = '';
 
         ws.send(JSON.stringify({
             type: 'stream_start'
@@ -201,6 +222,7 @@ async function handleChatStream(ws, message) {
                         const content = parsed.choices?.[0]?.delta?.content;
 
                         if (content) {
+                            fullMessage += content;
                             // Send each chunk to the client
                             ws.send(JSON.stringify({
                                 type: 'chunk',
@@ -214,6 +236,31 @@ async function handleChatStream(ws, message) {
             }
         }
 
+        // Auto-Record Diagnosis to Garden Clinic (Medical Records)
+        if (ws.user?.id && (fullMessage.includes('DIAGNOSIS:') || fullMessage.includes('TREATMENT:'))) {
+            try {
+                const pName = fullMessage.match(/Plant:?\s*([^\n]+)/i)?.[1] || matchedFloraBatch[0]?.commonName || "Unknown";
+                const sName = fullMessage.match(/Scientific Name:?\s*([^\n]+)/i)?.[1] || matchedFloraBatch[0]?.scientificName || "N/A";
+                const diag = fullMessage.match(/DIAGNOSIS:?\s*([^\n]+)/i)?.[1] || "Visual Assessment";
+                const treat = fullMessage.match(/TREATMENT:?\s*([\s\S]+?)(?=\n\n|$)/i)?.[1] || "See Dr. Flora's message for details.";
+
+                await DiagnosisRecord.create({
+                    userId: ws.user.id,
+                    plantName: pName.trim(),
+                    scientificName: sName.trim(),
+                    diagnosis: diag.trim(),
+                    treatment: treat.trim(),
+                    imageUrl: image || null,
+                    severity: fullMessage.toLowerCase().includes('critical') ? 'critical' :
+                        fullMessage.toLowerCase().includes('high') ? 'high' :
+                        fullMessage.toLowerCase().includes('medium') ? 'medium' : 'low'
+                });
+                console.log(`[Garden Clinic - WS] 🩺 Diagnosis recorded for user ${ws.user.id}`);
+            } catch (recordError) {
+                console.error('[Garden Clinic - WS] ❌ Failed to record diagnosis:', recordError);
+            }
+        }
+
     } catch (error) {
         console.error('[WS] Chat stream error:', error);
         ws.send(JSON.stringify({
@@ -224,23 +271,56 @@ async function handleChatStream(ws, message) {
 }
 
 // Get system prompt based on persona
-function getSystemPrompt(persona, floraKnowledge, userContext) {
-    const basePrompt = `You are Dr. Flora, an expert AI plant doctor. You help people care for their plants with scientific accuracy and friendly advice.
+function getSystemPrompt(persona, floraKnowledge, userContext, medicalHistory) {
+    const personaPrompts = {
+        flora: `YOUR PERSONA (DR. FLORA):
+            - Tone: The "Logical Empath". You are both a highly skilled scientist and a warm, supportive mentor.
+            - Balanced Approach: Provide rigorous botanical facts (Logic) while acknowledging the user's emotional bond with their plant (Emotion).
+            - Fluency: Use natural, fluid language. NEVER repeat words like "is is" or "the the". 
+            - Character: Use gentle grandmotherly wisdom ("my dear", "don't you worry") combined with advanced field botanist insights.`,
+        geneticist: `YOUR PERSONA (THE GENETICIST):
+            - Tone: "Analytical & Visionary". High-science, data-centric, and extremely precise.
+            - Depth: Focus on molecular biology, NPK ratios, cellular morphology, and scientific nomenclature.
+            - Flow: Concise and professional. Avoid small talk, but express a passion for genetic perfection and diversity.`,
+        ayurvedic: `YOUR PERSONA (AYURVEDIC EXPERT):
+            - Tone: "Philosophical & Holistic". Deep connection between plants, humans, and the cosmos.
+            - Wisdom: Focus on medicinal alchemy, dosha balancing, and ancient herbal traditions.
+            - Empathy: Guide the user to see the plant as a living spirit, providing care that heals both the plant and the environment.`
+    };
 
-${floraKnowledge ? `Relevant plant knowledge:\n${floraKnowledge}\n` : ''}
+    const systemPrompt = `${personaPrompts[persona] || personaPrompts.flora}
+    
+    🌍 CLIMATE CONTEXT:
+    - User's reported City: ${userContext?.city || 'Global Environment'}
+    - Current local conditions environment: ${userContext?.weather?.avgTemp30Days ? `${userContext.weather.avgTemp30Days}°C` : 'N/A'}. 
+    - [ADVICE RULE]: If it's extreme heat (>35°C) or cold (<10°C), adjust care tips immediately and Warn the user.
+    
+    📂 RELEVANT MEDICAL RECORDS (Your Garden Memory):
+    ${medicalHistory}
 
-${userContext?.city ? `User location: ${userContext.city}\n` : ''}
-${userContext?.weather ? `Current weather: ${userContext.weather.avgTemp30Days}°C\n` : ''}
+    🔬 WORLD FLORA INDEX KNOWLEDGE BASE:
+    ${floraKnowledge}
 
-Provide helpful, actionable advice. Be warm and encouraging.`;
+    ⚠️ STRICT BOUNDARIES: No technical/security info, no non-plant topics.
+    
+    👁️ VISION DIAGNOSIS PROTOCOL (IF IMAGE UPLOADED):
+    1. Analyze Leaf/Stem/Flower morphology (Venation, Margin, Shape, Spots, Discoloration, Pests).
+    2. Identify specific pests (e.g. spider mites, aphids, mealybugs) or plant pathogens (e.g. powdery mildew, black spot, leaf rust, root rot, nutrient deficiencies).
+    3. Assess Severity Level: Choose exactly one: low, medium, high, critical.
+    4. State Environmental Triggers: e.g., high humidity, poor aeration, overwatering, light stress.
+    5. Formulate complete remedies: separate into Organic (natural remedies), Chemical (fungicides/insecticides if appropriate), and Prevention (airflow, space, watering adjustment).
+    
+    💬 FORMATTING FOR ARCHIVING: 
+    If identifying an issue, you MUST use this structure at the end of your response to trigger medical recording:
+    Plant: [Common Name]
+    Scientific Name: [Latin Name]
+    DIAGNOSIS: [Disease/Pest Name] - [Severity Level: low/medium/high/critical]
+    TREATMENT:
+    - Organic: [Actionable steps]
+    - Chemical: [Actionable steps]
+    - Prevention: [Actionable steps]`;
 
-    if (persona === 'geneticist') {
-        return basePrompt + '\n\nFocus on plant genetics, breeding, and molecular biology.';
-    } else if (persona === 'ayurvedic') {
-        return basePrompt + '\n\nEmphasize traditional Ayurvedic plant medicine and holistic healing.';
-    }
-
-    return basePrompt;
+    return systemPrompt;
 }
 
 module.exports = { initializeWebSocket };

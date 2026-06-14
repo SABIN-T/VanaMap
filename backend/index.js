@@ -5673,7 +5673,10 @@ REMEMBER: Your response must include BOTH the identification analysis AND the [G
             }
         }
 
-        res.json(result.data);
+        res.json({
+            ...result.data,
+            matchedFlora: matchedFloraBatch
+        });
 
     } catch (e) {
         console.error("Chat API Error:", e);

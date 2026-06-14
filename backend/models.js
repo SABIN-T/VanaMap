@@ -394,6 +394,19 @@ module.exports = {
         severity: { type: String, enum: ['low', 'medium', 'high', 'critical'], default: 'low' },
         timestamp: { type: Date, default: Date.now }
     })),
+    BotanicalDossier: mongoose.model('BotanicalDossier', new mongoose.Schema({
+        scientificName: { type: String, required: true, unique: true, index: true },
+        commonName: { type: String, required: true },
+        toxicity: String,
+        npkRatio: String,
+        soilPH: String,
+        cropCoefficient: { type: Number, default: 0.5 },
+        phytoPathology: [String],
+        lightRequirement: String,
+        wateringInstructions: String,
+        verifiedSource: { type: String, default: 'Global Botanical Registry' },
+        createdAt: { type: Date, default: Date.now }
+    })),
     KidsProduct: mongoose.model('KidsProduct', new mongoose.Schema({
         id: { type: String, required: true, unique: true },
         name: { type: String, required: true },
