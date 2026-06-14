@@ -4679,6 +4679,20 @@ app.get('/api/settings/:key', async (req, res) => {
         if (!setting) {
             // Default values for common settings
             if (req.params.key === 'pot_save_on_buy') return res.json({ key: 'pot_save_on_buy', value: true });
+            if (req.params.key === 'delivery_rules') {
+                return res.json({
+                    key: 'delivery_rules',
+                    value: {
+                        freeRadiusKm: 3,
+                        baseFee: 40,
+                        chargeableLimitKm: 5,
+                        perKmFee: 10,
+                        maxDistanceKm: 25,
+                        hqLatitude: 10.008,
+                        hqLongitude: 76.315
+                    }
+                });
+            }
             return res.status(404).json({ error: "Setting not found" });
         }
         res.json(setting);

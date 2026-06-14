@@ -1224,3 +1224,58 @@
 [data-theme='light'] .payOnlineBtn:hover {
     box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
 }
+
+/* Delivery Rules Footer Styles */
+.groupFooterDetails {
+    padding: 1.25rem 1.5rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.footerDetailRow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    color: #94a3b8;
+}
+
+.grandTotal {
+    border-top: 1px dashed rgba(255, 255, 255, 0.1);
+    padding-top: 0.5rem;
+    margin-top: 0.25rem;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #f8fafc;
+}
+
+.shippingPrompt {
+    padding: 0.5rem 1.5rem;
+    background: rgba(16, 185, 129, 0.05);
+    color: #10b981;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* Light mode shipping rules */
+[data-theme='light'] .groupFooterDetails {
+    background: rgba(0, 0, 0, 0.02);
+}
+
+[data-theme='light'] .footerDetailRow {
+    color: #475569;
+}
+
+[data-theme='light'] .grandTotal {
+    color: #0f172a;
+    border-top-color: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme='light'] .shippingPrompt {
+    background: rgba(16, 185, 129, 0.1);
+    color: #065f46;
+}

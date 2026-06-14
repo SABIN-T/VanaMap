@@ -1,17 +1,17 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback, Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { Trash2, ArrowLeft, Minus, Plus, ShoppingCart, MessageCircle, MapPin, Store, Lock, ShieldCheck, Info, Phone, Smartphone, RefreshCw, CheckCircle2, CloudRain, CreditCard, Navigation, ChevronDown, ChevronUp } from 'lucide-react';
 import { Button } from '../components/common/Button';
-import { fetchVendors, completePurchase, createCartOrder, verifyCartPayment } from '../services/api';
+import { fetchVendors, completePurchase, createCartOrder, verifyCartPayment, fetchSystemSetting } from '../services/api';
 import { formatCurrency } from '../utils/currency';
 import toast from 'react-hot-toast';
 import type { Vendor, CartItem } from '../types';
 import styles from './Cart.module.css';
 
 // Leaflet imports
-import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, useMapEvents, Circle, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
@@ -82,6 +82,78 @@ export const Cart = () => {
         };
         loadVendors();
     }, []);
+
+    const [deliveryRules, setDeliveryRules] = useState({
+        freeRadiusKm: 3,
+        baseFee: 40,
+        chargeableLimitKm: 5,
+        perKmFee: 10,
+        maxDistanceKm: 25,
+        hqLatitude: 10.008,
+        hqLongitude: 76.315
+    });
+
+    useEffect(() => {
+        const loadDeliveryRules = async () => {
+            try {
+                const res = await fetchSystemSetting('delivery_rules');
+                if (res && res.value) {
+                    setDeliveryRules(res.value);
+                }
+            } catch (err) {
+                console.error("Failed to load delivery rules:", err);
+            }
+        };
+        loadDeliveryRules();
+    }, []);
+
+    const calculateDistance = (lat1: number, lon1: number, lat2: number, lon2: number) => {
+        const R = 6371; // Earth's radius in km
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLon = (lon2 - lon1) * Math.PI / 180;
+        const a = 
+            Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+            Math.sin(dLon/2) * Math.sin(dLon/2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c;
+    };
+
+    const getDeliveryDetails = (vendorId: string) => {
+        if (!deliveryAddress.latitude || !deliveryAddress.longitude) {
+            return { fee: 0, distance: 0, outOfRange: false, pending: true };
+        }
+
+        const isVanaMap = vendorId === 'vanamap';
+        const vendor = isVanaMap 
+            ? { latitude: deliveryRules.hqLatitude, longitude: deliveryRules.hqLongitude }
+            : vendors[vendorId];
+
+        if (!vendor || vendor.latitude === undefined || vendor.longitude === undefined) {
+            return { fee: 0, distance: 0, outOfRange: false, pending: true };
+        }
+
+        const distance = calculateDistance(
+            deliveryAddress.latitude,
+            deliveryAddress.longitude,
+            vendor.latitude,
+            vendor.longitude
+        );
+
+        if (distance > deliveryRules.maxDistanceKm) {
+            return { fee: 0, distance, outOfRange: true, pending: false };
+        }
+
+        let fee = 0;
+        if (distance > deliveryRules.freeRadiusKm) {
+            fee = deliveryRules.baseFee;
+            if (distance > deliveryRules.chargeableLimitKm) {
+                fee += Math.ceil((distance - deliveryRules.chargeableLimitKm) * deliveryRules.perKmFee);
+            }
+        }
+
+        return { fee, distance, outOfRange: false, pending: false };
+    };
 
     // Auto-fill from user location if available
     useEffect(() => {
@@ -256,9 +328,17 @@ export const Cart = () => {
         }, 0);
 
         if (totalPrice <= 0) {
-            toast.error('Cart total must be greater than â‚¹0');
+            toast.error('Cart total must be greater than ₹0');
             return;
         }
+
+        const { fee, outOfRange } = getDeliveryDetails(vendorId);
+        if (outOfRange) {
+            toast.error('Your delivery location is out of range for this vendor');
+            return;
+        }
+
+        const totalWithDelivery = totalPrice + fee;
 
         setPayingVendor(vendorId);
 
@@ -281,7 +361,7 @@ export const Cart = () => {
         const delivery = getDeliveryData();
 
         try {
-            const order = await createCartOrder(totalPrice, itemPayload, delivery);
+            const order = await createCartOrder(totalWithDelivery, itemPayload, delivery);
 
             const options = {
                 key: order.key,
@@ -298,7 +378,7 @@ export const Cart = () => {
                             paymentId: response.razorpay_payment_id,
                             signature: response.razorpay_signature,
                             items: itemPayload,
-                            totalAmount: totalPrice,
+                            totalAmount: totalWithDelivery,
                             deliveryAddress: delivery
                         });
 
@@ -367,12 +447,19 @@ export const Cart = () => {
                 name: 'VanaMap Official',
                 whatsapp: '9188773534', // System Admin / Official support
                 address: 'Headquarters',
-                latitude: 0, longitude: 0,
+                latitude: deliveryRules.hqLatitude,
+                longitude: deliveryRules.hqLongitude,
                 phone: '9188773534'
             } as Vendor;
         }
 
         if (!vendor || !vItems) return;
+
+        const { fee, distance, outOfRange } = getDeliveryDetails(vendorId);
+        if (outOfRange) {
+            toast.error('Your delivery location is out of range for this vendor');
+            return;
+        }
 
         const delivery = getDeliveryData();
 
@@ -390,17 +477,19 @@ export const Cart = () => {
             }
         });
         if (total > 0) {
-            msg += `\n*Total Estimated Value: ${formatCurrency(total)}*\n`;
+            msg += `\n*Delivery Distance:* ${distance.toFixed(1)} km`;
+            msg += `\n*Delivery Fee:* ${fee > 0 ? formatCurrency(fee) : 'FREE'}`;
+            msg += `\n*Total Estimated Value: ${formatCurrency(total + fee)}*\n`;
         }
 
         // Add delivery address to WhatsApp message
         if (delivery) {
-            msg += `\n*ðŸ“ Delivery Location:*\n`;
+            msg += `\n*📍 Delivery Location:*\n`;
             if (delivery.address) msg += `${delivery.address}\n`;
             if (delivery.city || delivery.state) msg += `${delivery.city || ''}${delivery.city && delivery.state ? ', ' : ''}${delivery.state || ''}\n`;
             if (delivery.pincode) msg += `PIN: ${delivery.pincode}\n`;
             if (delivery.latitude && delivery.longitude) {
-                msg += `ðŸ“Œ Map: https://www.google.com/maps?q=${delivery.latitude},${delivery.longitude}\n`;
+                msg += `📍 Map: https://www.google.com/maps?q=${delivery.latitude},${delivery.longitude}\n`;
             }
         }
 
@@ -558,8 +647,40 @@ export const Cart = () => {
                                                 onDrag={handleMarkerDrag}
                                             />
                                         )}
+                                        {Object.keys(groupedItems).map(vendorId => {
+                                            const isVanaMap = vendorId === 'vanamap';
+                                            const vendor = isVanaMap
+                                                ? { latitude: deliveryRules.hqLatitude, longitude: deliveryRules.hqLongitude, name: 'VanaMap Official' }
+                                                : vendors[vendorId];
+                                            if (!vendor || vendor.latitude === undefined || vendor.longitude === undefined || vendor.latitude === null || vendor.longitude === null) {
+                                                return null;
+                                            }
+                                            return (
+                                                <Fragment key={vendorId}>
+                                                    <Marker position={[vendor.latitude, vendor.longitude]}>
+                                                        <Popup>
+                                                            <strong>{vendor.name}</strong>
+                                                            <br />
+                                                            Free Delivery: {deliveryRules.freeRadiusKm} km
+                                                            <br />
+                                                            Max Delivery Range: {deliveryRules.maxDistanceKm} km
+                                                        </Popup>
+                                                    </Marker>
+                                                    <Circle
+                                                        center={[vendor.latitude, vendor.longitude]}
+                                                        radius={deliveryRules.freeRadiusKm * 1000}
+                                                        pathOptions={{ color: '#10b981', fillColor: '#10b981', fillOpacity: 0.15 }}
+                                                    />
+                                                    <Circle
+                                                        center={[vendor.latitude, vendor.longitude]}
+                                                        radius={deliveryRules.maxDistanceKm * 1000}
+                                                        pathOptions={{ color: '#ef4444', dashArray: '5, 5', fillOpacity: 0.02 }}
+                                                    />
+                                                </Fragment>
+                                            );
+                                        })}
                                     </MapContainer>
-                                    <p className={styles.mapHint}>ðŸ“ Click the map or drag the pin to set exact delivery location</p>
+                                    <p className={styles.mapHint}>📍 Click the map or drag the pin to set exact delivery location</p>
                                 </div>
                             </div>
                         )}
@@ -593,6 +714,8 @@ export const Cart = () => {
 
                             // If vendor data is missing (async load), show skeleton or placeholder
                             const vendorName = isVanaMap ? 'VanaMap Official' : (vendor?.name || 'Loading Vendor...');
+
+                            const { fee, distance, outOfRange, pending } = getDeliveryDetails(vendorId);
 
                             return (
                                 <div key={vendorId} className={styles.vendorGroup}>
@@ -633,7 +756,7 @@ export const Cart = () => {
                                                     <button
                                                         className={styles.payOnlineBtn}
                                                         onClick={() => handleRazorpayCheckout(vendorId)}
-                                                        disabled={payingVendor === vendorId}
+                                                        disabled={payingVendor === vendorId || outOfRange || pending}
                                                     >
                                                         <CreditCard size={18} />
                                                         {payingVendor === vendorId ? 'Processing...' : 'Pay Online'}
@@ -641,6 +764,7 @@ export const Cart = () => {
                                                     <button
                                                         className={styles.whatsappBtn}
                                                         onClick={() => handleWhatsAppCheckout(vendorId)}
+                                                        disabled={outOfRange || pending}
                                                     >
                                                         <MessageCircle size={18} /> WhatsApp
                                                     </button>
@@ -677,7 +801,7 @@ export const Cart = () => {
 
                                                         {isCustomPot && (
                                                             <div className={styles.comingSoonBadge}>
-                                                                <Info size={12} /> Stay tuned! This buying option is coming soon ðŸš€
+                                                                <Info size={12} /> Stay tuned! This buying option is coming soon 🚀
                                                             </div>
                                                         )}
 
@@ -712,10 +836,44 @@ export const Cart = () => {
                                         })}
                                     </div>
 
-                                    {/* Subtotal */}
-                                    <div className={styles.groupFooter}>
-                                        <span className={styles.subtotalLabel}>Subtotal ({cartItems.length} items)</span>
-                                        <span className={styles.subtotalValue}>{formatCurrency(totalPrice)}</span>
+                                    {/* Subtotal & Delivery Details */}
+                                    <div className={styles.groupFooterDetails}>
+                                        <div className={styles.footerDetailRow}>
+                                            <span>Subtotal ({cartItems.length} items)</span>
+                                            <span>{formatCurrency(totalPrice)}</span>
+                                        </div>
+                                        {!pending && (
+                                            <>
+                                                <div className={styles.footerDetailRow}>
+                                                    <span>Delivery Distance</span>
+                                                    <span>{distance.toFixed(1)} km</span>
+                                                </div>
+                                                <div className={styles.footerDetailRow}>
+                                                    <span>Delivery Fee</span>
+                                                    <span>{fee > 0 ? formatCurrency(fee) : 'FREE'}</span>
+                                                </div>
+                                                {outOfRange ? (
+                                                    <div className={styles.shippingPrompt} style={{ background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', border: '1px solid rgba(239, 68, 68, 0.2)', borderRadius: '8px', padding: '0.5rem', marginTop: '0.5rem' }}>
+                                                        📍 Out of delivery range (Max: {deliveryRules.maxDistanceKm} km)
+                                                    </div>
+                                                ) : (
+                                                    fee === 0 && (
+                                                        <div className={styles.shippingPrompt}>
+                                                            🎉 Within free delivery radius!
+                                                        </div>
+                                                    )
+                                                )}
+                                                <div className={`${styles.footerDetailRow} ${styles.grandTotal}`}>
+                                                    <span>Grand Total</span>
+                                                    <span>{formatCurrency(totalPrice + fee)}</span>
+                                                </div>
+                                            </>
+                                        )}
+                                        {pending && (
+                                            <div className={styles.shippingPrompt} style={{ background: 'rgba(245, 158, 11, 0.05)', color: '#f59e0b' }}>
+                                                📍 Please set delivery address to calculate delivery fee
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             );

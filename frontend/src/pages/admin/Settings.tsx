@@ -1,15 +1,25 @@
 import { useState, useEffect } from 'react';
 import { AdminLayout } from './AdminLayout';
-import { Lock, Bell, Database, Shield, Zap, Globe, Mail, Key, UserPlus, Fingerprint, Smartphone, MessageSquare, Webhook, Code2, Users } from 'lucide-react';
+import { Lock, Bell, Database, Shield, Zap, Globe, Mail, Key, UserPlus, Fingerprint, Smartphone, MessageSquare, Webhook, Code2, Users, Truck } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { fetchSystemSetting, updateSystemSetting } from '../../services/api';
 import styles from './Settings.module.css';
 
-type Tab = 'general' | 'security' | 'notifications' | 'api' | 'team';
+type Tab = 'general' | 'security' | 'notifications' | 'api' | 'team' | 'delivery';
 
 export const Settings = () => {
     const [activeTab, setActiveTab] = useState<Tab>('general');
     const [loading, setLoading] = useState(true);
+
+    const [deliveryRules, setDeliveryRules] = useState({
+        freeRadiusKm: 3,
+        baseFee: 40,
+        chargeableLimitKm: 5,
+        perKmFee: 10,
+        maxDistanceKm: 25,
+        hqLatitude: 10.008,
+        hqLongitude: 76.315
+    });
 
     const [settings, setSettings] = useState({
         twoFactor: false,
@@ -35,15 +45,21 @@ export const Settings = () => {
 
             const fetchedSettings = { ...settings };
 
-            await Promise.all(
-                keys.map(async (key) => {
+            await Promise.all([
+                ...keys.map(async (key) => {
                     const dbKey = `admin_settings_${key}`;
                     const res = await fetchSystemSetting(dbKey);
                     if (res && res.value !== undefined) {
                         fetchedSettings[key] = res.value;
                     }
-                })
-            );
+                }),
+                (async () => {
+                    const res = await fetchSystemSetting('delivery_rules');
+                    if (res && res.value) {
+                        setDeliveryRules(res.value);
+                    }
+                })()
+            ]);
 
             setSettings(fetchedSettings);
         } catch (err) {
@@ -57,6 +73,18 @@ export const Settings = () => {
     useEffect(() => {
         loadSettings();
     }, []);
+
+    const handleSaveDeliveryRules = async (e: React.FormEvent) => {
+        e.preventDefault();
+        const tid = toast.loading("Saving delivery rules...");
+        try {
+            await updateSystemSetting('delivery_rules', deliveryRules);
+            toast.success("Delivery rules saved successfully!", { id: tid });
+        } catch (err) {
+            console.error(err);
+            toast.error("Failed to save delivery rules", { id: tid });
+        }
+    };
 
     const toggleSetting = async (key: keyof typeof settings) => {
         const newValue = !settings[key];
@@ -139,6 +167,9 @@ export const Settings = () => {
                             </button>
                             <button onClick={() => setActiveTab('team')} className={`${styles.navItem} ${activeTab === 'team' ? styles.navItemActive : ''}`}>
                                 <Users size={18} /> Team Members
+                            </button>
+                            <button onClick={() => setActiveTab('delivery')} className={`${styles.navItem} ${activeTab === 'delivery' ? styles.navItemActive : ''}`}>
+                                <Truck size={18} /> Delivery Rules
                             </button>
                         </div>
 
@@ -348,6 +379,117 @@ export const Settings = () => {
                                         </button>
                                     </div>
                                 </div>
+                            )}
+
+                            {/* DELIVERY TAB */}
+                            {activeTab === 'delivery' && (
+                                <form onSubmit={handleSaveDeliveryRules} className={styles.card}>
+                                    <div className={styles.cardHeader}>
+                                        <div className={styles.cardTitle}>Delivery Rules Configuration</div>
+                                        <div className={styles.cardDesc}>Configure geo-fencing delivery parameters, base rates, distance calculations, and HQ coordinates.</div>
+                                    </div>
+                                    
+                                    <div className={styles.formGrid}>
+                                        <div className={styles.formGroup}>
+                                            <label className={styles.fieldLabel}>Free Delivery Radius (km)</label>
+                                            <input
+                                                type="number"
+                                                step="any"
+                                                className={styles.inputField}
+                                                value={deliveryRules.freeRadiusKm}
+                                                onChange={e => setDeliveryRules(prev => ({ ...prev, freeRadiusKm: parseFloat(e.target.value) || 0 }))}
+                                                required
+                                            />
+                                            <span className={styles.fieldHelper}>Orders within this radius will have FREE delivery.</span>
+                                        </div>
+
+                                        <div className={styles.formGroup}>
+                                            <label className={styles.fieldLabel}>Base Delivery Fee (₹)</label>
+                                            <input
+                                                type="number"
+                                                step="any"
+                                                className={styles.inputField}
+                                                value={deliveryRules.baseFee}
+                                                onChange={e => setDeliveryRules(prev => ({ ...prev, baseFee: parseFloat(e.target.value) || 0 }))}
+                                                required
+                                            />
+                                            <span className={styles.fieldHelper}>Starting fee for deliveries exceeding the free radius.</span>
+                                        </div>
+
+                                        <div className={styles.formGroup}>
+                                            <label className={styles.fieldLabel}>Chargeable Distance Limit (km)</label>
+                                            <input
+                                                type="number"
+                                                step="any"
+                                                className={styles.inputField}
+                                                value={deliveryRules.chargeableLimitKm}
+                                                onChange={e => setDeliveryRules(prev => ({ ...prev, chargeableLimitKm: parseFloat(e.target.value) || 0 }))}
+                                                required
+                                            />
+                                            <span className={styles.fieldHelper}>Deliveries beyond this distance will incur extra per-km charges.</span>
+                                        </div>
+
+                                        <div className={styles.formGroup}>
+                                            <label className={styles.fieldLabel}>Per-KM Fee (₹/km)</label>
+                                            <input
+                                                type="number"
+                                                step="any"
+                                                className={styles.inputField}
+                                                value={deliveryRules.perKmFee}
+                                                onChange={e => setDeliveryRules(prev => ({ ...prev, perKmFee: parseFloat(e.target.value) || 0 }))}
+                                                required
+                                            />
+                                            <span className={styles.fieldHelper}>Fee charged per kilometer beyond the Chargeable Distance Limit.</span>
+                                        </div>
+
+                                        <div className={styles.formGroup}>
+                                            <label className={styles.fieldLabel}>Maximum Delivery Distance (km)</label>
+                                            <input
+                                                type="number"
+                                                step="any"
+                                                className={styles.inputField}
+                                                value={deliveryRules.maxDistanceKm}
+                                                onChange={e => setDeliveryRules(prev => ({ ...prev, maxDistanceKm: parseFloat(e.target.value) || 0 }))}
+                                                required
+                                            />
+                                            <span className={styles.fieldHelper}>Maximum allowable distance for deliveries. Checkout is disabled beyond this.</span>
+                                        </div>
+                                    </div>
+
+                                    <div className={styles.sectionDivider}>HQ Coordinates (VanaMap Location)</div>
+                                    
+                                    <div className={styles.formGrid}>
+                                        <div className={styles.formGroup}>
+                                            <label className={styles.fieldLabel}>Latitude</label>
+                                            <input
+                                                type="number"
+                                                step="any"
+                                                className={styles.inputField}
+                                                value={deliveryRules.hqLatitude}
+                                                onChange={e => setDeliveryRules(prev => ({ ...prev, hqLatitude: parseFloat(e.target.value) || 0 }))}
+                                                required
+                                            />
+                                        </div>
+
+                                        <div className={styles.formGroup}>
+                                            <label className={styles.fieldLabel}>Longitude</label>
+                                            <input
+                                                type="number"
+                                                step="any"
+                                                className={styles.inputField}
+                                                value={deliveryRules.hqLongitude}
+                                                onChange={e => setDeliveryRules(prev => ({ ...prev, hqLongitude: parseFloat(e.target.value) || 0 }))}
+                                                required
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div style={{ marginTop: '2rem', display: 'flex', justifyContent: 'flex-end' }}>
+                                        <button type="submit" className={styles.saveBtn}>
+                                            Save Delivery Rules
+                                        </button>
+                                    </div>
+                                </form>
                             )}
 
                         </div>
