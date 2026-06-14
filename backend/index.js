@@ -1055,9 +1055,11 @@ app.post('/api/payments/verify-cart', auth, async (req, res) => {
             sales.push(sale);
 
             // Auto-deduct inventory
-            await deductInventory(item.vendorId, item.plantId, item.quantity || 1);
-
-            // Award 200 points per plant purchased
+            const deducted = await deductInventory(item.vendorId, item.plantId, item.quantity || 1);
+            if (deducted) {
+                sale.inventoryDeducted = true;
+                await sale.save();
+            }
             pointsToAward += (item.quantity || 1) * 200;
 
             // Notify vendor with delivery info
@@ -1172,10 +1174,10 @@ app.post('/api/payments/verify-cart', auth, async (req, res) => {
 const deductInventory = async (vendorId, plantId, quantityDeducted) => {
     try {
         const vendor = await Vendor.findOne({ id: vendorId });
-        if (!vendor) return;
+        if (!vendor) return false;
 
         const item = vendor.inventory.find(i => i.plantId === plantId);
-        if (!item) return;
+        if (!item) return false;
 
         const oldQty = item.quantity || 0;
         const newQty = Math.max(0, oldQty - quantityDeducted);
@@ -1185,6 +1187,7 @@ const deductInventory = async (vendorId, plantId, quantityDeducted) => {
             item.inStock = false;
         }
 
+        vendor.markModified('inventory');
         await vendor.save();
 
         const threshold = item.lowStockThreshold !== undefined ? item.lowStockThreshold : 5;
@@ -1225,8 +1228,37 @@ const deductInventory = async (vendorId, plantId, quantityDeducted) => {
                 }
             }
         }
+        return true;
     } catch (err) {
         console.error('Inventory Deduction Error:', err);
+        return false;
+    }
+};
+
+// Inventory Restoration Helper
+const restoreInventory = async (vendorId, plantId, quantityRestored) => {
+    try {
+        const vendor = await Vendor.findOne({ id: vendorId });
+        if (!vendor) return false;
+
+        const item = vendor.inventory.find(i => i.plantId === plantId);
+        if (!item) return false;
+
+        const oldQty = item.quantity || 0;
+        const newQty = oldQty + quantityRestored;
+        item.quantity = newQty;
+
+        if (newQty > 0) {
+            item.inStock = true;
+        }
+
+        vendor.markModified('inventory');
+        await vendor.save();
+        console.log(`[Inventory Restored] Vendor ${vendor.name} plant ${plantId} increased by ${quantityRestored}. New Qty: ${newQty}`);
+        return true;
+    } catch (err) {
+        console.error('Inventory Restoration Error:', err);
+        return false;
     }
 };
 
@@ -1367,12 +1399,37 @@ app.patch('/api/admin/orders/:id/status', auth, admin, async (req, res) => {
 
         const cofounderEmails = await getVerifiedCofounders();
 
-        const sale = await Sale.findByIdAndUpdate(
-            req.params.id,
-            { status },
-            { new: true }
-        );
+        const sale = await Sale.findById(req.params.id);
         if (!sale) return res.status(404).json({ error: 'Order not found' });
+
+        const oldStatus = sale.status;
+
+        // Stock Deduction/Restoration Lifecycle updates
+        if (status === 'delivered') {
+            if (!sale.inventoryDeducted) {
+                const deducted = await deductInventory(sale.vendorId, sale.plantId, sale.quantity || 1);
+                if (deducted) {
+                    sale.inventoryDeducted = true;
+                }
+            }
+        } else if (status === 'cancelled') {
+            if (sale.inventoryDeducted) {
+                const restored = await restoreInventory(sale.vendorId, sale.plantId, sale.quantity || 1);
+                if (restored) {
+                    sale.inventoryDeducted = false;
+                }
+            }
+        } else if (oldStatus === 'cancelled' && ['pending', 'completed', 'shipped'].includes(status)) {
+            if (!sale.inventoryDeducted) {
+                const deducted = await deductInventory(sale.vendorId, sale.plantId, sale.quantity || 1);
+                if (deducted) {
+                    sale.inventoryDeducted = true;
+                }
+            }
+        }
+
+        sale.status = status;
+        await sale.save();
 
         // Fetch user and vendor details for email notifications
         let user = null;
@@ -1605,6 +1662,30 @@ app.patch('/api/vendor/orders/:id/status', auth, async (req, res) => {
         if (status === 'shipped') {
             const deliveryOtp = Math.floor(100000 + Math.random() * 900000).toString();
             sale.deliveryOTP = deliveryOtp;
+        }
+        // Stock Deduction/Restoration Lifecycle updates
+        const oldStatus = sale.status;
+        if (status === 'delivered') {
+            if (!sale.inventoryDeducted) {
+                const deducted = await deductInventory(sale.vendorId, sale.plantId, sale.quantity || 1);
+                if (deducted) {
+                    sale.inventoryDeducted = true;
+                }
+            }
+        } else if (status === 'cancelled') {
+            if (sale.inventoryDeducted) {
+                const restored = await restoreInventory(sale.vendorId, sale.plantId, sale.quantity || 1);
+                if (restored) {
+                    sale.inventoryDeducted = false;
+                }
+            }
+        } else if (oldStatus === 'cancelled' && ['pending', 'completed', 'shipped'].includes(status)) {
+            if (!sale.inventoryDeducted) {
+                const deducted = await deductInventory(sale.vendorId, sale.plantId, sale.quantity || 1);
+                if (deducted) {
+                    sale.inventoryDeducted = true;
+                }
+            }
         }
 
         sale.status = status;
@@ -2029,8 +2110,11 @@ app.post('/api/user/complete-purchase', auth, async (req, res) => {
             sales.push(sale);
 
             // Auto-deduct inventory
-            await deductInventory(item.vendorId, item.plantId, item.quantity || 1);
-
+            const deducted = await deductInventory(item.vendorId, item.plantId, item.quantity || 1);
+            if (deducted) {
+                sale.inventoryDeducted = true;
+                await sale.save();
+            }
             // Award 200 points per plant purchased
             pointsToAward += (item.quantity || 1) * 200;
 

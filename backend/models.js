@@ -259,6 +259,7 @@ const SaleSchema = new mongoose.Schema({
     deliveryFee: { type: Number, default: 0 },
     deliveryDistance: { type: Number, default: 0 },
     deliveryOTP: { type: String },
+    inventoryDeducted: { type: Boolean, default: false },
     timestamp: { type: Date, default: Date.now }
 });
 
