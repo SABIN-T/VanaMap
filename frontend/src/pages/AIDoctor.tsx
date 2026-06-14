@@ -102,6 +102,70 @@ export const AIDoctor = () => {
     const [input, setInput] = useState('');
     const [loading, setLoading] = useState(false);
 
+    // --- GROWTH SIMULATOR STATES ---
+    const [showGrowthSim, setShowGrowthSim] = useState(false);
+    const [simPlant, setSimPlant] = useState('Monstera Deliciosa');
+    const [simMonths, setSimMonths] = useState(6); // 1, 3, 6, 12, 24
+    const [simLight, setSimLight] = useState('Medium'); // Low, Medium, High
+    const [simWater, setSimWater] = useState('Medium'); // Low, Medium, High
+    const [simImageLoading, setSimImageLoading] = useState(false);
+    const [simImageUrl, setSimImageUrl] = useState('');
+
+    useEffect(() => {
+        if (!showGrowthSim) return;
+        setSimImageLoading(true);
+        const seed = 42;
+        const monthsText = simMonths === 1 ? '1 month sprout' :
+                           simMonths === 3 ? '3 months young sprout' :
+                           simMonths === 6 ? '6 months young plant' :
+                           simMonths === 12 ? '12 months established plant' : '24 months mature plant';
+        
+        const envText = `${simLight} sunlight conditions, watered ${simWater.toLowerCase()}`;
+        const prompt = `A professional close up botanical studio photo of a ${simPlant} at ${monthsText} stage, grown under ${envText}, healthy glossy leaves, in a modern ceramic pot, solid clean background, studio lighting`;
+        const url = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=512&height=512&model=flux&seed=${seed}&nologo=true`;
+        
+        const img = new Image();
+        img.src = url;
+        img.onload = () => {
+            setSimImageUrl(url);
+            setSimImageLoading(false);
+        };
+        img.onerror = () => {
+            setSimImageUrl(url);
+            setSimImageLoading(false);
+        };
+    }, [simPlant, simMonths, simLight, simWater, showGrowthSim]);
+
+    const getGrowthDetails = () => {
+        const heightEstimates: Record<string, Record<number, string>> = {
+            'Monstera Deliciosa': { 1: '10-15 cm', 3: '20-30 cm', 6: '40-60 cm', 12: '80-120 cm (leaf splits starting)', 24: '150-200 cm (large fenestrations)' },
+            'Snake Plant': { 1: '15-20 cm', 3: '25-35 cm', 6: '40-50 cm', 12: '60-80 cm (compact clusters)', 24: '90-120 cm (tall sword leaves)' },
+            'Pothos': { 1: '15-25 cm (vines)', 3: '30-50 cm', 6: '60-100 cm (trailing)', 12: '120-180 cm', 24: '200-300 cm (lush waterfall)' },
+            'Peace Lily': { 1: '12-18 cm', 3: '20-25 cm', 6: '30-40 cm', 12: '45-60 cm (white spathes blooming)', 24: '70-90 cm (dense clumps)' }
+        };
+        
+        const defaultHeight: Record<number, string> = { 1: '8-12 cm', 3: '15-25 cm', 6: '30-40 cm', 12: '50-80 cm', 24: '100-150 cm' };
+        const pHeights = heightEstimates[simPlant] || defaultHeight;
+        const predictedHeight = pHeights[simMonths];
+        
+        let healthAdvice = "Ensure balanced care. Avoid overwatering.";
+        if (simWater === 'Frequent') {
+            healthAdvice = "⚠️ Warning: Watering too frequently can cause root rot. Let top soil dry.";
+        } else if (simWater === 'Low' && simMonths > 6) {
+            healthAdvice = "Plant might grow slower due to dry conditions. Mist foliage.";
+        } else if (simLight === 'Low' && simPlant === 'Monstera Deliciosa') {
+            healthAdvice = "Low light will limit leaf splits (fenestrations). Move to indirect bright light.";
+        } else if (simLight === 'High') {
+            healthAdvice = "Watch out for direct sun scorching. Ensure filtered light.";
+        }
+        
+        return {
+            height: predictedHeight,
+            advice: healthAdvice,
+            foliage: simMonths <= 3 ? "Young sprouting leaves" : simMonths <= 12 ? "Lush, expanding foliage" : "Matured adult foliage, full growth"
+        };
+    };
+
     // WebSocket streaming
     const { isConnected: wsConnected, isStreaming, sendMessage: sendWsMessage } = useAIDoctorStream();
 
@@ -1003,6 +1067,14 @@ export const AIDoctor = () => {
                             {voiceEnabled ? <Volume2 size={20} /> : <VolumeX size={20} />}
                         </button>
 
+                        <button
+                            className={`${styles.actionBtn} ${showGrowthSim ? styles.active : ''}`}
+                            onClick={() => setShowGrowthSim(true)}
+                            title="Growth Simulator"
+                        >
+                            <Calendar size={20} />
+                        </button>
+
                         {/* Extra Actions Menu - Unified */}
                         <button
                             className={styles.actionBtn}
@@ -1159,9 +1231,12 @@ export const AIDoctor = () => {
                                 ))}
                             </div>
 
-                            <div style={{ marginTop: '1.5rem', display: 'flex', gap: '10px' }}>
+                            <div style={{ marginTop: '1.5rem', display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+                                <button className={styles.expertBtn} onClick={() => { setIsVoiceSelectorOpen(false); setShowGrowthSim(true); }} style={{ flex: 1 }}>
+                                    <Calendar size={18} /> Growth Simulator
+                                </button>
                                 <button className={styles.expertBtn} onClick={handleCareCalendar} style={{ flex: 1 }}>
-                                    <Calendar size={18} /> Generate Schedule
+                                    <ScrollText size={18} /> Generate Schedule
                                 </button>
                                 <button className={styles.expertBtn} onClick={handleExport} style={{ flex: 1 }}>
                                     <Download size={18} /> Save Transcript
@@ -1307,11 +1382,22 @@ export const AIDoctor = () => {
                     <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
                         {previewUrl && (
                             <div className={styles.previewArea}>
-                                <div className={styles.previewBadge}>
-                                    <img src={previewUrl} className={styles.previewThumb} alt="Scan Preview" />
-                                    <span>Bio-Analysis Ready</span>
-                                    <button onClick={clearImage} style={{ background: 'none', border: 'none', color: '#ef4444', marginLeft: 'auto' }}>
-                                        <Trash2 size={16} />
+                                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                                    <div className={styles.previewBadge}>
+                                        <img src={previewUrl} className={styles.previewThumb} alt="Scan Preview" />
+                                        <span>Bio-Analysis Ready</span>
+                                        <button onClick={clearImage} style={{ background: 'none', border: 'none', color: '#ef4444', marginLeft: '8px', display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+                                            <Trash2 size={16} />
+                                        </button>
+                                    </div>
+                                    <button
+                                        className={styles.expertBtn}
+                                        onClick={() => handleSend("Please perform a complete diagnostic scan on this plant. Identify any signs of disease, pests, or nutrient deficiencies, and provide a treatment plan.")}
+                                        style={{ padding: '6px 14px', borderRadius: '14px', fontSize: '0.8rem', width: 'auto' }}
+                                        disabled={loading}
+                                    >
+                                        <Stethoscope size={14} style={{ color: '#ef4444' }} />
+                                        <span>Diagnose Plant Disease</span>
                                     </button>
                                 </div>
                             </div>
@@ -1408,6 +1494,141 @@ export const AIDoctor = () => {
                                     <Sparkles size={20} /> Upgrade to Infinite Neural Credits
                                 </button>
                             )}
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Growth Simulator Modal */}
+            {showGrowthSim && (
+                <div className={styles.overlay} onClick={() => setShowGrowthSim(false)}>
+                    <div className={styles.simModal} onClick={e => e.stopPropagation()}>
+                        <div className={styles.modalHeader}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                                <Calendar size={24} className="text-primary" />
+                                <div>
+                                    <h3 style={{ margin: 0, fontSize: '1.25rem' }}>Botanical Growth Simulator</h3>
+                                    <p style={{ margin: 0, fontSize: '0.8rem', color: '#64748b' }}>Time-lapse growth prediction & environmental simulation</p>
+                                </div>
+                            </div>
+                            <button onClick={() => setShowGrowthSim(false)} className={styles.closeBtn}>
+                                <X size={20} />
+                            </button>
+                        </div>
+                        <div className={styles.modalContent}>
+                            <div className={styles.simGrid}>
+                                
+                                {/* Controls */}
+                                <div className={styles.simControls}>
+                                    <div className={styles.controlGroup}>
+                                        <label className={styles.controlLabel}>Select Plant Species</label>
+                                        <select 
+                                            className={styles.selectInput} 
+                                            value={simPlant} 
+                                            onChange={e => setSimPlant(e.target.value)}
+                                        >
+                                            <option value="Monstera Deliciosa">Monstera Deliciosa (Split-leaf Philodendron)</option>
+                                            <option value="Snake Plant">Snake Plant (Sansevieria Trifasciata)</option>
+                                            <option value="Pothos">Devil's Ivy (Pothos/Epipremnum)</option>
+                                            <option value="Peace Lily">Peace Lily (Spathiphyllum)</option>
+                                        </select>
+                                    </div>
+        
+                                    <div className={styles.controlGroup}>
+                                        <label className={styles.controlLabel}>Growth Timeline</label>
+                                        <input 
+                                            type="range" 
+                                            min="1" 
+                                            max="5" 
+                                            step="1"
+                                            value={
+                                                simMonths === 1 ? 1 : 
+                                                simMonths === 3 ? 2 : 
+                                                simMonths === 6 ? 3 : 
+                                                simMonths === 12 ? 4 : 5
+                                            }
+                                            onChange={e => {
+                                                const val = parseInt(e.target.value);
+                                                if (val === 1) setSimMonths(1);
+                                                else if (val === 2) setSimMonths(3);
+                                                else if (val === 3) setSimMonths(6);
+                                                else if (val === 4) setSimMonths(12);
+                                                else setSimMonths(24);
+                                            }}
+                                            className={styles.sliderInput}
+                                        />
+                                        <div className={styles.sliderLabel}>
+                                            <span>1 Month</span>
+                                            <span>3M</span>
+                                            <span>6M</span>
+                                            <span>1 Year</span>
+                                            <span>2 Years</span>
+                                        </div>
+                                    </div>
+        
+                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                                        <div className={styles.controlGroup}>
+                                            <label className={styles.controlLabel}>Sunlight</label>
+                                            <select 
+                                                className={styles.selectInput} 
+                                                value={simLight} 
+                                                onChange={e => setSimLight(e.target.value)}
+                                            >
+                                                <option value="Low">Low Light</option>
+                                                <option value="Medium">Medium Indirect</option>
+                                                <option value="High">Bright Direct</option>
+                                            </select>
+                                        </div>
+                                        <div className={styles.controlGroup}>
+                                            <label className={styles.controlLabel}>Watering</label>
+                                            <select 
+                                                className={styles.selectInput} 
+                                                value={simWater} 
+                                                onChange={e => setSimWater(e.target.value)}
+                                            >
+                                                <option value="Low">Low (Dry)</option>
+                                                <option value="Medium">Moderate</option>
+                                                <option value="Frequent">Frequent (Moist)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+        
+                                    {/* Stats card */}
+                                    <div className={styles.simStatsCard}>
+                                        <div className={styles.simStatItem}>
+                                            <strong>Expected Height:</strong>
+                                            <span>{getGrowthDetails().height}</span>
+                                        </div>
+                                        <div className={styles.simStatItem}>
+                                            <strong>Foliage State:</strong>
+                                            <span>{getGrowthDetails().foliage}</span>
+                                        </div>
+                                        <div style={{ fontSize: '0.8rem', color: 'var(--flora-text)', marginTop: '8px', lineHeight: '1.4' }}>
+                                            <strong>Growth Tip:</strong> {getGrowthDetails().advice}
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                {/* Visual render */}
+                                <div className={styles.simVisual}>
+                                    {simImageUrl ? (
+                                        <img 
+                                            src={simImageUrl} 
+                                            alt="Growth Simulation" 
+                                            className={styles.simImage}
+                                            style={{ opacity: simImageLoading ? 0.3 : 1 }}
+                                        />
+                                    ) : (
+                                        <div style={{ color: 'var(--flora-text-muted)', fontSize: '0.9rem' }}>Preparing simulation...</div>
+                                    )}
+                                    {simImageLoading && (
+                                        <div style={{ position: 'absolute', display: 'flex', color: 'var(--flora-primary)', animation: 'spin 1s linear infinite' }}>
+                                            <Loader2 size={36} />
+                                        </div>
+                                    )}
+                                </div>
+        
+                            </div>
                         </div>
                     </div>
                 </div>

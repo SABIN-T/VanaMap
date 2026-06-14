@@ -5259,16 +5259,21 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
         ✅ CAN DO: Accurate ID, scientific synthesis, and **FLUX.1 DEV VISUALIZATION**.
 
         👁️ VISION DIAGNOSIS PROTOCOL (IF IMAGE UPLOADED):
-        1. Analyze Leaf/Stem/Flower morphology (Venation, Margin, Shape).
-        2. Cross-reference with scientific databases.
-        3. Identify any issues (pests, disease, nutrition).
+        1. Analyze Leaf/Stem/Flower morphology (Venation, Margin, Shape, Spots, Discoloration, Pests).
+        2. Identify specific pests (e.g. spider mites, aphids, mealybugs) or plant pathogens (e.g. powdery mildew, black spot, leaf rust, root rot, nutrient deficiencies).
+        3. Assess Severity Level: Choose exactly one: low, medium, high, critical.
+        4. State Environmental Triggers: e.g., high humidity, poor aeration, overwatering, light stress.
+        5. Formulate complete remedies: separate into Organic (natural remedies), Chemical (fungicides/insecticides if appropriate), and Prevention (airflow, space, watering adjustment).
         
         💬 FORMATTING FOR ARCHIVING: 
-        If identifying an issue, you MUST use this structure to trigger medical recording:
+        If identifying an issue, you MUST use this structure at the end of your response to trigger medical recording:
         Plant: [Common Name]
         Scientific Name: [Latin Name]
-        DIAGNOSIS: [Specific Issue]
-        TREATMENT: [Actionable Steps]
+        DIAGNOSIS: [Disease/Pest Name] - [Severity Level: low/medium/high/critical]
+        TREATMENT:
+        - Organic: [Actionable steps]
+        - Chemical: [Actionable steps]
+        - Prevention: [Actionable steps]
         
         🎨 MANDATORY IMAGE GENERATION:
         Include [GENERATE: ...] for any visual requests.
@@ -5659,7 +5664,8 @@ REMEMBER: Your response must include BOTH the identification analysis AND the [G
                     treatment: treat.trim(),
                     imageUrl: image || null,
                     severity: aiContent.toLowerCase().includes('critical') ? 'critical' :
-                        aiContent.toLowerCase().includes('high') ? 'high' : 'low'
+                        aiContent.toLowerCase().includes('high') ? 'high' :
+                        aiContent.toLowerCase().includes('medium') ? 'medium' : 'low'
                 });
                 console.log(`[Garden Clinic] 🩺 Diagnosis recorded for user ${req.user.id}`);
             } catch (recordError) {

@@ -577,19 +577,28 @@
     text-transform: uppercase;
 }
 
-.High {
-    background: #fee2e2;
-    color: #ef4444;
+.critical, .Critical, .High {
+    background: rgba(239, 68, 68, 0.15) !important;
+    color: #ef4444 !important;
+    border: 1px solid rgba(239, 68, 68, 0.25);
 }
 
-.Medium {
-    background: #fef3c7;
-    color: #d97706;
+.high, .Medium {
+    background: rgba(249, 115, 22, 0.15) !important;
+    color: #f97316 !important;
+    border: 1px solid rgba(249, 115, 22, 0.25);
 }
 
-.Low {
-    background: #d1fae5;
-    color: #059669;
+.medium {
+    background: rgba(234, 179, 8, 0.15) !important;
+    color: #ca8a04 !important;
+    border: 1px solid rgba(234, 179, 8, 0.25);
+}
+
+.low, .Low {
+    background: rgba(16, 185, 129, 0.15) !important;
+    color: #059669 !important;
+    border: 1px solid rgba(16, 185, 129, 0.25);
 }
 
 .recordDiagnosInfo,
@@ -771,4 +780,121 @@
     background: var(--flora-primary);
     width: 6px;
     height: 6px;
+}
+
+/* --- Growth Simulator Modal Styles --- */
+.simModal {
+    background: var(--flora-bg);
+    width: 95%;
+    max-width: 700px;
+    border-radius: 32px;
+    border: 1px solid var(--flora-glass-border);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
+    overflow: hidden;
+    animation: modalPop 0.4s cubic-bezier(0.17, 0.89, 0.32, 1.28);
+}
+
+.simGrid {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+@media (max-width: 650px) {
+    .simGrid {
+        grid-template-columns: 1fr;
+        max-height: 60vh;
+        overflow-y: auto;
+    }
+}
+
+.simControls {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.simVisual {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    background: rgba(0, 0, 0, 0.05);
+    min-height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--flora-border);
+}
+
+.simImage {
+    width: 100%;
+    height: 100%;
+    min-height: 250px;
+    max-height: 300px;
+    object-fit: cover;
+    border-radius: 20px;
+    transition: opacity 0.3s ease;
+}
+
+.controlGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.controlLabel {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--flora-text);
+}
+
+.selectInput {
+    padding: 10px 14px;
+    border-radius: 12px;
+    border: 1px solid var(--flora-border);
+    background: var(--flora-card);
+    color: var(--flora-text);
+    outline: none;
+    font-weight: 600;
+    transition: border-color 0.2s;
+}
+
+.selectInput:focus {
+    border-color: var(--flora-primary);
+}
+
+.sliderInput {
+    width: 100%;
+    accent-color: var(--flora-primary);
+    cursor: pointer;
+    margin: 8px 0;
+}
+
+.sliderLabel {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--flora-primary);
+}
+
+.simStatsCard {
+    background: rgba(16, 185, 129, 0.05);
+    border: 1px solid rgba(16, 185, 129, 0.15);
+    border-radius: 18px;
+    padding: 1rem;
+    margin-top: auto;
+}
+
+.simStatItem {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    padding: 6px 0;
+    border-bottom: 1px dashed rgba(16, 185, 129, 0.1);
+}
+
+.simStatItem:last-child {
+    border-bottom: none;
 }
