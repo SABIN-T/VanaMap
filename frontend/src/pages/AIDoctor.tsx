@@ -867,6 +867,48 @@ export const AIDoctor = () => {
         }
     }, [messages, voiceEnabled, speak]);
 
+    // Fetch personalized agent greeting with contextual memory on mount
+    useEffect(() => {
+        let isMounted = true;
+        const fetchProactiveGreeting = async () => {
+            const token = localStorage.getItem('token');
+            if (!token) return; // Keep default welcome if not logged in
+
+            try {
+                const res = await fetch(`${API_URL}/chat/greet`, {
+                    headers: {
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+                if (!res.ok) return;
+                const data = await res.json();
+                if (isMounted && data.greeting) {
+                    const newGreetMsg = {
+                        id: 'greet-' + Date.now(),
+                        role: 'assistant' as const,
+                        content: data.greeting,
+                        timestamp: new Date()
+                    };
+                    
+                    setMessages(prev => {
+                        // Only replace if the only message is the initial default one
+                        if (prev.length === 1 && prev[0].id === '1') {
+                            return [newGreetMsg];
+                        }
+                        return prev;
+                    });
+                }
+            } catch (err) {
+                console.error("Failed to fetch proactive greeting:", err);
+            }
+        };
+
+        fetchProactiveGreeting();
+        return () => {
+            isMounted = false;
+        };
+    }, [user?.id]);
+
 
     // --- SPEECH RECOGNITION (Microphone Input) ---
     const [isListening, setIsListening] = useState(false);

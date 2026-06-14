@@ -5803,6 +5803,70 @@ const AVAILABLE_VOICES = Object.entries(VOICE_PERSONALITIES).map(([id, config]) 
     description: config.description
 }));
 
+app.get('/api/chat/greet', auth, async (req, res) => {
+    try {
+        const userId = req.user.id;
+        const user = await User.findById(userId).lean();
+        const userName = user ? user.name : 'Plant Parent';
+        
+        // Find user's active or monitoring plant records
+        const activeRecords = await DiagnosisRecord.find({ 
+            userId: userId, 
+            status: { $in: ['active', 'monitoring'] } 
+        }).sort({ timestamp: -1 }).limit(2).lean();
+        
+        // Generate personalized prompt
+        let contextText = "";
+        if (activeRecords.length > 0) {
+            contextText = activeRecords.map(r => 
+                `- ${r.plantName} (${r.scientificName || 'Unknown'}): diagnosed with "${r.diagnosis}", severity is "${r.severity}", status is currently "${r.status}"`
+            ).join('\n');
+        }
+        
+        const systemPrompt = `You are Dr. Flora, the AI Plant Doctor agent (The "Logical Empath", combination of professional botanist and warm grandmotherly wisdom).
+Write a personalized, concise welcome message (strictly max 2 sentences, under 40 words) greeting the user by the name "${userName}".
+${activeRecords.length > 0 ? `They have the following plants under care/treatment:
+${contextText}
+Acknowledge the user, check in on one of their sick plants (or mention their status), and ask how you can help them today. Do not give direct treatment steps, just check in.` : `They have no active sick plant records. Greet them warmly by name, say you're ready to help, and ask how their plants are doing today.`}
+Keep it brief and conversational. Do not use any markdown styling (no bold, no asterisks, no hashtags) or emojis inside the text to ensure it sounds clean when read aloud via Text-to-Speech.`;
+
+        const apiKey = process.env.GROQ_API_KEY;
+        let greetingText = `Hello ${userName}! I'm Dr. Flora, your AI Plant Doctor. How can I help your plants thrive today?`;
+        
+        if (apiKey) {
+            const resp = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+                method: "POST",
+                headers: { 
+                    "Content-Type": "application/json", 
+                    "Authorization": `Bearer ${apiKey}` 
+                },
+                body: JSON.stringify({
+                    model: "llama-3.3-70b-versatile",
+                    messages: [
+                        { role: "system", content: systemPrompt },
+                        { role: "user", content: "Generate the greeting." }
+                    ],
+                    max_tokens: 100,
+                    temperature: 0.7
+                })
+            });
+            if (resp.ok) {
+                const json = await resp.json();
+                if (json && json.choices && json.choices[0] && json.choices[0].message) {
+                    greetingText = json.choices[0].message.content.trim();
+                }
+            } else {
+                console.warn(`[AI Doctor Greet] Groq API returned status ${resp.status}`);
+            }
+        }
+        
+        res.json({ greeting: greetingText });
+    } catch (err) {
+        console.error("Failed to generate greeting:", err);
+        res.json({ greeting: `Hello! I'm Dr. Flora, your AI Plant Doctor. How can I help your plants thrive today?` });
+    }
+});
+
 app.get('/api/chat/voices', (req, res) => {
     res.json(AVAILABLE_VOICES);
 });
