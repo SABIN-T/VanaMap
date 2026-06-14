@@ -5174,7 +5174,7 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
         }
 
         // 1. Fetch Contexts & Log Audit
-        const floraResult = await FloraIntelligence.getRelevantFloraContext(messages);
+        const floraResult = await FloraIntelligence.getRelevantFloraContext(messages, userContext?.weather);
         const floraKnowledge = floraResult.context;
         const matchedFloraBatch = floraResult.matches;
 

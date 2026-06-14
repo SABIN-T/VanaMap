@@ -118,7 +118,7 @@ async function handleChatStream(ws, message) {
 
         // Prepare messages for Groq
         const FloraIntelligence = require('./flora-intelligence');
-        const floraResult = await FloraIntelligence.getRelevantFloraContext(messages);
+        const floraResult = await FloraIntelligence.getRelevantFloraContext(messages, userContext?.weather);
         const floraKnowledge = floraResult.context;
 
         // Build system prompt based on persona
