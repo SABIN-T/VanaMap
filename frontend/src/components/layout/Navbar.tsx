@@ -15,7 +15,7 @@ export const Navbar = () => {
     const location = useLocation();
 
     // Hide navbar on full-screen designer/AI Doctor
-    if (location.pathname === '/pot-designer' || location.pathname === '/ai-doctor') return null;
+    if (location.pathname.includes('/pot-designer') || location.pathname.includes('/ai-doctor')) return null;
 
     const handleLogout = () => {
         logout();
