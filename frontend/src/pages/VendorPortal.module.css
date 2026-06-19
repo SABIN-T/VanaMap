@@ -4,7 +4,7 @@
     padding: 0;
     /* Layout handles padding */
     font-family: 'Outfit', sans-serif;
-    color: #f8fafc;
+    color: var(--color-text-main, #f8fafc);
 }
 
 /* OVERVIEW CARDS */
@@ -16,8 +16,8 @@
 }
 
 .statCard {
-    background: rgba(15, 23, 42, 0.35);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--color-bg-card, rgba(15, 23, 42, 0.35));
+    border: 1px solid var(--color-border, rgba(255, 255, 255, 0.05));
     border-radius: 1.25rem;
     padding: 1.25rem;
     display: flex;
@@ -28,10 +28,10 @@
 }
 
 .statCard:hover {
-    background: rgba(30, 41, 59, 0.55);
+    background: var(--color-bg-card-hover, rgba(30, 41, 59, 0.55));
     transform: translateY(-4px) scale(1.02);
-    border-color: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.5);
+    border-color: var(--color-primary, rgba(255, 255, 255, 0.15));
+    box-shadow: var(--glass-shadow);
 }
 
 .statIcon {
@@ -47,12 +47,12 @@
 .statValue {
     font-size: 1.5rem;
     font-weight: 900;
-    color: #fff;
+    color: var(--color-text-main, #fff);
     line-height: 1.1;
 }
 
 .statLabel {
-    color: #64748b;
+    color: var(--color-text-dim, #64748b);
     font-size: 0.65rem;
     font-weight: 800;
     text-transform: uppercase;
@@ -104,8 +104,8 @@
 
 /* FORM CARD - HIGH DENSITY */
 .formCard {
-    background: rgba(15, 23, 42, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--color-bg-card, rgba(15, 23, 42, 0.3));
+    border: 1px solid var(--color-border, rgba(255, 255, 255, 0.05));
     border-radius: 1.5rem;
     padding: 1.5rem;
     backdrop-filter: blur(10px);
@@ -117,14 +117,14 @@
     gap: 0.75rem;
     margin-bottom: 1.5rem;
     padding-bottom: 1rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid var(--color-border, rgba(255, 255, 255, 0.05));
 }
 
 .formHeader h2 {
     font-size: 1.15rem;
     font-weight: 800;
     margin: 0;
-    color: #fff;
+    color: var(--color-heading, #fff);
 }
 
 .formHeader svg {
@@ -145,7 +145,7 @@
     display: block;
     font-size: 0.65rem;
     font-weight: 800;
-    color: #64748b;
+    color: var(--color-text-dim, #64748b);
     text-transform: uppercase;
     letter-spacing: 1px;
     margin-bottom: 0.4rem;
@@ -154,20 +154,20 @@
 .input,
 .textarea {
     width: 100%;
-    background: rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: var(--color-bg-alt, rgba(0, 0, 0, 0.2));
+    border: 1px solid var(--color-border, rgba(255, 255, 255, 0.06));
     border-radius: 0.85rem;
     padding: 0.8rem 1rem;
-    color: #fff;
+    color: var(--color-text-main, #fff);
     font-size: 0.9rem;
     transition: 0.3s;
 }
 
 .input:focus,
 .textarea:focus {
-    border-color: #facc15;
-    background: rgba(250, 204, 21, 0.04);
-    box-shadow: 0 0 0 3px rgba(250, 204, 21, 0.15);
+    border-color: var(--color-primary, #10b981);
+    background: var(--color-bg-card);
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
     outline: none;
 }
 
@@ -235,8 +235,8 @@
 }
 
 .earningsChartCard {
-    background: rgba(15, 23, 42, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--color-bg-card, rgba(15, 23, 42, 0.3));
+    border: 1px solid var(--color-border, rgba(255, 255, 255, 0.05));
     border-radius: 1.5rem;
     padding: 1.5rem;
     backdrop-filter: blur(10px);
@@ -286,7 +286,7 @@
 .miniPlantPrice {
     font-size: 0.9rem;
     font-weight: 800;
-    color: #fff;
+    color: var(--color-text-main, #fff);
 }
 
 .miniStockIn {

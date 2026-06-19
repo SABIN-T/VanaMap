@@ -32,7 +32,7 @@
 [data-theme='light'] [class*="Block"] {
     background: #ffffff !important;
     background-color: #ffffff !important;
-    border-color: rgba(109, 129, 150, 0.2) !important;
+    border-color: rgba(16, 185, 129, 0.15) !important;
 }
 
 /* Override ALL inline dark backgrounds */
@@ -179,8 +179,8 @@
 [data-theme='light'] [class*="Btn"],
 [data-theme='light'] [class*="button"],
 [data-theme='light'] [class*="Button"] {
-    background: linear-gradient(135deg, #6D8196 0%, #6D8196 100%) !important;
-    background-color: #6D8196 !important;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
+    background-color: #10b981 !important;
     color: #ffffff !important;
 }
 
@@ -189,9 +189,9 @@
 [data-theme='light'] [class*="Secondary"],
 [data-theme='light'] [class*="outline"],
 [data-theme='light'] [class*="Outline"] {
-    background: rgba(109, 129, 150, 0.1) !important;
-    background-color: rgba(109, 129, 150, 0.1) !important;
-    color: #6b6b6b !important;
+    background: rgba(16, 185, 129, 0.1) !important;
+    background-color: rgba(16, 185, 129, 0.1) !important;
+    color: #047857 !important;
 }
 
 /* Input fields */
@@ -201,7 +201,7 @@
     background: #ffffff !important;
     background-color: #ffffff !important;
     color: #4A4A4A !important;
-    border-color: rgba(109, 129, 150, 0.2) !important;
+    border-color: rgba(16, 185, 129, 0.2) !important;
 }
 
 /* Lists */
@@ -218,8 +218,8 @@
 }
 
 [data-theme='light'] th {
-    background: rgba(109, 129, 150, 0.08) !important;
-    background-color: rgba(109, 129, 150, 0.08) !important;
+    background: rgba(16, 185, 129, 0.06) !important;
+    background-color: rgba(16, 185, 129, 0.06) !important;
     color: #4A4A4A !important;
 }
 
@@ -255,16 +255,16 @@
 [data-theme='light'] [class*="Tag"],
 [data-theme='light'] [class*="chip"],
 [data-theme='light'] [class*="Chip"] {
-    background: rgba(109, 129, 150, 0.15) !important;
-    background-color: rgba(109, 129, 150, 0.15) !important;
-    color: #6b6b6b !important;
+    background: rgba(16, 185, 129, 0.1) !important;
+    background-color: rgba(16, 185, 129, 0.1) !important;
+    color: #047857 !important;
 }
 
 /* Icons */
 [data-theme='light'] svg,
 [data-theme='light'] [class*="icon"],
 [data-theme='light'] [class*="Icon"] {
-    color: #6D8196 !important;
+    color: #10b981 !important;
     fill: currentColor !important;
 }
 

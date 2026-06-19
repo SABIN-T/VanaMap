@@ -74,7 +74,7 @@ export const UserDashboardLayout = ({ title, children }: UserDashboardLayoutProp
                             to="/vendor"
                             onClick={handleNavClick}
                             className={styles.navItem}
-                            style={{ color: '#facc15' }}
+                            style={{ color: 'var(--color-primary)' }}
                         >
                             <Store size={20} className={styles.navIcon} />
                             <span className={styles.navLabel}>Vendor Portal</span>

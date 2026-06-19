@@ -53,59 +53,58 @@ html {
 }
 
 [data-theme='light'] {
-  /* Ink Wash Color Palette - Premium Minimalist Theme */
-  --color-bg: #FFFFE3;
-  /* Cream/Ivory - main background */
-  --color-bg-alt: #f5f5dc;
-  /* Slightly darker cream for variation */
+  /* Premium Minimalist White-Green Palette */
+  --color-bg: #ffffff;
+  /* Pure white - main background */
+  --color-bg-alt: #f8fafc;
+  /* Soft slate gray for alternate sections */
   --color-bg-card: #ffffff;
-  /* Pure white cards for contrast */
-  --color-bg-card-hover: #f8f8f0;
-  /* Very light cream on hover */
+  /* Pure white cards */
+  --color-bg-card-hover: #f0fdf4;
+  /* Soft mint tint on hover */
 
-  /* Text Colors - Dark Gray Hierarchy */
-  --color-text-main: #4A4A4A;
-  /* Dark gray - primary text */
-  --color-text-muted: #6b6b6b;
-  /* Medium gray - secondary text */
-  --color-text-dim: #8a8a8a;
-  /* Light gray - tertiary text */
+  /* Text Colors - Forest Green & Slate Hierarchy */
+  --color-text-main: #1e293b;
+  /* Slate 800 - primary text */
+  --color-text-muted: #475569;
+  /* Slate 600 - secondary text */
+  --color-text-dim: #64748b;
+  /* Slate 500 - tertiary text */
 
-  --color-border: #CBCBCB;
+  --color-border: #cbd5e1;
   /* Light gray border */
   --glass-bg: rgba(255, 255, 255, 0.95);
   /* Almost opaque white glass */
-  --glass-border: 1px solid #CBCBCB;
+  --glass-border: 1px solid #cbd5e1;
   /* Light gray glass border */
-  --glass-shadow: 0 20px 50px -12px rgba(109, 129, 150, 0.15);
-  /* Soft slate blue shadow */
-  --card-shadow: 0 10px 15px -3px rgba(109, 129, 150, 0.1), 0 4px 6px -2px rgba(109, 129, 150, 0.05);
-  /* Slate blue-tinted card shadow */
+  --glass-shadow: 0 20px 50px -12px rgba(16, 185, 129, 0.06);
+  /* Subtle emerald shadow */
+  --card-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.04), 0 4px 6px -2px rgba(16, 185, 129, 0.02);
 
-  /* Slate Blue accents for buttons and interactive elements */
-  --color-primary: #6D8196;
-  /* Slate blue for buttons */
-  --color-primary-hover: #5a6b7d;
-  /* Darker slate blue on hover */
-  --color-accent-light: #8a9fb4;
-  /* Light slate blue accent */
+  /* Emerald Green accents for buttons and interactive elements */
+  --color-primary: #10b981;
+  /* Emerald green for buttons */
+  --color-primary-hover: #059669;
+  /* Darker emerald on hover */
+  --color-accent-light: #d1fae5;
+  /* Light mint green accent */
 
   /* Additional text colors for specific use cases */
-  --color-heading: #3a3a3a;
-  /* Almost black for headings */
-  --color-body: #4A4A4A;
-  /* Dark gray for body text */
-  --color-label: #6b6b6b;
-  /* Medium gray for labels */
-  --color-placeholder: #8a8a8a;
+  --color-heading: #064e3b;
+  /* Dark forest green for headings */
+  --color-body: #1e293b;
+  /* Slate 800 for body text */
+  --color-label: #475569;
+  /* Slate 600 for labels */
+  --color-placeholder: #94a3b8;
   /* Light gray for placeholders */
 
-  --map-bg: #FFFFE3;
-  /* Cream for map background */
+  --map-bg: #f8fafc;
+  /* Light slate background for maps */
   --map-popup-bg: #ffffff;
   /* White popups */
-  --map-popup-text: #4A4A4A;
-  /* Dark gray text */
+  --map-popup-text: #1e293b;
+  /* Slate 800 text */
 
   color-scheme: light;
 }

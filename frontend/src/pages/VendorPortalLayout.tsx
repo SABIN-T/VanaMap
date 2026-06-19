@@ -51,9 +51,9 @@ export const VendorPortalLayout = ({ title, children }: VendorPortalLayoutProps)
                 <div className={styles.sidebarHeader}>
                     <div className={styles.brand}>
                         <div className={styles.logoBox}>
-                            <Leaf size={24} color="#facc15" />
+                            <Leaf size={24} color="var(--color-primary)" />
                         </div>
-                        <span className={styles.brandName} style={{ color: '#facc15' }}>PARTNER</span>
+                        <span className={styles.brandName} style={{ color: 'var(--color-primary)' }}>PARTNER</span>
                     </div>
                 </div>
 
@@ -64,11 +64,11 @@ export const VendorPortalLayout = ({ title, children }: VendorPortalLayoutProps)
                             to={item.path}
                             onClick={handleNavClick}
                             className={`${styles.navItem} ${isActive(item.path) ? styles.navActive : ''}`}
-                            style={isActive(item.path) ? { color: '#facc15', background: 'rgba(250, 204, 21, 0.08)' } : {}}
+                            style={isActive(item.path) ? { color: 'var(--color-primary)', background: 'var(--color-bg-card-hover, rgba(16, 185, 129, 0.08))' } : {}}
                         >
                             <item.icon size={20} className={styles.navIcon} />
                             <span className={styles.navLabel}>{item.label}</span>
-                            {isActive(item.path) && <div className={styles.activeIndicator} style={{ background: '#facc15', boxShadow: '0 0 10px #facc15' }} />}
+                            {isActive(item.path) && <div className={styles.activeIndicator} style={{ background: 'var(--color-primary)', boxShadow: '0 0 10px var(--color-primary)' }} />}
                         </Link>
                     ))}
 
@@ -95,10 +95,10 @@ export const VendorPortalLayout = ({ title, children }: VendorPortalLayoutProps)
             {/* Mobile Bottom Tab Bar */}
             <nav style={{
                 position: 'fixed', bottom: 0, left: 0, right: 0,
-                background: '#1e293b', borderTop: '1px solid rgba(255,255,255,0.1)',
+                background: 'var(--color-bg-card)', borderTop: '1px solid var(--color-border)',
                 display: 'none', justifyContent: 'space-around', alignItems: 'center',
                 padding: '0.5rem', zIndex: 1000,
-                boxShadow: '0 -4px 20px rgba(0,0,0,0.3)',
+                boxShadow: 'var(--card-shadow)',
                 backdropFilter: 'blur(10px)'
             }} className="mobile-tab-bar">
                 {navItems.map((item) => (
@@ -107,7 +107,7 @@ export const VendorPortalLayout = ({ title, children }: VendorPortalLayoutProps)
                         to={item.path}
                         style={{
                             display: 'flex', flexDirection: 'column', alignItems: 'center',
-                            textDecoration: 'none', color: isActive(item.path) ? '#facc15' : '#94a3b8',
+                            textDecoration: 'none', color: isActive(item.path) ? 'var(--color-primary)' : 'var(--color-text-dim)',
                             fontSize: '0.7rem', gap: '4px', padding: '4px'
                         }}
                     >
@@ -141,7 +141,7 @@ export const VendorPortalLayout = ({ title, children }: VendorPortalLayoutProps)
 
                     <div className={styles.topBarRight}>
                         <div className={styles.userBadge}>
-                            <div className={styles.userAvatar} style={{ background: 'linear-gradient(135deg, #facc15, #ca8a04)' }}>
+                            <div className={styles.userAvatar} style={{ background: 'linear-gradient(135deg, var(--color-primary), var(--color-secondary))' }}>
                                 {user?.name?.charAt(0) || 'V'}
                             </div>
                             <div className={styles.userInfo}>

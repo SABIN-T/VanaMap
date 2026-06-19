@@ -3,8 +3,8 @@
 .container {
     display: flex;
     min-height: 100vh;
-    background: #020617;
-    color: #f8fafc;
+    background: var(--color-bg, #020617);
+    color: var(--color-text-main, #f8fafc);
     font-family: 'Outfit', sans-serif;
 }
 
@@ -12,8 +12,8 @@
 .sidebar {
     width: 240px;
     /* Tightened from 280 */
-    background: rgba(15, 23, 42, 0.4);
-    border-right: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--glass-bg, rgba(15, 23, 42, 0.4));
+    border-right: 1px solid var(--color-border, rgba(255, 255, 255, 0.05));
     display: flex;
     flex-direction: column;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -32,7 +32,7 @@
 
 .sidebarHeader {
     padding: 1.25rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid var(--color-border, rgba(255, 255, 255, 0.05));
 }
 
 .brand {
@@ -56,7 +56,7 @@
     font-size: 1rem;
     font-weight: 800;
     letter-spacing: 0.15em;
-    color: #fff;
+    color: var(--color-text-main, #fff);
     text-transform: uppercase;
 }
 
@@ -75,7 +75,7 @@
     gap: 0.75rem;
     padding: 0.6rem 1rem;
     border-radius: 0.75rem;
-    color: #94a3b8;
+    color: var(--color-text-dim, #94a3b8);
     text-decoration: none;
     transition: 0.2s;
     font-weight: 600;
@@ -83,13 +83,13 @@
 }
 
 .navItem:hover {
-    background: rgba(255, 255, 255, 0.03);
-    color: #fff;
+    background: var(--color-bg-alt, rgba(255, 255, 255, 0.03));
+    color: var(--color-text-main, #fff);
 }
 
 .navActive {
-    background: rgba(16, 185, 129, 0.08) !important;
-    color: #10b981 !important;
+    background: var(--color-bg-card-hover, rgba(16, 185, 129, 0.08)) !important;
+    color: var(--color-primary, #10b981) !important;
 }
 
 .activeIndicator {
@@ -105,7 +105,7 @@
 
 .sidebarFooter {
     padding: 1rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    border-top: 1px solid var(--color-border, rgba(255, 255, 255, 0.05));
 }
 
 .logoutBtn {
@@ -135,9 +135,9 @@
 .topBar {
     height: 56px;
     /* Reduced from 72 */
-    background: rgba(15, 23, 42, 0.3);
+    background: var(--glass-bg, rgba(15, 23, 42, 0.3));
     backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid var(--color-border, rgba(255, 255, 255, 0.05));
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -151,9 +151,9 @@
 }
 
 .toggleBtn {
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: #94a3b8;
+    background: var(--color-bg-alt, rgba(255, 255, 255, 0.03));
+    border: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
+    color: var(--color-text-dim, #94a3b8);
     width: 32px;
     height: 32px;
     border-radius: 8px;
@@ -170,7 +170,7 @@
 }
 
 .rootCrumb {
-    color: #64748b;
+    color: var(--color-text-muted, #64748b);
     font-weight: 700;
     font-size: 0.65rem;
     text-transform: uppercase;
@@ -180,7 +180,7 @@
 .activeCrumb {
     font-size: 0.75rem;
     font-weight: 600;
-    color: #cbd5e1;
+    color: var(--color-text-main, #cbd5e1);
 }
 
 .userBadge {
@@ -188,8 +188,8 @@
     align-items: center;
     gap: 0.6rem;
     padding: 0.35rem 0.75rem;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: var(--color-bg-alt, rgba(255, 255, 255, 0.03));
+    border: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
     border-radius: 20px;
 }
 
@@ -203,13 +203,13 @@
     justify-content: center;
     font-weight: 800;
     font-size: 0.65rem;
-    color: #020617;
+    color: #ffffff;
 }
 
 .userName {
     font-size: 0.75rem;
     font-weight: 700;
-    color: #fff;
+    color: var(--color-text-main, #fff);
 }
 
 /* --- CONTENT --- */
@@ -227,7 +227,7 @@
     font-size: 1.25rem;
     /* More compact */
     font-weight: 800;
-    color: #fff;
+    color: var(--color-heading, #fff);
     margin: 0;
 }
 

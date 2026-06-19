@@ -26,8 +26,8 @@
     border: 1px solid #CBCBCB !important;
     border-radius: 1.5rem !important;
     box-shadow:
-        0 4px 24px rgba(109, 129, 150, 0.06),
-        0 1px 4px rgba(109, 129, 150, 0.04) !important;
+        0 4px 24px rgba(16, 185, 129, 0.04),
+        0 1px 4px rgba(16, 185, 129, 0.02) !important;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
@@ -36,9 +36,9 @@
 [data-theme='light'] .feature-card:hover {
     transform: translateY(-4px) !important;
     box-shadow:
-        0 12px 48px rgba(109, 129, 150, 0.12),
-        0 4px 12px rgba(109, 129, 150, 0.08) !important;
-    border-color: #6D8196 !important;
+        0 12px 48px rgba(16, 185, 129, 0.12),
+        0 4px 12px rgba(16, 185, 129, 0.08) !important;
+    border-color: #10b981 !important;
 }
 
 /* Premium Typography */
@@ -72,12 +72,12 @@
 /* Premium Buttons */
 [data-theme='light'] .btn-primary,
 [data-theme='light'] .primary-button {
-    background: linear-gradient(135deg, #6D8196 0%, #5a6b7d 100%) !important;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
     color: #ffffff !important;
     border: none !important;
     box-shadow:
-        0 4px 16px rgba(109, 129, 150, 0.3),
-        0 1px 4px rgba(109, 129, 150, 0.2),
+        0 4px 16px rgba(16, 185, 129, 0.25),
+        0 1px 4px rgba(16, 185, 129, 0.15),
         inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
@@ -86,24 +86,24 @@
 [data-theme='light'] .primary-button:hover {
     transform: translateY(-2px) !important;
     box-shadow:
-        0 8px 24px rgba(109, 129, 150, 0.4),
-        0 2px 8px rgba(109, 129, 150, 0.3),
+        0 8px 24px rgba(16, 185, 129, 0.35),
+        0 2px 8px rgba(16, 185, 129, 0.25),
         inset 0 1px 0 rgba(255, 255, 255, 0.3) !important;
 }
 
 [data-theme='light'] .btn-secondary,
 [data-theme='light'] .secondary-button {
-    background: rgba(109, 129, 150, 0.08) !important;
-    color: #4A4A4A !important;
-    border: 1.5px solid #CBCBCB !important;
+    background: rgba(16, 185, 129, 0.08) !important;
+    color: #047857 !important;
+    border: 1.5px solid #cbd5e1 !important;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
 [data-theme='light'] .btn-secondary:hover,
 [data-theme='light'] .secondary-button:hover {
-    background: rgba(109, 129, 150, 0.15) !important;
-    border-color: #6D8196 !important;
-    color: #3a3a3a !important;
+    background: rgba(16, 185, 129, 0.15) !important;
+    border-color: #10b981 !important;
+    color: #064e3b !important;
 }
 
 /* Premium Input Fields */
@@ -123,10 +123,10 @@
 [data-theme='light'] textarea:focus,
 [data-theme='light'] select:focus {
     background: #ffffff !important;
-    border-color: #6D8196 !important;
+    border-color: #10b981 !important;
     box-shadow:
-        0 0 0 4px rgba(109, 129, 150, 0.1),
-        0 4px 16px rgba(109, 129, 150, 0.08) !important;
+        0 0 0 4px rgba(16, 185, 129, 0.1),
+        0 4px 16px rgba(16, 185, 129, 0.05) !important;
     outline: none !important;
 }
 
@@ -264,30 +264,30 @@
 }
 
 [data-theme='light'] ::-webkit-scrollbar-thumb:hover {
-    background: #6D8196;
+    background: #10b981;
 }
 
 /* Premium Selection */
 [data-theme='light'] ::selection {
-    background: rgba(109, 129, 150, 0.2);
-    color: #4A4A4A;
+    background: rgba(16, 185, 129, 0.15);
+    color: #064e3b;
 }
 
 /* Premium Focus Rings */
 [data-theme='light'] *:focus-visible {
-    outline: 2px solid #6D8196;
+    outline: 2px solid #10b981;
     outline-offset: 2px;
 }
 
 /* Premium Link Styles */
 [data-theme='light'] a {
-    color: #6D8196 !important;
+    color: #10b981 !important;
     text-decoration: none !important;
     transition: color 0.2s ease !important;
 }
 
 [data-theme='light'] a:hover {
-    color: #5a6b7d !important;
+    color: #059669 !important;
     text-decoration: underline !important;
 }
 
@@ -338,9 +338,9 @@
 
 /* Premium Alert/Notification Styles */
 [data-theme='light'] .alert-success {
-    background: rgba(109, 129, 150, 0.1) !important;
-    border: 1px solid #6D8196 !important;
-    color: #4A4A4A !important;
+    background: rgba(16, 185, 129, 0.1) !important;
+    border: 1px solid #10b981 !important;
+    color: #064e3b !important;
 }
 
 [data-theme='light'] .alert-info {

@@ -8,12 +8,12 @@
    ============================================ */
 
 [data-theme='light'] .homeContainer {
-    background: #FFFFE3;
+    background: #ffffff;
     color: #4A4A4A;
 }
 
 [data-theme='light'] .hero {
-    background: #FFFFE3;
+    background: #ffffff;
     background-image: none;
 }
 
@@ -28,26 +28,26 @@
 }
 
 [data-theme='light'] .heroBadge {
-    background: rgba(109, 129, 150, 0.15);
+    background: rgba(16, 185, 129, 0.15);
     color: #6b6b6b;
-    border-color: rgba(109, 129, 150, 0.3);
+    border-color: rgba(16, 185, 129, 0.3);
 }
 
 [data-theme='light'] .actionContainer {
     background: rgba(255, 255, 255, 0.9);
-    border-color: rgba(109, 129, 150, 0.2);
-    box-shadow: 0 25px 50px -12px rgba(109, 129, 150, 0.15);
+    border-color: rgba(16, 185, 129, 0.2);
+    box-shadow: 0 25px 50px -12px rgba(16, 185, 129, 0.15);
 }
 
 [data-theme='light'] .searchBox {
-    background: rgba(109, 129, 150, 0.05);
-    border-color: rgba(109, 129, 150, 0.2);
+    background: rgba(16, 185, 129, 0.05);
+    border-color: rgba(16, 185, 129, 0.2);
 }
 
 [data-theme='light'] .searchBox:focus-within {
     background: rgba(255, 255, 255, 0.95);
-    border-color: #6D8196;
-    box-shadow: 0 0 0 4px rgba(109, 129, 150, 0.15);
+    border-color: #10b981;
+    box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
 }
 
 [data-theme='light'] .searchInput {
@@ -64,8 +64,8 @@
 
 [data-theme='light'] .suggestionsList {
     background: #ffffff;
-    border-color: rgba(109, 129, 150, 0.2);
-    box-shadow: 0 10px 30px rgba(109, 129, 150, 0.2);
+    border-color: rgba(16, 185, 129, 0.2);
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.2);
 }
 
 [data-theme='light'] .suggestionItem {
@@ -73,7 +73,7 @@
 }
 
 [data-theme='light'] .suggestionItem:hover {
-    background: rgba(109, 129, 150, 0.15);
+    background: rgba(16, 185, 129, 0.15);
     color: #3a3a3a;
 }
 
@@ -82,14 +82,14 @@
 }
 
 [data-theme='light'] .ghostBtn {
-    border-color: rgba(109, 129, 150, 0.2) !important;
+    border-color: rgba(16, 185, 129, 0.2) !important;
     color: #6b6b6b !important;
 }
 
 [data-theme='light'] .ghostBtn:hover {
-    background: rgba(109, 129, 150, 0.1) !important;
+    background: rgba(16, 185, 129, 0.1) !important;
     color: #4A4A4A !important;
-    border-color: rgba(109, 129, 150, 0.3) !important;
+    border-color: rgba(16, 185, 129, 0.3) !important;
 }
 
 /* Weather Cards & Explainer */
@@ -99,8 +99,8 @@
 [data-theme='light'] .statsCard,
 [data-theme='light'] .card {
     background: #ffffff !important;
-    border-color: rgba(109, 129, 150, 0.2) !important;
-    box-shadow: 0 10px 30px rgba(109, 129, 150, 0.1) !important;
+    border-color: rgba(16, 185, 129, 0.2) !important;
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.1) !important;
 }
 
 [data-theme='light'] .weatherTitle,
@@ -120,21 +120,21 @@
    ============================================ */
 
 [data-theme='light'] .shopsContainer {
-    background: #FFFFE3;
+    background: #ffffff;
     color: #4A4A4A;
 }
 
 [data-theme='light'] .filterCard,
 [data-theme='light'] .plantCard {
     background: #ffffff;
-    border-color: rgba(109, 129, 150, 0.15);
-    box-shadow: 0 4px 15px rgba(109, 129, 150, 0.08);
+    border-color: rgba(16, 185, 129, 0.15);
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.08);
 }
 
 [data-theme='light'] .filterCard:hover,
 [data-theme='light'] .plantCard:hover {
-    border-color: rgba(109, 129, 150, 0.3);
-    box-shadow: 0 8px 25px rgba(109, 129, 150, 0.15);
+    border-color: rgba(16, 185, 129, 0.3);
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.15);
 }
 
 /* ============================================
@@ -142,18 +142,18 @@
    ============================================ */
 
 [data-theme='light'] .cartContainer {
-    background: #FFFFE3;
+    background: #ffffff;
 }
 
 [data-theme='light'] .cartItem {
     background: #ffffff;
-    border-color: rgba(109, 129, 150, 0.15);
+    border-color: rgba(16, 185, 129, 0.15);
 }
 
 [data-theme='light'] .cartSummary {
     background: #ffffff;
-    border-color: rgba(109, 129, 150, 0.2);
-    box-shadow: 0 10px 30px rgba(109, 129, 150, 0.1);
+    border-color: rgba(16, 185, 129, 0.2);
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.1);
 }
 
 /* ============================================
@@ -161,13 +161,13 @@
    ============================================ */
 
 [data-theme='light'] .container {
-    background: #FFFFE3;
+    background: #ffffff;
     color: #4A4A4A;
 }
 
 [data-theme='light'] .header {
     background: #ffffff;
-    border-bottom-color: rgba(109, 129, 150, 0.15);
+    border-bottom-color: rgba(16, 185, 129, 0.15);
 }
 
 [data-theme='light'] .chatContainer {
@@ -176,17 +176,17 @@
 
 [data-theme='light'] .message {
     background: #ffffff;
-    border-color: rgba(109, 129, 150, 0.15);
+    border-color: rgba(16, 185, 129, 0.15);
 }
 
 [data-theme='light'] .userMessage {
-    background: rgba(109, 129, 150, 0.1);
-    border-color: rgba(109, 129, 150, 0.25);
+    background: rgba(16, 185, 129, 0.1);
+    border-color: rgba(16, 185, 129, 0.25);
 }
 
 [data-theme='light'] .inputContainer {
     background: #ffffff;
-    border-top-color: rgba(109, 129, 150, 0.15);
+    border-top-color: rgba(16, 185, 129, 0.15);
 }
 
 /* ============================================
@@ -194,13 +194,13 @@
    ============================================ */
 
 [data-theme='light'] .heavenContainer {
-    background: #FFFFE3;
+    background: #ffffff;
 }
 
 [data-theme='light'] .gameCard {
     background: #ffffff;
-    border-color: rgba(109, 129, 150, 0.2);
-    box-shadow: 0 10px 30px rgba(109, 129, 150, 0.1);
+    border-color: rgba(16, 185, 129, 0.2);
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.1);
 }
 
 /* ============================================
@@ -208,17 +208,17 @@
    ============================================ */
 
 [data-theme='light'] .nearbyContainer {
-    background: #FFFFE3;
+    background: #ffffff;
 }
 
 [data-theme='light'] .vendorCard {
     background: #ffffff;
-    border-color: rgba(109, 129, 150, 0.15);
+    border-color: rgba(16, 185, 129, 0.15);
 }
 
 [data-theme='light'] .vendorCard:hover {
-    border-color: rgba(109, 129, 150, 0.3);
-    box-shadow: 0 8px 25px rgba(109, 129, 150, 0.15);
+    border-color: rgba(16, 185, 129, 0.3);
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.15);
 }
 
 /* ============================================
@@ -226,17 +226,17 @@
    ============================================ */
 
 [data-theme='light'] .premiumContainer {
-    background: #FFFFE3;
+    background: #ffffff;
 }
 
 [data-theme='light'] .pricingCard {
     background: #ffffff;
-    border-color: rgba(109, 129, 150, 0.2);
+    border-color: rgba(16, 185, 129, 0.2);
 }
 
 [data-theme='light'] .featuredCard {
-    border-color: #6D8196;
-    box-shadow: 0 20px 50px rgba(109, 129, 150, 0.2);
+    border-color: #10b981;
+    box-shadow: 0 20px 50px rgba(16, 185, 129, 0.2);
 }
 
 /* ============================================
@@ -244,17 +244,17 @@
    ============================================ */
 
 [data-theme='light'] .dashboardContainer {
-    background: #FFFFE3;
+    background: #ffffff;
 }
 
 [data-theme='light'] .statsCard {
     background: #ffffff;
-    border-color: rgba(109, 129, 150, 0.15);
+    border-color: rgba(16, 185, 129, 0.15);
 }
 
 [data-theme='light'] .activityItem {
     background: #ffffff;
-    border-color: rgba(109, 129, 150, 0.1);
+    border-color: rgba(16, 185, 129, 0.1);
 }
 
 /* ============================================
@@ -262,12 +262,12 @@
    ============================================ */
 
 [data-theme='light'] .vendorContainer {
-    background: #FFFFE3;
+    background: #ffffff;
 }
 
 [data-theme='light'] .inventoryCard {
     background: #ffffff;
-    border-color: rgba(109, 129, 150, 0.15);
+    border-color: rgba(16, 185, 129, 0.15);
 }
 
 /* ============================================
@@ -276,13 +276,13 @@
 
 [data-theme='light'] .plantCard {
     background: #ffffff;
-    border-color: rgba(109, 129, 150, 0.15);
-    box-shadow: 0 4px 15px rgba(109, 129, 150, 0.08);
+    border-color: rgba(16, 185, 129, 0.15);
+    box-shadow: 0 4px 15px rgba(16, 185, 129, 0.08);
 }
 
 [data-theme='light'] .plantCard:hover {
-    border-color: rgba(109, 129, 150, 0.3);
-    box-shadow: 0 10px 30px rgba(109, 129, 150, 0.15);
+    border-color: rgba(16, 185, 129, 0.3);
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.15);
     transform: translateY(-4px);
 }
 
@@ -291,13 +291,13 @@
 }
 
 [data-theme='light'] .plantPrice {
-    color: #6D8196;
+    color: #10b981;
 }
 
 [data-theme='light'] .plantTag {
-    background: rgba(109, 129, 150, 0.1);
+    background: rgba(16, 185, 129, 0.1);
     color: #6b6b6b;
-    border-color: rgba(109, 129, 150, 0.2);
+    border-color: rgba(16, 185, 129, 0.2);
 }
 
 /* ============================================
@@ -310,12 +310,12 @@
 
 [data-theme='light'] .modalContent {
     background: #ffffff;
-    border-color: rgba(109, 129, 150, 0.2);
-    box-shadow: 0 25px 60px rgba(109, 129, 150, 0.2);
+    border-color: rgba(16, 185, 129, 0.2);
+    box-shadow: 0 25px 60px rgba(16, 185, 129, 0.2);
 }
 
 [data-theme='light'] .modalHeader {
-    border-bottom-color: rgba(109, 129, 150, 0.15);
+    border-bottom-color: rgba(16, 185, 129, 0.15);
 }
 
 [data-theme='light'] .modalTitle {
@@ -332,17 +332,17 @@
 
 [data-theme='light'] .aboutContainer,
 [data-theme='light'] .contactContainer {
-    background: #FFFFE3;
+    background: #ffffff;
 }
 
 [data-theme='light'] .sectionCard {
     background: #ffffff;
-    border-color: rgba(109, 129, 150, 0.15);
+    border-color: rgba(16, 185, 129, 0.15);
 }
 
 [data-theme='light'] .teamMember {
     background: #ffffff;
-    border-color: rgba(109, 129, 150, 0.15);
+    border-color: rgba(16, 185, 129, 0.15);
 }
 
 /* ============================================
@@ -350,17 +350,17 @@
    ============================================ */
 
 [data-theme='light'] .adminContainer {
-    background: #FFFFE3;
+    background: #ffffff;
 }
 
 [data-theme='light'] .adminSidebar {
     background: #ffffff;
-    border-right-color: rgba(109, 129, 150, 0.15);
+    border-right-color: rgba(16, 185, 129, 0.15);
 }
 
 [data-theme='light'] .adminCard {
     background: #ffffff;
-    border-color: rgba(109, 129, 150, 0.15);
+    border-color: rgba(16, 185, 129, 0.15);
 }
 
 [data-theme='light'] .adminTable {
@@ -368,7 +368,7 @@
 }
 
 [data-theme='light'] .adminTableRow:hover {
-    background: rgba(109, 129, 150, 0.05);
+    background: rgba(16, 185, 129, 0.05);
 }
 
 /* ============================================
@@ -376,12 +376,12 @@
    ============================================ */
 
 [data-theme='light'] .gameContainer {
-    background: #FFFFE3;
+    background: #ffffff;
 }
 
 [data-theme='light'] .scoreCard {
     background: #ffffff;
-    border-color: rgba(109, 129, 150, 0.2);
+    border-color: rgba(16, 185, 129, 0.2);
 }
 
 /* ============================================
@@ -390,7 +390,7 @@
 
 [data-theme='light'] .glass {
     background: rgba(255, 255, 255, 0.85);
-    border-color: rgba(109, 129, 150, 0.2);
+    border-color: rgba(16, 185, 129, 0.2);
 }
 
 [data-theme='light'] .textPrimary {
@@ -402,11 +402,11 @@
 }
 
 [data-theme='light'] .textMuted {
-    color: #6D8196;
+    color: #10b981;
 }
 
 [data-theme='light'] .bgPrimary {
-    background: #6D8196;
+    background: #10b981;
 }
 
 [data-theme='light'] .bgSecondary {
@@ -414,7 +414,7 @@
 }
 
 [data-theme='light'] .borderPrimary {
-    border-color: rgba(109, 129, 150, 0.3);
+    border-color: rgba(16, 185, 129, 0.3);
 }
 
 /* ============================================
@@ -468,7 +468,7 @@
 
 /* Links should be visible */
 [data-theme='light'] a {
-    color: #6D8196 !important;
+    color: #10b981 !important;
 }
 
 [data-theme='light'] a:hover {

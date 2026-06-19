@@ -17,9 +17,9 @@
 [data-theme='light'] .weatherCard,
 [data-theme='light'] .explainerGlass {
     background: #ffffff !important;
-    border: 1px solid rgba(109, 129, 150, 0.2) !important;
+    border: 1px solid rgba(16, 185, 129, 0.2) !important;
     color: #4A4A4A !important;
-    box-shadow: 0 4px 16px rgba(109, 129, 150, 0.08) !important;
+    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.08) !important;
 }
 
 /* Fix any dark panels/sections */
@@ -85,7 +85,7 @@
 /* Fix buttons inside dark cards */
 [data-theme='light'] .card button,
 [data-theme='light'] .panel button {
-    background: linear-gradient(135deg, #6D8196 0%, #6D8196 100%) !important;
+    background: linear-gradient(135deg, #10b981 0%, #10b981 100%) !important;
     color: #ffffff !important;
     border: none !important;
 }
@@ -93,14 +93,14 @@
 /* Fix links inside cards */
 [data-theme='light'] .card a,
 [data-theme='light'] .panel a {
-    color: #6D8196 !important;
+    color: #10b981 !important;
 }
 
 /* Fix icons in cards */
 [data-theme='light'] .card svg,
 [data-theme='light'] .card .icon,
 [data-theme='light'] .panel svg {
-    color: #6D8196 !important;
+    color: #10b981 !important;
 }
 
 /* Fix any text with light gray colors */
@@ -133,7 +133,7 @@
 [data-theme='light'] .weatherCard,
 [data-theme='light'] .weather-card-item {
     background: #ffffff !important;
-    border-color: rgba(109, 129, 150, 0.2) !important;
+    border-color: rgba(16, 185, 129, 0.2) !important;
 }
 
 /* Fix location section */
@@ -151,7 +151,7 @@
     background: rgba(255, 255, 255, 0.95) !important;
     backdrop-filter: blur(20px) !important;
     -webkit-backdrop-filter: blur(20px) !important;
-    border: 1px solid rgba(109, 129, 150, 0.15) !important;
+    border: 1px solid rgba(16, 185, 129, 0.15) !important;
 }
 
 /* Fix permissions button and similar dark buttons */
@@ -160,7 +160,7 @@
 [data-theme='light'] .dark-btn {
     background: #ffffff !important;
     color: #4A4A4A !important;
-    border: 1px solid rgba(109, 129, 150, 0.2) !important;
+    border: 1px solid rgba(16, 185, 129, 0.2) !important;
 }
 
 /* Fix any elements with dark class names */
@@ -207,9 +207,9 @@
 /* Fix change location button */
 [data-theme='light'] .change-location-btn,
 [data-theme='light'] [class*="change-location"] {
-    background: rgba(109, 129, 150, 0.1) !important;
-    color: #6D8196 !important;
-    border-color: rgba(109, 129, 150, 0.3) !important;
+    background: rgba(16, 185, 129, 0.1) !important;
+    color: #10b981 !important;
+    border-color: rgba(16, 185, 129, 0.3) !important;
 }
 
 /* Fix air quality badge */
@@ -226,7 +226,7 @@
 }
 
 [data-theme='light'] .status-good {
-    color: #6D8196 !important;
+    color: #10b981 !important;
 }
 
 [data-theme='light'] .status-bad {

@@ -6,7 +6,7 @@
     margin: 0 auto;
     font-family: 'Outfit', sans-serif;
     animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-    color: #f8fafc;
+    color: var(--color-text-main, #f8fafc);
 }
 
 /* HEADER SECTION - TIGHTER */
@@ -31,13 +31,9 @@
 .dashboardTitle {
     font-size: 1.75rem;
     font-weight: 900;
-    color: #fff;
+    color: var(--color-heading, #fff);
     margin: 0;
     letter-spacing: -0.7px;
-    background: linear-gradient(to right, #fff, #94a3b8);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
 }
 
 /* GAMIFICATION BANNER - PREMIUM COMPACT */
@@ -77,13 +73,13 @@
     margin: 0;
     font-size: 1.15rem;
     font-weight: 800;
-    color: #fff;
+    color: var(--color-text-main, #fff);
     letter-spacing: -0.3px;
 }
 
 .bannerText p {
     margin: 0.15rem 0 0;
-    color: #94a3b8;
+    color: var(--color-text-dim, #94a3b8);
     font-size: 0.85rem;
     font-weight: 500;
 }
@@ -97,11 +93,11 @@
 }
 
 .statCard {
-    background: rgba(15, 23, 42, 0.35);
+    background: var(--color-bg-card, rgba(15, 23, 42, 0.35));
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.07);
-    box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1), 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--color-border, rgba(255, 255, 255, 0.07));
+    box-shadow: var(--card-shadow);
     border-radius: 1.25rem;
     padding: 1.25rem 1rem;
     display: flex;
@@ -113,10 +109,10 @@
 }
 
 .statCard:hover {
-    background: rgba(30, 41, 59, 0.55);
+    background: var(--color-bg-card-hover, rgba(30, 41, 59, 0.55));
     transform: translateY(-4px);
-    border-color: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.5);
+    border-color: var(--color-primary, rgba(255, 255, 255, 0.15));
+    box-shadow: var(--glass-shadow);
 }
 
 .statIcon {
@@ -132,13 +128,13 @@
 .statValue {
     font-size: 1.5rem;
     font-weight: 900;
-    color: #fff;
+    color: var(--color-text-main, #fff);
     line-height: 1.1;
     letter-spacing: -0.5px;
 }
 
 .statLabel {
-    color: #64748b;
+    color: var(--color-text-dim, #64748b);
     font-size: 0.65rem;
     font-weight: 800;
     text-transform: uppercase;
@@ -155,8 +151,8 @@
 }
 
 .actionCard {
-    background: rgba(15, 23, 42, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--color-bg-card, rgba(15, 23, 42, 0.3));
+    border: 1px solid var(--color-border, rgba(255, 255, 255, 0.05));
     padding: 1.25rem;
     border-radius: 1.25rem;
     display: flex;
@@ -170,8 +166,8 @@
 
 .actionCard:hover {
     transform: translateY(-4px);
-    border-color: rgba(255, 255, 255, 0.15);
-    box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.4);
+    border-color: var(--color-primary, rgba(255, 255, 255, 0.15));
+    box-shadow: var(--glass-shadow);
 }
 
 .actionHeader {
@@ -198,13 +194,13 @@
     margin: 0;
     font-size: 1rem;
     font-weight: 800;
-    color: #f1f5f9;
+    color: var(--color-text-main, #f1f5f9);
 }
 
 .actionDesc {
     margin: 0.1rem 0 0;
     font-size: 0.8rem;
-    color: #64748b;
+    color: var(--color-text-dim, #64748b);
     font-weight: 500;
 }
 
@@ -225,8 +221,8 @@
 }
 
 .quickCard {
-    background: rgba(15, 23, 42, 0.25);
-    border: 1px solid rgba(255, 255, 255, 0.04);
+    background: var(--color-bg-card, rgba(15, 23, 42, 0.25));
+    border: 1px solid var(--color-border, rgba(255, 255, 255, 0.04));
     border-radius: 1rem;
     padding: 1rem 1.25rem;
     display: flex;
@@ -240,15 +236,15 @@
 }
 
 .quickCard:hover {
-    background: rgba(15, 23, 42, 0.45);
+    background: var(--color-bg-card-hover, rgba(15, 23, 42, 0.45));
     transform: translateY(-3px) scale(1.02);
-    border-color: rgba(255, 255, 255, 0.12);
-    box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.5);
+    border-color: var(--color-primary, rgba(255, 255, 255, 0.12));
+    box-shadow: var(--glass-shadow);
 }
 
 .quickCard strong {
     display: block;
-    color: #fff;
+    color: var(--color-text-main, #fff);
     font-size: 0.95rem;
     font-weight: 700;
     margin-bottom: 0.1rem;
@@ -256,7 +252,7 @@
 
 .quickCard p {
     margin: 0;
-    color: #64748b;
+    color: var(--color-text-dim, #64748b);
     font-size: 0.75rem;
     font-weight: 500;
 }
@@ -275,13 +271,13 @@
 }
 
 .modalCard {
-    background: #0f172a;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: var(--color-bg-card, #0f172a);
+    border: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
     border-radius: 1.75rem;
     padding: 2rem;
     width: 100%;
     max-width: 440px;
-    box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.8);
+    box-shadow: var(--glass-shadow);
     animation: modalSlide 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -300,14 +296,14 @@
 .modalTitle {
     font-size: 1.5rem;
     font-weight: 800;
-    color: #fff;
+    color: var(--color-heading, #fff);
     margin-bottom: 0.5rem;
     text-align: center;
 }
 
 .modalSubtitle {
     font-size: 0.9rem;
-    color: #94a3b8;
+    color: var(--color-text-dim, #94a3b8);
     text-align: center;
     margin-bottom: 2rem;
     line-height: 1.5;
@@ -321,19 +317,19 @@
 
 .modalInput {
     width: 100%;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--color-bg-alt, rgba(255, 255, 255, 0.03));
+    border: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
     border-radius: 0.85rem;
     padding: 0.85rem 1rem;
-    color: #fff;
+    color: var(--color-text-main, #fff);
     font-size: 0.9rem;
     transition: 0.2s;
 }
 
 .modalInput:focus {
     outline: none;
-    border-color: #10b981;
-    background: rgba(255, 255, 255, 0.06);
+    border-color: var(--color-primary, #10b981);
+    background: var(--color-bg-card);
 }
 
 /* ANIMATIONS */
@@ -403,7 +399,7 @@
     position: fixed;
     inset: 0;
     z-index: 2500;
-    background: #020617;
+    background: var(--color-bg, #020617);
     display: flex;
     flex-direction: column;
     animation: fadeIn 0.3s ease;
@@ -425,15 +421,15 @@
 }
 
 .compactCard {
-    background: #0f172a;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--color-bg-card, #0f172a);
+    border: 1px solid var(--color-border, rgba(255, 255, 255, 0.05));
     border-radius: 1rem;
     overflow: hidden;
     transition: 0.3s;
 }
 
 .compactCard:hover {
-    border-color: #10b981;
+    border-color: var(--color-primary, #10b981);
     transform: translateY(-3px);
 }
 
@@ -456,7 +452,7 @@
     font-size: 0.8rem;
     font-weight: 700;
     margin: 0;
-    color: #fff;
+    color: var(--color-text-main, #fff);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -464,7 +460,7 @@
 
 .compactCardContent p {
     font-size: 0.65rem;
-    color: #64748b;
+    color: var(--color-text-dim, #64748b);
     margin: 0.1rem 0 0;
 }
 
