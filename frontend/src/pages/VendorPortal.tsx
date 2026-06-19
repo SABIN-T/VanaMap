@@ -244,7 +244,19 @@ export const VendorPortal = () => {
 
                 {/* SECTION: INSIGHTS */}
                 {activeSection === 'insights' && (
-                    <MarketInsights analytics={analytics} />
+                    analytics ? (
+                        <MarketInsights analytics={analytics} />
+                    ) : (
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+                            <div className={styles.skeleton} style={{ height: '40px', background: 'rgba(255,255,255,0.05)', borderRadius: '8px', width: '30%' }} />
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
+                                <div className={styles.skeleton} style={{ height: '100px', background: 'rgba(255,255,255,0.03)', borderRadius: '16px' }} />
+                                <div className={styles.skeleton} style={{ height: '100px', background: 'rgba(255,255,255,0.03)', borderRadius: '16px' }} />
+                                <div className={styles.skeleton} style={{ height: '100px', background: 'rgba(255,255,255,0.03)', borderRadius: '16px' }} />
+                            </div>
+                            <div className={styles.skeleton} style={{ height: '250px', background: 'rgba(255,255,255,0.02)', borderRadius: '24px' }} />
+                        </div>
+                    )
                 )}
 
                 {/* SECTION: GROWTH TOOLS */}
@@ -335,10 +347,7 @@ export const VendorPortal = () => {
                                 </div>
 
                                 {/* Quick Navigation Grid */}
-                                <div style={{
-                                    display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))',
-                                    gap: '0.75rem', marginTop: '1.5rem', marginBottom: '1.5rem'
-                                }}>
+                                <div className={styles.quickActionsGrid}>
                                     {[
                                         { label: 'Inventory', icon: Package, path: '/vendor/inventory', color: '#3b82f6' },
                                         { label: 'Insights', icon: BarChart2, path: '/vendor/insights', color: '#a855f7' },
@@ -349,19 +358,12 @@ export const VendorPortal = () => {
                                         <div
                                             key={i}
                                             onClick={() => navigate(action.path)}
-                                            style={{
-                                                background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.05)',
-                                                borderRadius: '0.75rem', padding: '1rem', cursor: 'pointer',
-                                                display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem',
-                                                transition: 'all 0.2s ease'
-                                            }}
-                                            onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.06)'; }}
-                                            onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255,255,255,0.03)'; }}
+                                            className={styles.quickActionCard}
                                         >
-                                            <div style={{ padding: '0.5rem', borderRadius: '50%', background: `${action.color}20`, color: action.color }}>
+                                            <div className={styles.quickActionIconBox} style={{ background: `${action.color}20`, color: action.color }}>
                                                 <action.icon size={20} />
                                             </div>
-                                            <span style={{ fontSize: '0.8rem', fontWeight: 600, color: '#e2e8f0' }}>{action.label}</span>
+                                            <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#e2e8f0' }}>{action.label}</span>
                                         </div>
                                     ))}
                                 </div>
@@ -432,7 +434,11 @@ export const VendorPortal = () => {
                                         ))}
                                         {(!currentVendor?.inventory || currentVendor.inventory.length === 0) && (
                                             <div className={styles.emptyCatalog}>
-                                                No plants added yet. <span onClick={() => navigate('/vendor/inventory')}>Start listing →</span>
+                                                <Package size={24} style={{ color: '#facc15', marginBottom: '0.5rem', opacity: 0.6 }} />
+                                                <div>No plants added yet.</div>
+                                                <span onClick={() => navigate('/vendor/inventory')} style={{ color: '#10b981', cursor: 'pointer', textDecoration: 'underline', fontWeight: 'bold', fontSize: '0.85rem', marginTop: '0.25rem', display: 'inline-block' }}>
+                                                    Start Listing →
+                                                </span>
                                             </div>
                                         )}
                                     </div>

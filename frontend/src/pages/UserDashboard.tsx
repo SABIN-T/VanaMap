@@ -640,21 +640,12 @@ export const UserDashboard = () => {
             {/* --- MODALS --- */}
 
             {showVendorModal && (
-                <div style={{
-                    position: 'fixed', inset: 0, zIndex: 1000,
-                    background: 'rgba(0,0,0,0.8)', backdropFilter: 'blur(8px)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem'
-                }}>
-                    <div style={{
-                        width: '100%', maxWidth: '500px',
-                        background: 'var(--color-bg-card)', border: '1px solid var(--glass-border)',
-                        borderRadius: '1.5rem', padding: '2rem',
-                        boxShadow: '0 20px 50px rgba(0,0,0,0.3)',
-                    }}>
-                        <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', marginBottom: '1rem' }}>Shop Profile</h2>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                            <input value={vendorForm.name} onChange={e => setVendorForm({ ...vendorForm, name: e.target.value })} placeholder="Shop Name" style={{ padding: '0.8rem', borderRadius: '0.5rem' }} />
-                            <input value={vendorForm.phone} onChange={e => setVendorForm({ ...vendorForm, phone: e.target.value })} placeholder="Phone" style={{ padding: '0.8rem', borderRadius: '0.5rem' }} />
+                <div className={styles.modalOverlay}>
+                    <div className={styles.modalCard} style={{ maxWidth: '500px' }}>
+                        <h2 className={styles.modalTitle} style={{ textAlign: 'left', marginBottom: '1.5rem' }}>Shop Profile</h2>
+                        <div className={styles.modalForm}>
+                            <input className={styles.modalInput} value={vendorForm.name} onChange={e => setVendorForm({ ...vendorForm, name: e.target.value })} placeholder="Shop Name" />
+                            <input className={styles.modalInput} value={vendorForm.phone} onChange={e => setVendorForm({ ...vendorForm, phone: e.target.value })} placeholder="Phone" />
                             <Button onClick={detectLocation} disabled={detectingLoc}>{detectingLoc ? 'Locating...' : 'Auto-Detect Location'}</Button>
                         </div>
                         <div style={{ display: 'flex', gap: '1rem', marginTop: '1.5rem' }}>
@@ -667,17 +658,13 @@ export const UserDashboard = () => {
 
             {/* 6. PASSWORD MODAL - (existing) */}
             {showPasswordModal && (
-                <div style={{
-                    position: 'fixed', inset: 0, zIndex: 1001,
-                    background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(8px)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem'
-                }}>
-                    <div className="glass-panel" style={{ width: '100%', maxWidth: '400px', padding: '2rem', borderRadius: '24px' }}>
-                        <h2 style={{ textAlign: 'center', marginBottom: '1.5rem' }}>Update Password</h2>
-                        <form onSubmit={handlePasswordChange} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                            <input type="password" placeholder="Current Password" value={pwdForm.old} onChange={e => setPwdForm({ ...pwdForm, old: e.target.value })} style={{ padding: '0.8rem', borderRadius: '0.5rem', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }} />
-                            <input type="password" placeholder="New Password" value={pwdForm.new} onChange={e => setPwdForm({ ...pwdForm, new: e.target.value })} style={{ padding: '0.8rem', borderRadius: '0.5rem', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }} />
-                            <input type="password" placeholder="Confirm Password" value={pwdForm.confirm} onChange={e => setPwdForm({ ...pwdForm, confirm: e.target.value })} style={{ padding: '0.8rem', borderRadius: '0.5rem', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: 'white' }} />
+                <div className={styles.modalOverlay} style={{ zIndex: 1001 }}>
+                    <div className={styles.modalCard} style={{ maxWidth: '400px' }}>
+                        <h2 className={styles.modalTitle}>Update Password</h2>
+                        <form onSubmit={handlePasswordChange} className={styles.modalForm}>
+                            <input type="password" placeholder="Current Password" value={pwdForm.old} onChange={e => setPwdForm({ ...pwdForm, old: e.target.value })} className={styles.modalInput} />
+                            <input type="password" placeholder="New Password" value={pwdForm.new} onChange={e => setPwdForm({ ...pwdForm, new: e.target.value })} className={styles.modalInput} />
+                            <input type="password" placeholder="Confirm Password" value={pwdForm.confirm} onChange={e => setPwdForm({ ...pwdForm, confirm: e.target.value })} className={styles.modalInput} />
                             <div style={{ display: 'flex', gap: '1rem', marginTop: '1rem' }}>
                                 <Button type="button" variant="outline" onClick={() => setShowPasswordModal(false)} style={{ flex: 1 }}>Cancel</Button>
                                 <Button type="submit" style={{ flex: 1 }}>Update</Button>
@@ -696,12 +683,12 @@ export const UserDashboard = () => {
                                 <MapPin size={32} />
                             </div>
                         </div>
-                        <h2 style={{ fontSize: '1.5rem', fontWeight: 800, margin: '0 0 0.5rem', color: '#f1f5f9' }}>Hall of Fame</h2>
-                        <p style={{ margin: '0 0 2rem', color: '#94a3b8', fontSize: '0.9rem' }}>
+                        <h2 className={styles.modalTitle}>Hall of Fame</h2>
+                        <p className={styles.modalSubtitle}>
                             Join your local city ranking and earn badges.
                         </p>
 
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', textAlign: 'left', marginBottom: '2rem' }}>
+                        <div className={styles.modalForm} style={{ textAlign: 'left', marginBottom: '2rem' }}>
                             <div>
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
                                     <label style={{ display: 'block', fontSize: '0.75rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Current City</label>
@@ -742,7 +729,6 @@ export const UserDashboard = () => {
                                     type="text"
                                     placeholder="e.g. New Delhi"
                                     className={styles.modalInput}
-                                    style={{ width: '100%', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '0.75rem', padding: '0.75rem', color: 'white' }}
                                     value={locForm.city}
                                     onChange={e => setLocForm({ ...locForm, city: e.target.value })}
                                 />
@@ -753,7 +739,6 @@ export const UserDashboard = () => {
                                     type="text"
                                     placeholder="e.g. Delhi"
                                     className={styles.modalInput}
-                                    style={{ width: '100%', background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: '0.75rem', padding: '0.75rem', color: 'white' }}
                                     value={locForm.state}
                                     onChange={e => setLocForm({ ...locForm, state: e.target.value })}
                                 />
@@ -769,18 +754,11 @@ export const UserDashboard = () => {
             )}
 
             {showGuide && (
-                <div style={{
-                    position: 'fixed', inset: 0, zIndex: 1001,
-                    background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(8px)',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem'
-                }} onClick={() => setShowGuide(false)}>
-                    <div className="glass-panel" style={{
-                        width: '100%', maxWidth: '500px', padding: '2rem', borderRadius: '24px',
-                        border: '1px solid rgba(255, 255, 255, 0.1)',
-                    }} onClick={e => e.stopPropagation()}>
-                        <h2 style={{ fontSize: '1.5rem', fontWeight: 800, margin: '0 0 1.5rem' }}>Level Up Guide</h2>
+                <div className={styles.modalOverlay} style={{ zIndex: 1001 }} onClick={() => setShowGuide(false)}>
+                    <div className={styles.modalCard} style={{ maxWidth: '500px' }} onClick={e => e.stopPropagation()}>
+                        <h2 className={styles.modalTitle} style={{ marginBottom: '1.5rem' }}>Level Up Guide</h2>
                         <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                            <p style={{ color: '#ccc' }}>Earn points by adding favorites, visiting daily, and completing profile.</p>
+                            <p style={{ color: '#ccc', textAlign: 'center' }}>Earn points by adding favorites, visiting daily, and completing profile.</p>
                             <Button onClick={() => setShowGuide(false)}>Got it!</Button>
                         </div>
                     </div>
@@ -788,17 +766,12 @@ export const UserDashboard = () => {
             )}
 
             {showCollectionModal && (
-                <div style={{
-                    position: 'fixed', inset: 0, zIndex: 1005,
-                    background: 'rgba(0,0,0,0.9)', backdropFilter: 'blur(5px)',
-                    display: 'flex', flexDirection: 'column',
-                    animation: 'fadeIn 0.2s'
-                }}>
-                    <div style={{ padding: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                <div className={styles.fullScreenModal}>
+                    <div className={styles.modalHeader}>
                         <h2 style={{ margin: 0, fontSize: '1.4rem', fontWeight: 700, color: 'white', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                             <Heart fill="#f43f5e" stroke="none" /> My Collection
                         </h2>
-                        <button onClick={() => setShowCollectionModal(false)} style={{ background: 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '50%', width: '36px', height: '36px', color: 'white' }}>
+                        <button onClick={() => setShowCollectionModal(false)} style={{ background: 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '50%', width: '36px', height: '36px', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                             <ArrowRight size={20} />
                         </button>
                     </div>
@@ -807,8 +780,12 @@ export const UserDashboard = () => {
                         {loadingFavs ? (
                             <div className={styles.loadingBox}><Loader2 className="animate-spin" /></div>
                         ) : favoritePlants.length === 0 ? (
-                            <div className={styles.emptyState}>
-                                <p>Your collection is empty.</p>
+                            <div className={styles.emptyState} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '4rem 2rem' }}>
+                                <Heart size={48} style={{ color: '#f43f5e', marginBottom: '1.25rem', opacity: 0.8 }} />
+                                <h3 style={{ fontSize: '1.2rem', fontWeight: 800, margin: '0 0 0.5rem', color: '#f1f5f9' }}>Your Collection is Empty</h3>
+                                <p style={{ margin: '0 0 1.75rem', color: '#94a3b8', fontSize: '0.9rem', maxWidth: '320px', lineHeight: 1.5 }}>
+                                    Discovered any favorite plants yet? Add them to your collection to easily track them.
+                                </p>
                                 <Button onClick={() => { setShowCollectionModal(false); navigate('/'); }}>Start Exploring</Button>
                             </div>
                         ) : (
@@ -834,17 +811,12 @@ export const UserDashboard = () => {
             )}
 
             {showOrdersModal && (
-                <div style={{
-                    position: 'fixed', inset: 0, zIndex: 1005,
-                    background: 'rgba(0,0,0,0.9)', backdropFilter: 'blur(5px)',
-                    display: 'flex', flexDirection: 'column',
-                    animation: 'fadeIn 0.2s'
-                }}>
-                    <div style={{ padding: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                <div className={styles.fullScreenModal}>
+                    <div className={styles.modalHeader}>
                         <h2 style={{ margin: 0, fontSize: '1.4rem', fontWeight: 700, color: 'white', display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                             <Package color="#a855f7" /> My Orders
                         </h2>
-                        <button onClick={() => setShowOrdersModal(false)} style={{ background: 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '50%', width: '36px', height: '36px', color: 'white', cursor: 'pointer' }}>
+                        <button onClick={() => setShowOrdersModal(false)} style={{ background: 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '50%', width: '36px', height: '36px', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
                             <ArrowRight size={20} />
                         </button>
                     </div>
@@ -853,8 +825,12 @@ export const UserDashboard = () => {
                         {loadingOrders ? (
                             <div className={styles.loadingBox}><Loader2 className="animate-spin" /></div>
                         ) : myOrders.length === 0 ? (
-                            <div className={styles.emptyState}>
-                                <p>No orders yet. Start shopping!</p>
+                            <div className={styles.emptyState} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '4rem 2rem' }}>
+                                <Package size={48} style={{ color: '#a855f7', marginBottom: '1.25rem', opacity: 0.8 }} />
+                                <h3 style={{ fontSize: '1.2rem', fontWeight: 800, margin: '0 0 0.5rem', color: '#f1f5f9' }}>No Orders Yet</h3>
+                                <p style={{ margin: '0 0 1.75rem', color: '#94a3b8', fontSize: '0.9rem', maxWidth: '320px', lineHeight: 1.5 }}>
+                                    You haven't placed any orders yet. Explore our green catalog and make your first purchase!
+                                </p>
                                 <Button onClick={() => { setShowOrdersModal(false); navigate('/'); }}>Browse Plants</Button>
                             </div>
                         ) : (

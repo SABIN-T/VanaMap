@@ -1494,3 +1494,275 @@
     background: rgba(16, 185, 129, 0.05);
     border-bottom-color: rgba(16, 185, 129, 0.15);
 }
+
+/* Active Orders Tracker */
+.activeOrdersSection {
+    background: rgba(30, 41, 59, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 1.5rem;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    backdrop-filter: blur(12px);
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.activeOrdersToggle {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem;
+    background: transparent;
+    border: none;
+    color: #e2e8f0;
+    cursor: pointer;
+    text-align: left;
+}
+
+.activeOrdersToggle:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.activeOrdersToggleLeft {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.activeOrdersIcon {
+    color: #a855f7;
+}
+
+.activeOrdersTitle {
+    font-weight: 700;
+    font-size: 1rem;
+    color: #f8fafc;
+}
+
+.activeOrdersList {
+    padding: 0 1.25rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.activeOrderCard {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    border-radius: 1rem;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.activeOrderCard:hover {
+    background: rgba(255, 255, 255, 0.03);
+    border-color: rgba(255, 255, 255, 0.08);
+}
+
+.activeOrderHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 0.5rem;
+}
+
+.activeOrderPlantName {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #f1f5f9;
+    margin: 0;
+}
+
+.activeOrderVendorName {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    margin: 0.15rem 0 0;
+}
+
+.activeOrderStatusBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+/* Timeline Tracker */
+.activeOrderTracker {
+    position: relative;
+    padding: 0.5rem 0.25rem 0;
+    margin: 0.25rem 0;
+}
+
+.trackerLineBg {
+    position: absolute;
+    top: 14px;
+    left: 8%;
+    right: 8%;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.08);
+    z-index: 0;
+}
+
+.trackerLineProgress {
+    position: absolute;
+    top: 14px;
+    left: 8%;
+    height: 2px;
+    background: #10b981;
+    z-index: 0;
+    transition: width 0.4s ease;
+}
+
+.trackerSteps {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    z-index: 1;
+}
+
+.trackerStep {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 25%;
+}
+
+.stepDot {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: #1e293b;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 9px;
+    font-weight: 800;
+    transition: all 0.3s ease;
+}
+
+.stepDotActive {
+    background: #10b981;
+    border-color: #10b981;
+    color: #fff;
+}
+
+.stepLabel {
+    margin-top: 0.4rem;
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.4);
+    text-align: center;
+}
+
+.stepLabelActive {
+    color: #f1f5f9;
+    font-weight: 700;
+}
+
+.activeOrderMeta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.04);
+    padding-top: 0.6rem;
+    margin-top: 0.2rem;
+}
+
+.activeOrderAddress {
+    font-size: 0.75rem;
+    color: #64748b;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 75%;
+}
+
+.activeOrderDate {
+    font-size: 0.75rem;
+    color: #475569;
+}
+
+/* Light mode overrides for active orders tracker */
+[data-theme='light'] .activeOrdersSection {
+    background: #ffffff;
+    border-color: rgba(168, 85, 247, 0.2);
+    box-shadow: 0 10px 30px rgba(168, 85, 247, 0.05);
+}
+
+[data-theme='light'] .activeOrdersToggle {
+    color: #1e293b;
+}
+
+[data-theme='light'] .activeOrdersToggle:hover {
+    background: rgba(168, 85, 247, 0.03);
+}
+
+[data-theme='light'] .activeOrdersTitle {
+    color: #1e293b;
+}
+
+[data-theme='light'] .activeOrderCard {
+    background: rgba(168, 85, 247, 0.02);
+    border-color: rgba(168, 85, 247, 0.08);
+}
+
+[data-theme='light'] .activeOrderCard:hover {
+    background: rgba(168, 85, 247, 0.04);
+    border-color: rgba(168, 85, 247, 0.15);
+}
+
+[data-theme='light'] .activeOrderPlantName {
+    color: #1e293b;
+}
+
+[data-theme='light'] .activeOrderVendorName {
+    color: #475569;
+}
+
+[data-theme='light'] .trackerLineBg {
+    background: rgba(0, 0, 0, 0.08);
+}
+
+[data-theme='light'] .stepDot {
+    background: #f1f5f9;
+    border-color: rgba(0, 0, 0, 0.15);
+    color: rgba(0, 0, 0, 0.35);
+}
+
+[data-theme='light'] .stepDotActive {
+    background: #10b981;
+    border-color: #10b981;
+    color: #fff;
+}
+
+[data-theme='light'] .stepLabel {
+    color: rgba(0, 0, 0, 0.4);
+}
+
+[data-theme='light'] .stepLabelActive {
+    color: #1e293b;
+}
+
+[data-theme='light'] .activeOrderMeta {
+    border-top-color: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme='light'] .activeOrderAddress {
+    color: #475569;
+}
+
+[data-theme='light'] .activeOrderDate {
+    color: #64748b;
+}

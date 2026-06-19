@@ -1,4 +1,4 @@
-import { X, MapPin, Phone, Globe, ShoppingCart, Star, Shield, Package, ChevronLeft, ChevronRight } from 'lucide-react';
+import { X, MapPin, Globe, ShoppingCart, Star, Shield, Package, ChevronLeft, ChevronRight, Navigation } from 'lucide-react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { Vendor, Plant } from '../../../types';
@@ -223,25 +223,27 @@ export const VendorDetailsModal = ({ vendor, plant, onClose, onBack }: VendorDet
                             </div>
                         </div>
 
-                        {/* Vendor Contact */}
+                        {/* Vendor Location & Website */}
                         <div className={styles.contactSection}>
-                            <div className={styles.sectionTitle}>Contact Information</div>
+                            <div className={styles.sectionTitle}>Location & Website</div>
+                            
+                            {vendor.address && (
+                                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', margin: '0.5rem 0 1rem', color: '#94a3b8', fontSize: '0.9rem' }}>
+                                    <MapPin size={16} style={{ color: '#10b981', flexShrink: 0 }} />
+                                    <span>{vendor.address}</span>
+                                </div>
+                            )}
+
                             <div className={styles.contactGrid}>
-                                {vendor.phone && (
-                                    <a href={`tel:${vendor.phone}`} className={styles.contactBtn}>
-                                        <Phone size={16} />
-                                        <span>Call</span>
-                                    </a>
-                                )}
-                                {vendor.whatsapp && (
+                                {vendor.latitude !== undefined && vendor.longitude !== undefined && vendor.latitude !== null && vendor.longitude !== null && (
                                     <a
-                                        href={`https://wa.me/${vendor.whatsapp.replace(/[^0-9]/g, '')}`}
+                                        href={`https://www.google.com/maps?q=${vendor.latitude},${vendor.longitude}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         className={styles.contactBtn}
                                     >
-                                        <Phone size={16} />
-                                        <span>WhatsApp</span>
+                                        <Navigation size={16} />
+                                        <span>View Location</span>
                                     </a>
                                 )}
                                 {vendor.website && (

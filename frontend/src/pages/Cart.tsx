@@ -2,9 +2,9 @@ import { useState, useEffect, useRef, useCallback, Fragment } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
-import { Trash2, ArrowLeft, Minus, Plus, ShoppingCart, MessageCircle, MapPin, Store, Lock, ShieldCheck, Info, Phone, Smartphone, RefreshCw, CheckCircle2, CloudRain, CreditCard, Navigation, ChevronDown, ChevronUp } from 'lucide-react';
+import { Trash2, ArrowLeft, Minus, Plus, ShoppingCart, MapPin, Store, Lock, ShieldCheck, Info, Phone, Smartphone, RefreshCw, CheckCircle2, CloudRain, CreditCard, Navigation, ChevronDown, ChevronUp, Clock, Truck } from 'lucide-react';
 import { Button } from '../components/common/Button';
-import { fetchVendors, completePurchase, createCartOrder, verifyCartPayment, fetchSystemSetting } from '../services/api';
+import { fetchVendors, createCartOrder, verifyCartPayment, fetchSystemSetting, fetchUserOrders } from '../services/api';
 import { formatCurrency } from '../utils/currency';
 import toast from 'react-hot-toast';
 import type { Vendor, CartItem } from '../types';
@@ -73,6 +73,19 @@ export const Cart = () => {
     });
     const mapRef = useRef<L.Map | null>(null);
 
+    const [orders, setOrders] = useState<any[]>([]);
+    const [activeOrdersExpanded, setActiveOrdersExpanded] = useState(true);
+
+    const loadOrders = useCallback(async () => {
+        if (!user) return;
+        try {
+            const data = await fetchUserOrders();
+            setOrders(data);
+        } catch (err) {
+            console.error("Failed to load orders:", err);
+        }
+    }, [user]);
+
     useEffect(() => {
         const loadVendors = async () => {
             const list = await fetchVendors();
@@ -81,7 +94,101 @@ export const Cart = () => {
             setVendors(map);
         };
         loadVendors();
-    }, []);
+        loadOrders();
+    }, [loadOrders]);
+
+    const renderActiveOrders = () => {
+        const activeOrders = orders.filter(o => o.status !== 'cancelled' && o.status !== 'delivered');
+        if (!user || activeOrders.length === 0) return null;
+
+        return (
+            <div className={styles.activeOrdersSection}>
+                <button
+                    className={styles.activeOrdersToggle}
+                    onClick={() => setActiveOrdersExpanded(!activeOrdersExpanded)}
+                >
+                    <div className={styles.activeOrdersToggleLeft}>
+                        <Truck size={20} className={styles.activeOrdersIcon} />
+                        <span className={styles.activeOrdersTitle}>My Active Orders ({activeOrders.length})</span>
+                    </div>
+                    {activeOrdersExpanded ? <ChevronUp size={20} /> : <ChevronDown size={20} />}
+                </button>
+
+                {activeOrdersExpanded && (
+                    <div className={styles.activeOrdersList}>
+                        {activeOrders.map((order: any) => {
+                            const statusConfig: Record<string, { color: string; bg: string; icon: React.ReactNode }> = {
+                                pending: { color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.1)', icon: <Clock size={12} /> },
+                                completed: { color: '#10b981', bg: 'rgba(16, 185, 129, 0.1)', icon: <CheckCircle2 size={12} /> },
+                                shipped: { color: '#3b82f6', bg: 'rgba(59, 130, 246, 0.1)', icon: <Truck size={12} /> }
+                            };
+                            const sc = statusConfig[order.status] || statusConfig.pending;
+                            const steps = [
+                                { label: 'Placed', active: true },
+                                { label: 'Packed', active: ['completed', 'shipped'].includes(order.status) },
+                                { label: 'Shipped', active: ['shipped'].includes(order.status) },
+                                { label: 'Delivered', active: false }
+                            ];
+
+                            return (
+                                <div key={order._id} className={styles.activeOrderCard}>
+                                    <div className={styles.activeOrderHeader}>
+                                        <div style={{ flex: 1, minWidth: 0 }}>
+                                            <h4 className={styles.activeOrderPlantName}>{order.plantName}</h4>
+                                            <p className={styles.activeOrderVendorName}>
+                                                from {order.vendorInfo?.name || 'VanaMap Official'}
+                                            </p>
+                                        </div>
+                                        <div className={styles.activeOrderStatusBadge} style={{ color: sc.color, backgroundColor: sc.bg }}>
+                                            {sc.icon} <span style={{ textTransform: 'capitalize' }}>{order.status}</span>
+                                        </div>
+                                    </div>
+
+                                    <div className={styles.activeOrderTracker}>
+                                        <div className={styles.trackerLineBg} />
+                                        <div 
+                                            className={styles.trackerLineProgress} 
+                                            style={{
+                                                width: order.status === 'shipped' ? '66%' :
+                                                       order.status === 'completed' ? '33%' : '0%'
+                                            }}
+                                        />
+                                        <div className={styles.trackerSteps}>
+                                            {steps.map((step, idx) => (
+                                                <div key={idx} className={styles.trackerStep}>
+                                                    <div className={`${styles.stepDot} ${step.active ? styles.stepDotActive : ''}`}>
+                                                        {step.active ? '✓' : idx + 1}
+                                                    </div>
+                                                    <span className={`${styles.stepLabel} ${step.active ? styles.stepLabelActive : ''}`}>{step.label}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+
+                                    <div className={styles.activeOrderMeta}>
+                                        {order.deliveryAddress?.address ? (
+                                            <div className={styles.activeOrderAddress}>
+                                                <MapPin size={11} />
+                                                <span>{order.deliveryAddress.address}, {order.deliveryAddress.city}</span>
+                                            </div>
+                                        ) : (
+                                            <div className={styles.activeOrderAddress}>
+                                                <MapPin size={11} />
+                                                <span>Self pickup / No address</span>
+                                            </div>
+                                        )}
+                                        <div className={styles.activeOrderDate}>
+                                            {new Date(order.timestamp).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
+                                        </div>
+                                    </div>
+                                </div>
+                            );
+                        })}
+                    </div>
+                )}
+            </div>
+        );
+    };
 
     const [deliveryRules, setDeliveryRules] = useState({
         freeRadiusKm: 3,
@@ -231,7 +338,7 @@ export const Cart = () => {
                         <div className={styles.lockIcon}><ShoppingCart size={40} /></div>
                         <h1 className={styles.lockTitle}>Secure Bag ðŸ›’</h1>
                         <p className={styles.lockDesc}>
-                            Please <strong>sign in</strong> to manage your orders, sync your cart across devices, and arrange WhatsApp delivery.
+                            Please <strong>sign in</strong> to manage your orders, sync your cart across devices, and securely complete payments.
                         </p>
 
                         <div className={styles.featureList}>
@@ -245,7 +352,7 @@ export const Cart = () => {
                             </div>
                             <div className={styles.featureItem}>
                                 <CheckCircle2 className={styles.featureIcon} size={24} />
-                                <span>Secure WhatsApp Checkout</span>
+                                <span>Secure Online Payment</span>
                             </div>
                         </div>
 
@@ -397,10 +504,11 @@ export const Cart = () => {
                         });
 
                         if (verifyData.success) {
-                            toast.success(`Payment successful! +${verifyData.pointsAwarded} CP earned ðŸŒ¿`);
+                            toast.success(`Payment successful! +${verifyData.pointsAwarded} CP earned 🌿`);
                             // Remove purchased items from cart
                             removeItems(vItems.map(i => ({ plantId: i.plant.id, vendorId: i.vendorId })));
                             await refreshUser();
+                            await loadOrders();
                         } else {
                             toast.error('Payment verification failed. Contact support.');
                         }
@@ -429,120 +537,12 @@ export const Cart = () => {
         } catch (err: any) {
             console.error('Cart payment error:', err);
             if (err.message?.includes('503') || err.message?.includes('not configured')) {
-                toast.error('Payment gateway unavailable. Try WhatsApp checkout.');
+                toast.error('Payment gateway unavailable. Please try again later.');
             } else {
                 toast.error(err.message || 'Payment initiation failed');
             }
             setPayingVendor(null);
         }
-    };
-
-    const handleWhatsAppCheckout = (vendorId: string) => {
-        if (!user) {
-            navigate('/auth');
-            return;
-        }
-
-        // Require delivery address
-        if (!deliveryAddress.address || !deliveryAddress.city) {
-            toast.error('Please enter your delivery address and city before checkout');
-            setDeliveryExpanded(true);
-            document.getElementById('delivery-address')?.focus();
-            return;
-        }
-
-        let vendor = vendors[vendorId];
-        const vItems = groupedItems[vendorId];
-
-        // Handle VanaMap Official Case
-        if (vendorId === 'vanamap') {
-            vendor = {
-                id: 'vanamap',
-                name: 'VanaMap Official',
-                whatsapp: '9188773534', // System Admin / Official support
-                address: 'Headquarters',
-                latitude: deliveryRules.hqLatitude,
-                longitude: deliveryRules.hqLongitude,
-                phone: '9188773534'
-            } as Vendor;
-        }
-
-        if (!vendor || !vItems) return;
-
-        const { fee, distance, outOfRange } = getDeliveryDetails(vendorId);
-        if (outOfRange) {
-            toast.error('Your delivery location is out of range for this vendor');
-            return;
-        }
-
-        // Validate stock quantities
-        if (vendorId !== 'vanamap' && vendor.inventory) {
-            for (const item of vItems) {
-                const invItem = vendor.inventory.find(i => i.plantId === item.plant.id);
-                const stockQty = invItem?.quantity !== undefined ? invItem.quantity : 0;
-                if (stockQty < item.quantity) {
-                    toast.error(`Insufficient stock for ${item.plant.name}. Only ${stockQty} available.`);
-                    return;
-                }
-            }
-        }
-
-        const delivery = getDeliveryData();
-
-        // Construct Message
-        let msg = `Hi, I am ${user.name}. I found your shop on VanaMap and would like to place an order.\n\n*Order Details:*\n`;
-        let total = 0;
-        vItems.forEach(i => {
-            const isCustomPot = i.plant.id.startsWith('cp_');
-            if (!isCustomPot) {
-                const price = i.vendorPrice || i.plant.price || 0;
-                msg += `- ${i.plant.name} (Qty: ${i.quantity}) @ ${formatCurrency(price)}\n`;
-                total += price * i.quantity;
-            } else {
-                msg += `- ${i.plant.name} (Qty: ${i.quantity}) [Price TBD]\n`;
-            }
-        });
-        if (total > 0) {
-            msg += `\n*Delivery Distance:* ${distance.toFixed(1)} km`;
-            msg += `\n*Delivery Fee:* ${fee > 0 ? formatCurrency(fee) : 'FREE'}`;
-            msg += `\n*Total Estimated Value: ${formatCurrency(total + fee)}*\n`;
-        }
-
-        // Add delivery address to WhatsApp message
-        if (delivery) {
-            msg += `\n*📍 Delivery Location:*\n`;
-            if (delivery.address) msg += `${delivery.address}\n`;
-            if (delivery.city || delivery.state) msg += `${delivery.city || ''}${delivery.city && delivery.state ? ', ' : ''}${delivery.state || ''}\n`;
-            if (delivery.pincode) msg += `PIN: ${delivery.pincode}\n`;
-            if (delivery.latitude && delivery.longitude) {
-                msg += `📍 Map: https://www.google.com/maps?q=${delivery.latitude},${delivery.longitude}\n`;
-            }
-        }
-
-        msg += `\nPlease confirm stock availability and delivery timeline.`;
-
-        // Open WhatsApp
-        const waNumber = vendor.whatsapp || vendor.phone;
-        const cleanNumber = waNumber.replace(/[^0-9]/g, '');
-        const url = `https://wa.me/${cleanNumber.length < 10 ? '91' + cleanNumber : cleanNumber}?text=${encodeURIComponent(msg)}`;
-
-        // Background award points and track sale
-        const purchaseData = vItems.map((i, index) => ({
-            plantId: i.plant.id,
-            vendorId: vendor.id,
-            vendorName: vendor.name,
-            quantity: i.quantity,
-            price: i.vendorPrice || i.plant.price || 0,
-            plantName: i.plant.name,
-            deliveryFee: index === 0 ? fee : 0,
-            deliveryDistance: distance
-        }));
-        completePurchase(purchaseData, delivery).catch(console.error);
-
-        window.open(url, '_blank');
-
-        // Note: We don't automatically remove items to allow user to retry if WA fails, 
-        // or we could prompt "Did you complete the order?". For now, keep them.
     };
 
     const mapCenter: [number, number] = [
@@ -577,17 +577,22 @@ export const Cart = () => {
 
                 {/* Delivery Location Section & Items List */}
                 {items.length === 0 ? (
-                    <div className={styles.emptyState}>
-                        <div className={styles.emptyIconBox}>
-                            <ShoppingCart size={48} color="#10b981" />
+                    <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
+                        <div className={styles.emptyState}>
+                            <div className={styles.emptyIconBox}>
+                                <ShoppingCart size={48} color="#10b981" />
+                            </div>
+                            <h2 className={styles.emptyTitle}>Your cart is empty</h2>
+                            <p className={styles.emptyDesc}>
+                                Looks like you haven't discovered your perfect plant match yet. Explore our collection of air-purifying plants.
+                            </p>
+                            <Button onClick={() => navigate('/shops')} variant="primary" size="lg">
+                                Browse Market
+                            </Button>
                         </div>
-                        <h2 className={styles.emptyTitle}>Your cart is empty</h2>
-                        <p className={styles.emptyDesc}>
-                            Looks like you haven't discovered your perfect plant match yet. Explore our collection of air-purifying plants.
-                        </p>
-                        <Button onClick={() => navigate('/shops')} variant="primary" size="lg">
-                            Browse Market
-                        </Button>
+                        <div style={{ width: '100%', maxWidth: '600px', marginTop: '2rem' }}>
+                            {renderActiveOrders()}
+                        </div>
                     </div>
                 ) : (
                     <div className={styles.cartContentLayout}>
@@ -842,7 +847,7 @@ export const Cart = () => {
                         <div className={styles.cartSidebarCol}>
                             <div className={styles.stickySidebar}>
                                 <h2 className={styles.sidebarTitle}>Order Summary</h2>
-                                
+                                {renderActiveOrders()}
                                 {Object.entries(groupedItems).map(([vendorId, cartItems]) => {
                                     const isVanaMap = vendorId === 'vanamap';
                                     const vendor = vendors[vendorId];
@@ -915,13 +920,6 @@ export const Cart = () => {
                                                             <CreditCard size={18} />
                                                             {payingVendor === vendorId ? 'Processing...' : 'Pay Online'}
                                                         </button>
-                                                        <button
-                                                            className={styles.whatsappBtn}
-                                                            onClick={() => handleWhatsAppCheckout(vendorId)}
-                                                            disabled={outOfRange || pending}
-                                                        >
-                                                            <MessageCircle size={18} /> WhatsApp Order
-                                                        </button>
                                                     </div>
                                                 ) : (
                                                     <div className={styles.loginPrompt}>
@@ -934,7 +932,7 @@ export const Cart = () => {
                                 })}
 
                                 <div className={styles.footerNote}>
-                                    <p>Prices are set by individual vendors. Delivery terms and final availability are confirmed upon order via WhatsApp.</p>
+                                    <p>Prices are set by individual vendors. Payments are securely processed via Razorpay.</p>
                                     {!user && (
                                         <Button variant="outline" className="mt-4" onClick={() => navigate('/auth')}>
                                             Sign In / Register Account

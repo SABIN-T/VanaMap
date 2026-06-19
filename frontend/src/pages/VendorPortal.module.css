@@ -16,21 +16,22 @@
 }
 
 .statCard {
-    background: rgba(15, 23, 42, 0.4);
+    background: rgba(15, 23, 42, 0.35);
     border: 1px solid rgba(255, 255, 255, 0.05);
     border-radius: 1.25rem;
     padding: 1.25rem;
     display: flex;
     align-items: center;
     gap: 1.25rem;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     backdrop-filter: blur(12px);
 }
 
 .statCard:hover {
-    background: rgba(30, 41, 59, 0.6);
-    transform: translateY(-3px);
-    border-color: rgba(255, 255, 255, 0.12);
+    background: rgba(30, 41, 59, 0.55);
+    transform: translateY(-4px) scale(1.02);
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 15px 30px -10px rgba(0, 0, 0, 0.5);
 }
 
 .statIcon {
@@ -61,8 +62,9 @@
 
 /* VERIFIED BANNER - COMPACT */
 .verifiedBanner {
-    background: linear-gradient(135deg, rgba(250, 204, 21, 0.08) 0%, rgba(202, 138, 4, 0.05) 100%);
-    border: 1px solid rgba(250, 204, 21, 0.2);
+    background: linear-gradient(135deg, rgba(250, 204, 21, 0.12) 0%, rgba(202, 138, 4, 0.06) 100%);
+    border: 1px solid rgba(250, 204, 21, 0.35);
+    box-shadow: 0 8px 32px 0 rgba(250, 204, 21, 0.05);
     border-radius: 1.25rem;
     padding: 1rem 1.5rem;
     margin-bottom: 2rem;
@@ -164,7 +166,8 @@
 .input:focus,
 .textarea:focus {
     border-color: #facc15;
-    background: rgba(250, 204, 21, 0.03);
+    background: rgba(250, 204, 21, 0.04);
+    box-shadow: 0 0 0 3px rgba(250, 204, 21, 0.15);
     outline: none;
 }
 
@@ -321,20 +324,17 @@
 
 .emptyCatalog {
     grid-column: span 4;
-    padding: 2.5rem;
+    padding: 3rem 2rem;
     text-align: center;
-    color: #475569;
-    font-size: 0.85rem;
-    font-style: italic;
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 1rem;
-}
-
-.emptyCatalog span {
-    color: #10b981;
-    font-weight: 700;
-    cursor: pointer;
-    text-decoration: underline;
+    color: #94a3b8;
+    font-size: 0.9rem;
+    background: rgba(15, 23, 42, 0.2);
+    border: 1px dashed rgba(255, 255, 255, 0.08);
+    border-radius: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 @media (max-width: 768px) {
@@ -469,4 +469,52 @@
     color: #64748b;
     margin: 0;
     line-height: 1.5;
+}
+
+/* Quick Actions Grid */
+.quickActionsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.quickActionCard {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    border-radius: 0.75rem;
+    padding: 1rem;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    backdrop-filter: blur(10px);
+}
+
+.quickActionCard:hover {
+    background: rgba(255, 255, 255, 0.06);
+    transform: translateY(-3px) scale(1.02);
+    border-color: rgba(255, 255, 255, 0.12);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+}
+
+.quickActionIconBox {
+    padding: 0.5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Skeleton Loading Animation */
+.skeleton {
+    animation: skeletonPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes skeletonPulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 0.3; }
 }
