@@ -1841,6 +1841,76 @@ app.patch('/api/vendor/orders/:id/status', auth, async (req, res) => {
 });
 
 // Get Restricted Pages
+// Resend Order Delivery OTP (Vendor)
+app.post('/api/vendor/orders/:id/resend-otp', auth, async (req, res) => {
+    try {
+        const sale = await Sale.findById(req.params.id);
+        if (!sale) return res.status(404).json({ error: 'Order not found' });
+
+        if (sale.status !== 'shipped') {
+            return res.status(400).json({ error: 'OTP can only be resent for shipped orders.' });
+        }
+
+        const vendor = await Vendor.findOne({ id: sale.vendorId });
+        if (!vendor || (vendor.userId !== req.user.id && vendor.ownerEmail !== req.user.email)) {
+            return res.status(403).json({ error: 'Access denied. You do not own this shop.' });
+        }
+
+        // Generate new OTP
+        const deliveryOtp = Math.floor(100000 + Math.random() * 900000).toString();
+        sale.deliveryOTP = deliveryOtp;
+        await sale.save();
+
+        let user = null;
+        if (sale.userId) {
+            user = await User.findById(sale.userId);
+        }
+
+        const vendorName = vendor ? vendor.name : 'VanaMap Partner';
+
+        // Send OTP email
+        if (user && user.email) {
+            try {
+                await sendEmail({
+                    from: 'VanaMap Delivery <delivery@vanamap.online>',
+                    to: user.email,
+                    subject: `VanaMap Delivery OTP: ${sale.deliveryOTP} 🌿`,
+                    html: `
+                        <div style="font-family: Arial, sans-serif; padding: 20px; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 12px; background: #fff;">
+                            <div style="text-align: center; border-bottom: 2px solid #10b981; padding-bottom: 15px; margin-bottom: 20px;">
+                                <h1 style="color: #10b981; margin: 0; font-size: 24px;">VanaMap Delivery Verification</h1>
+                            </div>
+                            <p>Hello <strong>${sale.userName || user.name || 'Valued Customer'}</strong>,</p>
+                            <p>Your order for <strong>${sale.plantName}</strong> (Qty: ${sale.quantity}) from <strong>${vendor.name}</strong> is shipped and on its way to you! 🚚</p>
+                            <p>To verify and confirm the delivery, please provide the following One-Time Password (OTP) to the delivery agent when they arrive:</p>
+                            <div style="text-align: center; margin: 30px 0;">
+                                <span style="font-size: 32px; font-weight: 800; color: #10b981; letter-spacing: 5px; background: #f0fdf4; padding: 12px 24px; border: 1px solid #bbf7d0; border-radius: 8px; display: inline-block;">
+                                    ${sale.deliveryOTP}
+                                </span>
+                            </div>
+                            <p style="color: #64748b; font-size: 14px;">If you did not request this delivery or have questions, please contact our support team immediately.</p>
+                            <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 20px 0;" />
+                            <p style="font-size: 11px; color: #94a3b8; text-align: center; margin: 0;">This email was sent automatically by the VanaMap Logistics Platform.</p>
+                        </div>
+                    `
+                });
+                console.log(`[Resend OTP Email] Sent OTP ${sale.deliveryOTP} to buyer: ${user.email}`);
+            } catch (mailErr) {
+                console.error('[Resend OTP Email] Failed to send email:', mailErr.message);
+                return res.status(500).json({ error: 'Failed to send OTP email to customer' });
+            }
+        } else {
+            return res.status(400).json({ error: 'Buyer email not found' });
+        }
+
+        res.json({ success: true, message: 'New OTP code sent to customer successfully' });
+    } catch (e) {
+        console.error('Error resending OTP:', e);
+        res.status(500).json({ error: e.message });
+    }
+});
+
+// Get Restricted Pages
 app.get('/api/admin/settings/restricted-pages', auth, admin, async (req, res) => {
     try {
         const setting = await SystemSettings.findOne({ key: 'restricted_pages' });

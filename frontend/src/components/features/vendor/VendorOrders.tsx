@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { fetchVendorOrders, updateVendorOrderStatus } from '../../../services/api';
+import { fetchVendorOrders, updateVendorOrderStatus, resendVendorOrderOTP } from '../../../services/api';
 import { formatCurrency } from '../../../utils/currency';
 import { Search, MapPin, Clock, Package, Truck, CheckCircle, AlertTriangle, ShieldCheck, Mail, Phone, Calendar, Loader2 } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -17,6 +17,7 @@ export const VendorOrders = ({ vendor }: VendorOrdersProps) => {
     const [activeTab, setActiveTab] = useState<'all' | 'pending' | 'completed' | 'shipped' | 'delivered'>('all');
     const [otpInputs, setOtpInputs] = useState<Record<string, string>>({});
     const [submittingId, setSubmittingId] = useState<string | null>(null);
+    const [resendingIds, setResendingIds] = useState<Set<string>>(new Set());
 
     const loadOrders = async () => {
         setLoading(true);
@@ -70,6 +71,27 @@ export const VendorOrders = ({ vendor }: VendorOrdersProps) => {
             ...prev,
             [orderId]: numericVal
         }));
+    };
+
+    const handleResendOtp = async (orderId: string) => {
+        setResendingIds(prev => {
+            const next = new Set(prev);
+            next.add(orderId);
+            return next;
+        });
+        const tid = toast.loading("Generating and resending OTP to buyer...");
+        try {
+            await resendVendorOrderOTP(orderId);
+            toast.success("New OTP code sent to customer successfully!", { id: tid });
+        } catch (err: any) {
+            toast.error(err.message || "Failed to resend OTP", { id: tid });
+        } finally {
+            setResendingIds(prev => {
+                const next = new Set(prev);
+                next.delete(orderId);
+                return next;
+            });
+        }
     };
 
     const filteredOrders = orders.filter(order => {
@@ -253,6 +275,27 @@ export const VendorOrders = ({ vendor }: VendorOrdersProps) => {
                                             >
                                                 ✅ Complete Delivery
                                             </button>
+                                            <div style={{ display: 'flex', justifyContent: 'center', marginTop: '0.75rem' }}>
+                                                <button
+                                                    onClick={() => handleResendOtp(order._id)}
+                                                    disabled={isSubmitting || resendingIds.has(order._id)}
+                                                    style={{
+                                                        background: 'transparent',
+                                                        border: 'none',
+                                                        color: 'var(--color-primary, #10b981)',
+                                                        fontSize: '0.8rem',
+                                                        fontWeight: 700,
+                                                        cursor: 'pointer',
+                                                        textDecoration: 'underline',
+                                                        opacity: (isSubmitting || resendingIds.has(order._id)) ? 0.6 : 1,
+                                                        display: 'flex',
+                                                        alignItems: 'center',
+                                                        gap: '4px'
+                                                    }}
+                                                >
+                                                    📬 {resendingIds.has(order._id) ? 'Resending OTP...' : 'Resend OTP to Customer'}
+                                                </button>
+                                            </div>
                                         </div>
                                     )}
 

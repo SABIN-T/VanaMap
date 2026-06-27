@@ -548,6 +548,18 @@ export const updateVendorOrderStatus = async (orderId: string, status: string, o
     return res.json();
 };
 
+export const resendVendorOrderOTP = async (orderId: string) => {
+    const res = await fetch(`${API_URL}/vendor/orders/${orderId}/resend-otp`, {
+        method: 'POST',
+        headers: getHeaders()
+    });
+    if (!res.ok) {
+        const errData = await res.json();
+        throw new Error(errData.error || "Failed to resend delivery OTP");
+    }
+    return res.json();
+};
+
 export const addPoints = async (amount: number) => {
     const res = await fetch(`${API_URL}/user/add-points`, {
         method: 'POST',
