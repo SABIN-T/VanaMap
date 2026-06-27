@@ -1892,6 +1892,8 @@
 
 .svgRing {
     position: absolute;
+    top: 5px;
+    left: 5px;
     transform: rotate(-90deg);
 }
 
@@ -1912,12 +1914,14 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
 }
 
 .scoreLarge {
-    font-size: 2.2rem;
+    font-size: 1.65rem;
     font-weight: 900;
     line-height: 1;
+    letter-spacing: -0.5px;
 }
 
 .scorePct {
