@@ -154,7 +154,7 @@ export const PlantDetailsModal = ({ plant, weather, onClose, onBuy }: PlantDetai
     const [lightLevel, setLightLevel] = useState(70);
 
     // Environment
-    const currentTemp = isACMode ? targetTemp : (weather?.avgTemp30Days || 25);
+    const currentTemp = isACMode ? targetTemp : Number((weather?.avgTemp30Days || 25).toFixed(1));
     const currentHumidity = weather?.avgHumidity30Days || 50;
 
 

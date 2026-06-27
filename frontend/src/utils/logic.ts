@@ -258,12 +258,15 @@ export const generatePlantInsights = (plant: Plant, avgTemp: number, avgHumidity
     const idealMin = plant.idealTempMin || 15;
     const idealMax = plant.idealTempMax || 30;
 
+    const roundedTemp = typeof avgTemp === 'number' ? Number(avgTemp.toFixed(1)) : avgTemp;
+    const roundedHumidity = typeof avgHumidity === 'number' ? Math.round(avgHumidity) : avgHumidity;
+
     let prediction = '';
     let tip = '';
 
-    if (avgTemp >= idealMin && avgTemp <= idealMax) {
-        prediction = `Thriving! Your ${avgTemp}°C matches the ideal ${idealMin}-${idealMax}°C range nicely.`;
-    } else if (avgTemp < idealMin) {
+    if (roundedTemp >= idealMin && roundedTemp <= idealMax) {
+        prediction = `Thriving! Your ${roundedTemp}°C matches the ideal ${idealMin}-${idealMax}°C range nicely.`;
+    } else if (roundedTemp < idealMin) {
         prediction = `A bit chilly. It prefers ${idealMin}-${idealMax}°C, but might adapt slightly.`;
         tip = `Avoid drafts and consider a warmer spot.`;
     } else {
@@ -272,8 +275,8 @@ export const generatePlantInsights = (plant: Plant, avgTemp: number, avgHumidity
     }
 
     const minHumidity = plant.minHumidity || 40;
-    if (avgHumidity < minHumidity && !tip) {
-        tip = `Humidity is low (${avgHumidity}%). This plant prefers >${minHumidity}%. Mist it!`;
+    if (roundedHumidity < minHumidity && !tip) {
+        tip = `Humidity is low (${roundedHumidity}%). This plant prefers >${minHumidity}%. Mist it!`;
     }
 
     if (!tip && aqi > 100) {
