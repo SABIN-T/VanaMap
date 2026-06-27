@@ -378,248 +378,250 @@ export const UserDashboard = () => {
 
     if (!user) return null;
 
+    const displayUserName = user?.name || user?.email?.split('@')[0] || 'Botanist';
+
     return (
         <UserDashboardLayout title="Overview">
-            {/* 1. GAMIFICATION BANNER */}
-            <div className={styles.gamificationBanner}>
-                <div className={styles.bannerContent}>
-                    <div className={styles.trophyCircle}>
-                        <Trophy size={22} />
-                    </div>
-                    <div className={styles.bannerText}>
-                        <h3>Welcome back, {user.name}!</h3>
-                        <p>
-                            You are a <span style={{ color: '#10b981', fontWeight: 700 }}>Seed Level</span> explorer.
-                            {user.isPremium && <span style={{ marginLeft: '8px', color: '#fbbf24', fontWeight: 800 }}>✨ PREMIUM (2x CP BOOST)</span>}
-                        </p>
-                    </div>
-                </div>
-
-                <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => navigate('/leaderboard')}
-                    className={styles.actionBtn}
-                    style={{ width: 'auto' }}
-                >
-                    View Rankings <ArrowRight size={14} style={{ marginLeft: '4px' }} />
-                </Button>
-            </div>
-
-            {/* LOCATION PROMPT - CLEANER ALERT */}
-            {!user.city && (
-                <div className={styles.actionCard} style={{
-                    background: 'linear-gradient(135deg, rgba(56, 189, 248, 0.1) 0%, rgba(14, 165, 233, 0.05) 100%)',
-                    borderColor: 'rgba(56, 189, 248, 0.3)',
-                    marginBottom: '1.5rem',
-                    animation: 'pulse-glow 3s infinite',
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    justifyContent: 'space-between'
-                }}>
-                    <div className={styles.actionHeader}>
-                        <div className={styles.actionIconBox} style={{ background: '#0ea5e9' }}>
-                            <MapPin size={22} />
+            <div className={styles.dashboardGrid}>
+                {/* Main Content Column */}
+                <div className={styles.mainColumn}>
+                    {/* Welcome Banner */}
+                    <div className={styles.gamificationBanner}>
+                        <div className={styles.bannerContent}>
+                            <div className={styles.trophyCircle}>
+                                <Trophy size={22} />
+                            </div>
+                            <div className={styles.bannerText}>
+                                <h3>Welcome back, {displayUserName}!</h3>
+                                <p>
+                                    You are a <span style={{ color: 'var(--color-primary, #10b981)', fontWeight: 700 }}>Seed Level</span> explorer.
+                                    {user.isPremium && <span style={{ marginLeft: '8px', color: '#fbbf24', fontWeight: 800 }}>✨ PREMIUM (2x CP BOOST)</span>}
+                                </p>
+                            </div>
                         </div>
-                        <div className={styles.actionContent}>
-                            <h4 className={styles.actionTitle}>Missing Local Ranking</h4>
-                            <p className={styles.actionDesc}>Set city to represent your zone in Hall of Fame</p>
-                        </div>
-                    </div>
-                    <Button
-                        size="sm"
-                        onClick={() => setShowLocationModal(true)}
-                        style={{ background: '#0ea5e9', border: 'none', fontWeight: 800, width: 'auto' }}
-                    >
-                        Set Location
-                    </Button>
-                </div>
-            )}
 
-            {/* 2. STATS OVERVIEW - HIGH DENSITY */}
-            <div className={styles.statsBoard}>
-                <div className={styles.statCard}>
-                    <div className={styles.statIcon} style={{ background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)', color: 'white' }}>
-                        <Zap size={20} />
-                    </div>
-                    <div>
-                        <div className={styles.statValue}>{user.points || 0}</div>
-                        <div className={styles.statLabel}>Total Points</div>
-                    </div>
-                </div>
-
-                <div className={styles.statCard}>
-                    <div className={styles.statIcon} style={{ background: 'linear-gradient(135deg, #facc15 0%, #ca8a04 100%)', color: 'black' }}>
-                        <Trophy size={20} />
-                    </div>
-                    <div>
-                        <div className={styles.statValue}>{rank ? `#${rank}` : '-'}</div>
-                        <div className={styles.statLabel}>Global Rank</div>
-                    </div>
-                </div>
-
-                <div className={styles.statCard}>
-                    <div className={styles.statIcon} style={{ background: 'linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%)', color: 'white' }}>
-                        <Wind size={20} />
-                    </div>
-                    <div>
-                        <div className={styles.statValue}>{((favoritePlants.length || items.length) * 1.2).toFixed(1)}L</div>
-                        <div className={styles.statLabel}>Oxygen Impact</div>
-                    </div>
-                </div>
-            </div>
-
-            {/* 3. ALERTS & ACTIONS - GRID 3-COL */}
-            <div className={styles.actionSection}>
-                {/* Account Status Card */}
-                <div className={styles.actionCard}>
-                    <div className={styles.actionHeader}>
-                        <div className={styles.actionIconBox} style={{ background: isFullyVerified ? '#10b981' : '#ef4444' }}>
-                            {isFullyVerified ? <CheckCircle size={18} /> : <Shield size={18} />}
-                        </div>
-                        <div className={styles.actionContent}>
-                            <h4 className={styles.actionTitle}>Identity</h4>
-                            <p className={styles.actionDesc}>{isFullyVerified ? 'Verified Account' : 'Action Required'}</p>
-                        </div>
-                    </div>
-                    {!isFullyVerified && (
                         <Button
-                            onClick={() => setShowVerifyModal(true)}
                             size="sm"
+                            variant="outline"
+                            onClick={() => navigate('/leaderboard')}
                             className={styles.actionBtn}
-                            style={{ background: '#ef4444', color: 'white', border: 'none' }}
+                            style={{ width: 'auto', marginTop: 0 }}
                         >
-                            Verify Identity
+                            View Rankings <ArrowRight size={14} style={{ marginLeft: '4px' }} />
                         </Button>
+                    </div>
+
+                    {/* Alerts & Prompts */}
+                    {!user.city && (
+                        <div className={styles.alertBox} style={{
+                            background: 'linear-gradient(135deg, rgba(56, 189, 248, 0.08) 0%, rgba(14, 165, 233, 0.04) 100%)',
+                            borderColor: 'rgba(56, 189, 248, 0.3)',
+                        }}>
+                            <div className={styles.alertContent}>
+                                <div className={styles.alertIcon} style={{ background: '#0ea5e9' }}>
+                                    <MapPin size={20} />
+                                </div>
+                                <div>
+                                    <h4 className={styles.alertTitle}>Missing Local Ranking</h4>
+                                    <p className={styles.alertDesc}>Set city to represent your zone in Hall of Fame</p>
+                                </div>
+                            </div>
+                            <Button
+                                size="sm"
+                                onClick={() => setShowLocationModal(true)}
+                                style={{ background: '#0ea5e9', border: 'none', fontWeight: 800, width: 'auto', marginTop: 0 }}
+                            >
+                                Set Location
+                            </Button>
+                        </div>
                     )}
+
+                    {!isFullyVerified && (
+                        <div className={styles.alertBox} style={{
+                            background: 'linear-gradient(135deg, rgba(239, 68, 68, 0.08) 0%, rgba(220, 38, 38, 0.04) 100%)',
+                            borderColor: 'rgba(239, 68, 68, 0.25)',
+                        }}>
+                            <div className={styles.alertContent}>
+                                <div className={styles.alertIcon} style={{ background: '#ef4444' }}>
+                                    <Shield size={20} />
+                                </div>
+                                <div>
+                                    <h4 className={styles.alertTitle}>Account Verification Required</h4>
+                                    <p className={styles.alertDesc}>Verify email/phone to start shopping or selling plants</p>
+                                </div>
+                            </div>
+                            <Button
+                                onClick={() => setShowVerifyModal(true)}
+                                size="sm"
+                                style={{ background: '#ef4444', color: 'white', border: 'none', fontWeight: 800, width: 'auto', marginTop: 0 }}
+                            >
+                                Verify Identity
+                            </Button>
+                        </div>
+                    )}
+
+                    {/* Quick Access Center */}
+                    <div className={styles.widgetHeader}>
+                        <h4 className={styles.widgetTitle}>Quick Navigation</h4>
+                    </div>
+                    <div className={styles.quickGrid}>
+                        <div onClick={() => setShowCollectionModal(true)} className={styles.quickCard}>
+                            <Heart style={{ color: '#f43f5e' }} size={24} />
+                            <div>
+                                <strong>My Garden</strong>
+                                <p>{user.favorites?.length || 0} Collected</p>
+                            </div>
+                        </div>
+
+                        <div onClick={() => navigate('/nearby')} className={styles.quickCard}>
+                            <MapPin style={{ color: '#10b981' }} size={24} />
+                            <div>
+                                <strong>Nearby Map</strong>
+                                <p>Locate Shops</p>
+                            </div>
+                        </div>
+
+                        <div onClick={() => navigate('/cart')} className={styles.quickCard}>
+                            <ShoppingBag style={{ color: '#0ea5e9' }} size={24} />
+                            <div>
+                                <strong>My Cart</strong>
+                                <p>{items.length} Pending</p>
+                            </div>
+                        </div>
+
+                        <div onClick={async () => {
+                            setShowOrdersModal(true);
+                            setLoadingOrders(true);
+                            try {
+                                const data = await fetchUserOrders();
+                                setMyOrders(data);
+                            } catch (e) {
+                                console.error('Failed to load orders', e);
+                            } finally {
+                                setLoadingOrders(false);
+                            }
+                        }} className={styles.quickCard}>
+                            <Package style={{ color: '#a855f7' }} size={24} />
+                            <div>
+                                <strong>My Orders</strong>
+                                <p>Order History</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Manage & Utilities Hub */}
+                    <div className={styles.widgetHeader}>
+                        <h4 className={styles.widgetTitle}>Account Tools</h4>
+                    </div>
+                    <div className={styles.utilityGrid}>
+                        <div className={styles.utilityCard}>
+                            <div className={styles.utilityHeader}>
+                                <Lock size={16} style={{ color: '#6366f1' }} /> Security settings
+                            </div>
+                            <p className={styles.utilityDesc}>Update your account keys and security questions.</p>
+                            <Button onClick={() => setShowPasswordModal(true)} size="sm" variant="outline" className={styles.actionBtn}>
+                                Change Key
+                            </Button>
+                        </div>
+
+                        <div className={styles.utilityCard}>
+                            <div className={styles.utilityHeader}>
+                                <Store size={16} style={{ color: '#facc15' }} /> Partner Center
+                            </div>
+                            <p className={styles.utilityDesc}>Onboard as a nursery seller to list your plant inventory.</p>
+                            <Button onClick={() => navigate('/vendor')} size="sm" style={{ background: '#facc15', color: '#000000', border: 'none' }} className={styles.actionBtn}>
+                                Partner Portal
+                            </Button>
+                        </div>
+
+                        {user.role === 'admin' && (
+                            <div className={styles.utilityCard} style={{ gridColumn: 'span 2' }}>
+                                <div className={styles.utilityHeader} style={{ color: '#ef4444' }}>
+                                    <Shield size={16} /> Admin Access
+                                </div>
+                                <p className={styles.utilityDesc}>Access diagnostic telemetry, manage flora lists, and review vendor registrations.</p>
+                                <Button onClick={() => navigate('/admin')} size="sm" style={{ background: '#ef4444', color: 'white', border: 'none' }} className={styles.actionBtn}>
+                                    Open Admin Panel
+                                </Button>
+                            </div>
+                        )}
+
+                        <div className={styles.utilityCard} style={{ gridColumn: 'span 2', borderColor: 'rgba(239, 68, 68, 0.15)' }}>
+                            <div className={styles.utilityHeader} style={{ color: '#ef4444' }}>
+                                <Trash2 size={16} /> Danger Zone
+                            </div>
+                            <p className={styles.utilityDesc}>Permanently terminate your VanaMap session and erase credentials.</p>
+                            <Button
+                                onClick={() => {
+                                    setDeleteStep('initial');
+                                    setDeleteOtp('');
+                                    setShowDeleteModal(true);
+                                }}
+                                size="sm"
+                                style={{ background: '#ef4444', color: 'white', border: 'none' }}
+                                className={styles.actionBtn}
+                            >
+                                Delete Account
+                            </Button>
+                        </div>
+                    </div>
                 </div>
 
-                {/* Privacy/Security Card */}
-                <div className={styles.actionCard}>
-                    <div className={styles.actionHeader}>
-                        <div className={styles.actionIconBox} style={{ background: '#6366f1' }}>
-                            <Lock size={18} />
+                {/* Right widgets Sidebar Column */}
+                <div className={styles.sidebarColumn}>
+                    {/* User profile card */}
+                    <div className={styles.widgetCard}>
+                        <div className={styles.widgetHeader}>
+                            <h4 className={styles.widgetTitle}>My Account</h4>
                         </div>
-                        <div className={styles.actionContent}>
-                            <h4 className={styles.actionTitle}>Security</h4>
-                            <p className={styles.actionDesc}>Manage Privacy</p>
-                        </div>
-                    </div>
-                    <Button onClick={() => setShowPasswordModal(true)} size="sm" variant="outline" className={styles.actionBtn}>
-                        Change Key
-                    </Button>
-                </div>
-
-                {/* Shop Center Card */}
-                <div className={styles.actionCard}>
-                    <div className={styles.actionHeader}>
-                        <div className={styles.actionIconBox} style={{ background: '#facc15', color: '#000' }}>
-                            <Store size={18} />
-                        </div>
-                        <div className={styles.actionContent}>
-                            <h4 className={styles.actionTitle}>Partners</h4>
-                            <p className={styles.actionDesc}>Shop Portal</p>
+                        <div className={styles.profileWidget}>
+                            <div className={styles.largeAvatar}>
+                                {displayUserName.charAt(0).toUpperCase()}
+                            </div>
+                            <div className={styles.profileInfo}>
+                                <div className={styles.profileName}>{displayUserName}</div>
+                                <div className={styles.profileEmail}>{user.email}</div>
+                                {user.isPremium && <span className={styles.premiumBadge}>Premium</span>}
+                            </div>
                         </div>
                     </div>
-                    <Button
-                        onClick={() => navigate('/vendor')}
-                        size="sm"
-                        className={styles.actionBtn}
-                        style={{ background: '#facc15', color: '#000', border: 'none' }}
-                    >
-                        Visit Center
-                    </Button>
-                </div>
 
-                {/* Danger Zone Card */}
-                <div className={styles.actionCard} style={{ borderColor: 'rgba(239, 68, 68, 0.15)' }}>
-                    <div className={styles.actionHeader}>
-                        <div className={styles.actionIconBox} style={{ background: 'linear-gradient(135deg, #ef4444 0%, #991b1b 100%)' }}>
-                            <Trash2 size={18} />
+                    {/* Impact & stats */}
+                    <div className={styles.widgetCard}>
+                        <div className={styles.widgetHeader}>
+                            <h4 className={styles.widgetTitle}>Ecosystem Telemetry</h4>
                         </div>
-                        <div className={styles.actionContent}>
-                            <h4 className={styles.actionTitle}>Danger Zone</h4>
-                            <p className={styles.actionDesc}>Delete Account</p>
+                        <div className={styles.statList}>
+                            <div className={styles.statRow}>
+                                <div className={styles.statIconBox} style={{ background: 'rgba(16, 185, 129, 0.1)', color: 'var(--color-primary, #10b981)' }}>
+                                    <Zap size={20} />
+                                </div>
+                                <div className={styles.statDetail}>
+                                    <div className={styles.statValue}>{user.points || 0}</div>
+                                    <div className={styles.statLabel}>Total Points</div>
+                                </div>
+                            </div>
+
+                            <div className={styles.statRow}>
+                                <div className={styles.statIconBox} style={{ background: 'rgba(250, 204, 21, 0.1)', color: '#facc15' }}>
+                                    <Trophy size={20} />
+                                </div>
+                                <div className={styles.statDetail}>
+                                    <div className={styles.statValue}>{rank ? `#${rank}` : '-'}</div>
+                                    <div className={styles.statLabel}>Global Rank</div>
+                                </div>
+                            </div>
+
+                            <div className={styles.statRow}>
+                                <div className={styles.statIconBox} style={{ background: 'rgba(59, 130, 246, 0.1)', color: '#3b82f6' }}>
+                                    <Wind size={20} />
+                                </div>
+                                <div className={styles.statDetail}>
+                                    <div className={styles.statValue}>{((favoritePlants.length || items.length) * 1.2).toFixed(1)}L</div>
+                                    <div className={styles.statLabel}>Oxygen Impact</div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <Button
-                        onClick={() => {
-                            setDeleteStep('initial');
-                            setDeleteOtp('');
-                            setShowDeleteModal(true);
-                        }}
-                        size="sm"
-                        className={styles.actionBtn}
-                        style={{ background: '#ef4444', color: 'white', border: 'none' }}
-                    >
-                        Delete Account
-                    </Button>
-                </div>
-            </div>
-
-            {/* 4. QUICK ACCESS GRID */}
-            <h2 className={styles.sectionTitle} style={{ marginBottom: '1rem' }}>Quick Navigation</h2>
-            <div className={styles.quickGrid}>
-                {(user.role === 'vendor' || myVendor) && (
-                    <div onClick={() => navigate('/vendor')} className={styles.quickCard} style={{ background: 'rgba(250, 204, 21, 0.05)', borderColor: 'rgba(250, 204, 21, 0.2)' }}>
-                        <Store style={{ color: '#facc15' }} size={24} />
-                        <div>
-                            <strong>Vendor Portal</strong>
-                            <p>{user.role === 'vendor' ? 'Manage Shop' : 'Application Status'}</p>
-                        </div>
-                    </div>
-                )}
-
-                {user.role === 'admin' && (
-                    <div onClick={() => navigate('/admin')} className={styles.quickCard} style={{ background: 'rgba(239, 68, 68, 0.05)', borderColor: 'rgba(239, 68, 68, 0.2)' }}>
-                        <Shield style={{ color: '#ef4444' }} size={24} />
-                        <div>
-                            <strong>Admin Panel</strong>
-                            <p>System Hub</p>
-                        </div>
-                    </div>
-                )}
-
-                <div onClick={() => setShowCollectionModal(true)} className={styles.quickCard}>
-                    <Heart style={{ color: '#f43f5e' }} size={24} />
-                    <div>
-                        <strong>My Garden</strong>
-                        <p>{user.favorites?.length || 0} Collected</p>
-                    </div>
-                </div>
-
-                <div onClick={() => navigate('/nearby')} className={styles.quickCard}>
-                    <MapPin style={{ color: '#10b981' }} size={24} />
-                    <div>
-                        <strong>Nearby</strong>
-                        <p>Locate Shops</p>
-                    </div>
-                </div>
-
-                <div onClick={() => navigate('/cart')} className={styles.quickCard}>
-                    <ShoppingBag style={{ color: '#0ea5e9' }} size={24} />
-                    <div>
-                        <strong>Cart</strong>
-                        <p>{items.length} Pending</p>
-                    </div>
-                </div>
-
-                <div onClick={async () => {
-                    setShowOrdersModal(true);
-                    setLoadingOrders(true);
-                    try {
-                        const data = await fetchUserOrders();
-                        setMyOrders(data);
-                    } catch (e) {
-                        console.error('Failed to load orders', e);
-                    } finally {
-                        setLoadingOrders(false);
-                    }
-                }} className={styles.quickCard} style={{ background: 'rgba(168, 85, 247, 0.05)', borderColor: 'rgba(168, 85, 247, 0.2)' }}>
-                    <Package style={{ color: '#a855f7' }} size={24} />
-                    <div>
-                        <strong>My Orders</strong>
-                        <p>Order History</p>
                     </div>
                 </div>
             </div>
