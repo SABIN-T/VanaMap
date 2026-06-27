@@ -26,6 +26,82 @@ export const PlantDetailsModal = ({ plant, weather, onClose, onBuy }: PlantDetai
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
+    // GBIF BIODIVERSITY ENGINE
+    const [gbifData, setGbifData] = useState<{
+        loading: boolean;
+        taxonKey?: number;
+        scientificName?: string;
+        occurrencesLocal?: number;
+        occurrencesGlobal?: number;
+        classification?: {
+            kingdom?: string;
+            phylum?: string;
+            clazz?: string;
+            order?: string;
+            family?: string;
+            genus?: string;
+        };
+        error?: boolean;
+    }>({ loading: true });
+
+    useEffect(() => {
+        let isMounted = true;
+        const fetchGbifDetails = async () => {
+            try {
+                let countryCode = 'IN';
+                const storedUser = localStorage.getItem('user');
+                if (storedUser) {
+                    const parsed = JSON.parse(storedUser);
+                    if (parsed?.country) {
+                        countryCode = parsed.country;
+                    }
+                }
+
+                const queryName = plant.scientificName || plant.name;
+                const matchRes = await fetch(`https://api.gbif.org/v1/species/match?name=${encodeURIComponent(queryName)}`);
+                if (!matchRes.ok) throw new Error('Match failed');
+                const matchData = await matchRes.json();
+
+                if (!matchData.usageKey) {
+                    if (isMounted) setGbifData({ loading: false, error: true });
+                    return;
+                }
+
+                const usageKey = matchData.usageKey;
+
+                const localOccurRes = await fetch(`https://api.gbif.org/v1/occurrence/search?taxonKey=${usageKey}&country=${countryCode}&limit=0`);
+                const localOccurData = await localOccurRes.json();
+
+                const globalOccurRes = await fetch(`https://api.gbif.org/v1/occurrence/search?taxonKey=${usageKey}&limit=0`);
+                const globalOccurData = await globalOccurRes.json();
+
+                if (isMounted) {
+                    setGbifData({
+                        loading: false,
+                        taxonKey: usageKey,
+                        scientificName: matchData.scientificName || queryName,
+                        occurrencesLocal: localOccurData.count || 0,
+                        occurrencesGlobal: globalOccurData.count || 0,
+                        classification: {
+                            kingdom: matchData.kingdom,
+                            phylum: matchData.phylum,
+                            clazz: matchData.class,
+                            order: matchData.order,
+                            family: matchData.family,
+                            genus: matchData.genus,
+                        }
+                    });
+                }
+            } catch (e) {
+                console.error('Error fetching from GBIF.org:', e);
+                if (isMounted) setGbifData({ loading: false, error: true });
+            }
+        };
+
+        fetchGbifDetails();
+        return () => { isMounted = false; };
+    }, [plant]);
+
     // UI States
     const [activeTab, setActiveTab] = useState<'overview' | 'simulation'>('overview');
 
@@ -141,6 +217,102 @@ export const PlantDetailsModal = ({ plant, weather, onClose, onBuy }: PlantDetai
                         <p>{insights.tip}</p>
                     </div>
                 </div>
+            </div>
+        );
+    };
+
+    const renderGbifSection = () => {
+        if (gbifData.loading) {
+            return (
+                <div style={{ marginTop: '2rem', padding: '1.5rem', background: 'rgba(255,255,255,0.02)', borderRadius: '1.25rem', border: '1px solid rgba(255,255,255,0.05)', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div className="skeleton" style={{ width: '20px', height: '20px', background: 'rgba(255,255,255,0.1)', borderRadius: '50%' }}></div>
+                    <span style={{ fontSize: '0.85rem', color: 'var(--color-text-dim, #94a3b8)' }}>Connecting to GBIF.org Biodiversity Engine...</span>
+                </div>
+            );
+        }
+
+        if (gbifData.error || !gbifData.taxonKey) {
+            return (
+                <div style={{ marginTop: '2rem', padding: '1.5rem', background: 'rgba(255,255,255,0.02)', borderRadius: '1.25rem', border: '1px solid rgba(255,255,255,0.05)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--color-text-dim, #94a3b8)', fontSize: '0.85rem' }}>
+                        <GraduationCap size={16} /> GBIF.org species search returned no occurrences.
+                    </div>
+                </div>
+            );
+        }
+
+        const localCount = gbifData.occurrencesLocal || 0;
+        const globalCount = gbifData.occurrencesGlobal || 0;
+
+        let statusColor = '#ef4444';
+        let statusLabel = 'Unrecorded / Non-Native';
+        let statusDesc = `This species has 0 occurrences registered in your country on GBIF.org. It might not adapt well to local outdoor conditions. Indoor care is recommended.`;
+
+        if (localCount > 50) {
+            statusColor = '#10b981';
+            statusLabel = 'Highly Native & Suitable';
+            statusDesc = `This species has ${localCount.toLocaleString()} documented occurrences in your region. It is perfectly adapted to grow in local conditions.`;
+        } else if (localCount > 0) {
+            statusColor = '#38bdf8';
+            statusLabel = 'Cultivated / Present';
+            statusDesc = `This species has ${localCount.toLocaleString()} recorded occurrences in your region. It can be successfully grown with standard care.`;
+        }
+
+        return (
+            <div style={{ 
+                marginTop: '1.5rem', padding: '1.25rem', 
+                background: 'rgba(15, 23, 42, 0.25)', 
+                borderRadius: '1.25rem', 
+                border: '1px solid rgba(255, 255, 255, 0.05)',
+                display: 'flex', flexDirection: 'column', gap: '1rem'
+            }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.9rem', fontWeight: 800, color: 'var(--color-text-main, #f8fafc)' }}>
+                        <GraduationCap size={18} style={{ color: '#10b981' }} /> GBIF.org regional check
+                    </div>
+                    <span style={{ fontSize: '0.65rem', fontWeight: 800, color: 'var(--color-text-dim, #94a3b8)', letterSpacing: '0.5px' }}>BIODIVERSITY DATA</span>
+                </div>
+
+                <div style={{ display: 'flex', gap: '1rem', alignItems: 'flex-start', background: 'rgba(255,255,255,0.01)', border: '1px solid rgba(255,255,255,0.03)', borderRadius: '12px', padding: '0.75rem 1rem' }}>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                        <span style={{ 
+                            fontSize: '0.7rem', fontWeight: 800, color: statusColor, 
+                            background: `${statusColor}15`, border: `1px solid ${statusColor}20`,
+                            padding: '2px 8px', borderRadius: '4px', alignSelf: 'flex-start', textTransform: 'uppercase'
+                        }}>{statusLabel}</span>
+                        <p style={{ margin: '6px 0 0', fontSize: '0.8rem', color: 'var(--color-text-dim, #94a3b8)', lineHeight: 1.4 }}>{statusDesc}</p>
+                    </div>
+                </div>
+
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                    <div style={{ background: 'rgba(0,0,0,0.15)', border: '1px solid rgba(255,255,255,0.03)', borderRadius: '10px', padding: '10px 12px' }}>
+                        <div style={{ fontSize: '1.1rem', fontWeight: 900, color: 'white' }}>{localCount.toLocaleString()}</div>
+                        <div style={{ fontSize: '0.6rem', color: 'var(--color-text-dim, #94a3b8)', textTransform: 'uppercase', fontWeight: 700, marginTop: '2px' }}>Local Sightings</div>
+                    </div>
+                    <div style={{ background: 'rgba(0,0,0,0.15)', border: '1px solid rgba(255,255,255,0.03)', borderRadius: '10px', padding: '10px 12px' }}>
+                        <div style={{ fontSize: '1.1rem', fontWeight: 900, color: 'white' }}>{globalCount.toLocaleString()}</div>
+                        <div style={{ fontSize: '0.6rem', color: 'var(--color-text-dim, #94a3b8)', textTransform: 'uppercase', fontWeight: 700, marginTop: '2px' }}>Global Sightings</div>
+                    </div>
+                </div>
+
+                {gbifData.classification && (
+                    <div style={{ borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '0.75rem' }}>
+                        <span style={{ fontSize: '0.65rem', fontWeight: 800, color: 'var(--color-text-dim, #94a3b8)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Taxonomy Hierarchy</span>
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px 12px', marginTop: '6px', fontSize: '0.75rem', fontFamily: 'monospace', color: 'var(--color-text-dim, #94a3b8)' }}>
+                            {gbifData.classification.family && <span>Family: <strong style={{ color: 'white' }}>{gbifData.classification.family}</strong></span>}
+                            {gbifData.classification.genus && <span>Genus: <strong style={{ color: 'white' }}>{gbifData.classification.genus}</strong></span>}
+                        </div>
+                    </div>
+                )}
+
+                <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => window.open(`https://www.gbif.org/species/${gbifData.taxonKey}`, '_blank')}
+                    style={{ width: '100%', justifyContent: 'center', fontSize: '0.75rem', fontWeight: 700, gap: '6px', marginTop: '0.25rem' }}
+                >
+                    <BookOpen size={12} /> Explore GBIF.org Catalog
+                </Button>
             </div>
         );
     };
@@ -321,6 +493,7 @@ export const PlantDetailsModal = ({ plant, weather, onClose, onBuy }: PlantDetai
                         <div className={styles.overviewContainer}>
                             <h3 style={{ fontSize: '1.2rem', color: 'white', marginBottom: '0.5rem' }}>Ecosystem Status</h3>
                             {renderGrowthVerdict()}
+                            {renderGbifSection()}
 
                             <h3 style={{ fontSize: '1.2rem', color: 'white', marginBottom: '0.5rem', marginTop: '2rem' }}>Overview</h3>
                             <p className={styles.descriptionText}>{plant.description}</p>
@@ -455,6 +628,7 @@ export const PlantDetailsModal = ({ plant, weather, onClose, onBuy }: PlantDetai
                                 <div className={`${styles.overviewContainer} animate-fade-in`}>
                                     <h3 style={{ fontSize: '1.5rem', color: 'white', marginBottom: '1.5rem' }}>Ecosystem Status</h3>
                                     {renderGrowthVerdict()}
+                                    {renderGbifSection()}
 
                                     <h3 style={{ fontSize: '1.5rem', color: 'white', marginBottom: '1.5rem', marginTop: '3rem' }}>Botanical Overview</h3>
                                     <p className={styles.descriptionText}>{plant.description}</p>
