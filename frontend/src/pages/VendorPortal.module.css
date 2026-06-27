@@ -526,3 +526,176 @@
     0%, 100% { opacity: 0.6; }
     50% { opacity: 0.3; }
 }
+
+/* ==========================================================================
+   X-STYLE 2-COLUMN SIDEBAR GRID LAYOUT (COPIED FOR VENDOR DASHBOARD)
+   ========================================================================== */
+
+.dashboardGrid {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 1.5rem;
+    align-items: start;
+    margin-top: 1.5rem;
+}
+
+.mainColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.sidebarColumn {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    position: sticky;
+    top: 76px;
+}
+
+/* WIDGET CARD */
+.widgetCard {
+    background: var(--color-bg-card, rgba(15, 23, 42, 0.35));
+    border: 1px solid var(--color-border, rgba(255, 255, 255, 0.05));
+    border-radius: 1.25rem;
+    padding: 1.5rem;
+    backdrop-filter: blur(20px);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    transition: all 0.3s ease;
+}
+
+.widgetCard:hover {
+    border-color: var(--color-border, rgba(255, 255, 255, 0.08));
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+}
+
+.widgetHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--color-border, rgba(255, 255, 255, 0.05));
+    padding-bottom: 0.75rem;
+    margin-bottom: 0.25rem;
+}
+
+.widgetTitle {
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: var(--color-text-main, #f8fafc);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* PROFILE WIDGET DETAIL */
+.profileWidget {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.5rem 0;
+}
+
+.largeAvatar {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--color-primary, #10b981), #3b82f6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+}
+
+.profileInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.profileName {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--color-text-main, #f8fafc);
+}
+
+.profileEmail {
+    font-size: 0.75rem;
+    color: var(--color-text-dim, #94a3b8);
+}
+
+.premiumBadge {
+    font-size: 0.6rem;
+    font-weight: 800;
+    color: #fbbf24;
+    background: rgba(251, 191, 36, 0.1);
+    border: 1px solid rgba(251, 191, 36, 0.2);
+    padding: 2px 6px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    align-self: flex-start;
+    margin-top: 4px;
+}
+
+/* STATS SIDEBAR ITEMS */
+.statList {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.statRow {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.5rem 0;
+}
+
+.statIconBox {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.statDetail {
+    display: flex;
+    flex-direction: column;
+}
+
+.statValue {
+    font-size: 1.35rem;
+    font-weight: 900;
+    color: var(--color-text-main, #f8fafc);
+    line-height: 1.1;
+}
+
+.statLabel {
+    color: var(--color-text-dim, #94a3b8);
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+}
+
+@media (max-width: 1024px) {
+    .dashboardGrid {
+        grid-template-columns: 1fr;
+    }
+    .sidebarColumn {
+        position: static;
+        width: 100%;
+    }
+}
