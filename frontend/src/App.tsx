@@ -16,6 +16,7 @@ import { LocationNag } from './components/common/LocationNag';
 import { PermissionCenter } from './components/common/PermissionCenter';
 import { InAppBrowserGuard } from './components/common/InAppBrowserGuard';
 import { ContactSupport } from './components/features/support/ContactSupport';
+import { CookieConsent } from './components/common/CookieConsent';
 
 function App() {
   return (
@@ -55,6 +56,7 @@ function App() {
                 <MobileTabBar />
                 <SwipeNavigator />
                 <InstallPrompt />
+                <CookieConsent />
 
                 <AnimatedRoutes />
                 <ContactSupport />

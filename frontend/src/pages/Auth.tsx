@@ -260,6 +260,7 @@ export const Auth = () => {
     const [otp, setOtp] = useState('');
     const [captchaSvg, setCaptchaSvg] = useState<string | null>(null);
     const [registrationToken, setRegistrationToken] = useState<string | null>(null);
+    const [agreeConsent, setAgreeConsent] = useState(false);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -286,6 +287,10 @@ export const Auth = () => {
                 );
             }
         } else if (view === 'signup') {
+            if (!agreeConsent) {
+                toast.error("You must agree to the Privacy Policy and Terms of Service.");
+                return;
+            }
             if (gmailStatus.isValid === false) {
                 toast.error(`Please provide a valid Gmail: ${gmailStatus.message}`);
                 return;
@@ -774,6 +779,21 @@ export const Auth = () => {
                                     4-18 chars, 1 Upper, 1 Number, 1 Special (@#$%)
                                 </p>
                             )}
+                        </div>
+                    )}
+
+                    {view === 'signup' && (
+                        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', marginBottom: '1.5rem', fontSize: '0.85rem', color: '#94a3b8' }}>
+                            <input 
+                                type="checkbox" 
+                                id="legal-consent" 
+                                checked={agreeConsent}
+                                onChange={(e) => setAgreeConsent(e.target.checked)}
+                                style={{ marginTop: '3px', cursor: 'pointer' }}
+                            />
+                            <label htmlFor="legal-consent" style={{ cursor: 'pointer', lineHeight: '1.4' }}>
+                                I agree to the <a href="/terms" target="_blank" rel="noopener noreferrer" style={{ color: '#10b981', textDecoration: 'underline' }}>Terms of Service</a> and acknowledge the <a href="/privacy" target="_blank" rel="noopener noreferrer" style={{ color: '#10b981', textDecoration: 'underline' }}>Privacy Policy</a>.
+                            </label>
                         </div>
                     )}
 

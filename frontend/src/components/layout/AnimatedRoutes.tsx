@@ -46,6 +46,11 @@ const SupportEmails = lazy(() => import('../../pages/admin/SupportEmails').then(
 const AIDoctor = lazy(() => import('../../pages/AIDoctor').then(m => ({ default: m.AIDoctor })));
 const BroadcastCenter = lazy(() => import('../../pages/admin/BroadcastCenter').then(m => ({ default: m.BroadcastCenter })));
 
+// Legal Pages
+const PrivacyPolicy = lazy(() => import('../../pages/PrivacyPolicy').then(m => ({ default: m.PrivacyPolicy })));
+const TermsOfService = lazy(() => import('../../pages/TermsOfService').then(m => ({ default: m.TermsOfService })));
+const RefundPolicy = lazy(() => import('../../pages/RefundPolicy').then(m => ({ default: m.RefundPolicy })));
+
 
 // Enhanced Loading Screen with timeout feedback
 const LoadingScreen = () => {
@@ -191,6 +196,11 @@ export const AnimatedRoutes = () => {
                             </RestrictedRoute>
                         } />
                         <Route path="/premium" element={<PublicPremium />} />
+
+                        {/* Legal Routes */}
+                        <Route path="/privacy" element={<PrivacyPolicy />} />
+                        <Route path="/terms" element={<TermsOfService />} />
+                        <Route path="/refund" element={<RefundPolicy />} />
                     </Routes>
                 </div>
             </Suspense>

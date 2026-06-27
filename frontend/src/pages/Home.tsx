@@ -991,6 +991,15 @@ export const Home = () => {
                             <li><button onClick={() => { setShowAbout(!showAbout); setTimeout(() => aboutRef.current?.scrollIntoView({ behavior: 'smooth' }), 100); }} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-text-muted)', textDecoration: 'none', fontSize: '0.9rem', padding: 0 }}>About Us</button></li>
                         </ul>
                     </div>
+
+                    <div style={{ textAlign: 'left' }}>
+                        <h4 style={{ color: 'var(--color-text-main)', marginBottom: '1.5rem' }}>Legal</h4>
+                        <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                            <li><a href="/privacy" style={{ color: 'var(--color-text-muted)', textDecoration: 'none', fontSize: '0.9rem' }}>Privacy Policy</a></li>
+                            <li><a href="/terms" style={{ color: 'var(--color-text-muted)', textDecoration: 'none', fontSize: '0.9rem' }}>Terms of Service</a></li>
+                            <li><a href="/refund" style={{ color: 'var(--color-text-muted)', textDecoration: 'none', fontSize: '0.9rem' }}>Refund & Cancellation</a></li>
+                        </ul>
+                    </div>
                 </div>
                 <p style={{ color: 'var(--color-text-dim)', fontSize: '0.8rem' }}>© 2025 VanaMap - Earth's Digital Botanical Archive</p>
             </footer>
