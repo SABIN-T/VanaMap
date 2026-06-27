@@ -1,23 +1,22 @@
-/* UserDashboardLayout.module.css - Compact & High-Density Redesign */
+/* UserDashboardLayout.module.css - High-Density Premium Responsive Redesign */
 
 .container {
     display: flex;
     min-height: 100vh;
-    background: var(--color-bg, #020617);
+    background: var(--color-bg-main, #0f172a);
     color: var(--color-text-main, #f8fafc);
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Inter', system-ui, sans-serif;
+    transition: background 0.3s ease, color 0.3s ease;
 }
 
 /* --- SIDEBAR --- */
 .sidebar {
     width: 240px;
-    /* Tightened from 280 */
-    background: var(--glass-bg, rgba(15, 23, 42, 0.4));
+    background: var(--color-bg-card, #0a1f18);
     border-right: 1px solid var(--color-border, rgba(255, 255, 255, 0.05));
     display: flex;
     flex-direction: column;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    backdrop-filter: blur(20px);
     z-index: 1000;
     height: 100vh;
     position: sticky;
@@ -56,7 +55,7 @@
     font-size: 1rem;
     font-weight: 800;
     letter-spacing: 0.15em;
-    color: var(--color-text-main, #fff);
+    color: var(--color-text-main, #f8fafc);
     text-transform: uppercase;
 }
 
@@ -77,18 +76,19 @@
     border-radius: 0.75rem;
     color: var(--color-text-dim, #94a3b8);
     text-decoration: none;
-    transition: 0.2s;
+    transition: all 0.2s ease;
     font-weight: 600;
     font-size: 0.85rem;
+    position: relative;
 }
 
 .navItem:hover {
     background: var(--color-bg-alt, rgba(255, 255, 255, 0.03));
-    color: var(--color-text-main, #fff);
+    color: var(--color-text-main, #f8fafc);
 }
 
 .navActive {
-    background: var(--color-bg-card-hover, rgba(16, 185, 129, 0.08)) !important;
+    background: rgba(16, 185, 129, 0.08) !important;
     color: var(--color-primary, #10b981) !important;
 }
 
@@ -98,9 +98,9 @@
     top: 25%;
     bottom: 25%;
     width: 2px;
-    background: #10b981;
+    background: var(--color-primary, #10b981);
     border-radius: 0 4px 4px 0;
-    box-shadow: 0 0 10px #10b981;
+    box-shadow: 0 0 10px var(--color-primary, #10b981);
 }
 
 .sidebarFooter {
@@ -119,9 +119,13 @@
     border: 1px solid rgba(244, 63, 94, 0.1);
     color: #f43f5e;
     cursor: pointer;
-    transition: 0.2s;
+    transition: all 0.2s;
     font-weight: 700;
     font-size: 0.85rem;
+}
+
+.logoutBtn:hover {
+    background: rgba(244, 63, 94, 0.1);
 }
 
 /* --- MAIN CONTENT --- */
@@ -134,14 +138,13 @@
 
 .topBar {
     height: 56px;
-    /* Reduced from 72 */
-    background: var(--glass-bg, rgba(15, 23, 42, 0.3));
-    backdrop-filter: blur(10px);
+    background: var(--color-bg-card, #0a1f18);
     border-bottom: 1px solid var(--color-border, rgba(255, 255, 255, 0.05));
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 1.5rem;
+    transition: background 0.3s ease;
 }
 
 .topBarLeft {
@@ -161,6 +164,12 @@
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    transition: all 0.2s;
+}
+
+.toggleBtn:hover {
+    color: var(--color-text-main, #f8fafc);
+    border-color: var(--color-primary, #10b981);
 }
 
 .breadcrumbs {
@@ -177,10 +186,14 @@
     letter-spacing: 1px;
 }
 
+.crumbDivider {
+    color: var(--color-text-muted, #64748b);
+}
+
 .activeCrumb {
     font-size: 0.75rem;
     font-weight: 600;
-    color: var(--color-text-main, #cbd5e1);
+    color: var(--color-text-main, #f8fafc);
 }
 
 .userBadge {
@@ -196,7 +209,7 @@
 .userAvatar {
     width: 24px;
     height: 24px;
-    background: linear-gradient(135deg, #10b981, #3b82f6);
+    background: linear-gradient(135deg, var(--color-primary, #10b981), #3b82f6);
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -209,14 +222,25 @@
 .userName {
     font-size: 0.75rem;
     font-weight: 700;
-    color: var(--color-text-main, #fff);
+    color: var(--color-text-main, #f8fafc);
+}
+
+.userInfo {
+    display: flex;
+    flex-direction: column;
+}
+
+.userRole {
+    font-size: 0.6rem;
+    color: var(--color-text-muted, #64748b);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 /* --- CONTENT --- */
 .content {
     flex: 1;
     padding: 1.5rem;
-    /* Tightened from 2.5 */
 }
 
 .contentHeader {
@@ -225,9 +249,8 @@
 
 .pageTitle {
     font-size: 1.25rem;
-    /* More compact */
     font-weight: 800;
-    color: var(--color-heading, #fff);
+    color: var(--color-text-main, #f8fafc);
     margin: 0;
 }
 
@@ -247,7 +270,7 @@
 
     .content {
         padding: 1rem;
-        padding-bottom: 80px;
+        padding-bottom: 90px;
     }
 
     .topBar {
@@ -257,7 +280,7 @@
     .backdrop {
         position: fixed;
         inset: 0;
-        background: rgba(2, 6, 23, 0.8);
+        background: rgba(15, 23, 42, 0.6);
         backdrop-filter: blur(4px);
         z-index: 1500;
     }

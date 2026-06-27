@@ -373,7 +373,7 @@ export const VendorPortal = () => {
                                             <div className={styles.quickActionIconBox} style={{ background: `${action.color}20`, color: action.color }}>
                                                 <action.icon size={20} />
                                             </div>
-                                            <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#e2e8f0' }}>{action.label}</span>
+                                            <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--color-text-main)' }}>{action.label}</span>
                                         </div>
                                     ))}
                                 </div>

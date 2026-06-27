@@ -4,7 +4,7 @@
     padding: 1.5rem;
     max-width: 1400px;
     margin: 0 auto;
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Inter', system-ui, sans-serif;
     animation: fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     color: var(--color-text-main, #f8fafc);
 }
@@ -22,7 +22,7 @@
 .welcomeTag {
     font-size: 0.6rem;
     font-weight: 800;
-    color: #10b981;
+    color: var(--color-primary, #10b981);
     letter-spacing: 1.5px;
     margin-bottom: 0.2rem;
     text-transform: uppercase;
@@ -31,7 +31,7 @@
 .dashboardTitle {
     font-size: 1.75rem;
     font-weight: 900;
-    color: var(--color-heading, #fff);
+    color: var(--color-text-main, #f8fafc);
     margin: 0;
     letter-spacing: -0.7px;
 }
@@ -39,7 +39,7 @@
 /* GAMIFICATION BANNER - PREMIUM COMPACT */
 .gamificationBanner {
     background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(56, 189, 248, 0.08) 100%);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--color-border, rgba(255, 255, 255, 0.05));
     border-radius: 1.25rem;
     padding: 1.25rem;
     margin-bottom: 1.5rem;
@@ -62,7 +62,7 @@
     background: linear-gradient(135deg, #facc15 0%, #ca8a04 100%);
     padding: 0.6rem;
     border-radius: 1rem;
-    color: #000;
+    color: #000000;
     box-shadow: 0 8px 20px rgba(234, 179, 8, 0.2);
     display: flex;
     align-items: center;
@@ -73,7 +73,7 @@
     margin: 0;
     font-size: 1.15rem;
     font-weight: 800;
-    color: var(--color-text-main, #fff);
+    color: var(--color-text-main, #f8fafc);
     letter-spacing: -0.3px;
 }
 
@@ -97,7 +97,6 @@
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--color-border, rgba(255, 255, 255, 0.07));
-    box-shadow: var(--card-shadow);
     border-radius: 1.25rem;
     padding: 1.25rem 1rem;
     display: flex;
@@ -109,10 +108,10 @@
 }
 
 .statCard:hover {
-    background: var(--color-bg-card-hover, rgba(30, 41, 59, 0.55));
+    background: var(--color-bg-alt, rgba(30, 41, 59, 0.55));
     transform: translateY(-4px);
-    border-color: var(--color-primary, rgba(255, 255, 255, 0.15));
-    box-shadow: var(--glass-shadow);
+    border-color: var(--color-primary, #10b981);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
 }
 
 .statIcon {
@@ -128,13 +127,17 @@
 .statValue {
     font-size: 1.5rem;
     font-weight: 900;
-    color: var(--color-text-main, #fff);
+    color: var(--color-text-main, #f8fafc);
     line-height: 1.1;
     letter-spacing: -0.5px;
 }
 
+.statCard:hover .statValue {
+    color: var(--color-primary, #10b981);
+}
+
 .statLabel {
-    color: var(--color-text-dim, #64748b);
+    color: var(--color-text-dim, #94a3b8);
     font-size: 0.65rem;
     font-weight: 800;
     text-transform: uppercase;
@@ -166,8 +169,8 @@
 
 .actionCard:hover {
     transform: translateY(-4px);
-    border-color: var(--color-primary, rgba(255, 255, 255, 0.15));
-    box-shadow: var(--glass-shadow);
+    border-color: var(--color-primary, #10b981);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
 .actionHeader {
@@ -179,7 +182,7 @@
 .actionIconBox {
     padding: 0.5rem;
     border-radius: 0.75rem;
-    color: #fff;
+    color: #ffffff;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -194,13 +197,13 @@
     margin: 0;
     font-size: 1rem;
     font-weight: 800;
-    color: var(--color-text-main, #f1f5f9);
+    color: var(--color-text-main, #f8fafc);
 }
 
 .actionDesc {
     margin: 0.1rem 0 0;
     font-size: 0.8rem;
-    color: var(--color-text-dim, #64748b);
+    color: var(--color-text-dim, #94a3b8);
     font-weight: 500;
 }
 
@@ -236,15 +239,15 @@
 }
 
 .quickCard:hover {
-    background: var(--color-bg-card-hover, rgba(15, 23, 42, 0.45));
+    background: var(--color-bg-alt, rgba(15, 23, 42, 0.45));
     transform: translateY(-3px) scale(1.02);
-    border-color: var(--color-primary, rgba(255, 255, 255, 0.12));
-    box-shadow: var(--glass-shadow);
+    border-color: var(--color-primary, #10b981);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
 }
 
 .quickCard strong {
     display: block;
-    color: var(--color-text-main, #fff);
+    color: var(--color-text-main, #f8fafc);
     font-size: 0.95rem;
     font-weight: 700;
     margin-bottom: 0.1rem;
@@ -252,7 +255,7 @@
 
 .quickCard p {
     margin: 0;
-    color: var(--color-text-dim, #64748b);
+    color: var(--color-text-dim, #94a3b8);
     font-size: 0.75rem;
     font-weight: 500;
 }
@@ -262,7 +265,7 @@
     position: fixed;
     inset: 0;
     z-index: 2000;
-    background: rgba(2, 6, 23, 0.8);
+    background: rgba(15, 23, 42, 0.6);
     backdrop-filter: blur(12px);
     display: flex;
     align-items: center;
@@ -271,13 +274,13 @@
 }
 
 .modalCard {
-    background: var(--color-bg-card, #0f172a);
+    background: var(--color-bg-card, #0a1f18);
     border: 1px solid var(--color-border, rgba(255, 255, 255, 0.08));
     border-radius: 1.75rem;
     padding: 2rem;
     width: 100%;
     max-width: 440px;
-    box-shadow: var(--glass-shadow);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
     animation: modalSlide 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -286,7 +289,6 @@
         transform: translateY(30px) scale(0.95);
         opacity: 0;
     }
-
     to {
         transform: translateY(0) scale(1);
         opacity: 1;
@@ -296,7 +298,7 @@
 .modalTitle {
     font-size: 1.5rem;
     font-weight: 800;
-    color: var(--color-heading, #fff);
+    color: var(--color-text-main, #f8fafc);
     margin-bottom: 0.5rem;
     text-align: center;
 }
@@ -321,7 +323,7 @@
     border: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
     border-radius: 0.85rem;
     padding: 0.85rem 1rem;
-    color: var(--color-text-main, #fff);
+    color: var(--color-text-main, #f8fafc);
     font-size: 0.9rem;
     transition: 0.2s;
 }
@@ -338,7 +340,6 @@
         opacity: 0;
         transform: translateY(10px);
     }
-
     to {
         opacity: 1;
         transform: translateY(0);
@@ -347,21 +348,18 @@
 
 @keyframes pulse-glow {
     0% {
-        box-shadow: 0 0 0 0 rgba(14, 165, 233, 0.3);
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.3);
     }
-
     70% {
-        box-shadow: 0 0 0 10px rgba(14, 165, 233, 0);
+        box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
     }
-
     100% {
-        box-shadow: 0 0 0 0 rgba(14, 165, 233, 0);
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
     }
 }
 
 /* RESPONSIVE REFINEMENTS */
 @media (max-width: 1024px) {
-
     .statsBoard,
     .actionSection {
         grid-template-columns: repeat(2, 1fr);
@@ -399,7 +397,7 @@
     position: fixed;
     inset: 0;
     z-index: 2500;
-    background: var(--color-bg, #020617);
+    background: var(--color-bg-main, #0f172a);
     display: flex;
     flex-direction: column;
     animation: fadeIn 0.3s ease;
@@ -410,7 +408,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid var(--color-border, rgba(255, 255, 255, 0.05));
 }
 
 .compactGrid {
@@ -421,7 +419,7 @@
 }
 
 .compactCard {
-    background: var(--color-bg-card, #0f172a);
+    background: var(--color-bg-card, #0a1f18);
     border: 1px solid var(--color-border, rgba(255, 255, 255, 0.05));
     border-radius: 1rem;
     overflow: hidden;
@@ -452,7 +450,7 @@
     font-size: 0.8rem;
     font-weight: 700;
     margin: 0;
-    color: var(--color-text-main, #fff);
+    color: var(--color-text-main, #f8fafc);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -460,7 +458,7 @@
 
 .compactCardContent p {
     font-size: 0.65rem;
-    color: var(--color-text-dim, #64748b);
+    color: var(--color-text-dim, #94a3b8);
     margin: 0.1rem 0 0;
 }
 
@@ -470,7 +468,7 @@
     right: 0.4rem;
     width: 22px;
     height: 22px;
-    background: #fff;
+    background: #ffffff;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -478,12 +476,13 @@
     border: none;
     cursor: pointer;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    color: #ef4444;
 }
 
 .emptyState {
     text-align: center;
     padding: 4rem 2rem;
-    color: #64748b;
+    color: var(--color-text-dim, #94a3b8);
 }
 
 .loadingBox {
