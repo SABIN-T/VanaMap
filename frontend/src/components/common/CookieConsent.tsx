@@ -30,28 +30,39 @@ export const CookieConsent = () => {
     if (!visible) return null;
 
     return (
-        <div style={{
-            position: 'fixed',
-            bottom: '24px',
-            left: '24px',
-            right: '24px',
-            maxWidth: '500px',
-            background: 'var(--color-card-bg, #FFFFFF)',
-            border: '1px solid var(--color-border, rgba(11, 93, 59, 0.15))',
-            borderRadius: '1.25rem',
-            padding: '1.5rem',
-            boxShadow: '0 20px 40px rgba(0, 0, 0, 0.08)',
-            zIndex: 9999,
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '1rem',
-            fontFamily: 'Inter, system-ui, sans-serif',
-            animation: 'slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-        }}>
+        <div className="vanamapCookieBanner">
             <style>{`
+                .vanamapCookieBanner {
+                    position: fixed;
+                    bottom: 24px;
+                    left: 24px;
+                    right: 24px;
+                    max-width: 500px;
+                    background: var(--color-card-bg, #FFFFFF);
+                    border: 1px solid var(--color-border, rgba(11, 93, 59, 0.15));
+                    border-radius: 1.25rem;
+                    padding: 1.5rem;
+                    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+                    z-index: 10005;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 1rem;
+                    font-family: 'Inter', system-ui, sans-serif;
+                    animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+                }
+
                 @keyframes slideUp {
                     from { transform: translateY(100px); opacity: 0; }
                     to { transform: translateY(0); opacity: 1; }
+                }
+
+                @media (max-width: 768px) {
+                    .vanamapCookieBanner {
+                        bottom: 90px;
+                        left: 16px;
+                        right: 16px;
+                        max-width: none;
+                    }
                 }
             `}</style>
             
