@@ -16,7 +16,7 @@ export const Auth = () => {
     const location = useLocation();
     const [searchParams] = useSearchParams();
     const { login, signup, user, verify, setAuthSession } = useAuth();
-    const { location: userLocation, detectLocation } = useLocationCapture();
+    const { location: userLocation } = useLocationCapture();
 
     type AuthView = 'login' | 'signup' | 'forgot' | 'reset' | 'verify';
 
@@ -372,8 +372,29 @@ export const Auth = () => {
         const tid = toast.loading('Signing in with Google...');
 
         try {
-            // Get current location (if available)
-            const loc = userLocation || await detectLocation();
+            // Try to get location silently and quickly; do not block or prompt the user
+            let loc = null;
+            if (userLocation) {
+                loc = userLocation;
+            } else {
+                try {
+                    const result = await getLocation({
+                        useCache: true,
+                        useIPFallback: true,
+                        highAccuracyTimeout: 2000,
+                        lowAccuracyTimeout: 2000
+                    });
+                    loc = {
+                        lat: result.latitude,
+                        lng: result.longitude,
+                        city: result.city || '',
+                        state: '',
+                        country: ''
+                    };
+                } catch (e) {
+                    console.log('[Google Auth] Silent location check skipped:', e);
+                }
+            }
 
             const result = await googleAuth({
                 email: googleData.email,
