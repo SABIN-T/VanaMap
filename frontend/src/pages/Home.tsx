@@ -13,6 +13,7 @@ import { Helmet } from 'react-helmet-async';
 const PlantDetailsModal = lazy(() => import('../components/features/plants/PlantDetailsModal').then(module => ({ default: module.PlantDetailsModal })));
 import { PlantSkeleton } from '../components/features/plants/PlantSkeleton';
 import styles from './Home.module.css';
+import { getLocation } from '../utils/getLocation';
 import { plantCache, apiCache } from '../utils/universalCache'; // 🚀 Performance boost!
 import { useAuth } from '../context/AuthContext';
 
@@ -260,70 +261,44 @@ export const Home = () => {
         setLocationLoading(false);
     };
 
-    const handleGetLocation = () => {
+    const handleGetLocation = async () => {
         setLocationLoading(true);
         const toastId = toast.loading("Finding your location...");
 
-        const performIPFallback = async (reason: string) => {
-            console.log(`GPS fail: ${reason}. Trying IP fallback...`);
+        try {
+            const result = await getLocation({
+                useCache: true,
+                useIPFallback: true,
+                highAccuracyTimeout: 10000,
+                lowAccuracyTimeout: 8000
+            });
+
+            const { latitude, longitude } = result;
+
             try {
-                // IP Geolocation fallback (ipapi.co is free and reliable)
-                const response = await fetch('https://ipapi.co/json/');
-                const data = await response.json();
+                const [weatherData, locationName] = await Promise.all([
+                    getWeather(latitude, longitude),
+                    result.source === 'ip' && result.city
+                        ? Promise.resolve(result.city)
+                        : reverseGeocode(latitude, longitude)
+                ]);
 
-                if (data.latitude && data.longitude) {
-                    const { latitude, longitude, city, country_name } = data;
-                    const weatherData = await getWeather(latitude, longitude);
-                    if (weatherData) {
-                        const locName = city ? `${city}, ${country_name}` : "Detected Location";
-                        setWeather({ ...weatherData, locationName: locName });
-                        toast.success(`Located: ${locName}`, { id: toastId });
-                        scrollToFilters();
-                    } else {
-                        toast.error("Weather unavailable for your zone.", { id: toastId });
-                    }
+                if (weatherData) {
+                    setWeather({ ...weatherData, locationName: locationName });
+                    toast.success(`Located: ${locationName}`, { id: toastId });
+                    scrollToFilters();
                 } else {
-                    toast.error("Could not detect location. Please search manually.", { id: toastId });
+                    toast.error("Weather data unavailable.", { id: toastId });
                 }
-            } catch (err) {
-                console.error("IP fallback failed", err);
-                toast.error("Location access failed. Please search manually.", { id: toastId });
-            } finally {
-                setLocationLoading(false);
+            } catch (e) {
+                console.error(e);
+                toast.error("Network error fetching weather.", { id: toastId });
             }
-        };
-
-        if (navigator.geolocation) {
-            const options = { enableHighAccuracy: true, timeout: 6000, maximumAge: 0 };
-            navigator.geolocation.getCurrentPosition(async (position) => {
-                const { latitude, longitude } = position.coords;
-                try {
-                    const [weatherData, locationName] = await Promise.all([
-                        getWeather(latitude, longitude),
-                        reverseGeocode(latitude, longitude)
-                    ]);
-
-                    if (weatherData) {
-                        setWeather({ ...weatherData, locationName: locationName });
-                        toast.success(`Located: ${locationName}`, { id: toastId });
-                        scrollToFilters();
-                    } else {
-                        toast.error("Weather data unavailable.", { id: toastId });
-                    }
-                } catch (e) {
-                    console.error(e);
-                    toast.error("Network error fetching weather.", { id: toastId });
-                } finally {
-                    setLocationLoading(false);
-                }
-            }, (err) => {
-                let msg = "GPS access denied.";
-                if (err.code === 3) msg = "Location timeout.";
-                if (err.code === 2) msg = "Location unavailable.";
-                performIPFallback(msg);
-            }, options);
-        } else {
-            performIPFallback("GPS not supported.");
+        } catch (err) {
+            console.error('[Home] Location detection failed:', err);
+            toast.error("Location access failed. Please search manually.", { id: toastId });
+        } finally {
+            setLocationLoading(false);
         }
     };
 

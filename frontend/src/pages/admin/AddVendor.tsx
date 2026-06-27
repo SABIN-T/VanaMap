@@ -8,6 +8,7 @@ import { AdminLayout } from './AdminLayout';
 import { registerVendor } from '../../services/api';
 import type { Vendor } from '../../types';
 import styles from './AddVendor.module.css';
+import { getLocation } from '../../utils/getLocation';
 
 // Fix Leaflet's default icon path issues
 import icon from 'leaflet/dist/images/marker-icon.png';
@@ -65,27 +66,34 @@ export const AddVendor = () => {
         }
     };
 
-    const handleGPS = () => {
-        if (!navigator.geolocation) {
-            toast.error("Geolocation not supported");
-            return;
-        }
+    const handleGPS = async () => {
         setIsLocating(true);
-        navigator.geolocation.getCurrentPosition(
-            (pos) => {
-                setNewVendor(prev => ({
-                    ...prev,
-                    latitude: pos.coords.latitude,
-                    longitude: pos.coords.longitude
-                }));
-                setIsLocating(false);
+        try {
+            const result = await getLocation({
+                useCache: false,
+                useIPFallback: true,
+                highAccuracyTimeout: 10000,
+                lowAccuracyTimeout: 8000
+            });
+
+            setNewVendor(prev => ({
+                ...prev,
+                latitude: result.latitude,
+                longitude: result.longitude
+            }));
+
+            if (result.source === 'gps') {
                 toast.success("Location Updated");
-            },
-            () => {
-                toast.error("Location access denied");
-                setIsLocating(false);
+            } else if (result.source === 'ip') {
+                toast.success(`Approximate location: ${result.city || 'detected'}. Adjust pin if needed.`);
+            } else {
+                toast.success("Using default location. Adjust pin if needed.");
             }
-        );
+        } catch {
+            toast.error("Location access denied");
+        } finally {
+            setIsLocating(false);
+        }
     };
 
     const updateCoords = (lat: number, lng: number) => {

@@ -18,6 +18,7 @@ import L from 'leaflet';
 import { MapContainer, TileLayer, Marker, Popup, Polyline } from 'react-leaflet';
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+import { getLocation } from '../utils/getLocation';
 
 const DefaultIcon = L.icon({
     iconUrl: icon,
@@ -123,30 +124,30 @@ export const UserDashboard = () => {
     useEffect(() => {
         if (showLocationModal && !locForm.city && !locForm.state) {
             const autoDetect = async () => {
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(async (position) => {
-                        try {
-                            const { latitude, longitude } = position.coords;
-                            const response = await fetch(
-                                `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
-                            );
-                            const data = await response.json();
-
-                            if (data.address) {
-                                const cityVal = data.address.city || data.address.town || data.address.village || data.address.county || '';
-                                const stateVal = data.address.state || '';
-
-                                if (cityVal) {
-                                    setLocForm({ city: cityVal, state: stateVal });
-                                    toast.success('📍 Location detected automatically!', { duration: 2000 });
-                                }
-                            }
-                        } catch (error) {
-                            console.log('Auto-detect failed silently');
-                        }
-                    }, () => {
-                        console.log('Location permission not granted');
+                try {
+                    const result = await getLocation({
+                        useCache: true,
+                        useIPFallback: true,
+                        highAccuracyTimeout: 5000,
+                        lowAccuracyTimeout: 5000
                     });
+
+                    const response = await fetch(
+                        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${result.latitude}&lon=${result.longitude}`
+                    );
+                    const data = await response.json();
+
+                    if (data.address) {
+                        const cityVal = data.address.city || data.address.town || data.address.village || data.address.county || '';
+                        const stateVal = data.address.state || '';
+
+                        if (cityVal) {
+                            setLocForm({ city: cityVal, state: stateVal });
+                            toast.success('📍 Location detected automatically!', { duration: 2000 });
+                        }
+                    }
+                } catch (error) {
+                    console.log('Auto-detect failed silently');
                 }
             };
 
@@ -187,48 +188,34 @@ export const UserDashboard = () => {
         loadVendorData();
     }, [user, navigate]);
 
-    const detectLocation = () => {
+    const detectLocation = async () => {
         setDetectingLoc(true);
-        const performIPFallback = async (reason: string) => {
-            toast.error(reason + " Trying IP fallback...");
-            try {
-                const response = await fetch('https://ipapi.co/json/');
-                const data = await response.json();
-                if (data.latitude && data.longitude) {
-                    setVendorForm(prev => ({
-                        ...prev,
-                        latitude: data.latitude,
-                        longitude: data.longitude
-                    }));
-                    toast.success(`Detected approx location: ${data.city || "Success"}!`);
-                } else {
-                    toast.error("Could not detect location automatically.");
-                }
-            } catch {
-                toast.error("Location detection failed. Please enter coordinates manually.");
-            } finally {
-                setDetectingLoc(false);
-            }
-        };
+        try {
+            const result = await getLocation({
+                useCache: false,
+                useIPFallback: true,
+                highAccuracyTimeout: 10000,
+                lowAccuracyTimeout: 8000
+            });
 
-        if (!navigator.geolocation) {
-            performIPFallback("GPS not supported");
-            return;
-        }
-        navigator.geolocation.getCurrentPosition(
-            (pos) => {
-                setVendorForm(prev => ({
-                    ...prev,
-                    latitude: pos.coords.latitude,
-                    longitude: pos.coords.longitude
-                }));
-                setDetectingLoc(false);
+            setVendorForm(prev => ({
+                ...prev,
+                latitude: result.latitude,
+                longitude: result.longitude
+            }));
+
+            if (result.source === 'gps' || result.source === 'cache') {
                 toast.success("GPS Location detected!");
-            },
-            () => {
-                performIPFallback("GPS access denied.");
+            } else if (result.source === 'ip') {
+                toast.success(`Detected approx location: ${result.city || "Success"}!`);
+            } else {
+                toast.success("Using default location. You can adjust on the map.");
             }
-        );
+        } catch {
+            toast.error("Location detection failed. Please enter coordinates manually.");
+        } finally {
+            setDetectingLoc(false);
+        }
     };
 
     const submitVendorProfile = async () => {
@@ -696,28 +683,30 @@ export const UserDashboard = () => {
                                         type="button"
                                         onClick={async () => {
                                             const tid = toast.loading("Detecting location...");
-                                            if (navigator.geolocation) {
-                                                navigator.geolocation.getCurrentPosition(async (position) => {
-                                                    try {
-                                                        const { latitude, longitude } = position.coords;
-                                                        const response = await fetch(
-                                                            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
-                                                        );
-                                                        const data = await response.json();
+                                            try {
+                                                const result = await getLocation({
+                                                    useCache: true,
+                                                    useIPFallback: true,
+                                                    highAccuracyTimeout: 8000,
+                                                    lowAccuracyTimeout: 5000
+                                                });
 
-                                                        if (data.address) {
-                                                            const cityVal = data.address.city || data.address.town || data.address.village || data.address.county || '';
-                                                            const stateVal = data.address.state || '';
+                                                const response = await fetch(
+                                                    `https://nominatim.openstreetmap.org/reverse?format=json&lat=${result.latitude}&lon=${result.longitude}`
+                                                );
+                                                const data = await response.json();
 
-                                                            if (cityVal) setLocForm({ city: cityVal, state: stateVal });
-                                                            toast.success("Location detected!", { id: tid });
-                                                        }
-                                                    } catch {
-                                                        toast.error("Failed to detect address", { id: tid });
-                                                    }
-                                                }, () => toast.error("Permission denied", { id: tid }));
-                                            } else {
-                                                toast.error("Geolocation not supported", { id: tid });
+                                                if (data.address) {
+                                                    const cityVal = data.address.city || data.address.town || data.address.village || data.address.county || '';
+                                                    const stateVal = data.address.state || '';
+
+                                                    if (cityVal) setLocForm({ city: cityVal, state: stateVal });
+                                                    toast.success("Location detected!", { id: tid });
+                                                } else {
+                                                    toast.error("Could not resolve address", { id: tid });
+                                                }
+                                            } catch {
+                                                toast.error("Failed to detect location", { id: tid });
                                             }
                                         }}
                                         style={{ background: 'none', border: 'none', color: '#10b981', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}

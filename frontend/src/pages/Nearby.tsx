@@ -14,6 +14,7 @@ import toast from 'react-hot-toast';
 import styles from './Nearby.module.css';
 import { locationCache, apiCache, cachedFetch } from '../utils/universalCache'; // 🚀 Boost map speed!
 import { Helmet } from 'react-helmet-async';
+import { getLocation, clearLocationCache as clearGeoCache } from '../utils/getLocation';
 
 // Geocoding helper removed or handled inline
 
@@ -261,7 +262,7 @@ out center;
         setIsScanningPublic(false);
     };
 
-    const handleGetLocation = useCallback((isManual = false) => {
+    const handleGetLocation = useCallback(async (isManual = false) => {
         if (loading) return;
         const tid = isManual ? toast.loading("Syncing with satellite...") : null;
         setLoading(true);
@@ -271,59 +272,40 @@ out center;
             // Force refresh when manual button is clicked
             locationCache.clear();
             apiCache.clear();
+            clearGeoCache();
         }
 
-        if (!navigator.geolocation) {
-            if (tid) toast.error("GPS Not Supported", { id: tid });
-            setPermissionState('unsupported');
-            setGpsError("GPS is not supported by your browser");
-            setLoading(false);
-            return;
-        }
+        try {
+            const result = await getLocation({
+                useCache: !isManual,
+                useIPFallback: true,
+                highAccuracyTimeout: 10000,
+                lowAccuracyTimeout: 8000
+            });
 
-        navigator.geolocation.getCurrentPosition(
-            async (pos) => {
-                const { latitude, longitude } = pos.coords;
-                setPosition([latitude, longitude]);
+            setPosition([result.latitude, result.longitude]);
+            setGpsError(null);
+
+            if (result.source === 'gps' || result.source === 'cache') {
                 setPermissionState('granted');
-                setGpsError(null);
-
-                // Store coordinates in sessionStorage so other pages can use it instantly
-                sessionStorage.setItem('user_latitude', latitude.toString());
-                sessionStorage.setItem('user_longitude', longitude.toString());
-
                 if (tid) toast.success("Satellites locked!", { id: tid });
-                await fetchAllData(latitude, longitude, searchRadius, isManual);
-            },
-            async (err) => {
-                console.warn(`GPS failed: ${err.message}. Trying IP fallback...`);
-                
-                if (err.code === err.PERMISSION_DENIED) {
-                    setPermissionState('denied');
-                    setGpsError("Location is not enabled. Please enable location, otherwise nearby shops will not show.");
-                } else {
-                    setGpsError(`GPS capture failed: ${err.message}`);
-                }
+            } else if (result.source === 'ip') {
+                // IP-based — GPS may be denied or unavailable
+                if (tid) toast.success(`Located via network: ${result.city || "approximate"}`, { id: tid });
+            } else {
+                // Default fallback
+                setGpsError("Could not detect exact location. Showing default area — try enabling GPS.");
+                if (tid) toast.error("Using default location", { id: tid });
+            }
 
-                try {
-                    const response = await fetch('https://ipapi.co/json/');
-                    const data = await response.json();
-                    if (data.latitude && data.longitude) {
-                        const { latitude, longitude, city } = data;
-                        setPosition([latitude, longitude]);
-                        if (tid) toast.success(`Located via IP: ${city || "approximate"}`, { id: tid });
-                        await fetchAllData(latitude, longitude, searchRadius, isManual);
-                    } else {
-                        throw new Error("No data");
-                    }
-                } catch (fallbackErr) {
-                    if (tid) toast.error("Location tracking unavailable", { id: tid });
-                    setPosition(prev => prev || [28.6139, 77.2090]); // Fallback to Delhi
-                    setLoading(false);
-                }
-            },
-            { enableHighAccuracy: true, timeout: 8000 }
-        );
+            await fetchAllData(result.latitude, result.longitude, searchRadius, isManual);
+        } catch (err) {
+            console.error('[Nearby] Location detection fully failed:', err);
+            setGpsError("Location detection failed. Please enable GPS or try again.");
+            setPosition(prev => prev || [28.6139, 77.2090]);
+            if (tid) toast.error("Location tracking unavailable", { id: tid });
+            setLoading(false);
+        }
     }, [loading, searchRadius]);
 
     useEffect(() => {

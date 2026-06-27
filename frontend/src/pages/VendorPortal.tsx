@@ -11,6 +11,7 @@ import {
 import { registerVendor, fetchVendors, updateVendor, fetchVendorAnalytics } from '../services/api';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
+import { getLocation } from '../utils/getLocation';
 
 import type { LatLng } from 'leaflet';
 import type { Vendor } from '../types';
@@ -142,25 +143,34 @@ export const VendorPortal = () => {
         }
     };
 
-    const handleAutoLocate = useCallback(() => {
+    const handleAutoLocate = useCallback(async () => {
         if (isLocating) return;
         setIsLocating(true);
         const tid = toast.loading("Accessing GPS...");
-        if (!navigator.geolocation) {
-            toast.error("Geolocation not supported", { id: tid });
-            setIsLocating(false);
-            return;
-        }
-        navigator.geolocation.getCurrentPosition(
-            (pos) => {
-                const newPos = new L.LatLng(pos.coords.latitude, pos.coords.longitude);
-                setMarkerPos(newPos);
+
+        try {
+            const result = await getLocation({
+                useCache: false,
+                useIPFallback: true,
+                highAccuracyTimeout: 10000,
+                lowAccuracyTimeout: 8000
+            });
+
+            const newPos = new L.LatLng(result.latitude, result.longitude);
+            setMarkerPos(newPos);
+
+            if (result.source === 'gps') {
                 toast.success("Location captured!", { id: tid });
-                setIsLocating(false);
-            },
-            () => { toast.error("GPS failed. Pin manually.", { id: tid }); setIsLocating(false); },
-            { enableHighAccuracy: true, timeout: 10000 }
-        );
+            } else if (result.source === 'ip') {
+                toast.success(`Approximate location: ${result.city || 'detected'}. Adjust pin if needed.`, { id: tid });
+            } else {
+                toast.success("Using default location. Please adjust the pin.", { id: tid });
+            }
+        } catch {
+            toast.error("GPS failed. Pin manually.", { id: tid });
+        } finally {
+            setIsLocating(false);
+        }
     }, [isLocating]);
 
     const [showSuccessStep, setShowSuccessStep] = useState(false);

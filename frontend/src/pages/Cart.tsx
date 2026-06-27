@@ -9,6 +9,7 @@ import { formatCurrency } from '../utils/currency';
 import toast from 'react-hot-toast';
 import type { Vendor, CartItem } from '../types';
 import styles from './Cart.module.css';
+import { getLocation } from '../utils/getLocation';
 
 // Leaflet imports
 import { MapContainer, TileLayer, Marker, useMapEvents, Circle, Popup } from 'react-leaflet';
@@ -275,48 +276,55 @@ export const Cart = () => {
         }
     }, [user]);
 
-    const handleUseMyLocation = useCallback(() => {
-        if (!navigator.geolocation) {
-            toast.error('Geolocation is not supported by your browser');
-            return;
-        }
+    const handleUseMyLocation = useCallback(async () => {
         setLocating(true);
-        navigator.geolocation.getCurrentPosition(
-            async (position) => {
-                const lat = position.coords.latitude;
-                const lng = position.coords.longitude;
-                setDeliveryAddress(prev => ({ ...prev, latitude: lat, longitude: lng }));
 
-                // Reverse geocode
-                try {
-                    const resp = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`);
-                    const data = await resp.json();
-                    if (data.address) {
-                        setDeliveryAddress(prev => ({
-                            ...prev,
-                            address: data.display_name?.split(',').slice(0, 3).join(', ') || prev.address,
-                            city: data.address.city || data.address.town || data.address.village || prev.city,
-                            state: data.address.state || prev.state,
-                            pincode: data.address.postcode || prev.pincode
-                        }));
-                    }
-                } catch (e) {
-                    console.error('Reverse geocode failed:', e);
-                }
+        try {
+            const result = await getLocation({
+                useCache: true,
+                useIPFallback: true,
+                highAccuracyTimeout: 10000,
+                lowAccuracyTimeout: 8000
+            });
 
-                if (mapRef.current) {
-                    mapRef.current.setView([lat, lng], 15);
+            const lat = result.latitude;
+            const lng = result.longitude;
+            setDeliveryAddress(prev => ({ ...prev, latitude: lat, longitude: lng }));
+
+            // Reverse geocode
+            try {
+                const resp = await fetch(`https://nominatim.openstreetmap.org/reverse?lat=${lat}&lon=${lng}&format=json`);
+                const data = await resp.json();
+                if (data.address) {
+                    setDeliveryAddress(prev => ({
+                        ...prev,
+                        address: data.display_name?.split(',').slice(0, 3).join(', ') || prev.address,
+                        city: data.address.city || data.address.town || data.address.village || prev.city,
+                        state: data.address.state || prev.state,
+                        pincode: data.address.postcode || prev.pincode
+                    }));
                 }
-                setLocating(false);
+            } catch (e) {
+                console.error('Reverse geocode failed:', e);
+            }
+
+            if (mapRef.current) {
+                mapRef.current.setView([lat, lng], 15);
+            }
+
+            if (result.source === 'gps' || result.source === 'cache') {
                 toast.success('Location captured!');
-            },
-            (error) => {
-                setLocating(false);
-                toast.error('Unable to get your location. Please enter manually.');
-                console.error('Geolocation error:', error);
-            },
-            { enableHighAccuracy: true, timeout: 10000 }
-        );
+            } else if (result.source === 'ip') {
+                toast.success('Approximate location detected. Adjust pin if needed.');
+            } else {
+                toast.success('Using default location. Please adjust the pin.');
+            }
+        } catch (error) {
+            toast.error('Unable to get your location. Please enter manually.');
+            console.error('Geolocation error:', error);
+        } finally {
+            setLocating(false);
+        }
     }, []);
 
     const handleMarkerDrag = useCallback((lat: number, lng: number) => {

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
+import { getLocation } from '../utils/getLocation';
 
 interface LocationData {
     lat: number;
@@ -14,92 +15,109 @@ export const useLocationCapture = () => {
     const [isDetecting, setIsDetecting] = useState(false);
 
     const detectLocation = async (): Promise<LocationData | null> => {
-        if (!navigator.geolocation) {
-            toast.error('Geolocation is not supported by your browser');
-            return null;
-        }
-
         setIsDetecting(true);
         const tid = toast.loading('Detecting your location...');
 
-        return new Promise((resolve) => {
-            navigator.geolocation.getCurrentPosition(
-                async (position) => {
-                    try {
-                        const { latitude, longitude } = position.coords;
+        try {
+            const result = await getLocation({
+                useCache: false,
+                useIPFallback: true,
+                highAccuracyTimeout: 10000,
+                lowAccuracyTimeout: 8000
+            });
 
-                        // Reverse geocode to get address
-                        const response = await fetch(
-                            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
-                        );
-                        const data = await response.json();
+            // Reverse geocode to get address
+            try {
+                const response = await fetch(
+                    `https://nominatim.openstreetmap.org/reverse?format=json&lat=${result.latitude}&lon=${result.longitude}`
+                );
+                const data = await response.json();
 
-                        const locationData: LocationData = {
-                            lat: latitude,
-                            lng: longitude,
-                            city: data.address?.city || data.address?.town || data.address?.village || '',
-                            state: data.address?.state || '',
-                            country: data.address?.country || ''
-                        };
+                const locationData: LocationData = {
+                    lat: result.latitude,
+                    lng: result.longitude,
+                    city: data.address?.city || data.address?.town || data.address?.village || result.city || '',
+                    state: data.address?.state || '',
+                    country: data.address?.country || ''
+                };
 
-                        setLocation(locationData);
-                        toast.success('Location detected!', { id: tid });
-                        setIsDetecting(false);
-                        resolve(locationData);
-                    } catch (error) {
-                        console.error('Geocoding error:', error);
-                        toast.error('Failed to get address details', { id: tid });
-                        setIsDetecting(false);
-                        resolve(null);
-                    }
-                },
-                (error) => {
-                    console.error('Geolocation error:', error);
-                    toast.error('Location access denied', { id: tid });
-                    setIsDetecting(false);
-                    resolve(null);
-                },
-                {
-                    enableHighAccuracy: true,
-                    timeout: 10000,
-                    maximumAge: 0
+                setLocation(locationData);
+
+                if (result.source === 'gps' || result.source === 'cache') {
+                    toast.success('Location detected!', { id: tid });
+                } else if (result.source === 'ip') {
+                    toast.success('Approximate location detected!', { id: tid });
+                } else {
+                    toast.success('Using default location', { id: tid });
                 }
-            );
-        });
+
+                setIsDetecting(false);
+                return locationData;
+            } catch (error) {
+                console.error('Geocoding error:', error);
+                // Even if geocoding fails, we still have coordinates
+                const locationData: LocationData = {
+                    lat: result.latitude,
+                    lng: result.longitude,
+                    city: result.city || '',
+                    state: '',
+                    country: ''
+                };
+                setLocation(locationData);
+                toast.success('Location coordinates captured!', { id: tid });
+                setIsDetecting(false);
+                return locationData;
+            }
+        } catch (error) {
+            console.error('Location detection error:', error);
+            toast.error('Failed to detect location. Please try again.', { id: tid });
+            setIsDetecting(false);
+            return null;
+        }
     };
 
     // Auto-detect location on mount (silent, no toast)
     useEffect(() => {
         const autoDetect = async () => {
-            if (navigator.geolocation && !location) {
-                navigator.geolocation.getCurrentPosition(
-                    async (position) => {
-                        try {
-                            const { latitude, longitude } = position.coords;
-                            const response = await fetch(
-                                `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
-                            );
-                            const data = await response.json();
+            if (!location) {
+                try {
+                    const result = await getLocation({
+                        useCache: true,
+                        useIPFallback: true,
+                        highAccuracyTimeout: 5000,
+                        lowAccuracyTimeout: 5000
+                    });
 
-                            const locationData: LocationData = {
-                                lat: latitude,
-                                lng: longitude,
-                                city: data.address?.city || data.address?.town || data.address?.village || '',
-                                state: data.address?.state || '',
-                                country: data.address?.country || ''
-                            };
+                    // Try reverse geocode silently
+                    try {
+                        const response = await fetch(
+                            `https://nominatim.openstreetmap.org/reverse?format=json&lat=${result.latitude}&lon=${result.longitude}`
+                        );
+                        const data = await response.json();
 
-                            setLocation(locationData);
-                            console.log('[Location] Auto-detected:', locationData);
-                        } catch (error) {
-                            console.log('[Location] Auto-detect failed:', error);
-                        }
-                    },
-                    () => {
-                        console.log('[Location] Auto-detect permission denied');
-                    },
-                    { enableHighAccuracy: false, timeout: 5000, maximumAge: 60000 }
-                );
+                        const locationData: LocationData = {
+                            lat: result.latitude,
+                            lng: result.longitude,
+                            city: data.address?.city || data.address?.town || data.address?.village || result.city || '',
+                            state: data.address?.state || '',
+                            country: data.address?.country || ''
+                        };
+
+                        setLocation(locationData);
+                        console.log('[Location] Auto-detected:', locationData);
+                    } catch {
+                        // Silently ignore geocoding errors during auto-detect
+                        setLocation({
+                            lat: result.latitude,
+                            lng: result.longitude,
+                            city: result.city || '',
+                            state: '',
+                            country: ''
+                        });
+                    }
+                } catch (error) {
+                    console.log('[Location] Auto-detect failed:', error);
+                }
             }
         };
 

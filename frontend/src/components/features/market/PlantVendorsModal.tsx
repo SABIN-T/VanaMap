@@ -9,6 +9,7 @@ import { VendorDetailsModal } from './VendorDetailsModal';
 import { getDistanceFromLatLonInKm } from '../../../utils/logic';
 import toast from 'react-hot-toast';
 import styles from './PlantVendorsModal.module.css';
+import { getLocation } from '../../../utils/getLocation';
 
 interface PlantVendorsModalProps {
     plant: Plant;
@@ -42,25 +43,29 @@ export const PlantVendorsModal = ({ plant, onClose }: PlantVendorsModalProps) =>
             return;
         }
 
-        // 2. Otherwise query geolocation silently
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (pos) => {
-                    const coords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+        // 2. Otherwise use the robust getLocation utility
+        const detectLocation = async () => {
+            try {
+                const result = await getLocation({
+                    useCache: true,
+                    useIPFallback: false, // Don't use IP for modal — silent only
+                    highAccuracyTimeout: 5000,
+                    lowAccuracyTimeout: 5000
+                });
+
+                if (result.source !== 'default') {
+                    const coords = { lat: result.latitude, lng: result.longitude };
                     setUserCoords(coords);
                     setLocationBlocked(false);
                     sessionStorage.setItem('user_latitude', coords.lat.toString());
                     sessionStorage.setItem('user_longitude', coords.lng.toString());
-                },
-                (err) => {
-                    console.warn("Silent location capture in modal failed:", err);
-                    if (err.code === err.PERMISSION_DENIED) {
-                        setLocationBlocked(true);
-                    }
-                },
-                { timeout: 5000, enableHighAccuracy: false }
-            );
-        }
+                }
+            } catch (err) {
+                console.warn("Silent location capture in modal failed:", err);
+                setLocationBlocked(true);
+            }
+        };
+        detectLocation();
     }, []);
 
     const loadVendors = async () => {
@@ -148,21 +153,25 @@ export const PlantVendorsModal = ({ plant, onClose }: PlantVendorsModalProps) =>
                         <AlertCircle size={14} color="#ef4444" style={{ flexShrink: 0 }} />
                         <span style={{ flexGrow: 1 }}>Location is not enabled. Please enable location, otherwise nearby shops will not show.</span>
                         <button
-                            onClick={() => {
-                                navigator.geolocation.getCurrentPosition(
-                                    (pos) => {
-                                        const coords = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-                                        setUserCoords(coords);
-                                        setLocationBlocked(false);
-                                        sessionStorage.setItem('user_latitude', coords.lat.toString());
-                                        sessionStorage.setItem('user_longitude', coords.lng.toString());
-                                        toast.success("Location enabled!");
-                                    },
-                                    (err) => {
-                                        console.warn(err);
-                                        toast.error("Location blocked. Please adjust your browser settings.");
-                                    }
-                                );
+                            onClick={async () => {
+                                try {
+                                    const result = await getLocation({
+                                        useCache: false,
+                                        useIPFallback: true,
+                                        highAccuracyTimeout: 10000,
+                                        lowAccuracyTimeout: 8000
+                                    });
+
+                                    const coords = { lat: result.latitude, lng: result.longitude };
+                                    setUserCoords(coords);
+                                    setLocationBlocked(false);
+                                    sessionStorage.setItem('user_latitude', coords.lat.toString());
+                                    sessionStorage.setItem('user_longitude', coords.lng.toString());
+                                    toast.success("Location enabled!");
+                                } catch (err) {
+                                    console.warn(err);
+                                    toast.error("Location blocked. Please adjust your browser settings.");
+                                }
                             }}
                             style={{
                                 background: '#ef4444',

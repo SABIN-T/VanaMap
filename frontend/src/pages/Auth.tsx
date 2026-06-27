@@ -8,6 +8,7 @@ import { toast } from 'react-hot-toast';
 import styles from './Auth.module.css';
 import { GoogleAuthButton } from '../components/auth/GoogleAuthButton';
 import { useLocationCapture } from '../hooks/useLocationCapture';
+import { getLocation } from '../utils/getLocation';
 import { googleAuth } from '../services/googleAuth';
 
 export const Auth = () => {
@@ -80,54 +81,53 @@ export const Auth = () => {
         if (view === 'signup' && !city && !state) {
             // Auto-detect location on signup
             const autoDetect = async () => {
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(async (position) => {
-                        try {
-                            const { latitude, longitude } = position.coords;
-                            const response = await fetch(
-                                `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`
-                            );
-                            const data = await response.json();
+                try {
+                    const result = await getLocation({
+                        useCache: true,
+                        useIPFallback: true,
+                        highAccuracyTimeout: 5000,
+                        lowAccuracyTimeout: 5000
+                    });
 
-                            if (data.address) {
-                                // Set country
-                                const countryCode = data.address.country_code?.toUpperCase();
-                                if (countryCode) {
-                                    const countryObj = Country.getCountryByCode(countryCode);
-                                    if (countryObj) {
-                                        setSelectedCountry(countryObj);
-                                        setCountry(countryObj.name);
-                                        setPhoneCode(countryObj.phonecode);
+                    const response = await fetch(
+                        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${result.latitude}&lon=${result.longitude}`
+                    );
+                    const data = await response.json();
 
-                                        // Set state
-                                        const stateName = data.address.state;
-                                        if (stateName) {
-                                            const states = State.getStatesOfCountry(countryObj.isoCode);
-                                            const foundState = states.find(s =>
-                                                s.name.toLowerCase().includes(stateName.toLowerCase()) ||
-                                                stateName.toLowerCase().includes(s.name.toLowerCase())
-                                            );
-                                            if (foundState) {
-                                                setSelectedState(foundState);
-                                                setState(foundState.name);
-                                            }
-                                        }
+                    if (data.address) {
+                        // Set country
+                        const countryCode = data.address.country_code?.toUpperCase();
+                        if (countryCode) {
+                            const countryObj = Country.getCountryByCode(countryCode);
+                            if (countryObj) {
+                                setSelectedCountry(countryObj);
+                                setCountry(countryObj.name);
+                                setPhoneCode(countryObj.phonecode);
+
+                                // Set state
+                                const stateName = data.address.state;
+                                if (stateName) {
+                                    const states = State.getStatesOfCountry(countryObj.isoCode);
+                                    const foundState = states.find(s =>
+                                        s.name.toLowerCase().includes(stateName.toLowerCase()) ||
+                                        stateName.toLowerCase().includes(s.name.toLowerCase())
+                                    );
+                                    if (foundState) {
+                                        setSelectedState(foundState);
+                                        setState(foundState.name);
                                     }
                                 }
-
-                                // Set city
-                                const cityVal = data.address.city || data.address.town || data.address.village || data.address.county || '';
-                                if (cityVal) setCity(cityVal);
-
-                                toast.success('📍 Location detected automatically!', { duration: 2000 });
                             }
-                        } catch (error) {
-                            console.log('Auto-detect failed silently');
                         }
-                    }, () => {
-                        // Silently fail if permission denied
-                        console.log('Location permission not granted');
-                    });
+
+                        // Set city
+                        const cityVal = data.address.city || data.address.town || data.address.village || data.address.county || '';
+                        if (cityVal) setCity(cityVal);
+
+                        toast.success('📍 Location detected automatically!', { duration: 2000 });
+                    }
+                } catch (error) {
+                    console.log('Auto-detect failed silently');
                 }
             };
 
@@ -487,47 +487,52 @@ export const Auth = () => {
                                     </label>
                                     <button
                                         type="button"
-                                        onClick={() => {
-                                            if (!navigator.geolocation) return toast.error("Not supported");
+                                        onClick={async () => {
                                             const tid = toast.loading("Detecting...");
-                                            navigator.geolocation.getCurrentPosition(async (pos) => {
-                                                try {
-                                                    const { latitude, longitude } = pos.coords;
-                                                    const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`);
-                                                    const data = await res.json();
+                                            try {
+                                                const result = await getLocation({
+                                                    useCache: false,
+                                                    useIPFallback: true,
+                                                    highAccuracyTimeout: 10000,
+                                                    lowAccuracyTimeout: 8000
+                                                });
 
-                                                    if (data.address) {
-                                                        const code = data.address.country_code?.toUpperCase();
-                                                        const countryObj = Country.getCountryByCode(code);
+                                                const res = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${result.latitude}&lon=${result.longitude}`);
+                                                const data = await res.json();
 
-                                                        if (countryObj) {
-                                                            setSelectedCountry(countryObj);
-                                                            setCountry(countryObj.name);
-                                                            setPhoneCode(countryObj.phonecode);
+                                                if (data.address) {
+                                                    const code = data.address.country_code?.toUpperCase();
+                                                    const countryObj = Country.getCountryByCode(code);
 
-                                                            const stateName = data.address.state;
-                                                            if (stateName) {
-                                                                const states = State.getStatesOfCountry(countryObj.isoCode);
-                                                                const foundState = states.find(s =>
-                                                                    s.name.toLowerCase().includes(stateName.toLowerCase()) ||
-                                                                    stateName.toLowerCase().includes(s.name.toLowerCase())
-                                                                );
-                                                                if (foundState) {
-                                                                    setSelectedState(foundState);
-                                                                    setState(foundState.name);
-                                                                }
+                                                    if (countryObj) {
+                                                        setSelectedCountry(countryObj);
+                                                        setCountry(countryObj.name);
+                                                        setPhoneCode(countryObj.phonecode);
+
+                                                        const stateName = data.address.state;
+                                                        if (stateName) {
+                                                            const states = State.getStatesOfCountry(countryObj.isoCode);
+                                                            const foundState = states.find(s =>
+                                                                s.name.toLowerCase().includes(stateName.toLowerCase()) ||
+                                                                stateName.toLowerCase().includes(s.name.toLowerCase())
+                                                            );
+                                                            if (foundState) {
+                                                                setSelectedState(foundState);
+                                                                setState(foundState.name);
                                                             }
                                                         }
-
-                                                        const cityVal = data.address.city || data.address.town || data.address.village || data.address.county || '';
-                                                        if (cityVal) setCity(cityVal);
-
-                                                        toast.success("Location Detected!", { id: tid });
                                                     }
-                                                } catch {
-                                                    toast.error("Failed to detect address", { id: tid });
+
+                                                    const cityVal = data.address.city || data.address.town || data.address.village || data.address.county || '';
+                                                    if (cityVal) setCity(cityVal);
+
+                                                    toast.success("Location Detected!", { id: tid });
+                                                } else {
+                                                    toast.error("Could not resolve address", { id: tid });
                                                 }
-                                            }, () => toast.error("Permission denied", { id: tid }));
+                                            } catch {
+                                                toast.error("Failed to detect location", { id: tid });
+                                            }
                                         }}
                                         style={{ background: 'none', border: 'none', color: '#10b981', cursor: 'pointer', fontSize: '0.85rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}
                                     >
