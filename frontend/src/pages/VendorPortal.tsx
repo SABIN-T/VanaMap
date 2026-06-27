@@ -5,7 +5,7 @@ import L from 'leaflet';
 import { Button } from '../components/common/Button';
 import {
     Store, Locate, Info, ArrowRight, Package,
-    ShoppingBag, ShoppingCart, DollarSign, ShieldCheck, ExternalLink,
+    ShoppingCart, DollarSign, ExternalLink,
     MessageCircle, CheckCircle, Clock, QrCode, BarChart2, TrendingUp, Shield
 } from 'lucide-react';
 import { registerVendor, fetchVendors, updateVendor, fetchVendorAnalytics } from '../services/api';
@@ -325,137 +325,181 @@ export const VendorPortal = () => {
                                 </Button>
                             </div>
                         ) : (
-                            <>
-                                <div className={styles.statsGrid}>
-                                    <div className={styles.statCard}>
-                                        <div className={styles.statIcon} style={{ background: 'rgba(16, 185, 129, 0.1)', color: '#10b981' }}>
-                                            <ShoppingBag size={24} />
-                                        </div>
-                                        <div className={styles.statInfo}>
-                                            <div className={styles.statValue}>{currentVendor?.inventory?.length || 0}</div>
-                                            <div className={styles.statLabel}>Added Plants</div>
-                                        </div>
+                            <div className={styles.dashboardGrid}>
+                                {/* Main Content Column */}
+                                <div className={styles.mainColumn}>
+                                    {/* Quick Actions Bento Grid */}
+                                    <div className={styles.widgetHeader}>
+                                        <h4 className={styles.widgetTitle}>Nursery Operations</h4>
                                     </div>
-                                    <div className={styles.statCard}>
-                                        <div className={styles.statIcon} style={{ background: 'rgba(250, 204, 21, 0.1)', color: '#facc15' }}>
-                                            <ShoppingCart size={24} />
-                                        </div>
-                                        <div className={styles.statInfo}>
-                                            <div className={styles.statValue}>{analytics?.itemsSold || 0}</div>
-                                            <div className={styles.statLabel}>Purchased Units</div>
-                                        </div>
-                                    </div>
-                                    <div className={styles.statCard}>
-                                        <div className={styles.statIcon} style={{ background: 'rgba(59, 130, 246, 0.1)', color: '#3b82f6' }}>
-                                            <DollarSign size={24} />
-                                        </div>
-                                        <div className={styles.statInfo}>
-                                            <div className={styles.statValue}>₹{analytics?.revenue?.toLocaleString() || 0}</div>
-                                            <div className={styles.statLabel}>Total Earnings</div>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {/* Quick Navigation Grid */}
-                                <div className={styles.quickActionsGrid}>
-                                    {[
-                                        { label: 'Inventory', icon: Package, path: '/vendor/inventory', color: '#3b82f6' },
-                                        { label: 'Insights', icon: BarChart2, path: '/vendor/insights', color: '#a855f7' },
-                                        { label: 'Growth', icon: TrendingUp, path: '/vendor/growth', color: '#facc15' },
-                                        { label: 'Payments', icon: DollarSign, path: '/vendor/payments', color: '#10b981' },
-                                        { label: 'Settings', icon: Store, path: '/vendor/profile', color: '#64748b' },
-                                    ].map((action, i) => (
-                                        <div
-                                            key={i}
-                                            onClick={() => navigate(action.path)}
-                                            className={styles.quickActionCard}
-                                        >
-                                            <div className={styles.quickActionIconBox} style={{ background: `${action.color}20`, color: action.color }}>
-                                                <action.icon size={20} />
-                                            </div>
-                                            <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--color-text-main)' }}>{action.label}</span>
-                                        </div>
-                                    ))}
-                                </div>
-
-                                <div className={styles.verifiedBanner}>
-                                    <div className={styles.verifiedInfo}>
-                                        <div className={styles.verifiedIcon}>
-                                            <ShieldCheck size={20} />
-                                        </div>
-                                        <div>
-                                            <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 800 }}>Verified Partner</h3>
-                                            <p style={{ margin: 0, fontSize: '0.8rem', opacity: 0.8 }}>Your nursery is live and visible to local plant enthusiasts.</p>
-                                        </div>
-                                    </div>
-                                    <Button
-                                        variant="outline"
-                                        size="sm"
-                                        onClick={() => navigate('/nearby')}
-                                        style={{ borderColor: 'rgba(255,255,255,0.3)', color: 'white', gap: '0.5rem' }}
-                                    >
-                                        <ExternalLink size={14} /> View Public Shop
-                                    </Button>
-                                    <Button size="sm" onClick={() => window.open('https://wa.me/9188773534', '_blank')} style={{ background: '#25D366', border: 'none' }}>
-                                        <MessageCircle size={16} /> WhatsApp Support
-                                    </Button>
-                                </div>
-
-                                {/* QR Code Quick Access */}
-                                <div className={styles.verifiedBanner} style={{ marginTop: '1rem', background: 'linear-gradient(135deg, #6366f1, #3b82f6)' }}>
-                                    <div className={styles.verifiedInfo}>
-                                        <div className={styles.verifiedIcon} style={{ background: 'rgba(255,255,255,0.2)' }}>
-                                            <QrCode size={20} color="white" />
-                                        </div>
-                                        <div>
-                                            <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 800 }}>Physical Shop QR Code</h3>
-                                            <p style={{ margin: 0, fontSize: '0.8rem', opacity: 0.9 }}>Download your official VanaMap signage for walk-in customers.</p>
-                                        </div>
-                                    </div>
-                                    <Button
-                                        size="sm"
-                                        onClick={() => navigate('/vendor/growth')}
-                                        style={{ background: 'white', color: '#4f46e5', fontWeight: 700 }}
-                                    >
-                                        Get QR Code
-                                    </Button>
-                                </div>
-
-                                <div className={styles.earningsChartCard}>
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
-                                        <h3 style={{ fontSize: '1rem', fontWeight: 800, color: 'white' }}>Your Catalog Highlights</h3>
-                                        <button onClick={() => navigate('/vendor/inventory')} className={styles.viewAllBtn}>
-                                            Manage All <ArrowRight size={14} />
-                                        </button>
-                                    </div>
-                                    <div className={styles.catalogGrid}>
-                                        {currentVendor?.inventory?.slice(0, 4).map((item: any, idx: number) => (
-                                            <div key={idx} className={styles.miniPlantCard}>
-                                                <div className={styles.miniThumbBox}>
-                                                    <div className={styles.miniPlantId}>#{item.plantId.slice(-4)}</div>
+                                    <div className={styles.quickActionsGrid}>
+                                        {[
+                                            { label: 'Inventory', icon: Package, path: '/vendor/inventory', color: '#3b82f6' },
+                                            { label: 'Insights', icon: BarChart2, path: '/vendor/insights', color: '#a855f7' },
+                                            { label: 'Growth', icon: TrendingUp, path: '/vendor/growth', color: '#facc15' },
+                                            { label: 'Payments', icon: DollarSign, path: '/vendor/payments', color: '#10b981' },
+                                            { label: 'Settings', icon: Store, path: '/vendor/profile', color: '#64748b' },
+                                        ].map((action, i) => (
+                                            <div
+                                                key={i}
+                                                onClick={() => navigate(action.path)}
+                                                className={styles.quickActionCard}
+                                            >
+                                                <div className={styles.quickActionIconBox} style={{ background: `${action.color}20`, color: action.color }}>
+                                                    <action.icon size={20} />
                                                 </div>
-                                                <div className={styles.miniPlantInfo}>
-                                                    <div className={styles.miniPlantPrice}>₹{item.price}</div>
-                                                    <div className={item.inStock ? styles.miniStockIn : styles.miniStockOut}>
-                                                        {item.inStock ? 'In Stock' : 'Sold Out'}
-                                                    </div>
-                                                </div>
+                                                <span style={{ fontSize: '0.85rem', fontWeight: 700, color: 'var(--color-text-main)' }}>{action.label}</span>
                                             </div>
                                         ))}
-                                        {(!currentVendor?.inventory || currentVendor.inventory.length === 0) && (
-                                            <div className={styles.emptyCatalog}>
-                                                <Package size={24} style={{ color: '#facc15', marginBottom: '0.5rem', opacity: 0.6 }} />
-                                                <div>No plants added yet.</div>
-                                                <span onClick={() => navigate('/vendor/inventory')} style={{ color: '#10b981', cursor: 'pointer', textDecoration: 'underline', fontWeight: 'bold', fontSize: '0.85rem', marginTop: '0.25rem', display: 'inline-block' }}>
-                                                    Start Listing →
-                                                </span>
-                                            </div>
-                                        )}
                                     </div>
+
+                                    {/* Catalog Highlights */}
+                                    <div className={styles.earningsChartCard}>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+                                            <h3 style={{ fontSize: '1rem', fontWeight: 800, color: 'var(--color-text-main, #ffffff)', margin: 0 }}>Your Catalog Highlights</h3>
+                                            <button onClick={() => navigate('/vendor/inventory')} className={styles.viewAllBtn}>
+                                                Manage All <ArrowRight size={14} />
+                                            </button>
+                                        </div>
+                                        <div className={styles.catalogGrid}>
+                                            {currentVendor?.inventory?.slice(0, 4).map((item: any, idx: number) => (
+                                                <div key={idx} className={styles.miniPlantCard}>
+                                                    <div className={styles.miniThumbBox}>
+                                                        <div className={styles.miniPlantId}>#{item.plantId.slice(-4)}</div>
+                                                    </div>
+                                                    <div className={styles.miniPlantInfo}>
+                                                        <div className={styles.miniPlantPrice}>₹{item.price}</div>
+                                                        <div className={item.inStock ? styles.miniStockIn : styles.miniStockOut}>
+                                                            {item.inStock ? 'In Stock' : 'Sold Out'}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                            {(!currentVendor?.inventory || currentVendor.inventory.length === 0) && (
+                                                <div className={styles.emptyCatalog}>
+                                                    <Package size={24} style={{ color: '#facc15', marginBottom: '0.5rem', opacity: 0.6 }} />
+                                                    <div>No plants added yet.</div>
+                                                    <span onClick={() => navigate('/vendor/inventory')} style={{ color: 'var(--color-primary, #10b981)', cursor: 'pointer', textDecoration: 'underline', fontWeight: 'bold', fontSize: '0.85rem', marginTop: '0.25rem', display: 'inline-block' }}>
+                                                        Start Listing →
+                                                    </span>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {/* Analytics Insights */}
+                                    <MarketInsights analytics={analytics} />
                                 </div>
 
-                                <MarketInsights analytics={analytics} />
-                            </>
+                                {/* Sidebar Column */}
+                                <div className={styles.sidebarColumn}>
+                                    {/* Store profile settings details */}
+                                    <div className={styles.widgetCard}>
+                                        <div className={styles.widgetHeader}>
+                                            <h4 className={styles.widgetTitle}>Nursery Settings</h4>
+                                        </div>
+                                        <div className={styles.profileWidget} style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                                            <div className={styles.largeAvatar} style={{ 
+                                                width: '48px', height: '48px', borderRadius: '50%',
+                                                background: 'linear-gradient(135deg, var(--color-primary, #10b981), #3b82f6)',
+                                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                                fontSize: '1.25rem', fontWeight: 900, color: '#ffffff'
+                                            }}>
+                                                {currentVendor?.name?.charAt(0).toUpperCase() || 'S'}
+                                            </div>
+                                            <div className={styles.profileInfo} style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                                                <div className={styles.profileName} style={{ fontSize: '1rem', fontWeight: 800 }}>{currentVendor?.name || 'Nursery'}</div>
+                                                <div className={styles.profileEmail} style={{ fontSize: '0.75rem', color: 'var(--color-text-dim)' }}>WhatsApp: {currentVendor?.whatsapp || 'N/A'}</div>
+                                                <span className={styles.premiumBadge} style={{ 
+                                                    fontSize: '0.6rem', fontWeight: 800, color: '#10b981', 
+                                                    background: 'rgba(16, 185, 129, 0.1)', border: '1px solid rgba(16, 185, 129, 0.2)',
+                                                    padding: '2px 6px', borderRadius: '4px', textTransform: 'uppercase',
+                                                    alignSelf: 'flex-start', marginTop: '4px'
+                                                }}>Verified Partner</span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* Store Telemetry Widgets */}
+                                    <div className={styles.widgetCard}>
+                                        <div className={styles.widgetHeader}>
+                                            <h4 className={styles.widgetTitle}>Performance Telemetry</h4>
+                                        </div>
+                                        <div className={styles.statList}>
+                                            <div className={styles.statRow}>
+                                                <div className={styles.statIconBox} style={{ background: 'rgba(16, 185, 129, 0.1)', color: 'var(--color-primary, #10b981)' }}>
+                                                    <Package size={20} />
+                                                </div>
+                                                <div className={styles.statDetail}>
+                                                    <div className={styles.statValue}>{currentVendor?.inventory?.length || 0}</div>
+                                                    <div className={styles.statLabel}>Added Plants</div>
+                                                </div>
+                                            </div>
+
+                                            <div className={styles.statRow}>
+                                                <div className={styles.statIconBox} style={{ background: 'rgba(250, 204, 21, 0.1)', color: '#facc15' }}>
+                                                    <ShoppingCart size={20} />
+                                                </div>
+                                                <div className={styles.statDetail}>
+                                                    <div className={styles.statValue}>{analytics?.itemsSold || 0}</div>
+                                                    <div className={styles.statLabel}>Purchased Units</div>
+                                                </div>
+                                            </div>
+
+                                            <div className={styles.statRow}>
+                                                <div className={styles.statIconBox} style={{ background: 'rgba(59, 130, 246, 0.1)', color: '#3b82f6' }}>
+                                                    <DollarSign size={20} />
+                                                </div>
+                                                <div className={styles.statDetail}>
+                                                    <div className={styles.statValue}>₹{analytics?.revenue?.toLocaleString() || 0}</div>
+                                                    <div className={styles.statLabel}>Total Earnings</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    {/* QR Signage widget */}
+                                    <div className={styles.widgetCard} style={{ background: 'linear-gradient(135deg, rgba(99, 102, 241, 0.08) 0%, rgba(59, 130, 246, 0.04) 100%)', borderColor: 'rgba(99, 102, 241, 0.25)' }}>
+                                        <div style={{ display: 'flex', gap: '0.85rem', alignItems: 'center' }}>
+                                            <div className={styles.statIconBox} style={{ background: '#6366f1', color: 'white' }}>
+                                                <QrCode size={18} />
+                                            </div>
+                                            <div>
+                                                <h4 style={{ margin: 0, fontSize: '0.9rem', fontWeight: 800, color: 'var(--color-text-main)' }}>Shop QR Signage</h4>
+                                                <p style={{ margin: '2px 0 0', fontSize: '0.75rem', color: 'var(--color-text-dim)' }}>Download walk-in signage</p>
+                                            </div>
+                                        </div>
+                                        <Button
+                                            size="sm"
+                                            onClick={() => navigate('/vendor/growth')}
+                                            style={{ background: '#6366f1', color: 'white', border: 'none', width: '100%', marginTop: '0.75rem', fontWeight: 700 }}
+                                        >
+                                            Get QR Signage
+                                        </Button>
+                                    </div>
+
+                                    {/* Partner Status Links / support */}
+                                    <div className={styles.widgetCard}>
+                                        <div style={{ display: 'flex', gap: '8px', flexDirection: 'column' }}>
+                                            <Button
+                                                variant="outline"
+                                                size="sm"
+                                                onClick={() => navigate('/nearby')}
+                                                style={{ width: '100%', justifyContent: 'center', gap: '0.5rem', fontWeight: 700 }}
+                                            >
+                                                <ExternalLink size={14} /> View Public Shop
+                                            </Button>
+                                            <Button 
+                                                size="sm" 
+                                                onClick={() => window.open('https://wa.me/9188773534', '_blank')} 
+                                                style={{ width: '100%', background: '#25D366', border: 'none', color: 'white', justifyContent: 'center', gap: '0.5rem', fontWeight: 700 }}
+                                            >
+                                                <MessageCircle size={16} /> WhatsApp Support
+                                            </Button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         )}
                     </>
                 )}
