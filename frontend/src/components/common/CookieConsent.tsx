@@ -38,17 +38,18 @@ export const CookieConsent = () => {
                     left: 24px;
                     right: 24px;
                     max-width: 500px;
-                    background: var(--color-card-bg, #FFFFFF);
-                    border: 1px solid var(--color-border, rgba(11, 93, 59, 0.15));
+                    background: var(--color-bg-card, #0a1f18);
+                    border: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
                     border-radius: 1.25rem;
                     padding: 1.5rem;
-                    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+                    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
                     z-index: 10005;
                     display: flex;
                     flex-direction: column;
                     gap: 1rem;
                     font-family: 'Inter', system-ui, sans-serif;
                     animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+                    backdrop-filter: blur(16px);
                 }
 
                 @keyframes slideUp {
@@ -64,14 +65,91 @@ export const CookieConsent = () => {
                         max-width: none;
                     }
                 }
+
+                .cookieBannerTitle {
+                    margin: 0 0 4px;
+                    fontSize: 0.95rem;
+                    font-weight: 700;
+                    color: var(--color-text-main, #f8fafc);
+                }
+
+                .cookieBannerDesc {
+                    margin: 0;
+                    font-size: 0.8rem;
+                    line-height: 1.4;
+                    color: var(--color-text-dim, #94a3b8);
+                }
+
+                .cookieBannerLink {
+                    color: var(--color-primary, #10b981);
+                    font-weight: 600;
+                    text-decoration: underline;
+                }
+
+                .cookieBannerClose {
+                    background: transparent;
+                    border: none;
+                    color: var(--color-text-dim, #94a3b8);
+                    cursor: pointer;
+                    padding: 0;
+                    display: flex;
+                    align-items: center;
+                    justifyContent: center;
+                    opacity: 0.7;
+                    transition: opacity 0.2s;
+                }
+
+                .cookieBannerClose:hover {
+                    opacity: 1;
+                }
+
+                .cookieBtnReject {
+                    background: transparent;
+                    border: 1px solid var(--color-border, rgba(255, 255, 255, 0.1));
+                    color: var(--color-text-main, #f8fafc);
+                    padding: 8px 16px;
+                    border-radius: 10px;
+                    font-size: 0.8rem;
+                    font-weight: 600;
+                    cursor: pointer;
+                    transition: all 0.2s;
+                }
+
+                .cookieBtnReject:hover {
+                    background: var(--color-bg-alt, rgba(255, 255, 255, 0.05));
+                    border-color: var(--color-text-dim, #94a3b8);
+                }
+
+                .cookieBtnAccept {
+                    background: var(--color-primary, #10b981);
+                    border: none;
+                    color: #000000;
+                    padding: 8px 20px;
+                    border-radius: 10px;
+                    font-size: 0.8rem;
+                    font-weight: 700;
+                    cursor: pointer;
+                    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+                    transition: all 0.2s;
+                }
+
+                .cookieBtnAccept:hover {
+                    transform: translateY(-1px);
+                    box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+                }
+
+                /* Text colors adapt dynamically when light mode is selected */
+                :root[data-theme='light'] .cookieBtnAccept {
+                    color: #ffffff;
+                }
             `}</style>
             
             <div style={{ display: 'flex', alignItems: 'flex-start', gap: '12px' }}>
                 <div style={{
-                    background: 'rgba(11, 93, 59, 0.1)',
+                    background: 'rgba(16, 185, 129, 0.1)',
                     padding: '8px',
                     borderRadius: '10px',
-                    color: 'var(--color-primary, #0B5D3B)',
+                    color: 'var(--color-primary, #10b981)',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
@@ -80,30 +158,15 @@ export const CookieConsent = () => {
                     <ShieldCheck size={20} />
                 </div>
                 <div style={{ flexGrow: 1 }}>
-                    <h4 style={{
-                        margin: '0 0 4px',
-                        fontSize: '0.95rem',
-                        fontWeight: 700,
-                        color: 'var(--color-text-main, #123524)'
-                    }}>Cookie & Privacy Settings</h4>
-                    <p style={{
-                        margin: 0,
-                        fontSize: '0.8rem',
-                        lineHeight: 1.4,
-                        color: 'var(--color-text-muted, #6B7280)'
-                    }}>
-                        We use essential storage identifiers (localStorage/cookies) to support authorization sessions and weather geo-caching. Read our <a href="/privacy" style={{ color: 'var(--color-primary, #0B5D3B)', fontWeight: 600, textDecoration: 'underline' }}>Privacy Policy</a>.
+                    <h4 className="cookieBannerTitle">Cookie & Privacy Settings</h4>
+                    <p className="cookieBannerDesc">
+                        We use essential storage identifiers (localStorage/cookies) to support authorization sessions and weather geo-caching. Read our <a href="/privacy" className="cookieBannerLink">Privacy Policy</a>.
                     </p>
                 </div>
                 <button 
                     onClick={() => setVisible(false)}
-                    style={{
-                        background: 'transparent',
-                        border: 'none',
-                        color: 'var(--color-text-muted, #6B7280)',
-                        cursor: 'pointer',
-                        padding: 0
-                    }}
+                    className="cookieBannerClose"
+                    aria-label="Close settings"
                 >
                     <X size={16} />
                 </button>
@@ -112,48 +175,13 @@ export const CookieConsent = () => {
             <div style={{ display: 'flex', gap: '8px', justifyContent: 'flex-end' }}>
                 <button
                     onClick={handleReject}
-                    style={{
-                        background: 'transparent',
-                        border: '1px solid var(--color-border, rgba(0, 0, 0, 0.1))',
-                        color: 'var(--color-text-muted, #6B7280)',
-                        padding: '8px 16px',
-                        borderRadius: '10px',
-                        fontSize: '0.8rem',
-                        fontWeight: 600,
-                        cursor: 'pointer',
-                        transition: 'all 0.2s'
-                    }}
-                    onMouseEnter={(e) => {
-                        e.currentTarget.style.background = 'var(--color-bg-alt, #FAFAF7)';
-                    }}
-                    onMouseLeave={(e) => {
-                        e.currentTarget.style.background = 'transparent';
-                    }}
+                    className="cookieBtnReject"
                 >
                     Reject Optional
                 </button>
                 <button
                     onClick={handleAccept}
-                    style={{
-                        background: 'var(--color-primary, #0B5D3B)',
-                        border: 'none',
-                        color: 'white',
-                        padding: '8px 20px',
-                        borderRadius: '10px',
-                        fontSize: '0.8rem',
-                        fontWeight: 700,
-                        cursor: 'pointer',
-                        boxShadow: '0 4px 12px rgba(11, 93, 59, 0.2)',
-                        transition: 'all 0.2s'
-                    }}
-                    onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = 'translateY(-1px)';
-                        e.currentTarget.style.boxShadow = '0 6px 16px rgba(11, 93, 59, 0.3)';
-                    }}
-                    onMouseLeave={(e) => {
-                        e.currentTarget.style.transform = 'none';
-                        e.currentTarget.style.boxShadow = '0 4px 12px rgba(11, 93, 59, 0.2)';
-                    }}
+                    className="cookieBtnAccept"
                 >
                     Accept All
                 </button>
