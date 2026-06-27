@@ -58,16 +58,64 @@ export const PlantDetailsModal = ({ plant, weather, onClose, onBuy }: PlantDetai
                 }
 
                 const queryName = plant.scientificName || plant.name;
-                const matchRes = await fetch(`https://api.gbif.org/v1/species/match?name=${encodeURIComponent(queryName)}`);
-                if (!matchRes.ok) throw new Error('Match failed');
-                const matchData = await matchRes.json();
+                
+                // Try 1: Species match (scientific name match)
+                let usageKey: number | undefined;
+                let scientificNameResult = queryName;
+                let classificationInfo = {
+                    kingdom: '', phylum: '', clazz: '', order: '', family: '', genus: ''
+                };
 
-                if (!matchData.usageKey) {
+                try {
+                    const matchRes = await fetch(`https://api.gbif.org/v1/species/match?name=${encodeURIComponent(queryName)}`);
+                    if (matchRes.ok) {
+                        const matchData = await matchRes.json();
+                        if (matchData.usageKey) {
+                            usageKey = matchData.usageKey;
+                            scientificNameResult = matchData.scientificName || queryName;
+                            classificationInfo = {
+                                kingdom: matchData.kingdom || '',
+                                phylum: matchData.phylum || '',
+                                clazz: matchData.class || '',
+                                order: matchData.order || '',
+                                family: matchData.family || '',
+                                genus: matchData.genus || ''
+                            };
+                        }
+                    }
+                } catch (matchErr) {
+                    console.warn('GBIF match query failed, attempting search query:', matchErr);
+                }
+
+                // Try 2: Species search fallback (useful for common names or vernacular matches)
+                if (!usageKey) {
+                    try {
+                        const searchRes = await fetch(`https://api.gbif.org/v1/species/search?q=${encodeURIComponent(queryName)}&limit=1`);
+                        if (searchRes.ok) {
+                            const searchData = await searchRes.json();
+                            if (searchData.results && searchData.results.length > 0) {
+                                const firstResult = searchData.results[0];
+                                usageKey = firstResult.key;
+                                scientificNameResult = firstResult.scientificName || queryName;
+                                classificationInfo = {
+                                    kingdom: firstResult.kingdom || '',
+                                    phylum: firstResult.phylum || '',
+                                    clazz: firstResult.class || '',
+                                    order: firstResult.order || '',
+                                    family: firstResult.family || '',
+                                    genus: firstResult.genus || ''
+                                };
+                            }
+                        }
+                    } catch (searchErr) {
+                        console.error('GBIF search query fallback failed:', searchErr);
+                    }
+                }
+
+                if (!usageKey) {
                     if (isMounted) setGbifData({ loading: false, error: true });
                     return;
                 }
-
-                const usageKey = matchData.usageKey;
 
                 const localOccurRes = await fetch(`https://api.gbif.org/v1/occurrence/search?taxonKey=${usageKey}&country=${countryCode}&limit=0`);
                 const localOccurData = await localOccurRes.json();
@@ -79,17 +127,10 @@ export const PlantDetailsModal = ({ plant, weather, onClose, onBuy }: PlantDetai
                     setGbifData({
                         loading: false,
                         taxonKey: usageKey,
-                        scientificName: matchData.scientificName || queryName,
+                        scientificName: scientificNameResult,
                         occurrencesLocal: localOccurData.count || 0,
                         occurrencesGlobal: globalOccurData.count || 0,
-                        classification: {
-                            kingdom: matchData.kingdom,
-                            phylum: matchData.phylum,
-                            clazz: matchData.class,
-                            order: matchData.order,
-                            family: matchData.family,
-                            genus: matchData.genus,
-                        }
+                        classification: classificationInfo
                     });
                 }
             } catch (e) {
