@@ -988,6 +988,44 @@ export const removeTeamMember = async (email: string) => {
     return await res.json();
 };
 
+export const fetchVendorReviews = async (vendorId: string) => {
+    const res = await fetch(`${API_URL}/vendors/${vendorId}/reviews`, {
+        method: 'GET',
+        headers: getHeaders()
+    });
+    if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || "Failed to fetch reviews");
+    }
+    return await res.json();
+};
+
+export const submitVendorReview = async (vendorId: string, rating: number, comment: string) => {
+    const res = await fetch(`${API_URL}/vendors/${vendorId}/reviews`, {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify({ rating, comment })
+    });
+    if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || "Failed to submit review");
+    }
+    return await res.json();
+};
+
+export const replyToVendorReview = async (vendorId: string, reviewId: string, reply: string) => {
+    const res = await fetch(`${API_URL}/vendors/${vendorId}/reviews/${reviewId}/reply`, {
+        method: 'POST',
+        headers: getHeaders(),
+        body: JSON.stringify({ reply })
+    });
+    if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || "Failed to reply to review");
+    }
+    return await res.json();
+};
+
 
 
 

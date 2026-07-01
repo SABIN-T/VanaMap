@@ -921,6 +921,31 @@ export const UserDashboard = () => {
 
                                             {isExpanded && (
                                                 <div style={{ marginTop: '1rem', borderTop: '1px dashed rgba(255,255,255,0.1)', paddingTop: '1rem' }}>
+                                                    {/* Estimated Delivery Banner */}
+                                                    {order.status !== 'cancelled' && (
+                                                        <div style={{
+                                                            background: 'rgba(255, 255, 255, 0.02)',
+                                                            borderRadius: '10px',
+                                                            padding: '8px 12px',
+                                                            marginBottom: '1rem',
+                                                            display: 'flex',
+                                                            justifyContent: 'space-between',
+                                                            alignItems: 'center',
+                                                            fontSize: '0.8rem',
+                                                            border: '1px solid rgba(255,255,255,0.04)'
+                                                        }}>
+                                                            <span style={{ color: '#cbd5e1' }}>Estimated Arrival:</span>
+                                                            <span style={{ fontWeight: 800, color: '#10b981' }}>
+                                                                {(() => {
+                                                                    const orderDate = new Date(order.timestamp);
+                                                                    const minDate = new Date(orderDate.getTime() + 24 * 60 * 60 * 1000);
+                                                                    const maxDate = new Date(orderDate.getTime() + 48 * 60 * 60 * 1000);
+                                                                    return `${minDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })} - ${maxDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}`;
+                                                                })()}
+                                                            </span>
+                                                        </div>
+                                                    )}
+
                                                     {/* Timeline Tracker */}
                                                     {order.status === 'cancelled' ? (
                                                         <div style={{ color: '#ef4444', fontSize: '0.85rem', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
@@ -928,7 +953,7 @@ export const UserDashboard = () => {
                                                         </div>
                                                     ) : (
                                                         <div style={{ marginBottom: '1.25rem' }}>
-                                                            <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative', padding: '0 0.5rem' }}>
+                                                            <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative', padding: '0 0.5rem', marginBottom: '1.5rem' }}>
                                                                 {/* Background line */}
                                                                 <div style={{
                                                                     position: 'absolute',
@@ -983,6 +1008,78 @@ export const UserDashboard = () => {
                                                                         </span>
                                                                     </div>
                                                                 ))}
+                                                            </div>
+
+                                                            {/* Step Status Text Description */}
+                                                            <div style={{
+                                                                background: 'rgba(16, 185, 129, 0.04)',
+                                                                border: '1px solid rgba(16, 185, 129, 0.1)',
+                                                                borderRadius: '12px',
+                                                                padding: '10px 14px',
+                                                                fontSize: '0.8rem',
+                                                                color: '#cbd5e1',
+                                                                lineHeight: 1.4
+                                                            }}>
+                                                                <strong style={{ color: '#10b981', display: 'block', marginBottom: '2px' }}>Current Status:</strong>
+                                                                {(() => {
+                                                                    switch (order.status) {
+                                                                        case 'delivered':
+                                                                            return "Package successfully delivered! Your nursery purchase handoff was confirmed by secure OTP validation.";
+                                                                        case 'shipped':
+                                                                            return "Your plants are in transit! A verified local delivery agent is transporting your package to your doorstep.";
+                                                                        case 'completed':
+                                                                            return "Your package has been prepared. The nursery has selected fresh stocks and prunings, wrapped them with protective organic soil wrap, and is coordinating pickup.";
+                                                                        default:
+                                                                            return "Order successfully received. Waiting for the nursery to verify stock availability and coordinate the logistics.";
+                                                                    }
+                                                                })()}
+                                                            </div>
+                                                        </div>
+                                                    )}
+
+                                                    {/* OTP Secure Handoff Badge */}
+                                                    {order.status === 'shipped' && order.deliveryOTP && (
+                                                        <div style={{
+                                                            background: 'linear-gradient(135deg, rgba(245, 158, 11, 0.1) 0%, rgba(245, 158, 11, 0.02) 100%)',
+                                                            border: '1px solid rgba(245, 158, 11, 0.3)',
+                                                            borderRadius: '14px',
+                                                            padding: '12px 16px',
+                                                            marginTop: '1rem',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            justifyContent: 'space-between',
+                                                            gap: '12px'
+                                                        }}>
+                                                            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                                                                <div style={{
+                                                                    background: 'rgba(245, 158, 11, 0.15)',
+                                                                    padding: '8px',
+                                                                    borderRadius: '50%',
+                                                                    color: '#f59e0b',
+                                                                    display: 'flex',
+                                                                    alignItems: 'center',
+                                                                    justifyContent: 'center'
+                                                                }}>
+                                                                    <Lock size={16} />
+                                                                </div>
+                                                                <div style={{ flex: 1 }}>
+                                                                    <div style={{ fontSize: '0.8rem', fontWeight: 800, color: '#f59e0b' }}>Delivery Handoff OTP</div>
+                                                                    <p style={{ margin: 0, fontSize: '0.7rem', color: '#94a3b8', lineHeight: 1.3 }}>
+                                                                        Share this secure code with your delivery driver to confirm receipt of the plants.
+                                                                    </p>
+                                                                </div>
+                                                            </div>
+                                                            <div style={{
+                                                                background: 'rgba(245, 158, 11, 0.15)',
+                                                                padding: '6px 14px',
+                                                                borderRadius: '8px',
+                                                                border: '1px solid rgba(245, 158, 11, 0.25)',
+                                                                fontSize: '1.1rem',
+                                                                fontWeight: 900,
+                                                                color: '#f59e0b',
+                                                                letterSpacing: '0.05em'
+                                                            }}>
+                                                                {order.deliveryOTP}
                                                             </div>
                                                         </div>
                                                     )}

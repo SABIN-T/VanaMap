@@ -6,7 +6,7 @@ import { Button } from '../components/common/Button';
 import {
     Store, Locate, Info, ArrowRight, Package,
     ShoppingCart, DollarSign, ExternalLink,
-    MessageCircle, CheckCircle, Clock, QrCode, BarChart2, TrendingUp, Shield
+    MessageCircle, CheckCircle, Clock, QrCode, BarChart2, TrendingUp, Shield, Star, ShoppingBag
 } from 'lucide-react';
 import { registerVendor, fetchVendors, updateVendor, fetchVendorAnalytics } from '../services/api';
 import { useAuth } from '../context/AuthContext';
@@ -18,6 +18,7 @@ import type { Vendor } from '../types';
 import { VendorInventory } from '../components/features/vendor/VendorInventory';
 import { VendorOrders } from '../components/features/vendor/VendorOrders';
 import { MarketInsights } from '../components/features/vendor/MarketInsights';
+import { VendorReviewsManager } from '../components/features/vendor/VendorReviewsManager';
 import { GrowthTools } from '../components/features/vendor/GrowthTools';
 import { PaymentSettings } from '../components/features/vendor/PaymentSettings';
 import { VendorPortalLayout } from './VendorPortalLayout';
@@ -86,6 +87,7 @@ export const VendorPortal = () => {
         const path = location.pathname;
         if (path.endsWith('/inventory')) return 'inventory';
         if (path.endsWith('/orders')) return 'orders';
+        if (path.endsWith('/reviews')) return 'reviews';
         if (path.endsWith('/insights')) return 'insights';
         if (path.endsWith('/growth')) return 'growth';
         if (path.endsWith('/payments')) return 'payments';
@@ -229,6 +231,7 @@ export const VendorPortal = () => {
         switch (activeSection) {
             case 'inventory': return 'Catalog Manager';
             case 'orders': return 'Customer Orders';
+            case 'reviews': return 'Customer Reviews';
             case 'insights': return 'Performance Data';
             case 'growth': return 'Growth Engine';
             case 'profile': return 'Shop Settings';
@@ -252,6 +255,11 @@ export const VendorPortal = () => {
                     <VendorOrders
                         vendor={currentVendor}
                     />
+                )}
+
+                {/* SECTION: REVIEWS */}
+                {activeSection === 'reviews' && currentVendor && (
+                    <VendorReviewsManager vendorId={currentVendor.id} />
                 )}
 
                 {/* SECTION: INSIGHTS */}
@@ -337,9 +345,10 @@ export const VendorPortal = () => {
                                     <div className={styles.quickActionsGrid}>
                                         {[
                                             { label: 'Inventory', icon: Package, path: '/vendor/inventory', color: '#3b82f6' },
+                                            { label: 'Orders', icon: ShoppingBag, path: '/vendor/orders', color: '#10b981' },
+                                            { label: 'Reviews', icon: Star, path: '/vendor/reviews', color: '#fbbf24' },
                                             { label: 'Insights', icon: BarChart2, path: '/vendor/insights', color: '#a855f7' },
                                             { label: 'Growth', icon: TrendingUp, path: '/vendor/growth', color: '#facc15' },
-                                            { label: 'Payments', icon: DollarSign, path: '/vendor/payments', color: '#10b981' },
                                             { label: 'Settings', icon: Store, path: '/vendor/profile', color: '#64748b' },
                                         ].map((action, i) => (
                                             <div

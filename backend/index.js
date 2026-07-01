@@ -3964,6 +3964,87 @@ app.delete('/api/vendors/:id', auth, admin, async (req, res) => {
 });
 
 
+// --- VENDOR REVIEWS ENDPOINTS ---
+
+// 1. Get all reviews for a vendor
+app.get('/api/vendors/:id/reviews', async (req, res) => {
+    try {
+        const reviews = await Review.find({ vendorId: req.params.id }).sort({ timestamp: -1 }).lean();
+        res.json(reviews);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// 2. Submit a new review for a vendor
+app.post('/api/vendors/:id/reviews', auth, async (req, res) => {
+    try {
+        const { rating, comment } = req.body;
+        const vendorId = req.params.id;
+
+        if (!rating || rating < 1 || rating > 5) {
+            return res.status(400).json({ error: 'Rating is required and must be between 1 and 5 stars' });
+        }
+
+        // Verify the user has a delivered order from this vendor
+        const sale = await Sale.findOne({
+            userId: req.user.id,
+            vendorId: vendorId,
+            status: 'delivered'
+        });
+
+        if (!sale) {
+            return res.status(403).json({ 
+                error: 'Purchase verification required', 
+                message: 'You can only review shops from which you have received a delivered order.' 
+            });
+        }
+
+        // Create the review
+        const newReview = await Review.create({
+            vendorId,
+            userId: req.user.id,
+            userName: req.user.name || 'Anonymous User',
+            rating: Number(rating),
+            comment: comment || ''
+        });
+
+        res.status(201).json(newReview);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+// 3. Vendor owner reply to a review
+app.post('/api/vendors/:id/reviews/:reviewId/reply', auth, async (req, res) => {
+    try {
+        const { reply } = req.body;
+        const { id: vendorId, reviewId } = req.params;
+
+        if (!reply || !reply.trim()) {
+            return res.status(400).json({ error: 'Reply content is required' });
+        }
+
+        // Check if the user owns this vendor
+        const vendor = await Vendor.findOne({ id: vendorId });
+        if (!vendor || (vendor.userId !== req.user.id && vendor.ownerEmail !== req.user.email)) {
+            return res.status(403).json({ error: 'Access denied. You do not own this shop.' });
+        }
+
+        const review = await Review.findById(reviewId);
+        if (!review) return res.status(404).json({ error: 'Review not found' });
+
+        review.reply = reply;
+        review.repliedAt = new Date();
+        await review.save();
+
+        res.json(review);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+});
+
+
 // --- USER ROUTES ---
 app.get('/api/users', auth, admin, async (req, res) => {
     try {

@@ -10,6 +10,7 @@ import { MessageCircle, MapPin, ExternalLink, RefreshCw, AlertCircle, Star, Spar
 import { Button } from '../components/common/Button';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
+import { VendorReviewsModal } from '../components/features/market/VendorReviewsModal';
 import toast from 'react-hot-toast';
 import styles from './Nearby.module.css';
 import { locationCache, apiCache, cachedFetch } from '../utils/universalCache'; // 🚀 Boost map speed!
@@ -58,6 +59,7 @@ export const Nearby = () => {
     const [showSuggestions, setShowSuggestions] = useState(false);
     const [searchRadius, setSearchRadius] = useState(50);
     const [isScanningPublic, setIsScanningPublic] = useState(false);
+    const [selectedVendorForReviews, setSelectedVendorForReviews] = useState<Vendor | null>(null);
     const hasInitialLocateRef = useRef(false);
 
     // Fetch suggestions as user types (debounced)
@@ -724,6 +726,11 @@ out center;
                                             <Button variant="outline" size="sm" className={styles.actionBtn} onClick={() => window.open(`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(vendor.name)}&query_place_id=${vendor.latitude},${vendor.longitude}`)}>
                                                 <MapPin size={14} /> <span className="hidden sm:inline">Map</span>
                                             </Button>
+                                            {vendor.verified && (
+                                                <Button variant="outline" size="sm" className={styles.actionBtn} style={{ borderColor: 'rgba(245, 158, 11, 0.35)', color: '#f59e0b' }} onClick={() => setSelectedVendorForReviews(vendor)}>
+                                                    <Star size={14} fill="#f59e0b" color="#f59e0b" style={{ marginRight: '2px' }} /> <span className="hidden sm:inline">Reviews</span>
+                                                </Button>
+                                            )}
                                             {vendor.website && (
                                                 <Button variant="outline" size="sm" className={styles.actionBtn} onClick={() => {
                                                     if (vendor.website) {
@@ -781,6 +788,12 @@ out center;
                     )}
                 </div>
             </div>
+            {selectedVendorForReviews && (
+                <VendorReviewsModal 
+                    vendor={selectedVendorForReviews} 
+                    onClose={() => setSelectedVendorForReviews(null)} 
+                />
+            )}
         </div>
     );
 };
