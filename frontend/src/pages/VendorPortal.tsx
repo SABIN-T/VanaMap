@@ -80,7 +80,7 @@ export const VendorPortal = () => {
     const [currentVendor, setCurrentVendor] = useState<Vendor | null>(null);
     const [analytics, setAnalytics] = useState<any>(null);
 
-    const [formData, setFormData] = useState({ shopName: '', phone: '', whatsapp: '', address: '' });
+    const [formData, setFormData] = useState({ shopName: '', phone: '', whatsapp: '', address: '', deliveryRadius: 15 });
 
     const activeSection = useMemo(() => {
         const path = location.pathname;
@@ -113,7 +113,8 @@ export const VendorPortal = () => {
                     shopName: myVendor.name,
                     phone: myVendor.phone || '',
                     whatsapp: myVendor.whatsapp || '',
-                    address: myVendor.address || ''
+                    address: myVendor.address || '',
+                    deliveryRadius: myVendor.deliveryRadius || 15
                 });
                 if (myVendor.latitude && myVendor.longitude) setMarkerPos(new L.LatLng(myVendor.latitude, myVendor.longitude));
 
@@ -184,6 +185,7 @@ export const VendorPortal = () => {
             phone: formData.phone,
             whatsapp: formData.whatsapp,
             address: formData.address,
+            deliveryRadius: Number(formData.deliveryRadius) || 15,
             latitude: markerPos.lat,
             longitude: markerPos.lng,
             verified: isEditing,
@@ -576,6 +578,24 @@ export const VendorPortal = () => {
                                         <label className={styles.label}>Full Address</label>
                                         <textarea rows={2} className={styles.textarea} value={formData.address} onChange={e => setFormData({ ...formData, address: e.target.value })} />
                                     </div>
+                                    <div className={styles.formGroup}>
+                                         <label className={styles.label} style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                             <span>Maximum Delivery Radius</span>
+                                             <span style={{ color: 'var(--color-primary, #10b981)', fontWeight: 800 }}>{formData.deliveryRadius} km</span>
+                                         </label>
+                                         <input
+                                             type="range"
+                                             min="1"
+                                             max="100"
+                                             className={styles.input}
+                                             style={{ height: '8px', padding: 0, cursor: 'pointer' }}
+                                             value={formData.deliveryRadius}
+                                             onChange={e => setFormData({ ...formData, deliveryRadius: parseInt(e.target.value) || 15 })}
+                                         />
+                                         <span style={{ fontSize: '0.7rem', color: 'var(--color-text-dim)', marginTop: '4px', display: 'block' }}>
+                                             Set the maximum distance you are willing to deliver orders from your shop location.
+                                         </span>
+                                     </div>
                                     <div className={styles.coordsBox}>
                                         <div className={styles.coordValue}>{markerPos.lat.toFixed(5)}, {markerPos.lng.toFixed(5)}</div>
                                         <button type="button" onClick={handleAutoLocate} disabled={isLocating} className={styles.gpsBtn}>

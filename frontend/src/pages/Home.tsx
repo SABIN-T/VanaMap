@@ -20,7 +20,7 @@ import { useAuth } from '../context/AuthContext';
 export const Home = () => {
     const [plants, setPlants] = useState<Plant[]>([]);
     const [vendors, setVendors] = useState<Vendor[]>([]);
-    const [filter, setFilter] = useState<'all' | 'indoor' | 'outdoor'>('all');
+    const [filter, setFilter] = useState<'all' | 'indoor' | 'outdoor' | 'care'>('all');
 
 
     const [searchQuery, setSearchQuery] = useState('');
@@ -685,7 +685,7 @@ export const Home = () => {
                         <h3 className={styles.filterQuestion}>Which plant are you looking for?</h3>
 
                         {/* Column Layout Filter Cards - Matching Shops Design */}
-                        <div className={styles.typeFilterContainer}>
+                        <div className={styles.typeFilterContainer} style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
                             <div
                                 className={`${styles.typeFilterCard} ${filter === 'indoor' ? styles.typeFilterActive : ''}`}
                                 onClick={() => {
@@ -710,7 +710,21 @@ export const Home = () => {
                                 <div className={styles.typeFilterIcon}>🌲</div>
                                 <div className={styles.typeFilterInfo}>
                                     <span className={styles.typeFilterName}>Outdoor</span>
-                                    <span className={styles.typeFilterDesc}>Natural Resilience</span>
+                                    <span className={styles.typeFilterDesc}>Resilient Species</span>
+                                </div>
+                            </div>
+
+                            <div
+                                className={`${styles.typeFilterCard} ${filter === 'care' ? styles.typeFilterActive : ''}`}
+                                onClick={() => {
+                                    setFilter(filter === 'care' ? 'all' : 'care');
+                                    scrollToPlants();
+                                }}
+                            >
+                                <div className={styles.typeFilterIcon}>🧴</div>
+                                <div className={styles.typeFilterInfo}>
+                                    <span className={styles.typeFilterName}>Care</span>
+                                    <span className={styles.typeFilterDesc}>Fungicide & NPK</span>
                                 </div>
                             </div>
                         </div>

@@ -14,7 +14,7 @@ export interface Plant {
     advantages: string[];
     price?: number;
     // Base price, vendors may override
-    type: 'indoor' | 'outdoor';
+    type: 'indoor' | 'outdoor' | 'care';
     lifespan?: string;
     isNocturnal?: boolean; // For CAM plants (Snake Plant, Aloe) that produce O2 at night
     ecosystem?: string;
@@ -62,6 +62,7 @@ export interface Vendor {
     highlyRecommended?: boolean;
     distance?: number;
     category?: string;
+    deliveryRadius?: number; // geofencing max delivery range in km
 }
 
 export interface CartItem {

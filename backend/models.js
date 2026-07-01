@@ -15,7 +15,7 @@ const PlantSchema = new mongoose.Schema({
     medicinalValues: [String],
     advantages: [String],
     price: Number,
-    type: { type: String, enum: ['indoor', 'outdoor'], required: true },
+    type: { type: String, enum: ['indoor', 'outdoor', 'care'], required: true },
     lifespan: { type: String, default: 'Unknown' }, // e.g. "Perennial (10+ years)"
     // Biometric Data for AI Scanning
     foliageTexture: String, // e.g. "Glossy", "Matte", "Pubescent"
@@ -40,6 +40,7 @@ const VendorSchema = new mongoose.Schema({
     state: String,
     country: String,
     district: String,
+    deliveryRadius: { type: Number, default: 15 }, // in Kilometers
     inventoryIds: [String],
     inventory: [{
         plantId: String,

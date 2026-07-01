@@ -248,7 +248,8 @@ export const Cart = () => {
             vendor.longitude
         );
 
-        if (distance > deliveryRules.maxDistanceKm) {
+        const maxRadius = (vendor && 'deliveryRadius' in vendor && vendor.deliveryRadius !== undefined) ? vendor.deliveryRadius : deliveryRules.maxDistanceKm;
+        if (distance > maxRadius) {
             return { fee: 0, distance, outOfRange: true, pending: false };
         }
 

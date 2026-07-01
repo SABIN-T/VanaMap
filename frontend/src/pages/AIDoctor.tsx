@@ -1,9 +1,10 @@
 import { useState, useRef, useEffect, useCallback, lazy } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Send, Sparkles, Leaf, Bot, User, Trash2, Download, Calendar, Camera, Mic, Volume2, VolumeX, Zap, Loader2, Settings, X, Stethoscope, CloudSun, ScrollText, CheckCircle2, AlertCircle } from 'lucide-react';
-import { chatWithDrFlora, API_URL } from '../services/api';
+import { chatWithDrFlora, API_URL, fetchPlants, fetchVendors } from '../services/api';
 import toast from 'react-hot-toast';
 import { useAuth } from '../context/AuthContext';
+import { useCart } from '../context/CartContext';
 import styles from './AIDoctor.module.css';
 import remarkGfm from 'remark-gfm';
 import { mlCache } from '../utils/mlCache';
@@ -102,6 +103,64 @@ export const AIDoctor = () => {
     const [input, setInput] = useState('');
     const [loading, setLoading] = useState(false);
     const [activeDossiers, setActiveDossiers] = useState<any[]>([]);
+    
+    // --- CART & SUPPLIES RECOMMENDATION STATES ---
+    const { addToCart } = useCart();
+    const [careProducts, setCareProducts] = useState<any[]>([]);
+    const [vendors, setVendors] = useState<any[]>([]);
+    const [suggestedProducts, setSuggestedProducts] = useState<any[]>([]);
+
+    useEffect(() => {
+        const init = async () => {
+            try {
+                const [plantsList, vendorsList] = await Promise.all([
+                    fetchPlants(),
+                    fetchVendors()
+                ]);
+                setCareProducts(plantsList.filter((p: any) => p.type === 'care'));
+                setVendors(vendorsList);
+            } catch (e) {
+                console.error("Error loading products/vendors for AI Doctor:", e);
+            }
+        };
+        init();
+    }, []);
+
+    useEffect(() => {
+        if (messages.length === 0 || careProducts.length === 0) return;
+        const lastMessage = messages[messages.length - 1];
+        if (lastMessage.role !== 'assistant') return;
+
+        const content = lastMessage.content.toLowerCase();
+        const matched: any[] = [];
+
+        if (content.includes('pest') || content.includes('mite') || content.includes('aphid') || content.includes('mealybug') || content.includes('insect') || content.includes('bug')) {
+            const neem = careProducts.find(p => p.id === 'care_neem_oil');
+            if (neem) matched.push(neem);
+        }
+        if (content.includes('fertilizer') || content.includes('npk') || content.includes('nutrient') || content.includes('nitrogen') || content.includes('growth') || content.includes('yellow leaf') || content.includes('yellowing')) {
+            const npk = careProducts.find(p => p.id === 'care_npk_fertilizer');
+            if (npk) matched.push(npk);
+        }
+        if (content.includes('fung') || content.includes('fungus') || content.includes('mildew') || content.includes('rust') || content.includes('mold') || content.includes('rot') || content.includes('spot')) {
+            const fungicide = careProducts.find(p => p.id === 'care_fungicide');
+            if (fungicide) matched.push(fungicide);
+        }
+        if (content.includes('soil') || content.includes('potting') || content.includes('repot') || content.includes('mix') || content.includes('compost')) {
+            const soil = careProducts.find(p => p.id === 'care_soil_mix');
+            if (soil) matched.push(soil);
+        }
+
+        setSuggestedProducts(matched);
+    }, [messages, careProducts]);
+
+    const handleAddCareToCart = (product: any) => {
+        // Find the first vendor that has this product in their inventory
+        const seller = vendors.find(v => v.inventory?.some((i: any) => i.plantId === product.id));
+        const sellerId = seller ? seller.id : undefined;
+        const sellerPrice = seller?.inventory?.find((i: any) => i.plantId === product.id)?.price || product.price;
+        addToCart(product, sellerId, sellerPrice);
+    };
 
     // --- GROWTH SIMULATOR STATES ---
     const [showGrowthSim, setShowGrowthSim] = useState(false);
@@ -1302,7 +1361,7 @@ export const AIDoctor = () => {
             {/* Chat Theatre */}
             <div className={styles.chatContainer}>
                 <div className={styles.messagesWrapper}>
-                    {messages.map((message) => (
+                    {messages.map((message, index) => (
                         <div key={message.id} className={`${styles.message} ${message.role === 'user' ? styles.userMessage : styles.assistantMessage}`}>
                             <div className={styles.messageIcon}>
                                 {message.role === 'user' ? <User size={20} /> : <Bot size={20} />}
@@ -1381,6 +1440,36 @@ export const AIDoctor = () => {
                                         {message.content}
                                     </ReactMarkdown>
                                 </div>
+
+                                {message.role === 'assistant' && index === messages.length - 1 && suggestedProducts.length > 0 && (
+                                    <div className={styles.suggestionsContainer}>
+                                        <div className={styles.suggestionsHeader}>
+                                            <Sparkles size={14} style={{ color: '#fbbf24', fill: '#fbbf24' }} />
+                                            <span>Recommended Care Treatments</span>
+                                        </div>
+                                        <div className={styles.suggestionsCarousel}>
+                                            {suggestedProducts.map((prod) => {
+                                                const seller = vendors.find(v => v.inventory?.some((i: any) => i.plantId === prod.id));
+                                                const sellerPrice = seller?.inventory?.find((i: any) => i.plantId === prod.id)?.price || prod.price || 199;
+                                                return (
+                                                    <div key={prod.id} className={styles.suggestionCard}>
+                                                        <img src={prod.imageUrl} alt={prod.name} className={styles.suggestionImg} />
+                                                        <div className={styles.suggestionInfo}>
+                                                            <h4 className={styles.suggestionTitle}>{prod.name}</h4>
+                                                            <p className={styles.suggestionPrice}>₹{sellerPrice}</p>
+                                                            <button
+                                                                onClick={() => handleAddCareToCart(prod)}
+                                                                className={styles.addToCartBtn}
+                                                            >
+                                                                Add to Cart
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     ))}

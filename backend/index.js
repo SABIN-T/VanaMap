@@ -765,6 +765,122 @@ const connectDB = async () => {
         } else {
             console.log('✅ Database already populated');
         }
+
+        // Ensure Care Products are seeded and added to vendor inventory
+        const seedCareProducts = async () => {
+            try {
+                const careProducts = [
+                    {
+                        id: "care_neem_oil",
+                        name: "Organic Neem Oil Pest Spray",
+                        scientificName: "Azadirachta indica extract",
+                        description: "100% cold-pressed organic Neem Oil spray. Highly effective natural treatment for Spider Mites, Aphids, Mealybugs, and fungal spots. Safe for indoor and outdoor plants.",
+                        imageUrl: "https://images.unsplash.com/photo-1600565193348-f74bd3c7ccdf?auto=format&fit=crop&w=800&q=80",
+                        idealTempMin: 10,
+                        idealTempMax: 40,
+                        minHumidity: 10,
+                        sunlight: "N/A",
+                        oxygenLevel: "N/A",
+                        medicinalValues: ["Organic Pest Control", "Antifungal"],
+                        advantages: ["Pet safe in dilution", "Controls 100+ pests"],
+                        price: 199,
+                        type: "care",
+                        audience: "both"
+                    },
+                    {
+                        id: "care_npk_fertilizer",
+                        name: "NPK 19-19-19 Premium Fertilizer",
+                        scientificName: "Balanced NPK Solution",
+                        description: "Balanced NPK liquid concentrate fertilizer. Promotes strong vegetative growth, leaf color, and healthy root development. Ideal for all indoor house plants.",
+                        imageUrl: "https://images.unsplash.com/photo-1599599810769-bcde5a160d32?auto=format&fit=crop&w=800&q=80",
+                        idealTempMin: 5,
+                        idealTempMax: 45,
+                        minHumidity: 10,
+                        sunlight: "N/A",
+                        oxygenLevel: "N/A",
+                        medicinalValues: ["Nutrient Supplement"],
+                        advantages: ["Balanced growth formula", "Water-soluble"],
+                        price: 249,
+                        type: "care",
+                        audience: "both"
+                    },
+                    {
+                        id: "care_soil_mix",
+                        name: "Premium Aerated Potting Soil Mix",
+                        scientificName: "Organic Growth Medium",
+                        description: "Complete organic soil mix enriched with coco peat, vermicompost, and perlite. Provides optimal aeration, water retention, and essential micronutrients.",
+                        imageUrl: "https://images.unsplash.com/photo-1416879595882-3373a0480b5b?auto=format&fit=crop&w=800&q=80",
+                        idealTempMin: 0,
+                        idealTempMax: 50,
+                        minHumidity: 5,
+                        sunlight: "N/A",
+                        oxygenLevel: "N/A",
+                        medicinalValues: ["Substrate Conditioning"],
+                        advantages: ["Enriched with Vermicompost", "Optimized pH & drainage"],
+                        price: 299,
+                        type: "care",
+                        audience: "both"
+                    },
+                    {
+                        id: "care_fungicide",
+                        name: "Systemic Copper Fungicide Spray",
+                        scientificName: "Copper Octanoate solution",
+                        description: "Highly effective broad-spectrum copper fungicide. Controls Powdery Mildew, Black Spot, Rust, and Anthracnose on indoor/outdoor plants.",
+                        imageUrl: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?auto=format&fit=crop&w=800&q=80",
+                        idealTempMin: 5,
+                        idealTempMax: 40,
+                        minHumidity: 10,
+                        sunlight: "N/A",
+                        oxygenLevel: "N/A",
+                        medicinalValues: ["Foliage Protection"],
+                        advantages: ["Controls Powdery Mildew & Rust", "Organic compatible"],
+                        price: 349,
+                        type: "care",
+                        audience: "both"
+                    }
+                ];
+
+                for (const prod of careProducts) {
+                    await Plant.updateOne({ id: prod.id }, { $set: prod }, { upsert: true });
+                }
+                console.log("🧴 Seeded care and treatment products.");
+
+                // Add these products to all verified vendors so they are instantly in stock
+                const vendors = await Vendor.find();
+                for (const vendor of vendors) {
+                    let updated = false;
+                    if (!vendor.inventory) vendor.inventory = [];
+                    for (const prod of careProducts) {
+                        const hasItem = vendor.inventory.some(i => i.plantId === prod.id);
+                        if (!hasItem) {
+                            vendor.inventory.push({
+                                plantId: prod.id,
+                                price: prod.price,
+                                quantity: 50,
+                                status: 'approved',
+                                inStock: true,
+                                sellingMode: 'both'
+                            });
+                            updated = true;
+                        }
+                    }
+                    if (updated) {
+                        if (vendor.inventoryIds) {
+                            for (const prod of careProducts) {
+                                if (!vendor.inventoryIds.includes(prod.id)) {
+                                    vendor.inventoryIds.push(prod.id);
+                                }
+                            }
+                        }
+                        await vendor.save();
+                    }
+                }
+                console.log(`🏪 Updated inventory of ${vendors.length} vendors with care supplies.`);
+            } catch (err) {
+                console.error("❌ Failed to seed care products:", err.message);
+            }
+        };
+        await seedCareProducts();
     } catch (err) {
         console.error('MongoDB Connection Error:', err.message);
         // Do not exit process, let server run to serve /health
