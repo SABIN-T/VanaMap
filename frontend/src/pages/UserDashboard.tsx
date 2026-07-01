@@ -96,7 +96,7 @@ export const UserDashboard = () => {
     // Redirect if not logged in
     useEffect(() => {
         if (!user && !loading) {
-            navigate('/login');
+            navigate('/auth');
         }
     }, [user, loading, navigate]);
 

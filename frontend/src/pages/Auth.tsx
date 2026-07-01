@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
+import { useSearchParams, useLocation } from 'react-router-dom';
 import { Button } from '../components/common/Button';
 import { User, ArrowLeft, Store, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
@@ -12,7 +12,6 @@ import { getLocation } from '../utils/getLocation';
 import { googleAuth } from '../services/googleAuth';
 
 export const Auth = () => {
-    const navigate = useNavigate();
     const location = useLocation();
     const [searchParams] = useSearchParams();
     const { login, signup, user, verify, setAuthSession } = useAuth();
@@ -143,20 +142,20 @@ export const Auth = () => {
             const origin = location.state?.from?.pathname || location.state?.from;
 
             if (origin) {
-                navigate(origin, { replace: true });
+                window.location.href = origin;
                 return;
             }
 
             if (user.role === 'admin') {
                 localStorage.setItem('adminAuthenticated', 'true');
-                navigate('/admin', { replace: true });
+                window.location.href = '/admin';
             } else if (user.role === 'vendor') {
-                navigate('/vendor', { replace: true });
+                window.location.href = '/vendor';
             } else {
-                navigate('/dashboard', { replace: true });
+                window.location.href = '/dashboard';
             }
         }
-    }, [user, navigate, location]);
+    }, [user, location]);
 
     const handleNudge = async () => {
         if (!email) { toast.error("Please enter your email address first"); return; }
