@@ -240,6 +240,17 @@ export const PlantVendorsModal = ({ plant, onClose }: PlantVendorsModalProps) =>
                                             </span>
                                             {vendor.quantity > 0 && <span className={styles.stockStatus}>In Stock</span>}
                                         </div>
+                                        <div className={styles.tapForDetails} style={{ 
+                                            fontSize: '0.65rem', 
+                                            color: '#34d399', 
+                                            display: 'flex', 
+                                            alignItems: 'center', 
+                                            gap: '3px', 
+                                            marginTop: '6px',
+                                            fontWeight: 'bold'
+                                        }}>
+                                            <span>ℹ️ Click to see nursery details & reviews</span>
+                                        </div>
                                     </div>
 
                                     {/* Right: Price & Quick Buy */}
