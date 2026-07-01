@@ -645,49 +645,51 @@ Please be specific and accurate.`;
 
 
                             {/* Biometric Profile */}
-                            <div className="mb-10">
-                                <div className={styles.sectionTitle}>
-                                    <ScanLine size={18} /> Biometric Profile
+                            {newPlant.type !== 'care' && (
+                                <div className="mb-10">
+                                    <div className={styles.sectionTitle}>
+                                        <ScanLine size={18} /> Biometric Profile
+                                    </div>
+                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                        <div className={styles.inputGroup}>
+                                            <label className={styles.label}>Leaf Shape</label>
+                                            <input
+                                                value={newPlant.leafShape}
+                                                onChange={(e) => setNewPlant({ ...newPlant, leafShape: e.target.value })}
+                                                className={styles.glassInput}
+                                                placeholder="e.g. Ovate, Lanceolate"
+                                            />
+                                        </div>
+                                        <div className={styles.inputGroup}>
+                                            <label className={styles.label}>Stem Structure</label>
+                                            <input
+                                                value={newPlant.stemStructure}
+                                                onChange={(e) => setNewPlant({ ...newPlant, stemStructure: e.target.value })}
+                                                className={styles.glassInput}
+                                                placeholder="e.g. Woody, Succulent"
+                                            />
+                                        </div>
+                                        <div className={styles.inputGroup}>
+                                            <label className={styles.label}>Growth Habit</label>
+                                            <input
+                                                value={newPlant.overallHabit}
+                                                onChange={(e) => setNewPlant({ ...newPlant, overallHabit: e.target.value })}
+                                                className={styles.glassInput}
+                                                placeholder="e.g. Climbing, Bushy"
+                                            />
+                                        </div>
+                                        <div className={styles.inputGroup}>
+                                            <label className={styles.label}>Distinctive Features</label>
+                                            <input
+                                                value={newPlant.biometricFeatures?.join(', ')}
+                                                onChange={(e) => setNewPlant({ ...newPlant, biometricFeatures: e.target.value.split(',').map(s => s.trim()) })}
+                                                className={styles.glassInput}
+                                                placeholder="Comma separated e.g. Serrated edges"
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <div className={styles.inputGroup}>
-                                        <label className={styles.label}>Leaf Shape</label>
-                                        <input
-                                            value={newPlant.leafShape}
-                                            onChange={(e) => setNewPlant({ ...newPlant, leafShape: e.target.value })}
-                                            className={styles.glassInput}
-                                            placeholder="e.g. Ovate, Lanceolate"
-                                        />
-                                    </div>
-                                    <div className={styles.inputGroup}>
-                                        <label className={styles.label}>Stem Structure</label>
-                                        <input
-                                            value={newPlant.stemStructure}
-                                            onChange={(e) => setNewPlant({ ...newPlant, stemStructure: e.target.value })}
-                                            className={styles.glassInput}
-                                            placeholder="e.g. Woody, Succulent"
-                                        />
-                                    </div>
-                                    <div className={styles.inputGroup}>
-                                        <label className={styles.label}>Growth Habit</label>
-                                        <input
-                                            value={newPlant.overallHabit}
-                                            onChange={(e) => setNewPlant({ ...newPlant, overallHabit: e.target.value })}
-                                            className={styles.glassInput}
-                                            placeholder="e.g. Climbing, Bushy"
-                                        />
-                                    </div>
-                                    <div className={styles.inputGroup}>
-                                        <label className={styles.label}>Distinctive Features</label>
-                                        <input
-                                            value={newPlant.biometricFeatures?.join(', ')}
-                                            onChange={(e) => setNewPlant({ ...newPlant, biometricFeatures: e.target.value.split(',').map(s => s.trim()) })}
-                                            className={styles.glassInput}
-                                            placeholder="Comma separated e.g. Serrated edges"
-                                        />
-                                    </div>
-                                </div>
-                            </div>
+                            )}
 
                             {/* 3. Vital Metrics */}
                             <div className="mb-10">
@@ -705,6 +707,7 @@ Please be specific and accurate.`;
                                         >
                                             <option value="indoor">Indoor</option>
                                             <option value="outdoor">Outdoor</option>
+                                            <option value="care">Care (Fungicide & NPK)</option>
                                         </select>
                                     </div>
                                     <div className={styles.inputGroup}>
@@ -719,94 +722,98 @@ Please be specific and accurate.`;
                                     </div>
                                 </div>
 
-                                {/* Sunlight Control */}
-                                <div className={styles.inputGroup}>
-                                    <label className={styles.label}>Sunlight Requirement</label>
-                                    <div className={styles.segmentedControl}>
-                                        {['low', 'medium', 'high', 'direct'].map(lvl => (
-                                            <button
-                                                key={lvl}
-                                                type="button"
-                                                onClick={() => setNewPlant({ ...newPlant, sunlight: lvl as any })}
-                                                className={`${styles.segmentBtn} ${newPlant.sunlight === lvl ? styles.segmentBtnActive : ''}`}
-                                            >
-                                                {lvl}
-                                            </button>
-                                        ))}
-                                    </div>
-                                </div>
+                                                      {/* Sunlight Control */}
+                                {newPlant.type !== 'care' && (
+                                    <>
+                                        <div className={styles.inputGroup}>
+                                            <label className={styles.label}>Sunlight Requirement</label>
+                                            <div className={styles.segmentedControl}>
+                                                {['low', 'medium', 'high', 'direct'].map(lvl => (
+                                                    <button
+                                                        key={lvl}
+                                                        type="button"
+                                                        onClick={() => setNewPlant({ ...newPlant, sunlight: lvl as any })}
+                                                        className={`${styles.segmentBtn} ${newPlant.sunlight === lvl ? styles.segmentBtnActive : ''}`}
+                                                    >
+                                                        {lvl}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
 
-                                {/* Sliders & Advanced */}
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
-                                    <div>
-                                        <div className="flex justify-between items-center mb-4">
-                                            <label className="text-xs font-bold uppercase text-slate-400 flex items-center gap-2">
-                                                <Droplets size={14} className="text-blue-400" /> Humidity
-                                            </label>
-                                            <span className="text-sm font-mono text-blue-400 font-bold">{newPlant.minHumidity}%</span>
-                                        </div>
-                                        <div className={styles.rangeWrapper}>
-                                            <input
-                                                type="range" min="0" max="100" step="10"
-                                                value={newPlant.minHumidity}
-                                                onChange={(e) => setNewPlant({ ...newPlant, minHumidity: Number(e.target.value) })}
-                                                className={styles.rangeInput}
-                                            />
-                                        </div>
-                                    </div>
+                                        {/* Sliders & Advanced */}
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+                                            <div>
+                                                <div className="flex justify-between items-center mb-4">
+                                                    <label className="text-xs font-bold uppercase text-slate-400 flex items-center gap-2">
+                                                        <Droplets size={14} className="text-blue-400" /> Humidity
+                                                    </label>
+                                                    <span className="text-sm font-mono text-blue-400 font-bold">{newPlant.minHumidity}%</span>
+                                                </div>
+                                                <div className={styles.rangeWrapper}>
+                                                    <input
+                                                        type="range" min="0" max="100" step="10"
+                                                        value={newPlant.minHumidity}
+                                                        onChange={(e) => setNewPlant({ ...newPlant, minHumidity: Number(e.target.value) })}
+                                                        className={styles.rangeInput}
+                                                    />
+                                                </div>
+                                            </div>
 
-                                    <div>
-                                        <label className="text-xs font-bold uppercase text-slate-400 flex items-center gap-2 mb-3">
-                                            <Wind size={14} className="text-purple-400" /> Oxygen Output
-                                        </label>
-                                        <select
-                                            value={newPlant.oxygenLevel}
-                                            onChange={(e) => setNewPlant({ ...newPlant, oxygenLevel: e.target.value as any })}
-                                            className={styles.glassSelect}
-                                        >
-                                            <option value="low">Low</option>
-                                            <option value="moderate">Moderate</option>
-                                            <option value="high">High</option>
-                                            <option value="very-high">Purifier (Very High)</option>
-                                        </select>
-                                    </div>
-                                </div>
+                                            <div>
+                                                <label className="text-xs font-bold uppercase text-slate-400 flex items-center gap-2 mb-3">
+                                                    <Wind size={14} className="text-purple-400" /> Oxygen Output
+                                                </label>
+                                                <select
+                                                    value={newPlant.oxygenLevel}
+                                                    onChange={(e) => setNewPlant({ ...newPlant, oxygenLevel: e.target.value as any })}
+                                                    className={styles.glassSelect}
+                                                >
+                                                    <option value="low">Low</option>
+                                                    <option value="moderate">Moderate</option>
+                                                    <option value="high">High</option>
+                                                    <option value="very-high">Purifier (Very High)</option>
+                                                </select>
+                                            </div>
+                                        </div>
 
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
-                                    <div>
-                                        <div className="flex justify-between items-center mb-4">
-                                            <label className="text-xs font-bold uppercase text-slate-400 flex items-center gap-2">
-                                                <Thermometer size={14} className="text-amber-400" /> Ideal Temp (Min)
-                                            </label>
-                                            <span className="text-sm font-mono text-amber-400 font-bold">{newPlant.idealTempMin}°C</span>
-                                        </div>
-                                        <div className={styles.rangeWrapper}>
-                                            <input
-                                                type="range" min="0" max="40" step="1"
-                                                value={newPlant.idealTempMin}
-                                                onChange={(e) => setNewPlant({ ...newPlant, idealTempMin: Number(e.target.value) })}
-                                                className={styles.rangeInput}
-                                            />
-                                        </div>
-                                    </div>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
+                                            <div>
+                                                <div className="flex justify-between items-center mb-4">
+                                                    <label className="text-xs font-bold uppercase text-slate-400 flex items-center gap-2">
+                                                        <Thermometer size={14} className="text-amber-400" /> Ideal Temp (Min)
+                                                    </label>
+                                                    <span className="text-sm font-mono text-amber-400 font-bold">{newPlant.idealTempMin}°C</span>
+                                                </div>
+                                                <div className={styles.rangeWrapper}>
+                                                    <input
+                                                        type="range" min="0" max="40" step="1"
+                                                        value={newPlant.idealTempMin}
+                                                        onChange={(e) => setNewPlant({ ...newPlant, idealTempMin: Number(e.target.value) })}
+                                                        className={styles.rangeInput}
+                                                    />
+                                                </div>
+                                            </div>
 
-                                    <div>
-                                        <div className="flex justify-between items-center mb-4">
-                                            <label className="text-xs font-bold uppercase text-slate-400 flex items-center gap-2">
-                                                <Thermometer size={14} className="text-red-400" /> Ideal Temp (Max)
-                                            </label>
-                                            <span className="text-sm font-mono text-red-400 font-bold">{newPlant.idealTempMax}°C</span>
+                                            <div>
+                                                <div className="flex justify-between items-center mb-4">
+                                                    <label className="text-xs font-bold uppercase text-slate-400 flex items-center gap-2">
+                                                        <Thermometer size={14} className="text-red-400" /> Ideal Temp (Max)
+                                                    </label>
+                                                    <span className="text-sm font-mono text-red-400 font-bold">{newPlant.idealTempMax}°C</span>
+                                                </div>
+                                                <div className={styles.rangeWrapper}>
+                                                    <input
+                                                        type="range" min="0" max="50" step="1"
+                                                        value={newPlant.idealTempMax}
+                                                        onChange={(e) => setNewPlant({ ...newPlant, idealTempMax: Number(e.target.value) })}
+                                                        className={styles.rangeInput}
+                                                    />
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div className={styles.rangeWrapper}>
-                                            <input
-                                                type="range" min="0" max="50" step="1"
-                                                value={newPlant.idealTempMax}
-                                                onChange={(e) => setNewPlant({ ...newPlant, idealTempMax: Number(e.target.value) })}
-                                                className={styles.rangeInput}
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
+                                    </>
+                                )}
                             </div>
 
                             {/* Submit Area */}
