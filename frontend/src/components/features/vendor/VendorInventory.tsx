@@ -257,6 +257,128 @@ export const VendorInventory = ({ vendor, onUpdate }: VendorInventoryProps) => {
         return vendor.inventory?.find(i => i.plantId === plantId);
     };
 
+    const livePlants = filteredPlants.filter(p => getInventoryItem(p.id) !== undefined);
+    const notLivePlants = filteredPlants.filter(p => getInventoryItem(p.id) === undefined);
+
+    const renderPlantCard = (plant: Plant) => {
+        const invItem = getInventoryItem(plant.id);
+        const editState = editValues[plant.id] || { price: '', quantity: '0', inStock: true, sellingMode: 'offline' };
+        const isPending = invItem?.status === 'pending';
+        const displayImage = (invItem?.customImages && invItem.customImages.length > 0) ? invItem.customImages[0] : plant.imageUrl;
+
+        return (
+            <div key={plant.id} className={styles.card}>
+                <div className={styles.imageWrapper}>
+                    <img src={displayImage} className={styles.image} alt={plant.name} style={{ objectFit: 'cover' }} />
+                    {invItem && (
+                        <div className={`${styles.statusBadge} ${isPending ? styles.statusPending : styles.statusLive} `}>
+                            {isPending ? <AlertCircle size={10} /> : <CheckCircle size={10} />}
+                            {isPending ? 'Pending' : 'Live'}
+                        </div>
+                    )}
+                    {invItem && (
+                        <button
+                            onClick={() => setEditingPlant({ plant, item: invItem })}
+                            style={{
+                                position: 'absolute', bottom: '8px', right: '8px',
+                                background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)',
+                                borderRadius: '50%', width: '32px', height: '32px',
+                                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                border: '1px solid rgba(255,255,255,0.2)', cursor: 'pointer',
+                                color: 'white'
+                            }}
+                            title="Edit Photos & Details"
+                        >
+                            <Edit2 size={16} />
+                        </button>
+                    )}
+                </div>
+
+                <div className={styles.cardContent}>
+                    <h3 className={styles.plantName}>{plant.name}</h3>
+                    <p className={styles.scientificName}>{plant.scientificName}</p>
+
+                    <div className={styles.controls}>
+                        <div className={styles.guidelineRow}>
+                            <span>Market Guideline:</span>
+                            <span className={styles.guidelineValue}>{formatCurrency(plant.price)}</span>
+                        </div>
+
+                        <div className={styles.inputGroup}>
+                            <div className={styles.priceInputWrapper}>
+                                <DollarSign size={14} className={styles.currencySymbol} />
+                                <input
+                                    type="number"
+                                    placeholder="Price"
+                                    value={editState.price}
+                                    onChange={e => handleFieldChange(plant.id, 'price', e.target.value)}
+                                    className={styles.priceInput}
+                                />
+                            </div>
+                            <div className={styles.priceInputWrapper} style={{ width: '80px', marginLeft: '0.5rem' }}>
+                                <span style={{ fontSize: '0.7rem', color: '#64748b', paddingLeft: '8px' }}>Qty:</span>
+                                <input
+                                    type="number"
+                                    placeholder="Qty"
+                                    value={editState.quantity}
+                                    onChange={e => handleFieldChange(plant.id, 'quantity', e.target.value)}
+                                    className={styles.priceInput}
+                                    style={{ paddingLeft: '4px' }}
+                                />
+                            </div>
+                            <button
+                                onClick={() => handleSaveItem(plant)}
+                                className={styles.saveBtn}
+                                title={invItem ? "Save Changes" : "Add to Storefront"}
+                            >
+                                <Save size={18} />
+                            </button>
+                            {invItem && (
+                                <button
+                                    onClick={() => handleRemoveItem(plant.id)}
+                                    className={styles.deleteBtn}
+                                    title="Remove from Inventory"
+                                    style={{ marginLeft: '0.5rem', padding: '0.5rem', borderRadius: '8px', background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', border: 'none', cursor: 'pointer' }}
+                                >
+                                    <Trash2 size={18} />
+                                </button>
+                            )}
+                        </div>
+
+                        <div className={styles.modeRow}>
+                            <span className={styles.modeLabel}>Selling Via:</span>
+                            <select
+                                className={styles.modeSelect}
+                                value={editState.sellingMode}
+                                onChange={e => handleFieldChange(plant.id, 'sellingMode', e.target.value)}
+                            >
+                                <option value="offline">Storefront (Offline)</option>
+                                <option value="online">Home Delivery (Online)</option>
+                                <option value="both">Both (Online + Offline)</option>
+                            </select>
+                        </div>
+
+                        {invItem && (
+                            <div className={styles.stockToggle}>
+                                <label className={styles.switch}>
+                                    <input
+                                        type="checkbox"
+                                        checked={editState.inStock}
+                                        onChange={() => toggleStock(plant.id)}
+                                    />
+                                    <span className={styles.slider}></span>
+                                </label>
+                                <span className={styles.stockLabel}>
+                                    {editState.inStock ? 'In Stock' : 'Out of Stock'}
+                                </span>
+                            </div>
+                        )}
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
     if (!vendor.verified) {
         return (
             <div className={styles.container} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '400px', textAlign: 'center' }}>
@@ -367,125 +489,88 @@ export const VendorInventory = ({ vendor, onUpdate }: VendorInventoryProps) => {
             {loading ? (
                 <div className="p-12 text-center text-slate-500 animate-pulse">Loading catalog...</div>
             ) : (
-                <div className={styles.grid}>
-                    {filteredPlants.map(plant => {
-                        const invItem = getInventoryItem(plant.id);
-                        const editState = editValues[plant.id] || { price: '', quantity: '0', inStock: true, sellingMode: 'offline' };
-                        const isPending = invItem?.status === 'pending';
-                        const displayImage = (invItem?.customImages && invItem.customImages.length > 0) ? invItem.customImages[0] : plant.imageUrl;
-
-                        return (
-                            <div key={plant.id} className={styles.card}>
-                                <div className={styles.imageWrapper}>
-                                    <img src={displayImage} className={styles.image} alt={plant.name} style={{ objectFit: 'cover' }} />
-                                    {invItem && (
-                                        <div className={`${styles.statusBadge} ${isPending ? styles.statusPending : styles.statusLive} `}>
-                                            {isPending ? <AlertCircle size={10} /> : <CheckCircle size={10} />}
-                                            {isPending ? 'Pending' : 'Live'}
-                                        </div>
-                                    )}
-                                    {invItem && (
-                                        <button
-                                            onClick={() => setEditingPlant({ plant, item: invItem })}
-                                            style={{
-                                                position: 'absolute', bottom: '8px', right: '8px',
-                                                background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(4px)',
-                                                borderRadius: '50%', width: '32px', height: '32px',
-                                                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                                                border: '1px solid rgba(255,255,255,0.2)', cursor: 'pointer',
-                                                color: 'white'
-                                            }}
-                                            title="Edit Photos & Details"
-                                        >
-                                            <Edit2 size={16} />
-                                        </button>
-                                    )}
-                                </div>
-
-                                <div className={styles.cardContent}>
-                                    <h3 className={styles.plantName}>{plant.name}</h3>
-                                    <p className={styles.scientificName}>{plant.scientificName}</p>
-
-                                    <div className={styles.controls}>
-                                        <div className={styles.guidelineRow}>
-                                            <span>Market Guideline:</span>
-                                            <span className={styles.guidelineValue}>{formatCurrency(plant.price)}</span>
-                                        </div>
-
-                                        <div className={styles.inputGroup}>
-                                            <div className={styles.priceInputWrapper}>
-                                                <DollarSign size={14} className={styles.currencySymbol} />
-                                                <input
-                                                    type="number"
-                                                    placeholder="Price"
-                                                    value={editState.price}
-                                                    onChange={e => handleFieldChange(plant.id, 'price', e.target.value)}
-                                                    className={styles.priceInput}
-                                                />
-                                            </div>
-                                            <div className={styles.priceInputWrapper} style={{ width: '80px', marginLeft: '0.5rem' }}>
-                                                <span style={{ fontSize: '0.7rem', color: '#64748b', paddingLeft: '8px' }}>Qty:</span>
-                                                <input
-                                                    type="number"
-                                                    placeholder="Qty"
-                                                    value={editState.quantity}
-                                                    onChange={e => handleFieldChange(plant.id, 'quantity', e.target.value)}
-                                                    className={styles.priceInput}
-                                                    style={{ paddingLeft: '4px' }}
-                                                />
-                                            </div>
-                                            <button
-                                                onClick={() => handleSaveItem(plant)}
-                                                className={styles.saveBtn}
-                                                title="Save Row"
-                                            >
-                                                <Save size={18} />
-                                            </button>
-                                            {invItem && (
-                                                <button
-                                                    onClick={() => handleRemoveItem(plant.id)}
-                                                    className={styles.deleteBtn}
-                                                    title="Remove from Inventory"
-                                                    style={{ marginLeft: '0.5rem', padding: '0.5rem', borderRadius: '8px', background: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', border: 'none', cursor: 'pointer' }}
-                                                >
-                                                    <Trash2 size={18} />
-                                                </button>
-                                            )}
-                                        </div>
-
-                                        <div className={styles.modeRow}>
-                                            <span className={styles.modeLabel}>Selling Via:</span>
-                                            <select
-                                                className={styles.modeSelect}
-                                                value={editState.sellingMode}
-                                                onChange={e => handleFieldChange(plant.id, 'sellingMode', e.target.value)}
-                                            >
-                                                <option value="offline">Storefront (Offline)</option>
-                                                <option value="online">Home Delivery (Online)</option>
-                                                <option value="both">Both (Online + Offline)</option>
-                                            </select>
-                                        </div>
-
-                                        {invItem && (
-                                            <div className={styles.stockToggle}>
-                                                <label className={styles.switch}>
-                                                    <input
-                                                        type="checkbox"
-                                                        checked={editState.inStock}
-                                                        onChange={() => toggleStock(plant.id)}
-                                                    />
-                                                    <span className={styles.slider}></span>
-                                                </label>
-                                                <span className={styles.stockLabel}>
-                                                    {editState.inStock ? 'In Stock' : 'Out of Stock'}
-                                                </span>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '2.5rem' }}>
+                    {/* SECTION 1: LIVE INVENTORY */}
+                    <div>
+                        <h3 style={{
+                            fontSize: '1rem',
+                            fontWeight: 800,
+                            color: '#10b981',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            marginBottom: '1rem',
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.05em'
+                        }}>
+                            <span style={{
+                                width: '8px',
+                                height: '8px',
+                                borderRadius: '50%',
+                                background: '#10b981',
+                                boxShadow: '0 0 8px #10b981'
+                            }} />
+                            Live in Storefront ({livePlants.length})
+                        </h3>
+                        {livePlants.length === 0 ? (
+                            <div style={{
+                                padding: '3rem 2rem',
+                                textAlign: 'center',
+                                background: 'rgba(255, 255, 255, 0.01)',
+                                border: '1px dashed rgba(255, 255, 255, 0.08)',
+                                borderRadius: '16px',
+                                color: '#64748b',
+                                fontSize: '0.85rem'
+                            }}>
+                                📦 No active storefront inventory. Add plants from the catalog below to make them live!
                             </div>
-                        );
-                    })}
+                        ) : (
+                            <div className={styles.grid}>
+                                {livePlants.map(plant => renderPlantCard(plant))}
+                            </div>
+                        )}
+                    </div>
+
+                    {/* SECTION 2: NOT LIVE CATALOG */}
+                    <div>
+                        <h3 style={{
+                            fontSize: '1rem',
+                            fontWeight: 800,
+                            color: '#f59e0b',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '8px',
+                            marginBottom: '1rem',
+                            textTransform: 'uppercase',
+                            letterSpacing: '0.05em'
+                        }}>
+                            <span style={{
+                                width: '8px',
+                                height: '8px',
+                                borderRadius: '50%',
+                                background: '#f59e0b',
+                                boxShadow: '0 0 8px #f59e0b'
+                            }} />
+                            Marketplace Catalog / Not Live ({notLivePlants.length})
+                        </h3>
+                        {notLivePlants.length === 0 ? (
+                            <div style={{
+                                padding: '3rem 2rem',
+                                textAlign: 'center',
+                                background: 'rgba(255, 255, 255, 0.01)',
+                                border: '1px dashed rgba(255, 255, 255, 0.08)',
+                                borderRadius: '16px',
+                                color: '#64748b',
+                                fontSize: '0.85rem'
+                            }}>
+                                ✨ All catalog species are currently active in your storefront!
+                            </div>
+                        ) : (
+                            <div className={styles.grid}>
+                                {notLivePlants.map(plant => renderPlantCard(plant))}
+                            </div>
+                        )}
+                    </div>
                 </div>
             )}
 
