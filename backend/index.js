@@ -6476,6 +6476,24 @@ REMEMBER: Your response must include BOTH the identification analysis AND the [G
             }
         }
 
+        // 8. Apply Premium 10x Capacity Multiplier
+        if (result.data?.usageMeta && req.user?.id) {
+            try {
+                const dbUser = await User.findById(req.user.id).select('isPremium premiumExpiry').lean();
+                const isActivePremium = dbUser?.isPremium && (!dbUser.premiumExpiry || new Date(dbUser.premiumExpiry) > new Date());
+                if (isActivePremium) {
+                    const raw = result.data.usageMeta;
+                    const remaining = parseInt(raw.remaining || '0') || 0;
+                    const limit = parseInt(raw.limit || '100000') || 100000;
+                    result.data.usageMeta.remaining = String(remaining * 10);
+                    result.data.usageMeta.limit = String(limit * 10);
+                    console.log(`[AI Doctor] ⭐ Premium 10x capacity applied for user ${req.user.id}`);
+                }
+            } catch (premiumErr) {
+                console.warn('[AI Doctor] Premium check failed:', premiumErr.message);
+            }
+        }
+
         res.json({
             ...result.data,
             matchedFlora: matchedFloraBatch

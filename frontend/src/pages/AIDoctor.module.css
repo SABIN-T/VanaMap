@@ -912,6 +912,7 @@
 
 /* Premium Glassmorphic Active Botanical Dossier Panel */
 .dossierPanel {
+    pointer-events: auto; /* Re-enable interactions (parent has pointer-events: none) */
     background: rgba(255, 255, 255, 0.03);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
@@ -922,6 +923,9 @@
     box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
     animation: slideIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     width: 100%;
+    max-width: 850px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 @keyframes slideIn {
