@@ -3,9 +3,10 @@ import { useCart } from '../context/CartContext';
 import { Button } from '../components/common/Button';
 import {
     ShoppingBag, MapPin, Heart, ArrowRight, Loader2,
-    Shield, Lock, Trophy, Zap, Wind, CheckCircle, Store, Package, Truck, CheckCircle2, XCircle, Clock, Trash2
+    Shield, Lock, Trophy, Zap, Wind, CheckCircle, Store, Package, Truck, CheckCircle2, XCircle, Clock, Trash2, Star
 } from 'lucide-react';
 import { VerificationModal } from '../components/auth/VerificationModal';
+import { VendorReviewsModal } from '../components/features/market/VendorReviewsModal';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { fetchPlants, fetchVendors, updateVendor, changePassword, fetchLeaderboard, updateLocation, fetchUserOrders } from '../services/api';
@@ -56,6 +57,7 @@ export const UserDashboard = () => {
     const [loadingOrders, setLoadingOrders] = useState(false);
     const [expandedOrderId, setExpandedOrderId] = useState<string | null>(null);
     const [locForm, setLocForm] = useState({ city: '', state: '' });
+    const [selectedVendorForReviews, setSelectedVendorForReviews] = useState<any | null>(null);
 
     // Verification State
     const [verStatus, setVerStatus] = useState({ email: false, phone: false });
@@ -916,6 +918,32 @@ export const UserDashboard = () => {
                                                     >
                                                         {isExpanded ? 'Hide Tracker' : 'Track Route'}
                                                     </button>
+                                                    {order.status === 'delivered' && (
+                                                         <button
+                                                             onClick={(e) => {
+                                                                 e.stopPropagation();
+                                                                 setSelectedVendorForReviews({
+                                                                     id: order.vendorId,
+                                                                     name: order.vendorInfo?.name || 'Local Nursery'
+                                                                 });
+                                                             }}
+                                                             style={{
+                                                                 background: 'rgba(245, 158, 11, 0.1)',
+                                                                 border: '1px solid rgba(245, 158, 11, 0.3)',
+                                                                 borderRadius: '0.4rem',
+                                                                 padding: '0.25rem 0.6rem',
+                                                                 color: '#fbbf24',
+                                                                 fontSize: '0.7rem',
+                                                                 fontWeight: 700,
+                                                                 cursor: 'pointer',
+                                                                 display: 'inline-flex',
+                                                                 alignItems: 'center',
+                                                                 gap: '3px'
+                                                             }}
+                                                         >
+                                                             <Star size={11} fill="#fbbf24" color="#fbbf24" /> Write Review
+                                                         </button>
+                                                     )}
                                                 </div>
                                             </div>
 
@@ -1276,6 +1304,13 @@ export const UserDashboard = () => {
                         )}
                     </div>
                 </div>
+            )}
+
+            {selectedVendorForReviews && (
+                <VendorReviewsModal
+                    vendor={selectedVendorForReviews}
+                    onClose={() => setSelectedVendorForReviews(null)}
+                />
             )}
 
         </UserDashboardLayout>
