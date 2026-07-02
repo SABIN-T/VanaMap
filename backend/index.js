@@ -6305,9 +6305,9 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
         ];
 
         // --- UPGRADED MODEL SELECTION (2026) ---
-        // Text Primary: Llama 3.3 70B Versatile (Latest, most capable)
+        // Text Primary: GPT OSS 120B (Latest, most capable replacement)
         // Vision Primary: Llama 3.2 90B Vision (SOTA for plant identification)
-        let model = "llama-3.3-70b-versatile";
+        let model = "openai/gpt-oss-120b";
 
         // If turn-level image is provided, append it to the LAST message if not already there
         if (image) {
@@ -6478,8 +6478,8 @@ REMEMBER: Your response must include BOTH the identification analysis AND the [G
                     { role: "user", content: synthesisPrompt }
                 ];
 
-                // Use latest Llama 3.3 for synthesis
-                result = await callGroq("llama-3.3-70b-versatile", synthesisMessages);
+                // Use GPT OSS 120B for synthesis
+                result = await callGroq("openai/gpt-oss-120b", synthesisMessages);
 
                 // If synthesis fails, try DeepSeek R1 for reasoning-based synthesis
                 if (!result.ok) {
@@ -6538,7 +6538,7 @@ REMEMBER: Your response must include BOTH the identification analysis AND the [G
             // FALLBACK STAGE 3: High-Speed Text-Only (Upgraded)
             if (!result.ok || result.data.error) {
                 console.warn('[AI Doctor] Vision falling back to High-Speed Text Engine.');
-                const bulletproofModel = "llama-3.3-70b-versatile"; // Upgraded from 3.1-8b
+                const bulletproofModel = "openai/gpt-oss-120b"; // Upgraded from llama-3.3-70b
 
                 // Helper to strip images
                 const stripValidation = (msgs) => msgs.map(m => {
@@ -6563,8 +6563,7 @@ REMEMBER: Your response must include BOTH the identification analysis AND the [G
                 { model: "google/gemini-2.0-flash-thinking-exp:free", name: "Gemini 2.0 Flash Thinking" },
                 { model: "deepseek/deepseek-r1", name: "DeepSeek R1" },
                 { model: "anthropic/claude-3.5-haiku:free", name: "Claude 3.5 Haiku" },
-                { model: "meta-llama/llama-3.3-70b-instruct:free", name: "Llama 3.3 70B" },
-                { model: "google/gemini-2.0-flash-exp:free", name: "Gemini 2.0 Flash" },
+                { model: "google/gemini-2.0-flash:free", name: "Gemini 2.0 Flash" },
                 { model: "qwen/qwen-2.5-72b-instruct:free", name: "Qwen 2.5 72B" }
             ];
 
@@ -6862,7 +6861,7 @@ Keep it brief and conversational. Do not use any markdown styling (no bold, no a
                     "Authorization": `Bearer ${apiKey}` 
                 },
                 body: JSON.stringify({
-                    model: "llama-3.3-70b-versatile",
+                    model: "openai/gpt-oss-120b",
                     messages: [
                         { role: "system", content: systemPrompt },
                         { role: "user", content: "Generate the greeting." }

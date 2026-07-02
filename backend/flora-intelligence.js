@@ -84,7 +84,7 @@ Rules:
                     "Authorization": `Bearer ${apiKey}`
                 },
                 body: JSON.stringify({
-                    model: "llama-3.3-70b-versatile",
+                    model: "openai/gpt-oss-120b",
                     messages: [
                         { role: "system", content: systemPrompt },
                         { role: "user", content: textContent }
@@ -193,7 +193,7 @@ Ensure all fields are present and valid JSON. Respond with ONLY the raw JSON obj
                     "Authorization": `Bearer ${apiKey}`
                 },
                 body: JSON.stringify({
-                    model: "llama-3.3-70b-versatile",
+                    model: "openai/gpt-oss-120b",
                     messages: [
                         { role: "system", content: systemPrompt }
                     ],

@@ -173,7 +173,7 @@ async function handleChatStream(ws, message) {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                model: image ? 'llama-3.2-90b-vision-preview' : 'llama-3.3-70b-versatile',
+                model: image ? 'llama-3.2-90b-vision-preview' : 'openai/gpt-oss-120b',
                 messages: apiMessages,
                 temperature: 0.3,
                 max_tokens: 4000,

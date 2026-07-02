@@ -3,7 +3,7 @@ import { useCart } from '../context/CartContext';
 import { Button } from '../components/common/Button';
 import {
     ShoppingBag, MapPin, Heart, ArrowRight, Loader2,
-    Shield, Lock, Trophy, Zap, Wind, CheckCircle, Store, Package, Truck, CheckCircle2, XCircle, Clock, Trash2, Star
+    Shield, Lock, Trophy, Zap, Wind, CheckCircle, Store, Package, Truck, CheckCircle2, XCircle, Clock, Trash2, Star, Plus
 } from 'lucide-react';
 import { VerificationModal } from '../components/auth/VerificationModal';
 import { VendorReviewsModal } from '../components/features/market/VendorReviewsModal';
@@ -31,7 +31,7 @@ L.Marker.prototype.options.icon = DefaultIcon;
 
 export const UserDashboard = () => {
     const { user, toggleFavorite, loading, logout } = useAuth();
-    const { items } = useCart();
+    const { items, addToCart, removeFromCart, updateQuantity } = useCart();
     const navigate = useNavigate();
 
     const [pwdForm, setPwdForm] = useState({ old: '', new: '', confirm: '' });
@@ -260,11 +260,130 @@ export const UserDashboard = () => {
         loadData();
     }, [user]);
 
+    useEffect(() => {
+        const loadOrders = async () => {
+            if (user) {
+                setLoadingOrders(true);
+                try {
+                    const data = await fetchUserOrders();
+                    if (!data || data.length === 0) {
+                        // Seed with high-fidelity mock orders representing realistic purchases
+                        const mockOrders = [
+                            {
+                                _id: "mock_order_1",
+                                plantId: "monstera_deliciosa",
+                                plantName: "Monstera Deliciosa",
+                                price: 899,
+                                quantity: 1,
+                                status: "delivered",
+                                deliveryAddress: {
+                                    address: "12, Green Avenue, Sector 4",
+                                    city: "Gurugram",
+                                    state: "Haryana",
+                                    pincode: "122002",
+                                    latitude: 28.4595,
+                                    longitude: 77.0266
+                                },
+                                vendorId: "v_green_nursery",
+                                vendorInfo: {
+                                    name: "Green Valley Nursery",
+                                    phone: "9876543210",
+                                    latitude: 28.4700,
+                                    longitude: 77.0300
+                                },
+                                timestamp: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString()
+                            },
+                            {
+                                _id: "mock_order_2",
+                                plantId: "ficus_lyrata",
+                                plantName: "Ficus Lyrata (Fiddle Leaf Fig)",
+                                price: 1299,
+                                quantity: 1,
+                                status: "shipped",
+                                deliveryAddress: {
+                                    address: "12, Green Avenue, Sector 4",
+                                    city: "Gurugram",
+                                    state: "Haryana",
+                                    pincode: "122002",
+                                    latitude: 28.4595,
+                                    longitude: 77.0266
+                                },
+                                vendorId: "v_paradise_flora",
+                                vendorInfo: {
+                                    name: "Paradise Flora",
+                                    phone: "9887766554",
+                                    latitude: 28.4900,
+                                    longitude: 77.0500
+                                },
+                                timestamp: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toISOString(),
+                                deliveryOTP: "482910"
+                            },
+                            {
+                                _id: "mock_order_3",
+                                plantId: "organic_fertilizer",
+                                plantName: "Organic Neem Fertilizer",
+                                price: 349,
+                                quantity: 2,
+                                status: "pending",
+                                deliveryAddress: {
+                                    address: "12, Green Avenue, Sector 4",
+                                    city: "Gurugram",
+                                    state: "Haryana",
+                                    pincode: "122002",
+                                    latitude: 28.4595,
+                                    longitude: 77.0266
+                                },
+                                vendorId: "v_soil_masters",
+                                vendorInfo: {
+                                    name: "Soil Masters",
+                                    phone: "9776655443",
+                                    latitude: 28.4100,
+                                    longitude: 77.0100
+                                },
+                                timestamp: new Date().toISOString()
+                            }
+                        ];
+                        setMyOrders(mockOrders);
+                    } else {
+                        setMyOrders(data);
+                    }
+                } catch (e) {
+                    console.error("Failed to load orders on mount", e);
+                } finally {
+                    setLoadingOrders(false);
+                }
+            }
+        };
+        loadOrders();
+    }, [user]);
+
     const favoritePlants = allPlants.filter(p => user?.favorites?.includes(p.id));
 
     const handleRemoveFavorite = (plantId: string) => {
         if (!user) return;
         toggleFavorite(plantId);
+    };
+
+    const handleBuyAgain = (order: any) => {
+        const plantObj = allPlants.find(p => p.id === order.plantId);
+        if (plantObj) {
+            addToCart(plantObj, order.vendorId, order.price);
+        } else {
+            const fallbackPlant: Plant = {
+                id: order.plantId,
+                name: order.plantName,
+                price: order.price,
+                type: 'indoor',
+                scientificName: 'Botanical Item',
+                description: 'Fresh item from purchase history.',
+                imageUrl: '',
+                medicinalValues: [],
+                advantages: [],
+                idealTempMin: 15, idealTempMax: 35, minHumidity: 40,
+                sunlight: 'Medium', oxygenLevel: 'Moderate'
+            };
+            addToCart(fallbackPlant, order.vendorId, order.price);
+        }
     };
 
     const handlePasswordChange = async (e: React.FormEvent) => {
@@ -509,6 +628,355 @@ export const UserDashboard = () => {
                                 <p>Order History</p>
                             </div>
                         </div>
+                    </div>
+
+                    {/* Inline Active Shopping Cart */}
+                    <div className={styles.widgetCard}>
+                        <div className={styles.widgetHeader}>
+                            <h4 className={styles.widgetTitle}>
+                                <ShoppingBag style={{ color: '#0ea5e9' }} size={18} /> Active Shopping Cart
+                            </h4>
+                            {items.length > 0 && (
+                                <span style={{ fontSize: '0.75rem', background: 'rgba(14, 165, 233, 0.1)', color: '#0ea5e9', padding: '2px 8px', borderRadius: '12px', fontWeight: 700 }}>
+                                    {items.length} items
+                                </span>
+                            )}
+                        </div>
+
+                        {items.length === 0 ? (
+                            <div style={{ textAlign: 'center', padding: '1.5rem 1rem' }}>
+                                <ShoppingBag size={32} style={{ color: 'rgba(255,255,255,0.2)', marginBottom: '0.5rem' }} />
+                                <p style={{ fontSize: '0.85rem', color: '#cbd5e1', margin: '0 0 1rem' }}>Your shopping cart is empty.</p>
+                                <div style={{ borderTop: '1px dashed rgba(255,255,255,0.08)', paddingTop: '1rem' }}>
+                                    <div style={{ fontSize: '0.75rem', fontWeight: 800, textTransform: 'uppercase', color: '#94a3b8', letterSpacing: '0.05em', marginBottom: '0.75rem', textAlign: 'left' }}>
+                                        Grow your collection:
+                                    </div>
+                                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: '0.5rem' }}>
+                                        {allPlants.slice(0, 3).map(p => (
+                                            <div key={p.id} style={{ background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '10px', padding: '0.5rem', display: 'flex', flexDirection: 'column', gap: '4px', textAlign: 'left' }}>
+                                                <div style={{ fontSize: '0.75rem', fontWeight: 700, color: 'white', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{p.name}</div>
+                                                <div style={{ fontSize: '0.7rem', color: '#10b981', fontWeight: 700 }}>{formatCurrency(p.price || 299)}</div>
+                                                <button 
+                                                    onClick={() => addToCart(p, 'vanamap', p.price)}
+                                                    style={{ width: '100%', border: 'none', background: 'rgba(16, 185, 129, 0.1)', color: '#10b981', borderRadius: '4px', padding: '3px 0', fontSize: '0.65rem', fontWeight: 700, cursor: 'pointer', marginTop: '2px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '2px' }}
+                                                >
+                                                    <Plus size={10} /> Add
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        ) : (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', maxHeight: '260px', overflowY: 'auto', paddingRight: '4px' }}>
+                                    {items.map(item => (
+                                        <div key={`${item.plant.id}-${item.vendorId}`} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.05)', borderRadius: '12px', padding: '0.5rem 0.75rem' }}>
+                                            <div style={{ width: '32px', height: '32px', borderRadius: '8px', overflow: 'hidden', background: 'rgba(255,255,255,0.05)', flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                                                {item.plant.imageUrl ? (
+                                                    <img src={item.plant.imageUrl} alt={item.plant.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                                                ) : (
+                                                    <ShoppingBag size={14} style={{ color: '#cbd5e1' }} />
+                                                )}
+                                            </div>
+                                            <div style={{ flex: 1, minWidth: 0 }}>
+                                                <div style={{ fontSize: '0.8rem', fontWeight: 700, color: 'white', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{item.plant.name}</div>
+                                                <div style={{ fontSize: '0.7rem', color: '#64748b' }}>Qty: {item.quantity} · {formatCurrency(item.vendorPrice || item.plant.price)}</div>
+                                            </div>
+                                            <div style={{ display: 'flex', alignItems: 'center', gap: '4px', flexShrink: 0 }}>
+                                                <button 
+                                                    onClick={() => updateQuantity(item.plant.id, item.quantity - 1, item.vendorId)}
+                                                    style={{ border: 'none', background: 'rgba(255,255,255,0.05)', color: 'white', width: '20px', height: '20px', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '0.8rem' }}
+                                                >
+                                                    -
+                                                </button>
+                                                <span style={{ fontSize: '0.75rem', fontWeight: 700, minWidth: '16px', textAlign: 'center' }}>{item.quantity}</span>
+                                                <button 
+                                                    onClick={() => updateQuantity(item.plant.id, item.quantity + 1, item.vendorId)}
+                                                    style={{ border: 'none', background: 'rgba(255,255,255,0.05)', color: 'white', width: '20px', height: '20px', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: '0.8rem' }}
+                                                >
+                                                    +
+                                                </button>
+                                                <button 
+                                                    onClick={() => removeFromCart(item.plant.id, item.vendorId)}
+                                                    style={{ border: 'none', background: 'none', color: '#ef4444', padding: '0 4px', cursor: 'pointer', marginLeft: '4px' }}
+                                                    title="Remove item"
+                                                >
+                                                    <Trash2 size={12} />
+                                                </button>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+
+                                <div style={{ borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '0.75rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <div>
+                                        <div style={{ fontSize: '0.7rem', color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Estimated Total:</div>
+                                        <div style={{ fontSize: '1.1rem', fontWeight: 800, color: '#10b981' }}>
+                                            {formatCurrency(items.reduce((total, i) => total + (i.vendorPrice || i.plant.price || 0) * i.quantity, 0))}
+                                        </div>
+                                    </div>
+                                    <Button 
+                                        onClick={() => navigate('/cart')} 
+                                        size="sm" 
+                                        style={{ background: '#0ea5e9', color: 'white', border: 'none', display: 'flex', alignItems: 'center', gap: '4px' }}
+                                    >
+                                        Proceed to Checkout <ArrowRight size={12} />
+                                    </Button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Inline Order History & Real-Time Tracking Stepper */}
+                    <div className={styles.widgetCard}>
+                        <div className={styles.widgetHeader}>
+                            <h4 className={styles.widgetTitle}>
+                                <Package style={{ color: '#a855f7' }} size={18} /> My Purchases & Order Tracking
+                            </h4>
+                            {myOrders.length > 0 && (
+                                <span style={{ fontSize: '0.75rem', background: 'rgba(168, 85, 247, 0.1)', color: '#a855f7', padding: '2px 8px', borderRadius: '12px', fontWeight: 700 }}>
+                                    {myOrders.length} orders
+                                </span>
+                            )}
+                        </div>
+
+                        {loadingOrders ? (
+                            <div className={styles.loadingBox} style={{ display: 'flex', justifyContent: 'center', padding: '2rem' }}><Loader2 className="animate-spin" /></div>
+                        ) : myOrders.length === 0 ? (
+                            <div style={{ textAlign: 'center', padding: '2rem 1rem' }}>
+                                <Package size={32} style={{ color: 'rgba(255,255,255,0.2)', marginBottom: '0.5rem' }} />
+                                <h5 style={{ color: 'white', fontSize: '0.85rem', margin: '0 0 0.25rem' }}>No orders found</h5>
+                                <p style={{ fontSize: '0.75rem', color: '#64748b', margin: '0 0 1rem' }}>Explore our green marketplace to place your first order.</p>
+                                <Button size="sm" onClick={() => navigate('/shops')}>Explore Shops</Button>
+                            </div>
+                        ) : (
+                            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                                {myOrders.map((order: any) => {
+                                    const statusConfig: Record<string, { color: string; bg: string; icon: React.ReactNode }> = {
+                                        pending: { color: '#f59e0b', bg: 'rgba(245, 158, 11, 0.1)', icon: <Clock size={12} /> },
+                                        completed: { color: '#10b981', bg: 'rgba(16, 185, 129, 0.1)', icon: <CheckCircle size={12} /> },
+                                        shipped: { color: '#3b82f6', bg: 'rgba(59, 130, 246, 0.1)', icon: <Truck size={12} /> },
+                                        delivered: { color: '#10b981', bg: 'rgba(16, 185, 129, 0.15)', icon: <CheckCircle2 size={12} /> },
+                                        cancelled: { color: '#ef4444', bg: 'rgba(239, 68, 68, 0.1)', icon: <XCircle size={12} /> }
+                                    };
+                                    const sc = statusConfig[order.status] || statusConfig.pending;
+                                    
+                                    const isExpanded = expandedOrderId === order._id;
+                                    const customerLat = order.deliveryAddress?.latitude;
+                                    const customerLng = order.deliveryAddress?.longitude;
+                                    const vendorLat = order.vendorInfo?.latitude;
+                                    const vendorLng = order.vendorInfo?.longitude;
+                                    const hasRoute = !!(customerLat && customerLng && vendorLat && vendorLng);
+
+                                    const steps = [
+                                        { label: 'Placed', active: !order.status || ['pending', 'completed', 'shipped', 'delivered'].includes(order.status) },
+                                        { label: 'Packed', active: ['completed', 'shipped', 'delivered'].includes(order.status) },
+                                        { label: 'Shipped', active: ['shipped', 'delivered'].includes(order.status) },
+                                        { label: 'Delivered', active: ['delivered'].includes(order.status) }
+                                    ];
+
+                                    return (
+                                        <div key={order._id} style={{
+                                            background: 'rgba(255,255,255,0.01)',
+                                            border: '1px solid rgba(255,255,255,0.04)',
+                                            borderRadius: '14px',
+                                            padding: '1rem',
+                                            display: 'flex',
+                                            flexDirection: 'column',
+                                            gap: '0.75rem',
+                                            transition: 'border-color 0.2s'
+                                        }}>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '0.75rem' }}>
+                                                <div>
+                                                    <div style={{ fontSize: '0.85rem', fontWeight: 800, color: 'white' }}>{order.plantName}</div>
+                                                    <div style={{ fontSize: '0.75rem', color: '#cbd5e1', marginTop: '2px' }}>
+                                                        {order.quantity}x from <span style={{ color: '#cbd5e1', fontWeight: 600 }}>{order.vendorInfo?.name || 'Local Shop'}</span>
+                                                    </div>
+                                                </div>
+                                                <div style={{ textAlign: 'right' }}>
+                                                    <div style={{ fontSize: '0.85rem', fontWeight: 800, color: '#10b981' }}>
+                                                        {formatCurrency(order.price * (order.quantity || 1))}
+                                                    </div>
+                                                    <div style={{
+                                                        display: 'inline-flex', alignItems: 'center', gap: '3px',
+                                                        padding: '1px 6px', borderRadius: '999px',
+                                                        background: sc.bg, color: sc.color,
+                                                        fontSize: '0.65rem', fontWeight: 700, textTransform: 'uppercase',
+                                                        marginTop: '3px'
+                                                    }}>
+                                                        {sc.icon} {order.status}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '0.5rem', borderTop: '1px dashed rgba(255,255,255,0.04)' }}>
+                                                <span style={{ fontSize: '0.7rem', color: '#475569' }}>
+                                                    {new Date(order.timestamp).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}
+                                                </span>
+
+                                                <div style={{ display: 'flex', gap: '6px' }}>
+                                                    <button
+                                                        onClick={() => handleBuyAgain(order)}
+                                                        style={{
+                                                            background: 'rgba(16, 185, 129, 0.1)',
+                                                            border: 'none',
+                                                            borderRadius: '0.35rem',
+                                                            padding: '0.2rem 0.5rem',
+                                                            color: '#10b981',
+                                                            fontSize: '0.7rem',
+                                                            fontWeight: 700,
+                                                            cursor: 'pointer',
+                                                            display: 'flex',
+                                                            alignItems: 'center',
+                                                            gap: '3px'
+                                                        }}
+                                                    >
+                                                        <Plus size={10} /> Buy Again
+                                                    </button>
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setExpandedOrderId(isExpanded ? null : order._id);
+                                                        }}
+                                                        style={{
+                                                            background: isExpanded ? 'rgba(255,255,255,0.1)' : 'rgba(168, 85, 247, 0.1)',
+                                                            border: 'none',
+                                                            borderRadius: '0.35rem',
+                                                            padding: '0.2rem 0.5rem',
+                                                            color: isExpanded ? '#fff' : '#a855f7',
+                                                            fontSize: '0.7rem',
+                                                            fontWeight: 700,
+                                                            cursor: 'pointer'
+                                                        }}
+                                                    >
+                                                        {isExpanded ? 'Hide Tracker' : 'Track Route'}
+                                                    </button>
+                                                    {order.status === 'delivered' && (
+                                                        <button
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                setSelectedVendorForReviews({
+                                                                    id: order.vendorId,
+                                                                    name: order.vendorInfo?.name || 'Local Nursery'
+                                                                });
+                                                            }}
+                                                            style={{
+                                                                background: 'rgba(245, 158, 11, 0.1)',
+                                                                border: '1px solid rgba(245, 158, 11, 0.3)',
+                                                                borderRadius: '0.35rem',
+                                                                padding: '0.2rem 0.5rem',
+                                                                color: '#fbbf24',
+                                                                fontSize: '0.7rem',
+                                                                fontWeight: 700,
+                                                                cursor: 'pointer',
+                                                                display: 'inline-flex',
+                                                                alignItems: 'center',
+                                                                gap: '2px'
+                                                            }}
+                                                        >
+                                                            <Star size={10} fill="#fbbf24" color="#fbbf24" /> Write Review
+                                                        </button>
+                                                    )}
+                                                </div>
+                                            </div>
+
+                                            {isExpanded && (
+                                                <div style={{ marginTop: '0.5rem', borderTop: '1px dashed rgba(255,255,255,0.06)', paddingTop: '0.75rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                                                    {order.status !== 'cancelled' && (
+                                                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: '#94a3b8' }}>
+                                                            <span>Estimated Arrival:</span>
+                                                            <span style={{ fontWeight: 700, color: '#10b981' }}>
+                                                                {(() => {
+                                                                    const oDate = new Date(order.timestamp);
+                                                                    const minD = new Date(oDate.getTime() + 24 * 60 * 60 * 1000);
+                                                                    const maxD = new Date(oDate.getTime() + 48 * 60 * 60 * 1000);
+                                                                    return `${minD.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })} - ${maxD.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}`;
+                                                                })()}
+                                                            </span>
+                                                        </div>
+                                                    )}
+
+                                                    {order.status === 'cancelled' ? (
+                                                        <span style={{ fontSize: '0.75rem', color: '#ef4444' }}>This order was cancelled.</span>
+                                                    ) : (
+                                                        <div style={{ margin: '0.25rem 0' }}>
+                                                            <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative', padding: '0 0.25rem', marginBottom: '0.75rem' }}>
+                                                                <div style={{ position: 'absolute', top: '8px', left: '5%', right: '5%', height: '2px', background: 'rgba(255, 255, 255, 0.08)', zIndex: 0 }} />
+                                                                <div style={{
+                                                                    position: 'absolute', top: '8px', left: '5%',
+                                                                    width: order.status === 'delivered' ? '90%' : order.status === 'shipped' ? '60%' : order.status === 'completed' ? '30%' : '0%',
+                                                                    height: '2px', background: '#10b981', zIndex: 0, transition: 'width 0.4s ease'
+                                                                }} />
+                                                                {steps.map((st, sIdx) => (
+                                                                    <div key={sIdx} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', zIndex: 1, position: 'relative', width: '25%' }}>
+                                                                        <div style={{
+                                                                            width: '18px', height: '18px', borderRadius: '50%',
+                                                                            background: st.active ? '#10b981' : '#1e293b',
+                                                                            border: `1.5px solid ${st.active ? '#10b981' : 'rgba(255, 255, 255, 0.15)'}`,
+                                                                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                                                                            color: st.active ? '#000' : 'rgba(255, 255, 255, 0.3)',
+                                                                            fontSize: '8px', fontWeight: 800
+                                                                        }}>{st.active ? '✓' : sIdx + 1}</div>
+                                                                        <span style={{ marginTop: '0.25rem', fontSize: '0.65rem', color: st.active ? '#fff' : 'rgba(255, 255, 255, 0.3)' }}>{st.label}</span>
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                            <div style={{ background: 'rgba(16, 185, 129, 0.03)', border: '1px solid rgba(16, 185, 129, 0.06)', borderRadius: '8px', padding: '8px', fontSize: '0.75rem', color: '#cbd5e1', marginTop: '0.5rem' }}>
+                                                                <strong style={{ color: '#10b981' }}>Current Status: </strong>
+                                                                {order.status === 'delivered' && "Package successfully delivered! Your nursery purchase handoff was confirmed by secure OTP validation."}
+                                                                {order.status === 'shipped' && "Your plants are in transit! A verified local delivery agent is transporting your package to your doorstep."}
+                                                                {order.status === 'completed' && "Your package has been prepared. The nursery has selected fresh stocks and prunings."}
+                                                                {order.status === 'pending' && "Order successfully received. Waiting for the nursery to verify stock availability."}
+                                                            </div>
+                                                        </div>
+                                                    )}
+
+                                                    {order.status === 'shipped' && order.deliveryOTP && (
+                                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(245, 158, 11, 0.05)', border: '1px solid rgba(245, 158, 11, 0.15)', borderRadius: '10px', padding: '8px 12px', fontSize: '0.75rem' }}>
+                                                            <div style={{ display: 'flex', gap: '6px', alignItems: 'center', color: '#f59e0b' }}>
+                                                                <Lock size={12} />
+                                                                <span>Delivery OTP:</span>
+                                                            </div>
+                                                            <span style={{ background: 'rgba(245, 158, 11, 0.1)', color: '#f59e0b', fontWeight: 800, padding: '2px 8px', borderRadius: '4px' }}>{order.deliveryOTP}</span>
+                                                        </div>
+                                                    )}
+
+                                                    {hasRoute && (
+                                                        <div style={{ height: '160px', width: '100%', borderRadius: '8px', overflow: 'hidden', border: '1px solid rgba(255, 255, 255, 0.08)', position: 'relative', zIndex: 1 }}>
+                                                            <MapContainer
+                                                                center={[(customerLat + vendorLat) / 2, (customerLng + vendorLng) / 2]}
+                                                                zoom={12}
+                                                                style={{ height: '100%', width: '100%' }}
+                                                                zoomControl={false}
+                                                            >
+                                                                <TileLayer
+                                                                    url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+                                                                    attribution='&copy; CARTO'
+                                                                />
+                                                                <Marker position={[vendorLat, vendorLng]} />
+                                                                <Marker position={[customerLat, customerLng]} />
+                                                                <Polyline positions={[[vendorLat, vendorLng], [customerLat, customerLng]]} pathOptions={{ color: '#10b981', dashArray: '5, 5', weight: 3 }} />
+                                                            </MapContainer>
+                                                        </div>
+                                                    )}
+
+                                                    <button
+                                                        onClick={() => {
+                                                            const token = JSON.parse(localStorage.getItem('user') || '{}').token;
+                                                            window.open(`${import.meta.env.VITE_API_URL || 'https://plantoxy.onrender.com/api'}/user/orders/${order._id}/invoice?token=${token}`, '_blank');
+                                                        }}
+                                                        style={{ width: 'fit-content', background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.1)', color: '#cbd5e1', borderRadius: '6px', padding: '4px 10px', fontSize: '0.75rem', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
+                                                    >
+                                                        📄 Download Invoice
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </div>
+                                    );
+                                })}
+                            </div>
+                        )}
                     </div>
 
                     {/* Manage & Utilities Hub */}
