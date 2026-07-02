@@ -1,14 +1,16 @@
 import { useState, useEffect } from 'react';
 import { AdminLayout } from './AdminLayout';
-import { Lock, Bell, Database, Shield, Zap, Globe, Mail, Key, UserPlus, Fingerprint, Smartphone, MessageSquare, Webhook, Code2, Users, Truck } from 'lucide-react';
+import { Lock, Bell, Database, Shield, Zap, Globe, Mail, Key, UserPlus, Fingerprint, Smartphone, MessageSquare, Webhook, Code2, Users, Truck, Sun } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import { fetchSystemSetting, updateSystemSetting, fetchTeamMembers, inviteTeamMember, verifyTeamMember, removeTeamMember } from '../../services/api';
 import type { TeamMember } from '../../services/api';
+import { useTheme } from '../../context/ThemeContext';
 import styles from './Settings.module.css';
 
 type Tab = 'general' | 'security' | 'notifications' | 'api' | 'team' | 'delivery';
 
 export const Settings = () => {
+    const { toggleTheme } = useTheme();
     const [activeTab, setActiveTab] = useState<Tab>('general');
     const [loading, setLoading] = useState(true);
 
@@ -32,7 +34,8 @@ export const Settings = () => {
         pushNotifs: true,
         smsNotifs: false,
         biometric: false,
-        webhookEnabled: true
+        webhookEnabled: true,
+        isLightTheme: false
     });
 
     const [teamMembers, setTeamMembers] = useState<TeamMember[]>([]);
@@ -144,6 +147,12 @@ export const Settings = () => {
                     }
                 }),
                 (async () => {
+                    const res = await fetchSystemSetting('global_theme');
+                    if (res && res.value) {
+                        fetchedSettings.isLightTheme = (res.value === 'light');
+                    }
+                })(),
+                (async () => {
                     const res = await fetchSystemSetting('delivery_rules');
                     if (res && res.value) {
                         setDeliveryRules(res.value);
@@ -179,16 +188,23 @@ export const Settings = () => {
     const toggleSetting = async (key: keyof typeof settings) => {
         const newValue = !settings[key];
         const name = key.replace(/([A-Z])/g, ' $1').trim();
-        const dbKey = `admin_settings_${key}`;
-        const tid = toast.loading(`Updating ${name}...`);
+        const dbKey = key === 'isLightTheme' ? 'global_theme' : `admin_settings_${key}`;
+        const dbValue = key === 'isLightTheme' ? (newValue ? 'light' : 'dark') : newValue;
+
+        // Optimistically update UI state immediately
+        setSettings(prev => ({ ...prev, [key]: newValue }));
+        if (key === 'isLightTheme') {
+            toggleTheme();
+        }
+
+        const tid = toast.loading(`Syncing ${name} to server...`);
 
         try {
-            await updateSystemSetting(dbKey, newValue);
-            setSettings(prev => ({ ...prev, [key]: newValue }));
+            await updateSystemSetting(dbKey, dbValue);
             toast.success(`${newValue ? 'Enabled' : 'Disabled'} ${name}`, { id: tid });
         } catch (err) {
-            console.error(err);
-            toast.error(`Failed to update ${name}`, { id: tid });
+            console.warn(`Database setting sync failed for ${name}:`, err);
+            toast.error(`${newValue ? 'Enabled' : 'Disabled'} ${name} locally (DB Offline)`, { id: tid });
         }
     };
 
@@ -284,7 +300,7 @@ export const Settings = () => {
                                             </div>
                                             <div className={styles.toggle} data-active={settings.autoBackup} onClick={() => toggleSetting('autoBackup')}><div className={styles.toggleKnob}></div></div>
                                         </div>
-                                        <div className={styles.settingRow}>
+                                         <div className={styles.settingRow}>
                                             <div className={styles.settingInfo}>
                                                 <div className={styles.iconBox}><Globe size={20} /></div>
                                                 <div className={styles.settingDetails}>
@@ -293,6 +309,16 @@ export const Settings = () => {
                                                 </div>
                                             </div>
                                             <div className={styles.toggle} data-active={!settings.maintenance} onClick={() => toggleSetting('maintenance')}><div className={styles.toggleKnob}></div></div>
+                                        </div>
+                                        <div className={styles.settingRow}>
+                                            <div className={styles.settingInfo}>
+                                                <div className={styles.iconBox}><Sun size={20} /></div>
+                                                <div className={styles.settingDetails}>
+                                                    <div className={styles.settingName}>Global Light Theme</div>
+                                                    <div className={styles.settingHelper}>Toggle between Light and Dark mode site-wide for all visitors.</div>
+                                                </div>
+                                            </div>
+                                            <div className={styles.toggle} data-active={settings.isLightTheme} onClick={() => toggleSetting('isLightTheme')}><div className={styles.toggleKnob}></div></div>
                                         </div>
                                     </div>
 

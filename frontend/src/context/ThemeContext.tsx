@@ -12,16 +12,36 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
-    const theme: Theme = 'dark';
+    const [theme, setTheme] = useState<Theme>(() => {
+        const saved = localStorage.getItem('theme');
+        return (saved as Theme) || 'dark';
+    });
 
     const [isPremium, setIsPremium] = useState<boolean>(() => {
         return localStorage.getItem('isPremium') === 'true';
     });
 
     useEffect(() => {
-        document.documentElement.setAttribute('data-theme', 'dark');
-        localStorage.setItem('theme', 'dark');
+        const loadGlobalTheme = async () => {
+            try {
+                const res = await fetch(`${import.meta.env.VITE_API_URL || 'https://plantoxy.onrender.com/api'}/settings/global_theme`);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data && data.value && (data.value === 'dark' || data.value === 'light')) {
+                        setTheme(data.value);
+                    }
+                }
+            } catch (err) {
+                console.error("Failed to load global theme settings:", err);
+            }
+        };
+        loadGlobalTheme();
     }, []);
+
+    useEffect(() => {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+    }, [theme]);
 
     useEffect(() => {
         document.documentElement.setAttribute('data-premium', isPremium ? 'true' : 'false');
@@ -34,7 +54,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     }, [isPremium]);
 
     const toggleTheme = () => {
-        // Dark theme is locked
+        setTheme(prev => prev === 'dark' ? 'light' : 'dark');
     };
 
     const togglePremium = () => {
