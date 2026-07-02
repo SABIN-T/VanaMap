@@ -2,21 +2,6 @@ html {
   scroll-behavior: smooth;
 }
 
-/* Import comprehensive light mode styles */
-@import './styles/light-mode-global.css';
-
-/* Import premium high-end design system */
-@import './styles/premium-light-mode.css';
-
-/* Import mobile-specific light mode fixes */
-@import './styles/mobile-light-mode-fixes.css';
-
-/* Import desktop-specific light mode fixes */
-@import './styles/desktop-light-mode-fixes.css';
-
-/* Import ultimate light mode fix - FINAL OVERRIDE */
-@import './styles/ultimate-light-mode-fix.css';
-
 :root {
   font-family: 'Inter', system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -52,62 +37,6 @@ html {
   color-scheme: dark;
 }
 
-[data-theme='light'] {
-  /* Premium Minimalist White-Green Palette */
-  --color-bg: #ffffff;
-  /* Pure white - main background */
-  --color-bg-alt: #f8fafc;
-  /* Soft slate gray for alternate sections */
-  --color-bg-card: #ffffff;
-  /* Pure white cards */
-  --color-bg-card-hover: #f0fdf4;
-  /* Soft mint tint on hover */
-
-  /* Text Colors - Forest Green & Slate Hierarchy */
-  --color-text-main: #1e293b;
-  /* Slate 800 - primary text */
-  --color-text-muted: #475569;
-  /* Slate 600 - secondary text */
-  --color-text-dim: #64748b;
-  /* Slate 500 - tertiary text */
-
-  --color-border: #cbd5e1;
-  /* Light gray border */
-  --glass-bg: rgba(255, 255, 255, 0.95);
-  /* Almost opaque white glass */
-  --glass-border: 1px solid #cbd5e1;
-  /* Light gray glass border */
-  --glass-shadow: 0 20px 50px -12px rgba(16, 185, 129, 0.06);
-  /* Subtle emerald shadow */
-  --card-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.04), 0 4px 6px -2px rgba(16, 185, 129, 0.02);
-
-  /* Emerald Green accents for buttons and interactive elements */
-  --color-primary: #10b981;
-  /* Emerald green for buttons */
-  --color-primary-hover: #059669;
-  /* Darker emerald on hover */
-  --color-accent-light: #d1fae5;
-  /* Light mint green accent */
-
-  /* Additional text colors for specific use cases */
-  --color-heading: #064e3b;
-  /* Dark forest green for headings */
-  --color-body: #1e293b;
-  /* Slate 800 for body text */
-  --color-label: #475569;
-  /* Slate 600 for labels */
-  --color-placeholder: #94a3b8;
-  /* Light gray for placeholders */
-
-  --map-bg: #f8fafc;
-  /* Light slate background for maps */
-  --map-popup-bg: #ffffff;
-  /* White popups */
-  --map-popup-text: #1e293b;
-  /* Slate 800 text */
-
-  color-scheme: light;
-}
 
 :root {
   color: var(--color-text-main);
@@ -225,26 +154,6 @@ body {
   background: rgba(16, 185, 129, 0.1);
 }
 
-/* Light Mode Button Styles */
-[data-theme='light'] .btn-primary {
-  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  color: #ffffff;
-}
-
-[data-theme='light'] .btn-primary:hover {
-  transform: translateY(-3px);
-}
-
-[data-theme='light'] .btn-outline {
-  border-color: rgba(16, 185, 129, 0.3);
-  color: #047857;
-}
-
-[data-theme='light'] .btn-outline:hover {
-  border-color: #10b981;
-  color: #064e3b;
-  background: rgba(16, 185, 129, 0.15);
-}
 
 /* Leaflet Overrides */
 .leaflet-container {
@@ -309,64 +218,4 @@ body {
   }
 }
 
-/* Desktop Font Size Reductions */
-
-/* Light Mode Input & Form Styles */
-[data-theme='light'] input,
-[data-theme='light'] textarea,
-[data-theme='light'] select {
-  background: rgba(255, 255, 255, 0.9);
-  border-color: rgba(16, 185, 129, 0.2);
-  color: #064e3b;
-}
-
-[data-theme='light'] input::placeholder,
-[data-theme='light'] textarea::placeholder {
-  color: #059669;
-  opacity: 0.6;
-}
-
-[data-theme='light'] input:focus,
-[data-theme='light'] textarea:focus,
-[data-theme='light'] select:focus {
-  border-color: #10b981;
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
-  background: #ffffff;
-}
-
-/* Light Mode Card & Panel Styles */
-[data-theme='light'] .card,
-[data-theme='light'] .panel {
-  background: #ffffff;
-  border-color: rgba(16, 185, 129, 0.15);
-  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.08);
-}
-
-/* Light Mode Link Styles */
-[data-theme='light'] a {
-  color: #059669;
-}
-
-[data-theme='light'] a:hover {
-  color: #10b981;
-}
-
-/* Light Mode Notification & Toast Styles */
-[data-theme='light'] .notification,
-[data-theme='light'] .toast {
-  background: rgba(255, 255, 255, 0.95);
-  border: 1px solid rgba(16, 185, 129, 0.2);
-  color: #064e3b;
-  box-shadow: 0 10px 30px rgba(16, 185, 129, 0.15);
-}
-
-/* Light Mode Modal Overlay */
-[data-theme='light'] .modal-overlay {
-  background: rgba(240, 253, 244, 0.8);
-}
-
-[data-theme='light'] .modal-content {
-  background: #ffffff;
-  border: 1px solid rgba(16, 185, 129, 0.2);
-  box-shadow: 0 20px 50px rgba(16, 185, 129, 0.2);
-}
+/* Desktop Font Size Reductions */

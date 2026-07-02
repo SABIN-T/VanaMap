@@ -12,19 +12,16 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
-    const [theme, setTheme] = useState<Theme>(() => {
-        const saved = localStorage.getItem('theme');
-        return (saved as Theme) || 'dark';
-    });
+    const theme: Theme = 'dark';
 
     const [isPremium, setIsPremium] = useState<boolean>(() => {
         return localStorage.getItem('isPremium') === 'true';
     });
 
     useEffect(() => {
-        document.documentElement.setAttribute('data-theme', theme);
-        localStorage.setItem('theme', theme);
-    }, [theme]);
+        document.documentElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+    }, []);
 
     useEffect(() => {
         document.documentElement.setAttribute('data-premium', isPremium ? 'true' : 'false');
@@ -37,7 +34,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
     }, [isPremium]);
 
     const toggleTheme = () => {
-        setTheme(prev => prev === 'dark' ? 'light' : 'dark');
+        // Dark theme is locked
     };
 
     const togglePremium = () => {

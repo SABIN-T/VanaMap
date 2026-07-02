@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { ShoppingCart, User as UserIcon, LogOut, Leaf, Sun, Moon, Menu, X, ChevronRight, Download, Shield, ShoppingBag, Trophy, Gamepad2, Crown } from 'lucide-react';
+import { ShoppingCart, User as UserIcon, LogOut, Leaf, Sun, Menu, X, ChevronRight, Download, Shield, ShoppingBag, Trophy, Gamepad2, Crown } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useCart } from '../../context/CartContext';
 import { useTheme } from '../../context/ThemeContext';
@@ -9,7 +9,7 @@ import styles from './Navbar.module.css';
 export const Navbar = () => {
     const { user, logout } = useAuth();
     const { items: cartItems } = useCart();
-    const { theme, toggleTheme, isPremium } = useTheme();
+    const { isPremium } = useTheme();
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
@@ -70,9 +70,6 @@ export const Navbar = () => {
                     {cartItems.length > 0 && <span className={styles.badge}>{cartItems.length}</span>}
                 </Link>
 
-                <button onClick={toggleTheme} className={styles.themeToggle} title="Toggle Theme">
-                    {theme === 'dark' ? <Sun size={20} color="#facc15" /> : <Moon size={20} color="#333" />}
-                </button>
 
                 {/* Mobile-only logout button */}
                 {user && (
