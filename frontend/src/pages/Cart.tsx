@@ -74,6 +74,7 @@ export const Cart = () => {
     const mapRef = useRef<L.Map | null>(null);
 
     const [checkoutStep, setCheckoutStep] = useState<1 | 2 | 3>(1);
+    const [activeCheckoutVendor, setActiveCheckoutVendor] = useState<string | null>(null);
     const [suggestions, setSuggestions] = useState<Plant[]>([]);
     const [orders, setOrders] = useState<any[]>([]);
     const [activeOrdersExpanded, setActiveOrdersExpanded] = useState(true);
@@ -505,8 +506,21 @@ export const Cart = () => {
         );
     }
 
-    // Helper: Group items by vendor
+    // Filter items based on active checkout vendor if set
+    const checkoutItems = activeCheckoutVendor
+        ? items.filter(item => (item.vendorId || 'vanamap') === activeCheckoutVendor)
+        : items;
+
+    // Helper: Group items by vendor (all items)
     const groupedItems = items.reduce((acc, item) => {
+        const vId = item.vendorId || 'vanamap';
+        if (!acc[vId]) acc[vId] = [];
+        acc[vId].push(item);
+        return acc;
+    }, {} as Record<string, CartItem[]>);
+
+    // Group items active for checkout steps
+    const checkoutGroupedItems = checkoutItems.reduce((acc, item) => {
         const vId = item.vendorId || 'vanamap';
         if (!acc[vId]) acc[vId] = [];
         acc[vId].push(item);
@@ -853,6 +867,32 @@ export const Cart = () => {
                                                         );
                                                     })}
                                                 </div>
+                                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '1rem', padding: '0.75rem 0 0', borderTop: '1px dashed rgba(255,255,255,0.06)' }}>
+                                                    <div style={{ fontSize: '0.8rem', color: '#94a3b8' }}>
+                                                        Subtotal: <span style={{ fontWeight: 800, color: '#10b981' }}>{formatCurrency(cartItems.reduce((acc, i) => acc + ((i.vendorPrice || i.plant.price || 0) * i.quantity), 0))}</span>
+                                                    </div>
+                                                    {Object.keys(groupedItems).length > 1 && (
+                                                        <button
+                                                            onClick={() => {
+                                                                setActiveCheckoutVendor(vendorId);
+                                                                setCheckoutStep(2);
+                                                            }}
+                                                            style={{
+                                                                background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+                                                                color: 'white',
+                                                                border: 'none',
+                                                                borderRadius: '8px',
+                                                                padding: '6px 12px',
+                                                                fontWeight: 800,
+                                                                fontSize: '0.75rem',
+                                                                cursor: 'pointer',
+                                                                transition: 'all 0.2s'
+                                                            }}
+                                                        >
+                                                            Checkout from this Seller ➔
+                                                        </button>
+                                                    )}
+                                                </div>
                                             </div>
                                         );
                                     })}
@@ -939,7 +979,7 @@ export const Cart = () => {
                                                                 onDrag={handleMarkerDrag}
                                                             />
                                                         )}
-                                                        {Object.keys(groupedItems).map(vendorId => {
+                                                        {checkoutGroupedItems && Object.keys(checkoutGroupedItems).map(vendorId => {
                                                             const isVanaMap = vendorId === 'vanamap';
                                                             const vendor = isVanaMap
                                                                 ? { latitude: deliveryRules.hqLatitude, longitude: deliveryRules.hqLongitude, name: 'VanaMap Official' }
@@ -972,7 +1012,7 @@ export const Cart = () => {
                                         <p style={{ margin: '2px 0 0', fontSize: '0.8rem', color: '#94a3b8' }}>Review final quantities, delivery routes, and billing breakdown before secure payment.</p>
                                     </div>
 
-                                    {Object.entries(groupedItems).map(([vendorId, cartItems]) => {
+                                    {Object.entries(checkoutGroupedItems).map(([vendorId, cartItems]) => {
                                         const isVanaMap = vendorId === 'vanamap';
                                         const vendor = vendors[vendorId];
                                         const vendorName = isVanaMap ? 'VanaMap Official' : (vendor?.name || 'Loading Vendor...');
@@ -1046,13 +1086,23 @@ export const Cart = () => {
                                             </div>
                                         </div>
                                         <div className={styles.summaryFooter} style={{ padding: '1rem' }}>
-                                            <button 
-                                                className={styles.payOnlineBtn}
-                                                style={{ width: '100%', background: '#10b981', display: 'flex', justifyContent: 'center', gap: '6px' }}
-                                                onClick={() => setCheckoutStep(2)}
-                                            >
-                                                Proceed to Shipping Pin ➔
-                                            </button>
+                                            {Object.keys(groupedItems).length > 1 ? (
+                                                <div style={{ fontSize: '0.75rem', color: '#fbbf24', background: 'rgba(251,191,36,0.08)', border: '1px dashed rgba(251,191,36,0.2)', borderRadius: '8px', padding: '8px', textAlign: 'center', lineHeight: 1.3 }}>
+                                                    ⚠️ Your cart has items from multiple nurseries. Please use the individual "Checkout" buttons in your cart list.
+                                                </div>
+                                            ) : (
+                                                <button 
+                                                    className={styles.payOnlineBtn}
+                                                    style={{ width: '100%', background: '#10b981', display: 'flex', justifyContent: 'center', gap: '6px' }}
+                                                    onClick={() => {
+                                                        const firstVendor = Object.keys(groupedItems)[0];
+                                                        setActiveCheckoutVendor(firstVendor);
+                                                        setCheckoutStep(2);
+                                                    }}
+                                                >
+                                                    Proceed to Shipping Pin ➔
+                                                </button>
+                                            )}
                                         </div>
                                     </div>
                                 )}
@@ -1074,7 +1124,7 @@ export const Cart = () => {
                                             </div>
                                             
                                             {/* Geofence checks warning alerts */}
-                                            {Object.entries(groupedItems).map(([vendorId, _]) => {
+                                            {Object.entries(checkoutGroupedItems).map(([vendorId, _]) => {
                                                 const { distance, outOfRange } = getDeliveryDetails(vendorId);
                                                 const vendor = vendors[vendorId];
                                                 const maxRadius = (vendor && 'deliveryRadius' in vendor && vendor.deliveryRadius !== undefined) ? vendor.deliveryRadius : deliveryRules.maxDistanceKm;
@@ -1096,7 +1146,7 @@ export const Cart = () => {
                                                 disabled={
                                                     !deliveryAddress.latitude || 
                                                     !deliveryAddress.address || 
-                                                    Object.keys(groupedItems).some(vendorId => getDeliveryDetails(vendorId).outOfRange)
+                                                    Object.keys(checkoutGroupedItems).some(vendorId => getDeliveryDetails(vendorId).outOfRange)
                                                 }
                                                 onClick={() => setCheckoutStep(3)}
                                             >
@@ -1104,7 +1154,10 @@ export const Cart = () => {
                                             </button>
                                             <button 
                                                 style={{ width: '100%', background: 'transparent', border: '1px solid rgba(255,255,255,0.1)', color: '#94a3b8', borderRadius: '12px', padding: '10px 0', fontSize: '0.85rem', fontWeight: 800, cursor: 'pointer' }}
-                                                onClick={() => setCheckoutStep(1)}
+                                                onClick={() => {
+                                                    setActiveCheckoutVendor(null);
+                                                    setCheckoutStep(1);
+                                                }}
                                             >
                                                 Back to Cart Items
                                             </button>
@@ -1114,7 +1167,7 @@ export const Cart = () => {
 
                                 {checkoutStep === 3 && (
                                     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                                        {Object.entries(groupedItems).map(([vendorId, cartItems]) => {
+                                        {Object.entries(checkoutGroupedItems).map(([vendorId, cartItems]) => {
                                             const isVanaMap = vendorId === 'vanamap';
                                             const vendor = vendors[vendorId];
                                             const totalPrice = cartItems.reduce((sum, i) => sum + ((i.vendorPrice || i.plant.price || 0) * i.quantity), 0);
