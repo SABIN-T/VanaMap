@@ -76,9 +76,6 @@ const FloraIntelligence = {
      * Extracts plant species names mentioned in user chat history.
      */
     async extractPlantNames(messages) {
-        const apiKey = process.env.GROQ_API_KEY;
-        if (!apiKey) return [];
-
         // Fetch user message contents (last 3 messages)
         const recentMessages = messages.filter(m => m.role !== 'system').slice(-3);
         const textContent = recentMessages.map(m => {
@@ -90,6 +87,30 @@ const FloraIntelligence = {
         }).join('\n');
 
         if (!textContent.trim()) return [];
+
+        const cleanText = textContent.toLowerCase();
+
+        // 1. FAST PATH: Scan in-memory worldFlora & static biometrics first (0ms latency)
+        const found = [];
+        const worldFlora = require('./worldFlora');
+        for (const plant of worldFlora) {
+            const sci = plant.scientificName.toLowerCase();
+            const com = plant.commonName.toLowerCase();
+            if (cleanText.includes(sci) || cleanText.includes(com)) {
+                if (!found.includes(plant.scientificName)) {
+                    found.push(plant.scientificName);
+                }
+            }
+            if (found.length >= 3) break;
+        }
+
+        if (found.length > 0) {
+            return found;
+        }
+
+        // 2. SLOW PATH FALLBACK: Call the LLM extractor only if no local database names match
+        const apiKey = process.env.GROQ_API_KEY;
+        if (!apiKey) return [];
 
         const systemPrompt = `You are a botanical entity extractor. Analyze the user messages and extract any specific plant species (common name or scientific name) they are asking about, diagnosing, or referencing.
 Return the result as a raw JSON array of strings, for example: ["Monstera deliciosa", "Peace Lily"]. If no specific plant is mentioned, return an empty array [].
@@ -341,16 +362,22 @@ STRICT GROUNDING: Base all parameters strictly on the provided Raw Information. 
             }
 
             if (worldMatch) {
-                const researched = await this.researchPlantDossier(worldMatch.scientificName);
-                if (researched) {
-                    dossiers.push(researched.toObject ? researched.toObject() : researched);
-                    continue;
+                // 3a. Check if we already have detailed research cached in BotanicalDossier
+                try {
+                    const cached = await BotanicalDossier.findOne({ scientificName: worldMatch.scientificName });
+                    if (cached) {
+                        dossiers.push(cached.toObject());
+                        continue;
+                    }
+                } catch (cacheErr) {
+                    console.error('[Flora Intelligence] Cache search error:', cacheErr);
                 }
 
+                // 3b. Not cached: return instant response from local database properties
                 dossiers.push({
                     scientificName: worldMatch.scientificName,
                     commonName: worldMatch.commonName,
-                    toxicity: "Toxicity data unavailable. Handle with care.",
+                    toxicity: "Toxicity data cached in background. Handle with care.",
                     npkRatio: "10-10-10 Balanced",
                     soilPH: "6.0 - 7.0",
                     cropCoefficient: 0.5,
@@ -358,6 +385,11 @@ STRICT GROUNDING: Base all parameters strictly on the provided Raw Information. 
                     lightRequirement: worldMatch.lightRequirement,
                     wateringInstructions: "Water regularly as needed.",
                     verifiedSource: `World Flora Index (${worldMatch.verifiedSource})`
+                });
+
+                // 3c. Trigger web/LLM crawler asynchronously in the background (Non-blocking!)
+                this.researchPlantDossier(worldMatch.scientificName).catch(err => {
+                    console.error(`[Background Researcher] Deep research failed for ${worldMatch.scientificName}:`, err);
                 });
                 continue;
             }
