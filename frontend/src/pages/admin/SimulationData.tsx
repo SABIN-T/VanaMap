@@ -135,6 +135,12 @@ export const SimulationData = () => {
                                 <div>
                                     <div style={{ fontWeight: 600, color: '#f8fafc' }}>{plant.scientificName}</div>
                                     <div style={{ fontSize: '0.8rem', color: '#64748b' }}>{plant.commonName}</div>
+                                    <div style={{ fontSize: '0.7rem', color: '#38bdf8', marginTop: '4px', display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
+                                        <span>🌡️ {(plant as any).idealTempMin || 16}-{(plant as any).idealTempMax || 30}°C</span>
+                                        <span>💧 {(plant as any).minHumidity || 45}% RH</span>
+                                        <span>🌱 {(plant as any).preferredSoil || 'loamy'}</span>
+                                        <span>🌦️ {(plant as any).climateZone || 'Temperate'} ({(plant as any).annualRainfallRequirement || 800}mm)</span>
+                                    </div>
                                 </div>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#cbd5e1' }}>
                                     <Flower size={14} color="#f472b6" /> {plant.flowerType}

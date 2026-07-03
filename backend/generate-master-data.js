@@ -680,6 +680,8 @@ const generateSimulationData = () => {
     const inflorescenceTypes = ["Raceme", "Cyme", "Panicle", "Umbel", "Corymb", "Spike", "Spadix"];
     const lightLevels = ["Bright Light", "Medium Light", "Low Light", "Direct Sun", "Deep Shade"];
     const acTolerances = ["High tolerance", "Medium tolerance", "Low tolerance"];
+    const soilTypes = ["loamy", "clayey", "sandy", "laterite", "red_black"];
+    const climateZones = ["Tropical", "Arid", "Temperate", "Mediterranean", "Subtropical"];
 
     let seed = 42;
     const random = () => {
@@ -691,6 +693,27 @@ const generateSimulationData = () => {
     for (let i = 0; i < 10000; i++) {
         if (i < REAL_PLANTS_SOURCE.length) {
             const p = REAL_PLANTS_SOURCE[i];
+            
+            // Map real species to explicit climate and soil attributes
+            let pSoil = "loamy";
+            let pZone = "Subtropical";
+            let pRain = 1200;
+            const pName = p.name.toLowerCase();
+            
+            if (pName.includes('cactus') || pName.includes('succulent') || pName.includes('aloe') || pName.includes('snake')) {
+                pSoil = "sandy";
+                pZone = "Arid";
+                pRain = 150;
+            } else if (pName.includes('fern') || pName.includes('calathea') || pName.includes('spathiphyllum')) {
+                pSoil = "clayey";
+                pZone = "Tropical";
+                pRain = 2200;
+            } else if (p.type === 'outdoor') {
+                pSoil = "red_black";
+                pZone = "Temperate";
+                pRain = 800;
+            }
+
             flora.push({
                 id: `wf_${1000 + i}`,
                 scientificName: p.sci,
@@ -704,7 +727,13 @@ const generateSimulationData = () => {
                 acTolerance: p.ac,
                 peopleSupported: Number((p.oxygen / 550).toFixed(4)),
                 aptness: calculateAptness(p),
-                verifiedSource: getVerificationSource(p)
+                verifiedSource: getVerificationSource(p),
+                idealTempMin: p.idealTempMin || 16,
+                idealTempMax: p.idealTempMax || 30,
+                minHumidity: p.minHumidity || 45,
+                preferredSoil: pSoil,
+                annualRainfallRequirement: pRain,
+                climateZone: pZone
             });
         } else {
             const gIdx = randInt(0, genusList.length - 1);
@@ -721,6 +750,13 @@ const generateSimulationData = () => {
             const light = lightLevels[randInt(0, lightLevels.length - 1)];
             const ac = acTolerances[randInt(0, acTolerances.length - 1)];
             const oxygen = randInt(5, 120);
+
+            const tempMin = randInt(10, 20);
+            const tempMax = randInt(25, 38);
+            const humidity = [30, 40, 50, 60, 70][randInt(0, 4)];
+            const soil = soilTypes[randInt(0, 4)];
+            const zone = climateZones[randInt(0, 4)];
+            const rain = zone === "Arid" ? randInt(50, 250) : zone === "Tropical" ? randInt(1800, 3200) : randInt(500, 1500);
 
             const dummyPlant = {
                 name: commonName,
@@ -750,7 +786,13 @@ const generateSimulationData = () => {
                 acTolerance: ac,
                 peopleSupported: Number((oxygen / 550).toFixed(4)),
                 aptness: calculateAptness(dummyPlant),
-                verifiedSource: getVerificationSource(dummyPlant)
+                verifiedSource: getVerificationSource(dummyPlant),
+                idealTempMin: tempMin,
+                idealTempMax: tempMax,
+                minHumidity: humidity,
+                preferredSoil: soil,
+                annualRainfallRequirement: rain,
+                climateZone: zone
             });
         }
     }
@@ -769,9 +811,15 @@ const generateSimulationData = () => {
     peopleSupported: number; // calculated ratio
     aptness: number; // 0-100% Simulation Suitability Score
     verifiedSource: string;
+    idealTempMin: number;
+    idealTempMax: number;
+    minHumidity: number;
+    preferredSoil: 'loamy' | 'clayey' | 'sandy' | 'laterite' | 'red_black';
+    annualRainfallRequirement: number; // mm/year
+    climateZone: 'Tropical' | 'Arid' | 'Temperate' | 'Mediterranean' | 'Subtropical';
 }
 
-export const worldFlora: WorldFloraSpecimen[] = ${JSON.stringify(flora, null, 4)};
+export const worldFlora: WorldFloraSpecimen[] = ${JSON.stringify(flora, null, 4)} as any;
 `;
     const simPath = path.join(__dirname, '../frontend/src/data/worldFlora.ts');
     fs.writeFileSync(simPath, content);

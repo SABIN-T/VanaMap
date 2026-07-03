@@ -62,6 +62,15 @@ const getSunlightMatchScore = (plant: Plant, userSunlight: 'low' | 'medium' | 'h
 };
 
 const getSoilMatchScore = (plant: Plant, userSoil: 'loamy' | 'clayey' | 'sandy' | 'laterite' | 'red_black'): number => {
+    const dbSoil = (plant as any).preferredSoil;
+    if (dbSoil) {
+        if (dbSoil === userSoil) return 1.0;
+        if (dbSoil === 'loamy' && userSoil === 'red_black') return 0.8;
+        if (dbSoil === 'red_black' && userSoil === 'loamy') return 0.8;
+        if ((dbSoil === 'sandy' && userSoil === 'clayey') || (dbSoil === 'clayey' && userSoil === 'sandy')) return 0.2;
+        return 0.5;
+    }
+
     const name = plant.name.toLowerCase();
     const desc = plant.description.toLowerCase();
     const isDryLover = name.includes('cactus') || name.includes('succulent') || name.includes('aloe') || name.includes('snake plant') || name.includes('jade') || desc.includes('succulent') || desc.includes('desert') || desc.includes('dry');
@@ -87,6 +96,22 @@ const getSoilMatchScore = (plant: Plant, userSoil: 'loamy' | 'clayey' | 'sandy' 
 };
 
 const getRainfallMatchScore = (plant: Plant, precipitation30Days: number): number => {
+    const dbZone = (plant as any).climateZone;
+    if (dbZone) {
+        if (precipitation30Days < 20) {
+            if (dbZone === 'Arid') return 1.0;
+            if (dbZone === 'Tropical') return 0.2;
+            return 0.6;
+        }
+        if (precipitation30Days > 80) {
+            if (dbZone === 'Tropical') return 1.0;
+            if (dbZone === 'Arid') return 0.2;
+            return 0.7;
+        }
+        if (dbZone === 'Temperate' || dbZone === 'Subtropical' || dbZone === 'Mediterranean') return 1.0;
+        return 0.8;
+    }
+
     const name = plant.name.toLowerCase();
     const desc = plant.description.toLowerCase();
     const isDryLover = name.includes('cactus') || name.includes('succulent') || name.includes('aloe') || name.includes('snake plant') || desc.includes('succulent') || desc.includes('desert') || desc.includes('dry');
