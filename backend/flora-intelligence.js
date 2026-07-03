@@ -1,3 +1,25 @@
+const getLevenshteinDistance = (a, b) => {
+    if (a.length === 0) return b.length;
+    if (b.length === 0) return a.length;
+    const matrix = [];
+    for (let i = 0; i <= b.length; i++) matrix[i] = [i];
+    for (let j = 0; j <= a.length; j++) matrix[0][j] = j;
+    for (let i = 1; i <= b.length; i++) {
+        for (let j = 1; j <= a.length; j++) {
+            if (b.charAt(i - 1) === a.charAt(j - 1)) {
+                matrix[i][j] = matrix[i - 1][j - 1];
+            } else {
+                matrix[i][j] = Math.min(
+                    matrix[i - 1][j - 1] + 1,
+                    matrix[i][j - 1] + 1,
+                    matrix[i - 1][j] + 1
+                );
+            }
+        }
+    }
+    return matrix[b.length][a.length];
+};
+
 const { User, Plant, BotanicalDossier } = require('./models');
 
 // Deep botanical and agronomic biometrics database for household and crop plants (Fast static path)
@@ -184,7 +206,8 @@ Format your response as a strict JSON object with the following fields:
   "lightRequirement": "Standard lux requirement (e.g., 'Medium indirect (500-1500 Lux)')",
   "wateringInstructions": "Watering rule/guidelines (e.g., 'Allow the top 2 inches of soil to dry out before watering again.')"
 }
-Ensure all fields are present and valid JSON. Respond with ONLY the raw JSON object, no explanation, no markdown backticks.`;
+Ensure all fields are present and valid JSON. Respond with ONLY the raw JSON object, no explanation, no markdown backticks.
+STRICT GROUNDING: Base all parameters strictly on the provided Raw Information. Do not invent properties or make up fictitious chemical details. If unknown, output standard conservative baseline values.`;
 
             const res = await fetch("https://api.groq.com/openai/v1/chat/completions", {
                 method: "POST",
@@ -197,7 +220,7 @@ Ensure all fields are present and valid JSON. Respond with ONLY the raw JSON obj
                     messages: [
                         { role: "system", content: systemPrompt }
                     ],
-                    temperature: 0.2,
+                    temperature: 0.1,
                     max_tokens: 600
                 })
             });
@@ -291,12 +314,31 @@ Ensure all fields are present and valid JSON. Respond with ONLY the raw JSON obj
                 console.error('[Flora Intelligence] Error checking BotanicalDossier cache:', err);
             }
 
-            // 3. Check worldFlora.js
+            // 3. Check worldFlora.js (with fuzzy edit distance fallback)
             const worldFlora = require('./worldFlora');
-            const worldMatch = worldFlora.find(p => 
+            let worldMatch = worldFlora.find(p => 
                 p.scientificName.toLowerCase() === cleanName || 
                 p.commonName.toLowerCase() === cleanName
             );
+
+            if (!worldMatch) {
+                let bestMatch = null;
+                let lowestDistance = 999;
+                for (const plant of worldFlora) {
+                    const sciDist = getLevenshteinDistance(cleanName, plant.scientificName.toLowerCase());
+                    const comDist = getLevenshteinDistance(cleanName, plant.commonName.toLowerCase());
+                    const minD = Math.min(sciDist, comDist);
+                    if (minD < lowestDistance) {
+                        lowestDistance = minD;
+                        bestMatch = plant;
+                    }
+                }
+                // Allow up to 3 character edits to capture spelling errors/typos
+                if (lowestDistance <= 3 && bestMatch) {
+                    console.log(`[Fuzzy Match] Rescued "${name}" as "${bestMatch.scientificName}" (Distance: ${lowestDistance})`);
+                    worldMatch = bestMatch;
+                }
+            }
 
             if (worldMatch) {
                 const researched = await this.researchPlantDossier(worldMatch.scientificName);
@@ -396,10 +438,10 @@ Ensure all fields are present and valid JSON. Respond with ONLY the raw JSON obj
 
             const bioSnippet = `
                - Safety: ${p.toxicity}
-               - Cultivation: Recommended NPK ratio is ${p.npkRatio}. Soil pH range: ${p.soilPH}.
-               - Common Pathogens/Pests: ${(p.phytoPathology || []).join(', ')}
-               - Light / Exposure: ${p.lightRequirement || 'N/A'}
-               - Watering Guidelines: ${p.wateringInstructions || 'N/A'}`;
+               - Cultivation: NPK: ${p.npkRatio}, pH: ${p.soilPH}.
+               - Pathogens: ${(p.phytoPathology || []).slice(0, 3).join(', ')}
+               - Light: ${p.lightRequirement || 'N/A'}
+               - Water: ${p.wateringInstructions || 'N/A'}`;
 
             return `• [ID: ${p.scientificName}] matches "${p.commonName}". ${transpirationSnippet}${bioSnippet}
                - Source: Verified by ${p.verifiedSource}.`;
