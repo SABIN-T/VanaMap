@@ -389,8 +389,45 @@ export const Home = () => {
     const displayedPlants = useMemo(() => {
         const filtered = plants.filter(p => {
             const matchesType = filter === 'all' ? true : p.type === filter;
-            const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                (p.scientificName || '').toLowerCase().includes(searchQuery.toLowerCase());
+            const matchesSearch = (() => {
+                const directMatch = p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    (p.scientificName || '').toLowerCase().includes(searchQuery.toLowerCase());
+                if (directMatch) return true;
+
+                const query = searchQuery.toLowerCase().trim();
+                if (!query) return true;
+
+                const desc = (p.description || '').toLowerCase();
+                const advantages = ((p as any).advantages || []).join(' ').toLowerCase();
+                const medicinal = ((p as any).medicinalValues || []).join(' ').toLowerCase();
+
+                if ((query.includes('easy') || query.includes('maintenance') || query.includes('hardy') || query.includes('neglect')) && 
+                    (desc.includes('easy') || desc.includes('hardy') || desc.includes('neglect') || desc.includes('durable') || (p as any).maintenance === 'low')) {
+                    return true;
+                }
+                if ((query.includes('bedroom') || query.includes('purif') || query.includes('breathe') || query.includes('oxygen')) && 
+                    (desc.includes('purif') || desc.includes('clean') || desc.includes('oxygen') || advantages.includes('purif') || medicinal.includes('purif'))) {
+                    return true;
+                }
+                if ((query.includes('pet') || query.includes('safe') || query.includes('toxic')) && 
+                    (desc.includes('non-toxic') || desc.includes('pet friendly') || advantages.includes('safe'))) {
+                    return true;
+                }
+                if ((query.includes('dark') || query.includes('shadow') || query.includes('dim') || query.includes('low light')) && 
+                    ((p.sunlight || '').toLowerCase().includes('low') || (p.sunlight || '').toLowerCase().includes('shade') || desc.includes('low light'))) {
+                    return true;
+                }
+                if ((query.includes('dry') || query.includes('desert') || query.includes('succulent') || query.includes('seldom')) && 
+                    (desc.includes('dry') || desc.includes('desert') || desc.includes('succulent') || desc.includes('drought'))) {
+                    return true;
+                }
+                if ((query.includes('medicin') || query.includes('heal') || query.includes('ayurveda') || query.includes('herbal')) && 
+                    (medicinal.length > 0 || desc.includes('medicin') || desc.includes('heal') || desc.includes('ayurveda'))) {
+                    return true;
+                }
+
+                return false;
+            })();
             const matchesLight = lightFilter === 'all' ? true : (() => {
                 const s = p.sunlight?.toLowerCase() || '';
                 if (lightFilter === 'low') return s.includes('low') || s.includes('shade') || s.includes('shadow');

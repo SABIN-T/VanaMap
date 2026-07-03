@@ -7703,6 +7703,63 @@ app.patch('/api/user/medical-records/:id', optionalAuth, async (req, res) => {
     }
 });
 
+// Download Medical Record PDF Care Card
+app.get('/api/user/medical-records/:id/pdf', optionalAuth, async (req, res) => {
+    if (!req.user) return res.status(401).json({ error: 'Unauthorized' });
+    try {
+        const record = await DiagnosisRecord.findOne({ _id: req.params.id, userId: req.user.id });
+        if (!record) return res.status(404).json({ error: 'Diagnosis record not found' });
+
+        const PDFDocument = require('pdfkit');
+        const doc = new PDFDocument({ margin: 50 });
+
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', `attachment; filename="VanaMap-Prescription-${record.plantName.replace(/\s+/g, '-')}.pdf"`);
+        doc.pipe(res);
+
+        // Slate Dark Header Box
+        doc.rect(0, 0, 612, 100).fill('#0f172a');
+        doc.fillColor('#10b981').fontSize(24).font('Helvetica-Bold').text('VANAMAP BOTANICAL CLINIC', 50, 35);
+        doc.fillColor('#94a3b8').fontSize(10).font('Helvetica').text('Autonomous Phyto-Pathological Diagnostic Core', 50, 65);
+
+        // Section Title
+        doc.fillColor('#1e293b').fontSize(16).font('Helvetica-Bold').text('Phytotherapy Prescription Care Card', 50, 130);
+        doc.moveTo(50, 150).lineTo(562, 150).stroke('#cbd5e1');
+
+        // Metadata grid
+        doc.fontSize(10).fillColor('#475569');
+        doc.font('Helvetica-Bold').text('Plant Subject:', 50, 170).font('Helvetica').text(record.plantName, 170, 170);
+        doc.font('Helvetica-Bold').text('Scientific Name:', 50, 185).font('Helvetica').text(record.scientificName || 'N/A', 170, 185);
+        
+        const severityColors = { low: '#10b981', medium: '#eab308', high: '#f97316', critical: '#ef4444' };
+        const sevColor = severityColors[record.severity] || '#64748b';
+        doc.font('Helvetica-Bold').text('Severity Class:', 50, 200).fillColor(sevColor).text(record.severity.toUpperCase(), 170, 200).fillColor('#475569');
+        
+        doc.font('Helvetica-Bold').text('Clinic Timestamp:', 50, 215).font('Helvetica').text(new Date(record.timestamp).toLocaleString(), 170, 215);
+        doc.font('Helvetica-Bold').text('Status:', 50, 230).font('Helvetica').text(record.status.toUpperCase(), 170, 230);
+
+        doc.moveTo(50, 250).lineTo(562, 250).stroke('#cbd5e1');
+
+        // Diagnosis Details
+        doc.fillColor('#1e293b').fontSize(12).font('Helvetica-Bold').text('Pathological Diagnosis:', 50, 270);
+        doc.fontSize(10).fillColor('#334155').font('Helvetica').text(record.diagnosis, 50, 290, { width: 512, align: 'justify' });
+
+        // Actionable Prescribed treatment
+        doc.fillColor('#1e293b').fontSize(12).font('Helvetica-Bold').text('Phytomedical Prescriptions & Actions:', 50, 360);
+        doc.fontSize(10).fillColor('#334155').font('Helvetica').text(record.treatment, 50, 380, { width: 512, align: 'left' });
+
+        // Footer & Stamp
+        doc.moveTo(50, 680).lineTo(562, 680).stroke('#cbd5e1');
+        doc.fillColor('#475569').fontSize(10).font('Helvetica-Bold').text('Authorized by:', 50, 700);
+        doc.fontSize(16).fillColor('#10b981').font('Times-BoldItalic').text('Dr. Flora', 50, 715);
+        doc.fontSize(8).fillColor('#94a3b8').font('Helvetica').text('Chief Phyto-Biologist, VanaMap AI Lab', 50, 730);
+
+        doc.end();
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
 // Switch Persona (Doctor Specialty)
 app.patch('/api/user/persona', optionalAuth, async (req, res) => {
     if (!req.user) return res.status(401).json({ error: 'Unauthorized' });

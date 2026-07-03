@@ -1277,8 +1277,31 @@ export const AIDoctor = () => {
                                                     {record.status}
                                                     {record.status === 'active' && <span style={{ fontSize: '0.6rem', marginLeft: '4px', opacity: 0.7 }}>(Click to Resolve)</span>}
                                                 </div>
-                                                <span style={{ marginLeft: 'auto' }}>
-                                                    {new Date(record.timestamp).toLocaleDateString()}
+                                                <span style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                                    <span>{new Date(record.timestamp).toLocaleDateString()}</span>
+                                                    <a 
+                                                        href={`${API_URL}/user/medical-records/${record._id}/pdf`}
+                                                        download={`VanaMap-Prescription-${record.plantName}.pdf`}
+                                                        target="_blank"
+                                                        rel="noreferrer"
+                                                        style={{ 
+                                                            display: 'inline-flex',
+                                                            alignItems: 'center',
+                                                            gap: '4px',
+                                                            color: '#10b981',
+                                                            textDecoration: 'none',
+                                                            fontSize: '0.75rem',
+                                                            fontWeight: 600,
+                                                            background: 'rgba(16, 185, 129, 0.1)',
+                                                            padding: '2px 6px',
+                                                            borderRadius: '4px',
+                                                            transition: '0.2s'
+                                                        }}
+                                                        onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(16, 185, 129, 0.2)'}
+                                                        onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(16, 185, 129, 0.1)'}
+                                                    >
+                                                        <Download size={10} /> PDF Card
+                                                    </a>
                                                 </span>
                                             </div>
                                         </div>
