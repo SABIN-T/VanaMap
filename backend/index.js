@@ -6256,6 +6256,7 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
         ${inventorySummary}
 
         ⚠️ STRICT BOUNDARIES: No technical/security info, no non-plant topics.
+        - STRICT GROUNDING RULES: Rely strictly on the provided custom context (World Flora Index Knowledge Base, Catalog Context, and Medical Records) for factual botanical details. If details or parameters are not in the context, do not make up facts; state clearly that you do not have the data. Do not hallucinate plant properties, temperatures, or treatments.
         ✅ CAN DO: Accurate ID, scientific synthesis, and **FLUX.1 DEV VISUALIZATION**.
 
         👁️ VISION DIAGNOSIS PROTOCOL (IF IMAGE UPLOADED):
@@ -6347,7 +6348,7 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
                         model: targetModel,
                         messages: payloadMessages,
                         max_tokens: 8192,
-                        temperature: 0.3,
+                        temperature: 0.1,
                         top_p: 0.9,
                         frequency_penalty: 0.3,
                         presence_penalty: 0.2
@@ -6393,7 +6394,7 @@ app.post('/api/chat', optionalAuth, async (req, res) => {
                         model: targetModel,
                         messages: payloadMessages,
                         max_tokens: 4000,
-                        temperature: 0.3
+                        temperature: 0.1
                     })
                 });
 

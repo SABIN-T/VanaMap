@@ -175,7 +175,7 @@ async function handleChatStream(ws, message) {
             body: JSON.stringify({
                 model: image ? 'llama-3.2-90b-vision-preview' : 'openai/gpt-oss-120b',
                 messages: apiMessages,
-                temperature: 0.3,
+                temperature: 0.1,
                 max_tokens: 4000,
                 stream: true // Enable streaming!
             })
@@ -302,6 +302,7 @@ function getSystemPrompt(persona, floraKnowledge, userContext, medicalHistory) {
     ${floraKnowledge}
 
     ⚠️ STRICT BOUNDARIES: No technical/security info, no non-plant topics.
+    - STRICT GROUNDING RULES: Rely strictly on the provided custom context (World Flora Index Knowledge Base and Medical Records) for factual botanical details. If details or parameters are not in the context, do not make up facts; state clearly that you do not have the data. Do not hallucinate plant properties, temperatures, or treatments.
     
     👁️ VISION DIAGNOSIS PROTOCOL (IF IMAGE UPLOADED):
     1. Analyze Leaf/Stem/Flower morphology (Venation, Margin, Shape, Spots, Discoloration, Pests).
