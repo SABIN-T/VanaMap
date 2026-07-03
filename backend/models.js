@@ -410,6 +410,12 @@ module.exports = {
         lightRequirement: String,
         wateringInstructions: String,
         verifiedSource: { type: String, default: 'Global Botanical Registry' },
+        idealTempMin: Number,
+        idealTempMax: Number,
+        minHumidity: Number,
+        preferredSoil: String,
+        annualRainfallRequirement: Number,
+        climateZone: String,
         createdAt: { type: Date, default: Date.now }
     })),
     KidsProduct: mongoose.model('KidsProduct', new mongoose.Schema({

@@ -219,13 +219,19 @@ Format your response as a strict JSON object with the following fields:
 {
   "scientificName": "Latin binomial name (e.g., 'Epipremnum aureum')",
   "commonName": "Standard common name (e.g., 'Pothos')",
-  "toxicity": "Toxicity warning to cats and dogs (e.g., 'TOXIC to cats and dogs (contains calcium oxalate crystals causing oral irritation)' or 'NON-TOXIC to cats and dogs')",
-  "npkRatio": "Target NPK fertilizer ratio formula (e.g., '10-15-10' or '20-20-20')",
+  "toxicity": "Toxicity warning to cats and dogs (e.g., 'TOXIC to cats and dogs' or 'NON-TOXIC')",
+  "npkRatio": "Target NPK fertilizer ratio (e.g., '10-15-10')",
   "soilPH": "Optimal soil pH range (e.g., '6.0 - 6.5')",
-  "cropCoefficient": 0.65, // A decimal value representing water transpiration rate (Kc between 0.1 and 1.2)
-  "phytoPathology": ["Pest/Disease 1", "Pest/Disease 2"], // Array of common pathogens
+  "cropCoefficient": 0.65, // water transpiration rate decimal (0.1 to 1.2)
+  "phytoPathology": ["Pest/Disease 1", "Pest/Disease 2"],
   "lightRequirement": "Standard lux requirement (e.g., 'Medium indirect (500-1500 Lux)')",
-  "wateringInstructions": "Watering rule/guidelines (e.g., 'Allow the top 2 inches of soil to dry out before watering again.')"
+  "wateringInstructions": "Watering guidelines",
+  "idealTempMin": 15, // minimum survival temp as integer
+  "idealTempMax": 35, // maximum survival temp as integer
+  "minHumidity": 45, // minimum humidity threshold percent integer
+  "preferredSoil": "loamy", // must be one of: 'loamy', 'clayey', 'sandy', 'laterite', 'red_black'
+  "annualRainfallRequirement": 800, // average rain in mm as integer
+  "climateZone": "Temperate" // must be one of: 'Tropical', 'Arid', 'Temperate', 'Mediterranean', 'Subtropical'
 }
 Ensure all fields are present and valid JSON. Respond with ONLY the raw JSON object, no explanation, no markdown backticks.
 STRICT GROUNDING: Base all parameters strictly on the provided Raw Information. Do not invent properties or make up fictitious chemical details. If unknown, output standard conservative baseline values.`;
@@ -468,9 +474,25 @@ STRICT GROUNDING: Base all parameters strictly on the provided Raw Information. 
                 transpirationSnippet = `\n               - Evapotranspiration Coefficient (Kc): ${p.cropCoefficient} (Water loss baseline)`;
             }
 
+            // Fallback lookup in worldFlora for climate metadata if not present in cached dossier p
+            const worldFlora = require('./worldFlora');
+            const wMatch = worldFlora.find(x => x.scientificName === p.scientificName) || {};
+            
+            const tempMin = p.idealTempMin ?? wMatch.idealTempMin;
+            const tempMax = p.idealTempMax ?? wMatch.idealTempMax;
+            const minHum = p.minHumidity ?? wMatch.minHumidity;
+            const soil = p.preferredSoil ?? wMatch.preferredSoil;
+            const zone = p.climateZone ?? wMatch.climateZone;
+            const rain = p.annualRainfallRequirement ?? wMatch.annualRainfallRequirement;
+
+            let climateSnippet = "";
+            if (tempMin !== undefined) {
+                climateSnippet = `\n               - Climate Profile: Temp: ${tempMin}-${tempMax}°C, Min Hum: ${minHum}%, Soil: ${soil}, Zone: ${zone} (Rain: ${rain}mm/yr).`;
+            }
+
             const bioSnippet = `
                - Safety: ${p.toxicity}
-               - Cultivation: NPK: ${p.npkRatio}, pH: ${p.soilPH}.
+               - Cultivation: NPK: ${p.npkRatio}, pH: ${p.soilPH}.${climateSnippet}
                - Pathogens: ${(p.phytoPathology || []).slice(0, 3).join(', ')}
                - Light: ${p.lightRequirement || 'N/A'}
                - Water: ${p.wateringInstructions || 'N/A'}`;
