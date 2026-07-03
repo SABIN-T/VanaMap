@@ -23,6 +23,21 @@ export const Home = () => {
     const [filter, setFilter] = useState<'all' | 'indoor' | 'outdoor' | 'care'>('all');
 
 
+    const [sunlightHours, setSunlightHours] = useState<'low' | 'medium' | 'high'>(() => {
+        return (localStorage.getItem('vanamap_sunlight') as any) || 'medium';
+    });
+    const [soilType, setSoilType] = useState<'loamy' | 'clayey' | 'sandy' | 'laterite' | 'red_black'>(() => {
+        return (localStorage.getItem('vanamap_soil') as any) || 'loamy';
+    });
+
+    useEffect(() => {
+        localStorage.setItem('vanamap_sunlight', sunlightHours);
+    }, [sunlightHours]);
+
+    useEffect(() => {
+        localStorage.setItem('vanamap_soil', soilType);
+    }, [soilType]);
+
     const [searchQuery, setSearchQuery] = useState('');
     const [lightFilter, setLightFilter] = useState<'all' | 'low' | 'medium' | 'high'>('all');
     const [weather, setWeather] = useState<any>(() => {
@@ -391,7 +406,7 @@ export const Home = () => {
         // Simple biological simulation - instant for both mobile and desktop
         // 1. Calculate raw high-precision absolute scores
         const scoredRaw = filtered.map(p => {
-            const rawScore = calculateAptness(p, weather.avgTemp30Days, weather.air_quality?.aqi, weather.avgHumidity30Days, undefined);
+            const rawScore = calculateAptness(p, weather.avgTemp30Days, weather.air_quality?.aqi, weather.avgHumidity30Days, sunlightHours, soilType, weather.precipitation30Days);
             return { ...p, rawScore };
         });
 
@@ -403,7 +418,7 @@ export const Home = () => {
         return scoredRaw
             .map((p, i) => ({ ...p, score: normalizedScores[i] }))
             .sort((a, b) => b.score - a.score);
-    }, [plants, filter, searchQuery, lightFilter, weather]);
+    }, [plants, filter, searchQuery, lightFilter, weather, sunlightHours, soilType]);
 
     return (
         <div className={styles.homeContainer}>
@@ -662,6 +677,105 @@ export const Home = () => {
                                     <span className={styles.statDescription} style={{ color: getPollutionStatus(weather.air_quality?.aqi).color, fontWeight: 800 }}>
                                         {getPollutionStatus(weather.air_quality?.aqi).label.toUpperCase()}
                                     </span>
+                                </div>
+                            </div>
+                            
+                            {/* Tier 1 Environmental Calibration Panel */}
+                            <div style={{
+                                width: '100%',
+                                background: 'rgba(255, 255, 255, 0.02)',
+                                border: '1px solid rgba(255, 255, 255, 0.05)',
+                                borderRadius: '24px',
+                                padding: '1.5rem',
+                                marginTop: '1.5rem',
+                                display: 'flex',
+                                flexDirection: 'column',
+                                gap: '1.25rem',
+                                backdropFilter: 'blur(10px)'
+                            }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '0.5rem' }}>
+                                    <div>
+                                        <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 800, color: 'white', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                            <Sparkles size={16} style={{ color: '#10b981' }} /> Environmental Calibration (Tier 1)
+                                        </h3>
+                                        <p style={{ margin: '2px 0 0', fontSize: '0.75rem', color: '#94a3b8' }}>
+                                            Calibrate micro-climatic inputs to recalculate high-accuracy survival suitability matches.
+                                        </p>
+                                    </div>
+                                    {weather.precipitation30Days !== undefined && (
+                                        <div style={{
+                                            background: 'rgba(56, 189, 248, 0.08)',
+                                            border: '1px solid rgba(56, 189, 248, 0.15)',
+                                            borderRadius: '50px',
+                                            padding: '4px 12px',
+                                            fontSize: '0.75rem',
+                                            color: '#38bdf8',
+                                            fontWeight: 800,
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '6px'
+                                        }}>
+                                            🌧️ Sat-Detected Rainfall: {weather.precipitation30Days.toFixed(1)} mm
+                                        </div>
+                                    )}
+                                </div>
+
+                                <div style={{
+                                    display: 'grid',
+                                    gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+                                    gap: '1rem'
+                                }}>
+                                    {/* Sunlight Hours Selector */}
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                                        <label style={{ fontSize: '0.75rem', fontWeight: 800, color: '#cbd5e1' }}>Direct Sunlight Exposure</label>
+                                        <select
+                                            value={sunlightHours}
+                                            onChange={(e) => setSunlightHours(e.target.value as any)}
+                                            style={{
+                                                background: 'rgba(255, 255, 255, 0.04)',
+                                                border: '1px solid rgba(255, 255, 255, 0.1)',
+                                                color: 'white',
+                                                borderRadius: '12px',
+                                                padding: '10px 14px',
+                                                fontSize: '0.85rem',
+                                                fontWeight: 600,
+                                                cursor: 'pointer',
+                                                outline: 'none',
+                                                transition: 'all 0.2s'
+                                            }}
+                                        >
+                                            <option value="high" style={{ background: '#1e293b', color: 'white' }}>☀️ Full Sun (6+ hours direct)</option>
+                                            <option value="medium" style={{ background: '#1e293b', color: 'white' }}>⛅ Partial Sun / Bright Indirect</option>
+                                            <option value="low" style={{ background: '#1e293b', color: 'white' }}>☁️ Shade (&lt;3 hours direct)</option>
+                                        </select>
+                                    </div>
+
+                                    {/* Soil Type Selector */}
+                                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                                        <label style={{ fontSize: '0.75rem', fontWeight: 800, color: '#cbd5e1' }}>Soil & Substrate Type</label>
+                                        <select
+                                            value={soilType}
+                                            onChange={(e) => setSoilType(e.target.value as any)}
+                                            style={{
+                                                background: 'rgba(255, 255, 255, 0.04)',
+                                                border: '1px solid rgba(255, 255, 255, 0.1)',
+                                                color: 'white',
+                                                borderRadius: '12px',
+                                                padding: '10px 14px',
+                                                fontSize: '0.85rem',
+                                                fontWeight: 600,
+                                                cursor: 'pointer',
+                                                outline: 'none',
+                                                transition: 'all 0.2s'
+                                            }}
+                                        >
+                                            <option value="loamy" style={{ background: '#1e293b', color: 'white' }}>🌱 Loamy (Optimal organic & drainage)</option>
+                                            <option value="clayey" style={{ background: '#1e293b', color: 'white' }}>🧱 Clayey (Dense, retains moisture)</option>
+                                            <option value="sandy" style={{ background: '#1e293b', color: 'white' }}>🏖️ Sandy (Dry, high drainage)</option>
+                                            <option value="laterite" style={{ background: '#1e293b', color: 'white' }}>🍋 Laterite (Acidic, iron-rich)</option>
+                                            <option value="red_black" style={{ background: '#1e293b', color: 'white' }}>🟫 Red/Black Garden Soil (Hardy fit)</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                         </div>

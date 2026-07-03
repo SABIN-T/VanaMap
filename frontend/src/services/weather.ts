@@ -26,6 +26,7 @@ export interface WeatherResponse {
     avgTemp30Days?: number;
     avgHumidity30Days?: number;
     humidity?: number;
+    precipitation30Days?: number;
     air_quality?: AirQuality;
 }
 
@@ -52,9 +53,9 @@ export const getAirQuality = async (lat: number, lng: number): Promise<AirQualit
 
 export const getWeather = async (lat: number, lng: number): Promise<WeatherResponse | null> => {
     try {
-        // Added &current=relative_humidity_2m to get live humidity
+        // Added &current=relative_humidity_2m to get live humidity, and precipitation_sum to get historical rainfall
         const response = await fetch(
-            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true&current=relative_humidity_2m&daily=temperature_2m_max,temperature_2m_min,relative_humidity_2m_mean&past_days=30&timezone=auto`
+            `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lng}&current_weather=true&current=relative_humidity_2m&daily=temperature_2m_max,temperature_2m_min,relative_humidity_2m_mean,precipitation_sum&past_days=30&timezone=auto`
         );
         const data = await response.json();
 
@@ -63,9 +64,9 @@ export const getWeather = async (lat: number, lng: number): Promise<WeatherRespo
 
         let avgTemp = data.current_weather.temperature;
         let avgHumidity = 50;
+        let precipitation30Days = 0;
 
         if (data.daily) {
-            // ... (keep existing daily logic) ... 
             if (data.daily.temperature_2m_max) {
                 const maxs = data.daily.temperature_2m_max;
                 const mins = data.daily.temperature_2m_min;
@@ -90,12 +91,24 @@ export const getWeather = async (lat: number, lng: number): Promise<WeatherRespo
                 }
                 if (hCount > 0) avgHumidity = hSum / hCount;
             }
+
+            if (data.daily.precipitation_sum) {
+                const rain = data.daily.precipitation_sum;
+                let rSum = 0;
+                for (let i = 0; i < rain.length; i++) {
+                    if (rain[i] !== null) {
+                        rSum += rain[i];
+                    }
+                }
+                precipitation30Days = rSum;
+            }
         }
 
         return {
             ...data,
             avgTemp30Days: avgTemp,
             avgHumidity30Days: avgHumidity,
+            precipitation30Days,
             // Map the fetched current humidity to the top-level property expected by UI
             humidity: data.current?.relative_humidity_2m ?? avgHumidity,
             air_quality: airQuality || undefined

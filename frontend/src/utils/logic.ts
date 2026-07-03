@@ -25,26 +25,6 @@ const getHumidityScore = (plant: Plant, avgHumidity: number): number => {
     return 1 / (1 + Math.exp(-diff / 15));
 };
 
-const getLightScore = (plant: Plant, lightPercent: number): number => {
-    const sun = (plant.sunlight || 'medium').toLowerCase();
-
-    // Lux Parsing (if available)
-    let target = 50;
-    const luxMatch = sun.match(/(\d+)\s*lux/i);
-
-    if (luxMatch) {
-        // Map 0-10000 Lux to 0-100%
-        const val = parseInt(luxMatch[1]);
-        target = Math.min(100, Math.max(1, val / 100));
-    } else {
-        if (sun.includes('high') || sun.includes('direct') || sun.includes('bright')) target = 80;
-        else if (sun.includes('low') || sun.includes('shade')) target = 30;
-    }
-
-    // Standard matching curve for Aptness
-    const diff = Math.abs(lightPercent - target);
-    return Math.max(0.1, 1 - Math.pow(diff / 100, 1.5));
-};
 
 const getAQIScore = (plant: Plant, aqi: number): number => {
     const isPurifier = plant.medicinalValues?.includes('Air purification') ||
@@ -57,19 +37,93 @@ const getAQIScore = (plant: Plant, aqi: number): number => {
     return 1.0;
 };
 
+const getSunlightMatchScore = (plant: Plant, userSunlight: 'low' | 'medium' | 'high'): number => {
+    const sun = (plant.sunlight || '').toLowerCase();
+    const supportsLow = sun.includes('low') || sun.includes('shade') || sun.includes('filtered') || sun.includes('indirect') || sun.includes('partial') || sun.includes('medium') || sun.includes('to bright');
+    const supportsMedium = sun.includes('medium') || sun.includes('indirect') || sun.includes('partial') || sun.includes('bright') || sun.includes('filtered') || sun.includes('low to') || sun.includes('spot');
+    const supportsHigh = sun.includes('high') || sun.includes('direct') || sun.includes('full') || sun.includes('bright') || sun.includes('sunny') || sun.includes('window') || sun.includes('to bright') || sun.includes('light');
+
+    if (userSunlight === 'high') {
+        if (supportsHigh) return 1.0;
+        if (supportsMedium) return 0.6;
+        return 0.2;
+    }
+    if (userSunlight === 'medium') {
+        if (supportsMedium) return 1.0;
+        if (supportsLow || supportsHigh) return 0.7;
+        return 0.3;
+    }
+    if (userSunlight === 'low') {
+        if (supportsLow) return 1.0;
+        if (supportsMedium) return 0.5;
+        return 0.1;
+    }
+    return 1.0;
+};
+
+const getSoilMatchScore = (plant: Plant, userSoil: 'loamy' | 'clayey' | 'sandy' | 'laterite' | 'red_black'): number => {
+    const name = plant.name.toLowerCase();
+    const desc = plant.description.toLowerCase();
+    const isDryLover = name.includes('cactus') || name.includes('succulent') || name.includes('aloe') || name.includes('snake plant') || name.includes('jade') || desc.includes('succulent') || desc.includes('desert') || desc.includes('dry');
+    const isMoistureLover = name.includes('fern') || name.includes('calathea') || name.includes('spathiphyllum') || name.includes('lily') || desc.includes('rainforest') || desc.includes('humid') || desc.includes('marsh') || desc.includes('wet');
+
+    if (isDryLover) {
+        if (userSoil === 'sandy') return 1.0;
+        if (userSoil === 'loamy' || userSoil === 'red_black') return 0.6;
+        return 0.2;
+    }
+    if (isMoistureLover) {
+        if (userSoil === 'clayey') return 0.9;
+        if (userSoil === 'loamy') return 1.0;
+        if (userSoil === 'red_black') return 0.7;
+        return 0.3;
+    }
+    if (userSoil === 'loamy') return 1.0;
+    if (userSoil === 'red_black') return 0.8;
+    if (userSoil === 'clayey') return 0.6;
+    if (userSoil === 'sandy') return 0.5;
+    if (userSoil === 'laterite') return 0.7;
+    return 1.0;
+};
+
+const getRainfallMatchScore = (plant: Plant, precipitation30Days: number): number => {
+    const name = plant.name.toLowerCase();
+    const desc = plant.description.toLowerCase();
+    const isDryLover = name.includes('cactus') || name.includes('succulent') || name.includes('aloe') || name.includes('snake plant') || desc.includes('succulent') || desc.includes('desert') || desc.includes('dry');
+    const isWetLover = name.includes('fern') || name.includes('palm') || name.includes('spathiphyllum') || name.includes('lily') || desc.includes('rainforest') || desc.includes('humid') || desc.includes('swamp') || desc.includes('tropical');
+
+    if (precipitation30Days < 20) {
+        if (isDryLover) return 1.0;
+        if (isWetLover) return 0.3;
+        return 0.6;
+    }
+    if (precipitation30Days > 80) {
+        if (isWetLover) return 1.0;
+        if (isDryLover) return 0.2;
+        return 0.7;
+    }
+    if (isDryLover) return 0.8;
+    if (isWetLover) return 0.8;
+    return 1.0;
+};
+
 export const calculateAptness = (
     plant: Plant,
     currentTemp: number,
     aqi: number = 20,
     currentHumidity: number = 50,
-    lightPercent: number = 70
+    sunlightInput: 'low' | 'medium' | 'high' = 'medium',
+    soilInput: 'loamy' | 'clayey' | 'sandy' | 'laterite' | 'red_black' = 'loamy',
+    precipitation30Days: number = 20
 ): number => {
     const sTemp = getTempScore(plant, currentTemp);
     const sHum = getHumidityScore(plant, currentHumidity);
-    const sLight = getLightScore(plant, lightPercent);
+    const sLight = getSunlightMatchScore(plant, sunlightInput);
+    const sRainfall = getRainfallMatchScore(plant, precipitation30Days);
+    const sSoil = getSoilMatchScore(plant, soilInput);
     const sAQI = getAQIScore(plant, aqi);
 
-    let raw = (sTemp * 0.35) + (sHum * 0.25) + (sLight * 0.25) + (sAQI * 0.15);
+    let raw = (sTemp * 0.20) + (sHum * 0.15) + (sLight * 0.25) + (sRainfall * 0.20) + (sSoil * 0.15) + (sAQI * 0.05);
 
     const type = plant.type || 'indoor';
     if (type === 'indoor') raw *= 1.05;
@@ -158,8 +212,10 @@ export const runRoomSimulationMC = (
     aqi: number,
     lightLevel: number = 70
 ) => {
-    // 1. Calculate Standard Aptness (For display only)
-    const aptness = calculateAptness(plant, avgTemp, aqi, avgHumidity, lightLevel);
+    let sunlightStr: 'low' | 'medium' | 'high' = 'medium';
+    if (lightLevel > 75) sunlightStr = 'high';
+    else if (lightLevel < 40) sunlightStr = 'low';
+    const aptness = calculateAptness(plant, avgTemp, aqi, avgHumidity, sunlightStr, 'loamy', 20);
 
     // 2. INDEPENDENT PLANT COUNT LOGIC
 
