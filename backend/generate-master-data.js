@@ -640,21 +640,120 @@ const generateSimulationData = () => {
         return Math.min(Math.round(score), 100);
     };
 
-    const flora = REAL_PLANTS_SOURCE.map((p, i) => ({
-        id: `wf_${1000 + i}`,
-        scientificName: p.sci,
-        commonName: p.name,
-        flowerType: p.bloom,
-        leafVenation: p.vein,
-        inflorescencePattern: p.inflo,
-        rarityIndex: randomInt(1, 90),
-        oxygenOutput: p.oxygen, // ml/h
-        lightRequirement: p.light,
-        acTolerance: p.ac,
-        peopleSupported: Number((p.oxygen / 550).toFixed(4)), // Approx daily need (550L) -> Plants needed = 1 / ratio
-        aptness: calculateAptness(p), // New Normalized Metric
-        verifiedSource: getVerificationSource(p)
-    }));
+    const flora = [];
+    const genusList = [
+        "Ficus", "Monstera", "Philodendron", "Sansevieria", "Dracaena", "Aloe", 
+        "Chlorophytum", "Spathiphyllum", "Calathea", "Begonia", "Peperomia", 
+        "Tradescantia", "Nephrolepis", "Anthurium", "Chamaedorea", "Hedera", 
+        "Epipremnum", "Schefflera", "Fittonia", "Pilea", "Syngonium", "Alocasia", 
+        "Dieffenbachia", "Aglaonema", "Codiaeum", "Fuchsia", "Phalaenopsis", 
+        "Guzmania", "Crassula", "Zamioculcas", "Hibiscus", "Rosa", "Jasminum",
+        "Ocimum", "Mentha", "Rosmarinus", "Lavandula", "Thymus", "Origanum", 
+        "Salvia", "Curcuma", "Zingiber", "Piper", "Coriandrum", "Solanum"
+    ];
+    const speciesList = [
+        "auriculata", "deliciosa", "scandens", "trifasciata", "marginata", "vera", 
+        "comosum", "wallisii", "ornata", "maculata", "obtusifolia", "zebrina", 
+        "exaltata", "andraeanum", "elegans", "helix", "aureum", "arboricola", 
+        "albivenis", "cadierei", "podophyllum", "amazonica", "picta", "commutatum", 
+        "variegatum", "magellanica", "aphylla", "fasciata", "ovata", "zamiifolia",
+        "sinensis", "damascena", "sambac", "tenuiflorum", "arvensis", "officinalis",
+        "angustifolia", "vulgaris", "major", "splendens", "longa", "officinale",
+        "nigrum", "sativum", "lycopersicum"
+    ];
+    const commonNamePrefixes = [
+        "Golden", "Silver", "Red", "Green", "Spotted", "Striped", "Variegated", 
+        "Giant", "Dwarf", "Creeping", "Weeping", "Foliage", "Emerald", "Ruby", 
+        "Velvet", "Neon", "Black", "Royal", "Sweet", "Wild", "Indian", "Chinese", 
+        "African", "Boston", "English", "Peace", "Snake", "Spider", "Lucky", "Cast-Iron"
+    ];
+    const commonNameSuffixes = [
+        "Ivy", "Pothos", "Fern", "Palm", "Dracaena", "Aloe", "Lily", "Begonia", 
+        "Orchid", "Philodendron", "Monstera", "Fig", "Jade", "Rubber Plant", 
+        "Prayer Plant", "Arrowhead", "Zanzibar", "Peperomia", "Fittonia", "Bamboo",
+        "Rose", "Jasmine", "Tulsi", "Mint", "Rosemary", "Lavender", "Thyme", 
+        "Sage", "Turmeric", "Ginger", "Pepper", "Coriander", "Tomato", "Basil"
+    ];
+
+    const bloomTypes = ["Spadix", "Umbel", "Panicle", "Raceme", "Spike", "Solitary", "Cyme", "Head"];
+    const venationTypes = ["Parallel", "Pinnate", "Palmate", "Reticulate", "Dichotomous"];
+    const inflorescenceTypes = ["Raceme", "Cyme", "Panicle", "Umbel", "Corymb", "Spike", "Spadix"];
+    const lightLevels = ["Bright Light", "Medium Light", "Low Light", "Direct Sun", "Deep Shade"];
+    const acTolerances = ["High tolerance", "Medium tolerance", "Low tolerance"];
+
+    let seed = 42;
+    const random = () => {
+        const x = Math.sin(seed++) * 10000;
+        return x - Math.floor(x);
+    };
+    const randInt = (min, max) => Math.floor(random() * (max - min + 1)) + min;
+
+    for (let i = 0; i < 10000; i++) {
+        if (i < REAL_PLANTS_SOURCE.length) {
+            const p = REAL_PLANTS_SOURCE[i];
+            flora.push({
+                id: `wf_${1000 + i}`,
+                scientificName: p.sci,
+                commonName: p.name,
+                flowerType: p.bloom,
+                leafVenation: p.vein,
+                inflorescencePattern: p.inflo,
+                rarityIndex: randInt(1, 90),
+                oxygenOutput: p.oxygen,
+                lightRequirement: p.light,
+                acTolerance: p.ac,
+                peopleSupported: Number((p.oxygen / 550).toFixed(4)),
+                aptness: calculateAptness(p),
+                verifiedSource: getVerificationSource(p)
+            });
+        } else {
+            const gIdx = randInt(0, genusList.length - 1);
+            const sIdx = randInt(0, speciesList.length - 1);
+            const preIdx = randInt(0, commonNamePrefixes.length - 1);
+            const sufIdx = randInt(0, commonNameSuffixes.length - 1);
+
+            const scientificName = `${genusList[gIdx]} ${speciesList[sIdx]} var. ${i}`;
+            const commonName = `${commonNamePrefixes[preIdx]} ${commonNameSuffixes[sufIdx]} #${i}`;
+            
+            const bloom = bloomTypes[randInt(0, bloomTypes.length - 1)];
+            const vein = venationTypes[randInt(0, venationTypes.length - 1)];
+            const inflo = inflorescenceTypes[randInt(0, inflorescenceTypes.length - 1)];
+            const light = lightLevels[randInt(0, lightLevels.length - 1)];
+            const ac = acTolerances[randInt(0, acTolerances.length - 1)];
+            const oxygen = randInt(5, 120);
+
+            const dummyPlant = {
+                name: commonName,
+                sci: scientificName,
+                bloom,
+                vein,
+                inflo,
+                light,
+                ac,
+                oxygen,
+                life: `${randInt(1, 100)} Years`,
+                type: randInt(0, 1) === 0 ? "indoor" : "outdoor",
+                medicinal: randInt(0, 1) === 0 ? ["Air purification"] : ["None"],
+                advantages: randInt(0, 1) === 0 ? ["Purifier"] : ["Ornamental"]
+            };
+
+            flora.push({
+                id: `wf_${1000 + i}`,
+                scientificName,
+                commonName,
+                flowerType: bloom,
+                leafVenation: vein,
+                inflorescencePattern: inflo,
+                rarityIndex: randInt(1, 99),
+                oxygenOutput: oxygen,
+                lightRequirement: light,
+                acTolerance: ac,
+                peopleSupported: Number((oxygen / 550).toFixed(4)),
+                aptness: calculateAptness(dummyPlant),
+                verifiedSource: getVerificationSource(dummyPlant)
+            });
+        }
+    }
 
     const content = `export interface WorldFloraSpecimen {
     id: string;
@@ -677,6 +776,11 @@ export const worldFlora: WorldFloraSpecimen[] = ${JSON.stringify(flora, null, 4)
     const simPath = path.join(__dirname, '../frontend/src/data/worldFlora.ts');
     fs.writeFileSync(simPath, content);
     console.log("Frontend worldFlora.ts generated.");
+
+    const backendContent = `const worldFlora = ${JSON.stringify(flora, null, 4)};\nmodule.exports = worldFlora;\n`;
+    const backendPath = path.join(__dirname, './worldFlora.js');
+    fs.writeFileSync(backendPath, backendContent);
+    console.log("Backend worldFlora.js generated.");
 };
 
 // RUN ALL
