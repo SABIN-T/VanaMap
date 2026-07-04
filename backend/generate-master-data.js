@@ -1,5 +1,8 @@
 const fs = require('fs');
 const path = require('path');
+const mongoose = require('mongoose');
+require('dotenv').config();
+const { WorldFlora } = require('./models');
 
 // Helper for random int
 const randomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
@@ -792,7 +795,8 @@ const generateSimulationData = () => {
                 minHumidity: humidity,
                 preferredSoil: soil,
                 annualRainfallRequirement: rain,
-                climateZone: zone
+                climateZone: zone,
+                type: dummyPlant.type
             });
         }
     }
@@ -817,18 +821,66 @@ const generateSimulationData = () => {
     preferredSoil: 'loamy' | 'clayey' | 'sandy' | 'laterite' | 'red_black';
     annualRainfallRequirement: number; // mm/year
     climateZone: 'Tropical' | 'Arid' | 'Temperate' | 'Mediterranean' | 'Subtropical';
+    type: 'indoor' | 'outdoor';
 }
 
-export const worldFlora: WorldFloraSpecimen[] = ${JSON.stringify(flora, null, 4)} as any;
+export const worldFlora: WorldFloraSpecimen[] = [];
 `;
     const simPath = path.join(__dirname, '../frontend/src/data/worldFlora.ts');
     fs.writeFileSync(simPath, content);
-    console.log("Frontend worldFlora.ts generated.");
+    console.log("Frontend worldFlora.ts generated (empty array stub).");
 
-    const backendContent = `const worldFlora = ${JSON.stringify(flora, null, 4)};\nmodule.exports = worldFlora;\n`;
-    const backendPath = path.join(__dirname, './worldFlora.js');
-    fs.writeFileSync(backendPath, backendContent);
-    console.log("Backend worldFlora.js generated.");
+    const jsonSeedPath = path.join(__dirname, 'simulation-seed-data.json');
+    fs.writeFileSync(jsonSeedPath, JSON.stringify(flora, null, 2));
+    console.log("Backend simulation-seed-data.json written.");
+
+    // Seed MongoDB asynchronously (Bulk Insert)
+    (async () => {
+        try {
+            console.log("🔄 Connecting to MongoDB for seeding...");
+            try {
+                await mongoose.connect(process.env.MONGO_URI);
+            } catch (srvErr) {
+                console.warn("⚠️ DNS SRV lookup failed. Retrying with standard direct connection...", srvErr.message);
+                // Parse standard replica set URI dynamically from environment variable to keep credentials secure
+                let fallbackUri = null;
+                const baseUri = process.env.MONGO_URI;
+                if (baseUri && baseUri.includes('+srv://')) {
+                    const regex = /mongodb\+srv:\/\/([^:]+):([^@]+)@([^/]+)\/([^?]+)/;
+                    const match = baseUri.match(regex);
+                    if (match) {
+                        const [_, user, pass, cluster, dbName] = match;
+                        const cleanCluster = cluster.split('?')[0]; // Remove options if present
+                        const db = dbName.split('?')[0];
+                        fallbackUri = `mongodb://${user}:${pass}@${cleanCluster}-shard-00-00.p0v7w.mongodb.net:27017,${cleanCluster}-shard-00-01.p0v7w.mongodb.net:27017,${cleanCluster}-shard-00-02.p0v7w.mongodb.net:27017/${db}?ssl=true&replicaSet=atlas-9xpfms-shard-0&authSource=admin&retryWrites=true&w=majority`;
+                    }
+                }
+                
+                try {
+                    if (fallbackUri) {
+                        await mongoose.connect(fallbackUri);
+                    } else {
+                        throw new Error("Could not construct replica set connection from MONGO_URI");
+                    }
+                } catch (directErr) {
+                    console.warn("⚠️ Direct Atlas connection failed. Falling back to local MongoDB...", directErr.message);
+                    await mongoose.connect("mongodb://127.0.0.1:27017/vanamap");
+                }
+            }
+            console.log("✅ Connected to MongoDB. Seeding 10,000 World Flora specimens...");
+            
+            await WorldFlora.deleteMany({});
+            console.log("🗑️ Cleared existing WorldFlora records.");
+            
+            await WorldFlora.insertMany(flora);
+            console.log(`🎉 Seeded ${flora.length} specimens into MongoDB successfully!`);
+        } catch (dbErr) {
+            console.error("❌ MongoDB seeding failed:", dbErr);
+        } finally {
+            await mongoose.disconnect();
+            console.log("🔌 Disconnected from MongoDB.");
+        }
+    })();
 };
 
 // RUN ALL

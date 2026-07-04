@@ -22,6 +22,7 @@ export const useAIDoctorStream = () => {
     const wsRef = useRef<WebSocket | null>(null);
     const [isConnected, setIsConnected] = useState(false);
     const [isStreaming, setIsStreaming] = useState(false);
+    const [statusDetail, setStatusDetail] = useState('');
     const reconnectTimeoutRef = useRef<number | undefined>(undefined);
 
     // Get WebSocket URL from API_URL
@@ -110,7 +111,9 @@ export const useAIDoctorStream = () => {
 
                 switch (data.type) {
                     case 'status':
-                        // AI is thinking
+                        if (data.detail) {
+                            setStatusDetail(data.detail);
+                        }
                         break;
 
                     case 'flora_metadata':
@@ -119,21 +122,25 @@ export const useAIDoctorStream = () => {
 
                     case 'stream_start':
                         fullMessage = '';
+                        setStatusDetail('');
                         break;
 
                     case 'chunk':
                         fullMessage += data.content;
+                        setStatusDetail('');
                         options.onChunk?.(data.content);
                         break;
 
                     case 'stream_end':
                         setIsStreaming(false);
+                        setStatusDetail('');
                         options.onComplete?.(fullMessage);
                         ws.removeEventListener('message', handleMessage);
                         break;
 
                     case 'error':
                         setIsStreaming(false);
+                        setStatusDetail('');
                         options.onError?.(data.error);
                         ws.removeEventListener('message', handleMessage);
                         break;
@@ -168,6 +175,7 @@ export const useAIDoctorStream = () => {
     return {
         isConnected,
         isStreaming,
+        statusDetail,
         sendMessage,
         connect,
         disconnect

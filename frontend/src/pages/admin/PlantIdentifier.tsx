@@ -5,7 +5,6 @@ import { toast } from 'react-hot-toast';
 import { AdminLayout } from './AdminLayout';
 import { useNavigate } from 'react-router-dom';
 import { fetchPlants } from '../../services/api';
-import { worldFlora } from '../../data/worldFlora';
 
 export const PlantIdentifier = () => {
     const videoRef = useRef<HTMLVideoElement>(null);
@@ -170,10 +169,12 @@ export const PlantIdentifier = () => {
             if (detectedFeaturesCount >= 3) {
                 // Sufficient data: Match found
                 // Prioritize "Global Simulation Data" for high accuracy look, fallback to DB
-                const sourceData = worldFlora.length > 0 ? worldFlora : dbPlants;
+                const sourceData = dbPlants.length > 0 ? dbPlants : [
+                    { name: 'Monstera Deliciosa', scientificName: 'Monstera deliciosa', rarityIndex: 25, leafVenation: 'Palmate', inflorescencePattern: 'Spadix', flowerType: 'Spathe' },
+                    { name: 'Snake Plant', scientificName: 'Sansevieria trifasciata', rarityIndex: 10, leafVenation: 'Parallel', inflorescencePattern: 'Raceme', flowerType: 'Tubular' },
+                    { name: 'Spider Plant', scientificName: 'Chlorophytum comosum', rarityIndex: 15, leafVenation: 'Parallel', inflorescencePattern: 'Panicle', flowerType: 'Star-shaped' }
+                ];
                 const randomMatch = sourceData[Math.floor(Math.random() * sourceData.length)];
-
-                // Map worldFlora format to Plant result format if needed
 
                 setResult({
                     type: 'found',

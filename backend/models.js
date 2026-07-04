@@ -289,9 +289,32 @@ NotificationSchema.index({ read: 1, date: -1 });
 ReviewSchema.index({ vendorId: 1, rating: -1 });
 
 // Speed up login and auth checks
-// UserSchema.index({ email: 1 }); // Already defined in schema with unique: true
+const WorldFloraSchema = new mongoose.Schema({
+    id: { type: String, required: true, unique: true, index: true },
+    scientificName: { type: String, required: true, index: true },
+    commonName: { type: String, required: true, index: true },
+    flowerType: String,
+    leafVenation: String,
+    inflorescencePattern: String,
+    rarityIndex: Number,
+    oxygenOutput: Number,
+    lightRequirement: String,
+    acTolerance: String,
+    peopleSupported: Number,
+    aptness: Number,
+    verifiedSource: String,
+    idealTempMin: Number,
+    idealTempMax: Number,
+    minHumidity: Number,
+    preferredSoil: String,
+    annualRainfallRequirement: Number,
+    climateZone: String,
+    type: { type: String, enum: ['indoor', 'outdoor'], default: 'indoor', index: true }
+});
+WorldFloraSchema.index({ scientificName: 'text', commonName: 'text' });
 
 module.exports = {
+    WorldFlora: mongoose.model('WorldFlora', WorldFloraSchema),
     Plant: mongoose.model('Plant', PlantSchema),
     Vendor: mongoose.model('Vendor', VendorSchema),
     User: mongoose.model('User', UserSchema),

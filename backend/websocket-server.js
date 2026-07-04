@@ -113,7 +113,8 @@ async function handleChatStream(ws, message) {
         // Send "thinking" status
         ws.send(JSON.stringify({
             type: 'status',
-            status: 'thinking'
+            status: 'thinking',
+            detail: '🔍 Analyzing chat context and matching biological species...'
         }));
 
         // Prepare messages for Groq
@@ -128,6 +129,12 @@ async function handleChatStream(ws, message) {
         ws.send(JSON.stringify({
             type: 'flora_metadata',
             matchedFlora: matchedFloraBatch
+        }));
+
+        ws.send(JSON.stringify({
+            type: 'status',
+            status: 'thinking',
+            detail: '🩺 Retrieving garden clinic medical history...'
         }));
 
         // Fetch user medical history
@@ -164,6 +171,12 @@ async function handleChatStream(ws, message) {
                 }
             ];
         }
+
+        ws.send(JSON.stringify({
+            type: 'status',
+            status: 'thinking',
+            detail: '🧠 Formulating phytomedical diagnosis with Groq AI...'
+        }));
 
         // Call Groq API with streaming
         const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {

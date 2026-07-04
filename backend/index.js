@@ -3,7 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
-const { Plant, Vendor, User, Payment, Notification, Chat, PlantSuggestion, SearchLog, PushSubscription, SystemSettings, CustomPot, SupportTicket, AIFeedback, ApiKey, NewsletterSubscriber, Sale, Review, SupportEmail, DiagnosisRecord, KidsProduct } = require('./models');
+const { WorldFlora, Plant, Vendor, User, Payment, Notification, Chat, PlantSuggestion, SearchLog, PushSubscription, SystemSettings, CustomPot, SupportTicket, AIFeedback, ApiKey, NewsletterSubscriber, Sale, Review, SupportEmail, DiagnosisRecord, KidsProduct } = require('./models');
 const Razorpay = require('razorpay');
 const webpush = require('web-push');
 const helmet = require('helmet');
@@ -764,6 +764,27 @@ const connectDB = async () => {
             }
         } else {
             console.log('✅ Database already populated');
+        }
+
+        // Auto-seed WorldFlora registry if empty
+        const floraCount = await WorldFlora.countDocuments();
+        console.log(`🔬 Current World Flora database: ${floraCount} specimens`);
+        if (floraCount === 0) {
+            console.log('🌱 World Flora database is empty. Auto-seeding from simulation-seed-data.json...');
+            try {
+                const fs = require('fs');
+                const path = require('path');
+                const seedFile = path.join(__dirname, 'simulation-seed-data.json');
+                if (fs.existsSync(seedFile)) {
+                    const floraData = JSON.parse(fs.readFileSync(seedFile, 'utf8'));
+                    await WorldFlora.insertMany(floraData);
+                    console.log(`✅ Auto-seeded ${floraData.length} World Flora specimens successfully!`);
+                } else {
+                    console.warn('⚠️ Seeding file simulation-seed-data.json not found.');
+                }
+            } catch (seedErr) {
+                console.error('❌ World Flora auto-seed failed:', seedErr.message);
+            }
         }
 
         // Ensure Care Products are seeded and added to vendor inventory
@@ -7770,6 +7791,46 @@ app.patch('/api/user/persona', optionalAuth, async (req, res) => {
             { new: true }
         );
         res.json({ persona: user.currentPersona });
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
+
+// GET /api/world-flora
+app.get('/api/world-flora', async (req, res) => {
+    try {
+        const { search = '', page = 1, limit = 20, type = 'all' } = req.query;
+        const query = {};
+
+        if (type !== 'all') {
+            query.type = type;
+        }
+
+        if (search.trim()) {
+            // Check if scientific/common name matches
+            query.$or = [
+                { scientificName: new RegExp(search.trim(), 'i') },
+                { commonName: new RegExp(search.trim(), 'i') },
+                { flowerType: new RegExp(search.trim(), 'i') }
+            ];
+        }
+
+        const limitNum = Math.min(parseInt(limit) || 20, 100);
+        const skip = (Math.max(parseInt(page) || 1, 1) - 1) * limitNum;
+
+        const list = await WorldFlora.find(query)
+            .skip(skip)
+            .limit(limitNum)
+            .lean();
+            
+        const total = await WorldFlora.countDocuments(query);
+
+        res.json({
+            plants: list,
+            total,
+            page: Math.max(parseInt(page) || 1, 1),
+            limit: limitNum
+        });
     } catch (e) {
         res.status(500).json({ error: e.message });
     }

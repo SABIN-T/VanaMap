@@ -1,20 +1,43 @@
 
-import { useState, useMemo } from 'react';
-import { Search, Flower, Leaf, Activity, Database, Cpu } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Search, Flower, Leaf, Activity, Database, Cpu, Loader2 } from 'lucide-react';
 import { AdminLayout } from './AdminLayout';
-import { worldFlora } from '../../data/worldFlora';
+import { API_URL } from '../../services/api';
 
 export const SimulationData = () => {
     const [searchTerm, setSearchTerm] = useState('');
+    const [floraList, setFloraList] = useState<any[]>([]);
+    const [totalCount, setTotalCount] = useState(10000);
+    const [isLoading, setIsLoading] = useState(false);
 
-    // Filter logic
-    const filteredData = useMemo(() => {
-        const lower = searchTerm.toLowerCase();
-        return worldFlora.filter(p =>
-            p.scientificName.toLowerCase().includes(lower) ||
-            p.commonName.toLowerCase().includes(lower) ||
-            p.flowerType.toLowerCase().includes(lower)
-        );
+    useEffect(() => {
+        setIsLoading(true);
+        const controller = new AbortController();
+        
+        const fetchFlora = async () => {
+            try {
+                const res = await fetch(`${API_URL}/world-flora?search=${encodeURIComponent(searchTerm)}&limit=100`, {
+                    signal: controller.signal
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    setFloraList(data.plants || []);
+                    setTotalCount(data.total || 0);
+                }
+            } catch (err: any) {
+                if (err.name !== 'AbortError') {
+                    console.error('Flora fetch error:', err);
+                }
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        const timer = setTimeout(fetchFlora, 300);
+        return () => {
+            clearTimeout(timer);
+            controller.abort();
+        };
     }, [searchTerm]);
 
     return (
@@ -44,14 +67,14 @@ export const SimulationData = () => {
                             World Flora Index
                         </h1>
                         <p style={{ marginTop: '0.5rem', opacity: 0.7, maxWidth: '600px' }}>
-                            Comprehensive biomorphological registry containing {worldFlora.length.toLocaleString()} categorized species.
+                            Comprehensive biomorphological registry containing {totalCount.toLocaleString()} categorized species.
                             Used for high-fidelity simulation and AI training.
                         </p>
                     </div>
 
                     <div style={{ zIndex: 2, display: 'flex', gap: '2rem', textAlign: 'right' }}>
                         <div>
-                            <span style={{ display: 'block', fontSize: '2rem', fontWeight: 700, color: '#38bdf8' }}>{worldFlora.length}</span>
+                            <span style={{ display: 'block', fontSize: '2rem', fontWeight: 700, color: '#38bdf8' }}>{totalCount}</span>
                             <span style={{ fontSize: '0.8rem', opacity: 0.6 }}>Total Records</span>
                         </div>
                         <div>
@@ -117,8 +140,23 @@ export const SimulationData = () => {
                     </div>
 
                     {/* Scanlines Effect Overlay (Optional, distinct look) */}
-                    <div style={{ position: 'relative', maxHeight: '600px', overflowY: 'auto' }}>
-                        {filteredData.slice(0, 100).map((plant) => (
+                    <div style={{ position: 'relative', maxHeight: '600px', overflowY: 'auto', minHeight: '150px' }}>
+                        {isLoading && (
+                            <div style={{
+                                position: 'absolute',
+                                inset: 0,
+                                background: 'rgba(15, 23, 42, 0.7)',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                zIndex: 10,
+                                backdropFilter: 'blur(2px)'
+                            }}>
+                                <Loader2 size={36} style={{ animation: 'spin 1s linear infinite' }} color="#38bdf8" />
+                            </div>
+                        )}
+
+                        {floraList.map((plant) => (
                             <div key={plant.id} style={{
                                 display: 'grid',
                                 gridTemplateColumns: '1.75fr 1fr 1fr 1fr 1fr 0.75fr 1.5fr', // Updated Grid
@@ -152,8 +190,14 @@ export const SimulationData = () => {
 
                                 {/* APTNESS CELL */}
                                 <div>
-                                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                        <div style={{ flex: 1, height: '6px', background: '#334155', borderRadius: '4px', overflow: 'hidden' }}>
+                                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                                        <div style={{
+                                            width: '60px',
+                                            height: '8px',
+                                            background: '#334155',
+                                            borderRadius: '4px',
+                                            overflow: 'hidden'
+                                        }}>
                                             <div style={{
                                                 width: `${plant.aptness || 0}%`,
                                                 height: '100%',
@@ -186,16 +230,16 @@ export const SimulationData = () => {
                             </div>
                         ))}
 
-                        {filteredData.length === 0 && (
+                        {floraList.length === 0 && !isLoading && (
                             <div style={{ padding: '4rem', textAlign: 'center', color: '#64748b' }}>
                                 <Database size={48} style={{ opacity: 0.2, marginBottom: '1rem' }} />
                                 <p>No matching biosignatures found in simulation node.</p>
                             </div>
                         )}
 
-                        {filteredData.length > 100 && (
+                        {totalCount > 100 && (
                             <div style={{ padding: '1rem', textAlign: 'center', borderTop: '1px solid #334155', color: '#64748b', fontSize: '0.9rem' }}>
-                                Showing top 100 matches of {filteredData.length}
+                                Showing top 100 matches of {totalCount}
                             </div>
                         )}
                     </div>

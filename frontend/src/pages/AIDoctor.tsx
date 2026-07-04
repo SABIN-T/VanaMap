@@ -227,7 +227,7 @@ export const AIDoctor = () => {
     };
 
     // WebSocket streaming
-    const { isConnected: wsConnected, isStreaming, sendMessage: sendWsMessage } = useAIDoctorStream();
+    const { isConnected: wsConnected, isStreaming, statusDetail, sendMessage: sendWsMessage } = useAIDoctorStream();
 
     // --- IMAGE UPLOAD (Plant Diagnosis) ---
     const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -1501,7 +1501,24 @@ export const AIDoctor = () => {
                         <div className={`${styles.message} ${styles.assistantMessage}`}>
                             <div className={styles.messageIcon}><Bot size={20} /></div>
                             <div className={styles.messageContent}>
-                                {isStreaming ? (
+                                {statusDetail ? (
+                                    <div style={{
+                                        padding: '12px',
+                                        background: 'rgba(16, 185, 129, 0.05)',
+                                        borderRadius: '12px',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '8px',
+                                        fontSize: '0.95rem',
+                                        color: '#059669',
+                                        fontStyle: 'italic',
+                                        fontWeight: 500,
+                                        border: '1px solid rgba(16, 185, 129, 0.1)'
+                                    }}>
+                                        <Loader2 size={16} style={{ animation: 'spin 1s linear infinite' }} />
+                                        {statusDetail}
+                                    </div>
+                                ) : isStreaming ? (
                                     <div style={{
                                         padding: '12px',
                                         background: 'rgba(16, 185, 129, 0.05)',

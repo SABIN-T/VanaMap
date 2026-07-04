@@ -20,7 +20,7 @@ const getLevenshteinDistance = (a, b) => {
     return matrix[b.length][a.length];
 };
 
-const { User, Plant, BotanicalDossier } = require('./models');
+const { User, Plant, BotanicalDossier, WorldFlora } = require('./models');
 
 // Deep botanical and agronomic biometrics database for household and crop plants (Fast static path)
 const plantBiometrics = {
@@ -90,18 +90,25 @@ const FloraIntelligence = {
 
         const cleanText = textContent.toLowerCase();
 
-        // 1. FAST PATH: Scan in-memory worldFlora & static biometrics first (0ms latency)
+        // 1. FAST PATH: Scan MongoDB WorldFlora index (under 5ms latency)
         const found = [];
-        const worldFlora = require('./worldFlora');
-        for (const plant of worldFlora) {
-            const sci = plant.scientificName.toLowerCase();
-            const com = plant.commonName.toLowerCase();
-            if (cleanText.includes(sci) || cleanText.includes(com)) {
-                if (!found.includes(plant.scientificName)) {
-                    found.push(plant.scientificName);
+        try {
+            const words = cleanText.split(/[^a-zA-Z]/).filter(w => w.length >= 4);
+            if (words.length > 0) {
+                const regexes = words.map(w => new RegExp(`\\b${w}`, 'i'));
+                const matches = await WorldFlora.find({
+                    $or: [
+                        { scientificName: { $in: regexes } },
+                        { commonName: { $in: regexes } }
+                    ]
+                }).limit(3).lean();
+                
+                for (const m of matches) {
+                    found.push(m.scientificName);
                 }
             }
-            if (found.length >= 3) break;
+        } catch (e) {
+            console.error('[Flora Intelligence] Fast path database scan failed:', e);
         }
 
         if (found.length > 0) {
@@ -341,30 +348,17 @@ STRICT GROUNDING: Base all parameters strictly on the provided Raw Information. 
                 console.error('[Flora Intelligence] Error checking BotanicalDossier cache:', err);
             }
 
-            // 3. Check worldFlora.js (with fuzzy edit distance fallback)
-            const worldFlora = require('./worldFlora');
-            let worldMatch = worldFlora.find(p => 
-                p.scientificName.toLowerCase() === cleanName || 
-                p.commonName.toLowerCase() === cleanName
-            );
-
-            if (!worldMatch) {
-                let bestMatch = null;
-                let lowestDistance = 999;
-                for (const plant of worldFlora) {
-                    const sciDist = getLevenshteinDistance(cleanName, plant.scientificName.toLowerCase());
-                    const comDist = getLevenshteinDistance(cleanName, plant.commonName.toLowerCase());
-                    const minD = Math.min(sciDist, comDist);
-                    if (minD < lowestDistance) {
-                        lowestDistance = minD;
-                        bestMatch = plant;
-                    }
-                }
-                // Allow up to 3 character edits to capture spelling errors/typos
-                if (lowestDistance <= 3 && bestMatch) {
-                    console.log(`[Fuzzy Match] Rescued "${name}" as "${bestMatch.scientificName}" (Distance: ${lowestDistance})`);
-                    worldMatch = bestMatch;
-                }
+            // 3. Check WorldFlora MongoDB collection (with fast indexed lookups)
+            let worldMatch = null;
+            try {
+                worldMatch = await WorldFlora.findOne({
+                    $or: [
+                        { scientificName: new RegExp(`^${cleanName}$`, 'i') },
+                        { commonName: new RegExp(`^${cleanName}$`, 'i') }
+                    ]
+                }).lean();
+            } catch (err) {
+                console.error('[Flora Intelligence] WorldFlora lookup error:', err);
             }
 
             if (worldMatch) {
@@ -416,7 +410,6 @@ STRICT GROUNDING: Base all parameters strictly on the provided Raw Information. 
         
         // Fuzzy word match fallback if extract returns nothing
         if (plantNames.length === 0) {
-            const worldFlora = require('./worldFlora');
             const fullText = userMessages
                 .map(m => {
                     if (typeof m.content === 'string') return m.content;
@@ -429,13 +422,22 @@ STRICT GROUNDING: Base all parameters strictly on the provided Raw Information. 
                 .toLowerCase();
 
             const matchedNames = [];
-            for (const plant of worldFlora) {
-                const sciName = plant.scientificName.toLowerCase();
-                const comName = plant.commonName.toLowerCase();
-                if (fullText.includes(sciName) || fullText.includes(comName)) {
-                    matchedNames.push(plant.scientificName);
+            try {
+                const words = fullText.split(/[^a-zA-Z]/).filter(w => w.length >= 4);
+                if (words.length > 0) {
+                    const regexes = words.map(w => new RegExp(`\\b${w}`, 'i'));
+                    const matches = await WorldFlora.find({
+                        $or: [
+                            { scientificName: { $in: regexes } },
+                            { commonName: { $in: regexes } }
+                        ]
+                    }).limit(3).lean();
+                    for (const m of matches) {
+                        matchedNames.push(m.scientificName);
+                    }
                 }
-                if (matchedNames.length >= 3) break;
+            } catch (e) {
+                console.error('[Flora Intelligence] Fallback database scan failed:', e);
             }
             plantNames = matchedNames;
         }
@@ -453,6 +455,15 @@ STRICT GROUNDING: Base all parameters strictly on the provided Raw Information. 
             if (weatherContext.humidity !== undefined) {
                 humidity = parseFloat(weatherContext.humidity) || 60;
             }
+        }
+
+        // Pre-fetch all matching WorldFlora documents for our dossiers in a single quick database query
+        let worldMatches = [];
+        try {
+            const sciNames = dossiers.map(d => d.scientificName);
+            worldMatches = await WorldFlora.find({ scientificName: { $in: sciNames } }).lean();
+        } catch (dbErr) {
+            console.error('[Flora Context] Failed to pre-fetch WorldFlora specs:', dbErr);
         }
 
         const context = `\n\n🔬 SCIENTIFIC DOSSIER (Verified World Flora Data & Agronomic Analytics):\n${dossiers.map(p => {
@@ -474,9 +485,8 @@ STRICT GROUNDING: Base all parameters strictly on the provided Raw Information. 
                 transpirationSnippet = `\n               - Evapotranspiration Coefficient (Kc): ${p.cropCoefficient} (Water loss baseline)`;
             }
 
-            // Fallback lookup in worldFlora for climate metadata if not present in cached dossier p
-            const worldFlora = require('./worldFlora');
-            const wMatch = worldFlora.find(x => x.scientificName === p.scientificName) || {};
+            // Fallback lookup in pre-fetched WorldFlora documents for climate metadata
+            const wMatch = worldMatches.find(x => x.scientificName === p.scientificName) || {};
             
             const tempMin = p.idealTempMin ?? wMatch.idealTempMin;
             const tempMax = p.idealTempMax ?? wMatch.idealTempMax;
