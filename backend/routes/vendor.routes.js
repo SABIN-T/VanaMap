@@ -5,7 +5,7 @@
 const express = require('express');
 const router = express.Router();
 const { auth, admin, optionalAuth, normalizeUser, requireApiKey, validateRequest } = require('../middleware/auth');
-const { sendEmail, CommunicationOS, sendResetEmail, sendOtpEmail, sendSmsOtp, sendWelcomeEmail, resend } = require('../config/email');
+const { sendEmail, CommunicationOS, sendResetEmail, sendOtpEmail, sendSmsOtp, sendWelcomeEmail } = require('../config/email');
 const { broadcastAlert, sendPushNotification, getPublicVapidKey, sendWhatsApp } = require('../config/push');
 const { razorpay } = require('../config/razorpay');
 const { upload, broadcastUpload, cloudinary } = require('../middleware/upload');
@@ -53,7 +53,7 @@ router.get('/api/vendor/orders', auth, async (req, res) => {
 router.patch('/api/vendor/orders/:id/status', auth, async (req, res) => {
     try {
         const { status, otp } = req.body;
-        const validStatuses = ['pending', 'completed', 'shipped', 'delivered', 'cancelled'];
+        const validStatuses = ['pending', 'completed', 'out_for_delivery', 'delivered', 'ready_for_pickup', 'picked_up', 'cancelled'];
         if (!validStatuses.includes(status)) {
             return res.status(400).json({ error: `Invalid status. Must be one of: ${validStatuses.join(', ')}` });
         }
@@ -66,24 +66,25 @@ router.patch('/api/vendor/orders/:id/status', auth, async (req, res) => {
             return res.status(403).json({ error: 'Access denied. You do not own this shop.' });
         }
 
-        // OTP Check on Deliver transition
-        if (status === 'delivered') {
+        // OTP Check on Deliver/Picked Up transition
+        if (status === 'delivered' || status === 'picked_up') {
             if (!sale.deliveryOTP) {
-                return res.status(400).json({ error: 'Delivery OTP has not been generated. Please mark order as shipped first.' });
+                return res.status(400).json({ error: 'Verification OTP has not been generated. Please mark order as out for delivery or ready for pickup first.' });
             }
             if (sale.deliveryOTP.trim() !== (otp || '').toString().trim()) {
-                return res.status(400).json({ error: 'Invalid delivery OTP code. Please enter the correct code from the buyer.' });
+                return res.status(400).json({ error: 'Invalid OTP code. Please enter the correct code from the buyer.' });
             }
         }
 
-        // Generate and Send OTP on Ship transition
-        if (status === 'shipped') {
+        // Generate OTP on Out for Delivery or Ready for Pickup
+        if (status === 'out_for_delivery' || status === 'ready_for_pickup') {
             const deliveryOtp = Math.floor(100000 + Math.random() * 900000).toString();
             sale.deliveryOTP = deliveryOtp;
         }
+
         // Stock Deduction/Restoration Lifecycle updates
         const oldStatus = sale.status;
-        if (status === 'delivered') {
+        if (status === 'delivered' || status === 'picked_up') {
             if (!sale.inventoryDeducted) {
                 const deducted = await deductInventory(sale.vendorId, sale.plantId, sale.quantity || 1);
                 if (deducted) {
@@ -97,7 +98,7 @@ router.patch('/api/vendor/orders/:id/status', auth, async (req, res) => {
                     sale.inventoryDeducted = false;
                 }
             }
-        } else if (oldStatus === 'cancelled' && ['pending', 'completed', 'shipped'].includes(status)) {
+        } else if (oldStatus === 'cancelled' && ['pending', 'completed', 'out_for_delivery', 'ready_for_pickup'].includes(status)) {
             if (!sale.inventoryDeducted) {
                 const deducted = await deductInventory(sale.vendorId, sale.plantId, sale.quantity || 1);
                 if (deducted) {
@@ -121,7 +122,9 @@ router.patch('/api/vendor/orders/:id/status', auth, async (req, res) => {
         // Notify user about status update
         if (sale.userId) {
             const statusMessages = {
-                shipped: `Your order of ${sale.plantName} has been shipped! 🚚`,
+                out_for_delivery: `Your order of ${sale.plantName} is out for delivery! 🚚`,
+                ready_for_pickup: `Your order of ${sale.plantName} is ready for pickup! 🏪`,
+                picked_up: `Your order of ${sale.plantName} has been picked up! 📦✅`,
                 delivered: `Your order of ${sale.plantName} has been delivered! 📦✅`,
                 cancelled: `Your order of ${sale.plantName} has been cancelled. ❌`,
                 pending: `Your order of ${sale.plantName} is now pending. ⏳`,
@@ -129,7 +132,7 @@ router.patch('/api/vendor/orders/:id/status', auth, async (req, res) => {
             };
             await broadcastAlert('order_status', statusMessages[status] || `Order status updated to ${status}`, {
                 userId: sale.userId,
-                title: `Order ${status.charAt(0).toUpperCase() + status.slice(1)} 📋`
+                title: `Order ${status.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')} 📋`
             });
 
             // Send notification email
@@ -139,7 +142,7 @@ router.patch('/api/vendor/orders/:id/status', auth, async (req, res) => {
                     let mailParams = {
                         from: 'VanaMap <support@vanamap.online>',
                         to: user.email,
-                        subject: `Update: Your order of ${sale.plantName} is ${status}! 🌿`,
+                        subject: `Update: Your order of ${sale.plantName} is ${status.split('_').join(' ')}! 🌿`,
                         html: EmailTemplates.userOrderStatusUpdate(
                             user.name,
                             sale.plantName,
@@ -151,8 +154,8 @@ router.patch('/api/vendor/orders/:id/status', auth, async (req, res) => {
                         )
                     };
 
-                    // If delivered, generate and attach the estimated invoice PDF
-                    if (status === 'delivered') {
+                    // If delivered or picked up, generate and attach the estimated invoice PDF
+                    if (status === 'delivered' || status === 'picked_up') {
                         try {
                             const invoiceBuffer = await generateInvoicePDF(sale, user, vendor);
                             mailParams.attachments = [{
@@ -173,35 +176,41 @@ router.patch('/api/vendor/orders/:id/status', auth, async (req, res) => {
             }
         }
 
-        // If shipped, send another email to the user with the OTP code
-        if (status === 'shipped' && user && user.email) {
+        // If out_for_delivery or ready_for_pickup, send another email to the user with the OTP code
+        if ((status === 'out_for_delivery' || status === 'ready_for_pickup') && user && user.email) {
             try {
+                const isPickup = status === 'ready_for_pickup';
+                const actionTitle = isPickup ? 'In-Store Pickup Code' : 'Local Delivery OTP';
+                const actionSubject = isPickup ? 'Pickup Verification Code' : 'Delivery Verification OTP';
+                const instructionText = isPickup 
+                    ? `Your order for <strong>${sale.plantName}</strong> (Qty: ${sale.quantity}) is ready for pickup at <strong>${vendor.name}</strong>! 🏪<br/>Please present the verification code below when you pick up your plants:` 
+                    : `Your order for <strong>${sale.plantName}</strong> (Qty: ${sale.quantity}) from <strong>${vendor.name}</strong> is out for local delivery! 🚚<br/>Please provide the verification code below to the delivery agent:`;
+
                 await sendEmail({
-                    from: 'VanaMap Delivery <delivery@vanamap.online>',
+                    from: 'VanaMap Platform <delivery@vanamap.online>',
                     to: user.email,
-                    subject: `VanaMap Delivery OTP: ${sale.deliveryOTP} 🌿`,
+                    subject: `VanaMap ${actionSubject}: ${sale.deliveryOTP} 🌿`,
                     html: `
                         <div style="font-family: Arial, sans-serif; padding: 20px; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 12px; background: #fff;">
                             <div style="text-align: center; border-bottom: 2px solid #10b981; padding-bottom: 15px; margin-bottom: 20px;">
-                                <h1 style="color: #10b981; margin: 0; font-size: 24px;">VanaMap Delivery Verification</h1>
+                                <h1 style="color: #10b981; margin: 0; font-size: 24px;">${actionTitle}</h1>
                             </div>
                             <p>Hello <strong>${sale.userName || user.name || 'Valued Customer'}</strong>,</p>
-                            <p>Your order for <strong>${sale.plantName}</strong> (Qty: ${sale.quantity}) from <strong>${vendor.name}</strong> is shipped and on its way to you! 🚚</p>
-                            <p>To verify and confirm the delivery, please provide the following One-Time Password (OTP) to the delivery agent when they arrive:</p>
+                            <p>${instructionText}</p>
                             <div style="text-align: center; margin: 30px 0;">
                                 <span style="font-size: 32px; font-weight: 800; color: #10b981; letter-spacing: 5px; background: #f0fdf4; padding: 12px 24px; border: 1px solid #bbf7d0; border-radius: 8px; display: inline-block;">
                                     ${sale.deliveryOTP}
                                 </span>
                             </div>
-                            <p style="color: #64748b; font-size: 14px;">If you did not request this delivery or have questions, please contact our support team immediately.</p>
+                            <p style="color: #64748b; font-size: 14px;">If you have any questions or did not authorize this, please contact support immediately.</p>
                             <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 20px 0;" />
-                            <p style="font-size: 11px; color: #94a3b8; text-align: center; margin: 0;">This email was sent automatically by the VanaMap Logistics Platform.</p>
+                            <p style="font-size: 11px; color: #94a3b8; text-align: center; margin: 0;">This email was sent automatically by the VanaMap Platform.</p>
                         </div>
                     `
                 });
-                console.log(`[Delivery OTP Email] Sent OTP ${sale.deliveryOTP} to buyer: ${user.email}`);
+                console.log(`[Fulfillment OTP Email] Sent OTP ${sale.deliveryOTP} to buyer: ${user.email}`);
             } catch (mailErr) {
-                console.error('[Delivery OTP Email] Failed to send email:', mailErr.message);
+                console.error('[Fulfillment OTP Email] Failed to send email:', mailErr.message);
             }
         }
 
@@ -213,7 +222,7 @@ router.patch('/api/vendor/orders/:id/status', auth, async (req, res) => {
                     let mailParams = {
                         from: 'VanaMap <support@vanamap.online>',
                         to: cofounderEmail,
-                        subject: `[Cofounder Alert] Order ${status.charAt(0).toUpperCase() + status.slice(1)}: ${sale.plantName} (Customer: ${sale.userName || (user ? user.name : 'Customer')}) 🌿`,
+                        subject: `[Cofounder Alert] Order ${status.split('_').join(' ')}: ${sale.plantName} (Customer: ${sale.userName || (user ? user.name : 'Customer')}) 🌿`,
                         html: EmailTemplates.userOrderStatusUpdate(
                             sale.userName || (user ? user.name : 'Customer'),
                             sale.plantName,
@@ -225,8 +234,8 @@ router.patch('/api/vendor/orders/:id/status', auth, async (req, res) => {
                         )
                     };
 
-                    // If delivered, generate and attach the estimated invoice PDF
-                    if (status === 'delivered') {
+                    // If delivered or picked up, generate and attach the estimated invoice PDF
+                    if (status === 'delivered' || status === 'picked_up') {
                         try {
                             const invoiceBuffer = await generateInvoicePDF(
                                 sale,
@@ -258,15 +267,14 @@ router.patch('/api/vendor/orders/:id/status', auth, async (req, res) => {
     }
 });
 
-// Get Restricted Pages
 // Resend Order Delivery OTP (Vendor)
 router.post('/api/vendor/orders/:id/resend-otp', auth, async (req, res) => {
     try {
         const sale = await Sale.findById(req.params.id);
         if (!sale) return res.status(404).json({ error: 'Order not found' });
 
-        if (sale.status !== 'shipped') {
-            return res.status(400).json({ error: 'OTP can only be resent for shipped orders.' });
+        if (sale.status !== 'out_for_delivery' && sale.status !== 'ready_for_pickup') {
+            return res.status(400).json({ error: 'OTP can only be resent for orders out for delivery or ready for pickup.' });
         }
 
         const vendor = await Vendor.findOne({ id: sale.vendorId });
@@ -289,41 +297,44 @@ router.post('/api/vendor/orders/:id/resend-otp', auth, async (req, res) => {
         // Send OTP email
         if (user && user.email) {
             try {
+                const isPickup = sale.status === 'ready_for_pickup';
+                const actionTitle = isPickup ? 'In-Store Pickup Code' : 'Local Delivery OTP';
+                const actionSubject = isPickup ? 'Pickup Verification Code' : 'Delivery Verification OTP';
+                const instructionText = isPickup 
+                    ? `Your order for <strong>${sale.plantName}</strong> (Qty: ${sale.quantity}) is ready for pickup at <strong>${vendor.name}</strong>! 🏪<br/>Please present the verification code below when you pick up your plants:` 
+                    : `Your order for <strong>${sale.plantName}</strong> (Qty: ${sale.quantity}) from <strong>${vendor.name}</strong> is out for local delivery! 🚚<br/>Please provide the verification code below to the delivery agent:`;
+
                 await sendEmail({
-                    from: 'VanaMap Delivery <delivery@vanamap.online>',
+                    from: 'VanaMap Platform <delivery@vanamap.online>',
                     to: user.email,
-                    subject: `VanaMap Delivery OTP: ${sale.deliveryOTP} 🌿`,
+                    subject: `VanaMap ${actionSubject}: ${sale.deliveryOTP} 🌿`,
                     html: `
                         <div style="font-family: Arial, sans-serif; padding: 20px; color: #333; max-width: 600px; margin: 0 auto; border: 1px solid #e2e8f0; border-radius: 12px; background: #fff;">
                             <div style="text-align: center; border-bottom: 2px solid #10b981; padding-bottom: 15px; margin-bottom: 20px;">
-                                <h1 style="color: #10b981; margin: 0; font-size: 24px;">VanaMap Delivery Verification</h1>
+                                <h1 style="color: #10b981; margin: 0; font-size: 24px;">${actionTitle}</h1>
                             </div>
                             <p>Hello <strong>${sale.userName || user.name || 'Valued Customer'}</strong>,</p>
-                            <p>Your order for <strong>${sale.plantName}</strong> (Qty: ${sale.quantity}) from <strong>${vendor.name}</strong> is shipped and on its way to you! 🚚</p>
-                            <p>To verify and confirm the delivery, please provide the following One-Time Password (OTP) to the delivery agent when they arrive:</p>
+                            <p>${instructionText}</p>
                             <div style="text-align: center; margin: 30px 0;">
                                 <span style="font-size: 32px; font-weight: 800; color: #10b981; letter-spacing: 5px; background: #f0fdf4; padding: 12px 24px; border: 1px solid #bbf7d0; border-radius: 8px; display: inline-block;">
                                     ${sale.deliveryOTP}
                                 </span>
                             </div>
-                            <p style="color: #64748b; font-size: 14px;">If you did not request this delivery or have questions, please contact our support team immediately.</p>
+                            <p style="color: #64748b; font-size: 14px;">If you have any questions or did not authorize this, please contact support immediately.</p>
                             <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 20px 0;" />
-                            <p style="font-size: 11px; color: #94a3b8; text-align: center; margin: 0;">This email was sent automatically by the VanaMap Logistics Platform.</p>
+                            <p style="font-size: 11px; color: #94a3b8; text-align: center; margin: 0;">This email was sent automatically by the VanaMap Platform.</p>
                         </div>
                     `
                 });
-                console.log(`[Resend OTP Email] Sent OTP ${sale.deliveryOTP} to buyer: ${user.email}`);
+                console.log(`[Delivery OTP Email] Sent resent OTP ${sale.deliveryOTP} to buyer: ${user.email}`);
             } catch (mailErr) {
-                console.error('[Resend OTP Email] Failed to send email:', mailErr.message);
-                return res.status(500).json({ error: 'Failed to send OTP email to customer' });
+                console.error('[Delivery OTP Email] Failed to send email:', mailErr.message);
             }
-        } else {
-            return res.status(400).json({ error: 'Buyer email not found' });
         }
 
-        res.json({ success: true, message: 'New OTP code sent to customer successfully' });
+        res.json({ success: true });
     } catch (e) {
-        console.error('Error resending OTP:', e);
+        console.error('Vendor Resend OTP Error:', e);
         res.status(500).json({ error: e.message });
     }
 });

@@ -5,7 +5,7 @@
 const express = require('express');
 const router = express.Router();
 const { auth, admin, optionalAuth, normalizeUser, requireApiKey, validateRequest } = require('../middleware/auth');
-const { sendEmail, CommunicationOS, sendResetEmail, sendOtpEmail, sendSmsOtp, sendWelcomeEmail, resend } = require('../config/email');
+const { sendEmail, CommunicationOS, sendResetEmail, sendOtpEmail, sendSmsOtp, sendWelcomeEmail } = require('../config/email');
 const { broadcastAlert, sendPushNotification, getPublicVapidKey, sendWhatsApp } = require('../config/push');
 const { razorpay } = require('../config/razorpay');
 const { upload, broadcastUpload, cloudinary } = require('../middleware/upload');
@@ -155,7 +155,7 @@ router.get('/api/admin/orders/map', auth, admin, async (req, res) => {
 router.patch('/api/admin/orders/:id/status', auth, admin, async (req, res) => {
     try {
         const { status } = req.body;
-        const validStatuses = ['pending', 'completed', 'shipped', 'delivered', 'cancelled'];
+        const validStatuses = ['pending', 'completed', 'out_for_delivery', 'delivered', 'ready_for_pickup', 'picked_up', 'cancelled'];
         if (!validStatuses.includes(status)) {
             return res.status(400).json({ error: `Invalid status. Must be one of: ${validStatuses.join(', ')}` });
         }
@@ -167,8 +167,15 @@ router.patch('/api/admin/orders/:id/status', auth, admin, async (req, res) => {
 
         const oldStatus = sale.status;
 
+        // Generate OTP code on Out for Delivery or Ready for Pickup
+        if (status === 'out_for_delivery' || status === 'ready_for_pickup') {
+            if (!sale.deliveryOTP) {
+                sale.deliveryOTP = Math.floor(100000 + Math.random() * 900000).toString();
+            }
+        }
+
         // Stock Deduction/Restoration Lifecycle updates
-        if (status === 'delivered') {
+        if (status === 'delivered' || status === 'picked_up') {
             if (!sale.inventoryDeducted) {
                 const deducted = await deductInventory(sale.vendorId, sale.plantId, sale.quantity || 1);
                 if (deducted) {
@@ -182,7 +189,7 @@ router.patch('/api/admin/orders/:id/status', auth, admin, async (req, res) => {
                     sale.inventoryDeducted = false;
                 }
             }
-        } else if (oldStatus === 'cancelled' && ['pending', 'completed', 'shipped'].includes(status)) {
+        } else if (oldStatus === 'cancelled' && ['pending', 'completed', 'out_for_delivery', 'ready_for_pickup'].includes(status)) {
             if (!sale.inventoryDeducted) {
                 const deducted = await deductInventory(sale.vendorId, sale.plantId, sale.quantity || 1);
                 if (deducted) {
@@ -210,7 +217,9 @@ router.patch('/api/admin/orders/:id/status', auth, admin, async (req, res) => {
         // Notify the user about status change
         if (sale.userId) {
             const statusMessages = {
-                shipped: `Your order of ${sale.plantName} has been shipped! 🚚`,
+                out_for_delivery: `Your order of ${sale.plantName} is out for delivery! 🚚`,
+                ready_for_pickup: `Your order of ${sale.plantName} is ready for pickup! 🏪`,
+                picked_up: `Your order of ${sale.plantName} has been picked up! 📦✅`,
                 delivered: `Your order of ${sale.plantName} has been delivered! 📦✅`,
                 cancelled: `Your order of ${sale.plantName} has been cancelled. ❌`,
                 pending: `Your order of ${sale.plantName} is now pending. ⏳`,
@@ -218,7 +227,7 @@ router.patch('/api/admin/orders/:id/status', auth, admin, async (req, res) => {
             };
             await broadcastAlert('order_status', statusMessages[status] || `Order status updated to ${status}`, {
                 userId: sale.userId,
-                title: `Order ${status.charAt(0).toUpperCase() + status.slice(1)} 📋`
+                title: `Order ${status.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')} 📋`
             });
 
             // Send order status update email to User
@@ -228,7 +237,7 @@ router.patch('/api/admin/orders/:id/status', auth, admin, async (req, res) => {
                     const mailParams = {
                         from: 'VanaMap <support@vanamap.online>',
                         to: user.email,
-                        subject: `Update: Your order of ${sale.plantName} is ${status}! 🌿`,
+                        subject: `Update: Your order of ${sale.plantName} is ${status.split('_').join(' ')}! 🌿`,
                         html: EmailTemplates.userOrderStatusUpdate(
                             user.name,
                             sale.plantName,
@@ -240,8 +249,8 @@ router.patch('/api/admin/orders/:id/status', auth, admin, async (req, res) => {
                         )
                     };
 
-                    // If delivered, generate and attach the estimated invoice PDF
-                    if (status.toLowerCase() === 'delivered') {
+                    // If delivered or picked up, generate and attach the estimated invoice PDF
+                    if (status.toLowerCase() === 'delivered' || status.toLowerCase() === 'picked_up') {
                         try {
                             const invoiceBuffer = await generateInvoicePDF(sale, user, vendor);
                             mailParams.attachments = [{
@@ -295,7 +304,7 @@ router.patch('/api/admin/orders/:id/status', auth, admin, async (req, res) => {
                     let mailParams = {
                         from: 'VanaMap <support@vanamap.online>',
                         to: cofounderEmail,
-                        subject: `[Cofounder Alert] Order ${status.charAt(0).toUpperCase() + status.slice(1)}: ${sale.plantName} (Customer: ${sale.userName || (user ? user.name : 'Customer')}) 🌿`,
+                        subject: `[Cofounder Alert] Order ${status.split('_').join(' ')}: ${sale.plantName} (Customer: ${sale.userName || (user ? user.name : 'Customer')}) 🌿`,
                         html: EmailTemplates.userOrderStatusUpdate(
                             sale.userName || (user ? user.name : 'Customer'),
                             sale.plantName,
@@ -307,8 +316,8 @@ router.patch('/api/admin/orders/:id/status', auth, admin, async (req, res) => {
                         )
                     };
 
-                    // If delivered, generate and attach the estimated invoice PDF
-                    if (status.toLowerCase() === 'delivered') {
+                    // If delivered or picked up, generate and attach the estimated invoice PDF
+                    if (status.toLowerCase() === 'delivered' || status.toLowerCase() === 'picked_up') {
                         try {
                             const invoiceBuffer = await generateInvoicePDF(
                                 sale,

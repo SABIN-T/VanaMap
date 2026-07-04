@@ -427,7 +427,9 @@ const EmailTemplates = {
         const statusColors = {
             pending: { title: 'Order Pending ⏳', color: '#d97706', bg: '#fef3c7', icon: '⏳' },
             completed: { title: 'Order Confirmed! ✅', color: '#059669', bg: '#ecfdf5', icon: '🌿' },
-            shipped: { title: 'Order Shipped! 🚚', color: '#2563eb', bg: '#eff6ff', icon: '🚚' },
+            out_for_delivery: { title: 'Out for Delivery! 🚚', color: '#2563eb', bg: '#eff6ff', icon: '🚚' },
+            ready_for_pickup: { title: 'Ready for Pickup! 🏪', color: '#3b82f6', bg: '#eff6ff', icon: '🏪' },
+            picked_up: { title: 'Picked Up! 📦✅', color: '#059669', bg: '#ecfdf5', icon: '🛍️' },
             delivered: { title: 'Order Delivered! 📦🎉', color: '#059669', bg: '#ecfdf5', icon: '📦' },
             cancelled: { title: 'Order Cancelled ❌', color: '#dc2626', bg: '#fef2f2', icon: '❌' }
         };
@@ -476,10 +478,18 @@ const EmailTemplates = {
                         </table>
                     </div>
 
-                    ${status.toLowerCase() === 'shipped' ? `
+                    ${status.toLowerCase() === 'out_for_delivery' ? `
                     <div style="background: #eff6ff; border-left: 4px solid #3b82f6; padding: 15px; border-radius: 8px; margin: 30px 0;">
                         <p style="color: #1e40af; font-size: 14px; margin: 0; line-height: 1.6;">
-                            <strong>🚚 Shipping Alert:</strong> Your green friend is on the way! Please make sure someone is available at the delivery location to receive the parcel.
+                            <strong>🚚 Local Delivery Alert:</strong> Your plant has left the store and is out for local delivery! Please make sure you are available to receive the delivery.
+                        </p>
+                    </div>
+                    ` : ''}
+
+                    ${status.toLowerCase() === 'ready_for_pickup' ? `
+                    <div style="background: #eff6ff; border-left: 4px solid #3b82f6; padding: 15px; border-radius: 8px; margin: 30px 0;">
+                        <p style="color: #1e40af; font-size: 14px; margin: 0; line-height: 1.6;">
+                            <strong>🏪 Store Pickup Alert:</strong> Your order is ready and waiting for you to pick up at the physical nursery/store! Please have your pickup OTP ready.
                         </p>
                     </div>
                     ` : ''}
@@ -620,7 +630,7 @@ const EmailTemplates = {
                     ${isCancelled ? `
                     <div style="background: #fef2f2; border-left: 4px solid #ef4444; padding: 15px; border-radius: 8px; margin: 30px 0;">
                         <p style="color: #991b1b; font-size: 14px; margin: 0; line-height: 1.6;">
-                            <strong>⚠️ Order Cancelled:</strong> Please halt any packaging or shipping operations for this order.
+                            <strong>⚠️ Order Cancelled:</strong> Please halt any packaging, delivery, or pickup preparation for this order.
                         </p>
                     </div>
                     ` : ''}

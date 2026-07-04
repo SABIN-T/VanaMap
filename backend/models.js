@@ -248,7 +248,8 @@ const SaleSchema = new mongoose.Schema({
     plantName: String,
     price: { type: Number, required: true },
     quantity: { type: Number, default: 1 },
-    status: { type: String, enum: ['pending', 'completed', 'shipped', 'delivered', 'cancelled'], default: 'completed' },
+    fulfillmentType: { type: String, enum: ['pickup', 'delivery'], default: 'delivery' },
+    status: { type: String, enum: ['pending', 'completed', 'out_for_delivery', 'delivered', 'ready_for_pickup', 'picked_up', 'cancelled'], default: 'completed' },
     deliveryAddress: {
         address: String,
         city: String,
