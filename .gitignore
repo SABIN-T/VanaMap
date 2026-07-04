@@ -49,3 +49,6 @@ VanaMap_Technical_Architecture.pdf
 !robots.txt
 !**/public/robots.txt
 *.tex
+
+# Local Archive/Backup folder
+archive/
