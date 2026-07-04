@@ -8,6 +8,7 @@ export const SimulationData = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [floraList, setFloraList] = useState<any[]>([]);
     const [totalCount, setTotalCount] = useState(10000);
+    const [page, setPage] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
@@ -16,7 +17,7 @@ export const SimulationData = () => {
         
         const fetchFlora = async () => {
             try {
-                const res = await fetch(`${API_URL}/world-flora?search=${encodeURIComponent(searchTerm)}&limit=100`, {
+                const res = await fetch(`${API_URL}/world-flora?search=${encodeURIComponent(searchTerm)}&page=${page}&limit=100`, {
                     signal: controller.signal
                 });
                 if (res.ok) {
@@ -38,7 +39,7 @@ export const SimulationData = () => {
             clearTimeout(timer);
             controller.abort();
         };
-    }, [searchTerm]);
+    }, [searchTerm, page]);
 
     return (
         <AdminLayout title="Global Biometric Database">
@@ -94,7 +95,10 @@ export const SimulationData = () => {
                         type="text"
                         placeholder="Search by Scientific Name, Common Name, or Morphology..."
                         value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
+                        onChange={(e) => {
+                            setSearchTerm(e.target.value);
+                            setPage(1);
+                        }}
                         style={{
                             width: '100%',
                             padding: '1.2rem 1.2rem 1.2rem 4rem',
@@ -237,11 +241,54 @@ export const SimulationData = () => {
                             </div>
                         )}
 
-                        {totalCount > 100 && (
-                            <div style={{ padding: '1rem', textAlign: 'center', borderTop: '1px solid #334155', color: '#64748b', fontSize: '0.9rem' }}>
-                                Showing top 100 matches of {totalCount}
+                        <div style={{ 
+                            display: 'flex', 
+                            justifyContent: 'space-between', 
+                            alignItems: 'center', 
+                            padding: '1rem 2rem', 
+                            borderTop: '1px solid #334155', 
+                            color: '#94a3b8', 
+                            fontSize: '0.9rem',
+                            background: '#0f172a'
+                        }}>
+                            <div>
+                                Showing {totalCount > 0 ? (page - 1) * 100 + 1 : 0} – {Math.min(page * 100, totalCount)} of {totalCount} records
                             </div>
-                        )}
+                            <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                <button
+                                    onClick={() => setPage(p => Math.max(p - 1, 1))}
+                                    disabled={page === 1 || isLoading}
+                                    style={{
+                                        padding: '0.5rem 1rem',
+                                        background: page === 1 ? 'transparent' : '#1e293b',
+                                        border: '1px solid #334155',
+                                        borderRadius: '8px',
+                                        color: page === 1 ? '#475569' : 'white',
+                                        fontWeight: 600,
+                                        cursor: page === 1 ? 'not-allowed' : 'pointer',
+                                        transition: '0.2s'
+                                    }}
+                                >
+                                    ◀ Previous 100
+                                </button>
+                                <button
+                                    onClick={() => setPage(p => p + 1)}
+                                    disabled={page * 100 >= totalCount || isLoading}
+                                    style={{
+                                        padding: '0.5rem 1rem',
+                                        background: page * 100 >= totalCount ? 'transparent' : '#1e293b',
+                                        border: '1px solid #334155',
+                                        borderRadius: '8px',
+                                        color: page * 100 >= totalCount ? '#475569' : 'white',
+                                        fontWeight: 600,
+                                        cursor: page * 100 >= totalCount ? 'not-allowed' : 'pointer',
+                                        transition: '0.2s'
+                                    }}
+                                >
+                                    Next 100 ▶
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
