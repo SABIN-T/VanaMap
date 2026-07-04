@@ -899,11 +899,11 @@ export const Cart = () => {
                                 </div>
                             )}
 
-                            {/* STEP 2: SHIPPING ADDRESS LOCATION */}
+                            {/* STEP 2: DELIVERY ADDRESS LOCATION */}
                             {checkoutStep === 2 && (
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
                                     <div style={{ marginBottom: '0.5rem' }}>
-                                        <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 800, color: 'white' }}>Set Shipping Address</h3>
+                                        <h3 style={{ margin: 0, fontSize: '1.1rem', fontWeight: 800, color: 'white' }}>Set Delivery Address</h3>
                                         <p style={{ margin: '2px 0 0', fontSize: '0.8rem', color: '#94a3b8' }}>Provide delivery location coordinates and address details.</p>
                                     </div>
 
@@ -1082,7 +1082,7 @@ export const Cart = () => {
                                                 </span>
                                             </div>
                                             <div style={{ fontSize: '0.7rem', color: '#64748b', marginTop: '1rem', lineHeight: 1.4 }}>
-                                                Shipping fees and delivery range limits will be calculated in the next step.
+                                                Delivery fees and range limits will be calculated in the next step.
                                             </div>
                                         </div>
                                         <div className={styles.summaryFooter} style={{ padding: '1rem' }}>
@@ -1100,7 +1100,7 @@ export const Cart = () => {
                                                         setCheckoutStep(2);
                                                     }}
                                                 >
-                                                    Proceed to Shipping Pin ➔
+                                                    Proceed to Delivery Location ➔
                                                 </button>
                                             )}
                                         </div>
@@ -1185,7 +1185,7 @@ export const Cart = () => {
                                                             <span>{formatCurrency(totalPrice)}</span>
                                                         </div>
                                                         <div className={styles.summaryRow}>
-                                                            <span>Shipping Charge</span>
+                                                            <span>Delivery Charge</span>
                                                             <span>{fee > 0 ? formatCurrency(fee) : 'FREE'}</span>
                                                         </div>
                                                         <div className={styles.summaryDivider} />
@@ -1213,7 +1213,7 @@ export const Cart = () => {
                                             style={{ width: '100%', background: 'transparent', border: '1px solid rgba(255,255,255,0.1)', color: '#94a3b8', borderRadius: '12px', padding: '10px 0', fontSize: '0.85rem', fontWeight: 800, cursor: 'pointer' }}
                                             onClick={() => setCheckoutStep(2)}
                                         >
-                                            Back to Shipping Pin
+                                            Back to Delivery Location
                                         </button>
                                     </div>
                                 )}
